@@ -32,3 +32,5 @@ I provided part of yaml file which contains lots of md file names. I want you to
 4. The last third layer for the heading level ### loop should have a title. This time the title naming has a little twist that the title should starts with numbers like 1., 2., 3., and short for nav. However, the title should make sense, not like First, Second, and so on, or, Use Case 1, Use Case 2, and so on, or Step 1, Step 2, and so on, or, Mistake #1, Mistake #2, and so on.
 5. Remember the title with #, ##, or ### should be short (at most 20 characters includinh empty space) for nav one line and should make sense, not like First, Second, and so on, or, Use Case 1, Use Case 2, and so on, or Step 1, Step 2, and so on, or, Mistake #1, Mistake #2, and so on.
 Give me the updated md files as a zip file to download
+
+Change the titles in the attached yml file so that nav use only one line to represent the titles.
