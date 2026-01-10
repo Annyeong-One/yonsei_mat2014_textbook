@@ -1,10 +1,10 @@
-# Saving and Exporting Figures
+# Saving and Exporting
 
 Once a figure is created, it often needs to be saved for reports, papers, or presentations.
 
 ---
 
-## 1. Saving figures
+## Saving figures
 
 Use `savefig` on the Figure object:
 
@@ -20,7 +20,7 @@ plt.savefig("figure.png")
 
 ---
 
-## 2. File formats
+## File formats
 
 Common formats:
 - PNG: raster, good for screens
@@ -33,7 +33,7 @@ fig.savefig("plot.pdf")
 
 ---
 
-## 3. Resolution and size
+## Resolution and size
 
 Control resolution with `dpi`:
 
@@ -49,7 +49,7 @@ fig, ax = plt.subplots(figsize=(6, 4))
 
 ---
 
-## 4. Tight layout
+## Tight layout
 
 Avoid clipped labels:
 
@@ -65,7 +65,7 @@ plt.tight_layout()
 
 ---
 
-## 5. Reproducibility
+## Reproducibility
 
 - Save figures programmatically.
 - Avoid manual resizing.

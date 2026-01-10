@@ -1,10 +1,10 @@
-# Resampling and Rolling
+# Resampling and
 
 Resampling and rolling operations summarize time series over different horizons, which is central to financial analysis.
 
 ---
 
-## 1. Resampling
+## Resampling
 
 Resampling changes the frequency of a time series.
 
@@ -19,7 +19,7 @@ Common frequencies:
 
 ---
 
-## 2. OHLC aggregation
+## OHLC aggregation
 
 ```python
 prices.resample("D").ohlc()
@@ -29,7 +29,7 @@ This is standard for financial price data.
 
 ---
 
-## 3. Rolling windows
+## Rolling windows
 
 Rolling operations compute statistics over moving windows.
 
@@ -41,7 +41,7 @@ This computes a 20-period rolling volatility.
 
 ---
 
-## 4. Expanding windows
+## Expanding windows
 
 ```python
 returns.expanding().mean()
@@ -51,7 +51,7 @@ Expanding windows include all data up to the current point.
 
 ---
 
-## 5. Practical considerations
+## Practical
 
 - Rolling windows introduce NaNs.
 - Window size affects smoothness.

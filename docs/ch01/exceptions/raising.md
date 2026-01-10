@@ -4,7 +4,7 @@ You can raise exceptions explicitly to signal error conditions in your own code.
 
 ---
 
-## 1. Using `raise`
+## Using `raise`
 
 ```python
 raise ValueError("Invalid parameter")
@@ -14,7 +14,7 @@ This immediately stops execution unless caught.
 
 ---
 
-## 2. Raising conditionally
+## Raising
 
 ```python
 def withdraw(balance, amount):
@@ -25,7 +25,7 @@ def withdraw(balance, amount):
 
 ---
 
-## 3. Re-raising exceptions
+## Re-raising
 
 Inside an `except` block, you can re-raise:
 
@@ -41,7 +41,7 @@ This preserves the original traceback.
 
 ---
 
-## 4. Custom exceptions
+## Custom exceptions
 
 Define your own exception types:
 

@@ -1,10 +1,10 @@
-# Opening and Reading Files
+# Opening and Reading
 
 File input/output (I/O) allows Python programs to read data from and write data to files on disk. Reading files is fundamental for data analysis and quantitative work.
 
 ---
 
-## 1. Opening a file
+## Opening a file
 
 Use the built-in `open()` function:
 
@@ -20,7 +20,7 @@ Common modes:
 
 ---
 
-## 2. Reading the entire file
+## Reading the entire
 
 ```python
 text = f.read()
@@ -30,7 +30,7 @@ This reads the entire file into a single string.
 
 ---
 
-## 3. Reading line by line
+## Reading line by line
 
 ```python
 for line in f:
@@ -41,7 +41,7 @@ This is memory-efficient and preferred for large files.
 
 ---
 
-## 4. Reading into a list
+## Reading into a list
 
 ```python
 lines = f.readlines()
@@ -51,7 +51,7 @@ Each element is one line (including newline characters).
 
 ---
 
-## 5. Closing files
+## Closing files
 
 Always close files when done:
 

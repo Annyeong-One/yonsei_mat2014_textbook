@@ -1,10 +1,10 @@
-# Python Interpreter and REPL
+# Python Interpreter
 
 Once Python is installed, interaction happens through the **interpreter** and the **REPL** (Read–Eval–Print Loop).
 
 ---
 
-## 1. What is the Python interpreter?
+## What is the Python
 
 The Python interpreter:
 - executes Python code,
@@ -18,7 +18,7 @@ python
 
 ---
 
-## 2. The REPL
+## The REPL
 
 The REPL allows interactive experimentation:
 ```text
@@ -33,7 +33,7 @@ This is invaluable for learning and quick testing.
 
 ---
 
-## 3. Exiting the REPL
+## Exiting the REPL
 
 You can exit by:
 - typing `exit()`,
@@ -42,7 +42,7 @@ You can exit by:
 
 ---
 
-## 4. Running scripts
+## Running scripts
 
 To run a Python file:
 ```bash
@@ -53,7 +53,7 @@ Scripts are used for larger programs, while the REPL is ideal for exploration.
 
 ---
 
-## 5. IPython and enhanced REPLs
+## IPython and enhanced
 
 Tools like IPython provide:
 - syntax highlighting,

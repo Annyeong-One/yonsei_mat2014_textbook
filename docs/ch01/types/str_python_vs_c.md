@@ -1,10 +1,10 @@
-# `str`: Python vs C Strings
+# `str`: Python vs C
 
 Python strings (`str`) differ dramatically from C strings in safety, semantics, and usability.
 
 ---
 
-## 1. C strings
+## C strings
 
 In C:
 - strings are arrays of characters
@@ -17,7 +17,7 @@ This leads to:
 
 ---
 
-## 2. Python strings
+## Python strings
 
 Python `str`:
 - is an immutable object
@@ -31,13 +31,13 @@ len(s)   # 7
 
 ---
 
-## 3. Immutability
+## Immutability
 
 Strings cannot be modified in place:
 
 ```python
 s = "abc"
-# s[0] = "A"   # error
+# s[0] = "A" # error
 s = "A" + s[1:]
 ```
 
@@ -48,7 +48,7 @@ Immutability enables:
 
 ---
 
-## 4. Unicode support
+## Unicode support
 
 Python strings handle Unicode naturally:
 

@@ -1,10 +1,10 @@
-# Lines, Markers, and Styles
+# Lines, Markers, and
 
 Matplotlib provides extensive control over how data is displayed through line styles, markers, and colors.
 
 ---
 
-## 1. Basic line plotting
+## Basic line plotting
 
 ```python
 ax.plot(x, y)
@@ -14,7 +14,7 @@ This draws a solid blue line by default.
 
 ---
 
-## 2. Line styles
+## Line styles
 
 ```python
 ax.plot(x, y, linestyle="--")
@@ -29,7 +29,7 @@ Common styles:
 
 ---
 
-## 3. Markers
+## Markers
 
 ```python
 ax.plot(x, y, marker="o")
@@ -40,7 +40,7 @@ Markers are useful for discrete data points.
 
 ---
 
-## 4. Combining styles
+## Combining styles
 
 ```python
 ax.plot(x, y, linestyle="--", marker="o")
@@ -54,7 +54,7 @@ ax.plot(x, y, "--o")
 
 ---
 
-## 5. Visual clarity
+## Visual clarity
 
 Best practices:
 - avoid clutter,

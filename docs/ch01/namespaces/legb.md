@@ -17,7 +17,7 @@ This chapter provides a comprehensive explanation of the LEGB rule with detailed
 A **namespace** is a mapping from names to objects. Think of it as a dictionary where keys are variable names and values are the objects those names refer to.
 
 ```python
-# Each scope has its own namespace
+# Each scope has its
 x = 10  # Global namespace
 y = 20  # Global namespace
 
@@ -31,7 +31,7 @@ def my_function():
 - Different namespaces can have the same variable names
 - Namespaces are created at different times and have different lifetimes
 
-## The LEGB Rule Explained
+## The LEGB Rule
 
 LEGB stands for the order in which Python searches for names:
 
@@ -42,7 +42,7 @@ LEGB stands for the order in which Python searches for names:
 
 ```python
 # B: Built-in
-# len, print, str, etc. are always available
+# len, print, str,
 
 x = "global"  # G: Global
 
@@ -58,7 +58,7 @@ def outer():
 outer()  # Output: local
 ```
 
-### Visual Representation
+### 1. Visual
 
 ```
 ┌─────────────────────────────────────┐
@@ -85,7 +85,7 @@ Python searches from innermost to outermost: L → E → G → B
 
 The **local namespace** contains names defined inside the current function.
 
-### Basic Local Scope
+### 1. Basic Local Scope
 
 ```python
 def greet():
@@ -93,10 +93,10 @@ def greet():
     print(message)
 
 greet()  # Output: Hello
-# print(message)  # NameError: name 'message' is not defined
+# print(message) #
 ```
 
-### Function Parameters are Local
+### 1. Function
 
 ```python
 def add(a, b):  # a and b are local
@@ -105,10 +105,10 @@ def add(a, b):  # a and b are local
 
 sum_value = add(3, 5)
 print(sum_value)  # 8
-# print(result)  # NameError: result is local to add()
+# print(result) #
 ```
 
-### Local Variables Shadow Outer Scopes
+### 1. Local Variables
 
 ```python
 x = "global"
@@ -121,7 +121,7 @@ my_function()  # Output: local
 print(x)       # Output: global (unchanged)
 ```
 
-### Lifetime of Local Variables
+### 2. Lifetime of Local
 
 Local variables are created when the function is called and destroyed when it returns:
 
@@ -133,14 +133,14 @@ def create_locals():
 
 result = create_locals()  # temp is created
 print(f"Returned: {result}")
-# temp no longer exists after function returns
+# temp no longer
 ```
 
-## Enclosing Namespace (E)
+## Enclosing Namespace
 
 The **enclosing namespace** refers to the scope of any enclosing (outer) functions. This is relevant in nested function definitions.
 
-### Basic Enclosing Scope
+### 1. Basic Enclosing
 
 ```python
 def outer():
@@ -154,7 +154,7 @@ def outer():
 outer()  # Output: enclosing
 ```
 
-### Multiple Levels of Nesting
+### 2. Multiple Levels
 
 ```python
 def level1():
@@ -180,7 +180,7 @@ level1()
 # z: level3
 ```
 
-### Reading vs Modifying Enclosing Variables
+### 1. Reading vs
 
 ```python
 # Reading is allowed
@@ -192,7 +192,7 @@ def outer():
     
     inner()
 
-# Modifying requires nonlocal
+# Modifying requires
 def outer_modify():
     x = 10
     
@@ -203,7 +203,7 @@ def outer_modify():
     
     inner()
 
-# Correct way to modify
+# Correct way to
 def outer_correct():
     x = 10
     
@@ -218,7 +218,7 @@ def outer_correct():
 outer_correct()
 ```
 
-### Closures and Enclosing Scope
+### 1. Closures and
 
 ```python
 def make_counter():
@@ -245,7 +245,7 @@ print(counter1())  # 3
 
 The **global namespace** contains names defined at the module level (top level of a Python file).
 
-### Basic Global Scope
+### 1. Basic Global
 
 ```python
 # Global variables
@@ -259,10 +259,10 @@ def display():
 
 display()
 # Output: 0
-#         Hello
+# Hello
 ```
 
-### Modifying Global Variables
+### 1. Modifying Global
 
 ```python
 count = 0
@@ -278,10 +278,10 @@ increment()
 print(count)  # 2
 ```
 
-### Global Without Modification
+### 2. Global Without
 
 ```python
-# If you only read, no global keyword needed
+# If you only read, no
 message = "Original"
 
 def read_global():
@@ -289,7 +289,7 @@ def read_global():
 
 read_global()  # Output: Original
 
-# But modifying requires global
+# But modifying
 def modify_global():
     global message
     message = "Modified"
@@ -298,7 +298,7 @@ modify_global()
 print(message)  # Output: Modified
 ```
 
-### Creating Global Variables from Functions
+### 1. Creating Global
 
 ```python
 def create_global():
@@ -309,7 +309,7 @@ create_global()
 print(new_var)  # I'm global! (accessible outside function)
 ```
 
-### Multiple Global Variables
+### 2. Multiple Global
 
 ```python
 x = 1
@@ -326,14 +326,14 @@ modify_all()
 print(x, y, z)  # Output: 10 20 30
 ```
 
-## Built-in Namespace (B)
+## Built-in Namespace
 
 The **built-in namespace** contains Python's built-in functions, exceptions, and constants.
 
-### Common Built-in Names
+### 1. Common Built-in
 
 ```python
-# These are always available without import
+# These are always
 print(len([1, 2, 3]))      # len is built-in
 print(max(5, 10))          # max is built-in
 print(type(42))            # type is built-in
@@ -351,42 +351,42 @@ print(False)  # Built-in
 print(None)   # Built-in
 ```
 
-### Viewing Built-in Names
+### 1. Viewing Built-in
 
 ```python
 import builtins
 
-# See all built-in names
+# See all built-in
 print(dir(builtins))
 
-# Check if name is built-in
+# Check if name is
 print('len' in dir(builtins))  # True
 print('myfunction' in dir(builtins))  # False
 ```
 
-### Shadowing Built-in Names
+### 1. Shadowing
 
 You can (but shouldn't) override built-in names:
 
 ```python
-# Bad practice - shadowing built-in
+# Bad practice -
 list = [1, 2, 3]  # Shadows built-in list type
 print(list)       # Prints [1, 2, 3]
 
-# Now you can't use list() constructor
-# result = list(range(5))  # TypeError!
+# Now you can't use
+# result =
 
 # Restore by deleting
 del list
 result = list(range(5))  # Works again
 ```
 
-## Name Resolution in Action
+## Name Resolution in
 
-### Example 1: All Four Scopes
+### 1. Key point
 
 ```python
-# B: Built-in (len is built-in)
+# B: Built-in (len is
 
 x = "global x"  # G: Global
 
@@ -413,7 +413,7 @@ enclosing x
 global x
 ```
 
-### Example 2: Progressive Search
+### 1. Key point
 
 ```python
 value = "global"
@@ -429,7 +429,7 @@ def outer():
 outer()  # Output: global
 ```
 
-### Example 3: Stopping at First Match
+### 2. Key point
 
 ```python
 x = "global"
@@ -450,7 +450,7 @@ outer()  # Output: enclosing
 
 The `nonlocal` keyword allows you to modify variables in enclosing (but not global) scope.
 
-### Basic nonlocal Usage
+### 1. Basic nonlocal
 
 ```python
 def outer():
@@ -467,7 +467,7 @@ def outer():
 outer()
 ```
 
-### nonlocal vs global
+### 2. nonlocal vs
 
 ```python
 x = "global"
@@ -501,7 +501,7 @@ After global: outer x = modified enclosing
 Global x = modified global
 ```
 
-### nonlocal with Multiple Levels
+### 3. nonlocal with
 
 ```python
 def level1():
@@ -531,7 +531,7 @@ After level3: modified
 level1 x: level1
 ```
 
-## Common Pitfalls and Gotchas
+## Common Pitfalls and
 
 ### 1. UnboundLocalError
 
@@ -542,7 +542,7 @@ def buggy_function():
     print(x)  # Tries to access x before assignment
     x = 20    # Python sees this, treats x as local
 
-# buggy_function()  # UnboundLocalError!
+# buggy_function() #
 
 # Fix: Use global
 def fixed_function():
@@ -553,10 +553,10 @@ def fixed_function():
 fixed_function()
 ```
 
-### 2. Modifying Mutable Objects
+### 1. Modifying Mutable
 
 ```python
-# This works without global (modifying object, not variable)
+# This works without
 my_list = [1, 2, 3]
 
 def append_item():
@@ -565,7 +565,7 @@ def append_item():
 append_item()
 print(my_list)  # [1, 2, 3, 4]
 
-# But reassignment needs global
+# But reassignment
 def replace_list():
     # my_list = [5, 6, 7]  # Creates local variable!
     global my_list
@@ -575,7 +575,7 @@ replace_list()
 print(my_list)  # [5, 6, 7]
 ```
 
-### 3. Loop Variables and Closures
+### 1. Loop Variables
 
 ```python
 # Common mistake
@@ -583,11 +583,11 @@ functions = []
 for i in range(3):
     functions.append(lambda: i)
 
-# All functions refer to the same i
+# All functions refer
 for f in functions:
     print(f())  # Prints: 2, 2, 2 (all reference final value of i)
 
-# Fix: Use default argument
+# Fix: Use default
 functions = []
 for i in range(3):
     functions.append(lambda x=i: x)  # Captures current value
@@ -596,26 +596,26 @@ for f in functions:
     print(f())  # Prints: 0, 1, 2
 ```
 
-### 4. Shadowing Built-ins
+### 1. Shadowing
 
 ```python
-# Accidentally shadowing built-in
+# Accidentally
 def process_data():
     list = [1, 2, 3]  # Shadows built-in list
     # Now can't use list() constructor in this function
     # data = list(range(5))  # TypeError!
     pass
 
-# Better: Use different name
+# Better: Use
 def process_data_better():
     items = [1, 2, 3]
     data = list(range(5))  # Works fine
 ```
 
-### 5. Namespace Pollution
+### 1. Namespace
 
 ```python
-# Bad: Using global everywhere
+# Bad: Using global
 count = 0
 
 def increment():
@@ -626,7 +626,7 @@ def decrement():
     global count
     count -= 1
 
-# Better: Encapsulate in class or pass as parameter
+# Better: Encapsulate
 class Counter:
     def __init__(self):
         self.count = 0
@@ -638,9 +638,9 @@ class Counter:
         self.count -= 1
 ```
 
-## Namespace Introspection
+## Namespace
 
-### globals() Function
+### 1. globals()
 
 Returns dictionary of global namespace:
 
@@ -660,7 +660,7 @@ def show_globals():
 show_globals()
 ```
 
-### locals() Function
+### 2. locals() Function
 
 Returns dictionary of local namespace:
 
@@ -679,10 +679,10 @@ def my_function():
 my_function()
 ```
 
-### vars() Function
+### 3. vars() Function
 
 ```python
-# vars() with no argument is like locals()
+# vars() with no
 def demo():
     x = 10
     y = 20
@@ -690,7 +690,7 @@ def demo():
 
 demo()
 
-# vars(object) returns object's __dict__
+# vars(object) returns
 class Person:
     def __init__(self, name, age):
         self.name = name
@@ -700,7 +700,7 @@ p = Person("Alice", 25)
 print(vars(p))  # {'name': 'Alice', 'age': 25}
 ```
 
-### dir() Function
+### 1. dir() Function
 
 Lists names in current scope:
 
@@ -718,17 +718,17 @@ my_function()
 
 ## Best Practices
 
-### 1. Minimize Global Variables
+### 1. Minimize Global
 
 ```python
-# Poor - relying on globals
+# Poor - relying on
 total = 0
 
 def add(x):
     global total
     total += x
 
-# Better - pass values and return results
+# Better - pass values
 def add(total, x):
     return total + x
 
@@ -737,26 +737,26 @@ total = add(total, 5)
 total = add(total, 10)
 ```
 
-### 2. Use Function Parameters
+### 1. Use Function
 
 ```python
-# Poor - accessing global
+# Poor - accessing
 config_value = 100
 
 def process():
     return config_value * 2
 
-# Better - pass as parameter
+# Better - pass as
 def process(config_value):
     return config_value * 2
 
 result = process(100)
 ```
 
-### 3. Be Explicit with global/nonlocal
+### 1. Be Explicit with
 
 ```python
-# Poor - implicit global access
+# Poor - implicit
 counter = 0
 
 def increment():
@@ -764,7 +764,7 @@ def increment():
     counter += 1
 ```
 
-### 4. Avoid Shadowing Built-ins
+### 1. Avoid Shadowing
 
 ```python
 # Bad
@@ -778,10 +778,10 @@ mapping = {'a': 1}
 total = 42
 ```
 
-### 5. Keep Scope as Narrow as Possible
+### 1. Keep Scope as
 
 ```python
-# Poor - wider scope than needed
+# Poor - wider scope
 result = 0
 
 def calculate(x, y):
@@ -799,7 +799,7 @@ result = calculate(5, 3)
 
 ## Practical Examples
 
-### Example 1: Configuration Management
+### 1. Key point
 
 ```python
 # Global configuration
@@ -827,7 +827,7 @@ process_data(data)
 update_config('debug', False)
 ```
 
-### Example 2: Callback with Closure
+### 1. Key point
 
 ```python
 def make_callback(prefix):
@@ -836,7 +836,7 @@ def make_callback(prefix):
         print(f"{prefix}: {message}")
     return callback
 
-# Create specialized callbacks
+# Create specialized
 error_handler = make_callback("ERROR")
 warning_handler = make_callback("WARNING")
 info_handler = make_callback("INFO")
@@ -846,7 +846,7 @@ warning_handler("Deprecated API")   # WARNING: Deprecated API
 info_handler("Process completed")   # INFO: Process completed
 ```
 
-### Example 3: State Management
+### 1. Key point
 
 ```python
 def create_account(initial_balance):
@@ -883,18 +883,18 @@ print(get_balance())  # 1300
 
 ## Quick Reference
 
-### LEGB Order
+### 1. LEGB Order
 ```
 Local → Enclosing → Global → Built-in
 ```
 
-### Scope Keywords
+### 2. Scope Keywords
 ```python
 global variable_name    # Modify global variable
 nonlocal variable_name  # Modify enclosing variable
 ```
 
-### Introspection Functions
+### 3. Introspection
 ```python
 globals()    # Global namespace dictionary
 locals()     # Local namespace dictionary
@@ -902,15 +902,15 @@ vars()       # Namespace dictionary
 dir()        # List of names in scope
 ```
 
-### Common Patterns
+### 4. Common Patterns
 ```python
-# Reading from outer scope (no keyword needed)
+# Reading from outer
 def outer():
     x = 10
     def inner():
         print(x)  # Just works
 
-# Modifying outer scope (keyword needed)
+# Modifying outer
 def outer():
     x = 10
     def inner():

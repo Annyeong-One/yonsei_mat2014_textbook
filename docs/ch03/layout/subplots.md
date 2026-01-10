@@ -4,7 +4,7 @@ Complex visualizations often require arranging multiple plots in a single figure
 
 ---
 
-## 1. Basic subplots
+## Basic subplots
 
 The simplest way to create multiple plots is `plt.subplots`:
 
@@ -18,7 +18,7 @@ This creates a 2×2 grid of Axes.
 
 ---
 
-## 2. Indexing Axes
+## Indexing Axes
 
 ```python
 axs[0, 0].plot([1, 2, 3])
@@ -29,7 +29,7 @@ Each Axes can be customized independently.
 
 ---
 
-## 3. Shared axes
+## Shared axes
 
 Sharing axes improves comparability:
 
@@ -41,7 +41,7 @@ Useful for time-series panels.
 
 ---
 
-## 4. GridSpec (advanced layouts)
+## GridSpec (advanced
 
 For fine control:
 
@@ -56,7 +56,7 @@ ax3 = plt.subplot(gs[1, 1:])
 
 ---
 
-## 5. Best practices
+## Best practices
 
 - Align axes when comparing plots.
 - Avoid overcrowding.

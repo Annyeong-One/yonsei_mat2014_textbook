@@ -1,10 +1,10 @@
-# `sys.path` and Module Search Order
+# `sys.path` and
 
 Python searches for modules in a well-defined order stored in `sys.path`.
 
 ---
 
-## 1. The module search path
+## The module search
 
 ```python
 import sys
@@ -15,7 +15,7 @@ This is a list of directories Python checks in order.
 
 ---
 
-## 2. Search order
+## Search order
 
 Typical order:
 1. Current script directory
@@ -27,7 +27,7 @@ The first match wins.
 
 ---
 
-## 3. Modifying `sys.path`
+## Modifying `sys.path`
 
 You can modify `sys.path` at runtime:
 
@@ -39,7 +39,7 @@ This is sometimes useful but should be avoided in production code.
 
 ---
 
-## 4. Common pitfalls
+## Common pitfalls
 
 - Name collisions with standard library modules
 - Accidental imports from the wrong directory

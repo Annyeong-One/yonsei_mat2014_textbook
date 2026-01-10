@@ -1,10 +1,10 @@
-# GroupBy and Aggregation
+# GroupBy and
 
 Grouping and aggregation are central to data wrangling in pandas, allowing you to summarize and transform data efficiently.
 
 ---
 
-## 1. The GroupBy concept
+## The GroupBy concept
 
 `groupby` splits data into groups, applies a function, and combines the results.
 
@@ -19,7 +19,7 @@ df = pd.DataFrame({
 
 ---
 
-## 2. Basic aggregation
+## Basic aggregation
 
 ```python
 df.groupby("asset")["return"].mean()
@@ -33,7 +33,7 @@ Common aggregations:
 
 ---
 
-## 3. Multiple aggregations
+## Multiple
 
 ```python
 df.groupby("asset")["return"].agg(["mean", "std"])
@@ -47,7 +47,7 @@ df.groupby("asset").agg({"return": "mean"})
 
 ---
 
-## 4. GroupBy objects
+## GroupBy objects
 
 A GroupBy object is lazy:
 - no computation until aggregation,
@@ -60,7 +60,7 @@ g.mean()
 
 ---
 
-## 5. Financial use cases
+## Financial use cases
 
 GroupBy is used for:
 - asset-level returns,

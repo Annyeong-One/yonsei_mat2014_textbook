@@ -1,10 +1,10 @@
-# Context Managers (`with`)
+# Context Managers
 
 Context managers ensure that resources are properly acquired and released. For file I/O, they are the preferred approach.
 
 ---
 
-## 1. The problem with manual closing
+## The problem with
 
 If an exception occurs:
 
@@ -18,7 +18,7 @@ The file is never closed.
 
 ---
 
-## 2. Using `with`
+## Using `with`
 
 ```python
 with open("data.txt") as f:
@@ -30,7 +30,7 @@ The file is **automatically closed**, even if an error occurs.
 
 ---
 
-## 3. Why context managers matter
+## Why context managers
 
 They guarantee:
 - proper cleanup,
@@ -41,7 +41,7 @@ They are used for files, locks, network connections, etc.
 
 ---
 
-## 4. Custom context managers
+## Custom context
 
 You can define your own context managers using:
 - `__enter__` / `__exit__`

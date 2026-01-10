@@ -1,10 +1,10 @@
-# The `builtins` Namespace
+# The `builtins`
 
 Python’s built-in functions, exceptions, and types live in the **`builtins` namespace**. Understanding this namespace clarifies what is always available without imports.
 
 ---
 
-## 1. What is `builtins`?
+## What is `builtins`?
 
 `builtins` is a module automatically loaded by Python that contains:
 - core functions (`len`, `print`, `range`, …),
@@ -15,7 +15,7 @@ You normally use these names without qualification.
 
 ---
 
-## 2. Inspecting `builtins`
+## Inspecting
 
 ```python
 import builtins
@@ -26,7 +26,7 @@ This shows all names that are globally available.
 
 ---
 
-## 3. Shadowing builtins
+## Shadowing builtins
 
 You can accidentally override built-ins:
 
@@ -40,7 +40,7 @@ Avoid shadowing built-in names.
 
 ---
 
-## 4. Why this matters
+## Why this matters
 
 Understanding `builtins` helps with:
 - debugging name conflicts,

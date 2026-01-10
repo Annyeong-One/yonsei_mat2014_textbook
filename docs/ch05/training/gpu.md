@@ -1,10 +1,10 @@
-# GPU and Performance Considerations
+# GPU and Performance
 
 Modern deep learning performance relies heavily on hardware acceleration, especially GPUs.
 
 ---
 
-## 1. CPU vs GPU
+## CPU vs GPU
 
 GPUs excel at:
 - large matrix operations,
@@ -18,7 +18,7 @@ model.to(device)
 
 ---
 
-## 2. Moving data to GPU
+## Moving data to GPU
 
 All tensors involved in computation must be on the same device:
 
@@ -31,7 +31,7 @@ Mixing CPU and GPU tensors causes runtime errors.
 
 ---
 
-## 3. Performance tips
+## Performance tips
 
 - Use larger batch sizes when possible.
 - Avoid Python loops inside training steps.
@@ -39,7 +39,7 @@ Mixing CPU and GPU tensors causes runtime errors.
 
 ---
 
-## 4. Numerical precision
+## Numerical precision
 
 Using lower precision can improve speed:
 
@@ -52,7 +52,7 @@ But may affect numerical stability.
 
 ---
 
-## 5. Financial modeling perspective
+## Financial modeling
 
 In finance, GPUs are valuable for:
 - large-scale Monte Carlo,

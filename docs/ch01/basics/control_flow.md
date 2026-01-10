@@ -1,4 +1,4 @@
-# Control Flow: if, for, while
+# Control Flow: if,
 
 ## Introduction
 
@@ -9,9 +9,9 @@ Control flow statements determine the order in which your program executes code.
 
 This chapter covers Python's core control flow constructs with comprehensive examples and best practices.
 
-## Conditional Statements: if, elif, else
+## Conditional
 
-### Basic if Statement
+### 1. Basic if
 
 Execute code only when a condition is true:
 
@@ -22,8 +22,8 @@ if age >= 18:
     print("You are an adult")
     print("You can vote")
 
-# Output: You are an adult
-#         You can vote
+# Output: You are an
+# You can vote
 ```
 
 **Syntax**:
@@ -34,7 +34,7 @@ if condition:
     statement2
 ```
 
-### if-else Statement
+### 1. if-else Statement
 
 Execute one block if condition is true, another if false:
 
@@ -46,10 +46,10 @@ if age >= 18:
 else:
     print("You are a minor")
 
-# Output: You are a minor
+# Output: You are a
 ```
 
-### if-elif-else Statement
+### 1. if-elif-else
 
 Handle multiple conditions:
 
@@ -68,7 +68,7 @@ else:
     grade = "F"
 
 print(f"Your grade is: {grade}")
-# Output: Your grade is: B
+# Output: Your grade
 ```
 
 **Important**: 
@@ -76,7 +76,7 @@ print(f"Your grade is: {grade}")
 - Only the first matching condition's block executes
 - `else` is optional and executes if no condition matches
 
-### Nested if Statements
+### 1. Nested if
 
 Put if statements inside other if statements:
 
@@ -92,10 +92,10 @@ if age >= 18:
 else:
     print("You're too young to drive")
 
-# Output: You can drive
+# Output: You can
 ```
 
-### One-Line if Statements
+### 1. One-Line if
 
 For simple cases, put everything on one line:
 
@@ -103,16 +103,16 @@ For simple cases, put everything on one line:
 age = 20
 if age >= 18: print("Adult")
 
-# Or use ternary operator (conditional expression)
+# Or use ternary
 status = "Adult" if age >= 18 else "Minor"
 ```
 
-### Conditions and Truth Values
+### 1. Conditions and
 
 Python treats many values as True or False:
 
 ```python
-# Falsy values (evaluate to False)
+# Falsy values
 if 0:              # False - zero
     pass
 if "":             # False - empty string
@@ -126,7 +126,7 @@ if None:           # False - None
 if False:          # False - boolean False
     pass
 
-# Truthy values (evaluate to True)
+# Truthy values
 if 42:             # True - non-zero number
     print("Number is truthy")
 if "hello":        # True - non-empty string
@@ -135,7 +135,7 @@ if [1, 2]:         # True - non-empty list
     print("List is truthy")
 ```
 
-### Comparison Operators in Conditions
+### 1. Comparison
 
 ```python
 x = 10
@@ -156,7 +156,7 @@ if x >= 10:         # Greater than or equal
 if x <= 15:         # Less than or equal
     pass
 
-# Chained comparisons (very Pythonic!)
+# Chained comparisons
 if 0 < x < 20:      # x is between 0 and 20
     pass
 if 0 <= x <= 100:   # x is between 0 and 100 inclusive
@@ -175,7 +175,7 @@ if 'a' in 'abc':       # Check if character in string
     pass
 ```
 
-### Logical Operators
+### 1. Logical Operators
 
 Combine multiple conditions:
 
@@ -184,15 +184,15 @@ age = 25
 has_license = True
 has_car = False
 
-# AND - all conditions must be True
+# AND - all conditions
 if age >= 18 and has_license:
     print("Can drive legally")
 
-# OR - at least one condition must be True
+# OR - at least one
 if has_license or has_car:
     print("Has some transportation option")
 
-# NOT - inverts the condition
+# NOT - inverts the
 if not has_car:
     print("Needs to buy a car")
 
@@ -201,15 +201,15 @@ if (age >= 18 and has_license) or has_car:
     print("Can drive somehow")
 ```
 
-### Short-Circuit Evaluation
+### 1. Short-Circuit
 
 Logical operators stop evaluating as soon as the result is determined:
 
 ```python
-# AND stops at first False
+# AND stops at first
 False and expensive_function()  # expensive_function() is NOT called
 
-# OR stops at first True
+# OR stops at first
 True or expensive_function()    # expensive_function() is NOT called
 
 # Practical example
@@ -217,13 +217,13 @@ x = None
 if x and x.some_method():  # Won't call some_method() if x is None
     pass
 
-# Another practical use
+# Another practical
 name = input_name or "Guest"  # Use "Guest" if input_name is empty
 ```
 
 ## For Loops
 
-### Basic for Loop
+### 1. Basic for Loop
 
 Iterate over sequences (lists, strings, ranges, etc.):
 
@@ -247,7 +247,7 @@ for variable in sequence:
     statement2
 ```
 
-### Iterating Over Different Types
+### 1. Iterating Over
 
 ```python
 # String
@@ -262,12 +262,12 @@ for number in [1, 2, 3, 4, 5]:
 for item in (1, 2, 3):
     print(item)
 
-# Dictionary (iterates over keys by default)
+# Dictionary (iterates
 person = {"name": "Alice", "age": 25}
 for key in person:
     print(f"{key}: {person[key]}")
 
-# Dictionary items (key-value pairs)
+# Dictionary items
 for key, value in person.items():
     print(f"{key}: {value}")
 
@@ -276,24 +276,24 @@ for item in {1, 2, 3}:
     print(item)
 ```
 
-### The range() Function
+### 1. The range()
 
 Generate sequences of numbers:
 
 ```python
-# range(stop) - from 0 to stop-1
+# range(stop) - from 0
 for i in range(5):
     print(i)  # 0, 1, 2, 3, 4
 
-# range(start, stop) - from start to stop-1
+# range(start, stop) -
 for i in range(2, 6):
     print(i)  # 2, 3, 4, 5
 
-# range(start, stop, step)
+# range(start, stop,
 for i in range(0, 10, 2):
     print(i)  # 0, 2, 4, 6, 8
 
-# Negative step (counting down)
+# Negative step
 for i in range(10, 0, -1):
     print(i)  # 10, 9, 8, ..., 1
 
@@ -302,7 +302,7 @@ for i in range(0, 20, 2):
     print(i)
 ```
 
-### Nested Loops
+### 1. Nested Loops
 
 Loops inside loops:
 
@@ -326,7 +326,7 @@ for row in matrix:
     print()  # New line after each row
 ```
 
-### enumerate() Function
+### 1. enumerate()
 
 Get both index and value:
 
@@ -337,20 +337,20 @@ fruits = ["apple", "banana", "cherry"]
 for i in range(len(fruits)):
     print(f"{i}: {fruits[i]}")
 
-# With enumerate (better!)
+# With enumerate
 for i, fruit in enumerate(fruits):
     print(f"{i}: {fruit}")
 
-# Start indexing from 1
+# Start indexing from
 for i, fruit in enumerate(fruits, start=1):
     print(f"{i}: {fruit}")
 # Output:
-# 1: apple
-# 2: banana
-# 3: cherry
+# apple
+# banana
+# cherry
 ```
 
-### zip() Function
+### 1. zip() Function
 
 Iterate over multiple sequences simultaneously:
 
@@ -362,9 +362,9 @@ for name, age in zip(names, ages):
     print(f"{name} is {age} years old")
 
 # Output:
-# Alice is 25 years old
+# Alice is 25 years
 # Bob is 30 years old
-# Charlie is 35 years old
+# Charlie is 35 years
 
 # Multiple sequences
 scores = [85, 90, 78]
@@ -372,7 +372,7 @@ for name, age, score in zip(names, ages, scores):
     print(f"{name} ({age}) scored {score}")
 ```
 
-### reversed() Function
+### 1. reversed()
 
 Iterate in reverse:
 
@@ -382,12 +382,12 @@ numbers = [1, 2, 3, 4, 5]
 for num in reversed(numbers):
     print(num)  # 5, 4, 3, 2, 1
 
-# Also works with strings
+# Also works with
 for char in reversed("Python"):
     print(char)  # n, o, h, t, y, P
 ```
 
-### sorted() Function
+### 1. sorted() Function
 
 Iterate in sorted order:
 
@@ -409,7 +409,7 @@ for name in sorted(names):
 
 ## While Loops
 
-### Basic while Loop
+### 1. Basic while Loop
 
 Repeat while a condition is true:
 
@@ -419,7 +419,7 @@ while count < 5:
     print(count)
     count += 1
 
-# Output: 0, 1, 2, 3, 4
+# Output: 0, 1, 2, 3,
 ```
 
 **Syntax**:
@@ -432,7 +432,7 @@ while condition:
 
 **Warning**: Make sure the condition eventually becomes False, or you'll have an infinite loop!
 
-### While Loop Examples
+### 1. While Loop
 
 ```python
 # Countdown
@@ -442,7 +442,7 @@ while n > 0:
     n -= 1
 print("Blast off!")
 
-# User input validation
+# User input
 while True:
     age = input("Enter your age: ")
     if age.isdigit() and int(age) > 0:
@@ -459,16 +459,16 @@ while num >= 0:
 print(f"Total: {total}")
 ```
 
-### While vs For
+### 1. While vs For
 
 ```python
-# Same result, different approaches
+# Same result,
 
-# For loop (when you know the count)
+# For loop (when you
 for i in range(5):
     print(i)
 
-# While loop (when you check a condition)
+# While loop (when you
 i = 0
 while i < 5:
     print(i)
@@ -484,9 +484,9 @@ while i < 5:
 - Waiting for a condition to change
 - Processing user input until they quit
 
-## Loop Control Statements
+## Loop Control
 
-### break Statement
+### 1. break Statement
 
 Exit the loop immediately:
 
@@ -499,9 +499,9 @@ for num in numbers:
         break
     print(num)
 
-# Output: 1, 3, 5, 7, 9, Found even number: 2
+# Output: 1, 3, 5, 7,
 
-# Infinite loop with break
+# Infinite loop with
 while True:
     response = input("Continue? (y/n): ")
     if response.lower() == 'n':
@@ -509,7 +509,7 @@ while True:
     print("Continuing...")
 ```
 
-### continue Statement
+### 1. continue
 
 Skip the rest of the current iteration:
 
@@ -520,7 +520,7 @@ for i in range(10):
         continue
     print(i)
 
-# Output: 1, 3, 5, 7, 9
+# Output: 1, 3, 5, 7,
 
 # Skip empty strings
 names = ["Alice", "", "Bob", "", "Charlie"]
@@ -530,27 +530,27 @@ for name in names:
     print(f"Hello, {name}")
 ```
 
-### pass Statement
+### 1. pass Statement
 
 Do nothing (placeholder):
 
 ```python
-# Placeholder for future code
+# Placeholder for
 for i in range(10):
     if i == 5:
         pass  # TODO: implement special handling
     print(i)
 
-# Empty loop (useful during development)
+# Empty loop (useful
 while condition:
     pass  # Will implement later
 
-# Minimal class definition
+# Minimal class
 class MyClass:
     pass  # Will add methods later
 ```
 
-### else Clause with Loops
+### 1. else Clause with
 
 Execute code when loop completes normally (not via `break`):
 
@@ -562,7 +562,7 @@ for num in [1, 3, 5, 7]:
         break
 else:
     print("10 not found in list")
-# Output: 10 not found in list
+# Output: 10 not found
 
 # With while loop
 count = 0
@@ -571,9 +571,9 @@ while count < 5:
     count += 1
 else:
     print("Loop completed normally")
-# Output: 0, 1, 2, 3, 4, Loop completed normally
+# Output: 0, 1, 2, 3,
 
-# Practical example: search
+# Practical example:
 def find_item(items, target):
     for item in items:
         if item == target:
@@ -586,9 +586,9 @@ find_item([1, 2, 3, 4], 3)  # Found 3
 find_item([1, 2, 3, 4], 5)  # 5 not found
 ```
 
-## Common Patterns and Idioms
+## Common Patterns and
 
-### Counting Pattern
+### 1. Counting Pattern
 
 ```python
 # Count occurrences
@@ -599,11 +599,11 @@ for num in numbers:
         count += 1
 print(f"2 appears {count} times")
 
-# Or use count() method
+# Or use count()
 count = numbers.count(2)
 ```
 
-### Accumulation Pattern
+### 1. Accumulation
 
 ```python
 # Sum all numbers
@@ -617,7 +617,7 @@ print(total)  # 15
 total = sum(numbers)
 ```
 
-### Finding Maximum/Minimum
+### 1. Finding
 
 ```python
 # Find maximum
@@ -632,7 +632,7 @@ print(maximum)  # 9
 maximum = max(numbers)
 ```
 
-### Filtering Pattern
+### 1. Filtering Pattern
 
 ```python
 # Collect even numbers
@@ -643,11 +643,11 @@ for num in numbers:
         evens.append(num)
 print(evens)  # [2, 4, 6]
 
-# Or use list comprehension
+# Or use list
 evens = [num for num in numbers if num % 2 == 0]
 ```
 
-### Transformation Pattern
+### 1. Transformation
 
 ```python
 # Square all numbers
@@ -657,17 +657,17 @@ for num in numbers:
     squares.append(num ** 2)
 print(squares)  # [1, 4, 9, 16, 25]
 
-# Or use list comprehension
+# Or use list
 squares = [num ** 2 for num in numbers]
 
 # Or use map()
 squares = list(map(lambda x: x ** 2, numbers))
 ```
 
-### Early Exit Pattern
+### 1. Early Exit
 
 ```python
-# Find first match and exit
+# Find first match and
 def find_user(users, user_id):
     for user in users:
         if user['id'] == user_id:
@@ -675,10 +675,10 @@ def find_user(users, user_id):
     return None  # Not found
 ```
 
-### Flag Pattern
+### 1. Flag Pattern
 
 ```python
-# Set flag when condition is met
+# Set flag when
 found = False
 for item in collection:
     if item == target:
@@ -693,21 +693,21 @@ else:
 
 ## Best Practices
 
-### 1. Use for Loops for Sequences
+### 1. Use for Loops for
 
 ```python
-# Poor (C-style iteration)
+# Poor (C-style
 i = 0
 while i < len(items):
     print(items[i])
     i += 1
 
-# Good (Pythonic iteration)
+# Good (Pythonic
 for item in items:
     print(item)
 ```
 
-### 2. Use enumerate() for Index and Value
+### 1. Use enumerate()
 
 ```python
 # Poor
@@ -719,7 +719,7 @@ for i, item in enumerate(items):
     print(f"{i}: {item}")
 ```
 
-### 3. Avoid Modifying List While Iterating
+### 1. Avoid Modifying
 
 ```python
 # Dangerous!
@@ -728,17 +728,17 @@ for num in numbers:
     if num % 2 == 0:
         numbers.remove(num)  # Can skip elements or raise errors
 
-# Safe - iterate over a copy
+# Safe - iterate over
 numbers = [1, 2, 3, 4, 5]
 for num in numbers[:]:  # [:] creates a copy
     if num % 2 == 0:
         numbers.remove(num)
 
-# Better - use list comprehension
+# Better - use list
 numbers = [num for num in numbers if num % 2 != 0]
 ```
 
-### 4. Use List Comprehensions When Appropriate
+### 1. Use List
 
 ```python
 # Traditional loop
@@ -746,27 +746,27 @@ squares = []
 for x in range(10):
     squares.append(x ** 2)
 
-# List comprehension (more concise)
+# List comprehension
 squares = [x ** 2 for x in range(10)]
 
-# But don't overuse - readability matters
+# But don't overuse -
 # Too complex
 result = [x**2 for x in range(100) if x%2==0 and x>10 and x<90]
 
-# Better - break it down
+# Better - break it
 evens = [x for x in range(100) if x % 2 == 0]
 in_range = [x for x in evens if 10 < x < 90]
 result = [x ** 2 for x in in_range]
 ```
 
-### 5. Avoid Infinite Loops
+### 1. Avoid Infinite
 
 ```python
-# Dangerous - no way to exit
+# Dangerous - no way
 while True:
     print("This will run forever!")
 
-# Better - have an exit condition
+# Better - have an
 count = 0
 while count < 10:
     print(count)
@@ -779,10 +779,10 @@ while True:
         break
 ```
 
-### 6. Keep Loop Bodies Simple
+### 1. Keep Loop Bodies
 
 ```python
-# Poor - complex loop body
+# Poor - complex loop
 for item in items:
     if condition1:
         if condition2:
@@ -790,7 +790,7 @@ for item in items:
                 # deeply nested code
                 pass
 
-# Better - extract to function
+# Better - extract to
 def process_item(item):
     if not condition1:
         return
@@ -814,13 +814,13 @@ for item in items:
 for i in range(1, 10):  # Goes from 1 to 9, not 10
     print(i)
 
-# Remember: range(start, stop) excludes stop
+# Remember:
 # To include 10:
 for i in range(1, 11):
     print(i)
 ```
 
-### 2. Modifying Dictionary While Iterating
+### 1. Modifying
 
 ```python
 # Dangerous!
@@ -829,13 +829,13 @@ for key in d:
     if d[key] == 2:
         del d[key]  # RuntimeError!
 
-# Safe - iterate over a copy of keys
+# Safe - iterate over
 for key in list(d.keys()):
     if d[key] == 2:
         del d[key]
 ```
 
-### 3. Forgetting to Update Loop Variable
+### 1. Forgetting to
 
 ```python
 # Infinite loop!
@@ -845,10 +845,10 @@ while i < 10:
     # Forgot: i += 1
 ```
 
-### 4. Using Wrong Comparison Operator
+### 1. Using Wrong
 
 ```python
-# Wrong - always True (single =)
+# Wrong - always True
 if x = 10:  # SyntaxError in Python
     pass
 
@@ -859,7 +859,7 @@ if x == 10:
 
 ## Quick Reference
 
-### if Statement
+### 1. if Statement
 ```python
 if condition:
     # code
@@ -869,7 +869,7 @@ else:
     # code
 ```
 
-### for Loop
+### 2. for Loop
 ```python
 for item in sequence:
     # code
@@ -884,7 +884,7 @@ for key, value in dictionary.items():
     # code
 ```
 
-### while Loop
+### 3. while Loop
 ```python
 while condition:
     # code
@@ -895,14 +895,14 @@ while True:
         break
 ```
 
-### Loop Control
+### 4. Loop Control
 ```python
 break      # Exit loop immediately
 continue   # Skip to next iteration
 pass       # Do nothing (placeholder)
 ```
 
-### Loop with else
+### 5. Loop with else
 ```python
 for item in sequence:
     if found:

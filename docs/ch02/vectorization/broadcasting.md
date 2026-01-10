@@ -4,7 +4,7 @@ Broadcasting allows NumPy to perform elementwise operations on arrays of differe
 
 ---
 
-## 1. Motivation
+## Motivation
 
 Broadcasting avoids:
 - manual reshaping,
@@ -15,7 +15,7 @@ It enables concise, high-performance code.
 
 ---
 
-## 2. Basic idea
+## Basic idea
 
 When operating on two arrays, NumPy compares shapes **from the trailing dimensions**.
 
@@ -25,7 +25,7 @@ Dimensions are compatible if:
 
 ---
 
-## 3. Example
+## Key topics
 
 ```python
 import numpy as np
@@ -40,7 +40,7 @@ Here, `b` behaves like shape `(1, 4)`.
 
 ---
 
-## 4. More examples
+## More examples
 
 ```python
 x = np.ones((5, 1))
@@ -50,7 +50,7 @@ x + y   # result shape (5, 3)
 
 ---
 
-## 5. Broadcasting errors
+## Broadcasting errors
 
 If shapes are incompatible:
 

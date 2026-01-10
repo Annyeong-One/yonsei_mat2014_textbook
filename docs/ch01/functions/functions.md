@@ -1,4 +1,4 @@
-# Function Definition and Call Stack
+# Function Definition
 
 ## Introduction
 
@@ -15,7 +15,7 @@ A **function** is a named block of code that:
 - Can be called multiple times
 - Helps organize code into logical units
 
-### Why Use Functions?
+### 1. Why Use
 
 1. **Code Reusability**: Write once, use many times
 2. **Modularity**: Break complex problems into smaller pieces
@@ -25,7 +25,7 @@ A **function** is a named block of code that:
 
 ## Defining Functions
 
-### Basic Function Definition
+### 1. Basic Function
 
 Use the `def` keyword to define a function:
 
@@ -48,7 +48,7 @@ def function_name():
     # ...
 ```
 
-### Function Components
+### 1. Function
 
 ```python
 def calculate_area(length, width):
@@ -75,7 +75,7 @@ Components:
 6. **Function body**: Indented code that executes when function is called
 7. **return statement**: Specifies output (optional)
 
-### Docstrings
+### 2. Docstrings
 
 Document your functions with docstrings:
 
@@ -106,7 +106,7 @@ help(add)
 
 ## Calling Functions
 
-### Basic Function Call
+### 1. Basic Function
 
 ```python
 def say_hello():
@@ -120,7 +120,7 @@ say_hello()
 say_hello()
 ```
 
-### Function Call with Arguments
+### 1. Function Call
 
 ```python
 def greet(name):
@@ -130,7 +130,7 @@ greet("Alice")   # Output: Hello, Alice!
 greet("Bob")     # Output: Hello, Bob!
 ```
 
-### Using Return Values
+### 2. Using Return
 
 ```python
 def add(a, b):
@@ -153,7 +153,7 @@ print(double(add(3, 4)))  # Output: 14
 
 ## Return Statement
 
-### Basic Return
+### 1. Basic Return
 
 ```python
 def square(x):
@@ -162,7 +162,7 @@ def square(x):
 result = square(5)  # result = 25
 ```
 
-### Multiple Return Values
+### 2. Multiple Return
 
 Return a tuple to return multiple values:
 
@@ -173,7 +173,7 @@ def get_dimensions():
     height = 3
     return length, width, height  # Returns a tuple
 
-# Unpack returned values
+# Unpack returned
 l, w, h = get_dimensions()
 print(f"Length: {l}, Width: {w}, Height: {h}")
 
@@ -182,7 +182,7 @@ dimensions = get_dimensions()
 print(dimensions)  # Output: (10, 5, 3)
 ```
 
-### Early Return
+### 1. Early Return
 
 ```python
 def validate_age(age):
@@ -198,7 +198,7 @@ print(validate_age(200))  # Age seems unrealistic
 print(validate_age(25))   # Valid age
 ```
 
-### No Return Statement
+### 2. No Return
 
 Functions without `return` implicitly return `None`:
 
@@ -211,28 +211,28 @@ result = print_message("Hello")
 print(result)  # Output: None
 ```
 
-### Return vs Print
+### 3. Return vs Print
 
 ```python
-# Return - provides value for use
+# Return - provides
 def add_return(a, b):
     return a + b
 
 result = add_return(3, 4)  # result = 7
 print(result * 2)          # Output: 14
 
-# Print - displays to console
+# Print - displays to
 def add_print(a, b):
     print(a + b)
 
 result = add_print(3, 4)   # Prints: 7
 # result is None
-# print(result * 2)        # TypeError: unsupported operand type(s)
+# print(result * 2) #
 ```
 
 ## Variable Scope
 
-### Local Scope
+### 1. Local Scope
 
 Variables defined inside a function are local:
 
@@ -242,10 +242,10 @@ def my_function():
     print(x)
 
 my_function()  # Output: 10
-# print(x)     # NameError: name 'x' is not defined
+# print(x) #
 ```
 
-### Global Scope
+### 1. Global Scope
 
 Variables defined outside functions are global:
 
@@ -259,7 +259,7 @@ my_function()  # Output: 10
 print(x)       # Output: 10
 ```
 
-### Local vs Global
+### 2. Local vs Global
 
 ```python
 x = 10  # Global
@@ -272,7 +272,7 @@ my_function()      # Output: Inside: 20
 print(f"Outside: {x}")  # Output: Outside: 10
 ```
 
-### Modifying Global Variables
+### 3. Modifying Global
 
 Use `global` keyword to modify global variables:
 
@@ -290,7 +290,7 @@ increment()
 print(count)  # Output: 2
 ```
 
-### Nonlocal Scope
+### 4. Nonlocal Scope
 
 In nested functions, use `nonlocal` to modify enclosing scope:
 
@@ -311,7 +311,7 @@ outer()
 
 ## The Call Stack
 
-### Understanding the Call Stack
+### 1. Understanding the
 
 The **call stack** is a data structure that tracks function calls:
 - When a function is called, a new **stack frame** is created and pushed onto the stack
@@ -319,7 +319,7 @@ The **call stack** is a data structure that tracks function calls:
 - When the function returns, its stack frame is popped off
 - Execution resumes at the calling location
 
-### Visualizing the Call Stack
+### 2. Visualizing the
 
 ```python
 def function_a():
@@ -368,7 +368,7 @@ B: End
 A: End
 ```
 
-### Stack Frame Contents
+### 3. Stack Frame
 
 Each stack frame stores:
 
@@ -379,14 +379,14 @@ def calculate_total(price, quantity, tax_rate=0.1):
     total = subtotal + tax
     return total
 
-# When called: calculate_total(10, 5, 0.08)
-# Stack frame contains:
-# - Parameters: price=10, quantity=5, tax_rate=0.08
-# - Local variables: subtotal=50, tax=4.0, total=54.0
-# - Return address: where to resume after function returns
+# When called:
+# Stack frame
+# Parameters:
+# Local variables:
+# Return address:
 ```
 
-### Stack Trace
+### 1. Stack Trace
 
 When an error occurs, Python shows the call stack:
 
@@ -421,7 +421,7 @@ The traceback shows the call stack from bottom (where error occurred) to top (in
 
 ## Nested Functions
 
-### Defining Functions Inside Functions
+### 1. Defining
 
 ```python
 def outer(x):
@@ -437,7 +437,7 @@ def outer(x):
 print(outer(10))  # Output: 25
 ```
 
-### Closures
+### 2. Closures
 
 Inner functions can access outer function variables:
 
@@ -457,7 +457,7 @@ print(times_3(10))  # Output: 30
 print(times_5(10))  # Output: 50
 ```
 
-### Encapsulation with Nested Functions
+### 3. Encapsulation
 
 ```python
 def counter():
@@ -480,7 +480,7 @@ print(my_counter())  # 3
 
 ## Function Objects
 
-### Functions are First-Class Objects
+### 1. Functions are
 
 In Python, functions are objects that can be:
 - Assigned to variables
@@ -507,7 +507,7 @@ def apply_function(func, value):
 print(apply_function(greet, "Charlie"))  # Output: Hello, Charlie!
 ```
 
-### Function Attributes
+### 1. Function
 
 Functions have attributes:
 
@@ -521,12 +521,12 @@ print(my_function.__doc__)       # This is my function.
 print(type(my_function))         # <class 'function'>
 ```
 
-## Higher-Order Functions
+## Higher-Order
 
 Functions that operate on other functions:
 
 ```python
-# Function that takes a function as argument
+# Function that takes
 def apply_twice(func, value):
     """Apply function twice to value."""
     return func(func(value))
@@ -537,7 +537,7 @@ def add_five(x):
 result = apply_twice(add_five, 10)
 print(result)  # Output: 20 (10 + 5 + 5)
 
-# Function that returns a function
+# Function that
 def make_power(n):
     """Return a function that raises to power n."""
     def power(x):
@@ -584,12 +584,12 @@ help(len)         # Display documentation
 
 ## Best Practices
 
-### 1. Single Responsibility Principle
+### 1. Single
 
 Each function should do one thing well:
 
 ```python
-# Poor - doing too much
+# Poor - doing too
 def process_user(user_data):
     # Validate
     if not user_data:
@@ -601,7 +601,7 @@ def process_user(user_data):
     # Send email
     email.send(user_data)
 
-# Better - separate concerns
+# Better - separate
 def validate_user(user_data):
     return bool(user_data)
 
@@ -623,7 +623,7 @@ def process_user(user_data):
     return True
 ```
 
-### 2. Keep Functions Small
+### 1. Keep Functions
 
 Aim for functions that fit on one screen:
 
@@ -633,7 +633,7 @@ def process_order(order):
     # 100+ lines of code
     ...
 
-# Better - break into smaller functions
+# Better - break into
 def validate_order(order):
     ...
 
@@ -654,7 +654,7 @@ def process_order(order):
     return process_payment(order, total)
 ```
 
-### 3. Use Descriptive Names
+### 1. Use Descriptive
 
 ```python
 # Poor
@@ -666,21 +666,21 @@ def calculate_area(length, width):
     return length * width
 ```
 
-### 4. Limit Parameters
+### 1. Limit Parameters
 
 Keep parameter count low (ideally ≤ 3):
 
 ```python
-# Poor - too many parameters
+# Poor - too many
 def create_user(name, email, age, address, phone, city, state, zip):
     ...
 
-# Better - use dictionary or object
+# Better - use
 def create_user(user_data):
     # user_data is a dictionary with all fields
     ...
 
-# Or use a dataclass/named tuple
+# Or use a
 from dataclasses import dataclass
 
 @dataclass
@@ -694,26 +694,26 @@ def create_user(user: User):
     ...
 ```
 
-### 5. Avoid Side Effects
+### 1. Avoid Side
 
 Functions should avoid unexpected changes:
 
 ```python
-# Poor - modifies global state
+# Poor - modifies
 count = 0
 
 def increment():
     global count
     count += 1  # Side effect
 
-# Better - pure function
+# Better - pure
 def increment(count):
     return count + 1
 
 count = increment(count)
 ```
 
-### 6. Document Functions
+### 1. Document
 
 ```python
 def calculate_discount(price, discount_rate):
@@ -737,7 +737,7 @@ def calculate_discount(price, discount_rate):
 
 ## Common Patterns
 
-### Guard Clauses
+### 1. Guard Clauses
 
 Validate inputs early:
 
@@ -756,7 +756,7 @@ def process_payment(amount, account):
     return "Success"
 ```
 
-### Factory Functions
+### 2. Factory Functions
 
 Functions that create and return objects:
 
@@ -772,7 +772,7 @@ def create_person(name, age):
 person = create_person("Alice", 25)
 ```
 
-### Command Pattern
+### 3. Command Pattern
 
 Functions that encapsulate actions:
 
@@ -794,7 +794,7 @@ result = cmd2()  # result = 6
 
 ## Common Pitfalls
 
-### 1. Mutable Default Arguments
+### 1. Mutable Default
 
 ```python
 # Dangerous!
@@ -813,7 +813,7 @@ def append_to(element, list=None):
     return list
 ```
 
-### 2. Missing Return Statement
+### 1. Missing Return
 
 ```python
 def add(a, b):
@@ -824,7 +824,7 @@ value = add(3, 4)
 print(value)  # None
 ```
 
-### 3. Modifying Arguments
+### 2. Modifying
 
 ```python
 def sort_list(items):
@@ -835,22 +835,22 @@ my_list = [3, 1, 2]
 sorted_list = sort_list(my_list)
 print(my_list)  # [1, 2, 3] - modified!
 
-# Better - don't modify original
+# Better - don't
 def sort_list(items):
     return sorted(items)  # Returns new list
 ```
 
-### 4. Excessive Global Variables
+### 1. Excessive Global
 
 ```python
-# Poor - relies on globals
+# Poor - relies on
 total = 0
 
 def add_to_total(value):
     global total
     total += value
 
-# Better - pass and return
+# Better - pass and
 def add_to_total(total, value):
     return total + value
 
@@ -859,7 +859,7 @@ total = add_to_total(total, 5)
 
 ## Quick Reference
 
-### Function Definition
+### 1. Function
 ```python
 def function_name(parameters):
     """Docstring."""
@@ -867,23 +867,23 @@ def function_name(parameters):
     return value
 ```
 
-### Function Call
+### 2. Function Call
 ```python
 result = function_name(arguments)
 ```
 
-### Scope Keywords
+### 3. Scope Keywords
 ```python
 global variable_name  # Modify global variable
 nonlocal variable_name  # Modify enclosing scope variable
 ```
 
-### Return Statement
+### 4. Return Statement
 ```python
 return value           # Return single value
 return val1, val2     # Return multiple values (tuple)
 return                # Return None
-# No return statement also returns None
+# No return statement
 ```
 
 ## Summary

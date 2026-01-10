@@ -1,10 +1,10 @@
-# Iterables and Iterators
+# Iterables and
 
 Iteration is a core concept in Python. Understanding **iterables** and **iterators** explains how `for` loops, comprehensions, and many built-ins work.
 
 ---
 
-## 1. Iterables
+## Iterables
 
 An **iterable** is any object that can be looped over.
 
@@ -22,7 +22,7 @@ iter([1, 2, 3])
 
 ---
 
-## 2. Iterators
+## Iterators
 
 An **iterator** is an object that:
 - produces values one at a time,
@@ -35,7 +35,7 @@ It implements:
 
 ---
 
-## 3. Relationship between them
+## Relationship between
 
 ```python
 xs = [1, 2, 3]
@@ -49,7 +49,7 @@ next(it)  # 2
 
 ---
 
-## 4. Single-pass nature
+## Single-pass nature
 
 Iterators are **consumed** as you iterate:
 

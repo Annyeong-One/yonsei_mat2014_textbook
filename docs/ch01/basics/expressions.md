@@ -1,12 +1,12 @@
-# Expressions and Statements
+# Expressions and
 
 ## Introduction
 
 Understanding the difference between expressions and statements is fundamental to Python programming. While they may seem similar, they serve distinct purposes in your code. This chapter explores both concepts in depth, covering operators, evaluation, and how Python processes your code.
 
-## Expressions vs Statements
+## Expressions vs
 
-### What is an Expression?
+### 1. What is an
 
 An **expression** is any piece of code that evaluates to a value. Expressions can be as simple as a literal or as complex as a function call combined with arithmetic operations.
 
@@ -21,7 +21,7 @@ x > 5                 # Evaluates to True or False
 
 **Key characteristic**: Expressions always produce a value that can be used elsewhere.
 
-### What is a Statement?
+### 1. What is a
 
 A **statement** is a complete line of code that performs an action. Statements don't necessarily produce a value—they do something.
 
@@ -37,17 +37,17 @@ del x                # Deletion statement
 
 **Key characteristic**: Statements perform actions but don't evaluate to a value.
 
-### The Distinction
+### 1. The Distinction
 
 ```python
-# Expression (can be used as part of something else)
+# Expression (can be
 total = 5 + 3        # 5 + 3 is an expression
 
-# Statement (complete action)
+# Statement (complete
 print(5 + 3)         # The whole line is a statement
                      # but 5 + 3 is still an expression within it
 
-# Expression as statement (expression statement)
+# Expression as
 5 + 3                # Valid but useless (result is discarded)
 ```
 
@@ -58,7 +58,7 @@ print(5 + 3)         # The whole line is a statement
 
 ## Types of Expressions
 
-### 1. Literal Expressions
+### 1. Literal
 
 The simplest expressions—just literal values:
 
@@ -72,7 +72,7 @@ True            # Boolean literal
 None            # None literal
 ```
 
-### 2. Arithmetic Expressions
+### 2. Arithmetic
 
 Mathematical operations using arithmetic operators:
 
@@ -86,13 +86,13 @@ Mathematical operations using arithmetic operators:
 10 % 3          # Modulus (remainder): 1
 10 ** 2         # Exponentiation: 100
 
-# Operator precedence (PEMDAS)
+# Operator precedence
 result = 2 + 3 * 4        # 14 (not 20)
 result = (2 + 3) * 4      # 20 (parentheses first)
 result = 10 + 5 * 2 ** 3  # 50 (** before *, then +)
 ```
 
-### 3. Comparison Expressions
+### 1. Comparison
 
 Compare values and evaluate to boolean:
 
@@ -119,7 +119,7 @@ x is not None   # Check if x is not None
 5 in [1, 2, 3, 4, 5]  # True
 ```
 
-### 4. Logical Expressions
+### 1. Logical
 
 Combine boolean values with logical operators:
 
@@ -129,12 +129,12 @@ True and False   # False (both must be True)
 True or False    # True (at least one must be True)
 not True         # False (negation)
 
-# Complex logical expressions
+# Complex logical
 age = 25
 has_license = True
 can_drive = age >= 18 and has_license  # True
 
-# Short-circuit evaluation
+# Short-circuit
 x = 5
 result = x > 0 and x < 10  # Second part only evaluated if first is True
 
@@ -148,7 +148,7 @@ bool("hello")    # True
 bool([1, 2])     # True
 ```
 
-### 5. String Expressions
+### 1. String
 
 Operations on strings:
 
@@ -165,13 +165,13 @@ f"Hello, {name}!"             # f-string: "Hello, Alice!"
 "Hello, {}!".format(name)     # format method: "Hello, Alice!"
 "Hello, %s!" % name           # old style: "Hello, Alice!"
 
-# String methods (all return new strings)
+# String methods (all
 "hello".upper()               # "HELLO"
 "  trim  ".strip()            # "trim"
 "a,b,c".split(",")           # ["a", "b", "c"]
 ```
 
-### 6. List/Collection Expressions
+### 1. List/Collection
 
 Operations on collections:
 
@@ -185,17 +185,17 @@ len([1, 2, 3])                # 3
 [x * 2 for x in range(5)]     # [0, 2, 4, 6, 8]
 [x for x in range(10) if x % 2 == 0]  # [0, 2, 4, 6, 8]
 
-# Dictionary comprehensions
+# Dictionary
 {x: x**2 for x in range(5)}   # {0: 0, 1: 1, 2: 4, 3: 9, 4: 16}
 
 # Set comprehensions
 {x % 3 for x in range(10)}    # {0, 1, 2}
 
-# Generator expressions
+# Generator
 (x * 2 for x in range(5))     # Generator object
 ```
 
-### 7. Function Call Expressions
+### 1. Function Call
 
 Calling functions produces values:
 
@@ -206,7 +206,7 @@ abs(-5)               # 5
 max(1, 5, 3)          # 5
 sum([1, 2, 3, 4])     # 10
 
-# User-defined functions
+# User-defined
 def add(a, b):
     return a + b
 
@@ -217,7 +217,7 @@ result = add(3, 5)    # 8
 [1, 2, 3].append(4)   # None (modifies list in place)
 ```
 
-### 8. Lambda Expressions
+### 1. Lambda
 
 Anonymous function expressions:
 
@@ -226,7 +226,7 @@ Anonymous function expressions:
 square = lambda x: x ** 2
 square(5)  # 25
 
-# Used with higher-order functions
+# Used with
 numbers = [1, 2, 3, 4, 5]
 squared = map(lambda x: x ** 2, numbers)  # [1, 4, 9, 16, 25]
 even = filter(lambda x: x % 2 == 0, numbers)  # [2, 4]
@@ -236,16 +236,16 @@ add = lambda a, b: a + b
 add(3, 5)  # 8
 ```
 
-### 9. Conditional Expressions (Ternary Operator)
+### 1. Conditional
 
 Inline if-else expressions:
 
 ```python
-# Syntax: value_if_true if condition else value_if_false
+# Syntax:
 age = 20
 status = "adult" if age >= 18 else "minor"  # "adult"
 
-# Nested conditional expressions
+# Nested conditional
 score = 85
 grade = "A" if score >= 90 else "B" if score >= 80 else "C"
 
@@ -255,7 +255,7 @@ max_value = max(a, b) if a is not None and b is not None else 0
 
 ## Types of Statements
 
-### 1. Assignment Statements
+### 1. Assignment
 
 Assign values to variables:
 
@@ -276,12 +276,12 @@ x //= 2    # Equivalent to: x = x // 2
 x %= 3     # Equivalent to: x = x % 3
 x **= 2    # Equivalent to: x = x ** 2
 
-# Walrus operator (Python 3.8+)
+# Walrus operator
 if (n := len(items)) > 10:
     print(f"List is large: {n} items")
 ```
 
-### 2. Import Statements
+### 1. Import Statements
 
 Import modules and packages:
 
@@ -290,7 +290,7 @@ Import modules and packages:
 import math
 import os, sys
 
-# Import specific items
+# Import specific
 from math import pi, sqrt
 from os import path
 
@@ -298,15 +298,15 @@ from os import path
 import numpy as np
 import pandas as pd
 
-# Import all (generally discouraged)
+# Import all
 from math import *
 
-# Relative imports (in packages)
+# Relative imports (in
 from . import module
 from ..package import module
 ```
 
-### 3. Function Definition Statements
+### 1. Function
 
 Define functions:
 
@@ -315,11 +315,11 @@ Define functions:
 def greet(name):
     return f"Hello, {name}!"
 
-# Function with default parameters
+# Function with
 def power(base, exponent=2):
     return base ** exponent
 
-# Function with *args and **kwargs
+# Function with *args
 def flexible_function(*args, **kwargs):
     print(f"Args: {args}")
     print(f"Kwargs: {kwargs}")
@@ -329,7 +329,7 @@ def add(a: int, b: int) -> int:
     return a + b
 ```
 
-### 4. Class Definition Statements
+### 1. Class Definition
 
 Define classes:
 
@@ -350,7 +350,7 @@ class Student(Person):
         self.student_id = student_id
 ```
 
-### 5. Control Flow Statements
+### 1. Control Flow
 
 Control program execution (covered in detail in control_flow.md):
 
@@ -379,28 +379,28 @@ except Exception as e:
     pass
 ```
 
-### 6. Other Statements
+### 1. Other Statements
 
 ```python
-# pass statement (does nothing)
+# pass statement (does
 def not_implemented():
     pass
 
-# del statement (delete references)
+# del statement
 x = 10
 del x
 
-# return statement (in functions)
+# return statement (in
 def add(a, b):
     return a + b
 
-# yield statement (in generators)
+# yield statement (in
 def countdown(n):
     while n > 0:
         yield n
         n -= 1
 
-# break and continue (in loops)
+# break and continue
 for i in range(10):
     if i == 5:
         break  # Exit loop
@@ -408,10 +408,10 @@ for i in range(10):
         continue  # Skip to next iteration
     print(i)
 
-# assert statement (debugging)
+# assert statement
 assert x > 0, "x must be positive"
 
-# with statement (context management)
+# with statement
 with open('file.txt', 'r') as f:
     content = f.read()
 ```
@@ -436,14 +436,14 @@ Python evaluates expressions according to operator precedence (highest to lowest
 | 12 | `and` | Logical AND |
 | 13 (lowest) | `or` | Logical OR |
 
-### Precedence Examples
+### 1. Precedence
 
 ```python
-# Arithmetic precedence
+# Arithmetic
 2 + 3 * 4          # 14 (not 20)
 (2 + 3) * 4        # 20
 
-# Comparison and logical
+# Comparison and
 x = 5
 x > 3 and x < 10   # True
 not x > 10         # True (equivalent to: not (x > 10))
@@ -452,7 +452,7 @@ not x > 10         # True (equivalent to: not (x > 10))
 result = 2 + 3 * 4 ** 2  # 2 + 3 * 16 = 2 + 48 = 50
 ```
 
-### Using Parentheses for Clarity
+### 1. Using Parentheses
 
 Even when not required, parentheses improve readability:
 
@@ -464,9 +464,9 @@ result = a and b or c and d
 result = (a and b) or (c and d)
 ```
 
-## Expression Evaluation
+## Expression
 
-### Left-to-Right Evaluation
+### 1. Left-to-Right
 
 Python evaluates expressions from left to right (except for exponentiation):
 
@@ -474,23 +474,23 @@ Python evaluates expressions from left to right (except for exponentiation):
 # Left to right
 result = 10 - 5 - 2  # (10 - 5) - 2 = 3
 
-# Exponentiation is right to left
+# Exponentiation is
 result = 2 ** 3 ** 2  # 2 ** (3 ** 2) = 2 ** 9 = 512
 ```
 
-### Short-Circuit Evaluation
+### 1. Short-Circuit
 
 Logical operators use short-circuit evaluation:
 
 ```python
-# 'and' stops at first False
+# 'and' stops at first
 def expensive_check():
     print("Running expensive check")
     return True
 
 False and expensive_check()  # expensive_check() is NOT called
 
-# 'or' stops at first True
+# 'or' stops at first
 True or expensive_check()    # expensive_check() is NOT called
 
 # Practical use
@@ -498,24 +498,24 @@ x = None
 value = x and x.some_method()  # Won't call some_method() if x is None
 ```
 
-### Lazy Evaluation in Generators
+### 1. Lazy Evaluation
 
 Generator expressions are evaluated lazily:
 
 ```python
-# List comprehension (eager - computed immediately)
+# List comprehension
 squares_list = [x ** 2 for x in range(1000000)]  # Takes memory
 
-# Generator expression (lazy - computed on demand)
+# Generator expression
 squares_gen = (x ** 2 for x in range(1000000))   # Almost no memory
 
-# Values computed only when needed
+# Values computed only
 next(squares_gen)  # Computes and returns first value
 ```
 
 ## Type Coercion
 
-### Implicit Type Coercion
+### 1. Implicit Type
 
 Python automatically converts types in some contexts:
 
@@ -528,7 +528,7 @@ True + 5       # 6 (bool treated as int: True = 1, False = 0)
 "Answer: " + str(42)  # "Answer: 42"
 ```
 
-### Explicit Type Conversion
+### 1. Explicit Type
 
 ```python
 # To integer
@@ -558,30 +558,30 @@ list((1, 2))   # [1, 2]
 tuple([1, 2])  # (1, 2)
 ```
 
-## Expression Statements
+## Expression
 
 An expression followed by a newline becomes an expression statement:
 
 ```python
-# Expression statement (result is discarded)
+# Expression statement
 5 + 3          # Valid but useless
 
-# Useful expression statements
+# Useful expression
 print("Hello") # Function call
 list.append(5) # Method call
 
-# Interactive mode vs script
+# Interactive mode vs
 >>> 5 + 3      # In REPL, displays 8
 8
-# In script, same line does nothing (result discarded)
+# In script, same line
 ```
 
 ## Compound Expressions
 
-### Nesting Expressions
+### 1. Nesting
 
 ```python
-# Nested function calls
+# Nested function
 result = max(abs(-5), abs(-3), abs(-7))  # 7
 
 # Complex expressions
@@ -591,7 +591,7 @@ total = sum([x ** 2 for x in range(10) if x % 2 == 0])
 value = ((a + b) * c - d) / e
 ```
 
-### Readability Considerations
+### 1. Readability
 
 Break complex expressions for clarity:
 
@@ -605,27 +605,27 @@ in_range = [x for x in even_numbers if 10 < x < 90]
 squares = [x ** 2 for x in in_range]
 result = sum(squares)
 
-# Or with intermediate variables
+# Or with intermediate
 numbers = range(100)
 filtered = [x for x in numbers if x % 2 == 0 and 10 < x < 90]
 result = sum(x ** 2 for x in filtered)
 ```
 
-## Common Patterns and Idioms
+## Common Patterns and
 
-### Swapping Variables
+### 1. Swapping
 
 ```python
 # Pythonic way
 a, b = b, a
 
-# Old way (using temporary variable)
+# Old way (using
 temp = a
 a = b
 b = temp
 ```
 
-### Chaining Comparisons
+### 1. Chaining
 
 ```python
 # Pythonic
@@ -637,24 +637,24 @@ if x >= 0 and x <= 100:
     pass
 ```
 
-### Default Values with `or`
+### 1. Default Values
 
 ```python
 # Get value or default
 name = input_name or "Guest"
 
-# Be careful with falsy values
+# Be careful with
 count = 0
 result = count or 10  # 10, but maybe count = 0 is valid!
 
-# Better for falsy values
+# Better for falsy
 result = count if count is not None else 10
 ```
 
-### Conditional Assignment
+### 1. Conditional
 
 ```python
-# Set value based on condition
+# Set value based on
 status = "pass" if score >= 60 else "fail"
 
 # Multiple conditions
@@ -663,19 +663,19 @@ grade = "A" if score >= 90 else "B" if score >= 80 else "C"
 
 ## Best Practices
 
-### 1. Keep Expressions Simple
+### 1. Keep Expressions
 
 ```python
-# Complex (hard to debug)
+# Complex (hard to
 result = func1(func2(x) + func3(y)) * func4(z) if condition else default
 
-# Better (easier to understand and debug)
+# Better (easier to
 value1 = func2(x) + func3(y)
 value2 = func1(value1) * func4(z)
 result = value2 if condition else default
 ```
 
-### 2. Use Meaningful Variable Names
+### 1. Use Meaningful
 
 ```python
 # Poor
@@ -685,30 +685,30 @@ x = (a + b) * c - d / e
 total_cost = (base_price + tax) * quantity - discount / 100
 ```
 
-### 3. Avoid Side Effects in Expressions
+### 1. Avoid Side
 
 ```python
-# Poor (modifies list in expression)
+# Poor (modifies list
 if items.append(new_item) or len(items) > 10:
     pass
 
-# Better (separate modification and check)
+# Better (separate
 items.append(new_item)
 if len(items) > 10:
     pass
 ```
 
-### 4. Use Parentheses for Clarity
+### 1. Use Parentheses
 
 ```python
 # Unclear precedence
 result = a and b or c and d
 
-# Clear with parentheses
+# Clear with
 result = (a and b) or (c and d)
 ```
 
-### 5. One Statement Per Line
+### 1. One Statement Per
 
 ```python
 # Poor (hard to read)
@@ -725,14 +725,14 @@ z = 3
 ### 1. Integer Division
 
 ```python
-# Python 3: always returns float
+# Python 3: always
 result = 5 / 2   # 2.5
 
-# Use // for integer division
+# Use // for integer
 result = 5 // 2  # 2
 ```
 
-### 2. Mutable Default Arguments
+### 1. Mutable Default
 
 ```python
 # Dangerous!
@@ -740,7 +740,7 @@ def append_to(element, list=[]):
     list.append(element)
     return list
 
-# Both calls modify the same list
+# Both calls modify
 append_to(1)  # [1]
 append_to(2)  # [1, 2] - unexpected!
 
@@ -752,22 +752,22 @@ def append_to(element, list=None):
     return list
 ```
 
-### 3. Expression vs Statement Confusion
+### 1. Expression vs
 
 ```python
-# This is a statement, not an expression
+# This is a statement,
 x = print("Hello")  # x is None (print returns None)
 
-# This is an expression
+# This is an
 x = len("Hello")    # x is 5
 ```
 
-### 4. Comparison Chaining
+### 1. Comparison
 
 ```python
-# Be careful with logic
+# Be careful with
 a = 5
-# This doesn't mean "x not equal to 1 or 2"
+# This doesn't mean "x
 if x != 1 or 2:  # Always True! (2 is truthy)
     pass
 

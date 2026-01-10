@@ -1,10 +1,10 @@
-# Linear Algebra Basics
+# Linear Algebra
 
 NumPy provides a rich set of linear algebra routines built on optimized BLAS and LAPACK libraries. These are central to quantitative finance, statistics, and machine learning.
 
 ---
 
-## 1. Vectors and matrices
+## Vectors and matrices
 
 In NumPy:
 - 1D arrays represent vectors,
@@ -20,9 +20,9 @@ A = np.array([[1.0, 0.0],
 
 ---
 
-## 2. Matrix operations
+## Matrix operations
 
-### Matrix multiplication
+### 1. Matrix
 
 Use the `@` operator:
 
@@ -33,7 +33,7 @@ A @ v[:2]
 
 This performs true linear algebra multiplication (not elementwise).
 
-### Transpose
+### 2. Transpose
 
 ```python
 A.T
@@ -41,7 +41,7 @@ A.T
 
 ---
 
-## 3. Linear algebra module
+## Linear algebra
 
 The `np.linalg` submodule includes:
 
@@ -56,7 +56,7 @@ Avoid explicit inverses when solving systems.
 
 ---
 
-## 4. Numerical considerations
+## Numerical
 
 - Linear algebra is numerically sensitive.
 - Conditioning matters.
@@ -66,7 +66,7 @@ Use stable algorithms (`solve` over `inv`).
 
 ---
 
-## 5. Financial applications
+## Financial
 
 Linear algebra underlies:
 - portfolio optimization,

@@ -1,10 +1,10 @@
-# Shape, Strides, and Views
+# Shape, Strides, and
 
 Understanding **shape**, **strides**, and **views** explains why NumPy slicing is fast and how memory is shared.
 
 ---
 
-## 1. Shape
+## Shape
 
 The shape describes array dimensions:
 
@@ -21,7 +21,7 @@ a.reshape((4, 3))
 
 ---
 
-## 2. Strides
+## Strides
 
 Strides describe how many bytes to step in memory when moving along each axis.
 
@@ -33,7 +33,7 @@ They allow NumPy to interpret the same memory in different ways.
 
 ---
 
-## 3. Views vs copies
+## Views vs copies
 
 Many NumPy operations return **views**:
 
@@ -52,7 +52,7 @@ b.base is a
 
 ---
 
-## 4. When copies occur
+## When copies occur
 
 Copies occur when:
 - dtype changes,
@@ -61,7 +61,7 @@ Copies occur when:
 
 ---
 
-## 5. Performance implications
+## Performance
 
 Views:
 - are cheap to create,

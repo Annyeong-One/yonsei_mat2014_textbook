@@ -1,10 +1,10 @@
-# Object Identity and References
+# Object Identity and
 
 In Python, variables do not store values directly. They store **references** to objects. Understanding identity is crucial for correct reasoning about programs.
 
 ---
 
-## 1. Identity vs value
+## Identity vs value
 
 Every object has:
 - **identity**: its memory address (conceptually),
@@ -20,7 +20,7 @@ id(x)
 
 ---
 
-## 2. Names and bindings
+## Names and bindings
 
 ```python
 a = 10
@@ -32,7 +32,7 @@ b = a
 
 ---
 
-## 3. Equality vs identity
+## Equality vs identity
 
 ```python
 a == b   # value equality

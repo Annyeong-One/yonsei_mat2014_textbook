@@ -1,10 +1,10 @@
-# `try` / `except` / `finally`
+# `try` / `except` /
 
 Python provides structured exception handling using `try`, `except`, `else`, and `finally`.
 
 ---
 
-## 1. Basic structure
+## Basic structure
 
 ```python
 try:
@@ -15,7 +15,7 @@ except ValueError:
 
 ---
 
-## 2. Catching multiple exceptions
+## Catching multiple
 
 ```python
 try:
@@ -26,7 +26,7 @@ except (TypeError, ValueError):
 
 ---
 
-## 3. `else` clause
+## `else` clause
 
 Runs only if no exception occurs.
 
@@ -41,7 +41,7 @@ else:
 
 ---
 
-## 4. `finally` clause
+## `finally` clause
 
 Always runs, regardless of exceptions.
 

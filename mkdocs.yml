@@ -14,85 +14,92 @@ nav:
   - Home: index.md
   - Chapter 1 Python:
       - 1.1 Getting Started:
-          - Installing Python (brew, conda, pip): ch01/setup/installing_python.md
+          - Installing Python: ch01/setup/installing_python.md
           - Python Interpreter and REPL: ch01/setup/python_interpreter.md
-      - 1.2 Basic Syntax and Control Flow:
+      - 1.2 Basic Syntax:
           - Variables and Naming Rules: ch01/basics/variables.md
           - Expressions and Statements: ch01/basics/expressions.md
+      - 1.3 Control Flow:
           - if / for / while: ch01/basics/control_flow.md
           - Indentation and Blocks: ch01/basics/indentation.md
-      - 1.3 Essential Built-in Functions:
+      - 1.4 Essential Built-ins:
           - print() and input(): ch01/builtins/print_input.md
           - len(), range(), enumerate(): ch01/builtins/len_range_enumerate.md
-      - 1.4 Built-in Data Types:
-          - int Python vs C (Memory & Semantics): ch01/types/int_python_vs_c.md
+      - 1.5 Built-in Data Types:
+          - int Python vs C: ch01/types/int_python_vs_c.md
           - float IEEE 754 and Precision: ch01/types/float_behavior.md
           - bool and None: ch01/types/bool_none.md
           - str Python vs C Strings: ch01/types/str_python_vs_c.md
-          - Type Conversions (int, float, str, bool): ch01/types/type_conversions.md
-      - 1.5 Composite Data Types:
+          - Type Conversions: ch01/types/type_conversions.md
+      - 1.6 Composite Data Types:
           - tuple and Immutability: ch01/composite_data_types/tuple.md
           - list and Dynamic Arrays: ch01/composite_data_types/list.md
           - dict and Hash Tables: ch01/composite_data_types/dict.md
-          - set and Membership Semantics: ch01/composite_data_types/set.md
-      - 1.6 Functions:
-          - Function Definition and Call Stack: ch01/functions/functions.md
-          - Parameters and Return Values: ch01/functions/parameters.md
+          - set and Membership: ch01/composite_data_types/set.md
+      - 1.7 Functions:
+          - Function and Call Stack: ch01/functions/functions.md
+          - Parameters & Returns: ch01/functions/parameters.md
           - Recursion and Stack Overflow: ch01/functions/recursion.md
           - lambda Expressions: ch01/functions/lambda.md
-      - 1.7 Memory Model and Assignment:
-          - Stack vs Heap (Conceptual Model): ch01/memory/stack_vs_heap.md
-          - Object Identity and References: ch01/memory/object_identity.md
-          - Assignment Semantics (Python vs C): ch01/memory/assignment_python_vs_c.md
-          - Mutable vs Immutable Objects: ch01/memory/mutable_vs_immutable.md
+      - 1.8 Memory Model:
+          - Stack vs Heap: ch01/memory/stack_vs_heap.md
+          - Object Id and References: ch01/memory/object_identity.md
+      - 1.9 Assignment:
+          - Assignment (Python vs C): ch01/memory/assignment_python_vs_c.md
+          - Mutable vs Immutable: ch01/memory/mutable_vs_immutable.md
           - list Assignment and Aliasing: ch01/memory/list_assignment.md
-          - Reference Counting and Garbage Collection: ch01/memory/garbage_collection.md
-      - 1.8 Exceptions:
+          - Ref Counting & GC: ch01/memory/garbage_collection.md
+      - 1.10 Exceptions:
           - Exception Hierarchy: ch01/exceptions/hierarchy.md
           - Common Runtime Errors: ch01/exceptions/common_errors.md
           - try / except / finally: ch01/exceptions/handling.md
           - Raising Exceptions: ch01/exceptions/raising.md
-      - 1.9 File I/O:
+      - 1.11 File I/O:
           - Opening and Reading Files: ch01/io/file_reading.md
           - Writing Files: ch01/io/file_writing.md
           - Context Managers (with): ch01/io/context_managers.md
-      - 1.10 Advanced Built-in Functions:
+      - 1.12 Advanced Built-ins:
           - The builtins Namespace: ch01/advanced_builtins/builtins_namespace.md
           - map(), filter(), sorted(): ch01/advanced_builtins/map_filter_sorted.md
-          - key= Functions and Custom Ordering: ch01/advanced_builtins/sorted_key.md
+          - Functions & Custom Order: ch01/advanced_builtins/sorted_key.md
           - id(), type(), isinstance(): ch01/advanced_builtins/introspection.md
-      - 1.11 Modules and Imports:
+      - 1.13 Modules and Imports:
           - import Mechanics: ch01/modules/imports.md
-          - sys.path and Module Search Order: ch01/modules/module_search.md
+          - sys.path & Module Search: ch01/modules/module_search.md
           - __name__ == "__main__": ch01/modules/main_guard.md
           - Scripts vs Modules: ch01/modules/scripts_vs_modules.md
-      - 1.12 Namespaces and Name Resolution:
+      - 1.14 Namespaces:
           - LEGB Rule: ch01/namespaces/legb.md
           - Global vs Local Variables: ch01/namespaces/scope.md
-      - 1.13 Classes and Objects:
-          - Class Definition and Instances: ch01/oop/classes.md
+      - 1.15 Classes and Objects:
+          - Class and Instances: ch01/oop/classes.md
           - __init__ and Attribute Lookup: ch01/oop/attributes.md
-          - Method Resolution Order (MRO): ch01/oop/mro.md
+          - Method Resolution Order: ch01/oop/mro.md
           - Inheritance and super(): ch01/oop/inheritance.md
-      - 1.14 Decorators and Metaprogramming:
+      - 1.16 Decorators:
           - Functions as Objects: ch01/advanced/functions_as_objects.md
-          - Decorator Syntax and Semantics: ch01/advanced/decorators.md
-      - 1.15 Iteration Internals:
+          - Decorator Semantics: ch01/advanced/decorators.md
+      - 1.17 Iteration Internals:
           - Iterables and Iterators: ch01/iteration/iterables.md
           - Generators and yield: ch01/iteration/generators.md
-      - 1.16 Performance and Mental Models:
+      - 1.18 Performance:
           - Time vs Space Trade-offs: ch01/performance/tradeoffs.md
+      - 1.19 Mental Models:
           - Python Execution Model: ch01/performance/execution_model.md
+
   - Chapter 2 NumPy:
-      - 2.1 NumPy ndarray Fundamentals:
+      - 2.1 NumPy Fundamentals:
           - Array Creation and dtypes: ch02/ndarray/creation.md
           - Shape, Strides, and Views: ch02/ndarray/shape_strides.md
-      - 2.2 Vectorization and Broadcasting:
+      - 2.2 Broadcasting:
           - Broadcasting Rules: ch02/vectorization/broadcasting.md
-          - Performance vs Python Loops: ch02/vectorization/performance.md
-      - 2.3 Linear Algebra and Randomness:
+      - 2.3 Vectorization:
+          - Performance vs Loops: ch02/vectorization/performance.md
+      - 2.4 Linear Algebra:
           - Linear Algebra Basics: ch02/linalg/linalg.md
-          - Random Numbers and Simulation: ch02/random/random.md
+      - 2.5 Randomness:
+          - Randomness & Simulation: ch02/random/random.md
+
   - Chapter 3 Matplotlib:
       - 3.1 Plotting Fundamentals:
           - Figures and Axes: ch03/fundamentals/figures_axes.md
@@ -114,14 +121,16 @@ nav:
           - DatetimeIndex: ch04/timeseries/datetimeindex.md
           - Resampling and Rolling: ch04/timeseries/resampling.md
   - Chapter 5 PyTorch:
-      - 5.1 Tensors and Autograd:
+      - 5.1 Tensors:
           - Tensor Basics: ch05/tensors/basics.md
+      - 5.2 Autograd:
           - Autograd Mechanics: ch05/autograd/autograd.md
-      - 5.2 Neural Network Components:
+      - 5.3 Neural Network:
           - Modules and Parameters: ch05/nn/modules.md
-          - Loss Functions and Optimizers: ch05/nn/optimizers.md
-      - 5.3 Training and Performance:
+          - Losss and Optimizers: ch05/nn/optimizers.md
+      - 5.4 Training:
           - Training Loops: ch05/training/training_loops.md
-          - GPU and Performance Considerations: ch05/training/gpu.md
+      - 5.5 Performance:
+          - GPU and Performance: ch05/training/gpu.md
 plugins:
   - search

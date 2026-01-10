@@ -4,7 +4,7 @@ In Python, **functions are first-class objects**. This means they can be assigne
 
 ---
 
-## 1. Functions as values
+## Functions as values
 
 A function can be treated like any other object:
 
@@ -20,7 +20,7 @@ Here, `g` is another reference to the same function object.
 
 ---
 
-## 2. Passing functions as arguments
+## Passing functions as
 
 Functions are often passed to other functions:
 
@@ -38,7 +38,7 @@ This pattern underlies:
 
 ---
 
-## 3. Returning functions
+## Returning functions
 
 Functions can return other functions:
 
@@ -56,7 +56,7 @@ This uses **closures** to capture state.
 
 ---
 
-## 4. Practical importance
+## Practical importance
 
 Functions as objects enable:
 - decorators,

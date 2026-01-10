@@ -1,4 +1,4 @@
-# `len()`, `range()`, `enumerate()`
+# `len()`, `range()`,
 
 These built-in functions appear everywhere in Python code:
 - `len()` tells you *how many* items are in a container.
@@ -9,7 +9,7 @@ These built-in functions appear everywhere in Python code:
 
 ## `len()`
 
-### What it does
+### 1. What it does
 
 `len(x)` returns the number of elements in a container-like object.
 
@@ -19,7 +19,7 @@ len("quant")               # 5
 len({"a": 1, "b": 2})      # 2  (number of keys)
 ```
 
-### Common uses
+### 2. Common uses
 
 ```python
 items = ["a", "b", "c"]
@@ -31,7 +31,7 @@ if len(items) == 0:
 
 ## `range()`
 
-### Basic forms
+### 1. Basic forms
 
 - `range(stop)` → `0, 1, ..., stop-1`
 - `range(start, stop)` → `start, ..., stop-1`
@@ -45,14 +45,14 @@ list(range(10, 0, -2))    # [10, 8, 6, 4, 2]
 
 > Note: `range()` is *lazy* (it doesn’t create a full list unless you ask).
 
-### Typical loop usage
+### 2. Typical loop
 
 ```python
 for i in range(3):
     print(i)
 ```
 
-### Using range with indices
+### 3. Using range with
 
 ```python
 xs = [10, 20, 30]
@@ -66,7 +66,7 @@ This works, but `enumerate()` is often cleaner.
 
 ## `enumerate()`
 
-### Why it’s useful
+### 1. Why it’s useful
 
 `enumerate(iterable)` produces pairs `(index, value)`.
 
@@ -74,22 +74,22 @@ This works, but `enumerate()` is often cleaner.
 xs = [10, 20, 30]
 for i, x in enumerate(xs):
     print(i, x)
-# 0 10
-# 1 20
-# 2 30
+# Overview
+# Overview
+# Overview
 ```
 
-### Starting from a different index
+### 1. Starting from a
 
 ```python
 for i, x in enumerate(xs, start=1):
     print(i, x)
-# 1 10
-# 2 20
-# 3 30
+# Overview
+# Overview
+# Overview
 ```
 
-### Common pattern: finding positions
+### 1. Common pattern:
 
 ```python
 s = "finance"

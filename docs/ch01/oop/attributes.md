@@ -1,10 +1,10 @@
-# `__init__` and Attribute Lookup
+# `__init__` and
 
 The `__init__` method initializes new objects. Attribute lookup follows a well-defined order.
 
 ---
 
-## 1. The `__init__` method
+## The `__init__`
 
 ```python
 class Point:
@@ -17,7 +17,7 @@ class Point:
 
 ---
 
-## 2. Attribute lookup order
+## Attribute lookup
 
 When accessing `obj.attr`, Python searches:
 1. Instance dictionary
@@ -31,7 +31,7 @@ p.x
 
 ---
 
-## 3. Class vs instance attributes
+## Class vs instance
 
 ```python
 class A:

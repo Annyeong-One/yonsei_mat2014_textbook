@@ -1,4 +1,4 @@
-# Global vs Local Variables
+# Global vs Local
 
 ## Introduction
 
@@ -12,7 +12,7 @@ This chapter provides a comprehensive guide to global and local variables, their
 
 ## Local Variables
 
-### What are Local Variables?
+### 1. What are Local
 
 **Local variables** are variables defined inside a function. They:
 - Exist only within the function
@@ -20,7 +20,7 @@ This chapter provides a comprehensive guide to global and local variables, their
 - Are destroyed when the function returns
 - Cannot be accessed from outside the function
 
-### Basic Local Variables
+### 2. Basic Local
 
 ```python
 def calculate_area(length, width):
@@ -29,10 +29,10 @@ def calculate_area(length, width):
 
 result = calculate_area(5, 3)
 print(result)  # 15
-# print(area)  # NameError: name 'area' is not defined
+# print(area) #
 ```
 
-### Function Parameters are Local
+### 1. Function
 
 ```python
 def greet(name, age):  # name and age are local
@@ -40,10 +40,10 @@ def greet(name, age):  # name and age are local
     print(message)
 
 greet("Alice", 25)
-# print(name)  # NameError: name and age don't exist here
+# print(name) #
 ```
 
-### Lifetime of Local Variables
+### 1. Lifetime of Local
 
 ```python
 def counter():
@@ -57,7 +57,7 @@ counter()  # Output: 1 (new count created each time)
 counter()  # Output: 1
 ```
 
-### Multiple Local Scopes
+### 2. Multiple Local
 
 Each function call creates its own local scope:
 
@@ -72,7 +72,7 @@ b = process(3)  # Different result = 6 (then destroyed)
 print(a, b)  # 10 6
 ```
 
-### Nested Functions Have Separate Local Scopes
+### 3. Nested Functions
 
 ```python
 def outer():
@@ -93,7 +93,7 @@ outer()
 
 ## Global Variables
 
-### What are Global Variables?
+### 1. What are Global
 
 **Global variables** are variables defined at the module level (outside all functions). They:
 - Exist for the entire program execution
@@ -101,7 +101,7 @@ outer()
 - Persist between function calls
 - Can be read by functions without special keywords
 
-### Basic Global Variables
+### 2. Basic Global
 
 ```python
 # Global variables
@@ -119,7 +119,7 @@ display_info()
 # Age: 25
 ```
 
-### Lifetime of Global Variables
+### 1. Lifetime of
 
 ```python
 counter = 0  # Created when module loads
@@ -136,10 +136,10 @@ print(counter)  # 2
 
 increment()
 print(counter)  # 3
-# counter persists between calls
+# counter persists
 ```
 
-### Reading Global Variables
+### 1. Reading Global
 
 Functions can read global variables without any special keywords:
 
@@ -161,7 +161,7 @@ print(check_size(50))            # Uses MAX_SIZE
 
 ## Modifying Variables
 
-### The Key Difference
+### 1. The Key
 
 This is where local and global variables behave very differently:
 
@@ -177,10 +177,10 @@ print(f"Outside function: {x}")
 
 # Output:
 # Inside function: 20
-# Outside function: 10 (unchanged!)
+# Outside function: 10
 ```
 
-### The global Keyword
+### 1. The global
 
 To modify a global variable from inside a function, use the `global` keyword:
 
@@ -196,7 +196,7 @@ increment()
 print(f"After: {count}")   # 1
 ```
 
-### Why global is Needed
+### 2. Why global is
 
 ```python
 x = 5
@@ -215,7 +215,7 @@ correct_function()
 print(x)  # 6
 ```
 
-### Multiple Global Variables
+### 3. Multiple Global
 
 ```python
 a = 1
@@ -232,9 +232,9 @@ modify_all()
 print(a, b, c)  # 10 20 30
 ```
 
-## Local vs Global: Direct Comparison
+## Local vs Global:
 
-### Side-by-Side Example
+### 1. Side-by-Side
 
 ```python
 # Global scope
@@ -252,10 +252,10 @@ demonstrate_scope()
 
 print(f"\nOutside function:")
 print(f"  Global: {global_var}")  # Can access global
-# print(f"  Local: {local_var}")  # NameError! Can't access local
+# print(f" Local:
 ```
 
-### Comparison Table
+### 1. Comparison Table
 
 | Feature | Local Variables | Global Variables |
 |---------|----------------|------------------|
@@ -268,9 +268,9 @@ print(f"  Global: {global_var}")  # Can access global
 | **Memory** | Stack | Heap |
 | **Best for** | Temporary computation | Configuration, shared state |
 
-## Shadowing: When Local Hides Global
+## Shadowing: When
 
-### Basic Shadowing
+### 1. Basic Shadowing
 
 When a local variable has the same name as a global variable, the local "shadows" (hides) the global:
 
@@ -285,10 +285,10 @@ shadow_demo()  # Output: local
 print(x)       # Output: global (unchanged)
 ```
 
-### Intentional vs Accidental Shadowing
+### 2. Intentional vs
 
 ```python
-# Configuration constant
+# Configuration
 DEBUG = True
 
 def process_data(data):
@@ -301,7 +301,7 @@ process_data([1, 2, 3])
 print(DEBUG)  # Still True (global unchanged)
 ```
 
-### Avoiding Shadowing
+### 1. Avoiding
 
 ```python
 # Use different names
@@ -316,9 +316,9 @@ def process_data(data, debug_mode=None):
         print("Debugging...")
 ```
 
-## Common Patterns and Use Cases
+## Common Patterns and
 
-### Pattern 1: Configuration Variables
+### 1. Pattern 1:
 
 ```python
 # Global configuration
@@ -333,10 +333,10 @@ def connect_to_database():
     print(f"Timeout: {TIMEOUT}")
 ```
 
-### Pattern 2: State Management
+### 1. Pattern 2: State
 
 ```python
-# Global state (use sparingly!)
+# Global state (use
 user_logged_in = False
 current_user = None
 
@@ -355,7 +355,7 @@ def get_current_user():
     return current_user if user_logged_in else None
 ```
 
-### Pattern 3: Counters and Accumulators
+### 1. Pattern 3:
 
 ```python
 # Global counter
@@ -371,7 +371,7 @@ handle_request()  # Request #2
 handle_request()  # Request #3
 ```
 
-### Pattern 4: Temporary Computation
+### 1. Pattern 4:
 
 ```python
 def calculate_statistics(numbers):
@@ -389,15 +389,15 @@ def calculate_statistics(numbers):
     }
 
 result = calculate_statistics([1, 2, 3, 4, 5])
-# total, count, average, etc. no longer exist
+# total, count,
 ```
 
-## Mutable Objects: A Special Case
+## Mutable Objects: A
 
-### Modifying Mutable Global Objects
+### 1. Modifying Mutable
 
 ```python
-# Global list (mutable)
+# Global list
 tasks = []
 
 def add_task(task):
@@ -418,10 +418,10 @@ clear_tasks()
 print(tasks)  # []
 ```
 
-### Why This Works
+### 1. Why This Works
 
 ```python
-# Modifying vs Reassigning
+# Modifying vs
 
 data = [1, 2, 3]  # Global
 
@@ -442,7 +442,7 @@ reassign_list()
 print(data)  # [5, 6, 7]
 ```
 
-### Dictionary Example
+### 1. Dictionary
 
 ```python
 config = {'debug': False, 'verbose': False}  # Global
@@ -462,10 +462,10 @@ print(config)  # {'debug': True, 'verbose': False}
 
 ## Best Practices
 
-### 1. Minimize Global Variables
+### 1. Minimize Global
 
 ```python
-# Poor - heavy reliance on globals
+# Poor - heavy
 total = 0
 count = 0
 
@@ -477,7 +477,7 @@ def add_number(n):
 def get_average():
     return total / count if count > 0 else 0
 
-# Better - use class or pass parameters
+# Better - use class
 class Statistics:
     def __init__(self):
         self.total = 0
@@ -491,10 +491,10 @@ class Statistics:
         return self.total / self.count if self.count > 0 else 0
 ```
 
-### 2. Use Constants for Global Configuration
+### 1. Use Constants for
 
 ```python
-# Good - uppercase for constants
+# Good - uppercase for
 API_KEY = "your-api-key"
 MAX_RETRIES = 3
 TIMEOUT = 30
@@ -506,7 +506,7 @@ def make_request():
         pass
 ```
 
-### 3. Use Function Parameters Instead of Globals
+### 1. Use Function
 
 ```python
 # Poor
@@ -522,7 +522,7 @@ def filter_values(values, threshold):
 result = filter_values([50, 150, 200], 100)
 ```
 
-### 4. Return Values Instead of Modifying Globals
+### 1. Return Values
 
 ```python
 # Poor
@@ -539,7 +539,7 @@ def calculate(x, y):
 result = calculate(5, 3)
 ```
 
-### 5. Use Descriptive Names
+### 1. Use Descriptive
 
 ```python
 # Poor - unclear scope
@@ -550,7 +550,7 @@ def process():
     z = x + y
     return z
 
-# Better - clear naming
+# Better - clear
 CONFIG_MAX_SIZE = 10
 CONFIG_MIN_SIZE = 20
 
@@ -559,10 +559,10 @@ def process_data():
     return data_size
 ```
 
-### 6. Document Global Dependencies
+### 1. Document Global
 
 ```python
-# Global state used by this module
+# Global state used by
 DATABASE_CONNECTION = None
 CACHE = {}
 
@@ -594,7 +594,7 @@ def increment_fixed():
     count = count + 1
 ```
 
-### 2. Forgetting global Keyword
+### 1. Forgetting global
 
 ```python
 total = 0
@@ -609,17 +609,17 @@ def add_to_total_fixed(value):
     total = total + value
 ```
 
-### 3. Namespace Pollution
+### 1. Namespace
 
 ```python
-# Poor - cluttered global namespace
+# Poor - cluttered
 temp1 = 0
 temp2 = 0
 temp3 = 0
 result1 = 0
 result2 = 0
 
-# Better - use local variables
+# Better - use local
 def calculate():
     temp1 = 0
     temp2 = 0
@@ -628,33 +628,33 @@ def calculate():
     return result
 ```
 
-### 4. Hidden Dependencies
+### 1. Hidden
 
 ```python
-# Poor - hidden global dependency
+# Poor - hidden global
 RATE = 0.1
 
 def calculate_tax(amount):
     return amount * RATE  # Depends on global RATE
 
-# Better - explicit dependency
+# Better - explicit
 def calculate_tax(amount, rate):
     return amount * rate
 
 result = calculate_tax(100, 0.1)
 ```
 
-### 5. Testing Difficulties
+### 1. Testing
 
 ```python
-# Poor - hard to test due to global state
+# Poor - hard to test
 score = 0
 
 def add_points(points):
     global score
     score += points
 
-# Better - testable function
+# Better - testable
 def add_points(current_score, points):
     return current_score + points
 
@@ -663,10 +663,10 @@ score = add_points(score, 10)
 
 ## Advanced Topics
 
-### globals() and locals()
+### 1. globals() and
 
 ```python
-# Access global namespace
+# Access global
 x = 10
 y = 20
 
@@ -686,21 +686,21 @@ def show_locals():
 show_locals()
 ```
 
-### Dynamic Global Access
+### 1. Dynamic Global
 
 ```python
-# Access globals dynamically
+# Access globals
 globals()['dynamic_var'] = 100
 
 print(dynamic_var)  # 100
 
-# Modify existing global
+# Modify existing
 x = 5
 globals()['x'] = 10
 print(x)  # 10
 ```
 
-### exec() with Globals
+### 1. exec() with
 
 ```python
 global_vars = {'x': 10, 'y': 20}
@@ -712,9 +712,9 @@ exec(code, global_vars, local_vars)
 print(local_vars['result'])  # 30
 ```
 
-## When to Use Global vs Local
+## When to Use Global
 
-### Use Global Variables When:
+### 1. Use Global
 
 ✅ Configuration that doesn't change:
 ```python
@@ -734,7 +734,7 @@ database_connection = None
 cache = {}
 ```
 
-### Use Local Variables When:
+### 2. Use Local
 
 ✅ Temporary computation:
 ```python
@@ -766,7 +766,7 @@ def find_maximum(numbers):
 
 ## Practical Examples
 
-### Example 1: Configuration Manager
+### 1. Key point
 
 ```python
 # Global configuration
@@ -792,7 +792,7 @@ set_debug(True)
 print(is_debug())  # True
 ```
 
-### Example 2: Counter System
+### 1. Key point
 
 ```python
 # Global counters
@@ -820,7 +820,7 @@ increment('requests')
 print(get_count('requests'))  # 2
 ```
 
-### Example 3: Clean Local Processing
+### 1. Key point
 
 ```python
 def process_transaction(amount, fee_rate=0.02):
@@ -842,24 +842,24 @@ def process_transaction(amount, fee_rate=0.02):
     
     return formatted
 
-# Clean, testable, no global state
+# Clean, testable, no
 result = process_transaction(100.00)
 print(result)
 ```
 
 ## Quick Reference
 
-### Creating Variables
+### 1. Creating
 ```python
-# Global (module level)
+# Global (module
 global_var = 10
 
-# Local (inside function)
+# Local (inside
 def func():
     local_var = 20
 ```
 
-### Reading Variables
+### 1. Reading Variables
 ```python
 x = 10  # Global
 
@@ -867,7 +867,7 @@ def read_global():
     print(x)  # No keyword needed to read
 ```
 
-### Modifying Variables
+### 2. Modifying
 ```python
 x = 10  # Global
 
@@ -879,19 +879,19 @@ def create_local():
     x = 30  # Creates new local variable
 ```
 
-### Common Patterns
+### 3. Common Patterns
 ```python
-# Constants (never modified)
+# Constants (never
 MAX_SIZE = 100
 
-# State (modified carefully)
+# State (modified
 counter = 0
 
 def increment():
     global counter
     counter += 1
 
-# Temporary (always local)
+# Temporary (always
 def calculate():
     temp = 10
     result = temp * 2

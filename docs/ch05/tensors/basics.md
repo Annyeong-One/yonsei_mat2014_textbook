@@ -4,7 +4,7 @@ Modern machine learning frameworks (such as PyTorch and JAX) generalize NumPy ar
 
 ---
 
-## 1. What is a tensor?
+## What is a tensor?
 
 A tensor is a:
 - multi-dimensional array,
@@ -19,7 +19,7 @@ Conceptually:
 
 ---
 
-## 2. Creating tensors
+## Creating tensors
 
 Example (PyTorch-style):
 
@@ -34,7 +34,7 @@ Tensors closely resemble NumPy arrays.
 
 ---
 
-## 3. Shape, dtype, device
+## Shape, dtype, device
 
 ```python
 x.shape
@@ -49,7 +49,7 @@ These attributes control:
 
 ---
 
-## 4. Tensor operations
+## Tensor operations
 
 Operations are vectorized:
 
@@ -63,7 +63,7 @@ They are designed to:
 
 ---
 
-## 5. Financial perspective
+## Financial
 
 Tensors are used for:
 - large-scale simulations,

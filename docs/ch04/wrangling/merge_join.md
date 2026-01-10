@@ -4,7 +4,7 @@ Merging and joining combine datasets based on keys, similar to SQL joins. pandas
 
 ---
 
-## 1. Merge vs join
+## Merge vs join
 
 - `merge`: column-based joins
 - `join`: index-based joins
@@ -15,7 +15,7 @@ pd.merge(left, right, on="key")
 
 ---
 
-## 2. Join types
+## Join types
 
 Supported joins:
 - `inner`
@@ -29,7 +29,7 @@ pd.merge(df1, df2, on="id", how="left")
 
 ---
 
-## 3. Handling overlapping columns
+## Handling overlapping
 
 ```python
 pd.merge(df1, df2, on="id", suffixes=("_x", "_y"))
@@ -39,7 +39,7 @@ Always inspect results carefully.
 
 ---
 
-## 4. Index-based joins
+## Index-based joins
 
 ```python
 df1.join(df2)
@@ -49,7 +49,7 @@ Useful for time-series alignment.
 
 ---
 
-## 5. Financial applications
+## Financial
 
 Merges are common for:
 - joining prices with fundamentals,

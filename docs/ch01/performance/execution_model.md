@@ -1,10 +1,10 @@
-# Python Execution Model
+# Python Execution
 
 Python’s execution model explains why some operations are fast and others are slow, and how to reason about performance.
 
 ---
 
-## 1. Interpreted execution
+## Interpreted
 
 Python code is:
 1. parsed into bytecode,
@@ -15,7 +15,7 @@ This introduces overhead compared to compiled languages.
 
 ---
 
-## 2. Bytecode and the VM
+## Bytecode and the VM
 
 ```python
 import dis
@@ -30,7 +30,7 @@ This reveals low-level operations executed by the VM.
 
 ---
 
-## 3. Where Python is slow
+## Where Python is slow
 
 Python is slow when:
 - looping in pure Python,
@@ -39,7 +39,7 @@ Python is slow when:
 
 ---
 
-## 4. Where Python is fast
+## Where Python is fast
 
 Python is fast when:
 - delegating work to C extensions (NumPy, pandas),
@@ -48,7 +48,7 @@ Python is fast when:
 
 ---
 
-## 5. Mental model for performance
+## Mental model for
 
 Think in terms of:
 - reducing Python-level operations,

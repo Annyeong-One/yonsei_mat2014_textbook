@@ -1,10 +1,10 @@
-# `list` and Dynamic Arrays
+# `list` and Dynamic
 
 A **list** is an ordered, mutable collection backed by a dynamic array. Lists are the most commonly used data structure in Python.
 
 ---
 
-## 1. Creating lists
+## Creating lists
 
 ```python
 xs = [1, 2, 3]
@@ -15,7 +15,7 @@ Lists can contain mixed types, but this is usually discouraged in practice.
 
 ---
 
-## 2. Mutability
+## Mutability
 
 Lists can grow and change:
 
@@ -28,7 +28,7 @@ This flexibility makes lists extremely useful.
 
 ---
 
-## 3. Dynamic array behavior
+## Dynamic array
 
 Internally, Python lists:
 - allocate extra capacity,
@@ -39,7 +39,7 @@ Random access is O(1).
 
 ---
 
-## 4. Common operations
+## Common operations
 
 ```python
 xs.append(5)

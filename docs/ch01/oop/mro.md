@@ -1,10 +1,10 @@
-# Method Resolution Order (MRO)
+# Method Resolution
 
 The **Method Resolution Order (MRO)** defines how Python resolves methods in multiple inheritance.
 
 ---
 
-## 1. Why MRO exists
+## Why MRO exists
 
 Multiple inheritance can create ambiguity:
 ```python
@@ -18,7 +18,7 @@ Which method should be used?
 
 ---
 
-## 2. C3 linearization
+## C3 linearization
 
 Python uses **C3 linearization** to compute MRO:
 - preserves local precedence,
@@ -27,7 +27,7 @@ Python uses **C3 linearization** to compute MRO:
 
 ---
 
-## 3. Inspecting MRO
+## Inspecting MRO
 
 ```python
 D.mro()
@@ -37,7 +37,7 @@ This returns the order in which classes are searched.
 
 ---
 
-## 4. Practical advice
+## Practical advice
 
 - Prefer single inheritance when possible.
 - Use MRO-aware designs.

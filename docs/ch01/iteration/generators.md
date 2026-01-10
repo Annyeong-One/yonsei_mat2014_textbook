@@ -1,10 +1,10 @@
-# Generators and `yield`
+# Generators and
 
 Generators provide a concise way to create iterators using the `yield` keyword. They are central to Python’s lazy evaluation model.
 
 ---
 
-## 1. Generator functions
+## Generator functions
 
 A function becomes a generator if it uses `yield`:
 
@@ -20,7 +20,7 @@ Calling it returns a generator object.
 
 ---
 
-## 2. Execution model
+## Execution model
 
 - Execution pauses at `yield`.
 - State is saved.
@@ -34,7 +34,7 @@ next(g)  # 1
 
 ---
 
-## 3. Memory efficiency
+## Memory efficiency
 
 Generators:
 - do not store all values,
@@ -43,7 +43,7 @@ Generators:
 
 ---
 
-## 4. Generator expressions
+## Generator
 
 Similar to list comprehensions, but lazy:
 

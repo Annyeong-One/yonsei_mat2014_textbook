@@ -4,7 +4,7 @@ Training a neural network consists of repeatedly applying a **training loop** th
 
 ---
 
-## 1. The standard training loop
+## The standard
 
 A canonical training step in PyTorch:
 
@@ -21,7 +21,7 @@ This loop performs one gradient-based update per batch.
 
 ---
 
-## 2. Epochs and batches
+## Epochs and batches
 
 - **Batch**: a subset of data used for one update
 - **Epoch**: one full pass over the dataset
@@ -33,7 +33,7 @@ for epoch in range(num_epochs):
 
 ---
 
-## 3. Training vs evaluation mode
+## Training vs
 
 Some modules behave differently during training:
 
@@ -48,7 +48,7 @@ Examples:
 
 ---
 
-## 4. Monitoring training
+## Monitoring training
 
 Typical quantities to monitor:
 - training loss,
@@ -61,7 +61,7 @@ loss.item()
 
 ---
 
-## 5. Financial calibration context
+## Financial
 
 Training loops are used for:
 - fitting surrogate pricing models,

@@ -1,10 +1,10 @@
-# `id()`, `type()`, and `isinstance()`
+# `id()`, `type()`,
 
 These built-ins support **introspection**, allowing programs to examine objects at runtime.
 
 ---
 
-## 1. `id()`
+## `id()`
 
 Returns a unique identifier for an object during its lifetime:
 
@@ -17,7 +17,7 @@ Conceptually corresponds to a memory address.
 
 ---
 
-## 2. `type()`
+## `type()`
 
 Returns the type of an object:
 
@@ -28,7 +28,7 @@ type([1, 2])   # <class 'list'>
 
 ---
 
-## 3. `isinstance()`
+## `isinstance()`
 
 Checks whether an object is an instance of a type:
 
@@ -45,7 +45,7 @@ isinstance(x, (int, float))
 
 ---
 
-## 4. Best practices
+## Best practices
 
 - Use `isinstance()` instead of `type(x) == T`.
 - Avoid excessive type checking; prefer polymorphism.

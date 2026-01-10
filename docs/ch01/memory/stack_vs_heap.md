@@ -1,10 +1,10 @@
-# Stack vs Heap (Conceptual Model)
+# Stack vs Heap
 
 Understanding Python’s **memory model** starts with the conceptual distinction between the *stack* and the *heap*. This distinction explains variable lifetimes, performance, and reference behavior.
 
 ---
 
-## 1. The stack (conceptually)
+## The stack
 
 The stack stores:
 - function call frames,
@@ -20,7 +20,7 @@ In Python, stack frames hold **references**, not actual objects.
 
 ---
 
-## 2. The heap
+## The heap
 
 The heap stores:
 - all Python objects,
@@ -34,7 +34,7 @@ Characteristics:
 
 ---
 
-## 3. Python’s abstraction
+## Python’s abstraction
 
 Python hides low-level memory details:
 - you never allocate or free memory manually,

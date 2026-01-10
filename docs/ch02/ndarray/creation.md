@@ -1,10 +1,10 @@
-# Array Creation and dtypes
+# Array Creation and
 
 NumPy’s core object is the **ndarray**, a homogeneous, fixed-size array designed for efficient numerical computation.
 
 ---
 
-## 1. Creating arrays from Python objects
+## Creating arrays from
 
 The most common way to create an array is with `np.array`:
 
@@ -18,7 +18,7 @@ All elements are stored with the same **dtype**.
 
 ---
 
-## 2. dtypes (data types)
+## dtypes (data types)
 
 A dtype specifies:
 - how many bytes each element uses,
@@ -38,7 +38,7 @@ np.array([1, 2, 3], dtype=np.float64)
 
 ---
 
-## 3. Common array constructors
+## Common array
 
 NumPy provides efficient constructors:
 
@@ -54,7 +54,7 @@ These avoid Python loops and are highly optimized.
 
 ---
 
-## 4. Type promotion
+## Type promotion
 
 NumPy promotes types automatically:
 
@@ -66,7 +66,7 @@ Promotion follows fixed rules to preserve information.
 
 ---
 
-## 5. Financial computing note
+## Financial computing
 
 Choosing the right dtype matters for:
 - memory usage,

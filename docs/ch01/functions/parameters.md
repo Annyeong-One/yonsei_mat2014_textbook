@@ -1,4 +1,4 @@
-# Parameters and Return Values
+# Parameters and
 
 ## Introduction
 
@@ -8,7 +8,7 @@ This chapter covers all aspects of function parameters (positional, keyword, def
 
 ## Function Parameters
 
-### Basic Parameters
+### 1. Basic Parameters
 
 Parameters are variables listed in the function definition:
 
@@ -23,7 +23,7 @@ greet("Alice")  # "Alice" is an argument
 - **Parameter**: Variable in function definition
 - **Argument**: Actual value passed when calling function
 
-### Positional Parameters
+### 2. Positional
 
 Parameters matched by position:
 
@@ -32,13 +32,13 @@ def describe_pet(animal_type, pet_name):
     print(f"I have a {animal_type} named {pet_name}")
 
 describe_pet("dog", "Buddy")
-# Output: I have a dog named Buddy
+# Output: I have a dog
 
 describe_pet("Buddy", "dog")  # Wrong order!
-# Output: I have a Buddy named dog
+# Output: I have a
 ```
 
-### Keyword Arguments
+### 1. Keyword Arguments
 
 Arguments specified by parameter name:
 
@@ -46,15 +46,15 @@ Arguments specified by parameter name:
 def describe_pet(animal_type, pet_name):
     print(f"I have a {animal_type} named {pet_name}")
 
-# Using keyword arguments
+# Using keyword
 describe_pet(animal_type="cat", pet_name="Whiskers")
 describe_pet(pet_name="Whiskers", animal_type="cat")  # Order doesn't matter
 
-# Mix positional and keyword (positional must come first)
+# Mix positional and
 describe_pet("hamster", pet_name="Fluffy")
 ```
 
-### Default Parameters
+### 1. Default
 
 Parameters with default values:
 
@@ -76,14 +76,14 @@ greet("Charlie", greeting="Hey")  # Hey, Charlie!
 def func(a, b, c=0, d=1):
     pass
 
-# Error - non-default after default
+# Error - non-default
 def func(a, b=0, c):  # SyntaxError
     pass
 ```
 
-## Variable-Length Arguments
+## Variable-Length
 
-### *args - Arbitrary Positional Arguments
+### 1. *args - Arbitrary
 
 Collect extra positional arguments into a tuple:
 
@@ -108,10 +108,10 @@ def print_info(name, *hobbies):
 
 print_info("Alice", "reading", "coding", "hiking")
 # Name: Alice
-# Hobbies: reading, coding, hiking
+# Hobbies: reading,
 ```
 
-### **kwargs - Arbitrary Keyword Arguments
+### 1. **kwargs -
 
 Collect extra keyword arguments into a dictionary:
 
@@ -129,7 +129,7 @@ create_profile("Alice", age=25, city="NYC", job="Engineer")
 # job: Engineer
 ```
 
-### Combining *args and **kwargs
+### 1. Combining *args
 
 ```python
 def flexible_function(required, *args, **kwargs):
@@ -140,7 +140,7 @@ def flexible_function(required, *args, **kwargs):
 flexible_function(1, 2, 3, name="Alice", age=25)
 # Required: 1
 # Args: (2, 3)
-# Kwargs: {'name': 'Alice', 'age': 25}
+# Kwargs: {'name':
 ```
 
 **Order**: 
@@ -149,15 +149,15 @@ def func(pos1, pos2, default=0, *args, **kwargs):
     pass
 
 # Correct order:
-# 1. Positional parameters
-# 2. Default parameters
-# 3. *args
-# 4. **kwargs
+# Positional
+# Default parameters
+# *args
+# **kwargs
 ```
 
 ## Unpacking Arguments
 
-### Unpacking Lists/Tuples with *
+### 1. Unpacking
 
 ```python
 def add(a, b, c):
@@ -173,7 +173,7 @@ result = add(*coords)
 print(result)  # 60
 ```
 
-### Unpacking Dictionaries with **
+### 1. Unpacking
 
 ```python
 def greet(first_name, last_name, age):
@@ -186,10 +186,10 @@ person = {
 }
 
 greet(**person)  # Unpacks to greet(first_name='Alice', ...)
-# Output: Hello, Alice Smith, age 25
+# Output: Hello, Alice
 ```
 
-## Keyword-Only Parameters (Python 3)
+## Keyword-Only
 
 Force parameters to be passed as keyword arguments using `*`:
 
@@ -202,11 +202,11 @@ def create_user(name, age, *, email, phone):
 # Correct
 create_user("Alice", 25, email="alice@example.com", phone="123-456")
 
-# Error - email and phone must be keyword arguments
-# create_user("Alice", 25, "alice@example.com", "123-456")  # TypeError
+# Error - email and
+# create_user("Alice",
 ```
 
-### Keyword-Only with *args
+### 1. Keyword-Only with
 
 ```python
 def process_data(*data, sort=False, reverse=False):
@@ -217,13 +217,13 @@ def process_data(*data, sort=False, reverse=False):
     return result
 
 print(process_data(3, 1, 4, 1, 5, sort=True))
-# [1, 1, 3, 4, 5]
+# Overview
 
 print(process_data(3, 1, 4, 1, 5, sort=True, reverse=True))
-# [5, 4, 3, 1, 1]
+# Overview
 ```
 
-## Positional-Only Parameters (Python 3.8+)
+## Positional-Only
 
 Force parameters to be positional using `/`:
 
@@ -235,11 +235,11 @@ def divide(a, b, /):
 # Correct
 result = divide(10, 2)  # 5.0
 
-# Error - cannot use keyword arguments
-# result = divide(a=10, b=2)  # TypeError
+# Error - cannot use
+# result =
 ```
 
-### Combining / and *
+### 1. Combining / and *
 
 ```python
 def func(pos_only, /, standard, *, kwd_only):
@@ -255,13 +255,13 @@ func(1, 2, kwd_only=3)
 func(1, standard=2, kwd_only=3)
 
 # Invalid
-# func(pos_only=1, standard=2, kwd_only=3)  # Error
-# func(1, 2, 3)  # Error
+# func(pos_only=1,
+# func(1, 2, 3) #
 ```
 
 ## Return Values
 
-### Single Return Value
+### 1. Single Return
 
 ```python
 def add(a, b):
@@ -271,7 +271,7 @@ result = add(5, 3)
 print(result)  # 8
 ```
 
-### Multiple Return Values
+### 2. Multiple Return
 
 Return a tuple to return multiple values:
 
@@ -290,7 +290,7 @@ result = get_min_max([1, 5, 3, 9, 2])
 print(result)  # (1, 9)
 ```
 
-### Named Return Values
+### 1. Named Return
 
 Use namedtuple or dataclass for clarity:
 
@@ -307,7 +307,7 @@ p = get_point()
 print(f"x: {p.x}, y: {p.y}")
 # x: 10, y: 20
 
-# Using dataclass (Python 3.7+)
+# Using dataclass
 from dataclasses import dataclass
 
 @dataclass
@@ -322,7 +322,7 @@ def process_data(data):
     return Result(True, "Success", data)
 ```
 
-### Returning None
+### 1. Returning None
 
 Functions without explicit return return `None`:
 
@@ -345,7 +345,7 @@ if result is None:
     print("Invalid value")
 ```
 
-### Conditional Returns
+### 1. Conditional
 
 ```python
 def get_grade(score):
@@ -364,7 +364,7 @@ def get_grade(score):
 print(get_grade(85))  # B
 ```
 
-### Returning Different Types
+### 2. Returning
 
 ```python
 def divide(a, b):
@@ -380,7 +380,7 @@ result = divide(10, 0)
 print(result)  # Error: Division by zero
 ```
 
-## Type Hints (Python 3.5+)
+## Type Hints (Python
 
 Add type information to parameters and return values:
 
@@ -401,7 +401,7 @@ def greet(name: str, age: int) -> str:
 result = greet("Alice", 25)
 ```
 
-### Complex Type Hints
+### 1. Complex Type
 
 ```python
 from typing import List, Dict, Tuple, Optional, Union
@@ -424,11 +424,11 @@ def parse_value(value: str) -> Union[int, float]:
     return int(value)
 ```
 
-## Parameter Passing: By Value or By Reference?
+## Parameter Passing:
 
 Python uses **"pass by assignment"**:
 
-### Immutable Objects (int, str, tuple)
+### 1. Immutable Objects
 
 Changes don't affect the original:
 
@@ -444,7 +444,7 @@ print(f"Outside: {num}")  # Still 10
 # Outside: 10
 ```
 
-### Mutable Objects (list, dict, set)
+### 1. Mutable Objects
 
 Changes affect the original:
 
@@ -457,13 +457,13 @@ numbers = [1, 2, 3]
 modify_list(numbers)
 print(f"Outside: {numbers}")  # Modified!
 # Inside: [1, 2, 3, 4]
-# Outside: [1, 2, 3, 4]
+# Outside: [1, 2, 3,
 
-# To avoid modification, pass a copy
+# To avoid
 modify_list(numbers[:])  # Pass a copy
 ```
 
-### Reassignment vs Modification
+### 1. Reassignment vs
 
 ```python
 def reassign_list(lst):
@@ -479,17 +479,17 @@ numbers = [1, 2, 3]
 reassign_list(numbers)
 print(f"After reassign: {numbers}")  # Unchanged
 # Inside: [10, 20, 30]
-# After reassign: [1, 2, 3]
+# After reassign: [1,
 
 modify_list(numbers)
 print(f"After modify: {numbers}")  # Changed!
 # Inside: [1, 2, 3, 4]
-# After modify: [1, 2, 3, 4]
+# After modify: [1, 2,
 ```
 
-## Advanced Parameter Patterns
+## Advanced Parameter
 
-### Builder Pattern
+### 1. Builder Pattern
 
 ```python
 def create_user(name, age=None, email=None, phone=None):
@@ -507,7 +507,7 @@ user1 = create_user("Alice")
 user2 = create_user("Bob", age=30, email="bob@example.com")
 ```
 
-### Options Dictionary
+### 2. Options
 
 ```python
 def process_data(data, **options):
@@ -532,7 +532,7 @@ result = process_data([3, 1, 4, 1, 5], sort=True, unique=True)
 print(result)  # [1, 3, 4, 5]
 ```
 
-### Callback Functions
+### 3. Callback
 
 ```python
 def process_items(items, callback):
@@ -557,16 +557,16 @@ print(squared)  # [1, 4, 9, 16, 25]
 
 ## Best Practices
 
-### 1. Limit Parameter Count
+### 1. Limit Parameter
 
 Keep parameters to 3-4 maximum:
 
 ```python
-# Poor - too many parameters
+# Poor - too many
 def create_account(name, email, age, address, city, state, zip_code, phone):
     pass
 
-# Better - use dictionary or object
+# Better - use
 def create_account(user_data):
     pass
 
@@ -584,7 +584,7 @@ def create_account(user: UserData):
     pass
 ```
 
-### 2. Use Descriptive Parameter Names
+### 1. Use Descriptive
 
 ```python
 # Poor
@@ -596,19 +596,19 @@ def calculate_total(price, quantity, tax):
     return price * quantity + tax
 ```
 
-### 3. Provide Meaningful Defaults
+### 1. Provide
 
 ```python
-# Poor - unclear default
+# Poor - unclear
 def connect(host, port=0):
     pass
 
-# Better - meaningful default
+# Better - meaningful
 def connect(host, port=8080):
     pass
 ```
 
-### 4. Avoid Mutable Default Arguments
+### 1. Avoid Mutable
 
 ```python
 # Dangerous!
@@ -624,7 +624,7 @@ def add_item(item, items=None):
     return items
 ```
 
-### 5. Use Type Hints
+### 1. Use Type Hints
 
 ```python
 def calculate_area(length: float, width: float) -> float:
@@ -632,7 +632,7 @@ def calculate_area(length: float, width: float) -> float:
     return length * width
 ```
 
-### 6. Document Parameters
+### 2. Document
 
 ```python
 def process_payment(amount, account, *, fee_rate=0.02):
@@ -654,7 +654,7 @@ def process_payment(amount, account, *, fee_rate=0.02):
     pass
 ```
 
-### 7. Return Early for Guard Clauses
+### 3. Return Early for
 
 ```python
 def process_order(order):
@@ -670,10 +670,10 @@ def process_order(order):
     return calculate_total(order)
 ```
 
-### 8. Return Consistent Types
+### 4. Return Consistent
 
 ```python
-# Poor - inconsistent return types
+# Poor - inconsistent
 def get_user(user_id):
     if user_id == 0:
         return None
@@ -681,7 +681,7 @@ def get_user(user_id):
         return False
     return {'id': user_id, 'name': 'User'}
 
-# Better - consistent return type
+# Better - consistent
 def get_user(user_id):
     if user_id <= 0:
         return None
@@ -690,7 +690,7 @@ def get_user(user_id):
 
 ## Common Pitfalls
 
-### 1. Mutable Default Arguments
+### 1. Mutable Default
 
 ```python
 # Wrong!
@@ -709,7 +709,7 @@ def append_to(element, target=None):
     return target
 ```
 
-### 2. Modifying Arguments
+### 1. Modifying
 
 ```python
 def sort_numbers(numbers):
@@ -720,27 +720,27 @@ nums = [3, 1, 2]
 sorted_nums = sort_numbers(nums)
 print(nums)  # [1, 2, 3] - modified!
 
-# Better - don't modify original
+# Better - don't
 def sort_numbers(numbers):
     return sorted(numbers)  # Returns new list
 ```
 
-### 3. Using *args/**kwargs Everywhere
+### 1. Using
 
 ```python
-# Poor - too flexible, unclear what's expected
+# Poor - too flexible,
 def do_something(*args, **kwargs):
     pass
 
-# Better - explicit parameters
+# Better - explicit
 def do_something(name, value, options=None):
     pass
 ```
 
-### 4. Not Validating Parameters
+### 1. Not Validating
 
 ```python
-# Risky - no validation
+# Risky - no
 def divide(a, b):
     return a / b  # ZeroDivisionError if b is 0!
 
@@ -753,7 +753,7 @@ def divide(a, b):
 
 ## Quick Reference
 
-### Parameter Types
+### 1. Parameter Types
 ```python
 def func(
     pos,              # Positional
@@ -765,7 +765,7 @@ def func(
     pass
 ```
 
-### Calling with Arguments
+### 2. Calling with
 ```python
 func(1)                    # Positional
 func(pos=1)                # Keyword
@@ -774,15 +774,15 @@ func(*[1, 2, 3])           # Unpack list
 func(**{'pos': 1})         # Unpack dict
 ```
 
-### Return Values
+### 3. Return Values
 ```python
 return value               # Single value
 return val1, val2          # Multiple values (tuple)
 return                     # None
-# No return also returns None
+# No return also
 ```
 
-### Type Hints
+### 1. Type Hints
 ```python
 def func(name: str, age: int = 0) -> str:
     return f"{name} is {age}"

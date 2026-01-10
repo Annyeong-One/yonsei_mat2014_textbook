@@ -1,10 +1,10 @@
-# Decorator Syntax and Semantics
+# Decorator Syntax and
 
 Decorators modify functions or methods **without changing their source code**. They are a powerful metaprogramming tool in Python.
 
 ---
 
-## 1. What is a decorator?
+## What is a decorator?
 
 A decorator is a function that:
 - takes another function,
@@ -22,7 +22,7 @@ def my_decorator(fn):
 
 ---
 
-## 2. Applying decorators
+## Applying decorators
 
 Using decorator syntax:
 
@@ -40,7 +40,7 @@ greet = my_decorator(greet)
 
 ---
 
-## 3. Preserving metadata
+## Preserving metadata
 
 Decorators should preserve function metadata:
 
@@ -56,7 +56,7 @@ def my_decorator(fn):
 
 ---
 
-## 4. Common use cases
+## Common use cases
 
 Decorators are used for:
 - logging,
@@ -66,7 +66,7 @@ Decorators are used for:
 
 ---
 
-## 5. Cautionary notes
+## Cautionary notes
 
 - Decorators can obscure control flow.
 - Overuse hurts readability.

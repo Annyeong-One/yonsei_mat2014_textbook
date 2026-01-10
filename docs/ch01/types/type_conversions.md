@@ -1,10 +1,10 @@
-# Type Conversions (`int`, `float`, `str`, `bool`)
+# Type Conversions
 
 Python allows explicit conversion between built-in types. Understanding these conversions is essential for correct programs.
 
 ---
 
-## 1. Numeric conversions
+## Numeric conversions
 
 ```python
 int(3.7)      # 3   (truncates toward zero)
@@ -15,7 +15,7 @@ Be careful: `int()` does **not** round.
 
 ---
 
-## 2. String conversions
+## String conversions
 
 ```python
 str(123)      # "123"
@@ -31,7 +31,7 @@ int("abc")    # ValueError
 
 ---
 
-## 3. Boolean conversions
+## Boolean conversions
 
 Rules for `bool(x)`:
 - `0`, `0.0`, `""`, `[]`, `{}`, `None` → `False`
@@ -44,7 +44,7 @@ bool(10)      # True
 
 ---
 
-## 4. Explicit vs implicit conversion
+## Explicit vs implicit
 
 Python avoids implicit numeric conversions that lose information.
 Always convert explicitly when needed.

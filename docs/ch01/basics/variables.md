@@ -1,4 +1,4 @@
-# Variables and Naming Rules
+# Variables and Naming
 
 ## Introduction
 
@@ -24,7 +24,7 @@ In the examples above:
 
 ## Variable Assignment
 
-### Basic Assignment
+### 1. Basic Assignment
 
 The equals sign (`=`) is the assignment operator in Python:
 
@@ -35,15 +35,15 @@ name = "Alice"  # Assign string "Alice" to variable name
 
 **Important**: The assignment operator works from right to left. The value on the right is assigned to the variable on the left.
 
-### Multiple Assignment
+### 2. Multiple
 
 Python allows you to assign values to multiple variables in a single line:
 
 ```python
-# Assign the same value to multiple variables
+# Assign the same
 a = b = c = 100
 
-# Assign different values to multiple variables
+# Assign different
 x, y, z = 1, 2, 3
 
 # Swapping variables
@@ -51,7 +51,7 @@ a, b = 10, 20
 a, b = b, a  # Now a = 20, b = 10
 ```
 
-### Unpacking
+### 1. Unpacking
 
 You can unpack sequences (like lists or tuples) into individual variables:
 
@@ -60,11 +60,11 @@ You can unpack sequences (like lists or tuples) into individual variables:
 coordinates = [10, 20, 30]
 x, y, z = coordinates
 
-# Unpacking with the * operator (extended unpacking)
+# Unpacking with the *
 first, *middle, last = [1, 2, 3, 4, 5]
-# first = 1, middle = [2, 3, 4], last = 5
+# Overview
 
-# Ignoring values with underscore
+# Ignoring values with
 x, _, z = [1, 2, 3]  # _ is conventionally used for unwanted values
 ```
 
@@ -72,7 +72,7 @@ x, _, z = [1, 2, 3]  # _ is conventionally used for unwanted values
 
 Python has specific rules and conventions for naming variables. Following these ensures your code is valid and readable.
 
-### Required Rules
+### 1. Required Rules
 
 These rules are **mandatory**—violating them causes syntax errors:
 
@@ -116,7 +116,7 @@ These rules are **mandatory**—violating them causes syntax errors:
    if = 30         # SyntaxError
    ```
 
-### Python Keywords
+### 2. Python Keywords
 
 Python reserves certain words that have special meaning. You cannot use these as variable names:
 
@@ -138,7 +138,7 @@ import keyword
 print(keyword.kwlist)
 ```
 
-### Naming Conventions (PEP 8)
+### 1. Naming
 
 While not required by Python, following these conventions makes your code more readable and professional:
 
@@ -206,7 +206,7 @@ While not required by Python, following these conventions makes your code more r
 Python is dynamically typed—you don't declare types explicitly:
 
 ```python
-# The type is determined by the value assigned
+# The type is
 count = 10              # int
 price = 19.99           # float
 name = "Alice"          # str
@@ -215,7 +215,7 @@ items = [1, 2, 3]       # list
 data = {"key": "value"} # dict
 ```
 
-### Checking Variable Type
+### 1. Checking Variable
 
 Use the `type()` function to check a variable's type:
 
@@ -230,7 +230,7 @@ name = "Alice"
 print(type(name))  # <class 'str'>
 ```
 
-### Type Conversion
+### 2. Type Conversion
 
 Convert between types explicitly:
 
@@ -247,7 +247,7 @@ count_str = str(count)  # "100"
 price_str = "19.99"
 price = float(price_str)  # 19.99
 
-# Float to integer (truncates decimal)
+# Float to integer
 value = int(3.9)  # 3
 ```
 
@@ -255,7 +255,7 @@ value = int(3.9)  # 3
 
 Variables have different scopes depending on where they're defined:
 
-### Local Variables
+### 1. Local Variables
 
 Variables defined inside a function are local to that function:
 
@@ -268,7 +268,7 @@ greet()  # Output: Hello
 print(message)  # NameError: name 'message' is not defined
 ```
 
-### Global Variables
+### 2. Global Variables
 
 Variables defined outside all functions are global:
 
@@ -283,7 +283,7 @@ increment()
 print(count)  # Output: 1
 ```
 
-### Nonlocal Variables
+### 3. Nonlocal
 
 In nested functions, use `nonlocal` to modify variables from the enclosing scope:
 
@@ -306,12 +306,12 @@ outer()
 Python doesn't have built-in constant types, but convention uses ALL_CAPS:
 
 ```python
-# Constants (by convention only)
+# Constants (by
 MAX_CONNECTIONS = 100
 PI = 3.14159
 DEFAULT_TIMEOUT = 30
 
-# These can still be changed (Python won't prevent it)
+# These can still be
 MAX_CONNECTIONS = 200  # Valid but discouraged
 ```
 
@@ -323,12 +323,12 @@ from collections import namedtuple
 Config = namedtuple('Config', ['max_size', 'timeout'])
 settings = Config(max_size=100, timeout=30)
 
-# settings.max_size = 200  # AttributeError: can't set attribute
+# settings.max_size =
 ```
 
-## Common Naming Patterns
+## Common Naming
 
-### Boolean Variables
+### 1. Boolean Variables
 
 Prefix with `is_`, `has_`, `can_`, or similar:
 
@@ -339,7 +339,7 @@ can_edit = True
 should_update = False
 ```
 
-### Collections
+### 2. Collections
 
 Use plural nouns:
 
@@ -349,7 +349,7 @@ prices = [10.99, 20.50, 15.75]
 user_ids = {101, 102, 103}
 ```
 
-### Counters and Indices
+### 3. Counters and
 
 Use descriptive names or conventional single letters:
 
@@ -366,7 +366,7 @@ for row_num, row_data in enumerate(data):
     pass
 ```
 
-### Temporary Variables
+### 1. Temporary
 
 Use descriptive names even for temporary values:
 
@@ -394,9 +394,9 @@ print(x)  # NameError: name 'x' is not defined
 
 **Note**: Deletion is rarely needed in Python due to automatic garbage collection.
 
-## Variable Identity and Equality
+## Variable Identity
 
-### Identity vs Equality
+### 1. Identity vs
 
 - `is` checks if two variables refer to the same object (identity)
 - `==` checks if two variables have the same value (equality)
@@ -411,7 +411,7 @@ print(a is b)  # False (different objects)
 print(a is c)  # True (same object)
 ```
 
-### The `id()` Function
+### 2. The `id()`
 
 Get the unique identifier of an object:
 
@@ -427,7 +427,7 @@ print(id(z))  # Same as x (z references same object)
 
 ## Best Practices
 
-### 1. Use Meaningful Names
+### 1. Use Meaningful
 
 ```python
 # Poor
@@ -437,29 +437,29 @@ d = 86400  # What does 'd' represent?
 seconds_per_day = 86400
 ```
 
-### 2. Be Consistent
+### 1. Be Consistent
 
 ```python
-# Pick a naming style and stick with it
+# Pick a naming style
 user_name = "Alice"    # snake_case
 user_age = 25          # snake_case
 user_email = "alice@example.com"  # snake_case
 ```
 
-### 3. Avoid Name Shadowing
+### 1. Avoid Name
 
 ```python
-# Poor - shadows built-in function
+# Poor - shadows
 list = [1, 2, 3]  # Now you can't use list() constructor
 
 # Good
 item_list = [1, 2, 3]
 ```
 
-### 4. Use Type Hints (Python 3.5+)
+### 1. Use Type Hints
 
 ```python
-# Type hints make code more readable and enable better IDE support
+# Type hints make code
 name: str = "Alice"
 age: int = 25
 prices: list[float] = [10.99, 20.50]
@@ -468,15 +468,15 @@ def greet(name: str) -> str:
     return f"Hello, {name}!"
 ```
 
-### 5. Initialize Variables Properly
+### 1. Initialize
 
 ```python
-# Poor - undefined variable
+# Poor - undefined
 if condition:
     result = calculate()
-# result might not exist here
+# result might not
 
-# Good - initialize first
+# Good - initialize
 result = None
 if condition:
     result = calculate()
@@ -484,15 +484,15 @@ if condition:
 
 ## Common Pitfalls
 
-### 1. Mutable Default Arguments
+### 1. Mutable Default
 
 ```python
-# Dangerous - list is created once and shared
+# Dangerous - list is
 def add_item(item, items=[]):
     items.append(item)
     return items
 
-# Better - use None as default
+# Better - use None as
 def add_item(item, items=None):
     if items is None:
         items = []
@@ -500,33 +500,33 @@ def add_item(item, items=None):
     return items
 ```
 
-### 2. Variable Reassignment
+### 1. Variable
 
 ```python
-# Variables can change type
+# Variables can change
 x = 10      # int
 x = "ten"   # now str - perfectly valid in Python
 ```
 
-### 3. Integer Division
+### 1. Integer Division
 
 ```python
-# Python 2 vs Python 3 behavior
+# Python 2 vs Python 3
 result = 5 / 2
 
-# Python 2: result = 2 (integer division)
-# Python 3: result = 2.5 (float division)
+# Python 2: result = 2
+# Python 3: result =
 
-# Use // for integer division in both
+# Use // for integer
 result = 5 // 2  # 2 in both Python 2 and 3
 ```
 
 ## Advanced Topics
 
-### Variable Annotations
+### 1. Variable
 
 ```python
-# PEP 526 variable annotations
+# PEP 526 variable
 count: int  # Declare without assignment
 count = 0   # Later assignment
 
@@ -538,12 +538,12 @@ ages: Dict[str, int] = {"Alice": 25, "Bob": 30}
 optional_value: Optional[int] = None
 ```
 
-### Walrus Operator (Python 3.8+)
+### 1. Walrus Operator
 
 Assign and use a variable in the same expression:
 
 ```python
-# Without walrus operator
+# Without walrus
 data = get_data()
 if data:
     process(data)
@@ -553,10 +553,10 @@ if (data := get_data()):
     process(data)
 ```
 
-### Variable Unpacking in Loops
+### 1. Variable
 
 ```python
-# Unpacking in for loops
+# Unpacking in for
 pairs = [(1, 'a'), (2, 'b'), (3, 'c')]
 
 for number, letter in pairs:
@@ -570,14 +570,14 @@ for key, value in person.items():
 
 ## Quick Reference
 
-### Variable Creation
+### 1. Variable Creation
 ```python
 x = 10                    # Simple assignment
 x = y = z = 0            # Multiple assignment
 a, b, c = 1, 2, 3        # Unpacking
 ```
 
-### Naming Rules
+### 2. Naming Rules
 ```python
 valid_name = 10          # Valid
 _private = 20            # Valid
@@ -588,14 +588,14 @@ my-var = 20              # Invalid (hyphen not allowed)
 class = 30               # Invalid (keyword)
 ```
 
-### Type Checking
+### 3. Type Checking
 ```python
 x = 42
 type(x)                  # <class 'int'>
 isinstance(x, int)       # True
 ```
 
-### Scope
+### 4. Scope
 ```python
 global_var = 10          # Global scope
 

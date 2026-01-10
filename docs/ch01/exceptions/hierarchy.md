@@ -4,7 +4,7 @@ Python exceptions are organized in a hierarchy. Understanding this hierarchy hel
 
 ---
 
-## 1. BaseException
+## BaseException
 
 At the top of the hierarchy is `BaseException`.
 
@@ -16,7 +16,7 @@ It is rarely caught directly and mainly exists to group:
 
 ---
 
-## 2. Exception
+## Exception
 
 Most runtime errors inherit from `Exception`.
 
@@ -32,7 +32,7 @@ In practice, you almost always catch subclasses of `Exception`.
 
 ---
 
-## 3. Why hierarchy matters
+## Why hierarchy
 
 Because of inheritance, you can catch:
 - specific errors when you know what to expect,

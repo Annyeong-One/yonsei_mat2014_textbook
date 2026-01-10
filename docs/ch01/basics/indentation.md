@@ -1,4 +1,4 @@
-# Indentation and Blocks
+# Indentation and
 
 ## Introduction
 
@@ -6,66 +6,66 @@ Unlike most programming languages that use braces `{}` or keywords like `begin`/
 
 Understanding indentation is crucial because improper indentation doesn't just make code hard to read—it causes syntax errors or changes program logic. This chapter covers everything you need to know about Python's indentation rules and code blocks.
 
-## Why Indentation Matters in Python
+## Why Indentation
 
-### The Philosophy
+### 1. The Philosophy
 
 Python's creator, Guido van Rossum, believed that code is read more often than it's written. By making indentation mandatory, Python ensures that code structure is always visually clear.
 
 ```python
-# Python - structure is obvious
+# Python - structure
 if x > 0:
     print("Positive")
     print("Greater than zero")
 else:
     print("Not positive")
 
-# Compare to languages with braces (structure can be hidden)
-# if (x > 0) { print("Positive"); print("Greater than zero"); }
-# else { print("Not positive"); }
+# Compare to languages
+# if (x > 0) {
+# else { print("Not
 ```
 
-### Indentation as Syntax
+### 1. Indentation as
 
 In Python, indentation isn't just for readability—it's part of the syntax:
 
 ```python
-# Correct - indentation defines the block
+# Correct -
 if True:
     print("This is inside the if block")
 print("This is outside the if block")
 
-# Error - inconsistent indentation
+# Error - inconsistent
 if True:
     print("This is inside")
   print("This will cause IndentationError")
 
-# Error - missing indentation
+# Error - missing
 if True:
 print("This will cause IndentationError")
 ```
 
-## Basic Indentation Rules
+## Basic Indentation
 
-### Rule 1: Consistent Indentation
+### 1. Rule 1:
 
 All statements in a block must be indented by the same amount:
 
 ```python
-# Correct - consistent 4-space indentation
+# Correct - consistent
 if x > 0:
     print("Line 1")
     print("Line 2")
     print("Line 3")
 
-# Error - inconsistent indentation
+# Error - inconsistent
 if x > 0:
     print("Line 1")
   print("Line 2")  # IndentationError: unexpected indent
       print("Line 3")  # IndentationError
 ```
 
-### Rule 2: Indentation After Colons
+### 1. Rule 2:
 
 Colons (`:`) indicate the start of an indented block:
 
@@ -82,11 +82,11 @@ for i in range(10):
 while condition:
     statement
 
-# After function definition
+# After function
 def function():
     statement
 
-# After class definition
+# After class
 class MyClass:
     statement
 
@@ -101,24 +101,24 @@ except Exception:
     statement
 ```
 
-### Rule 3: Spaces vs Tabs
+### 1. Rule 3: Spaces vs
 
 **PEP 8 Recommendation**: Use **4 spaces per indentation level**
 
 ```python
-# Recommended (4 spaces)
+# Recommended (4
 if True:
     print("4 spaces")
     if True:
         print("8 spaces")
 
-# Also valid but not recommended (2 spaces)
+# Also valid but not
 if True:
   print("2 spaces")
   if True:
     print("4 spaces")
 
-# Valid but NEVER mix with spaces (causes errors)
+# Valid but NEVER mix
 if True:
 <tab>print("Tab character")  # Don't do this if you use spaces elsewhere
 ```
@@ -126,13 +126,13 @@ if True:
 **Critical**: Never mix tabs and spaces in the same file. Python 3 treats this as an error:
 
 ```python
-# Error - mixing tabs and spaces
+# Error - mixing tabs
 if True:
     print("Spaces")
 <tab>print("Tab")  # TabError: inconsistent use of tabs and spaces
 ```
 
-### Rule 4: Blank Lines
+### 1. Rule 4: Blank
 
 Blank lines don't require indentation:
 
@@ -142,7 +142,7 @@ if x > 0:
                     # <-- Blank line (no indentation needed)
     print("Still in the if block")
 
-# But be consistent within blocks
+# But be consistent
 def function():
     statement1
     
@@ -153,19 +153,19 @@ def function():
 
 ## Defining Code Blocks
 
-### Single-Statement Blocks
+### 1. Single-Statement
 
 For single-statement blocks, you can use the same line (though not always recommended):
 
 ```python
-# Valid - single statement on same line
+# Valid - single
 if x > 0: print("Positive")
 
-# But better for readability
+# But better for
 if x > 0:
     print("Positive")
 
-# Multiple statements must be indented
+# Multiple statements
 if x > 0: print("Line 1"); print("Line 2")  # Valid but ugly
 
 # Better
@@ -174,7 +174,7 @@ if x > 0:
     print("Line 2")
 ```
 
-### Multi-Statement Blocks
+### 1. Multi-Statement
 
 Multiple statements must be properly indented:
 
@@ -186,12 +186,12 @@ if score >= 60:
     print(f"Grade: {grade}")
 ```
 
-### Nested Blocks
+### 2. Nested Blocks
 
 Blocks can be nested inside other blocks:
 
 ```python
-# Each nesting level adds one indentation level
+# Each nesting level
 if x > 0:                    # Level 0
     print("Positive")        # Level 1
     if x > 10:               # Level 1
@@ -208,9 +208,9 @@ for i in range(5):           # Level 0
             print("  Equal!")  # Level 3
 ```
 
-## Indentation in Different Constructs
+## Indentation in
 
-### Conditional Statements
+### 1. Conditional
 
 ```python
 # if-elif-else
@@ -240,7 +240,7 @@ else:
     show_login_page()
 ```
 
-### Loops
+### 1. Loops
 
 ```python
 # for loop
@@ -260,7 +260,7 @@ for i in range(3):
         print(f"({i}, {j})")
 ```
 
-### Functions
+### 1. Functions
 
 ```python
 # Function definition
@@ -268,7 +268,7 @@ def calculate_area(length, width):
     area = length * width
     return area
 
-# Function with multiple statements
+# Function with
 def greet(name):
     message = f"Hello, {name}!"
     print(message)
@@ -286,7 +286,7 @@ def outer():
     return x
 ```
 
-### Classes
+### 1. Classes
 
 ```python
 # Class definition
@@ -310,7 +310,7 @@ class Outer:
             print("Inner class method")
 ```
 
-### Try-Except Blocks
+### 1. Try-Except Blocks
 
 ```python
 try:
@@ -327,7 +327,7 @@ finally:
     cleanup()
 ```
 
-### With Statements
+### 2. With Statements
 
 ```python
 with open('file.txt', 'r') as f:
@@ -335,15 +335,15 @@ with open('file.txt', 'r') as f:
     print(content)
     process(content)
 
-# Multiple context managers
+# Multiple context
 with open('input.txt') as infile, open('output.txt', 'w') as outfile:
     data = infile.read()
     outfile.write(data.upper())
 ```
 
-## Common Indentation Patterns
+## Common Indentation
 
-### Guarding Clauses
+### 1. Guarding Clauses
 
 Return early to avoid deep nesting:
 
@@ -356,7 +356,7 @@ def process_data(data):
                 return transform(data)
     return None
 
-# Better - guard clauses
+# Better - guard
 def process_data(data):
     if data is None:
         return None
@@ -367,10 +367,10 @@ def process_data(data):
     return transform(data)
 ```
 
-### Early Returns
+### 1. Early Returns
 
 ```python
-# Reduce nesting with early returns
+# Reduce nesting with
 def check_eligibility(age, license):
     if age < 18:
         return False
@@ -386,7 +386,7 @@ def check_eligibility(age, license):
     return False
 ```
 
-### Loop Structures
+### 1. Loop Structures
 
 ```python
 # Clean loop structure
@@ -402,12 +402,12 @@ for user in users:
 
 ## Continuation Lines
 
-### Implicit Line Continuation
+### 1. Implicit Line
 
 Python allows line continuation inside brackets, parentheses, and braces:
 
 ```python
-# List spread across multiple lines
+# List spread across
 fruits = [
     'apple',
     'banana',
@@ -415,7 +415,7 @@ fruits = [
     'date'
 ]
 
-# Function call with many arguments
+# Function call with
 result = some_function(
     arg1,
     arg2,
@@ -429,7 +429,7 @@ if (temperature > 30 and
     wind_speed < 10):
     print("Very hot and humid")
 
-# Dictionary definition
+# Dictionary
 person = {
     'name': 'Alice',
     'age': 30,
@@ -437,12 +437,12 @@ person = {
 }
 ```
 
-### Explicit Line Continuation
+### 1. Explicit Line
 
 Use backslash `\` for explicit continuation:
 
 ```python
-# Arithmetic expression
+# Arithmetic
 total = 1 + 2 + 3 + \
         4 + 5 + 6 + \
         7 + 8 + 9
@@ -452,29 +452,29 @@ message = "This is a very long message " \
           "that spans multiple lines " \
           "using backslash continuation"
 
-# Note: Implicit continuation is preferred when possible
+# Note: Implicit
 # Better:
 total = (1 + 2 + 3 +
          4 + 5 + 6 +
          7 + 8 + 9)
 ```
 
-### String Continuation
+### 1. String
 
 ```python
-# Triple quotes for multi-line strings
+# Triple quotes for
 text = """
 This is a multi-line string.
 It preserves line breaks.
 And indentation.
 """
 
-# Implicit concatenation of string literals
+# Implicit
 message = ("This is "
            "a single "
            "string")
 
-# Join method for dynamic strings
+# Join method for
 lines = [
     "Line 1",
     "Line 2",
@@ -487,20 +487,20 @@ text = "\n".join(lines)
 
 PEP 8 recommends keeping lines under 79 characters. Here's how to break long lines:
 
-### Function Calls
+### 1. Function Calls
 
 ```python
-# Method 1: Align with opening delimiter
+# Method 1: Align with
 result = some_function(arg1, arg2,
                        arg3, arg4)
 
-# Method 2: Hanging indent (preferred)
+# Method 2: Hanging
 result = some_function(
     arg1, arg2,
     arg3, arg4
 )
 
-# Method 3: One argument per line
+# Method 3: One
 result = some_function(
     arg1,
     arg2,
@@ -509,7 +509,7 @@ result = some_function(
 )
 ```
 
-### Function Definitions
+### 1. Function
 
 ```python
 # Hanging indent
@@ -527,23 +527,23 @@ def long_function_name(
     print(param1)
 ```
 
-### Conditional Statements
+### 1. Conditional
 
 ```python
-# Use parentheses for multi-line conditions
+# Use parentheses for
 if (condition1 and
     condition2 and
     condition3):
     do_something()
 
-# Or break at logical operators
+# Or break at logical
 if (user.is_authenticated and
         user.has_permission('edit') and
         not user.is_suspended):
     allow_edit()
 ```
 
-### Collections
+### 1. Collections
 
 ```python
 # Lists
@@ -569,7 +569,7 @@ result = (dataframe
           .sort_values('value'))
 ```
 
-## Indentation Best Practices
+## Indentation Best
 
 ### 1. Use 4 Spaces
 
@@ -579,28 +579,28 @@ def function():
     statement1
     statement2
 
-# Avoid - 2 spaces (valid but not PEP 8)
+# Avoid - 2 spaces
 def function():
   statement1
   statement2
 
-# Never - tabs mixed with spaces
+# Never - tabs mixed
 def function():
     statement1
 <tab>statement2  # TabError
 ```
 
-### 2. Be Consistent
+### 1. Be Consistent
 
 ```python
-# Good - consistent indentation throughout
+# Good - consistent
 if condition:
     statement1
     statement2
     if nested_condition:
         nested_statement
 
-# Poor - varying indentation
+# Poor - varying
 if condition:
   statement1
     statement2
@@ -608,7 +608,7 @@ if condition:
         nested_statement
 ```
 
-### 3. Avoid Deep Nesting
+### 1. Avoid Deep
 
 ```python
 # Poor - deeply nested
@@ -620,7 +620,7 @@ def process(data):
                     return True
     return False
 
-# Better - early returns
+# Better - early
 def process(data):
     if not data:
         return False
@@ -631,10 +631,10 @@ def process(data):
     return save(data)
 ```
 
-### 4. Use Blank Lines for Readability
+### 1. Use Blank Lines
 
 ```python
-# Good - blank lines separate logical sections
+# Good - blank lines
 def complex_function(x):
     # Validate input
     if x < 0:
@@ -649,14 +649,14 @@ def complex_function(x):
     return result / x
 ```
 
-### 5. Align Continuation Lines
+### 1. Align
 
 ```python
 # Good - aligned
 result = some_function(argument1, argument2,
                        argument3, argument4)
 
-# Good - hanging indent
+# Good - hanging
 result = some_function(
     argument1, argument2,
     argument3, argument4
@@ -667,63 +667,63 @@ result = some_function(argument1, argument2,
     argument3, argument4)
 ```
 
-## Common Indentation Errors
+## Common Indentation
 
 ### 1. IndentationError
 
 Occurs when indentation is incorrect:
 
 ```python
-# Error - missing indentation
+# Error - missing
 if True:
 print("No indentation")  # IndentationError: expected an indented block
 
-# Error - unexpected indentation
+# Error - unexpected
 x = 10
     y = 20  # IndentationError: unexpected indent
 ```
 
-### 2. Inconsistent Indentation
+### 1. Inconsistent
 
 ```python
-# Error - inconsistent spacing
+# Error - inconsistent
 if True:
     print("4 spaces")
   print("2 spaces")  # IndentationError: unindent does not match
 ```
 
-### 3. TabError
+### 1. TabError
 
 ```python
-# Error - mixing tabs and spaces
+# Error - mixing tabs
 if True:
     print("Spaces")
 <tab>print("Tab")  # TabError: inconsistent use of tabs and spaces
 ```
 
-### 4. Forgetting Colons
+### 1. Forgetting Colons
 
 ```python
-# Error - missing colon
+# Error - missing
 if condition  # SyntaxError: invalid syntax
     statement
 ```
 
-### 5. Empty Blocks
+### 1. Empty Blocks
 
 ```python
 # Error - empty block
 if condition:
-# IndentationError: expected an indented block after 'if'
+# IndentationError:
 
 # Fix with pass
 if condition:
     pass  # Placeholder
 ```
 
-## IDE and Editor Support
+## IDE and Editor
 
-### Configuring Your Editor
+### 1. Configuring Your
 
 Most modern editors handle Python indentation automatically:
 
@@ -749,37 +749,37 @@ Most modern editors handle Python indentation automatically:
 }
 ```
 
-### Automatic Formatting
+### 2. Automatic
 
 Use formatters to ensure consistent indentation:
 
 ```bash
-# Black - opinionated formatter
+# Black - opinionated
 pip install black
 black my_script.py
 
-# autopep8 - PEP 8 compliant formatter
+# autopep8 - PEP 8
 pip install autopep8
 autopep8 --in-place my_script.py
 
-# yapf - configurable formatter
+# yapf - configurable
 pip install yapf
 yapf --in-place my_script.py
 ```
 
 ## Special Cases
 
-### Single-Line Blocks
+### 1. Single-Line
 
 ```python
-# Allowed but not always recommended
+# Allowed but not
 if x > 0: print("Positive")
 
 # Better
 if x > 0:
     print("Positive")
 
-# Multiple statements (discouraged)
+# Multiple statements
 if x > 0: y = x; print(y)
 
 # Much better
@@ -788,26 +788,26 @@ if x > 0:
     print(y)
 ```
 
-### Empty Blocks
+### 1. Empty Blocks
 
 ```python
-# Use pass for empty blocks
+# Use pass for empty
 def not_implemented():
     pass
 
 class EmptyClass:
     pass
 
-# Or docstrings count as statements
+# Or docstrings count
 def documented_but_empty():
     """This function does nothing yet."""
     pass  # Still good practice
 ```
 
-### Comments and Indentation
+### 1. Comments and
 
 ```python
-# Comments should align with code
+# Comments should
 if condition:
     # This comment is properly indented
     statement
@@ -816,30 +816,30 @@ if condition:
 
 # Not this
 if condition:
-# Poorly indented comment
+# Poorly indented
     statement
 ```
 
-## Debugging Indentation Issues
+## Debugging
 
-### Check for Hidden Characters
+### 1. Check for Hidden
 
 ```python
-# Tabs might look like spaces but aren't
-# Use editor's "Show whitespace" feature
+# Tabs might look like
+# Use editor's "Show
 
-# Run with Python's -tt flag for strict tab checking
+# Run with Python's
 # python -tt script.py
 ```
 
-### Use Python's Indentation Checker
+### 1. Use Python's
 
 ```python
-# python -m tabnanny script.py
-# Checks for ambiguous indentation
+# python -m tabnanny
+# Checks for ambiguous
 ```
 
-### Visual Indicators
+### 1. Visual Indicators
 
 Enable whitespace visualization in your editor:
 - Dots for spaces
@@ -848,7 +848,7 @@ Enable whitespace visualization in your editor:
 
 ## Quick Reference
 
-### Valid Indentation Patterns
+### 1. Valid Indentation
 ```python
 # Basic block
 if condition:
@@ -872,18 +872,18 @@ result = function(
 )
 ```
 
-### Common Errors
+### 1. Common Errors
 ```python
 # Missing indentation
 if condition:
 statement  # Error
 
-# Inconsistent indentation
+# Inconsistent
 if condition:
     statement1
   statement2  # Error
 
-# Mixing tabs and spaces
+# Mixing tabs and
 if condition:
     statement  # Spaces
 <tab>statement  # Tab - Error!

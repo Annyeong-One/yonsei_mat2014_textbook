@@ -1,17 +1,17 @@
-# `__name__ == "__main__"`
+# `__name__ ==
 
 The `__name__` variable distinguishes between running a file as a script and importing it as a module.
 
 ---
 
-## 1. The `__name__` variable
+## The `__name__`
 
 - When run directly: `__name__ == "__main__"`
 - When imported: `__name__ == "module_name"`
 
 ---
 
-## 2. The main guard pattern
+## The main guard
 
 ```python
 def main():
@@ -25,7 +25,7 @@ This ensures code runs only when executed directly.
 
 ---
 
-## 3. Why it matters
+## Why it matters
 
 The main guard:
 - prevents unwanted side effects on import,

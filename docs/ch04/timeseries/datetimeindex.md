@@ -4,7 +4,7 @@ pandas provides rich support for time series data through the **DatetimeIndex**,
 
 ---
 
-## 1. Creating a DatetimeIndex
+## Creating a
 
 ```python
 import pandas as pd
@@ -16,7 +16,7 @@ DatetimeIndex stores timestamps with nanosecond precision.
 
 ---
 
-## 2. Converting to datetime
+## Converting to
 
 ```python
 pd.to_datetime(["2021-01-01", "2021-01-05"])
@@ -26,7 +26,7 @@ This is commonly used when loading data from CSV files.
 
 ---
 
-## 3. Indexing with dates
+## Indexing with dates
 
 ```python
 s = pd.Series(range(5), index=dates)
@@ -37,7 +37,7 @@ Date-based slicing is inclusive.
 
 ---
 
-## 4. Time zone handling
+## Time zone handling
 
 ```python
 dates.tz_localize("UTC")
@@ -48,7 +48,7 @@ Time zones are essential for global financial data.
 
 ---
 
-## 5. Financial context
+## Financial context
 
 DatetimeIndex underlies:
 - price time series,

@@ -4,7 +4,7 @@ Writing files allows programs to persist results, logs, and data.
 
 ---
 
-## 1. Opening a file for writing
+## Opening a file for
 
 ```python
 f = open("output.txt", "w")
@@ -16,7 +16,7 @@ Warning:
 
 ---
 
-## 2. Writing text
+## Writing text
 
 ```python
 f.write("Hello\n")
@@ -27,7 +27,7 @@ f.write("World\n")
 
 ---
 
-## 3. Writing multiple lines
+## Writing multiple
 
 ```python
 lines = ["a\n", "b\n", "c\n"]
@@ -38,7 +38,7 @@ No automatic newlines are added.
 
 ---
 
-## 4. Flushing output
+## Flushing output
 
 ```python
 f.flush()

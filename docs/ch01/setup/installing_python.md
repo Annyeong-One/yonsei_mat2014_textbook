@@ -1,10 +1,10 @@
-# Installing Python (brew, conda, pip)
+# Installing Python
 
 Python is the primary language used throughout this book. This section explains common ways to install Python reliably on different systems.
 
 ---
 
-## 1. System Python vs user-installed Python
+## System Python vs
 
 Most operating systems ship with a system Python, but:
 - it may be outdated,
@@ -14,7 +14,7 @@ It is strongly recommended to install a separate Python distribution.
 
 ---
 
-## 2. Installing with Homebrew (macOS)
+## Installing with
 
 On macOS, Homebrew is a popular package manager.
 
@@ -29,7 +29,7 @@ This installs the latest stable Python and `pip`.
 
 ---
 
-## 3. Installing with Conda (Anaconda / Miniconda)
+## Installing with
 
 Conda provides:
 - Python,
@@ -48,7 +48,7 @@ Conda is especially convenient for scientific computing.
 
 ---
 
-## 4. Installing with pip and pyenv
+## Installing with pip
 
 Advanced users may prefer `pyenv` to manage Python versions.
 
@@ -63,7 +63,7 @@ This gives fine-grained control over Python versions.
 
 ---
 
-## 5. Verification
+## Verification
 
 Check installation with:
 ```bash

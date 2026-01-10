@@ -1,10 +1,10 @@
-# `dict` and Hash Tables
+# `dict` and Hash
 
 A **dictionary** maps keys to values using a hash table. It is one of Python’s most powerful and widely used data types.
 
 ---
 
-## 1. Creating dictionaries
+## Creating
 
 ```python
 d = {"a": 1, "b": 2}
@@ -15,7 +15,7 @@ Keys must be hashable (immutable).
 
 ---
 
-## 2. Hash table semantics
+## Hash table semantics
 
 Dictionary operations are:
 - average O(1) for lookup, insert, delete,
@@ -28,7 +28,7 @@ value = d["a"]
 
 ---
 
-## 3. Common patterns
+## Common patterns
 
 ```python
 if "x" in d:
@@ -43,7 +43,7 @@ d.get("x", 0)
 
 ---
 
-## 4. Use cases
+## Use cases
 
 Dictionaries are used for:
 - configurations,

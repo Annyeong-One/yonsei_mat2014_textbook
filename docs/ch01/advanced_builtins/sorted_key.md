@@ -1,10 +1,10 @@
-# `key=` Functions and Custom Ordering
+# `key=` Functions and
 
 The `key` argument allows precise control over sorting and ordering operations.
 
 ---
 
-## 1. Basic usage
+## Basic usage
 
 ```python
 xs = ["aaa", "b", "cc"]
@@ -15,7 +15,7 @@ Elements are ordered by `len(x)`.
 
 ---
 
-## 2. Sorting complex objects
+## Sorting complex
 
 ```python
 data = [("AAPL", 180), ("GOOG", 130)]
@@ -26,7 +26,7 @@ This sorts by price.
 
 ---
 
-## 3. Stability of sorting
+## Stability of sorting
 
 Python’s sorting is **stable**:
 - equal keys preserve original order.
@@ -35,7 +35,7 @@ This enables multi-stage sorting.
 
 ---
 
-## 4. Custom ordering logic
+## Custom ordering
 
 The `key` function should:
 - be fast,

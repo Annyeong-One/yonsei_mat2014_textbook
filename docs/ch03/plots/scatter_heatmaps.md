@@ -1,10 +1,10 @@
-# Scatter Plots and Heatmaps
+# Scatter Plots and
 
 Scatter plots and heatmaps visualize relationships between variables and are essential for multivariate analysis.
 
 ---
 
-## 1. Scatter plots
+## Scatter plots
 
 Scatter plots show pairs of observations:
 
@@ -25,7 +25,7 @@ They reveal:
 
 ---
 
-## 2. Enhancing scatter plots
+## Enhancing scatter
 
 ```python
 plt.scatter(x, y, alpha=0.5)
@@ -35,7 +35,7 @@ Transparency helps with overplotting.
 
 ---
 
-## 3. Heatmaps
+## Heatmaps
 
 Heatmaps visualize values on a grid using color intensity.
 
@@ -47,7 +47,7 @@ plt.colorbar()
 
 ---
 
-## 4. Correlation matrices
+## Correlation matrices
 
 ```python
 corr = np.corrcoef(np.random.randn(5, 100))

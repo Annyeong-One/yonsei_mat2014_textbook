@@ -4,7 +4,7 @@ pandas provides two core data structures for tabular and time-series data: **Ser
 
 ---
 
-## 1. Series
+## Series
 
 A **Series** is a one-dimensional labeled array.
 
@@ -21,7 +21,7 @@ Key properties:
 
 ---
 
-## 2. Accessing Series data
+## Accessing Series
 
 ```python
 s["a"]     # label-based
@@ -32,7 +32,7 @@ Labels and positions are distinct concepts.
 
 ---
 
-## 3. DataFrame
+## DataFrame
 
 A **DataFrame** is a two-dimensional table of labeled columns.
 
@@ -47,7 +47,7 @@ Each column is a Series sharing a common index.
 
 ---
 
-## 4. Column access
+## Column access
 
 ```python
 df["price"]
@@ -56,7 +56,7 @@ df.price    # attribute access (use cautiously)
 
 ---
 
-## 5. Financial context
+## Financial context
 
 DataFrames are used for:
 - price histories,

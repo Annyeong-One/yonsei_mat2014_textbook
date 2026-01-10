@@ -1,12 +1,12 @@
-# `int`: Python vs C (Memory & Semantics)
+# `int`: Python vs C
 
 Python integers (`int`) differ fundamentally from integers in low-level languages like C. Understanding this difference prevents many bugs and misconceptions.
 
 ---
 
-## 1. Fixed-size vs arbitrary precision
+## Fixed-size vs
 
-### C integers
+### 1. C integers
 - Fixed size (e.g. 32-bit or 64-bit)
 - Overflow wraps around or is undefined
 
@@ -15,7 +15,7 @@ int x = INT_MAX;
 x = x + 1;   // overflow
 ```
 
-### Python integers
+### 2. Python integers
 - Arbitrary precision
 - No overflow (memory grows as needed)
 
@@ -26,7 +26,7 @@ print(x)
 
 ---
 
-## 2. Memory representation
+## Memory
 
 - C `int`: stored directly in a fixed number of bits
 - Python `int`: object containing
@@ -40,7 +40,7 @@ This makes Python `int`:
 
 ---
 
-## 3. Semantics
+## Semantics
 
 Python integers obey **mathematical integer semantics**:
 - exact arithmetic
@@ -53,7 +53,7 @@ This is crucial for:
 
 ---
 
-## 4. Performance considerations
+## Performance
 
 Because Python `int` is an object:
 - arithmetic is slower than in C

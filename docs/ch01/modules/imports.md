@@ -4,7 +4,7 @@ Python’s `import` system allows code to be organized into reusable **modules**
 
 ---
 
-## 1. Basic import forms
+## Basic import forms
 
 ```python
 import math
@@ -17,7 +17,7 @@ Each form binds names differently in the current namespace.
 
 ---
 
-## 2. What happens during import
+## What happens during
 
 When Python executes `import module`:
 1. It searches for the module.
@@ -29,7 +29,7 @@ Imports are cached in `sys.modules`.
 
 ---
 
-## 3. Import is executed once
+## Import is executed
 
 A module is initialized only once per session:
 

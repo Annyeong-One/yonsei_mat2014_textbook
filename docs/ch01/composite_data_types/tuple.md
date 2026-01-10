@@ -1,10 +1,10 @@
-# `tuple` and Immutability
+# `tuple` and
 
 A **tuple** is an ordered, immutable collection. Tuples are fundamental to Python’s design and are widely used for safety and performance.
 
 ---
 
-## 1. Creating tuples
+## Creating tuples
 
 ```python
 t = (1, 2, 3)
@@ -16,13 +16,13 @@ Without the comma, `(42)` is just an integer.
 
 ---
 
-## 2. Immutability
+## Immutability
 
 Tuples cannot be modified after creation:
 
 ```python
 t = (1, 2, 3)
-# t[0] = 10   # TypeError
+# t[0] = 10 #
 ```
 
 Immutability provides:
@@ -32,7 +32,7 @@ Immutability provides:
 
 ---
 
-## 3. Access and unpacking
+## Access and unpacking
 
 ```python
 x, y = (10, 20)
@@ -45,7 +45,7 @@ Tuple unpacking is common in:
 
 ---
 
-## 4. Performance considerations
+## Performance
 
 Compared to lists:
 - tuples use less memory,

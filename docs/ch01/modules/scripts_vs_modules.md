@@ -4,7 +4,7 @@ Python files can act as **scripts**, **modules**, or both, depending on how they
 
 ---
 
-## 1. Scripts
+## Scripts
 
 Scripts are:
 - executed directly,
@@ -18,7 +18,7 @@ python script.py
 
 ---
 
-## 2. Modules
+## Modules
 
 Modules are:
 - imported by other code,
@@ -27,7 +27,7 @@ Modules are:
 
 ---
 
-## 3. Combining both roles
+## Combining both roles
 
 A common pattern:
 - define functions and classes,
@@ -36,7 +36,7 @@ A common pattern:
 
 ---
 
-## 4. Project structure
+## Project structure
 
 Larger projects separate:
 - library code (modules),

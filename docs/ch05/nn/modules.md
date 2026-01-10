@@ -1,10 +1,10 @@
-# Modules and Parameters
+# Modules and
 
 Modern neural network libraries (e.g. PyTorch) organize models using **modules** that encapsulate parameters and computation.
 
 ---
 
-## 1. What is a module?
+## What is a module?
 
 A module is:
 - a callable object,
@@ -25,7 +25,7 @@ class LinearModel(nn.Module):
 
 ---
 
-## 2. Parameters
+## Parameters
 
 Parameters are tensors registered inside a module:
 
@@ -40,7 +40,7 @@ They:
 
 ---
 
-## 3. Submodules and composition
+## Submodules and
 
 Modules can contain other modules:
 
@@ -56,7 +56,7 @@ This enables hierarchical model design.
 
 ---
 
-## 4. Why modules matter
+## Why modules matter
 
 Modules provide:
 - parameter management,

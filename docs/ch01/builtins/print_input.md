@@ -1,4 +1,4 @@
-# `print()` and `input()`
+# `print()` and
 
 Two of the most commonly used built-in functions in Python are `print()` (for output) and `input()` (for interactive user input). You’ll use them constantly when learning and when building small tools.
 
@@ -6,7 +6,7 @@ Two of the most commonly used built-in functions in Python are `print()` (for ou
 
 ## `print()`
 
-### Basic usage
+### 1. Basic usage
 
 ```python
 print("Hello, world!")
@@ -16,7 +16,7 @@ print(3.14)
 
 `print()` converts its arguments to strings and writes them to standard output.
 
-### Printing multiple values
+### 2. Printing multiple
 
 ```python
 name = "Alice"
@@ -27,7 +27,7 @@ print(name, "is", age)    # Alice is 30
 
 By default, values are separated by a single space.
 
-### `sep` and `end`
+### 3. `sep` and `end`
 
 - `sep` controls the separator between values.
 - `end` controls what is printed at the end (newline by default).
@@ -38,7 +38,7 @@ print("no newline", end="")        # stays on same line
 print(" -> next print continues")  # appended after end=""
 ```
 
-### f-strings (recommended)
+### 4. f-strings
 
 Use f-strings to format text cleanly:
 
@@ -51,7 +51,7 @@ print(f"pi ≈ {pi:.2f}")  # pi ≈ 3.14
 
 ## `input()`
 
-### Basic usage
+### 1. Basic usage
 
 `input()` reads a line of text from the user and **returns a string**:
 
@@ -60,7 +60,7 @@ name = input("Your name? ")
 print(f"Hi, {name}!")
 ```
 
-### Converting types
+### 2. Converting types
 
 Because `input()` returns a string, you often need to convert to `int` or `float`:
 
@@ -77,7 +77,7 @@ x = float(input("Enter a number: "))
 print(x * 2)
 ```
 
-### Handling invalid input
+### 3. Handling invalid
 
 Users can type anything, so conversions can fail:
 

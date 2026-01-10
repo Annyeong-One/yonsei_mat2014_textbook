@@ -1,10 +1,10 @@
-# Common Runtime Errors
+# Common Runtime
 
 Python raises exceptions when something goes wrong at runtime. Recognizing common errors helps you debug quickly.
 
 ---
 
-## 1. `TypeError`
+## `TypeError`
 
 Raised when an operation is applied to an inappropriate type.
 
@@ -14,7 +14,7 @@ Raised when an operation is applied to an inappropriate type.
 
 ---
 
-## 2. `ValueError`
+## `ValueError`
 
 Raised when a function receives the right type but an invalid value.
 
@@ -24,7 +24,7 @@ int("abc")
 
 ---
 
-## 3. `IndexError`
+## `IndexError`
 
 Raised when accessing an invalid index in a sequence.
 
@@ -35,7 +35,7 @@ xs[10]
 
 ---
 
-## 4. `KeyError`
+## `KeyError`
 
 Raised when a dictionary key is missing.
 
@@ -46,7 +46,7 @@ d["x"]
 
 ---
 
-## 5. `ZeroDivisionError`
+## `ZeroDivisionError`
 
 Raised when dividing by zero.
 

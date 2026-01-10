@@ -1,10 +1,10 @@
-# Histograms and Density
+# Histograms and
 
 Histograms and density plots are fundamental tools for exploring the distributional properties of data, especially in statistics and finance.
 
 ---
 
-## 1. Histograms
+## Histograms
 
 A histogram visualizes the frequency distribution of data by grouping values into bins.
 
@@ -23,7 +23,7 @@ Key parameters:
 
 ---
 
-## 2. Normalized histograms
+## Normalized
 
 ```python
 plt.hist(data, bins=30, density=True)
@@ -33,7 +33,7 @@ This allows comparison with theoretical densities.
 
 ---
 
-## 3. Overlaying density curves
+## Overlaying density
 
 ```python
 from scipy.stats import norm
@@ -45,7 +45,7 @@ plt.plot(x, norm.pdf(x), linewidth=2)
 
 ---
 
-## 4. Financial interpretation
+## Financial
 
 Histograms are used for:
 - return distributions,

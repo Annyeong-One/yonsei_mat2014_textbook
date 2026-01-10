@@ -1,10 +1,10 @@
-# Performance vs Python Loops
+# Performance vs
 
 Vectorization is the single most important performance concept in NumPy.
 
 ---
 
-## 1. Python loops are slow
+## Python loops are
 
 A pure Python loop:
 
@@ -21,7 +21,7 @@ This incurs:
 
 ---
 
-## 2. Vectorized NumPy code
+## Vectorized NumPy
 
 ```python
 res = a + b
@@ -34,7 +34,7 @@ This executes:
 
 ---
 
-## 3. Orders of magnitude difference
+## Orders of magnitude
 
 Typical speedups:
 - 10×–100× faster,
@@ -44,7 +44,7 @@ This is why NumPy is essential for numerical work.
 
 ---
 
-## 4. Memory considerations
+## Memory
 
 Vectorization may:
 - allocate temporary arrays,
@@ -58,7 +58,7 @@ a += b
 
 ---
 
-## 5. Practical guidance
+## Practical guidance
 
 - Avoid Python loops over arrays.
 - Think in array operations.

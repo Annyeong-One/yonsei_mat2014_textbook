@@ -4,7 +4,7 @@ Python includes two special built-in types: `bool` for truth values and `None` f
 
 ---
 
-## 1. `bool`
+## `bool`
 
 `bool` has exactly two values:
 - `True`
@@ -21,7 +21,7 @@ But semantically, booleans represent truth, not numbers.
 
 ---
 
-## 2. Truthiness
+## Truthiness
 
 Many objects are implicitly true or false:
 
@@ -37,7 +37,7 @@ This is widely used in conditionals.
 
 ---
 
-## 3. `None`
+## `None`
 
 `None` represents:
 - absence of a value
@@ -50,7 +50,7 @@ x = None
 
 ---
 
-## 4. Comparing with `None`
+## Comparing with
 
 Always use `is` / `is not`:
 

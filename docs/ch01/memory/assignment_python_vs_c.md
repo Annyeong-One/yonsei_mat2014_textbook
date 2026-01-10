@@ -1,10 +1,10 @@
-# Assignment Semantics (Python vs C)
+# Assignment Semantics
 
 Assignment in Python is fundamentally different from assignment in C and other low-level languages.
 
 ---
 
-## 1. Assignment in C
+## Assignment in C
 
 In C:
 - variables represent memory locations,
@@ -18,7 +18,7 @@ int b = a;  // copies value
 
 ---
 
-## 2. Assignment in Python
+## Assignment in Python
 
 In Python:
 - assignment binds a name to an object,
@@ -33,7 +33,7 @@ Both names refer to the same object.
 
 ---
 
-## 3. Consequences
+## Consequences
 
 - Assignment is cheap.
 - Mutability matters.

@@ -1,10 +1,10 @@
-# Mutable vs Immutable Objects
+# Mutable vs Immutable
 
 Python objects are either **mutable** or **immutable**. This distinction affects assignment, function calls, and correctness.
 
 ---
 
-## 1. Immutable objects
+## Immutable objects
 
 Immutable objects cannot be changed after creation.
 
@@ -19,7 +19,7 @@ x += 1   # creates a new object
 
 ---
 
-## 2. Mutable objects
+## Mutable objects
 
 Mutable objects can be changed in place.
 
@@ -33,7 +33,7 @@ xs.append(3)
 
 ---
 
-## 3. Why it matters
+## Why it matters
 
 Mutability affects:
 - aliasing,

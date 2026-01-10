@@ -1,10 +1,10 @@
-# Time vs Space Trade-offs
+# Time vs Space
 
 Efficient programs balance **time complexity** and **space complexity**. Understanding this trade-off is essential for writing performant Python code.
 
 ---
 
-## 1. Time complexity
+## Time complexity
 
 Time complexity measures how execution time grows with input size.
 
@@ -18,7 +18,7 @@ In Python, constant factors also matter.
 
 ---
 
-## 2. Space complexity
+## Space complexity
 
 Space complexity measures memory usage:
 - stack usage (call frames),
@@ -29,7 +29,7 @@ Faster algorithms often use more memory.
 
 ---
 
-## 3. Trade-offs in practice
+## Trade-offs in
 
 Examples:
 - caching results speeds up computation but uses memory,
@@ -37,13 +37,13 @@ Examples:
 - vectorization trades memory for speed.
 
 ```python
-# trade memory for speed
+# trade memory for
 cache = {}
 ```
 
 ---
 
-## 4. Financial computing perspective
+## Financial computing
 
 In quantitative finance:
 - latency matters in trading,

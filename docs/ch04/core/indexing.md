@@ -1,10 +1,10 @@
-# Indexing and Selection
+# Indexing and
 
 Indexing is one of pandas’ most powerful (and subtle) features. Understanding selection rules is essential for correct analysis.
 
 ---
 
-## 1. Label-based indexing: `loc`
+## Label-based
 
 ```python
 df.loc[0]              # row with label 0
@@ -15,7 +15,7 @@ df.loc[:, "price"]     # all rows, column "price"
 
 ---
 
-## 2. Position-based indexing: `iloc`
+## Position-based
 
 ```python
 df.iloc[0]             # first row
@@ -26,7 +26,7 @@ df.iloc[:, 0]          # first column
 
 ---
 
-## 3. Boolean indexing
+## Boolean indexing
 
 ```python
 df[df["price"] > 100]
@@ -36,7 +36,7 @@ Boolean masks must align with the index.
 
 ---
 
-## 4. Chained indexing (avoid)
+## Chained indexing
 
 ```python
 df[df["price"] > 100]["volume"]
@@ -52,7 +52,7 @@ df.loc[df["price"] > 100, "volume"]
 
 ---
 
-## 5. Best practices
+## Best practices
 
 - Use `loc` / `iloc` explicitly.
 - Avoid chained indexing.

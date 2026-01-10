@@ -1,10 +1,10 @@
-# `map()`, `filter()`, and `sorted()`
+# `map()`, `filter()`,
 
 These higher-order built-in functions apply operations to collections in a functional style.
 
 ---
 
-## 1. `map()`
+## `map()`
 
 Applies a function to each element:
 
@@ -21,7 +21,7 @@ ys = [x * 2 for x in xs]
 
 ---
 
-## 2. `filter()`
+## `filter()`
 
 Keeps elements for which a predicate is true:
 
@@ -38,7 +38,7 @@ evens = [x for x in xs if x % 2 == 0]
 
 ---
 
-## 3. `sorted()`
+## `sorted()`
 
 Returns a new sorted list:
 
@@ -50,7 +50,7 @@ Works on any iterable and does not modify the original.
 
 ---
 
-## 4. Pythonic style
+## Pythonic style
 
 List comprehensions are often clearer, but `map` and `filter` are useful when:
 - composing functions,

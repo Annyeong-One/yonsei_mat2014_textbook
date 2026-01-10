@@ -1,4 +1,4 @@
-# Recursion and Stack Overflow
+# Recursion and Stack
 
 ## Introduction
 
@@ -26,15 +26,15 @@ def countdown(n):
 
 countdown(5)
 # Output:
-# 5
-# 4
-# 3
-# 2
-# 1
+# Overview
+# Overview
+# Overview
+# Overview
+# Overview
 # Blast off!
 ```
 
-### How Recursion Works
+### 1. How Recursion
 
 Each recursive call creates a new stack frame:
 
@@ -45,16 +45,16 @@ def factorial(n):
     return n * factorial(n - 1)
 
 result = factorial(4)
-# Call stack progression:
-# factorial(4) -> 4 * factorial(3)
-#              -> 4 * 3 * factorial(2)
-#              -> 4 * 3 * 2 * factorial(1)
-#              -> 4 * 3 * 2 * 1 * factorial(0)
-#              -> 4 * 3 * 2 * 1 * 1
-#              -> 24
+# Call stack
+# factorial(4) -> 4 *
+# > 4 * 3 *
+# > 4 * 3 * 2 *
+# > 4 * 3 * 2 * 1 *
+# Overview
+# Overview
 ```
 
-### Recursion vs Iteration
+### 1. Recursion vs
 
 Many recursive problems can be solved iteratively:
 
@@ -86,7 +86,7 @@ print(factorial_iterative(5))  # 120
 - Performance is critical
 - Avoiding stack overflow is important
 
-## Classic Recursive Problems
+## Classic Recursive
 
 ### 1. Factorial
 
@@ -103,7 +103,7 @@ print(factorial(5))  # 120
 print(factorial(0))  # 1
 ```
 
-### 2. Fibonacci Sequence
+### 2. Fibonacci
 
 ```python
 def fibonacci(n):
@@ -117,12 +117,12 @@ def fibonacci(n):
     return fibonacci(n - 1) + fibonacci(n - 2)
 
 print(fibonacci(6))  # 8
-# Sequence: 0, 1, 1, 2, 3, 5, 8, ...
+# Sequence: 0, 1, 1,
 ```
 
 **Warning**: Naive Fibonacci is extremely inefficient due to repeated calculations!
 
-### 3. Sum of List
+### 1. Sum of List
 
 ```python
 def sum_list(numbers):
@@ -136,7 +136,7 @@ def sum_list(numbers):
 print(sum_list([1, 2, 3, 4, 5]))  # 15
 ```
 
-### 4. Reverse String
+### 2. Reverse String
 
 ```python
 def reverse_string(s):
@@ -150,7 +150,7 @@ def reverse_string(s):
 print(reverse_string("hello"))  # olleh
 ```
 
-### 5. Power Function
+### 3. Power Function
 
 ```python
 def power(base, exp):
@@ -164,9 +164,9 @@ def power(base, exp):
 print(power(2, 5))  # 32
 ```
 
-## The Call Stack in Recursion
+## The Call Stack in
 
-### Stack Frame Visualization
+### 1. Stack Frame
 
 Each recursive call adds a frame to the call stack:
 
@@ -229,11 +229,11 @@ Stack: []
 
 ## Stack Overflow
 
-### What is Stack Overflow?
+### 1. What is Stack
 
 **Stack overflow** occurs when the call stack grows too large and exceeds the system's memory limit.
 
-### Causes of Stack Overflow
+### 2. Causes of Stack
 
 1. **No base case**:
 ```python
@@ -241,7 +241,7 @@ def infinite_recursion(n):
     # No base case!
     return infinite_recursion(n - 1)
 
-# infinite_recursion(10)  # RecursionError!
+# infinite_recursion(1
 ```
 
 2. **Base case never reached**:
@@ -252,7 +252,7 @@ def buggy_countdown(n):
     print(n)
     buggy_countdown(n + 1)  # Goes wrong direction!
 
-# buggy_countdown(5)  # RecursionError!
+# buggy_countdown(5) #
 ```
 
 3. **Too many recursive calls**:
@@ -262,10 +262,10 @@ def fibonacci(n):
         return n
     return fibonacci(n - 1) + fibonacci(n - 2)
 
-# fibonacci(1000)  # RecursionError!
+# fibonacci(1000) #
 ```
 
-### Python's Recursion Limit
+### 1. Python's
 
 Python has a default recursion limit (usually 1000):
 
@@ -275,7 +275,7 @@ import sys
 # Check current limit
 print(sys.getrecursionlimit())  # 1000 (default)
 
-# Increase limit (use with caution!)
+# Increase limit (use
 sys.setrecursionlimit(5000)
 
 # Test limit
@@ -293,7 +293,7 @@ except RecursionError:
 
 **Warning**: Increasing the recursion limit doesn't add memory—it just allows deeper recursion before hitting the actual memory limit!
 
-### Detecting Stack Overflow
+### 1. Detecting Stack
 
 ```python
 def safe_recursion(n):
@@ -308,14 +308,14 @@ def safe_recursion(n):
 result = safe_recursion(5000)
 ```
 
-## Avoiding Stack Overflow
+## Avoiding Stack
 
-### 1. Use Iteration Instead
+### 1. Use Iteration
 
 Convert recursion to loops:
 
 ```python
-# Recursive (can overflow)
+# Recursive (can
 def sum_recursive(n):
     if n == 0:
         return 0
@@ -331,18 +331,18 @@ def sum_iterative(n):
 print(sum_iterative(10000))  # No problem!
 ```
 
-### 2. Tail Recursion
+### 1. Tail Recursion
 
 A function is **tail recursive** if the recursive call is the last operation:
 
 ```python
-# Not tail recursive (multiplication after recursive call)
+# Not tail recursive
 def factorial(n):
     if n == 0:
         return 1
     return n * factorial(n - 1)  # Operation after recursion
 
-# Tail recursive (accumulator pattern)
+# Tail recursive
 def factorial_tail(n, accumulator=1):
     if n == 0:
         return accumulator
@@ -353,18 +353,18 @@ print(factorial_tail(5))  # 120
 
 **Note**: Python doesn't optimize tail recursion (unlike some languages), so this doesn't prevent stack overflow by itself.
 
-### 3. Memoization
+### 1. Memoization
 
 Cache results to avoid repeated calculations:
 
 ```python
-# Naive Fibonacci (exponential time)
+# Naive Fibonacci
 def fib_naive(n):
     if n <= 1:
         return n
     return fib_naive(n - 1) + fib_naive(n - 2)
 
-# Memoized Fibonacci (linear time)
+# Memoized Fibonacci
 def fib_memo(n, cache=None):
     if cache is None:
         cache = {}
@@ -390,13 +390,13 @@ def fib_cached(n):
 print(fib_cached(100))  # Fast!
 ```
 
-### 4. Increase Stack Size (Careful!)
+### 1. Increase Stack
 
 ```python
 import sys
 import threading
 
-# Increase thread stack size
+# Increase thread
 threading.stack_size(67108864)  # 64 MB
 
 def deep_recursion(n):
@@ -404,22 +404,22 @@ def deep_recursion(n):
         return 0
     return deep_recursion(n - 1) + 1
 
-# Run in thread with larger stack
+# Run in thread with
 thread = threading.Thread(target=lambda: print(deep_recursion(50000)))
 thread.start()
 thread.join()
 ```
 
-### 5. Convert to Dynamic Programming
+### 1. Convert to
 
 ```python
-# Recursive Fibonacci (slow, can overflow)
+# Recursive Fibonacci
 def fib_recursive(n):
     if n <= 1:
         return n
     return fib_recursive(n - 1) + fib_recursive(n - 2)
 
-# Dynamic programming (fast, no overflow)
+# Dynamic programming
 def fib_dp(n):
     if n <= 1:
         return n
@@ -435,9 +435,9 @@ def fib_dp(n):
 print(fib_dp(1000))  # Fast and safe!
 ```
 
-## Advanced Recursive Patterns
+## Advanced Recursive
 
-### 1. Multiple Recursive Calls
+### 1. Multiple
 
 ```python
 def fibonacci(n):
@@ -446,10 +446,10 @@ def fibonacci(n):
         return n
     return fibonacci(n - 1) + fibonacci(n - 2)
 
-# Tree-like recursion structure
+# Tree-like recursion
 ```
 
-### 2. Mutual Recursion
+### 1. Mutual Recursion
 
 Functions calling each other:
 
@@ -470,7 +470,7 @@ print(is_even(4))  # True
 print(is_odd(5))   # True
 ```
 
-### 3. Tree Recursion
+### 2. Tree Recursion
 
 Recursing through tree structures:
 
@@ -487,12 +487,12 @@ def tree_sum(node):
         return 0
     return node.value + tree_sum(node.left) + tree_sum(node.right)
 
-# Example tree:
-#     1
-#    / \
-#   2   3
-#  / \
-# 4   5
+# Overview
+# Overview
+# Overview
+# Overview
+# Overview
+# Overview
 
 root = TreeNode(1,
     TreeNode(2, TreeNode(4), TreeNode(5)),
@@ -502,7 +502,7 @@ root = TreeNode(1,
 print(tree_sum(root))  # 15
 ```
 
-### 4. Backtracking
+### 1. Backtracking
 
 Try different paths and backtrack if they don't work:
 
@@ -547,7 +547,7 @@ if find_path(maze, 0, 0, path):
     print("Path found:", path)
 ```
 
-### 5. Divide and Conquer
+### 2. Divide and
 
 ```python
 def merge_sort(arr):
@@ -582,19 +582,19 @@ def merge(left, right):
     return result
 
 print(merge_sort([38, 27, 43, 3, 9, 82, 10]))
-# [3, 9, 10, 27, 38, 43, 82]
+# Overview
 ```
 
-## Recursion Best Practices
+## Recursion Best
 
-### 1. Always Have a Base Case
+### 1. Always Have a
 
 ```python
 # Wrong - no base case
 def infinite(n):
     return infinite(n - 1)  # Never stops!
 
-# Correct - clear base case
+# Correct - clear base
 def countdown(n):
     if n <= 0:  # Base case
         return
@@ -602,23 +602,23 @@ def countdown(n):
     countdown(n - 1)
 ```
 
-### 2. Ensure Progress Toward Base Case
+### 1. Ensure Progress
 
 ```python
-# Wrong - not progressing
+# Wrong - not
 def bad_factorial(n):
     if n == 0:
         return 1
     return n * bad_factorial(n)  # n doesn't change!
 
-# Correct - making progress
+# Correct - making
 def factorial(n):
     if n == 0:
         return 1
     return n * factorial(n - 1)  # n decreases
 ```
 
-### 3. Use Meaningful Variable Names
+### 1. Use Meaningful
 
 ```python
 # Poor
@@ -634,7 +634,7 @@ def sum_to_n(n):
     return n + sum_to_n(n - 1)
 ```
 
-### 4. Consider Iteration for Simple Cases
+### 1. Consider
 
 ```python
 # Recursion overkill
@@ -643,11 +643,11 @@ def sum_recursive(numbers):
         return 0
     return numbers[0] + sum_recursive(numbers[1:])
 
-# Better - use built-in
+# Better - use
 total = sum(numbers)
 ```
 
-### 5. Add Safeguards
+### 1. Add Safeguards
 
 ```python
 def safe_factorial(n, max_depth=100):
@@ -659,7 +659,7 @@ def safe_factorial(n, max_depth=100):
     return n * safe_factorial(n - 1, max_depth - 1)
 ```
 
-### 6. Document Recursive Functions
+### 2. Document
 
 ```python
 def fibonacci(n):
@@ -686,9 +686,9 @@ def fibonacci(n):
     return fibonacci(n - 1) + fibonacci(n - 2)
 ```
 
-## Debugging Recursive Functions
+## Debugging Recursive
 
-### 1. Add Print Statements
+### 1. Add Print
 
 ```python
 def factorial(n, depth=0):
@@ -706,7 +706,7 @@ def factorial(n, depth=0):
 factorial(4)
 ```
 
-### 2. Visualize the Call Tree
+### 2. Visualize the
 
 ```python
 def visualize_recursion(func):
@@ -739,7 +739,7 @@ def debug_factorial(n):
 
 ## Quick Reference
 
-### Recursive Function Template
+### 1. Recursive
 ```python
 def recursive_function(parameters):
     # Base case(s)
@@ -753,7 +753,7 @@ def recursive_function(parameters):
     return combine(recursive_function(modified_parameters))
 ```
 
-### Common Patterns
+### 2. Common Patterns
 ```python
 # Linear recursion
 def linear(n):
@@ -774,23 +774,23 @@ def tail(n, acc=initial):
     return tail(n - 1, update(acc, n))
 ```
 
-### Avoiding Stack Overflow
+### 1. Avoiding Stack
 ```python
-# 1. Use iteration
+# Use iteration
 for i in range(n):
     ...
 
-# 2. Use memoization
+# Use memoization
 from functools import lru_cache
 @lru_cache(maxsize=None)
 def func(n):
     ...
 
-# 3. Check depth
+# Check depth
 if depth > MAX_DEPTH:
     raise RecursionError()
 
-# 4. Increase limit (careful!)
+# Increase limit
 import sys
 sys.setrecursionlimit(new_limit)
 ```

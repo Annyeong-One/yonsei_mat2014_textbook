@@ -1,10 +1,10 @@
-# Loss Functions and Optimizers
+# Loss Functions and
 
 Training neural networks requires defining a **loss function** and an **optimizer** to adjust parameters.
 
 ---
 
-## 1. Loss functions
+## Loss functions
 
 A loss function measures model error:
 
@@ -21,7 +21,7 @@ Common losses:
 
 ---
 
-## 2. Computing loss
+## Computing loss
 
 ```python
 pred = model(x)
@@ -32,7 +32,7 @@ The loss is a scalar tensor.
 
 ---
 
-## 3. Optimizers
+## Optimizers
 
 Optimizers update parameters using gradients:
 
@@ -49,7 +49,7 @@ Popular optimizers:
 
 ---
 
-## 4. Training step
+## Training step
 
 ```python
 optimizer.zero_grad()
@@ -61,7 +61,7 @@ This is the core training loop.
 
 ---
 
-## 5. Financial perspective
+## Financial
 
 Optimizers are used for:
 - model calibration,

@@ -4,7 +4,7 @@
 
 ---
 
-## 1. Why autograd?
+## Why autograd?
 
 In optimization and learning, we need:
 - gradients of loss functions,
@@ -14,7 +14,7 @@ Manual differentiation is error-prone and unscalable.
 
 ---
 
-## 2. Computational graphs
+## Computational graphs
 
 Autograd builds a **computational graph**:
 - nodes = tensor operations,
@@ -24,7 +24,7 @@ During the forward pass, the graph is recorded.
 
 ---
 
-## 3. Backpropagation
+## Backpropagation
 
 Calling backward computes gradients:
 
@@ -39,7 +39,7 @@ Gradients flow backward through the graph.
 
 ---
 
-## 4. Leaf tensors and gradients
+## Leaf tensors and
 
 - Only tensors with `requires_grad=True` accumulate gradients.
 - Gradients are stored in `.grad`.
@@ -48,7 +48,7 @@ Gradients accumulate unless reset.
 
 ---
 
-## 5. Financial applications
+## Financial
 
 Autograd enables:
 - calibration via gradient descent,

@@ -4,7 +4,7 @@ Matplotlib organizes plots around two core objects: **Figure** and **Axes**. Und
 
 ---
 
-## 1. The Figure
+## The Figure
 
 A **Figure** represents the entire drawing canvas.
 
@@ -18,7 +18,7 @@ It can contain one or more Axes objects.
 
 ---
 
-## 2. Axes
+## Axes
 
 An **Axes** represents a single plot area with:
 - x-axis and y-axis,
@@ -33,7 +33,7 @@ fig, ax = plt.subplots()
 
 ---
 
-## 3. Plotting on Axes
+## Plotting on Axes
 
 ```python
 import numpy as np
@@ -51,7 +51,7 @@ This object-oriented style is recommended.
 
 ---
 
-## 4. Multiple Axes
+## Multiple Axes
 
 ```python
 fig, axs = plt.subplots(2, 2)
@@ -61,7 +61,7 @@ This creates a grid of Axes for comparative plots.
 
 ---
 
-## 5. Why the object-oriented API matters
+## Why the
 
 - More explicit control
 - Easier customization

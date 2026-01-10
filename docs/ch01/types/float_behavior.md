@@ -1,10 +1,10 @@
-# `float`: IEEE 754 and Precision
+# `float`: IEEE 754
 
 Python `float` implements the IEEE 754 double-precision floating-point standard. This has important consequences for numerical accuracy.
 
 ---
 
-## 1. What is IEEE 754?
+## What is IEEE 754?
 
 Python `float` is:
 - 64-bit double precision
@@ -18,20 +18,20 @@ Structure:
 
 ---
 
-## 2. Representation error
+## Representation error
 
 Many decimal numbers cannot be represented exactly:
 
 ```python
 0.1 + 0.2
-# 0.30000000000000004
+# Overview
 ```
 
 This is **not a bug**, but a consequence of binary representation.
 
 ---
 
-## 3. Equality pitfalls
+## Equality pitfalls
 
 Avoid direct equality checks:
 
@@ -48,7 +48,7 @@ abs(x - 0.3) < 1e-9
 
 ---
 
-## 4. Financial implications
+## Financial
 
 Floating-point issues matter for:
 - pricing

@@ -1,10 +1,10 @@
-# `set` and Membership Semantics
+# `set` and Membership
 
 A **set** is an unordered collection of unique elements, implemented using a hash table.
 
 ---
 
-## 1. Creating sets
+## Creating sets
 
 ```python
 s = {1, 2, 3}
@@ -15,7 +15,7 @@ Duplicate elements are automatically removed.
 
 ---
 
-## 2. Membership testing
+## Membership testing
 
 Sets excel at membership checks:
 
@@ -27,7 +27,7 @@ This is O(1) on average.
 
 ---
 
-## 3. Set operations
+## Set operations
 
 ```python
 a | b   # union
@@ -39,7 +39,7 @@ These operations are concise and expressive.
 
 ---
 
-## 4. Use cases
+## Use cases
 
 Sets are ideal for:
 - removing duplicates,

@@ -1,10 +1,10 @@
-# List Assignment and Aliasing
+# List Assignment and
 
 Lists are mutable, so assignment can easily lead to **aliasing bugs** if misunderstood.
 
 ---
 
-## 1. Aliasing example
+## Aliasing example
 
 ```python
 a = [1, 2, 3]
@@ -21,7 +21,7 @@ Both names refer to the same list.
 
 ---
 
-## 2. Copying lists
+## Copying lists
 
 To create a copy:
 
@@ -35,7 +35,7 @@ Now modifications are independent.
 
 ---
 
-## 3. Nested lists
+## Nested lists
 
 Shallow copies do not copy nested objects:
 
