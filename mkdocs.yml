@@ -1,46 +1,148 @@
-site_name: Financial Math Book
+site_name: Python Foundations for Quantitative Finance
 theme:
   name: material
 
-nav:
-  - Home: index.md
-  - Chapter 1:
-      - 1.1 Overview: ch01/index.md
-      - 1.2 BS PDE Derivation:
-          - Delta Hedging: ch01/bs_pde_derivation/delta_hedging.md
-          - Martingale: ch01/bs_pde_derivation/martingale.md
-          - Equilibrium: ch01/bs_pde_derivation/equilbrium.md
-          - Change of Numeraire: ch01/bs_pde_derivation/change_of_numeraire.md
-      - 1.3 BS PDE Solution:
-          - Feynman-Kac Formula: ch01/bs_pde_solution/feynman_kac.md
-          - Heat Equation: ch01/bs_pde_solution/heat_equation.md
-          - Green Function: ch01/bs_pde_solution/green_function.md
-          - Various Transforms: ch01/bs_pde_solution/fourier_mellin_laplace_transforms.md
-          - Change of Numeraire: ch01/bs_pde_solution/change_of_numeraire.md
-          - Viscosity Solutions: ch01/bs_pde_solution/viscosity_solutions.md
-      - 1.3 Mathematical Backups:
-          - Martingale Representation Theorem: ch01/math_backups/martingale_representation_theorem.md
-          - Girsanov Theorem: ch01/math_backups/girsanov_theorem.md
-          - Fundamental Theorem of Asset Pricing: ch01/math_backups/fundamental_theorem_of_asset_pricing.md
-          - Separating Hyperplane Theorem: ch01/math_backups/separating_hyperplane_theorem.md
-
-  - Chapter 2:
-      - 2.1 Overview: ch02/index.md
-
-plugins:
-  - search
-
 markdown_extensions:
-  - pymdownx.arithmatex:
-      generic: true
-  - pymdownx.superfences
   - admonition
   - toc:
       permalink: true
+  - pymdownx.superfences
+  - pymdownx.arithmatex:
+      generic: true
 
-extra_javascript:
-  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+nav:
+  - Home: index.md
 
+  - Chapter 1 Python Language Fundamentals:
+      - 1.1 Getting Started:
+          - Installing Python (brew, conda, pip): ch01/setup/installing_python.md
+          - Python Interpreter and REPL: ch01/setup/python_interpreter.md
 
+      - 1.2 Basic Syntax and Control Flow:
+          - Variables and Naming Rules: ch01/basics/variables.md
+          - Expressions and Statements: ch01/basics/expressions.md
+          - if / for / while: ch01/basics/control_flow.md
+          - Indentation and Blocks: ch01/basics/indentation.md
 
+      - 1.3 Essential Built-in Functions:
+          - print() and input(): ch01/builtins/print_input.md
+          - len(), range(), enumerate(): ch01/builtins/len_range_enumerate.md
 
+      - 1.4 Built-in Data Types:
+          - int Python vs C (Memory & Semantics): ch01/types/int_python_vs_c.md
+          - float IEEE 754 and Precision: ch01/types/float_behavior.md
+          - bool and None: ch01/types/bool_none.md
+          - str Python vs C Strings: ch01/types/str_python_vs_c.md
+          - Type Conversions (int, float, str, bool): ch01/types/type_conversions.md
+
+      - 1.5 Composite Data Types:
+          - tuple and Immutability: ch01/composite_data_types/tuple.md
+          - list and Dynamic Arrays: ch01/composite_data_types/list.md
+          - dict and Hash Tables: ch01/composite_data_types/dict.md
+          - set and Membership Semantics: ch01/composite_data_types/set.md
+
+      - 1.6 Functions:
+          - Function Definition and Call Stack: ch01/functions/functions.md
+          - Parameters and Return Values: ch01/functions/parameters.md
+          - Recursion and Stack Overflow: ch01/functions/recursion.md
+          - lambda Expressions: ch01/functions/lambda.md
+
+      - 1.7 Memory Model and Assignment:
+          - Stack vs Heap (Conceptual Model): ch01/memory/stack_vs_heap.md
+          - Object Identity and References: ch01/memory/object_identity.md
+          - Assignment Semantics (Python vs C): ch01/memory/assignment_python_vs_c.md
+          - Mutable vs Immutable Objects: ch01/memory/mutable_vs_immutable.md
+          - list Assignment and Aliasing: ch01/memory/list_assignment.md
+          - Reference Counting and Garbage Collection: ch01/memory/garbage_collection.md
+
+      - 1.8 Exceptions:
+          - Exception Hierarchy: ch01/exceptions/hierarchy.md
+          - Common Runtime Errors: ch01/exceptions/common_errors.md
+          - try / except / finally: ch01/exceptions/handling.md
+          - Raising Exceptions: ch01/exceptions/raising.md
+
+      - 1.9 File I/O:
+          - Opening and Reading Files: ch01/io/file_reading.md
+          - Writing Files: ch01/io/file_writing.md
+          - Context Managers (with): ch01/io/context_managers.md
+
+      - 1.10 Advanced Built-in Functions:
+          - The builtins Namespace: ch01/advanced_builtins/builtins_namespace.md
+          - map(), filter(), sorted(): ch01/advanced_builtins/map_filter_sorted.md
+          - key= Functions and Custom Ordering: ch01/advanced_builtins/sorted_key.md
+          - id(), type(), isinstance(): ch01/advanced_builtins/introspection.md
+
+      - 1.11 Modules and Imports:
+          - import Mechanics: ch01/modules/imports.md
+          - sys.path and Module Search Order: ch01/modules/module_search.md
+          - __name__ == "__main__": ch01/modules/main_guard.md
+          - Scripts vs Modules: ch01/modules/scripts_vs_modules.md
+
+      - 1.12 Namespaces and Name Resolution:
+          - LEGB Rule: ch01/namespaces/legb.md
+          - Global vs Local Variables: ch01/namespaces/scope.md
+
+      - 1.13 Classes and Objects:
+          - Class Definition and Instances: ch01/oop/classes.md
+          - __init__ and Attribute Lookup: ch01/oop/attributes.md
+          - Method Resolution Order (MRO): ch01/oop/mro.md
+          - Inheritance and super(): ch01/oop/inheritance.md
+
+      - 1.14 Decorators and Metaprogramming:
+          - Functions as Objects: ch01/advanced/functions_as_objects.md
+          - Decorator Syntax and Semantics: ch01/advanced/decorators.md
+
+      - 1.15 Iteration Internals:
+          - Iterables and Iterators: ch01/iteration/iterables.md
+          - Generators and yield: ch01/iteration/generators.md
+
+      - 1.16 Performance and Mental Models:
+          - Time vs Space Trade-offs: ch01/performance/tradeoffs.md
+          - Python Execution Model: ch01/performance/execution_model.md
+
+  - Chapter 2 NumPy and Numerical Computing:
+      - 2.1 NumPy ndarray Fundamentals:
+          - Array Creation and dtypes: ch02/ndarray/creation.md
+          - Shape, Strides, and Views: ch02/ndarray/shape_strides.md
+      - 2.2 Vectorization and Broadcasting:
+          - Broadcasting Rules: ch02/vectorization/broadcasting.md
+          - Performance vs Python Loops: ch02/vectorization/performance.md
+      - 2.3 Linear Algebra and Randomness:
+          - Linear Algebra Basics: ch02/linalg/linalg.md
+          - Random Numbers and Simulation: ch02/random/random.md
+
+  - Chapter 3 matplotlib for Visualization:
+      - 3.1 Plotting Fundamentals:
+          - Figures and Axes: ch03/fundamentals/figures_axes.md
+          - Lines, Markers, and Styles: ch03/fundamentals/styles.md
+      - 3.2 Statistical Plots:
+          - Histograms and Density: ch03/plots/histograms.md
+          - Scatter and Heatmaps: ch03/plots/scatter_heatmaps.md
+      - 3.3 Layout and Output:
+          - Subplots and Grids: ch03/layout/subplots.md
+          - Saving and Exporting Figures: ch03/layout/export.md
+
+  - Chapter 4 pandas and Data Analysis:
+      - 4.1 Core pandas Objects:
+          - Series and DataFrame: ch04/core/series_dataframe.md
+          - Indexing and Selection: ch04/core/indexing.md
+      - 4.2 Data Wrangling:
+          - GroupBy and Aggregation: ch04/wrangling/groupby.md
+          - Merge and Join: ch04/wrangling/merge_join.md
+      - 4.3 Time Series:
+          - DatetimeIndex: ch04/timeseries/datetimeindex.md
+          - Resampling and Rolling: ch04/timeseries/resampling.md
+
+  - Chapter 5 PyTorch and Automatic Differentiation:
+      - 5.1 Tensors and Autograd:
+          - Tensor Basics: ch05/tensors/basics.md
+          - Autograd Mechanics: ch05/autograd/autograd.md
+      - 5.2 Neural Network Components:
+          - Modules and Parameters: ch05/nn/modules.md
+          - Loss Functions and Optimizers: ch05/nn/optimizers.md
+      - 5.3 Training and Performance:
+          - Training Loops: ch05/training/training_loops.md
+          - GPU and Performance Considerations: ch05/training/gpu.md
+
+plugins:
+  - search
