@@ -110,6 +110,7 @@ nav:
       - 3.3 Layout and Output:
           - Subplots and Grids: ch03/layout/subplots.md
           - Saving and Exporting Figures: ch03/layout/export.md
+
   - Chapter 4 Pandas:
       - 4.1 Core pandas Objects:
           - Series and DataFrame: ch04/core/series_dataframe.md
@@ -120,6 +121,7 @@ nav:
       - 4.3 Time Series:
           - DatetimeIndex: ch04/timeseries/datetimeindex.md
           - Resampling and Rolling: ch04/timeseries/resampling.md
+
   - Chapter 5 PyTorch:
       - 5.1 Tensors:
           - Tensor Basics: ch05/tensors/basics.md
@@ -132,5 +134,51 @@ nav:
           - Training Loops: ch05/training/training_loops.md
       - 5.5 Performance:
           - GPU and Performance: ch05/training/gpu.md
+
+  - Chapter 6 SciPy Stats:
+      - 6.1 Distributions:
+          - Continuous Distributions: ch06/distributions/continuous.md
+          - Discrete Distributions: ch06/distributions/discrete.md
+          - Distribution Methods: ch06/distributions/methods.md
+      - 6.2 Descriptive Statistics:
+          - Summary Statistics: ch06/descriptive/summary_stats.md
+          - Moments and Skewness: ch06/descriptive/moments.md
+      - 6.3 Statistical Tests:
+          - Parametric Tests: ch06/tests/parametric.md
+          - Non-Parametric Tests: ch06/tests/nonparametric.md
+          - Goodness of Fit: ch06/tests/goodness_of_fit.md
+      - 6.4 Hypothesis Testing:
+          - Null Hypothesis: ch06/hypothesis/null_hypothesis.md
+          - p-values and Significance: ch06/hypothesis/pvalues.md
+          - Power Analysis: ch06/hypothesis/power_analysis.md
+      - 6.5 Correlation:
+          - Pearson and Spearman: ch06/correlation/correlation.md
+          - Covariance: ch06/correlation/covariance.md
+
+  - Chapter 7 Scikit-Learn:
+      - 7.1 Data Preprocessing:
+          - Scaling and Normalization: ch07/preprocessing/scaling.md
+          - Encoding Categorical: ch07/preprocessing/encoding.md
+          - Missing Data Handling: ch07/preprocessing/missing_data.md
+      - 7.2 Model Selection:
+          - Train-Test Split: ch07/model_selection/train_test_split.md
+          - Cross-Validation: ch07/model_selection/cross_validation.md
+          - Grid Search and Tuning: ch07/model_selection/hyperparameters.md
+      - 7.3 Supervised Learning:
+          - Linear Models: ch07/supervised/linear_models.md
+          - Tree-Based Models: ch07/supervised/tree_models.md
+          - Ensemble Methods: ch07/supervised/ensemble.md
+          - Support Vector Machines: ch07/supervised/svm.md
+      - 7.4 Unsupervised Learning:
+          - Clustering Algorithms: ch07/unsupervised/clustering.md
+          - Dimensionality Reduction: ch07/unsupervised/dimensionality.md
+      - 7.5 Model Evaluation:
+          - Classification Metrics: ch07/evaluation/classification_metrics.md
+          - Regression Metrics: ch07/evaluation/regression_metrics.md
+          - Confusion Matrix: ch07/evaluation/confusion_matrix.md
+      - 7.6 Pipelines:
+          - Pipeline Construction: ch07/pipelines/pipeline_basics.md
+          - Feature Engineering: ch07/pipelines/feature_engineering.md
+
 plugins:
   - search
