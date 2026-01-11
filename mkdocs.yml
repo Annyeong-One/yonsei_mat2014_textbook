@@ -71,6 +71,7 @@ nav:
       - 1.14 Namespaces:
           - LEGB Rule: ch01/namespaces/legb.md
           - Global vs Local Variables: ch01/namespaces/scope.md
+
       - 1.15 OOP Foundations:
           - Procedural vs OOP: ch01/oop/procedural_vs_oop.md
           - Functions to Classes: ch01/oop/functions_to_classes.md
@@ -97,43 +98,83 @@ nav:
           - Method Resolution Order: ch01/oop/mro.md
           - C3 Linearization: ch01/oop/c3_linearization.md
           
-      - 1.19 Properties and Computed Attributes:
+      - 1.19 Composition and Aggregation:
+          - Is-a vs Has-a: ch01/oop/isa_vs_hasa.md
+          - Composition Pattern: ch01/oop/composition.md
+          - Aggregation Pattern: ch01/oop/aggregation.md
+          - Composition vs Inheritance: ch01/oop/composition_vs_inheritance.md
+          - Design Guidelines: ch01/oop/relationship_design.md
+          
+      - 1.20 Properties and Computed Attributes:
           - Property Decorator: ch01/oop/property_decorator.md
           - Getter Setter Deleter: ch01/oop/property_methods.md
           - Cached Properties: ch01/oop/cached_property.md
           - Read-Only Properties: ch01/oop/readonly_properties.md
           
-      - 1.20 Dynamic Attribute Access:
+      - 1.21 Dynamic Attribute Access:
           - getattr setattr delattr: ch01/oop/builtin_attr_functions.md
           - Attribute Lookup Hierarchy: ch01/oop/attribute_lookup_hierarchy.md
           - Dynamic vs Static Access: ch01/oop/dynamic_static_access.md
           
-      - 1.21 Dunder Methods - Attribute Access:
+      - 1.22 Dunder Methods - Attribute Access:
           - __getattribute__: ch01/oop/dunder_getattribute.md
           - __getattr__: ch01/oop/dunder_getattr.md
           - __setattr__: ch01/oop/dunder_setattr.md
           - __delattr__: ch01/oop/dunder_delattr.md
           - Attribute Access Interplay: ch01/oop/attribute_access_interplay.md
           
-      - 1.22 Descriptor Protocol:
+      - 1.23 Descriptor Protocol:
           - Descriptor Introduction: ch01/oop/descriptor_intro.md
           - __get__ __set__ __delete__: ch01/oop/descriptor_methods.md
           - Data vs Non-Data Descriptors: ch01/oop/descriptor_types.md
           - Descriptor Use Cases: ch01/oop/descriptor_applications.md
           - Properties as Descriptors: ch01/oop/property_descriptor_connection.md
           
-      - 1.23 Dunder Methods - Basics:
+      - 1.24 Dunder Methods - Basics:
           - Introduction to Dunder: ch01/oop/dunder_intro.md
           - Object Lifecycle: ch01/oop/dunder_lifecycle.md
           - String Representation: ch01/oop/dunder_string.md
           - Arithmetic Operators: ch01/oop/dunder_arithmetic.md
           - Comparison Operators: ch01/oop/dunder_comparison.md
           
-      - 1.24 Dunder Methods - Advanced:
+      - 1.25 Dunder Methods - Advanced:
           - Container Protocol: ch01/oop/dunder_containers.md
           - Iterable Protocol: ch01/oop/dunder_iterables.md
           - Callable Objects: ch01/oop/dunder_callable.md
           - Context Managers: ch01/oop/dunder_context.md
+          
+      - 1.26 NumPy OOP Design:
+          - ndarray Object Model: ch01/scientific/numpy_ndarray.md
+          - dtype and Shape: ch01/scientific/numpy_dtype_shape.md
+          - UFuncs and Vectorization: ch01/scientific/numpy_ufuncs.md
+          - Broadcasting Rules: ch01/scientific/numpy_broadcasting.md
+          - Views vs Copies: ch01/scientific/numpy_views_copies.md
+          
+      - 1.27 Pandas OOP Design:
+          - Series Object: ch01/scientific/pandas_series.md
+          - DataFrame Architecture: ch01/scientific/pandas_dataframe.md
+          - Index Objects: ch01/scientific/pandas_index.md
+          - MultiIndex Hierarchy: ch01/scientific/pandas_multiindex.md
+          - Method Chaining: ch01/scientific/pandas_method_chaining.md
+          
+      - 1.28 Matplotlib OOP Design:
+          - Figure-Axes-Artist: ch01/scientific/matplotlib_hierarchy.md
+          - OOP vs Pyplot: ch01/scientific/matplotlib_oop_pyplot.md
+          - Axes Customization: ch01/scientific/matplotlib_axes.md
+          - Line2D and Artists: ch01/scientific/matplotlib_artists.md
+          - Plot Lifecycle: ch01/scientific/matplotlib_lifecycle.md
+          
+      - 1.29 Scientific Python Integration:
+          - Lists vs Arrays: ch01/scientific/lists_vs_arrays.md
+          - Arrays vs DataFrames: ch01/scientific/arrays_vs_dataframes.md
+          - PIL vs NumPy Images: ch01/scientific/pil_vs_numpy.md
+          - NumPy to PyTorch: ch01/scientific/numpy_to_pytorch.md
+          - Financial Data with yfinance: ch01/scientific/yfinance_workflow.md
+          
+
+          
+
+
       - 1.16 Decorators:
           - Functions as Objects: ch01/advanced/functions_as_objects.md
           - Decorator Semantics: ch01/advanced/decorators.md
