@@ -137,7 +137,7 @@ nav:
           - Namespace Implementation: ch02/binding/namespace_implementation.md
 
       - 2.9 Closures & Late Binding:
-          - Closure Cells and Free Variables: ch02/closures/cells_freevars.md
+          - Closure Cells & Free Vars: ch02/closures/cells_freevars.md
           - cellvars vs freevars: ch02/closures/cellvars_vs_freevars.md
           - Code Objects: ch02/closures/code_objects.md
           - Late Binding Problem: ch02/closures/late_binding_problem.md
@@ -168,7 +168,7 @@ nav:
           - Special Cases: ch02/assignment/special_cases.md
 
       - 2.11 Ref Count and GC:
-          - Memory Management Overview: ch02/gc/memory_management_overview.md
+          - Memory Management: ch02/gc/memory_management_overview.md
           - Reference Counting: ch02/gc/reference_counting.md
           - Circular References: ch02/gc/circular_references.md
           - Garbage Collection: ch02/gc/garbage_collection.md
@@ -235,7 +235,7 @@ nav:
           - Recursion Patterns: ch03/functions/recursion_patterns.md
 
       - 3.2 Parameters:
-          - \*args and \*\*kwargs: ch03/params/args_kwargs.md
+          - "*args and **kwargs": ch03/params/args_kwargs.md
           - Keyword-Only Arguments: ch03/params/keyword_only.md
           - Positional-Only Arguments: ch03/params/positional_only.md
           - Parameter Best Practices: ch03/params/best_practices.md
