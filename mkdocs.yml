@@ -102,12 +102,12 @@ nav:
           - Built-in Names: ch02/naming/builtins.md
 
       - 2.4 Dynamic Typing:
-          - Dynamic Typing Fundamentals: ch02/typing/dynamic_typing.md
+          - Dynamic Typing Basics: ch02/typing/dynamic_typing.md
           - Type Conversion: ch02/typing/type_conversion.md
           - Type Introspection: ch02/typing/type_function.md
 
       - 2.5 CPython Internals:
-          - Implementation vs Guarantees: ch02/implementation/guarantees_vs_details.md
+          - Impl vs Guarantees: ch02/implementation/guarantees_vs_details.md
           - Integer Interning: ch02/implementation/integer_interning.md
           - String Interning: ch02/implementation/string_interning.md
 
@@ -437,12 +437,12 @@ nav:
           - Train-Test Split: ch11/model_selection/train_test_split.md
           - Cross-Validation: ch11/model_selection/cross_validation.md
           - Grid Search and Tuning: ch11/model_selection/hyperparameters.md
-      - 11.3 Supervised Learning:
+      - 11.3 Supervised ML:
           - Linear Models: ch11/supervised/linear_models.md
           - Tree-Based Models: ch11/supervised/tree_models.md
           - Ensemble Methods: ch11/supervised/ensemble.md
           - Support Vector Machines: ch11/supervised/svm.md
-      - 11.4 Unsupervised Learning:
+      - 11.4 Unsupervised ML:
           - Clustering Algorithms: ch11/unsupervised/clustering.md
           - Dimensionality Reduction: ch11/unsupervised/dimensionality.md
       - 11.5 Model Evaluation:
