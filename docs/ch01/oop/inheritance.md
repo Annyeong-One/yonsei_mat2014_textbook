@@ -1,10 +1,10 @@
-# Inheritance and
+# Inheritance Basics
 
 Inheritance allows classes to reuse and extend behavior. `super()` enables cooperative method calls.
 
 ---
 
-## Basic inheritance
+## Basic Inheritance
 
 ```python
 class Animal:
@@ -18,7 +18,7 @@ class Dog(Animal):
 
 ---
 
-## Calling parent
+## Calling Parent Methods
 
 ```python
 class LoggedDog(Dog):
@@ -31,23 +31,39 @@ class LoggedDog(Dog):
 
 ---
 
-## Why `super()`
+## Why Use `super()`
 
-- Enables multiple inheritance
-- Avoids hardcoding parent class names
-- Produces extensible designs
+### 1. Multiple Inheritance
+
+Enables cooperative inheritance patterns.
+
+### 2. Avoids Hardcoding
+
+No need to hardcode parent class names.
+
+### 3. Extensible Design
+
+Makes refactoring easier and designs more flexible.
 
 ---
 
-## Best practices
+## Best Practices
 
-- Always use `super()` in cooperative hierarchies
-- Keep inheritance shallow
-- Prefer composition when possible
+### 1. Use `super()` Always
+
+In cooperative hierarchies, always use `super()`.
+
+### 2. Keep Shallow
+
+Prefer shallow inheritance hierarchies.
+
+### 3. Prefer Composition
+
+Use composition when inheritance isn't needed.
 
 ---
 
-## Key takeaways
+## Key Takeaways
 
 - Inheritance extends behavior.
 - `super()` follows the MRO.

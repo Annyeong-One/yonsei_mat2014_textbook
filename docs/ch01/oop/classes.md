@@ -1,10 +1,10 @@
-# Class Definition and
+# Class Definition
 
 Classes define **custom types** in Python. An instance is a concrete object created from a class.
 
 ---
 
-## Defining a class
+## Defining a Class
 
 ```python
 class Point:
@@ -15,7 +15,7 @@ This defines a new class named `Point`.
 
 ---
 
-## Creating instances
+## Creating Instances
 
 ```python
 p = Point()
@@ -28,7 +28,7 @@ Each instance has its own identity.
 
 ---
 
-## Adding attributes
+## Dynamic Attributes
 
 ```python
 p.x = 1
@@ -39,7 +39,7 @@ Python allows dynamic attribute creation, though it should be used carefully.
 
 ---
 
-## Why classes matter
+## Why Classes Matter
 
 Classes allow:
 - encapsulation of data and behavior,
@@ -50,7 +50,7 @@ They are fundamental for large systems.
 
 ---
 
-## Key takeaways
+## Key Takeaways
 
 - Classes define new types.
 - Instances are concrete objects.

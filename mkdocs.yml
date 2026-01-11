@@ -71,11 +71,39 @@ nav:
       - 1.14 Namespaces:
           - LEGB Rule: ch01/namespaces/legb.md
           - Global vs Local Variables: ch01/namespaces/scope.md
-      - 1.15 Classes and Objects:
+      - 1.15 OOP Foundations:
+          - Procedural vs OOP: ch01/oop/procedural_vs_oop.md
+          - Functions to Classes: ch01/oop/functions_to_classes.md
           - Class and Instances: ch01/oop/classes.md
-          - __init__ and Attribute Lookup: ch01/oop/attributes.md
+          - Constructor and Destructor: ch01/oop/constructor_destructor.md
+          
+      - 1.16 Attributes and Methods:
+          - Instance Attributes: ch01/oop/instance_attributes.md
+          - Class Attributes: ch01/oop/class_attributes.md
+          - Attribute Lookup: ch01/oop/attributes.md
+          - Instance Methods: ch01/oop/instance_methods.md
+          - Class Methods: ch01/oop/class_methods.md
+          - Static Methods: ch01/oop/static_methods.md
+          
+      - 1.17 Four Pillars of OOP:
+          - Encapsulation: ch01/oop/encapsulation.md
+          - Abstraction: ch01/oop/abstraction.md
+          - Polymorphism: ch01/oop/polymorphism.md
+          - Inheritance Basics: ch01/oop/inheritance.md
+          
+      - 1.18 Advanced Inheritance:
+          - Initialization Patterns: ch01/oop/inheritance_init.md
+          - super() and Cooperation: ch01/oop/super.md
           - Method Resolution Order: ch01/oop/mro.md
-          - Inheritance and super(): ch01/oop/inheritance.md
+          - C3 Linearization: ch01/oop/c3_linearization.md
+          
+      - 1.19 Dunder Methods:
+          - Introduction to Dunder: ch01/oop/dunder_intro.md
+          - Arithmetic Operators: ch01/oop/dunder_arithmetic.md
+          - Comparison Operators: ch01/oop/dunder_comparison.md
+          - Container Methods: ch01/oop/dunder_containers.md
+          - String Representation: ch01/oop/dunder_string.md
+          - Advanced Dunder: ch01/oop/dunder_advanced.md
       - 1.16 Decorators:
           - Functions as Objects: ch01/advanced/functions_as_objects.md
           - Decorator Semantics: ch01/advanced/decorators.md
