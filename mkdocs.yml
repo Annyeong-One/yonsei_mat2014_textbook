@@ -159,6 +159,10 @@ nav:
           - Common Pitfalls: ch02/closures/common_pitfalls.md
           - Historical PEPs: ch02/closures/historical_peps.md
           - Practical Applications: ch02/closures/practical_applications.md
+          - Closure Lifetime: ch02/closures/closure_lifetime.md
+          - Closure Memory: ch02/closures/closure_memory.md
+          - Closure Performance: ch02/closures/closure_performance.md
+          - Closure Scope Chain: ch02/closures/closure_scope_chain.md
 
       - 2.10 Assignment Rules:
           - Assignment Process: ch02/assignment/process_breakdown.md
@@ -166,13 +170,17 @@ nav:
           - Assignment Semantics: ch02/assignment/assignment_semantics.md
           - Assignment Examples: ch02/assignment/assignment_examples.md
           - Special Cases: ch02/assignment/special_cases.md
+          - Destructuring: ch02/assignment/destructuring.md
+          - Identity Equality: ch02/assignment/identity_equality.md
+          - Unpacking: ch02/assignment/unpacking.md
+          - Walrus Operator: ch02/assignment/walrus_operator.md
 
       - 2.11 Ref Count and GC:
           - Memory Management: ch02/gc/memory_management_overview.md
           - Reference Counting: ch02/gc/reference_counting.md
           - Circular References: ch02/gc/circular_references.md
           - Garbage Collection: ch02/gc/garbage_collection.md
-          - Weak References Intro: ch02/gc/weak_references_intro.md
+          - Weak References: ch02/gc/weak_references.md
           - Strong vs Weak: ch02/gc/strong_vs_weak.md
           - Breaking Cycles: ch02/gc/breaking_cycles.md
           - Weak Ref Applications: ch02/gc/weak_ref_applications.md
@@ -180,18 +188,26 @@ nav:
           - Self-Cleaning Cache: ch02/gc/self_cleaning_cache.md
           - Parent-Child Relationships: ch02/gc/parent_child_relationships.md
           - When to Use Weak Refs: ch02/gc/when_to_use_weakref.md
-          - Best Practices: ch02/gc/weakref_best_practices.md
-          - Memory Guidelines: ch02/gc/memory_guidelines.md
+          - GC Module: ch02/gc/gc_module.md
+          - GC Algorithms: ch02/gc/gc_algorithms.md
+          - Generations: ch02/gc/generations.md
+          - Finalizers: ch02/gc/finalizers.md
+          - Memory Leaks: ch02/gc/memory_leaks.md
+          - GC Performance: ch02/gc/gc_performance.md
+          - GC Tuning: ch02/gc/gc_tuning.md
 
       - 2.12 Scope & Namespace:
           - LEGB Resolution: ch02/scope/legb_resolution.md
           - global and nonlocal: ch02/scope/global_nonlocal.md
+          - Scope Lifetime: ch02/scope/scope_lifetime.md
 
       - 2.13 Function Parameters:
           - Call-by-Object-Reference: ch02/functions/call_by_object_reference.md
           - Parameter Mechanisms: ch02/functions/parameter_mechanisms.md
           - Default Parameter Gotcha: ch02/functions/default_parameter_gotcha.md
           - Closure Capture: ch02/functions/closure_capture.md
+          - First Class Functions: ch02/functions/first_class_functions.md
+          - Parameter Passing: ch02/functions/parameter_passing.md
 
       - 2.14 Advanced Memory:
           - __slots__ Memory Efficiency: ch02/advanced_memory/slots.md
@@ -201,32 +217,50 @@ nav:
           - Weak Refs Advanced: ch02/advanced_memory/weakref_advanced.md
           - Cache Systems: ch02/advanced_memory/cache_systems.md
           - Weak Ref Limitations: ch02/advanced_memory/weakref_limitations.md
+          - Copy Deepcopy: ch02/advanced_memory/copy_deepcopy.md
+          - Memory Views: ch02/advanced_memory/memory_views.md
+          - Object Pools: ch02/advanced_memory/object_pools.md
+          - Memory Optimization: ch02/advanced_memory/memory_optimization.md
+          - Memory Profiling: ch02/advanced_memory/memory_profiling.md
 
       - 2.15 Practical Implications:
           - Pythonic Idioms: ch02/practical/pythonic_idioms.md
+          - Common Patterns: ch02/practical/common_patterns.md
+          - Anti Patterns: ch02/practical/anti_patterns.md
           - Assignment Patterns: ch02/practical/assignment_patterns.md
           - Namespace Manipulation: ch02/practical/namespace_manipulation.md
           - locals() Caveats: ch02/practical/locals_caveats.md
           - Scope Pitfalls: ch02/practical/scope_pitfalls.md
           - GIL Interaction: ch02/practical/gil_interaction.md
-          - Best Practices Summary: ch02/practical/best_practices.md
           - Memory Efficiency: ch02/practical/memory_efficiency.md
           - Performance Guidelines: ch02/practical/performance.md
           - Correctness Guidelines: ch02/practical/correctness.md
           - Maintainability: ch02/practical/maintainability.md
           - Debugging: ch02/practical/debugging.md
+          - Testing: ch02/practical/testing.md
+          - Code Review: ch02/practical/code_review.md
+          - Refactoring: ch02/practical/refactoring.md
+          - Style Guide: ch02/practical/style_guide.md
+          - Real World Examples: ch02/practical/real_world_examples.md
+          - Interview Questions: ch02/practical/interview_questions.md
 
       - 2.16 Resources:
           - Key Takeaways: ch02/conclusion/key_takeaways.md
+          - Chapter Summary: ch02/conclusion/chapter_summary.md
+          - Mental Models: ch02/conclusion/mental_models.md
+          - Common Mistakes: ch02/conclusion/common_mistakes.md
           - Graduate Insights: ch02/conclusion/graduate_insights.md
-          - Further Study: ch02/conclusion/further_study.md
+          - Glossary: ch02/conclusion/glossary.md
+          - Further Reading: ch02/conclusion/further_reading.md
           - Essential Reading: ch02/conclusion/essential_reading.md
           - CPython Resources: ch02/conclusion/cpython_resources.md
-          - Profiling Tools: ch02/conclusion/profiling_tools.md
           - Academic Papers: ch02/conclusion/academic_papers.md
+          - Profiling Tools: ch02/conclusion/profiling_tools.md
           - Communities: ch02/conclusion/communities.md
           - Exercises: ch02/conclusion/exercises.md
+          - Review Quiz: ch02/conclusion/review_quiz.md
           - Assessment: ch02/conclusion/assessment.md
+          - Next Steps: ch02/conclusion/next_steps.md
 
   - Chapter 3 Functions:
       - 3.1 First-Class Functions:
