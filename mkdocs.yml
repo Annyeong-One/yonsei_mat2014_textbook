@@ -12,272 +12,446 @@ markdown_extensions:
 
 nav:
   - Home: index.md
-  - Chapter 1 Python:
+
+  - Chapter 1 Python Fundamentals:
       - 1.1 Getting Started:
           - Installing Python: ch01/setup/installing_python.md
           - Python Interpreter and REPL: ch01/setup/python_interpreter.md
+
       - 1.2 Basic Syntax:
-          - Variables and Naming Rules: ch01/basics/variables.md
           - Expressions and Statements: ch01/basics/expressions.md
-      - 1.3 Control Flow:
-          - if / for / while: ch01/basics/control_flow.md
           - Indentation and Blocks: ch01/basics/indentation.md
+
+      - 1.3 Control Flow:
+          - if / for / while: ch01/control_flow/control_flow.md
+
       - 1.4 Essential Built-ins:
           - print() and input(): ch01/builtins/print_input.md
           - len(), range(), enumerate(): ch01/builtins/len_range_enumerate.md
+
       - 1.5 Built-in Data Types:
           - int Python vs C: ch01/types/int_python_vs_c.md
           - float IEEE 754 and Precision: ch01/types/float_behavior.md
           - bool and None: ch01/types/bool_none.md
           - str Python vs C Strings: ch01/types/str_python_vs_c.md
           - Type Conversions: ch01/types/type_conversions.md
+
       - 1.6 Composite Data Types:
           - tuple and Immutability: ch01/composite_data_types/tuple.md
           - list and Dynamic Arrays: ch01/composite_data_types/list.md
           - dict and Hash Tables: ch01/composite_data_types/dict.md
           - set and Membership: ch01/composite_data_types/set.md
-      - 1.7 Functions:
+
+      - 1.7 Functions Basics:
           - Function and Call Stack: ch01/functions/functions.md
           - Parameters & Returns: ch01/functions/parameters.md
           - Recursion and Stack Overflow: ch01/functions/recursion.md
           - lambda Expressions: ch01/functions/lambda.md
-      - 1.8 Memory Model:
-          - Stack vs Heap: ch01/memory/stack_vs_heap.md
-          - Object Id and References: ch01/memory/object_identity.md
-      - 1.9 Assignment:
-          - Assignment (Python vs C): ch01/memory/assignment_python_vs_c.md
-          - Mutable vs Immutable: ch01/memory/mutable_vs_immutable.md
-          - list Assignment and Aliasing: ch01/memory/list_assignment.md
-          - Ref Counting & GC: ch01/memory/garbage_collection.md
-      - 1.10 Exceptions:
+
+      - 1.8 Exceptions:
           - Exception Hierarchy: ch01/exceptions/hierarchy.md
           - Common Runtime Errors: ch01/exceptions/common_errors.md
           - try / except / finally: ch01/exceptions/handling.md
           - Raising Exceptions: ch01/exceptions/raising.md
-      - 1.11 File I/O:
+
+      - 1.9 File I/O:
           - Opening and Reading Files: ch01/io/file_reading.md
           - Writing Files: ch01/io/file_writing.md
           - Context Managers (with): ch01/io/context_managers.md
-      - 1.12 Advanced Built-ins:
-          - The builtins Namespace: ch01/advanced_builtins/builtins_namespace.md
-          - map(), filter(), sorted(): ch01/advanced_builtins/map_filter_sorted.md
-          - Functions & Custom Order: ch01/advanced_builtins/sorted_key.md
-          - id(), type(), isinstance(): ch01/advanced_builtins/introspection.md
-      - 1.13 Modules and Imports:
+
+      - 1.10 Modules and Imports:
           - import Mechanics: ch01/modules/imports.md
           - sys.path & Module Search: ch01/modules/module_search.md
           - __name__ == "__main__": ch01/modules/main_guard.md
           - Scripts vs Modules: ch01/modules/scripts_vs_modules.md
-      - 1.14 Namespaces:
-          - LEGB Rule: ch01/namespaces/legb.md
-          - Global vs Local Variables: ch01/namespaces/scope.md
 
-      - 1.15 OOP Foundations:
-          - Procedural vs OOP: ch01/oop/procedural_vs_oop.md
-          - Functions to Classes: ch01/oop/functions_to_classes.md
-          - Class and Instances: ch01/oop/classes.md
-          - Constructor and Destructor: ch01/oop/constructor_destructor.md
-          
-      - 1.16 Attributes and Methods:
-          - Instance Attributes: ch01/oop/instance_attributes.md
-          - Class Attributes: ch01/oop/class_attributes.md
-          - Attribute Lookup: ch01/oop/attributes.md
-          - Instance Methods: ch01/oop/instance_methods.md
-          - Class Methods: ch01/oop/class_methods.md
-          - Static Methods: ch01/oop/static_methods.md
-          
-      - 1.17 Four Pillars of OOP:
-          - Encapsulation: ch01/oop/encapsulation.md
-          - Abstraction: ch01/oop/abstraction.md
-          - Polymorphism: ch01/oop/polymorphism.md
-          - Inheritance Basics: ch01/oop/inheritance.md
-          
-      - 1.18 Advanced Inheritance:
-          - Initialization Patterns: ch01/oop/inheritance_init.md
-          - super() and Cooperation: ch01/oop/super.md
-          - Method Resolution Order: ch01/oop/mro.md
-          - C3 Linearization: ch01/oop/c3_linearization.md
-          
-      - 1.19 Composition and Aggregation:
-          - Is-a vs Has-a: ch01/oop/isa_vs_hasa.md
-          - Composition Pattern: ch01/oop/composition.md
-          - Aggregation Pattern: ch01/oop/aggregation.md
-          - Composition vs Inheritance: ch01/oop/composition_vs_inheritance.md
-          - Design Guidelines: ch01/oop/relationship_design.md
-          
-      - 1.20 Properties and Computed Attributes:
-          - Property Decorator: ch01/oop/property_decorator.md
-          - Getter Setter Deleter: ch01/oop/property_methods.md
-          - Cached Properties: ch01/oop/cached_property.md
-          - Read-Only Properties: ch01/oop/readonly_properties.md
-          
-      - 1.21 Dynamic Attribute Access:
-          - getattr setattr delattr: ch01/oop/builtin_attr_functions.md
-          - Attribute Lookup Hierarchy: ch01/oop/attribute_lookup_hierarchy.md
-          - Dynamic vs Static Access: ch01/oop/dynamic_static_access.md
-          
-      - 1.22 Dunder Methods - Attribute Access:
-          - __getattribute__: ch01/oop/dunder_getattribute.md
-          - __getattr__: ch01/oop/dunder_getattr.md
-          - __setattr__: ch01/oop/dunder_setattr.md
-          - __delattr__: ch01/oop/dunder_delattr.md
-          - Attribute Access Interplay: ch01/oop/attribute_access_interplay.md
-          
-      - 1.23 Descriptor Protocol:
-          - Descriptor Introduction: ch01/oop/descriptor_intro.md
-          - __get__ __set__ __delete__: ch01/oop/descriptor_methods.md
-          - Data vs Non-Data Descriptors: ch01/oop/descriptor_types.md
-          - Descriptor Use Cases: ch01/oop/descriptor_applications.md
-          - Properties as Descriptors: ch01/oop/property_descriptor_connection.md
-          
-      - 1.24 Dunder Methods - Basics:
-          - Introduction to Dunder: ch01/oop/dunder_intro.md
-          - Object Lifecycle: ch01/oop/dunder_lifecycle.md
-          - String Representation: ch01/oop/dunder_string.md
-          - Arithmetic Operators: ch01/oop/dunder_arithmetic.md
-          - Comparison Operators: ch01/oop/dunder_comparison.md
-          
-      - 1.25 Dunder Methods - Advanced:
-          - Container Protocol: ch01/oop/dunder_containers.md
-          - Iterable Protocol: ch01/oop/dunder_iterables.md
-          - Callable Objects: ch01/oop/dunder_callable.md
-          - Context Managers: ch01/oop/dunder_context.md
-          
-      - 1.26 NumPy OOP Design:
-          - ndarray Object Model: ch01/scientific/numpy_ndarray.md
-          - dtype and Shape: ch01/scientific/numpy_dtype_shape.md
-          - UFuncs and Vectorization: ch01/scientific/numpy_ufuncs.md
-          - Broadcasting Rules: ch01/scientific/numpy_broadcasting.md
-          - Views vs Copies: ch01/scientific/numpy_views_copies.md
-          
-      - 1.27 Pandas OOP Design:
-          - Series Object: ch01/scientific/pandas_series.md
-          - DataFrame Architecture: ch01/scientific/pandas_dataframe.md
-          - Index Objects: ch01/scientific/pandas_index.md
-          - MultiIndex Hierarchy: ch01/scientific/pandas_multiindex.md
-          - Method Chaining: ch01/scientific/pandas_method_chaining.md
-          
-      - 1.28 Matplotlib OOP Design:
-          - Figure-Axes-Artist: ch01/scientific/matplotlib_hierarchy.md
-          - OOP vs Pyplot: ch01/scientific/matplotlib_oop_pyplot.md
-          - Axes Customization: ch01/scientific/matplotlib_axes.md
-          - Line2D and Artists: ch01/scientific/matplotlib_artists.md
-          - Plot Lifecycle: ch01/scientific/matplotlib_lifecycle.md
-          
-      - 1.29 Scientific Python Integration:
-          - Lists vs Arrays: ch01/scientific/lists_vs_arrays.md
-          - Arrays vs DataFrames: ch01/scientific/arrays_vs_dataframes.md
-          - PIL vs NumPy Images: ch01/scientific/pil_vs_numpy.md
-          - NumPy to PyTorch: ch01/scientific/numpy_to_pytorch.md
-          - Financial Data with yfinance: ch01/scientific/yfinance_workflow.md
-          
-
-          
-
-
-      - 1.16 Decorators:
-          - Functions as Objects: ch01/advanced/functions_as_objects.md
-          - Decorator Semantics: ch01/advanced/decorators.md
-      - 1.17 Iteration Internals:
+      - 1.11 Iteration Basics:
           - Iterables and Iterators: ch01/iteration/iterables.md
           - Generators and yield: ch01/iteration/generators.md
-      - 1.18 Performance:
+
+      - 1.12 Performance Concepts:
           - Time vs Space Trade-offs: ch01/performance/tradeoffs.md
-      - 1.19 Mental Models:
           - Python Execution Model: ch01/performance/execution_model.md
 
-  - Chapter 2 NumPy:
-      - 2.1 NumPy Fundamentals:
-          - Array Creation and dtypes: ch02/ndarray/creation.md
-          - Shape, Strides, and Views: ch02/ndarray/shape_strides.md
-      - 2.2 Broadcasting:
-          - Broadcasting Rules: ch02/vectorization/broadcasting.md
-      - 2.3 Vectorization:
-          - Performance vs Loops: ch02/vectorization/performance.md
-      - 2.4 Linear Algebra:
-          - Linear Algebra Basics: ch02/linalg/linalg.md
-      - 2.5 Randomness:
-          - Randomness & Simulation: ch02/random/random.md
+      - 1.13 Advanced Built-ins:
+          - The builtins Namespace: ch01/advanced_builtins/builtins_namespace.md
+          - map(), filter(), sorted(): ch01/advanced_builtins/map_filter_sorted.md
+          - sorted() with key Function: ch01/advanced_builtins/sorted_key.md
+          - id(), type(), isinstance(): ch01/advanced_builtins/introspection.md
 
-  - Chapter 3 Matplotlib:
-      - 3.1 Plotting Fundamentals:
-          - Figures and Axes: ch03/fundamentals/figures_axes.md
-          - Lines, Markers, and Styles: ch03/fundamentals/styles.md
-      - 3.2 Statistical Plots:
-          - Histograms and Density: ch03/plots/histograms.md
-          - Scatter and Heatmaps: ch03/plots/scatter_heatmaps.md
-      - 3.3 Layout and Output:
-          - Subplots and Grids: ch03/layout/subplots.md
-          - Saving and Exporting Figures: ch03/layout/export.md
+  - Chapter 2 Variables, Memory, and Object Model:
+      - 2.1 Introduction:
+          - CPython vs Language Spec: ch02/intro/cpython_vs_language.md
+          - Key Terms Glossary: ch02/intro/terminology.md
 
-  - Chapter 4 Pandas:
-      - 4.1 Core pandas Objects:
-          - Series and DataFrame: ch04/core/series_dataframe.md
-          - Indexing and Selection: ch04/core/indexing.md
-      - 4.2 Data Wrangling:
-          - GroupBy and Aggregation: ch04/wrangling/groupby.md
-          - Merge and Join: ch04/wrangling/merge_join.md
-      - 4.3 Time Series:
-          - DatetimeIndex: ch04/timeseries/datetimeindex.md
-          - Resampling and Rolling: ch04/timeseries/resampling.md
+      - 2.2 Variables Fundamentals:
+          - Variables as Names: ch02/variables/names_not_containers.md
+          - Language Comparison: ch02/variables/language_comparison.md
+          - Variable Assignment: ch02/variables/assignment.md
+          - Shorthand Operators: ch02/variables/shorthand_operators.md
+          - Simultaneous Assignment: ch02/variables/simultaneous_assignment.md
+          - Chained Assignment: ch02/variables/chained_assignment.md
 
-  - Chapter 5 PyTorch:
-      - 5.1 Tensors:
-          - Tensor Basics: ch05/tensors/basics.md
-      - 5.2 Autograd:
-          - Autograd Mechanics: ch05/autograd/autograd.md
-      - 5.3 Neural Network:
-          - Modules and Parameters: ch05/nn/modules.md
-          - Losss and Optimizers: ch05/nn/optimizers.md
-      - 5.4 Training:
-          - Training Loops: ch05/training/training_loops.md
-      - 5.5 Performance:
-          - GPU and Performance: ch05/training/gpu.md
+      - 2.3 Variable Naming:
+          - Naming Constraints: ch02/naming/constraints.md
+          - Valid and Invalid Names: ch02/naming/valid_invalid.md
+          - Unicode Identifiers: ch02/naming/unicode_identifiers.md
+          - Underscore Convention: ch02/naming/underscore_convention.md
+          - Bad Naming Practices: ch02/naming/bad_practices.md
+          - Reserved Keywords: ch02/naming/keywords.md
+          - Built-in Names: ch02/naming/builtins.md
 
-  - Chapter 6 SciPy Stats:
-      - 6.1 Distributions:
-          - Continuous Distributions: ch06/distributions/continuous.md
-          - Discrete Distributions: ch06/distributions/discrete.md
-          - Distribution Methods: ch06/distributions/methods.md
-      - 6.2 Descriptive Statistics:
-          - Summary Statistics: ch06/descriptive/summary_stats.md
-          - Moments and Skewness: ch06/descriptive/moments.md
-      - 6.3 Statistical Tests:
-          - Parametric Tests: ch06/tests/parametric.md
-          - Non-Parametric Tests: ch06/tests/nonparametric.md
-          - Goodness of Fit: ch06/tests/goodness_of_fit.md
-      - 6.4 Hypothesis Testing:
-          - Null Hypothesis: ch06/hypothesis/null_hypothesis.md
-          - p-values and Significance: ch06/hypothesis/pvalues.md
-          - Power Analysis: ch06/hypothesis/power_analysis.md
-      - 6.5 Correlation:
-          - Pearson and Spearman: ch06/correlation/correlation.md
-          - Covariance: ch06/correlation/covariance.md
+      - 2.4 Dynamic Typing:
+          - Dynamic Typing Fundamentals: ch02/typing/dynamic_typing.md
+          - Type Conversion: ch02/typing/type_conversion.md
+          - Type Introspection: ch02/typing/type_function.md
 
-  - Chapter 7 Scikit-Learn:
-      - 7.1 Data Preprocessing:
-          - Scaling and Normalization: ch07/preprocessing/scaling.md
-          - Encoding Categorical: ch07/preprocessing/encoding.md
-          - Missing Data Handling: ch07/preprocessing/missing_data.md
-      - 7.2 Model Selection:
-          - Train-Test Split: ch07/model_selection/train_test_split.md
-          - Cross-Validation: ch07/model_selection/cross_validation.md
-          - Grid Search and Tuning: ch07/model_selection/hyperparameters.md
-      - 7.3 Supervised Learning:
-          - Linear Models: ch07/supervised/linear_models.md
-          - Tree-Based Models: ch07/supervised/tree_models.md
-          - Ensemble Methods: ch07/supervised/ensemble.md
-          - Support Vector Machines: ch07/supervised/svm.md
-      - 7.4 Unsupervised Learning:
-          - Clustering Algorithms: ch07/unsupervised/clustering.md
-          - Dimensionality Reduction: ch07/unsupervised/dimensionality.md
-      - 7.5 Model Evaluation:
-          - Classification Metrics: ch07/evaluation/classification_metrics.md
-          - Regression Metrics: ch07/evaluation/regression_metrics.md
-          - Confusion Matrix: ch07/evaluation/confusion_matrix.md
-      - 7.6 Pipelines:
-          - Pipeline Construction: ch07/pipelines/pipeline_basics.md
-          - Feature Engineering: ch07/pipelines/feature_engineering.md
+      - 2.5 CPython Implementation:
+          - Implementation vs Guarantees: ch02/implementation/guarantees_vs_details.md
+          - Integer Interning: ch02/implementation/integer_interning.md
+          - String Interning: ch02/implementation/string_interning.md
+
+      - 2.6 Python's Object Model:
+          - Names vs Objects: ch02/objects/names_vs_objects.md
+          - Identity Type Value: ch02/objects/identity_type_value.md
+          - PyObject Structure: ch02/objects/pyobject_structure.md
+          - Immutable vs Mutable: ch02/objects/immutable_mutable.md
+          - Mutation vs Assignment: ch02/objects/mutation_vs_assignment.md
+
+      - 2.7 Memory Architecture:
+          - Stack vs Heap Overview: ch02/memory/stack_heap_overview.md
+          - Frame Objects: ch02/memory/frame_objects.md
+          - Recursion and Stack Growth: ch02/memory/recursion_stack.md
+          - Heap Object Storage: ch02/memory/heap_storage.md
+          - Stack-Heap Interaction: ch02/memory/stack_heap_interaction.md
+          - Object Identity Stability: ch02/memory/identity_stability.md
+          - Buffer Reallocation: ch02/memory/buffer_reallocation.md
+          - Stack Overflow: ch02/memory/stack_overflow.md
+          - Python vs C Memory: ch02/memory/python_vs_c_memory.md
+
+      - 2.8 Name Binding:
+          - Formal Binding Model: ch02/binding/formal_model.md
+          - Simple Name Binding: ch02/binding/simple_binding.md
+          - Complex Binding Scenarios: ch02/binding/complex_scenarios.md
+          - Namespace Hierarchies: ch02/binding/namespace_hierarchies.md
+          - Namespace Implementation: ch02/binding/namespace_implementation.md
+
+      - 2.9 Closures and Late Binding:
+          - Closure Cells and Free Variables: ch02/closures/cells_freevars.md
+          - cellvars vs freevars: ch02/closures/cellvars_vs_freevars.md
+          - Code Objects: ch02/closures/code_objects.md
+          - Late Binding Problem: ch02/closures/late_binding_problem.md
+          - Late Binding Solutions: ch02/closures/late_binding_solutions.md
+          - Default Parameters: ch02/closures/default_parameters.md
+          - Function Factory Pattern: ch02/closures/function_factory.md
+          - functools.partial: ch02/closures/functools_partial.md
+          - Closure vs Defaults: ch02/closures/closure_vs_defaults.md
+          - nonlocal and Rebinding: ch02/closures/nonlocal_rebinding.md
+          - Rebinding vs Mutation: ch02/closures/rebinding_vs_mutation.md
+          - Advanced Concepts: ch02/closures/advanced_concepts.md
+          - Cell Sharing: ch02/closures/cell_sharing.md
+          - Generator Scoping: ch02/closures/generator_scoping.md
+          - Comprehension Scoping: ch02/closures/comprehension_scoping.md
+          - Bytecode Analysis: ch02/closures/bytecode_analysis.md
+          - lambda vs def: ch02/closures/lambda_vs_def.md
+          - Debugging Tools: ch02/closures/debugging_tools.md
+          - Terminology: ch02/closures/terminology.md
+          - Common Pitfalls: ch02/closures/common_pitfalls.md
+          - Historical PEPs: ch02/closures/historical_peps.md
+          - Practical Applications: ch02/closures/practical_applications.md
+
+      - 2.10 Assignment Mechanics:
+          - Assignment Process: ch02/assignment/process_breakdown.md
+          - Assignment vs Mutation: ch02/assignment/assignment_vs_mutation.md
+          - Assignment Semantics: ch02/assignment/assignment_semantics.md
+          - Assignment Examples: ch02/assignment/assignment_examples.md
+          - Special Cases: ch02/assignment/special_cases.md
+
+      - 2.11 Reference Counting and GC:
+          - Memory Management Overview: ch02/gc/memory_management_overview.md
+          - Reference Counting: ch02/gc/reference_counting.md
+          - Circular References: ch02/gc/circular_references.md
+          - Garbage Collection: ch02/gc/garbage_collection.md
+          - Weak References Intro: ch02/gc/weak_references_intro.md
+          - Strong vs Weak: ch02/gc/strong_vs_weak.md
+          - Breaking Cycles: ch02/gc/breaking_cycles.md
+          - Weak Ref Applications: ch02/gc/weak_ref_applications.md
+          - Observer Pattern: ch02/gc/observer_pattern.md
+          - Self-Cleaning Cache: ch02/gc/self_cleaning_cache.md
+          - Parent-Child Relationships: ch02/gc/parent_child_relationships.md
+          - When to Use Weak Refs: ch02/gc/when_to_use_weakref.md
+          - Best Practices: ch02/gc/weakref_best_practices.md
+          - Memory Guidelines: ch02/gc/memory_guidelines.md
+
+      - 2.12 Scope and Namespace:
+          - LEGB Resolution: ch02/scope/legb_resolution.md
+          - global and nonlocal: ch02/scope/global_nonlocal.md
+
+      - 2.13 Function Parameters:
+          - Call-by-Object-Reference: ch02/functions/call_by_object_reference.md
+          - Parameter Mechanisms: ch02/functions/parameter_mechanisms.md
+          - Default Parameter Gotcha: ch02/functions/default_parameter_gotcha.md
+          - Closure Capture: ch02/functions/closure_capture.md
+
+      - 2.14 Advanced Memory:
+          - __slots__ Memory Efficiency: ch02/advanced_memory/slots.md
+          - Object Interning: ch02/advanced_memory/interning.md
+          - Integer Caching: ch02/advanced_memory/integer_caching.md
+          - String Interning Details: ch02/advanced_memory/string_interning_details.md
+          - Weak Refs Advanced: ch02/advanced_memory/weakref_advanced.md
+          - Cache Systems: ch02/advanced_memory/cache_systems.md
+          - Weak Ref Limitations: ch02/advanced_memory/weakref_limitations.md
+
+      - 2.15 Practical Implications:
+          - Pythonic Idioms: ch02/practical/pythonic_idioms.md
+          - Assignment Patterns: ch02/practical/assignment_patterns.md
+          - Namespace Manipulation: ch02/practical/namespace_manipulation.md
+          - locals() Caveats: ch02/practical/locals_caveats.md
+          - Scope Pitfalls: ch02/practical/scope_pitfalls.md
+          - GIL Interaction: ch02/practical/gil_interaction.md
+          - Best Practices Summary: ch02/practical/best_practices.md
+          - Memory Efficiency: ch02/practical/memory_efficiency.md
+          - Performance Guidelines: ch02/practical/performance.md
+          - Correctness Guidelines: ch02/practical/correctness.md
+          - Maintainability: ch02/practical/maintainability.md
+          - Debugging: ch02/practical/debugging.md
+
+      - 2.16 Resources:
+          - Key Takeaways: ch02/conclusion/key_takeaways.md
+          - Graduate Insights: ch02/conclusion/graduate_insights.md
+          - Further Study: ch02/conclusion/further_study.md
+          - Essential Reading: ch02/conclusion/essential_reading.md
+          - CPython Resources: ch02/conclusion/cpython_resources.md
+          - Profiling Tools: ch02/conclusion/profiling_tools.md
+          - Academic Papers: ch02/conclusion/academic_papers.md
+          - Communities: ch02/conclusion/communities.md
+          - Exercises: ch02/conclusion/exercises.md
+          - Assessment: ch02/conclusion/assessment.md
+
+  - Chapter 3 Functions and Functional Programming:
+      - 3.1 Functions as First-Class Objects:
+          - Functions as Objects: ch03/functions/first_class_objects.md
+          - Function Call Stack: ch03/functions/call_stack.md
+          - Recursion Patterns: ch03/functions/recursion_patterns.md
+
+      - 3.2 Advanced Parameters:
+          - *args and **kwargs: ch03/params/args_kwargs.md
+          - Keyword-Only Arguments: ch03/params/keyword_only.md
+          - Positional-Only Arguments: ch03/params/positional_only.md
+          - Parameter Best Practices: ch03/params/best_practices.md
+
+      - 3.3 Decorators:
+          - Functions as Objects: ch03/decorators/functions_as_objects.md
+          - Decorator Semantics: ch03/decorators/decorator_semantics.md
+          - Function Wrappers: ch03/decorators/wrappers.md
+          - Decorator Factories: ch03/decorators/factories.md
+          - functools.wraps: ch03/decorators/functools_wraps.md
+          - Class Decorators: ch03/decorators/class_decorators.md
+          - Decorator Patterns: ch03/decorators/patterns.md
+
+      - 3.4 Functional Programming:
+          - map(), filter(), reduce(): ch03/functional/map_filter_reduce.md
+          - Lambda Best Practices: ch03/functional/lambda_practices.md
+          - Comprehensions: ch03/functional/comprehensions.md
+          - Generator Expressions: ch03/functional/generator_expressions.md
+          - Pure Functions: ch03/functional/pure_functions.md
+          - Higher-Order Functions: ch03/functional/higher_order.md
+          - Partial Application: ch03/functional/partial_application.md
+          - Function Composition: ch03/functional/composition.md
+
+  - Chapter 4 Object-Oriented Programming:
+      - 4.1 OOP Foundations:
+          - Procedural vs OOP: ch04/foundations/procedural_vs_oop.md
+          - Functions to Classes: ch04/foundations/functions_to_classes.md
+          - Classes and Instances: ch04/foundations/classes_instances.md
+          - Constructor and Destructor: ch04/foundations/constructor_destructor.md
+
+      - 4.2 Attributes and Methods:
+          - Instance Attributes: ch04/attributes/instance_attributes.md
+          - Class Attributes: ch04/attributes/class_attributes.md
+          - Attribute Lookup: ch04/attributes/attribute_lookup.md
+          - Instance Methods: ch04/methods/instance_methods.md
+          - Class Methods: ch04/methods/class_methods.md
+          - Static Methods: ch04/methods/static_methods.md
+
+      - 4.3 Four Pillars of OOP:
+          - Encapsulation: ch04/pillars/encapsulation.md
+          - Abstraction: ch04/pillars/abstraction.md
+          - Polymorphism: ch04/pillars/polymorphism.md
+          - Inheritance Basics: ch04/pillars/inheritance.md
+
+      - 4.4 Advanced Inheritance:
+          - Initialization Patterns: ch04/inheritance/initialization_patterns.md
+          - super() and Cooperation: ch04/inheritance/super.md
+          - Method Resolution Order: ch04/inheritance/mro.md
+          - C3 Linearization: ch04/inheritance/c3_linearization.md
+
+      - 4.5 Composition and Aggregation:
+          - Is-a vs Has-a: ch04/composition/isa_vs_hasa.md
+          - Composition Pattern: ch04/composition/composition_pattern.md
+          - Aggregation Pattern: ch04/composition/aggregation_pattern.md
+          - Composition vs Inheritance: ch04/composition/composition_vs_inheritance.md
+          - Design Guidelines: ch04/composition/design_guidelines.md
+
+      - 4.6 Properties and Computed Attributes:
+          - Property Decorator: ch04/properties/property_decorator.md
+          - Getter Setter Deleter: ch04/properties/getter_setter_deleter.md
+          - Cached Properties: ch04/properties/cached_property.md
+          - Read-Only Properties: ch04/properties/readonly_properties.md
+
+      - 4.7 Dynamic Attribute Access:
+          - getattr setattr delattr: ch04/dynamic/builtin_attr_functions.md
+          - Attribute Lookup Hierarchy: ch04/dynamic/attribute_lookup_hierarchy.md
+          - Dynamic vs Static Access: ch04/dynamic/dynamic_vs_static.md
+
+      - 4.8 Dunder Methods - Attribute Access:
+          - __getattribute__: ch04/dunder_attrs/dunder_getattribute.md
+          - __getattr__: ch04/dunder_attrs/dunder_getattr.md
+          - __setattr__: ch04/dunder_attrs/dunder_setattr.md
+          - __delattr__: ch04/dunder_attrs/dunder_delattr.md
+          - Attribute Access Interplay: ch04/dunder_attrs/attribute_access_interplay.md
+
+      - 4.9 Descriptor Protocol:
+          - Descriptor Introduction: ch04/descriptors/descriptor_intro.md
+          - __get__ __set__ __delete__: ch04/descriptors/descriptor_methods.md
+          - Data vs Non-Data Descriptors: ch04/descriptors/descriptor_types.md
+          - Descriptor Use Cases: ch04/descriptors/descriptor_applications.md
+          - Properties as Descriptors: ch04/descriptors/property_descriptor_connection.md
+
+      - 4.10 Dunder Methods - Basics:
+          - Introduction to Dunder: ch04/dunder/dunder_intro.md
+          - Object Lifecycle: ch04/dunder/dunder_lifecycle.md
+          - String Representation: ch04/dunder/dunder_string.md
+          - Arithmetic Operators: ch04/dunder/dunder_arithmetic.md
+          - Comparison Operators: ch04/dunder/dunder_comparison.md
+
+      - 4.11 Dunder Methods - Advanced:
+          - Container Protocol: ch04/dunder_advanced/dunder_containers.md
+          - Iterable Protocol: ch04/dunder_advanced/dunder_iterables.md
+          - Callable Objects: ch04/dunder_advanced/dunder_callable.md
+          - Context Managers: ch04/dunder_advanced/dunder_context.md
+
+  - Chapter 5 Scientific Python Integration:
+      - 5.1 Overview:
+          - Lists vs Arrays: ch05/overview/lists_vs_arrays.md
+          - Arrays vs DataFrames: ch05/overview/arrays_vs_dataframes.md
+          - PIL vs NumPy Images: ch05/overview/pil_vs_numpy.md
+          - NumPy to PyTorch: ch05/overview/numpy_to_pytorch.md
+          - yfinance Workflow: ch05/overview/yfinance_workflow.md
+
+      - 5.2 NumPy OOP Design:
+          - ndarray Object Model: ch05/numpy/numpy_ndarray.md
+          - dtype and Shape: ch05/numpy/numpy_dtype_shape.md
+          - UFuncs and Vectorization: ch05/numpy/numpy_ufuncs.md
+          - Broadcasting Rules: ch05/numpy/numpy_broadcasting.md
+          - Views vs Copies: ch05/numpy/numpy_views_copies.md
+
+      - 5.3 Pandas OOP Design:
+          - Series Object: ch05/pandas/pandas_series.md
+          - DataFrame Architecture: ch05/pandas/pandas_dataframe.md
+          - Index Objects: ch05/pandas/pandas_index.md
+          - MultiIndex Hierarchy: ch05/pandas/pandas_multiindex.md
+          - Method Chaining: ch05/pandas/pandas_method_chaining.md
+
+      - 5.4 Matplotlib OOP Design:
+          - Figure-Axes-Artist: ch05/matplotlib/matplotlib_hierarchy.md
+          - OOP vs Pyplot: ch05/matplotlib/matplotlib_oop_pyplot.md
+          - Axes Customization: ch05/matplotlib/matplotlib_axes.md
+          - Line2D and Artists: ch05/matplotlib/matplotlib_artists.md
+          - Plot Lifecycle: ch05/matplotlib/matplotlib_lifecycle.md
+
+  - Chapter 6 NumPy:
+      - 6.1 NumPy Fundamentals:
+          - Array Creation and dtypes: ch06/ndarray/creation.md
+          - Shape, Strides, and Views: ch06/ndarray/shape_strides.md
+      - 6.2 Broadcasting:
+          - Broadcasting Rules: ch06/broadcasting/broadcasting.md
+      - 6.3 Vectorization:
+          - Performance vs Loops: ch06/vectorization/performance.md
+      - 6.4 Linear Algebra:
+          - Linear Algebra Basics: ch06/linalg/linalg.md
+      - 6.5 Randomness:
+          - Randomness & Simulation: ch06/random/random.md
+
+  - Chapter 7 Matplotlib:
+      - 7.1 Plotting Fundamentals:
+          - Figures and Axes: ch07/fundamentals/figures_axes.md
+          - Lines, Markers, and Styles: ch07/fundamentals/styles.md
+      - 7.2 Statistical Plots:
+          - Histograms and Density: ch07/plots/histograms.md
+          - Scatter and Heatmaps: ch07/plots/scatter_heatmaps.md
+      - 7.3 Layout and Output:
+          - Subplots and Grids: ch07/layout/subplots.md
+          - Saving and Exporting Figures: ch07/layout/export.md
+
+  - Chapter 8 Pandas:
+      - 8.1 Core pandas Objects:
+          - Series and DataFrame: ch08/core/series_dataframe.md
+          - Indexing and Selection: ch08/core/indexing.md
+      - 8.2 Data Wrangling:
+          - GroupBy and Aggregation: ch08/wrangling/groupby.md
+          - Merge and Join: ch08/wrangling/merge_join.md
+      - 8.3 Time Series:
+          - DatetimeIndex: ch08/timeseries/datetimeindex.md
+          - Resampling and Rolling: ch08/timeseries/resampling.md
+
+  - Chapter 9 PyTorch:
+      - 9.1 Tensors:
+          - Tensor Basics: ch09/tensors/basics.md
+      - 9.2 Autograd:
+          - Autograd Mechanics: ch09/autograd/autograd.md
+      - 9.3 Neural Network:
+          - Modules and Parameters: ch09/nn/modules.md
+          - Loss and Optimizers: ch09/nn/optimizers.md
+      - 9.4 Training:
+          - Training Loops: ch09/training/training_loops.md
+      - 9.5 Performance:
+          - GPU and Performance: ch09/performance/gpu.md
+
+  - Chapter 10 SciPy Stats:
+      - 10.1 Distributions:
+          - Continuous Distributions: ch10/distributions/continuous.md
+          - Discrete Distributions: ch10/distributions/discrete.md
+          - Distribution Methods: ch10/distributions/methods.md
+      - 10.2 Descriptive Statistics:
+          - Summary Statistics: ch10/descriptive/summary_stats.md
+          - Moments and Skewness: ch10/descriptive/moments.md
+      - 10.3 Statistical Tests:
+          - Parametric Tests: ch10/tests/parametric.md
+          - Non-Parametric Tests: ch10/tests/nonparametric.md
+          - Goodness of Fit: ch10/tests/goodness_of_fit.md
+      - 10.4 Hypothesis Testing:
+          - Null Hypothesis: ch10/hypothesis/null_hypothesis.md
+          - p-values and Significance: ch10/hypothesis/pvalues.md
+          - Power Analysis: ch10/hypothesis/power_analysis.md
+      - 10.5 Correlation:
+          - Pearson and Spearman: ch10/correlation/correlation.md
+          - Covariance: ch10/correlation/covariance.md
+
+  - Chapter 11 Scikit-Learn:
+      - 11.1 Data Preprocessing:
+          - Scaling and Normalization: ch11/preprocessing/scaling.md
+          - Encoding Categorical: ch11/preprocessing/encoding.md
+          - Missing Data Handling: ch11/preprocessing/missing_data.md
+      - 11.2 Model Selection:
+          - Train-Test Split: ch11/model_selection/train_test_split.md
+          - Cross-Validation: ch11/model_selection/cross_validation.md
+          - Grid Search and Tuning: ch11/model_selection/hyperparameters.md
+      - 11.3 Supervised Learning:
+          - Linear Models: ch11/supervised/linear_models.md
+          - Tree-Based Models: ch11/supervised/tree_models.md
+          - Ensemble Methods: ch11/supervised/ensemble.md
+          - Support Vector Machines: ch11/supervised/svm.md
+      - 11.4 Unsupervised Learning:
+          - Clustering Algorithms: ch11/unsupervised/clustering.md
+          - Dimensionality Reduction: ch11/unsupervised/dimensionality.md
+      - 11.5 Model Evaluation:
+          - Classification Metrics: ch11/evaluation/classification_metrics.md
+          - Regression Metrics: ch11/evaluation/regression_metrics.md
+          - Confusion Matrix: ch11/evaluation/confusion_matrix.md
+      - 11.6 Pipelines:
+          - Pipeline Construction: ch11/pipelines/pipeline_basics.md
+          - Feature Engineering: ch11/pipelines/feature_engineering.md
 
 plugins:
   - search
