@@ -1,53 +1,67 @@
-# Reference Counting
+# Garbage Collection
 
-Python manages memory automatically using **reference counting** combined with **garbage collection**.
+## Cycle Detection
 
----
-
-## Reference counting
-
-Each object keeps a count of how many references point to it.
-
-- Count increases when referenced.
-- Count decreases when references are removed.
-- When count reaches zero, object is deallocated.
-
----
-
-## Circular references
-
-Reference counting alone cannot handle cycles:
+### 1. Generational GC
 
 ```python
-a = []
-a.append(a)
+import gc
+
+# Three generations
+print(gc.get_count())  # (count0, count1, count2)
 ```
 
-The reference count never reaches zero.
+### 2. Force Collection
 
----
+```python
+import gc
 
-## Garbage collector
+gc.collect()  # Force collection
+```
 
-Python includes a cyclic garbage collector that:
-- detects reference cycles,
-- reclaims unreachable objects,
-- runs periodically.
+## Cycles
 
-You usually don’t need to think about it.
+### 1. Example
 
----
+```python
+class Node:
+    def __init__(self):
+        self.ref = None
 
-## Practical
+a = Node()
+b = Node()
+a.ref = b
+b.ref = a
 
-- Deterministic deallocation is not guaranteed.
-- Resource management uses context managers (`with`).
-- Manual memory management is unnecessary.
+# Cycle: a → b → a
+# Needs cycle GC
+```
 
----
+## Control
 
-## Key takeaways
+### 1. Disable/Enable
 
-- Python uses reference counting + GC.
-- Cycles are handled automatically.
-- Memory management is mostly invisible to users.
+```python
+import gc
+
+gc.disable()  # Disable
+# ... critical section ...
+gc.enable()   # Re-enable
+```
+
+### 2. Thresholds
+
+```python
+# Get thresholds
+print(gc.get_threshold())  # (700, 10, 10)
+
+# Set thresholds
+gc.set_threshold(1000, 15, 15)
+```
+
+## Summary
+
+- Handles cycles
+- Generational approach
+- Can be controlled
+- Complements refcounting

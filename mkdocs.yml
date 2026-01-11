@@ -13,7 +13,7 @@ markdown_extensions:
 nav:
   - Home: index.md
 
-  - Chapter 1 Python Fundamentals:
+  - Chapter 1 Python Basics:
       - 1.1 Getting Started:
           - Installing Python: ch01/setup/installing_python.md
           - Python Interpreter and REPL: ch01/setup/python_interpreter.md
@@ -69,7 +69,7 @@ nav:
           - Iterables and Iterators: ch01/iteration/iterables.md
           - Generators and yield: ch01/iteration/generators.md
 
-      - 1.12 Performance Concepts:
+      - 1.12 Performance:
           - Time vs Space Trade-offs: ch01/performance/tradeoffs.md
           - Python Execution Model: ch01/performance/execution_model.md
 
@@ -79,12 +79,12 @@ nav:
           - sorted() with key Function: ch01/advanced_builtins/sorted_key.md
           - id(), type(), isinstance(): ch01/advanced_builtins/introspection.md
 
-  - Chapter 2 Variables, Memory, and Object Model:
+  - Chapter 2 Variables:
       - 2.1 Introduction:
           - CPython vs Language Spec: ch02/intro/cpython_vs_language.md
           - Key Terms Glossary: ch02/intro/terminology.md
 
-      - 2.2 Variables Fundamentals:
+      - 2.2 Variables:
           - Variables as Names: ch02/variables/names_not_containers.md
           - Language Comparison: ch02/variables/language_comparison.md
           - Variable Assignment: ch02/variables/assignment.md
@@ -106,7 +106,7 @@ nav:
           - Type Conversion: ch02/typing/type_conversion.md
           - Type Introspection: ch02/typing/type_function.md
 
-      - 2.5 CPython Implementation:
+      - 2.5 CPython Internals:
           - Implementation vs Guarantees: ch02/implementation/guarantees_vs_details.md
           - Integer Interning: ch02/implementation/integer_interning.md
           - String Interning: ch02/implementation/string_interning.md
@@ -136,7 +136,7 @@ nav:
           - Namespace Hierarchies: ch02/binding/namespace_hierarchies.md
           - Namespace Implementation: ch02/binding/namespace_implementation.md
 
-      - 2.9 Closures and Late Binding:
+      - 2.9 Closures & Late Binding:
           - Closure Cells and Free Variables: ch02/closures/cells_freevars.md
           - cellvars vs freevars: ch02/closures/cellvars_vs_freevars.md
           - Code Objects: ch02/closures/code_objects.md
@@ -160,14 +160,14 @@ nav:
           - Historical PEPs: ch02/closures/historical_peps.md
           - Practical Applications: ch02/closures/practical_applications.md
 
-      - 2.10 Assignment Mechanics:
+      - 2.10 Assignment Rules:
           - Assignment Process: ch02/assignment/process_breakdown.md
           - Assignment vs Mutation: ch02/assignment/assignment_vs_mutation.md
           - Assignment Semantics: ch02/assignment/assignment_semantics.md
           - Assignment Examples: ch02/assignment/assignment_examples.md
           - Special Cases: ch02/assignment/special_cases.md
 
-      - 2.11 Reference Counting and GC:
+      - 2.11 Ref Count and GC:
           - Memory Management Overview: ch02/gc/memory_management_overview.md
           - Reference Counting: ch02/gc/reference_counting.md
           - Circular References: ch02/gc/circular_references.md
@@ -183,7 +183,7 @@ nav:
           - Best Practices: ch02/gc/weakref_best_practices.md
           - Memory Guidelines: ch02/gc/memory_guidelines.md
 
-      - 2.12 Scope and Namespace:
+      - 2.12 Scope & Namespace:
           - LEGB Resolution: ch02/scope/legb_resolution.md
           - global and nonlocal: ch02/scope/global_nonlocal.md
 
@@ -228,13 +228,13 @@ nav:
           - Exercises: ch02/conclusion/exercises.md
           - Assessment: ch02/conclusion/assessment.md
 
-  - Chapter 3 Functions and Functional Programming:
-      - 3.1 Functions as First-Class Objects:
+  - Chapter 3 Functions:
+      - 3.1 First-Class Functions:
           - Functions as Objects: ch03/functions/first_class_objects.md
           - Function Call Stack: ch03/functions/call_stack.md
           - Recursion Patterns: ch03/functions/recursion_patterns.md
 
-      - 3.2 Advanced Parameters:
+      - 3.2 Parameters:
           - \*args and \*\*kwargs: ch03/params/args_kwargs.md
           - Keyword-Only Arguments: ch03/params/keyword_only.md
           - Positional-Only Arguments: ch03/params/positional_only.md
@@ -249,7 +249,7 @@ nav:
           - Class Decorators: ch03/decorators/class_decorators.md
           - Decorator Patterns: ch03/decorators/patterns.md
 
-      - 3.4 Functional Programming:
+      - 3.4 Functional Prog:
           - map(), filter(), reduce(): ch03/functional/map_filter_reduce.md
           - Lambda Best Practices: ch03/functional/lambda_practices.md
           - Comprehensions: ch03/functional/comprehensions.md
@@ -259,7 +259,7 @@ nav:
           - Partial Application: ch03/functional/partial_application.md
           - Function Composition: ch03/functional/composition.md
 
-  - Chapter 4 Object-Oriented Programming:
+  - Chapter 4 OOP:
       - 4.1 OOP Foundations:
           - Procedural vs OOP: ch04/foundations/procedural_vs_oop.md
           - Functions to Classes: ch04/foundations/functions_to_classes.md
@@ -286,25 +286,25 @@ nav:
           - Method Resolution Order: ch04/inheritance/mro.md
           - C3 Linearization: ch04/inheritance/c3_linearization.md
 
-      - 4.5 Composition and Aggregation:
+      - 4.5 Comp & Aggregation:
           - Is-a vs Has-a: ch04/composition/isa_vs_hasa.md
           - Composition Pattern: ch04/composition/composition_pattern.md
           - Aggregation Pattern: ch04/composition/aggregation_pattern.md
           - Composition vs Inheritance: ch04/composition/composition_vs_inheritance.md
           - Design Guidelines: ch04/composition/design_guidelines.md
 
-      - 4.6 Properties and Computed Attributes:
+      - 4.6 Properties & Attributes:
           - Property Decorator: ch04/properties/property_decorator.md
           - Getter Setter Deleter: ch04/properties/getter_setter_deleter.md
           - Cached Properties: ch04/properties/cached_property.md
           - Read-Only Properties: ch04/properties/readonly_properties.md
 
-      - 4.7 Dynamic Attribute Access:
+      - 4.7 Dynamic Attribute:
           - getattr setattr delattr: ch04/dynamic/builtin_attr_functions.md
           - Attribute Lookup Hierarchy: ch04/dynamic/attribute_lookup_hierarchy.md
           - Dynamic vs Static Access: ch04/dynamic/dynamic_vs_static.md
 
-      - 4.8 Dunder Methods - Attribute Access:
+      - 4.8 Dunder Attr Access:
           - __getattribute__: ch04/dunder_attrs/dunder_getattribute.md
           - __getattr__: ch04/dunder_attrs/dunder_getattr.md
           - __setattr__: ch04/dunder_attrs/dunder_setattr.md
@@ -318,20 +318,20 @@ nav:
           - Descriptor Use Cases: ch04/descriptors/descriptor_applications.md
           - Properties as Descriptors: ch04/descriptors/property_descriptor_connection.md
 
-      - 4.10 Dunder Methods - Basics:
+      - 4.10 Dunder Basics:
           - Introduction to Dunder: ch04/dunder/dunder_intro.md
           - Object Lifecycle: ch04/dunder/dunder_lifecycle.md
           - String Representation: ch04/dunder/dunder_string.md
           - Arithmetic Operators: ch04/dunder/dunder_arithmetic.md
           - Comparison Operators: ch04/dunder/dunder_comparison.md
 
-      - 4.11 Dunder Methods - Advanced:
+      - 4.11 Dunder Advanced:
           - Container Protocol: ch04/dunder_advanced/dunder_containers.md
           - Iterable Protocol: ch04/dunder_advanced/dunder_iterables.md
           - Callable Objects: ch04/dunder_advanced/dunder_callable.md
           - Context Managers: ch04/dunder_advanced/dunder_context.md
 
-  - Chapter 5 Scientific Python Integration:
+  - Chapter 5 Scientific Stack:
       - 5.1 Overview:
           - Lists vs Arrays: ch05/overview/lists_vs_arrays.md
           - Arrays vs DataFrames: ch05/overview/arrays_vs_dataframes.md
