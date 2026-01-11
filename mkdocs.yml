@@ -235,7 +235,7 @@ nav:
           - Recursion Patterns: ch03/functions/recursion_patterns.md
 
       - 3.2 Advanced Parameters:
-          - *args and **kwargs: ch03/params/args_kwargs.md
+          - \*args and \*\*kwargs: ch03/params/args_kwargs.md
           - Keyword-Only Arguments: ch03/params/keyword_only.md
           - Positional-Only Arguments: ch03/params/positional_only.md
           - Parameter Best Practices: ch03/params/best_practices.md
