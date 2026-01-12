@@ -44,7 +44,7 @@ nav:
           - bool Operators: ch01/types/bool_operators.md
           - bool Comparisons: ch01/types/bool_comparisons.md
           - bool Applications: ch01/types/bool_applications.md
-          - bool and None: ch01/types/bool_none.md
+          - None Type: ch01/types/none_type.md                  
           - str Creating Strings: ch01/types/str_creating.md
           - str Escape Characters: ch01/types/str_escape_characters.md
           - str Multiline Strings: ch01/types/str_multiline.md
@@ -55,10 +55,20 @@ nav:
           - str Encode and Decode: ch01/types/str_encode_decode.md
           - str Indexing: ch01/types/str_indexing.md
           - str Slicing: ch01/types/str_slicing.md
+          - str Unpacking: ch01/types/str_unpacking.md                
           - str Immutability: ch01/types/str_immutability.md
           - str Concatenation: ch01/types/str_concatenation.md
           - str Repetition: ch01/types/str_repetition.md
-          - str Methods: ch01/types/str_methods.md
+          - str Membership: ch01/types/str_membership.md              
+          - str Comparison: ch01/types/str_comparison.md              
+          - str Case Methods: ch01/types/str_case_methods.md          
+          - str Check Methods: ch01/types/str_check_methods.md        
+          - str Split and Join: ch01/types/str_split_join.md          
+          - str Modify Methods: ch01/types/str_modify_methods.md      
+          - str Align Methods: ch01/types/str_align_methods.md        
+          - str Formatting Methods: ch01/types/str_formatting_methods.md      
+          - str Format Specifiers: ch01/types/str_format_specifiers.md 
+          - str Built-in Funcs: ch01/types/str_builtin_funcs.md              
           - str Python vs C: ch01/types/str_python_vs_c.md
           - Type Conversions: ch01/types/type_conversions.md
 
@@ -67,6 +77,8 @@ nav:
           - list and Dynamic Arrays: ch01/composite_data_types/list.md
           - dict and Hash Tables: ch01/composite_data_types/dict.md
           - set and Membership: ch01/composite_data_types/set.md
+          - Comprehensions Overview: ch01/composite_data_types/comprehensions.md
+          - Nested Data Structures: ch01/composite_data_types/nested_structures.md
 
       - 1.7 Functions Basics:
           - Function and Call Stack: ch01/functions/functions.md
@@ -84,6 +96,9 @@ nav:
           - Opening and Reading Files: ch01/io/file_reading.md
           - Writing Files: ch01/io/file_writing.md
           - Context Managers (with): ch01/io/context_managers.md
+          - Binary Files: ch01/io/binary_files.md
+          - CSV and JSON: ch01/io/csv_json.md
+          - Path Handling (pathlib): ch01/io/pathlib.md
 
       - 1.10 Modules and Imports:
           - import Mechanics: ch01/modules/imports.md
