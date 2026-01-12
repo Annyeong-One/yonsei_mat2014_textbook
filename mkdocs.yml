@@ -37,7 +37,13 @@ nav:
           - int Type Conversion: ch01/types/int_type_conversion.md
           - int Number Systems: ch01/types/int_number_systems.md
           - int Two's Complement: ch01/types/int_twos_complement.md
-          - float IEEE 754 and Precision: ch01/types/float_behavior.md
+          - float Fundamentals: ch01/types/float_fundamentals.md
+          - float IEEE 754 Standard: ch01/types/float_ieee754.md
+          - float Machine Precision: ch01/types/float_machine_precision.md
+          - float Numerical Errors: ch01/types/float_numerical_errors.md
+          - float Numerical Stability: ch01/types/float_numerical_stability.md
+          - float Special Values: ch01/types/float_special_values.md
+          - complex Fundamentals: ch01/types/complex_fundamentals.md
           - bool Fundamentals: ch01/types/bool_fundamentals.md
           - bool Subclass of int: ch01/types/bool_subclass_int.md
           - bool Truthiness: ch01/types/bool_truthiness.md
