@@ -30,7 +30,13 @@ nav:
           - len(), range(), enumerate(): ch01/builtins/len_range_enumerate.md
 
       - 1.5 Built-in Data Types:
+          - int Fundamentals: ch01/types/int_fundamentals.md
           - int Python vs C: ch01/types/int_python_vs_c.md
+          - int Logical Operations: ch01/types/int_logical_operations.md
+          - int Bitwise Operations: ch01/types/int_bitwise_operations.md
+          - int Type Conversion: ch01/types/int_type_conversion.md
+          - int Number Systems: ch01/types/int_number_systems.md
+          - int Two's Complement: ch01/types/int_twos_complement.md
           - float IEEE 754 and Precision: ch01/types/float_behavior.md
           - bool and None: ch01/types/bool_none.md
           - str Python vs C Strings: ch01/types/str_python_vs_c.md
