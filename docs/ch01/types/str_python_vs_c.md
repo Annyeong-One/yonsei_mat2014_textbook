@@ -1,67 +1,119 @@
 # `str`: Python vs C
 
-Python strings (`str`) differ dramatically from C strings in safety, semantics, and usability.
+Python strings differ fundamentally from C strings in storage, safety, and semantics.
 
 ---
 
-## C strings
+## C Strings
 
-In C:
-- strings are arrays of characters
-- terminated by a null byte (`\0`)
-- no built-in length tracking
+### 1. Null Termination
+
+C strings are character arrays terminated by `\0`:
+
+```c
+char str[] = "Hello";  // Actually 6 bytes: H e l l o \0
+```
 
 This leads to:
-- buffer overflows
-- undefined behavior
+
+- Buffer overflow vulnerabilities
+- Manual length tracking required
+- Undefined behavior on missing null
+
+### 2. No Length Storage
+
+C has no built-in string length:
+
+```c
+// Must scan for null terminator
+size_t len = strlen(str);
+```
 
 ---
 
-## Python strings
+## Python Strings
 
-Python `str`:
-- is an immutable object
-- stores length explicitly
-- supports Unicode by default
+### 1. Explicit Length
+
+Python stores length explicitly, no null terminator:
+
+```python
+s = "Hello, world!"
+length = len(s)
+print("Length of the string:", length)  # 13
+```
+
+### 2. Object-Based
+
+Python strings are immutable objects:
 
 ```python
 s = "finance"
-len(s)   # 7
+print(len(s))   # 7
+print(type(s))  # <class 'str'>
 ```
 
 ---
 
 ## Immutability
 
-Strings cannot be modified in place:
+### 1. Cannot Modify
+
+Strings cannot be changed in place:
 
 ```python
 s = "abc"
-# s[0] = "A" # error
-s = "A" + s[1:]
+# s[0] = "A"  # TypeError: 'str' does not support item assignment
+s = "A" + s[1:]  # Create new string instead
 ```
 
+### 2. Benefits
+
 Immutability enables:
-- safety
-- hashing
-- efficient reuse
+
+- Thread safety
+- Use as dictionary keys
+- Efficient string interning
+- Predictable behavior
 
 ---
 
-## Unicode support
+## Unicode Support
 
-Python strings handle Unicode naturally:
+### 1. Native Unicode
+
+Python handles Unicode naturally:
 
 ```python
 s = "π ≈ 3.14"
+print(s)  # π ≈ 3.14
 ```
 
-This is essential for internationalization and modern text processing.
+### 2. International Text
+
+```python
+# Multiple scripts in one string
+text = "Hello 世界 مرحبا"
+print(len(text))  # Character count, not bytes
+```
 
 ---
 
-## Key takeaways
+## Comparison Table
 
-- Python strings are safe and Unicode-aware.
-- They are immutable objects.
-- Very different from C strings in semantics.
+| Feature | C | Python |
+|---------|---|--------|
+| Termination | Null byte | Length stored |
+| Mutability | Mutable | Immutable |
+| Unicode | Manual | Native |
+| Safety | Buffer risks | Safe |
+| Length | `strlen()` | `len()` |
+
+---
+
+## Key Takeaways
+
+- Python strings store length explicitly.
+- No null terminator needed in Python.
+- Immutability provides safety and hashability.
+- Unicode support is built-in.

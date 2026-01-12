@@ -45,7 +45,21 @@ nav:
           - bool Comparisons: ch01/types/bool_comparisons.md
           - bool Applications: ch01/types/bool_applications.md
           - bool and None: ch01/types/bool_none.md
-          - str Python vs C Strings: ch01/types/str_python_vs_c.md
+          - str Creating Strings: ch01/types/str_creating.md
+          - str Escape Characters: ch01/types/str_escape_characters.md
+          - str Multiline Strings: ch01/types/str_multiline.md
+          - str Raw Strings: ch01/types/str_raw_strings.md
+          - str Docstrings: ch01/types/str_docstrings.md
+          - str ASCII and Unicode: ch01/types/str_ascii_unicode.md
+          - str UTF-8 Encoding: ch01/types/str_utf8_encoding.md
+          - str Encode and Decode: ch01/types/str_encode_decode.md
+          - str Indexing: ch01/types/str_indexing.md
+          - str Slicing: ch01/types/str_slicing.md
+          - str Immutability: ch01/types/str_immutability.md
+          - str Concatenation: ch01/types/str_concatenation.md
+          - str Repetition: ch01/types/str_repetition.md
+          - str Methods: ch01/types/str_methods.md
+          - str Python vs C: ch01/types/str_python_vs_c.md
           - Type Conversions: ch01/types/type_conversions.md
 
       - 1.6 Composite Data Types:
