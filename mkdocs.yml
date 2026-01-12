@@ -38,6 +38,12 @@ nav:
           - int Number Systems: ch01/types/int_number_systems.md
           - int Two's Complement: ch01/types/int_twos_complement.md
           - float IEEE 754 and Precision: ch01/types/float_behavior.md
+          - bool Fundamentals: ch01/types/bool_fundamentals.md
+          - bool Subclass of int: ch01/types/bool_subclass_int.md
+          - bool Truthiness: ch01/types/bool_truthiness.md
+          - bool Operators: ch01/types/bool_operators.md
+          - bool Comparisons: ch01/types/bool_comparisons.md
+          - bool Applications: ch01/types/bool_applications.md
           - bool and None: ch01/types/bool_none.md
           - str Python vs C Strings: ch01/types/str_python_vs_c.md
           - Type Conversions: ch01/types/type_conversions.md
