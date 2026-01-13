@@ -513,6 +513,8 @@ nav:
           - Arrays vs DataFrames: ch06/overview/arrays_vs_dataframes.md
           - PIL vs NumPy Images: ch06/overview/pil_vs_numpy.md
           - NumPy to PyTorch: ch06/overview/numpy_to_pytorch.md
+          - NumPy Constants: ch06/overview/numpy_constants.md
+          - NumPy vs C Arrays: ch06/overview/numpy_vs_c.md
       - 6.2 NumPy Fundamentals:
           - Array Creation and dtypes: ch06/ndarray/creation.md
           - Shape, Strides, and Views: ch06/ndarray/shape_strides.md
@@ -524,17 +526,44 @@ nav:
           - np.full and np.eye: ch06/generation/full_eye_identity.md
           - np.arange and np.linspace: ch06/generation/arange_linspace.md
           - np.diag and Diagonal Matrices: ch06/generation/diag_matrices.md
-      - 6.4 Random Arrays:
+      - 6.4 Array Attributes:
+          - Shape and ndim: ch06/attributes/shape_ndim.md
+          - Image Shape Examples: ch06/attributes/image_shape.md
+          - Reshaping Arrays: ch06/attributes/reshape.md
+          - Expanding Dimensions: ch06/attributes/expand_dims.md
+          - Squeezing Dimensions: ch06/attributes/squeeze.md
+          - Dtype Basics: ch06/attributes/dtype_basics.md
+          - Changing Dtype: ch06/attributes/dtype_conversion.md
+      - 6.5 Indexing and Slicing:
+          - Basic Indexing: ch06/indexing/basic_indexing.md
+          - Slicing Arrays: ch06/indexing/slicing.md
+          - Shape After Indexing: ch06/indexing/shape_after_indexing.md
+          - Image Manipulation: ch06/indexing/image_manipulation.md
+          - Fancy Indexing: ch06/indexing/fancy_indexing.md
+          - Boolean Masking: ch06/indexing/boolean_masking.md
+      - 6.6 Views and Copies:
+          - View vs Copy Basics: ch06/memory/view_copy_basics.md
+          - Operations That Return Views: ch06/memory/view_operations.md
+          - Operations That Return Copies: ch06/memory/copy_operations.md
+          - ravel vs flatten: ch06/memory/ravel_flatten.md
+          - Memory Contiguity: ch06/memory/contiguity.md
+          - Stride Tricks: ch06/memory/strides.md
+      - 6.7 Random Arrays:
           - Random Seed and Reproducibility: ch06/random/seed.md
           - Normal Distributions: ch06/random/normal.md
           - Uniform Distributions: ch06/random/uniform.md
           - Discrete Distributions: ch06/random/discrete.md
           - Random Permutations: ch06/random/permutations.md
-      - 6.5 Broadcasting:
+      - 6.8 Broadcasting:
           - Broadcasting Rules: ch06/broadcasting/broadcasting.md
-      - 6.6 Vectorization:
+      - 6.9 Vectorization:
           - Performance vs Loops: ch06/vectorization/performance.md
-      - 6.7 Linear Algebra:
+          - Vectorization Basics: ch06/vectorization/vectorization_basics.md
+          - Memory Preallocation: ch06/vectorization/preallocation.md
+          - In-Place Operations: ch06/vectorization/inplace_operations.md
+          - Profiling Tools: ch06/vectorization/profiling_tools.md
+          - Acceleration Libraries: ch06/vectorization/acceleration_libs.md
+      - 6.10 Linear Algebra:
           - Linear Algebra Basics: ch06/linalg/linalg.md
 
   - Chapter 7 Matplotlib:
