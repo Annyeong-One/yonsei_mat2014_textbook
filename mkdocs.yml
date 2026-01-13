@@ -15,12 +15,19 @@ nav:
 
   - Chapter 1 Python Basics:
       - 1.1 Getting Started:
+          - Why Python: ch01/setup/why_python.md
+          - Static vs Dynamic Typing: ch01/setup/static_vs_dynamic.md
+          - Everything is an Object: ch01/setup/everything_is_object.md
+          - Methods and Attributes: ch01/setup/methods_and_attributes.md
           - Installing Python: ch01/setup/installing_python.md
+          - Development Tools: ch01/setup/development_tools.md
           - Python Interpreter and REPL: ch01/setup/python_interpreter.md
 
       - 1.2 Basic Syntax:
           - Expressions and Statements: ch01/basics/expressions.md
           - Indentation and Blocks: ch01/basics/indentation.md
+          - Comments: ch01/basics/comments.md
+          - Python Execution Model: ch01/basics/python_execution.md
 
       - 1.3 Control Flow:
           - if / for / while: ch01/control_flow/control_flow.md
@@ -128,9 +135,11 @@ nav:
       - 1.11 Modules and Imports:
           - import Mechanics: ch01/modules/imports.md
           - sys.path & Module Search: ch01/modules/module_search.md
+          - Relative Imports: ch01/modules/relative_imports.md
           - __name__ == "__main__": ch01/modules/main_guard.md
           - Scripts vs Modules: ch01/modules/scripts_vs_modules.md
           - Package Init Files: ch01/modules/init_files.md
+          - Package Creation: ch01/modules/package_creation.md
           - Command Line Arguments: ch01/modules/argparse.md
 
       - 1.12 Iteration Basics:
@@ -155,6 +164,14 @@ nav:
           - Identity Operators: ch01/operators/identity.md
           - Membership Operators: ch01/operators/membership.md
           - Precedence and Associativity: ch01/operators/precedence.md
+
+      - 1.16 Package Managers:
+          - pip and PyPI: ch01/package_managers/pip.md
+          - conda and Anaconda: ch01/package_managers/conda.md
+          - conda-forge and Miniforge: ch01/package_managers/conda_forge.md
+          - mamba: ch01/package_managers/mamba.md
+          - Homebrew: ch01/package_managers/homebrew.md
+          - Comparison: ch01/package_managers/pkg_manager_comparison.md
 
   - Chapter 2 Variables:
       - 2.1 Introduction:
@@ -446,60 +463,82 @@ nav:
           - Callable Objects: ch04/dunder_advanced/dunder_callable.md
           - Context Managers: ch04/dunder_advanced/dunder_context.md
 
-  - Chapter 5 Scientific Stack:
-      - 5.1 Overview:
-          - Lists vs Arrays: ch05/overview/lists_vs_arrays.md
-          - Arrays vs DataFrames: ch05/overview/arrays_vs_dataframes.md
-          - PIL vs NumPy Images: ch05/overview/pil_vs_numpy.md
-          - NumPy to PyTorch: ch05/overview/numpy_to_pytorch.md
-          - yfinance Workflow: ch05/overview/yfinance_workflow.md
+      - 4.12 OOP in Scientific Python:
+          - Overview: ch04/scientific_oop/overview.md
+          - NumPy ndarray Design: ch04/scientific_oop/numpy_ndarray.md
+          - NumPy dtype and Shape: ch04/scientific_oop/numpy_dtype_shape.md
+          - NumPy UFuncs: ch04/scientific_oop/numpy_ufuncs.md
+          - NumPy Broadcasting: ch04/scientific_oop/numpy_broadcasting.md
+          - NumPy Views vs Copies: ch04/scientific_oop/numpy_views_copies.md
+          - Pandas Series: ch04/scientific_oop/pandas_series.md
+          - Pandas DataFrame: ch04/scientific_oop/pandas_dataframe.md
+          - Pandas Index Objects: ch04/scientific_oop/pandas_index.md
+          - Pandas MultiIndex: ch04/scientific_oop/pandas_multiindex.md
+          - Pandas Method Chaining: ch04/scientific_oop/pandas_method_chaining.md
+          - Matplotlib Hierarchy: ch04/scientific_oop/matplotlib_hierarchy.md
+          - Matplotlib OOP vs Pyplot: ch04/scientific_oop/matplotlib_oop_pyplot.md
+          - Matplotlib Artists: ch04/scientific_oop/matplotlib_artists.md
 
-      - 5.2 NumPy OOP Design:
-          - ndarray Object Model: ch05/numpy/numpy_ndarray.md
-          - dtype and Shape: ch05/numpy/numpy_dtype_shape.md
-          - UFuncs and Vectorization: ch05/numpy/numpy_ufuncs.md
-          - Broadcasting Rules: ch05/numpy/numpy_broadcasting.md
-          - Views vs Copies: ch05/numpy/numpy_views_copies.md
+  - Chapter 5 Concurrency:
+      - 5.1 Concurrency Concepts:
+          - Introduction: ch05_concurrency/concepts/introduction.md
+          - GIL Explained: ch05_concurrency/concepts/gil.md
+          - CPU-bound vs IO-bound: ch05_concurrency/concepts/cpu_vs_io.md
+          - Threads vs Processes: ch05_concurrency/concepts/threads_vs_processes.md
 
-      - 5.3 Pandas OOP Design:
-          - Series Object: ch05/pandas/pandas_series.md
-          - DataFrame Architecture: ch05/pandas/pandas_dataframe.md
-          - Index Objects: ch05/pandas/pandas_index.md
-          - MultiIndex Hierarchy: ch05/pandas/pandas_multiindex.md
-          - Method Chaining: ch05/pandas/pandas_method_chaining.md
+      - 5.2 Threading:
+          - Thread Basics: ch05_concurrency/threading/thread_basics.md
+          - Thread Synchronization: ch05_concurrency/threading/synchronization.md
+          - Thread Communication: ch05_concurrency/threading/communication.md
 
-      - 5.4 Matplotlib OOP Design:
-          - Figure-Axes-Artist: ch05/matplotlib/matplotlib_hierarchy.md
-          - OOP vs Pyplot: ch05/matplotlib/matplotlib_oop_pyplot.md
-          - Axes Customization: ch05/matplotlib/matplotlib_axes.md
-          - Line2D and Artists: ch05/matplotlib/matplotlib_artists.md
-          - Plot Lifecycle: ch05/matplotlib/matplotlib_lifecycle.md
+      - 5.3 Multiprocessing:
+          - Process Basics: ch05_concurrency/multiprocessing/process_basics.md
+          - Process Pool: ch05_concurrency/multiprocessing/pool.md
+          - Sharing State: ch05_concurrency/multiprocessing/sharing_state.md
+
+      - 5.4 concurrent.futures:
+          - Executor Interface: ch05_concurrency/futures/executor_interface.md
+          - ThreadPoolExecutor: ch05_concurrency/futures/thread_pool.md
+          - ProcessPoolExecutor: ch05_concurrency/futures/process_pool.md
+          - Future Objects: ch05_concurrency/futures/future_objects.md
+
+      - 5.5 Practical Patterns:
+          - When to Use What: ch05_concurrency/patterns/decision_guide.md
+          - Common Patterns: ch05_concurrency/patterns/common_patterns.md
+          - Error Handling: ch05_concurrency/patterns/error_handling.md
 
   - Chapter 6 NumPy:
-      - 6.1 NumPy Fundamentals:
+      - 6.1 Overview:
+          - Lists vs Arrays: ch06/overview/lists_vs_arrays.md
+          - Arrays vs DataFrames: ch06/overview/arrays_vs_dataframes.md
+          - PIL vs NumPy Images: ch06/overview/pil_vs_numpy.md
+          - NumPy to PyTorch: ch06/overview/numpy_to_pytorch.md
+      - 6.2 NumPy Fundamentals:
           - Array Creation and dtypes: ch06/ndarray/creation.md
           - Shape, Strides, and Views: ch06/ndarray/shape_strides.md
           - linspace and Trigonometry: ch06/ndarray/linspace_trig.md
           - Type Promotion: ch06/ndarray/type_promotion.md
-      - 6.2 Broadcasting:
+      - 6.3 Broadcasting:
           - Broadcasting Rules: ch06/broadcasting/broadcasting.md
-      - 6.3 Vectorization:
+      - 6.4 Vectorization:
           - Performance vs Loops: ch06/vectorization/performance.md
-      - 6.4 Linear Algebra:
+      - 6.5 Linear Algebra:
           - Linear Algebra Basics: ch06/linalg/linalg.md
-      - 6.5 Randomness:
+      - 6.6 Randomness:
           - Randomness & Simulation: ch06/random/random.md
 
   - Chapter 7 Matplotlib:
       - 7.1 Plotting Fundamentals:
           - Figures and Axes: ch07/fundamentals/figures_axes.md
           - Lines, Markers, and Styles: ch07/fundamentals/styles.md
+          - Axes Customization: ch07/fundamentals/axes_customization.md
       - 7.2 Statistical Plots:
           - Histograms and Density: ch07/plots/histograms.md
           - Scatter and Heatmaps: ch07/plots/scatter_heatmaps.md
       - 7.3 Layout and Output:
           - Subplots and Grids: ch07/layout/subplots.md
           - Saving and Exporting Figures: ch07/layout/export.md
+          - Plot Lifecycle: ch07/layout/plot_lifecycle.md
 
   - Chapter 8 Pandas:
       - 8.1 Core pandas Objects:
@@ -511,6 +550,8 @@ nav:
       - 8.3 Time Series:
           - DatetimeIndex: ch08/timeseries/datetimeindex.md
           - Resampling and Rolling: ch08/timeseries/resampling.md
+      - 8.4 Practical Examples:           
+          - Financial Data Workflow: ch08/examples/yfinance_workflow.md
 
   - Chapter 9 PyTorch:
       - 9.1 Tensors:

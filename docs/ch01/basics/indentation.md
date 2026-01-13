@@ -1,10 +1,58 @@
-# Indentation and
+# Indentation and Blocks
 
 ## Introduction
 
 Unlike most programming languages that use braces `{}` or keywords like `begin`/`end` to define code blocks, Python uses **indentation**. This is one of Python's most distinctive features and enforces readable code formatting.
 
 Understanding indentation is crucial because improper indentation doesn't just make code hard to read—it causes syntax errors or changes program logic. This chapter covers everything you need to know about Python's indentation rules and code blocks.
+
+---
+
+## Python vs C: Indentation Comparison
+
+### Python: Indentation is Syntax
+
+```python
+def greet(name):
+    if name == "Alice":
+        print("Hello, Alice!")
+    else:
+        print("Hello, stranger!")
+```
+
+- Indentation **defines** code blocks
+- No braces `{}` needed
+- Incorrect indentation causes errors
+
+### C: Indentation is Style
+
+```c
+#include <stdio.h>
+#include <string.h>
+
+void greet(char* name) {
+    if (strcmp(name, "Alice") == 0) {
+        printf("Hello, Alice!\n");
+    } else {
+        printf("Hello, stranger!\n");
+    }
+}
+```
+
+- Braces `{}` define code blocks
+- Indentation is optional (for readability)
+- Compiler ignores indentation
+
+### Key Difference
+
+| Aspect | Python | C |
+|--------|--------|---|
+| Block delimiters | Indentation | `{ }` |
+| Indentation required | ✅ Yes | ❌ No |
+| Wrong indentation | Syntax error | No effect |
+| Readability | Enforced | Optional |
+
+---
 
 ## Why Indentation
 

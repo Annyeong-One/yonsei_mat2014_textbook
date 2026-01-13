@@ -65,13 +65,27 @@ This gives fine-grained control over Python versions.
 
 ## Verification
 
+### Command Line
+
 Check installation with:
+
 ```bash
 python --version
 pip --version
 ```
 
 You should see Python 3.10+.
+
+### From Python
+
+```python
+from platform import python_version
+print(python_version())  # e.g., '3.11.6'
+
+import sys
+print(sys.version)       # Full version info
+print(sys.executable)    # Path to Python interpreter
+```
 
 ---
 
