@@ -51,6 +51,22 @@ abs_vals = [n if n >= 0 else -n for n in nums]
 print(abs_vals)  # [1, 2, 3, 4, 5]
 ```
 
+### 4. Performance
+
+List comprehensions are faster than equivalent for loops due to internal optimizations:
+
+```python
+# For loop (slower)
+squares = []
+for x in range(1000):
+    squares.append(x ** 2)
+
+# List comprehension (faster)
+squares = [x ** 2 for x in range(1000)]
+```
+
+The comprehension avoids method lookup overhead (`append`) and uses optimized bytecode.
+
 ## Dict Comprehensions
 
 Dictionary comprehensions create dictionaries using `{key: value for item in iterable}`.
@@ -253,6 +269,31 @@ print(sys.getsizeof(list_comp))  # ~87624 bytes
 gen_exp = (x for x in range(10000))
 print(sys.getsizeof(gen_exp))    # ~200 bytes
 ```
+
+## Tuple from Comprehension
+
+Python has no native tuple comprehension. Use `tuple()` with a generator:
+
+```python
+# This is a generator, not a tuple
+gen = (x ** 2 for x in range(5))
+
+# Wrap in tuple() to create tuple
+t = tuple(x ** 2 for x in range(5))
+print(t)  # (0, 1, 4, 9, 16)
+```
+
+
+## Performance Summary
+
+| Type | Syntax | Lazy | Memory |
+|------|--------|------|--------|
+| List | `[x for x in iter]` | No | O(n) |
+| Set | `{x for x in iter}` | No | O(n) |
+| Dict | `{k: v for ...}` | No | O(n) |
+| Generator | `(x for x in iter)` | Yes | O(1) |
+| Tuple | `tuple(x for ...)` | No | O(n) |
+
 
 ## Best Practices
 

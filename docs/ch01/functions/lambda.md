@@ -128,27 +128,29 @@ short_words = list(filter(lambda w: len(w) <= 3, words))
 print(short_words)  # ['cat', 'dog']
 ```
 
-### 1. With sorted()
+### 1. With sorted() and list.sort()
 
-Custom sorting:
+Custom sorting with `key=` parameter:
+
+**sorted()** returns a new sorted list:
 
 ```python
-# Sort by absolute
+# Sort by absolute value
 numbers = [-5, -2, 1, 3, -4]
 sorted_nums = sorted(numbers, key=lambda x: abs(x))
 print(sorted_nums)  # [1, -2, 3, -4, -5]
 
-# Sort strings by
+# Sort strings by length
 words = ["python", "is", "awesome"]
 by_length = sorted(words, key=lambda w: len(w))
 print(by_length)  # ['is', 'python', 'awesome']
 
-# Sort tuples by
+# Sort tuples by second element
 pairs = [(1, 5), (3, 2), (2, 8)]
 sorted_pairs = sorted(pairs, key=lambda p: p[1])
 print(sorted_pairs)  # [(3, 2), (1, 5), (2, 8)]
 
-# Sort dictionaries by
+# Sort dictionaries by value
 people = [
     {'name': 'Alice', 'age': 25},
     {'name': 'Bob', 'age': 30},
@@ -157,6 +159,43 @@ people = [
 by_age = sorted(people, key=lambda p: p['age'])
 print([p['name'] for p in by_age])  # ['Charlie', 'Alice', 'Bob']
 ```
+
+**list.sort()** sorts in-place and returns `None`:
+
+```python
+# Basic in-place sort with custom key
+lst = [-1, 3, -2, 5, 6, 7, 5]
+lst.sort(key=lambda x: (x+2)**2)
+print(lst)  # [-2, -1, 3, 5, 5, 6, 7]
+
+# With reverse parameter
+lst = [-1, 3, -2, 5, 6, 7, 5]
+lst.sort(key=lambda x: (x+2)**2, reverse=True)
+print(lst)  # [7, 6, 5, 5, 3, -1, -2]
+
+# Using built-in function as key
+lst = [-1, 3, -2, 5, 6, 7, 5]
+lst.sort(key=abs)
+print(lst)  # [-1, -2, 3, 5, 5, 6, 7]
+
+# Case-insensitive string sort
+lst = ["CBA", "ABC", "abc"]
+lst.sort(key=str.lower)
+print(lst)  # ['ABC', 'abc', 'CBA']
+
+# Sort nested lists by element
+lst = [[1, 2], [3, -1], [4, 2]]
+lst.sort(key=lambda x: x[1])
+print(lst)  # [[3, -1], [1, 2], [4, 2]]
+```
+
+**sorted() vs list.sort()**:
+
+| Feature | `sorted()` | `list.sort()` |
+|---------|------------|---------------|
+| Returns | New list | `None` |
+| Original | Unchanged | Modified |
+| Works on | Any iterable | Lists only |
 
 ### 1. With reduce()
 

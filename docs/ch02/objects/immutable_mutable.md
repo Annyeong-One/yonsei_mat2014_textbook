@@ -48,6 +48,50 @@ lst.append(4)
 print(id(lst) == original_id)  # True
 ```
 
+### 3. Reference Sharing
+
+When two names point to the same mutable object:
+
+```python
+a = [1, 2, 3]
+b = a
+a.append(4)
+print(b)  # [1, 2, 3, 4]
+```
+
+```
+Before:
+a ─┬──► [1, 2, 3]
+   │
+b ─┘
+
+After a.append(4):
+a ─┬──► [1, 2, 3, 4]
+   │
+b ─┘
+```
+
+### 4. Immutable Rebinding
+
+```python
+a = 10
+b = a
+b += 1
+print(a)  # 10 (unchanged)
+```
+
+```
+Before:
+a ─┬──► 10
+   │
+b ─┘
+
+After b += 1:
+a ───► 10
+
+b ───► 11  (new object)
+```
+
 ## Type Classification
 
 ### 1. Immutable
@@ -77,6 +121,51 @@ s = {1, "two", (3, 4)}
 # Cannot use as dict key
 # d[[1, 2]] = "bad"  # TypeError
 ```
+
+### 3. Shallow Immutability
+
+Tuples containing mutable objects are **not hashable**:
+
+```python
+t = (1, [2, 3])      # Tuple with list inside
+hash(t)              # TypeError: unhashable type: 'list'
+```
+
+The tuple is immutable (can't reassign `t[1]`), but the list inside can change.
+
+
+## Operations That Create New Objects
+
+Even with mutable types, some operations create new objects:
+
+```python
+lst = [1, 2, 3]
+print(id(lst))
+
+# In-place (same object)
+lst.append(4)
+lst.sort()
+print(id(lst))       # Same id
+
+# Creates new object
+lst = lst + [5]
+print(id(lst))       # Different id!
+
+lst = sorted(lst)
+print(id(lst))       # Different id!
+
+lst = [x for x in lst]
+print(id(lst))       # Different id!
+```
+
+| Operation | Same Object? |
+|-----------|--------------|
+| `lst.append(x)` | ✅ Yes |
+| `lst.sort()` | ✅ Yes |
+| `lst += [x]` | ✅ Yes |
+| `lst = lst + [x]` | ❌ No |
+| `lst = sorted(lst)` | ❌ No |
+| `lst = [x for x in lst]` | ❌ No |
 
 ## Default Arguments
 

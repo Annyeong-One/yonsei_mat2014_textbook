@@ -40,6 +40,42 @@ evens = (x for x in squares if x % 2 == 0)
 result = sum(evens)
 ```
 
+## Reimplementing map and filter
+
+Generators can recreate the behavior of `map()` and `filter()`.
+
+### 1. Custom map
+
+```python
+def my_map(func, iterable):
+    for item in iterable:
+        yield func(item)
+
+squares = my_map(lambda x: x * x, [1, 2, 3, 4])
+print(list(squares))  # [1, 4, 9, 16]
+```
+
+### 2. Custom filter
+
+```python
+def my_filter(predicate, iterable):
+    for item in iterable:
+        if predicate(item):
+            yield item
+
+evens = my_filter(lambda x: x % 2 == 0, range(10))
+print(list(evens))  # [0, 2, 4, 6, 8]
+```
+
+### 3. Comparison
+
+| Operation | Built-in | Custom Generator | Generator Expression |
+|-----------|----------|------------------|----------------------|
+| map | `map(f, xs)` | `my_map(f, xs)` | `(f(x) for x in xs)` |
+| filter | `filter(p, xs)` | `my_filter(p, xs)` | `(x for x in xs if p(x))` |
+
+All three approaches are **lazy** — values computed on demand.
+
 ## Summary
 
 - Lazy evaluation

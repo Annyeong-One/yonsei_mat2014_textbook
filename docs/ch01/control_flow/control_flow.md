@@ -221,7 +221,73 @@ if x and x.some_method():  # Won't call some_method() if x is None
 name = input_name or "Guest"  # Use "Guest" if input_name is empty
 ```
 
+### 1. Match Statement (Python 3.10+)
+
+Pattern matching for cleaner multi-way branching:
+
+```python
+def get_status(code):
+    match code:
+        case 200:
+            return "OK"
+        case 404:
+            return "Not Found"
+        case 500:
+            return "Server Error"
+        case _:
+            return "Unknown"
+
+print(get_status(200))  # OK
+print(get_status(999))  # Unknown
+```
+
+The `_` is a wildcard that matches anything (like `else`).
+
+**With multiple values:**
+
+```python
+match day:
+    case "Saturday" | "Sunday":
+        print("Weekend")
+    case _:
+        print("Weekday")
+```
+
+**With variable capture:**
+
+```python
+match point:
+    case (0, 0):
+        print("Origin")
+    case (x, 0):
+        print(f"On x-axis at {x}")
+    case (0, y):
+        print(f"On y-axis at {y}")
+    case (x, y):
+        print(f"Point at ({x}, {y})")
+```
+
+**When to use `match` vs `if-elif`:**
+- Use `match` for comparing one value against multiple patterns
+- Use `if-elif` for complex conditions or range checks
+
 ## For Loops
+
+Python's `for` loop uses the **iterator protocol** under the hood:
+
+```python
+for item in iterable:
+    print(item)
+
+# Is equivalent to:
+iterator = iter(iterable)
+while True:
+    try:
+        item = next(iterator)
+        print(item)
+    except StopIteration:
+        break
+```
 
 ### 1. Basic for Loop
 
@@ -912,10 +978,40 @@ else:
     pass
 ```
 
+### 6. Match Statement (Python 3.10+)
+```python
+match value:
+    case pattern1:
+        # code
+    case pattern2 | pattern3:
+        # code for multiple patterns
+    case _:
+        # default case
+```
+
+## No Do-While Loop
+
+Python doesn't have a `do-while` loop. Emulate it with:
+
+```python
+# Pattern 1: while True with break
+while True:
+    # body executes at least once
+    result = do_something()
+    if not condition:
+        break
+
+# Pattern 2: Execute before loop
+result = do_something()
+while condition:
+    result = do_something()
+```
+
 ## Summary
 
 - **if statements** let you make decisions and execute code conditionally
 - **elif** and **else** handle multiple conditions and alternatives
+- **match statements** (Python 3.10+) provide pattern matching for cleaner multi-way branching
 - **for loops** iterate over sequences (lists, strings, ranges, etc.)
 - **while loops** repeat while a condition is true
 - **break** exits a loop early

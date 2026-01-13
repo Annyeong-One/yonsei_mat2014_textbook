@@ -1,0 +1,148 @@
+# Forward Referencing Errors
+
+Forward referencing errors occur when code attempts to use a variable, function, or class before it has been defined. Python executes code sequentially, so names must exist before they are referenced.
+
+
+## Variable Forward Reference
+
+Using a variable before assignment raises `NameError`.
+
+```python
+print(x)  # NameError: name 'x' is not defined
+x = 10
+```
+
+**Fix**: Define variables before use.
+
+```python
+x = 10
+print(x)  # 10
+```
+
+
+## Function Forward Reference
+
+Calling a function before its definition raises `NameError`.
+
+```python
+result = add(5, 3)  # NameError: name 'add' is not defined
+
+def add(a, b):
+    return a + b
+```
+
+**Fix**: Define functions before calling them.
+
+```python
+def add(a, b):
+    return a + b
+
+result = add(5, 3)
+print(result)  # 8
+```
+
+
+## Class Method Default Parameter Pitfall
+
+A common forward referencing error occurs when using `self` in default parameter values.
+
+```python
+class BlackScholes:
+    def __init__(self, T):
+        self.T = T
+    
+    # ERROR: self doesn't exist when default is evaluated
+    def run_MC(self, num_steps=int(self.T * 12 * 21)):
+        pass
+```
+
+This fails because default parameter values are evaluated at function definition time, not at call time. At definition time, `self` doesn't exist yet.
+
+**Fix**: Use `None` as default and set the value inside the method.
+
+```python
+class BlackScholes:
+    def __init__(self, T):
+        self.T = T
+    
+    def run_MC(self, num_steps=None):
+        if num_steps is None:
+            num_steps = int(self.T * 12 * 21)
+        # ... method body
+```
+
+
+## Why Forward Referencing Errors Occur
+
+Python processes code sequentially:
+
+1. The interpreter reads code line by line
+2. Names are added to the namespace when assigned
+3. Referencing a name requires it to already exist
+
+```python
+# At this point, 'x' is not in the namespace
+print(x)  # NameError
+
+# Now 'x' is added to the namespace
+x = 10
+```
+
+
+## Functions Can Reference Each Other
+
+Function bodies are not executed until called, so mutual references work.
+
+```python
+def is_even(n):
+    if n == 0:
+        return True
+    return is_odd(n - 1)  # is_odd not defined yet, but OK
+
+def is_odd(n):
+    if n == 0:
+        return False
+    return is_even(n - 1)
+
+print(is_even(4))  # True
+```
+
+This works because `is_odd` is only looked up when `is_even` is actually called, by which time both functions exist.
+
+
+## Avoiding Forward Referencing Errors
+
+1. **Define variables before use**
+   ```python
+   x = 10
+   print(x)
+   ```
+
+2. **Define functions before calling**
+   ```python
+   def greet():
+       print("Hello")
+   
+   greet()
+   ```
+
+3. **Use `None` for instance-dependent defaults**
+   ```python
+   def method(self, value=None):
+       if value is None:
+           value = self.default_value
+   ```
+
+4. **Organize code with definitions first**
+   ```python
+   # Constants
+   MAX_SIZE = 100
+   
+   # Functions
+   def process():
+       pass
+   
+   # Main execution
+   if __name__ == "__main__":
+       process()
+   ```

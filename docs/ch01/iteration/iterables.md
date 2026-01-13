@@ -1,4 +1,4 @@
-# Iterables and
+# Iterables and Iterators
 
 Iteration is a core concept in Python. Understanding **iterables** and **iterators** explains how `for` loops, comprehensions, and many built-ins work.
 
@@ -30,38 +30,122 @@ An **iterator** is an object that:
 - raises `StopIteration` when exhausted.
 
 It implements:
-- `__iter__()`
-- `__next__()`
+- `__iter__()` — returns itself
+- `__next__()` — returns next value
 
 ---
 
-## Relationship between
+## Iterable vs Iterator
+
+| Feature | Iterable | Iterator |
+|---------|----------|----------|
+| Has `__iter__()` | ✅ | ✅ |
+| Has `__next__()` | ❌ | ✅ |
+| Can use in `for` | ✅ | ✅ |
+| Can call `next()` | ❌ (need `iter()`) | ✅ |
 
 ```python
-xs = [1, 2, 3]
-it = iter(xs)
-next(it)  # 1
-next(it)  # 2
-```
+nums = [1, 2, 3]           # Iterable
+it = iter(nums)            # Iterator
 
-- The list is iterable.
-- `it` is an iterator.
+print("__iter__" in dir(nums))  # True
+print("__next__" in dir(nums))  # False
+print("__next__" in dir(it))    # True
+```
 
 ---
 
-## Single-pass nature
+## How `for` Loop Works
+
+When you write:
+
+```python
+for x in [1, 2, 3]:
+    print(x)
+```
+
+Python does this internally:
+
+```python
+it = iter([1, 2, 3])
+while True:
+    try:
+        x = next(it)
+        print(x)
+    except StopIteration:
+        break
+```
+
+---
+
+## Built-in Iterators
+
+These functions return **iterators** (lazy evaluation):
+
+| Function | Description |
+|----------|-------------|
+| `zip()` | Pairs elements from multiple iterables |
+| `enumerate()` | Pairs index with element |
+| `map()` | Applies function to each element |
+| `filter()` | Filters elements by predicate |
+| `reversed()` | Reverses a sequence |
+
+```python
+# All return iterators
+z = zip([1, 2], ['a', 'b'])
+e = enumerate(['x', 'y'])
+m = map(str.upper, ['a', 'b'])
+f = filter(lambda x: x > 0, [-1, 2, 3])
+
+print(next(z))  # (1, 'a')
+print(next(e))  # (0, 'x')
+print(next(m))  # 'A'
+print(next(f))  # 2
+```
+
+---
+
+## Custom Iterator
+
+Create your own iterator by implementing the protocol:
+
+```python
+class CountUp:
+    def __init__(self, limit):
+        self.limit = limit
+        self.current = 0
+    
+    def __iter__(self):
+        return self
+    
+    def __next__(self):
+        if self.current >= self.limit:
+            raise StopIteration
+        self.current += 1
+        return self.current
+
+for n in CountUp(3):
+    print(n)  # 1, 2, 3
+```
+
+---
+
+## Single-pass Nature
 
 Iterators are **consumed** as you iterate:
 
 ```python
-list(it)   # remaining elements
-list(it)   # empty
+it = iter([1, 2, 3])
+list(it)   # [1, 2, 3]
+list(it)   # [] (exhausted)
 ```
 
 ---
 
-## Key takeaways
+## Key Takeaways
 
-- Iterables can produce iterators.
-- Iterators yield values lazily.
-- Iterators are single-use.
+- **Iterables** can produce iterators via `iter()`
+- **Iterators** yield values lazily via `next()`
+- Iterators are single-use
+- `for` loop uses `iter()` and `next()` internally
+- `zip`, `map`, `filter`, `enumerate` return iterators

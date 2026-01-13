@@ -38,7 +38,47 @@ print("no newline", end="")        # stays on same line
 print(" -> next print continues")  # appended after end=""
 ```
 
-### 4. f-strings
+### 4. `file` parameter
+
+By default, `print()` writes to `sys.stdout`. You can redirect output:
+
+```python
+import sys
+
+# Print to standard error
+print("Warning!", file=sys.stderr)
+
+# Print to a file
+with open("output.txt", "w") as f:
+    print("Hello, file!", file=f)
+```
+
+### 5. Standard Streams
+
+Python has three standard streams:
+
+| Stream | Description | Default |
+|--------|-------------|---------|
+| `sys.stdin` | Standard input | Keyboard |
+| `sys.stdout` | Standard output | Console |
+| `sys.stderr` | Standard error | Console |
+
+```python
+import sys
+
+print("Normal output", file=sys.stdout)
+print("Error message", file=sys.stderr)
+```
+
+**Shell redirection:**
+
+```bash
+python script.py > output.txt      # stdout to file
+python script.py 2> error.txt      # stderr to file
+python script.py > out.txt 2>&1    # both to same file
+```
+
+### 6. f-strings
 
 Use f-strings to format text cleanly:
 

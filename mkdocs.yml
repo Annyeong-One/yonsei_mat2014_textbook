@@ -38,6 +38,7 @@ nav:
           - int Number Systems: ch01/types/int_number_systems.md
           - int Two's Complement: ch01/types/int_twos_complement.md
           - float Fundamentals: ch01/types/float_fundamentals.md
+          - float Python vs C: ch01/types/float_python_vs_c.md    
           - float IEEE 754 Standard: ch01/types/float_ieee754.md
           - float Machine Precision: ch01/types/float_machine_precision.md
           - float Numerical Errors: ch01/types/float_numerical_errors.md
@@ -73,32 +74,50 @@ nav:
           - str Modify Methods: ch01/types/str_modify_methods.md      
           - str Align Methods: ch01/types/str_align_methods.md        
           - str Formatting Methods: ch01/types/str_formatting_methods.md      
-          - str Format Specifiers: ch01/types/str_format_specifiers.md 
+          - str Format Specifiers: ch01/types/str_format_specifiers.md
           - str Built-in Funcs: ch01/types/str_builtin_funcs.md              
           - str Python vs C: ch01/types/str_python_vs_c.md
           - Type Conversions: ch01/types/type_conversions.md
+          - Type Promotion: ch01/types/type_promotion.md
 
       - 1.6 Composite Data Types:
+          - Sequences Overview: ch01/composite_data_types/sequences.md
           - tuple and Immutability: ch01/composite_data_types/tuple.md
           - list and Dynamic Arrays: ch01/composite_data_types/list.md
+          - list Methods: ch01/composite_data_types/list_methods.md
+          - list Copying: ch01/composite_data_types/list_copying.md
           - dict and Hash Tables: ch01/composite_data_types/dict.md
+          - dict Methods: ch01/composite_data_types/dict_methods.md
           - set and Membership: ch01/composite_data_types/set.md
           - Comprehensions Overview: ch01/composite_data_types/comprehensions.md
           - Nested Data Structures: ch01/composite_data_types/nested_structures.md
 
-      - 1.7 Functions Basics:
+      - 1.7 collections Module:
+          - collections Overview: ch01/collections/collections_overview.md
+          - namedtuple: ch01/collections/namedtuple.md
+          - defaultdict: ch01/collections/defaultdict.md
+          - Counter: ch01/collections/counter.md
+          - deque: ch01/collections/deque.md
+          - OrderedDict and ChainMap: ch01/collections/ordereddict_chainmap.md
+
+      - 1.8 Functions Basics:
           - Function and Call Stack: ch01/functions/functions.md
           - Parameters & Returns: ch01/functions/parameters.md
           - Recursion and Stack Overflow: ch01/functions/recursion.md
           - lambda Expressions: ch01/functions/lambda.md
+          - Type Hints: ch01/functions/type_hints.md
 
-      - 1.8 Exceptions:
+      - 1.9 Exceptions:
           - Exception Hierarchy: ch01/exceptions/hierarchy.md
           - Common Runtime Errors: ch01/exceptions/common_errors.md
           - try / except / finally: ch01/exceptions/handling.md
           - Raising Exceptions: ch01/exceptions/raising.md
+          - Custom Exceptions: ch01/exceptions/custom_exceptions.md
+          - assert Statement: ch01/exceptions/assert.md
+          - Forward Referencing Errors: ch01/exceptions/forward_referencing.md
+          - Compile vs Runtime Errors: ch01/exceptions/compile_vs_runtime.md
 
-      - 1.9 File I/O:
+      - 1.10 File I/O:
           - Opening and Reading Files: ch01/io/file_reading.md
           - Writing Files: ch01/io/file_writing.md
           - Context Managers (with): ch01/io/context_managers.md
@@ -106,25 +125,36 @@ nav:
           - CSV and JSON: ch01/io/csv_json.md
           - Path Handling (pathlib): ch01/io/pathlib.md
 
-      - 1.10 Modules and Imports:
+      - 1.11 Modules and Imports:
           - import Mechanics: ch01/modules/imports.md
           - sys.path & Module Search: ch01/modules/module_search.md
           - __name__ == "__main__": ch01/modules/main_guard.md
           - Scripts vs Modules: ch01/modules/scripts_vs_modules.md
+          - Package Init Files: ch01/modules/init_files.md
+          - Command Line Arguments: ch01/modules/argparse.md
 
-      - 1.11 Iteration Basics:
+      - 1.12 Iteration Basics:
           - Iterables and Iterators: ch01/iteration/iterables.md
           - Generators and yield: ch01/iteration/generators.md
 
-      - 1.12 Performance:
+      - 1.13 Performance:
           - Time vs Space Trade-offs: ch01/performance/tradeoffs.md
           - Python Execution Model: ch01/performance/execution_model.md
 
-      - 1.13 Advanced Built-ins:
+      - 1.14 Advanced Built-ins:
           - The builtins Namespace: ch01/advanced_builtins/builtins_namespace.md
           - map(), filter(), sorted(): ch01/advanced_builtins/map_filter_sorted.md
           - sorted() with key Function: ch01/advanced_builtins/sorted_key.md
           - id(), type(), isinstance(): ch01/advanced_builtins/introspection.md
+
+      - 1.15 Operators:
+          - Operators Overview: ch01/operators/operators_overview.md
+          - Arithmetic Operators: ch01/operators/arithmetic.md
+          - Comparison Operators: ch01/operators/comparison.md
+          - Sequence Comparison: ch01/operators/sequence_comparison.md
+          - Identity Operators: ch01/operators/identity.md
+          - Membership Operators: ch01/operators/membership.md
+          - Precedence and Associativity: ch01/operators/precedence.md
 
   - Chapter 2 Variables:
       - 2.1 Introduction:
@@ -312,6 +342,7 @@ nav:
   - Chapter 3 Functions:
       - 3.1 First-Class Functions:
           - Functions as Objects: ch03/functions/first_class_objects.md
+          - Function Factories: ch03/functions/function_factories.md
           - Function Call Stack: ch03/functions/call_stack.md
           - Recursion Patterns: ch03/functions/recursion_patterns.md
 
@@ -327,7 +358,10 @@ nav:
           - Function Wrappers: ch03/decorators/wrappers.md
           - Decorator Factories: ch03/decorators/factories.md
           - functools.wraps: ch03/decorators/functools_wraps.md
+          - Practical Decorators: ch03/decorators/practical_decorators.md
+          - Stacked Decorators: ch03/decorators/stacked_decorators.md
           - Class Decorators: ch03/decorators/class_decorators.md
+          - Closures vs Decorators: ch03/decorators/closures_vs_decorators.md
           - Decorator Patterns: ch03/decorators/patterns.md
 
       - 3.4 Functional Prog:
@@ -445,6 +479,8 @@ nav:
       - 6.1 NumPy Fundamentals:
           - Array Creation and dtypes: ch06/ndarray/creation.md
           - Shape, Strides, and Views: ch06/ndarray/shape_strides.md
+          - linspace and Trigonometry: ch06/ndarray/linspace_trig.md
+          - Type Promotion: ch06/ndarray/type_promotion.md
       - 6.2 Broadcasting:
           - Broadcasting Rules: ch06/broadcasting/broadcasting.md
       - 6.3 Vectorization:

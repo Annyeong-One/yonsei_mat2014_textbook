@@ -23,6 +23,16 @@ b = [1, 2, 3]
 print(id(a) != id(b))  # True
 ```
 
+**CPython note**: `id()` returns the memory address:
+
+```python
+x = [1, 2, 3]
+print(id(x))       # e.g., 140234567890
+print(hex(id(x)))  # e.g., '0x7f8b2c3d4e50'
+```
+
+Other implementations (PyPy, Jython) may return a different unique token.
+
 ### 2. Constant
 
 ```python

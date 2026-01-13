@@ -59,6 +59,12 @@ print(a)           # 10.0
 b = float("45.67")
 print(b)           # 45.67
 
+# Whitespace is automatically stripped
+print(float("   3.14   "))  # 3.14
+
+# Leading zeros are ignored
+print(float("007.5"))       # 7.5
+
 # From scientific notation string
 c = float("1.5e2")
 print(c)           # 150.0

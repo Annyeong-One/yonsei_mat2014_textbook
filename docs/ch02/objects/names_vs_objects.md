@@ -4,12 +4,22 @@
 
 ### 1. Python Model
 
-Names are references to objects:
+Names are references to objects, not containers holding values:
 
 ```python
 x = [1, 2, 3]
-# x is a name pointing to list object
+# x is a name pointing to list object in heap
 ```
+
+```
+x ───► [1, 2, 3]   (heap object)
+       │
+       ├── id: 0x7f...
+       ├── type: list
+       └── value: [1, 2, 3]
+```
+
+The arrow (`→`) is a **pointer/reference**, not a copy.
 
 ### 2. Key Insight
 
@@ -20,6 +30,14 @@ z = x
 
 # Multiple names, one object
 print(x is y is z)  # True
+```
+
+```
+x ─┬──► [1, 2, 3]
+   │
+y ─┤
+   │
+z ─┘
 ```
 
 ## Object Properties
