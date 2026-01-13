@@ -481,31 +481,31 @@ nav:
 
   - Chapter 5 Concurrency:
       - 5.1 Concurrency Concepts:
-          - Introduction: ch05_concurrency/concepts/introduction.md
-          - GIL Explained: ch05_concurrency/concepts/gil.md
-          - CPU-bound vs IO-bound: ch05_concurrency/concepts/cpu_vs_io.md
-          - Threads vs Processes: ch05_concurrency/concepts/threads_vs_processes.md
+          - Introduction: ch05/concepts/introduction.md
+          - GIL Explained: ch05/concepts/gil.md
+          - CPU-bound vs IO-bound: ch05/concepts/cpu_vs_io.md
+          - Threads vs Processes: ch05/concepts/threads_vs_processes.md
 
       - 5.2 Threading:
-          - Thread Basics: ch05_concurrency/threading/thread_basics.md
-          - Thread Synchronization: ch05_concurrency/threading/synchronization.md
-          - Thread Communication: ch05_concurrency/threading/communication.md
+          - Thread Basics: ch05/threading/thread_basics.md
+          - Thread Synchronization: ch05/threading/synchronization.md
+          - Thread Communication: ch05/threading/communication.md
 
       - 5.3 Multiprocessing:
-          - Process Basics: ch05_concurrency/multiprocessing/process_basics.md
-          - Process Pool: ch05_concurrency/multiprocessing/pool.md
-          - Sharing State: ch05_concurrency/multiprocessing/sharing_state.md
+          - Process Basics: ch05/multiprocessing/process_basics.md
+          - Process Pool: ch05/multiprocessing/pool.md
+          - Sharing State: ch05/multiprocessing/sharing_state.md
 
       - 5.4 concurrent.futures:
-          - Executor Interface: ch05_concurrency/futures/executor_interface.md
-          - ThreadPoolExecutor: ch05_concurrency/futures/thread_pool.md
-          - ProcessPoolExecutor: ch05_concurrency/futures/process_pool.md
-          - Future Objects: ch05_concurrency/futures/future_objects.md
+          - Executor Interface: ch05/futures/executor_interface.md
+          - ThreadPoolExecutor: ch05/futures/thread_pool.md
+          - ProcessPoolExecutor: ch05/futures/process_pool.md
+          - Future Objects: ch05/futures/future_objects.md
 
       - 5.5 Practical Patterns:
-          - When to Use What: ch05_concurrency/patterns/decision_guide.md
-          - Common Patterns: ch05_concurrency/patterns/common_patterns.md
-          - Error Handling: ch05_concurrency/patterns/error_handling.md
+          - When to Use What: ch05/patterns/decision_guide.md
+          - Common Patterns: ch05/patterns/common_patterns.md
+          - Error Handling: ch05/patterns/error_handling.md
 
   - Chapter 6 NumPy:
       - 6.1 Overview:
