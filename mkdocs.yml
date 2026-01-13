@@ -518,14 +518,24 @@ nav:
           - Shape, Strides, and Views: ch06/ndarray/shape_strides.md
           - linspace and Trigonometry: ch06/ndarray/linspace_trig.md
           - Type Promotion: ch06/ndarray/type_promotion.md
-      - 6.3 Broadcasting:
+      - 6.3 Array Generation:
+          - np.array and Dimensions: ch06/generation/np_array.md
+          - np.zeros, np.ones, np.empty: ch06/generation/zeros_ones_empty.md
+          - np.full and np.eye: ch06/generation/full_eye_identity.md
+          - np.arange and np.linspace: ch06/generation/arange_linspace.md
+          - np.diag and Diagonal Matrices: ch06/generation/diag_matrices.md
+      - 6.4 Random Arrays:
+          - Random Seed and Reproducibility: ch06/random/seed.md
+          - Normal Distributions: ch06/random/normal.md
+          - Uniform Distributions: ch06/random/uniform.md
+          - Discrete Distributions: ch06/random/discrete.md
+          - Random Permutations: ch06/random/permutations.md
+      - 6.5 Broadcasting:
           - Broadcasting Rules: ch06/broadcasting/broadcasting.md
-      - 6.4 Vectorization:
+      - 6.6 Vectorization:
           - Performance vs Loops: ch06/vectorization/performance.md
-      - 6.5 Linear Algebra:
+      - 6.7 Linear Algebra:
           - Linear Algebra Basics: ch06/linalg/linalg.md
-      - 6.6 Randomness:
-          - Randomness & Simulation: ch06/random/random.md
 
   - Chapter 7 Matplotlib:
       - 7.1 Plotting Fundamentals:
