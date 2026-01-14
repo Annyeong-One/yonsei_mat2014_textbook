@@ -669,6 +669,10 @@ nav:
           - Fill and Fill Between: ch07/advanced/fill_between.md
           - Axhline and Axvline: ch07/advanced/axhline_axvline.md
 
+      # ========================================
+      # STATISTICAL PLOTS (7.11 - 7.15)
+      # ========================================
+
       - 7.11 Histogram:
           - Basic Histogram: ch07/histogram/basic_histogram.md
           - Histogram Keywords: ch07/histogram/histogram_keywords.md
@@ -695,61 +699,75 @@ nav:
       - 7.15 Pie Chart:
           - Basic Pie Chart: ch07/pie_chart/basic_pie_chart.md
           - Pie Chart Keywords: ch07/pie_chart/pie_chart_keywords.md
-          - Keyword - startangle: ch07/pie_chart/startangle.md
-          - Keyword - shadow: ch07/pie_chart/shadow.md
-          - Keyword - counterclock: ch07/pie_chart/counterclock.md
-          - Keyword - explode: ch07/pie_chart/explode.md
-          - Keyword - radius: ch07/pie_chart/radius.md
-          - Keyword - autopct: ch07/pie_chart/autopct.md
+          - Customization Examples: ch07/pie_chart/customization.md
+          # Consolidates: startangle, shadow, counterclock, explode, radius, autopct
+          # into one comprehensive "keywords" file + one "customization" file
+          # OR keep granular if pedagogically necessary for your course
 
-      - 7.16 Heatmap:
+      # ========================================
+      # 2D GRID/DENSITY VISUALIZATION (7.16 - 7.17)
+      # ========================================
+
+      - 7.16 Heatmap and Colormaps:
           - Heatmaps with imshow: ch07/heatmap/imshow_heatmap.md
           - Heatmaps with pcolormesh: ch07/heatmap/pcolormesh_heatmap.md
+          - Colormap Selection: ch07/heatmap/colormap_selection.md
           - Colorbars: ch07/heatmap/colorbars.md
 
-      - 7.17 Layout:
+      - 7.17 2D Density Plots:
+          - Axes Method - hist2d: ch07/density_2d/hist2d.md
+          - Axes Method - hexbin: ch07/density_2d/hexbin.md
+          - Kernel Density Estimation: ch07/density_2d/kde_imshow.md
+          # Unified section for bivariate density visualization
+
+      # ========================================
+      # LAYOUT (7.18)
+      # ========================================
+
+      - 7.18 Layout:
           - Subplots and Grids: ch07/layout/subplots.md
           - GridSpec: ch07/layout/gridspec.md
           - Tight Layout: ch07/layout/tight_layout.md
 
-      - 7.18 Image Plot:
-          - Reading Web Images: ch07/image_plot/reading_web_images.md  # NEW
-          - Axes Method - imread: ch07/image_plot/imread.md  # NEW
-          - Axes Method - imshow: ch07/image_plot/imshow.md  # NEW
-          - Keyword - cmap: ch07/image_plot/cmap.md  # NEW
-          - Image Manipulation: ch07/image_plot/image_manipulation.md  # NEW
-          - np.where: ch07/image_plot/np_where.md  # NEW
-          - np.transpose: ch07/image_plot/np_transpose.md  # NEW
-          - np.roll: ch07/image_plot/np_roll.md  # NEW
-          - QR Code: ch07/image_plot/qr_code.md  # NEW
-          - Image Compression: ch07/image_plot/image_compression.md  # NEW
+      # ========================================
+      # SPECIALIZED PLOTS (7.19 - 7.21)
+      # ========================================
 
-      - 7.19 Contour Plot:
-          - Axes Method - contour: ch07/contour_plot/contour.md  # NEW
-          - Axes Method - clabel: ch07/contour_plot/clabel.md  # NEW
+      - 7.19 Image Plot:
+          - Reading Web Images: ch07/image_plot/reading_web_images.md
+          - Axes Method - imread: ch07/image_plot/imread.md
+          - Axes Method - imshow: ch07/image_plot/imshow.md
+          - Keyword - cmap: ch07/image_plot/cmap.md
+          - Image Manipulation: ch07/image_plot/image_manipulation.md
+          - np.where: ch07/image_plot/np_where.md
+          - np.transpose: ch07/image_plot/np_transpose.md
+          - np.roll: ch07/image_plot/np_roll.md
+          - QR Code: ch07/image_plot/qr_code.md
+          - Image Compression: ch07/image_plot/image_compression.md
 
-      - 7.20 3D Plot:
+      - 7.20 Contour Plot:
+          - Axes Method - contour: ch07/contour_plot/contour.md
+          - Axes Method - contourf: ch07/contour_plot/contourf.md
+          - Axes Method - clabel: ch07/contour_plot/clabel.md
+          - Contour and Surface: ch07/contour_plot/contour_surface.md
+
+      - 7.21 3D Plot:
           - Creating 3D Axes: ch07/3d_plot/creating_3d_axes.md
+          - Axes Method - plot (3D Lines): ch07/3d_plot/plot_3d.md
           - Axes Method - plot_surface: ch07/3d_plot/plot_surface.md
           - Axes Method - view_init: ch07/3d_plot/view_init.md
-          - Axes Method - plot3D: ch07/3d_plot/plot3D.md
-          - Axes Method - plot: ch07/3d_plot/3d_plot.md
-          - Axes Method - pcolormesh: ch07/3d_plot/pcolormesh.md
+          - Complex Function Visualization: ch07/3d_plot/complex_functions.md
+          # Characteristic functions, Euler's formula visualizations
 
-      - 7.21 Colorbar:
-          - Axes Method - hexbin: ch07/colorbar/hexbin.md
-          - Axes Method - imshow (KDE): ch07/colorbar/imshow_kde.md
-          - Axes Method - hist2d: ch07/colorbar/hist2d.md
+      # ========================================
+      # PRACTICAL APPLICATIONS (7.22)
+      # ========================================
 
-      - 7.22 2D Histogram:
-          - Axes Method - hist2d: ch07/2d_histogram/hist2d.md  # NEW
-          - Axes Method - hexbin: ch07/2d_histogram/hexbin.md  # NEW
-          - Axes Method - imshow (KDE): ch07/2d_histogram/imshow_kde.md  # NEW
-
-      - 7.23 Practical Examples:
+      - 7.22 Practical Examples:
           - Financial Charts: ch07/examples/financial_charts.md
           - Brownian Motion: ch07/examples/brownian_motion.md
           - Mathematical Functions: ch07/examples/math_functions.md
+          - Statistical Distributions: ch07/examples/statistical_distributions.md
 
   - Chapter 8 Pandas:
       - 8.1 Core pandas Objects:
