@@ -514,35 +514,6 @@ nav:
           - Common Patterns: ch05/patterns/common_patterns.md
           - Error Handling: ch05/patterns/error_handling.md
 
-
-  - Chapter 5 Concurrency:
-      - 5.1 Concurrency Concepts:
-          - Introduction: ch05/concepts/introduction.md
-          - GIL Explained: ch05/concepts/gil.md
-          - CPU-bound vs IO-bound: ch05/concepts/cpu_vs_io.md
-          - Threads vs Processes: ch05/concepts/threads_vs_processes.md
-
-      - 5.2 Threading:
-          - Thread Basics: ch05/threading/thread_basics.md
-          - Thread Synchronization: ch05/threading/synchronization.md
-          - Thread Communication: ch05/threading/communication.md
-
-      - 5.3 Multiprocessing:
-          - Process Basics: ch05/multiprocessing/process_basics.md
-          - Process Pool: ch05/multiprocessing/pool.md
-          - Sharing State: ch05/multiprocessing/sharing_state.md
-
-      - 5.4 concurrent.futures:
-          - Executor Interface: ch05/futures/executor_interface.md
-          - ThreadPoolExecutor: ch05/futures/thread_pool.md
-          - ProcessPoolExecutor: ch05/futures/process_pool.md
-          - Future Objects: ch05/futures/future_objects.md
-
-      - 5.5 Practical Patterns:
-          - When to Use What: ch05/patterns/decision_guide.md
-          - Common Patterns: ch05/patterns/common_patterns.md
-          - Error Handling: ch05/patterns/error_handling.md
-
   - Chapter 6 NumPy:
       - 6.1 Getting Started:
           - Installation: ch06/setup/installation.md
@@ -552,34 +523,24 @@ nav:
       - 6.2 Overview:
           - Lists vs Arrays: ch06/overview/lists_vs_arrays.md
           - Arrays vs DataFrames: ch06/overview/arrays_vs_dataframes.md
-          - PIL vs NumPy Images: ch06/overview/pil_vs_numpy.md
-          - NumPy to PyTorch: ch06/overview/numpy_to_pytorch.md
           - NumPy Constants: ch06/overview/numpy_constants.md
-          - NumPy vs C Arrays: ch06/overview/numpy_vs_c.md
 
-      - 6.3 NumPy Fundamentals:
-          - Array Creation and dtypes: ch06/ndarray/creation.md
-          - Shape, Strides, and Views: ch06/ndarray/shape_strides.md
-          - linspace and Trigonometry: ch06/ndarray/linspace_trig.md
-          - Type Promotion: ch06/ndarray/type_promotion.md
-
-      - 6.4 Array Generation:
+      - 6.3 Array Creation:
           - np.array and Dimensions: ch06/generation/np_array.md
           - np.zeros, np.ones, np.empty: ch06/generation/zeros_ones_empty.md
           - np.full and np.eye: ch06/generation/full_eye_identity.md
           - np.arange and np.linspace: ch06/generation/arange_linspace.md
           - np.diag and Diagonal Matrices: ch06/generation/diag_matrices.md
 
-      - 6.5 Array Attributes:
+      - 6.4 Array Attributes:
           - Shape and ndim: ch06/attributes/shape_ndim.md
-          - Image Shape Examples: ch06/attributes/image_shape.md
           - Reshaping Arrays: ch06/attributes/reshape.md
           - Expanding Dimensions: ch06/attributes/expand_dims.md
           - Squeezing Dimensions: ch06/attributes/squeeze.md
           - Dtype Basics: ch06/attributes/dtype_basics.md
           - Changing Dtype: ch06/attributes/dtype_conversion.md
 
-      - 6.6 Indexing and Slicing:
+      - 6.5 Indexing and Slicing:
           - Basic Indexing: ch06/indexing/basic_indexing.md
           - Slicing Arrays: ch06/indexing/slicing.md
           - Shape After Indexing: ch06/indexing/shape_after_indexing.md
@@ -587,7 +548,7 @@ nav:
           - Fancy Indexing: ch06/indexing/fancy_indexing.md
           - Boolean Masking: ch06/indexing/boolean_masking.md
 
-      - 6.7 Views and Copies:
+      - 6.6 Views and Copies:
           - View vs Copy Basics: ch06/memory/view_copy_basics.md
           - Operations That Return Views: ch06/memory/view_operations.md
           - Operations That Return Copies: ch06/memory/copy_operations.md
@@ -595,7 +556,35 @@ nav:
           - Memory Contiguity: ch06/memory/contiguity.md
           - Stride Tricks: ch06/memory/strides.md
 
-      - 6.8 Random Arrays:
+      - 6.7 Broadcasting:
+          - Broadcasting Rules: ch06/broadcasting/broadcasting.md
+
+      - 6.8 Element-wise Operations:
+          - Arithmetic Operations: ch06/operations/arithmetic.md
+          - Power Exp Log: ch06/operations/power_exp_log.md
+          - Rounding Functions: ch06/operations/rounding.md
+          - Comparison Operators: ch06/operations/comparison.md
+          - Universal Functions: ch06/operations/ufuncs.md
+
+      - 6.9 Array Manipulation:
+          - Transpose and Swapaxes: ch06/manipulation/transpose.md
+          - Concatenation: ch06/manipulation/concatenation.md
+          - Splitting Arrays: ch06/manipulation/splitting.md
+          - Array Iteration: ch06/manipulation/iteration.md
+
+      - 6.10 Array Methods:
+          - Reductions with axis: ch06/methods/reductions.md
+          - Min Max Argmin Argmax: ch06/methods/minmax.md
+          - Sum Prod Cumsum: ch06/methods/sum_prod.md
+          - Element-wise Min Max: ch06/methods/elementwise_minmax.md
+          - Statistics Methods: ch06/methods/statistics.md
+          - Covariance Correlation: ch06/methods/cov_corr.md
+          - Sorting Arrays: ch06/methods/sorting.md
+          - Searching Arrays: ch06/methods/searching.md
+          - Filtering with where: ch06/methods/where.md
+          - Utility Functions: ch06/methods/utility.md
+
+      - 6.11 Random Arrays:
           - Random Seed and Reproducibility: ch06/random/seed.md
           - Normal Distributions: ch06/random/normal.md
           - Uniform Distributions: ch06/random/uniform.md
@@ -604,22 +593,6 @@ nav:
           - Exponential Distribution: ch06/random/exponential.md
           - Discrete Distributions: ch06/random/discrete.md
           - Random Permutations: ch06/random/permutations.md
-
-      - 6.9 Broadcasting:
-          - Broadcasting Rules: ch06/broadcasting/broadcasting.md
-
-      - 6.10 Element-wise Operations:
-          - Arithmetic Operations: ch06/operations/arithmetic.md
-          - Power Exp Log: ch06/operations/power_exp_log.md
-          - Rounding Functions: ch06/operations/rounding.md
-          - Comparison Operators: ch06/operations/comparison.md
-          - Universal Functions: ch06/operations/ufuncs.md
-
-      - 6.11 Array Manipulation:
-          - Transpose and Swapaxes: ch06/manipulation/transpose.md
-          - Concatenation: ch06/manipulation/concatenation.md
-          - Splitting Arrays: ch06/manipulation/splitting.md
-          - Array Iteration: ch06/manipulation/iteration.md
 
       - 6.12 Vectorization:
           - Performance vs Loops: ch06/vectorization/performance.md
@@ -648,24 +621,14 @@ nav:
           - Cholesky Decomposition: ch06/linalg/cholesky.md
           - QR Decomposition: ch06/linalg/qr.md
 
-      - 6.15 Array Methods:
-          - Reductions with axis: ch06/methods/reductions.md
-          - Min Max Argmin Argmax: ch06/methods/minmax.md
-          - Sum Prod Cumsum: ch06/methods/sum_prod.md
-          - Element-wise Min Max: ch06/methods/elementwise_minmax.md
-          - Statistics Methods: ch06/methods/statistics.md
-          - Covariance Correlation: ch06/methods/cov_corr.md
-          - Sorting Arrays: ch06/methods/sorting.md
-          - Searching Arrays: ch06/methods/searching.md
-          - Filtering with where: ch06/methods/where.md
-          - Utility Functions: ch06/methods/utility.md
-
-      - 6.16 NumPy OOP Design:
+      - 6.15 NumPy OOP Design:
           - NumPy ndarray Design: ch06/oop/numpy_ndarray.md
           - NumPy dtype and Shape: ch06/oop/numpy_dtype_shape.md
           - NumPy UFuncs: ch06/oop/numpy_ufuncs.md
           - NumPy Broadcasting: ch06/oop/numpy_broadcasting.md
           - NumPy Views vs Copies: ch06/oop/numpy_views_copies.md
+          - NumPy vs C Arrays: ch06/oop/numpy_vs_c.md
+          - PIL vs NumPy Images: ch06/oop/pil_vs_numpy.md
 
   - Chapter 7 Matplotlib:
       - 7.1 Introduction:
@@ -832,6 +795,7 @@ nav:
   - Chapter 9 PyTorch:
       - 9.1 Tensors:
           - Tensor Basics: ch09/tensors/basics.md
+          - NumPy to PyTorch: ch09/tensors/numpy_to_pytorch.md
 
       - 9.2 Autograd:
           - Autograd Mechanics: ch09/autograd/autograd.md
