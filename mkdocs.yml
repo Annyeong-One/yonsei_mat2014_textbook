@@ -406,6 +406,7 @@ nav:
           - Class Decorators: ch03/decorators/class_decorators.md
           - Practical Decorators: ch03/decorators/practical_decorators.md
           - Decorator Patterns: ch03/decorators/patterns.md
+          - Decorator vs Closure: ch03/decorators/closures_vs_decorators.md
 
   - Chapter 4 OOP:
       - 4.1 OOP Foundations:
