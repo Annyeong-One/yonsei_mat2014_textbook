@@ -262,12 +262,10 @@ nav:
           - Cell Sharing: ch02/closures/cell_sharing.md
           - Generator Scoping: ch02/closures/generator_scoping.md
           - Comprehension Scoping: ch02/closures/comprehension_scoping.md
-          - Bytecode Analysis: ch02/closures/bytecode_analysis.md
           - lambda vs def: ch02/closures/lambda_vs_def.md
           - Debugging Tools: ch02/closures/debugging_tools.md
           - Terminology: ch02/closures/terminology.md
           - Common Pitfalls: ch02/closures/common_pitfalls.md
-          - Historical PEPs: ch02/closures/historical_peps.md
           - Practical Applications: ch02/closures/practical_applications.md
           - Closure Lifetime: ch02/closures/closure_lifetime.md
           - Closure Memory: ch02/closures/closure_memory.md
@@ -346,10 +344,6 @@ nav:
           - Performance Guidelines: ch02/practical/performance.md
           - Correctness Guidelines: ch02/practical/correctness.md
           - Maintainability: ch02/practical/maintainability.md
-          - Debugging: ch02/practical/debugging.md
-          - Testing: ch02/practical/testing.md
-          - Code Review: ch02/practical/code_review.md
-          - Refactoring: ch02/practical/refactoring.md
           - Style Guide: ch02/practical/style_guide.md
           - Real World Examples: ch02/practical/real_world_examples.md
           - Interview Questions: ch02/practical/interview_questions.md
@@ -367,9 +361,6 @@ nav:
           - Academic Papers: ch02/conclusion/academic_papers.md
           - Profiling Tools: ch02/conclusion/profiling_tools.md
           - Communities: ch02/conclusion/communities.md
-          - Exercises: ch02/conclusion/exercises.md
-          - Review Quiz: ch02/conclusion/review_quiz.md
-          - Assessment: ch02/conclusion/assessment.md
           - Next Steps: ch02/conclusion/next_steps.md
 
   - Chapter 3 Functions:
