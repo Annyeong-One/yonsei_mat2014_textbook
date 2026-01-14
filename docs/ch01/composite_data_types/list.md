@@ -121,7 +121,7 @@ a ─┬──► [1, 2, 3, 4]
 b ─┘
 ```
 
-To create an independent copy, see [list Copying](list_copying.md).
+To create an independent copy, see [list Copying](../../ch02/composites/list_copying.md).
 
 ---
 

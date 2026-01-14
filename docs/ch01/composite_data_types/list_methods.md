@@ -139,7 +139,7 @@ a.append(4)
 print(b)      # [1, 2, 3] (unchanged)
 ```
 
-See [list Copying](list_copying.md) for shallow vs deep copy.
+See [list Copying](../../ch02/composites/list_copying.md) for shallow vs deep copy.
 
 ---
 
