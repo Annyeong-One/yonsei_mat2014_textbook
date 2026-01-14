@@ -105,94 +105,94 @@ nav:
       - 2.1 Language Foundations:
           - CPython vs Language Spec: ch02/intro/cpython_vs_language.md
           - Key Terms Glossary: ch02/intro/terminology.md
-          - Static vs Dynamic Typing: ch01/setup/static_vs_dynamic.md
-          - Everything is an Object: ch01/setup/everything_is_object.md
-          - Methods and Attributes: ch01/setup/methods_and_attributes.md
-          - Python Execution Model: ch01/basics/python_execution.md
+          - Static vs Dynamic Typing: ch02/foundations/static_vs_dynamic.md
+          - Everything is an Object: ch02/foundations/everything_is_object.md
+          - Methods and Attributes: ch02/foundations/methods_and_attributes.md
+          - Python Execution Model: ch02/foundations/python_execution.md
 
       - 2.2 Numeric Types Deep Dive:
-          - int Python vs C: ch01/types/int_python_vs_c.md
-          - int Logical Operations: ch01/types/int_logical_operations.md
-          - int Bitwise Operations: ch01/types/int_bitwise_operations.md
-          - int Number Systems: ch01/types/int_number_systems.md
-          - int Two's Complement: ch01/types/int_twos_complement.md
-          - float Python vs C: ch01/types/float_python_vs_c.md
-          - float IEEE 754 Standard: ch01/types/float_ieee754.md
-          - float Machine Precision: ch01/types/float_machine_precision.md
-          - float Numerical Errors: ch01/types/float_numerical_errors.md
-          - float Numerical Stability: ch01/types/float_numerical_stability.md
-          - float Special Values: ch01/types/float_special_values.md
-          - Type Promotion: ch01/types/type_promotion.md
+          - int Python vs C: ch02/numerics/int_python_vs_c.md
+          - int Logical Operations: ch02/numerics/int_logical_operations.md
+          - int Bitwise Operations: ch02/numerics/int_bitwise_operations.md
+          - int Number Systems: ch02/numerics/int_number_systems.md
+          - int Two's Complement: ch02/numerics/int_twos_complement.md
+          - float Python vs C: ch02/numerics/float_python_vs_c.md
+          - float IEEE 754 Standard: ch02/numerics/float_ieee754.md
+          - float Machine Precision: ch02/numerics/float_machine_precision.md
+          - float Numerical Errors: ch02/numerics/float_numerical_errors.md
+          - float Numerical Stability: ch02/numerics/float_numerical_stability.md
+          - float Special Values: ch02/numerics/float_special_values.md
+          - Type Promotion: ch02/numerics/type_promotion.md
 
       - 2.3 Boolean Deep Dive:
-          - bool Subclass of int: ch01/types/bool_subclass_int.md
-          - bool Applications: ch01/types/bool_applications.md
+          - bool Subclass of int: ch02/bool/bool_subclass_int.md
+          - bool Applications: ch02/bool/bool_applications.md
 
       - 2.4 String Internals:
-          - str ASCII and Unicode: ch01/types/str_ascii_unicode.md
-          - str UTF-8 Encoding: ch01/types/str_utf8_encoding.md
-          - str Encode and Decode: ch01/types/str_encode_decode.md
-          - str Unpacking: ch01/types/str_unpacking.md
-          - str Immutability: ch01/types/str_immutability.md
-          - str Python vs C: ch01/types/str_python_vs_c.md
+          - str ASCII and Unicode: ch02/strings/str_ascii_unicode.md
+          - str UTF-8 Encoding: ch02/strings/str_utf8_encoding.md
+          - str Encode and Decode: ch02/strings/str_encode_decode.md
+          - str Unpacking: ch02/strings/str_unpacking.md
+          - str Immutability: ch02/strings/str_immutability.md
+          - str Python vs C: ch02/strings/str_python_vs_c.md
 
       - 2.5 Composite Types Deep Dive:
-          - list Copying: ch01/composite_data_types/list_copying.md
-          - Nested Data Structures: ch01/composite_data_types/nested_structures.md
+          - list Copying: ch02/composites/list_copying.md
+          - Nested Data Structures: ch02/composites/nested_structures.md
 
       - 2.6 collections Module:
-          - collections Overview: ch01/collections/collections_overview.md
-          - namedtuple: ch01/collections/namedtuple.md
-          - defaultdict: ch01/collections/defaultdict.md
-          - Counter: ch01/collections/counter.md
-          - deque: ch01/collections/deque.md
-          - OrderedDict and ChainMap: ch01/collections/ordereddict_chainmap.md
+          - collections Overview: ch02/collections/collections_overview.md
+          - namedtuple: ch02/collections/namedtuple.md
+          - defaultdict: ch02/collections/defaultdict.md
+          - Counter: ch02/collections/counter.md
+          - deque: ch02/collections/deque.md
+          - OrderedDict and ChainMap: ch02/collections/ordereddict_chainmap.md
 
       - 2.7 Iteration Protocol:
-          - Iterables and Iterators: ch01/iteration/iterables.md
-          - Generators and yield: ch01/iteration/generators.md
+          - Iterables and Iterators: ch02/iteration/iterables.md
+          - Generators and yield: ch02/iteration/generators.md
 
       - 2.8 Advanced Built-ins:
-          - The builtins Namespace: ch01/advanced_builtins/builtins_namespace.md
-          - map(), filter(), sorted(): ch01/advanced_builtins/map_filter_sorted.md
-          - sorted() with key Function: ch01/advanced_builtins/sorted_key.md
-          - id(), type(), isinstance(): ch01/advanced_builtins/introspection.md
+          - The builtins Namespace: ch02/advanced_builtins/builtins_namespace.md
+          - map(), filter(), sorted(): ch02/advanced_builtins/map_filter_sorted.md
+          - sorted() with key Function: ch02/advanced_builtins/sorted_key.md
+          - id(), type(), isinstance(): ch02/advanced_builtins/introspection.md
 
       - 2.9 Operators Deep Dive:
-          - Operators Overview: ch01/operators/operators_overview.md
-          - Arithmetic Operators: ch01/operators/arithmetic.md
-          - Comparison Operators: ch01/operators/comparison.md
-          - Sequence Comparison: ch01/operators/sequence_comparison.md
-          - Identity Operators: ch01/operators/identity.md
-          - Membership Operators: ch01/operators/membership.md
-          - Precedence and Associativity: ch01/operators/precedence.md
+          - Operators Overview: ch02/operators/operators_overview.md
+          - Arithmetic Operators: ch02/operators/arithmetic.md
+          - Comparison Operators: ch02/operators/comparison.md
+          - Sequence Comparison: ch02/operators/sequence_comparison.md
+          - Identity Operators: ch02/operators/identity.md
+          - Membership Operators: ch02/operators/membership.md
+          - Precedence and Associativity: ch02/operators/precedence.md
 
       - 2.10 Exceptions Deep Dive:
-          - Custom Exceptions: ch01/exceptions/custom_exceptions.md
-          - assert Statement: ch01/exceptions/assert.md
-          - Forward Referencing Errors: ch01/exceptions/forward_referencing.md
-          - Compile vs Runtime Errors: ch01/exceptions/compile_vs_runtime.md
+          - Custom Exceptions: ch02/exceptions/custom_exceptions.md
+          - assert Statement: ch02/exceptions/assert.md
+          - Forward Referencing Errors: ch02/exceptions/forward_referencing.md
+          - Compile vs Runtime Errors: ch02/exceptions/compile_vs_runtime.md
 
       - 2.11 File I/O Deep Dive:
-          - Binary Files: ch01/io/binary_files.md
+          - Binary Files: ch02/io/binary_files.md
 
       - 2.12 Modules Deep Dive:
-          - sys.path & Module Search: ch01/modules/module_search.md
-          - Relative Imports: ch01/modules/relative_imports.md
-          - Package Init Files: ch01/modules/init_files.md
-          - Package Creation: ch01/modules/package_creation.md
-          - Command Line Arguments: ch01/modules/argparse.md
+          - sys.path & Module Search: ch02/modules/module_search.md
+          - Relative Imports: ch02/modules/relative_imports.md
+          - Package Init Files: ch02/modules/init_files.md
+          - Package Creation: ch02/modules/package_creation.md
+          - Command Line Arguments: ch02/modules/argparse.md
 
       - 2.13 Package Managers:
-          - conda and Anaconda: ch01/package_managers/conda.md
-          - conda-forge and Miniforge: ch01/package_managers/conda_forge.md
-          - mamba: ch01/package_managers/mamba.md
-          - Homebrew: ch01/package_managers/homebrew.md
-          - Comparison: ch01/package_managers/pkg_manager_comparison.md
+          - conda and Anaconda: ch02/package_managers/conda.md
+          - conda-forge and Miniforge: ch02/package_managers/conda_forge.md
+          - mamba: ch02/package_managers/mamba.md
+          - Homebrew: ch02/package_managers/homebrew.md
+          - Comparison: ch02/package_managers/pkg_manager_comparison.md
 
       - 2.14 Performance:
-          - Time vs Space Trade-offs: ch01/performance/tradeoffs.md
-          - Python Execution Model: ch01/performance/execution_model.md
+          - Time vs Space Trade-offs: ch02/performance/tradeoffs.md
+          - Python Execution Model: ch02/performance/execution_model.md
 
       - 2.15 Variables:
           - Variables as Names: ch02/variables/names_not_containers.md
@@ -378,6 +378,7 @@ nav:
           - Function Factories: ch03/functions/function_factories.md
           - Function Call Stack: ch03/functions/call_stack.md
           - Recursion Patterns: ch03/functions/recursion_patterns.md
+          - Recursion Basics: ch03/recursion/recursion.md
 
       - 3.2 Parameters:
           - "*args and **kwargs": ch03/params/args_kwargs.md
@@ -399,7 +400,7 @@ nav:
 
       - 3.4 Functional Programming:
           - map(), filter(), reduce(): ch03/functional/map_filter_reduce.md
-          - lambda Expressions: ch01/functions/lambda.md
+          - Lambda Expressions: ch03/functional/lambda.md
           - Lambda Best Practices: ch03/functional/lambda_practices.md
           - Comprehensions: ch03/functional/comprehensions.md
           - Generator Expressions: ch03/functional/generator_expressions.md
@@ -407,9 +408,6 @@ nav:
           - Higher-Order Functions: ch03/functional/higher_order.md
           - Partial Application: ch03/functional/partial_application.md
           - Function Composition: ch03/functional/composition.md
-
-      - 3.5 Recursion:
-          - Recursion and Stack Overflow: ch01/functions/recursion.md
 
   - Chapter 4 OOP:
       - 4.1 OOP Foundations:
