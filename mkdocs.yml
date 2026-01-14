@@ -376,9 +376,6 @@ nav:
       - 3.1 First-Class Functions:
           - Functions as Objects: ch03/functions/first_class_objects.md
           - Function Factories: ch03/functions/function_factories.md
-          - Function Call Stack: ch03/functions/call_stack.md
-          - Recursion Patterns: ch03/functions/recursion_patterns.md
-          - Recursion Basics: ch03/recursion/recursion.md
 
       - 3.2 Parameters:
           - "*args and **kwargs": ch03/params/args_kwargs.md
@@ -386,28 +383,29 @@ nav:
           - Positional-Only Arguments: ch03/params/positional_only.md
           - Parameter Best Practices: ch03/params/best_practices.md
 
-      - 3.3 Decorators:
-          - Functions as Objects: ch03/decorators/functions_as_objects.md
-          - Decorator Semantics: ch03/decorators/decorator_semantics.md
-          - Function Wrappers: ch03/decorators/wrappers.md
-          - Decorator Factories: ch03/decorators/factories.md
-          - functools.wraps: ch03/decorators/functools_wraps.md
-          - Practical Decorators: ch03/decorators/practical_decorators.md
-          - Stacked Decorators: ch03/decorators/stacked_decorators.md
-          - Class Decorators: ch03/decorators/class_decorators.md
-          - Closures vs Decorators: ch03/decorators/closures_vs_decorators.md
-          - Decorator Patterns: ch03/decorators/patterns.md
+      - 3.3 Recursion:
+          - Recursion Fundamentals: ch03/recursion/fundamentals.md  # merge basics + patterns
+          - Recursive Patterns: ch03/recursion/patterns.md
+          - Tail Recursion: ch03/recursion/tail_recursion.md  # optional new
 
       - 3.4 Functional Programming:
+          - Lambda Expressions: ch03/functional/lambda.md  # merge with best practices
           - map(), filter(), reduce(): ch03/functional/map_filter_reduce.md
-          - Lambda Expressions: ch03/functional/lambda.md
-          - Lambda Best Practices: ch03/functional/lambda_practices.md
           - Comprehensions: ch03/functional/comprehensions.md
           - Generator Expressions: ch03/functional/generator_expressions.md
           - Pure Functions: ch03/functional/pure_functions.md
           - Higher-Order Functions: ch03/functional/higher_order.md
           - Partial Application: ch03/functional/partial_application.md
           - Function Composition: ch03/functional/composition.md
+
+      - 3.5 Decorators:
+          - Decorator Fundamentals: ch03/decorators/fundamentals.md  # merge semantics + wrappers
+          - Decorator Factories: ch03/decorators/factories.md
+          - functools.wraps: ch03/decorators/functools_wraps.md
+          - Stacked Decorators: ch03/decorators/stacked_decorators.md
+          - Class Decorators: ch03/decorators/class_decorators.md
+          - Practical Decorators: ch03/decorators/practical_decorators.md
+          - Decorator Patterns: ch03/decorators/patterns.md
 
   - Chapter 4 OOP:
       - 4.1 OOP Foundations:

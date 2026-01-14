@@ -8,7 +8,7 @@ Lambda functions are particularly useful when you need a simple function for a s
 
 ## Basic Syntax
 
-### 1. Lambda vs Regular
+### Lambda vs Regular Function
 
 ```python
 # Regular function
@@ -32,24 +32,25 @@ lambda parameters: expression
 - **expression**: Single expression that is evaluated and returned
 - **No return statement**: Result is automatically returned
 
-### 1. Key
+### Key Characteristics
 
 1. **Anonymous**: No function name required
 2. **Single expression**: Can only contain one expression
 3. **Implicit return**: Automatically returns the expression result
 4. **Limited**: Cannot contain statements, only expressions
 
-## Creating Lambda
+---
 
-### 1. No Parameters
+## Creating Lambda Functions
+
+### No Parameters
 
 ```python
-# Lambda with no
 greet = lambda: "Hello, World!"
 print(greet())  # Hello, World!
 ```
 
-### 1. Single Parameter
+### Single Parameter
 
 ```python
 # Square function
@@ -62,7 +63,7 @@ print(is_even(4))  # True
 print(is_even(7))  # False
 ```
 
-### 1. Multiple
+### Multiple Parameters
 
 ```python
 # Addition
@@ -74,18 +75,19 @@ multiply_three = lambda a, b, c: a * b * c
 print(multiply_three(2, 3, 4))  # 24
 ```
 
-### 1. Default
+### Default Parameters
 
 ```python
-# Lambda with default
 power = lambda x, n=2: x ** n
 print(power(5))     # 25 (default n=2)
 print(power(5, 3))  # 125
 ```
 
+---
+
 ## Common Use Cases
 
-### 1. With map()
+### With map()
 
 Apply function to every item in iterable:
 
@@ -107,7 +109,7 @@ sums = list(map(lambda x, y: x + y, numbers1, numbers2))
 print(sums)  # [5, 7, 9]
 ```
 
-### 1. With filter()
+### With filter()
 
 Filter items based on condition:
 
@@ -122,13 +124,13 @@ print(evens)  # [2, 4, 6, 8, 10]
 greater_than_five = list(filter(lambda x: x > 5, numbers))
 print(greater_than_five)  # [6, 7, 8, 9, 10]
 
-# Filter strings by
+# Filter strings by length
 words = ["cat", "elephant", "dog", "butterfly"]
 short_words = list(filter(lambda w: len(w) <= 3, words))
 print(short_words)  # ['cat', 'dog']
 ```
 
-### 1. With sorted() and list.sort()
+### With sorted() and list.sort()
 
 Custom sorting with `key=` parameter:
 
@@ -173,20 +175,10 @@ lst = [-1, 3, -2, 5, 6, 7, 5]
 lst.sort(key=lambda x: (x+2)**2, reverse=True)
 print(lst)  # [7, 6, 5, 5, 3, -1, -2]
 
-# Using built-in function as key
-lst = [-1, 3, -2, 5, 6, 7, 5]
-lst.sort(key=abs)
-print(lst)  # [-1, -2, 3, 5, 5, 6, 7]
-
 # Case-insensitive string sort
 lst = ["CBA", "ABC", "abc"]
 lst.sort(key=str.lower)
 print(lst)  # ['ABC', 'abc', 'CBA']
-
-# Sort nested lists by element
-lst = [[1, 2], [3, -1], [4, 2]]
-lst.sort(key=lambda x: x[1])
-print(lst)  # [[3, -1], [1, 2], [4, 2]]
 ```
 
 **sorted() vs list.sort()**:
@@ -197,7 +189,7 @@ print(lst)  # [[3, -1], [1, 2], [4, 2]]
 | Original | Unchanged | Modified |
 | Works on | Any iterable | Lists only |
 
-### 1. With reduce()
+### With reduce()
 
 Reduce sequence to single value:
 
@@ -210,7 +202,7 @@ numbers = [1, 2, 3, 4, 5]
 total = reduce(lambda x, y: x + y, numbers)
 print(total)  # 15
 
-# Product of all
+# Product of all numbers
 product = reduce(lambda x, y: x * y, numbers)
 print(product)  # 120
 
@@ -219,10 +211,10 @@ maximum = reduce(lambda x, y: x if x > y else y, numbers)
 print(maximum)  # 5
 ```
 
-### 1. Event Handlers
+### Event Handlers
 
 ```python
-# Button click
+# Button click handler
 button.config(command=lambda: print("Button clicked!"))
 
 # Timer callbacks
@@ -232,12 +224,13 @@ timer.after(1000, lambda: update_display())
 thread = threading.Thread(target=lambda: process_data(data))
 ```
 
-## Lambda in Data
+---
 
-### 1. Dictionary of
+## Lambda in Data Structures
+
+### Dictionary of Functions
 
 ```python
-# Calculator using
 operations = {
     'add': lambda x, y: x + y,
     'subtract': lambda x, y: x - y,
@@ -249,10 +242,9 @@ print(operations['add'](10, 5))       # 15
 print(operations['multiply'](10, 5))  # 50
 ```
 
-### 1. List of Functions
+### List of Functions
 
 ```python
-# List of
 transforms = [
     lambda x: x + 1,
     lambda x: x * 2,
@@ -266,12 +258,14 @@ for transform in transforms:
 # Output: 4, 8, 64
 ```
 
-## Advanced Lambda
+---
 
-### 1. Conditional
+## Advanced Lambda Patterns
+
+### Conditional Expressions
 
 ```python
-# Ternary operator in
+# Ternary operator in lambda
 max_func = lambda a, b: a if a > b else b
 print(max_func(5, 3))  # 5
 
@@ -284,27 +278,10 @@ get_grade = lambda score: 'A' if score >= 90 else 'B' if score >= 80 else 'C'
 print(get_grade(85))  # B
 ```
 
-### 1. Multiple
+### Nested Lambdas
 
 ```python
-# Execute multiple
-func = lambda x: (print(f"Input: {x}"), x ** 2)[1]
-result = func(5)  # Prints "Input: 5", returns 25
-```
-
-### 1. Lambda with
-
-```python
-# Default parameter
-greet = lambda name, greeting="Hello": f"{greeting}, {name}!"
-print(greet("Alice"))              # Hello, Alice!
-print(greet("Bob", "Hi"))          # Hi, Bob!
-```
-
-### 1. Nested Lambdas
-
-```python
-# Lambda returning
+# Lambda returning lambda
 def make_multiplier(n):
     return lambda x: x * n
 
@@ -319,101 +296,89 @@ add_and_double = lambda x, y: (lambda z: z * 2)(x + y)
 print(add_and_double(3, 5))  # 16 (3+5=8, 8*2=16)
 ```
 
-## Lambda with Built-in
+---
 
-### 1. min() and max()
+## Lambda with Built-in Functions
+
+### min() and max()
 
 ```python
-# Find word with
 words = ["python", "is", "awesome"]
 longest = max(words, key=lambda w: len(w))
 print(longest)  # awesome
 
-# Find tuple with
 pairs = [(1, 5), (3, 2), (2, 8)]
 min_pair = min(pairs, key=lambda p: p[1])
 print(min_pair)  # (3, 2)
 ```
 
-### 1. any() and all()
+### any() and all()
 
 ```python
 numbers = [1, 2, 3, 4, 5]
 
-# Check if any number
+# Check if any number is even
 has_even = any(map(lambda x: x % 2 == 0, numbers))
 print(has_even)  # True
 
-# Check if all numbers
+# Check if all numbers are positive
 all_positive = all(map(lambda x: x > 0, numbers))
 print(all_positive)  # True
 ```
 
+---
+
 ## Lambda Limitations
 
-### 1. Single Expression
+### Single Expression Only
 
 ```python
-# Invalid - multiple
-# lambda x: print(x);
+# Invalid - multiple statements not allowed
+# lambda x: print(x); return x ** 2
 
-# Must use regular
+# Must use regular function
 def process(x):
     print(x)
     return x ** 2
 ```
 
-### 1. No Type Hints
+### No Type Hints
 
 ```python
-# Cannot add type
-# lambda x: int: x + 1
+# Cannot add type hints to lambda
+# lambda x: int: x + 1  # Invalid
 
-# Use regular function
+# Use regular function for type hints
 def add_one(x: int) -> int:
     return x + 1
 ```
 
-### 1. No Docstrings
+### No Docstrings
 
 ```python
-# Cannot add docstring
-# Regular function for
+# Cannot add docstring to lambda
+# Use regular function for documentation
 def calculate_area(length, width):
     """Calculate rectangle area."""
     return length * width
 ```
 
-### 1. Harder to Debug
+### Harder to Debug
 
 ```python
-# Lambda in traceback
+# Lambda in traceback shows "<lambda>"
 nums = [1, 2, 'three', 4]
-# list(map(lambda x: x
+# list(map(lambda x: x ** 2, nums))  # Error points to <lambda>
 
-# Named function gives
+# Named function gives clearer traceback
 def square(x):
     return x ** 2
-# list(map(square,
+# list(map(square, nums))  # Error points to "square"
 ```
 
-### 1. Reduced
+---
 
-```python
-# Poor - complex
-result = list(filter(lambda x: x > 0 and x < 100 and x % 2 == 0 and x % 3 == 0, range(200)))
-
-# Better - named
-def is_valid_number(x):
-    """Check if number is positive, < 100, even, and divisible by 3."""
-    return 0 < x < 100 and x % 2 == 0 and x % 3 == 0
-
-result = list(filter(is_valid_number, range(200)))
-```
-
-## Lambda vs Regular
-
-### 1. When to Use
+## When to Use Lambda
 
 ✅ **Use lambda when**:
 - Function is simple (one expression)
@@ -426,9 +391,10 @@ result = list(filter(is_valid_number, range(200)))
 # Good lambda usage
 sorted_names = sorted(names, key=lambda n: n.lower())
 doubled = list(map(lambda x: x * 2, numbers))
+filtered = list(filter(lambda x: x > 0, numbers))
 ```
 
-### 1. When to Use
+## When NOT to Use Lambda
 
 ✅ **Use `def` when**:
 - Function is complex (multiple statements)
@@ -439,7 +405,21 @@ doubled = list(map(lambda x: x * 2, numbers))
 - Function name adds clarity
 
 ```python
-# Good regular
+# Bad - too complex for lambda
+process = lambda x: x * 2 if x > 0 else -x if x < 0 else 0
+
+# Better - use def for complex logic
+def process(x):
+    if x > 0:
+        return x * 2
+    elif x < 0:
+        return -x
+    else:
+        return 0
+```
+
+```python
+# Good regular function with documentation
 def calculate_total_with_tax(price, quantity, tax_rate=0.1):
     """
     Calculate total price including tax.
@@ -457,50 +437,40 @@ def calculate_total_with_tax(price, quantity, tax_rate=0.1):
     return subtotal + tax
 ```
 
+---
+
 ## Best Practices
 
-### 1. Keep Lambdas
+### 1. Keep Lambdas Simple
 
 ```python
-# Good - simple and
+# Good - simple and clear
 double = lambda x: x * 2
+sorted(data, key=lambda x: x[1])
 
-# Poor - too complex
-# Use regular function
+# Bad - too complex, use def instead
 complex_func = lambda x: (x ** 2 + 3 * x - 5) / (x + 1) if x != -1 else 0
 ```
 
-### 1. Use Descriptive
+### 2. Prefer List Comprehensions
 
 ```python
-# Poor - lambda
-f = lambda x: x ** 2
+numbers = [1, 2, 3, 4, 5]
 
-# Better - use
-square = lambda x: x ** 2
-
-# Best - use regular
-def square(x):
-    return x ** 2
-```
-
-### 1. Consider List
-
-```python
 # Lambda with map
 squares = list(map(lambda x: x ** 2, numbers))
 
-# Often better - list
+# Often clearer - list comprehension
 squares = [x ** 2 for x in numbers]
 
 # Lambda with filter
 evens = list(filter(lambda x: x % 2 == 0, numbers))
 
-# Often better - list
+# Often clearer - list comprehension
 evens = [x for x in numbers if x % 2 == 0]
 ```
 
-### 1. Avoid Assigning
+### 3. Avoid Assigning Lambdas to Variables
 
 ```python
 # Against PEP 8
@@ -510,80 +480,67 @@ square = lambda x: x ** 2
 def square(x):
     return x ** 2
 
-# Exception: Lambda as
+# Exception: Lambda as argument is fine
 sorted(items, key=lambda x: x.value)
 ```
 
-### 1. Use Operator
+### 4. Use Operator Module for Simple Operations
 
 ```python
 from operator import add, mul, itemgetter
 
 numbers = [1, 2, 3, 4, 5]
 
-# Instead of:
+# Instead of lambda
+total = reduce(lambda x, y: x + y, numbers)
+# Use operator
 total = reduce(add, numbers)
 
-# Instead of:
+# Instead of lambda for item access
 pairs = [(1, 5), (3, 2), (2, 8)]
+sorted_pairs = sorted(pairs, key=lambda p: p[1])
+# Use itemgetter
 sorted_pairs = sorted(pairs, key=itemgetter(1))
 ```
 
+---
+
 ## Real-World Examples
 
-### 1. Data Processing
+### Data Processing
 
 ```python
-# Process user data
 users = [
     {'name': 'Alice', 'age': 25, 'active': True},
     {'name': 'Bob', 'age': 30, 'active': False},
     {'name': 'Charlie', 'age': 35, 'active': True}
 ]
 
-# Get active users
-active_users = list(filter(lambda u: u['active'], users))
-
-# Get names of active
-active_names = list(map(lambda u: u['name'], active_users))
-
-# Sort by age
-sorted_users = sorted(users, key=lambda u: u['age'])
+# Get active users sorted by age
+active_users = sorted(
+    filter(lambda u: u['active'], users),
+    key=lambda u: u['age']
+)
 ```
 
-### 1. API Response
+### GUI Event Handlers
 
 ```python
-# Extract specific
-api_data = [
-    {'id': 1, 'name': 'Item 1', 'price': 10.99},
-    {'id': 2, 'name': 'Item 2', 'price': 20.50},
-    {'id': 3, 'name': 'Item 3', 'price': 15.75}
-]
-
-# Get item names
-names = list(map(lambda item: item['name'], api_data))
-
-# Get items under $20
-affordable = list(filter(lambda item: item['price'] < 20, api_data))
-```
-
-### 1. GUI Event
-
-```python
-# Tkinter button
 import tkinter as tk
 
 root = tk.Tk()
 
-# Lambda captures
+# Lambda captures loop variable correctly with default parameter
 for i in range(5):
-    btn = tk.Button(root, text=f"Button {i}", 
-                    command=lambda x=i: print(f"Clicked button {x}"))
+    btn = tk.Button(
+        root, 
+        text=f"Button {i}", 
+        command=lambda x=i: print(f"Clicked button {x}")
+    )
     btn.pack()
 ```
 
-### 1. DataFrame
+### DataFrame Operations
 
 ```python
 import pandas as pd
@@ -594,63 +551,58 @@ df = pd.DataFrame({
     'salary': [50000, 60000, 70000]
 })
 
-# Apply lambda to
+# Apply lambda to column
 df['age_group'] = df['age'].apply(lambda x: 'Young' if x < 30 else 'Older')
 
 # Filter rows
 young_employees = df[df['age'].apply(lambda x: x < 30)]
 ```
 
+---
+
 ## Quick Reference
 
-### 1. Basic Syntax
+### Syntax
 ```python
 lambda parameters: expression
 ```
 
-### 2. Common Patterns
+### Common Patterns
 ```python
-# Single parameter
-lambda x: x * 2
-
-# Multiple parameters
-lambda x, y: x + y
-
-# No parameters
-lambda: 42
-
-# Default parameter
-lambda x, n=2: x ** n
-
-# Conditional
-lambda x: 'even' if x % 2 == 0 else 'odd'
+lambda x: x * 2              # Single parameter
+lambda x, y: x + y           # Multiple parameters
+lambda: 42                   # No parameters
+lambda x, n=2: x ** n        # Default parameter
+lambda x: 'yes' if x else 'no'  # Conditional
 ```
 
-### 1. Common Uses
+### Common Uses
 ```python
-# map
-list(map(lambda x: x ** 2, numbers))
-
-# filter
-list(filter(lambda x: x > 0, numbers))
-
-# sorted
-sorted(items, key=lambda x: x.value)
-
-# reduce
-reduce(lambda x, y: x + y, numbers)
+list(map(lambda x: x ** 2, numbers))      # Transform
+list(filter(lambda x: x > 0, numbers))    # Filter
+sorted(items, key=lambda x: x.value)      # Sort
+reduce(lambda x, y: x + y, numbers)       # Reduce
 ```
+
+---
 
 ## Summary
 
-- **Lambda functions** are anonymous, single-expression functions
-- **Syntax**: `lambda parameters: expression`
-- **Common with**: `map()`, `filter()`, `sorted()`, `reduce()`
-- **Best for**: Simple, one-time use functions
-- **Limitations**: Single expression, no statements, no docstrings
-- **Alternatives**: List comprehensions often clearer
-- **PEP 8**: Avoid assigning lambdas to variables
-- **Use regular functions** for: Complex logic, reusable code, documentation needs
-- **Operator module**: Consider for simple operations
+| Aspect | Lambda | Regular Function |
+|--------|--------|------------------|
+| Syntax | `lambda x: x + 1` | `def f(x): return x + 1` |
+| Name | Anonymous | Named |
+| Expressions | Single only | Multiple statements |
+| Documentation | No docstring | Docstring supported |
+| Type hints | Not supported | Supported |
+| Debugging | Shows `<lambda>` | Shows function name |
+| Best for | Simple, one-time use | Complex, reusable code |
 
-Lambda expressions are a powerful tool for concise functional programming in Python. Use them judiciously where they improve code clarity, but don't hesitate to use regular functions when appropriate. The goal is always readable, maintainable code.
+**Key Takeaways**:
+
+- Lambda functions are anonymous, single-expression functions
+- Best used as arguments to higher-order functions
+- Keep them simple — use `def` for complex logic
+- List comprehensions often clearer than `map`/`filter` with lambda
+- Avoid assigning lambdas to variables (PEP 8)
+- Consider `operator` module for simple operations
