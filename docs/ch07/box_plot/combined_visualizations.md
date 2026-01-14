@@ -1,0 +1,302 @@
+# Combined Visualizations
+
+Combine box plots with other chart types for comprehensive data analysis and presentation.
+
+## Box Plot with Histogram
+
+Pair box plots with histograms to show both summary statistics and distributional shape.
+
+### 1. Side by Side Layout
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+
+np.random.seed(42)
+data = np.random.normal(100, 15, 500)
+
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 4))
+
+ax1.hist(data, bins=25, edgecolor='black', alpha=0.7)
+ax1.axvline(np.mean(data), color='red', linestyle='--', label='Mean')
+ax1.axvline(np.median(data), color='blue', linestyle='--', label='Median')
+ax1.legend()
+ax1.set_title('Histogram')
+
+ax2.boxplot(data)
+ax2.set_title('Box Plot')
+
+plt.tight_layout()
+plt.show()
+```
+
+### 2. Stacked Vertically
+
+```python
+fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8, 6), 
+                               gridspec_kw={'height_ratios': [3, 1]})
+
+ax1.hist(data, bins=25, edgecolor='black', alpha=0.7)
+ax1.set_ylabel('Frequency')
+
+ax2.boxplot(data, vert=False)
+ax2.set_xlabel('Value')
+
+plt.tight_layout()
+plt.show()
+```
+
+### 3. Reusable Function
+
+```python
+def plot_distribution(data, title='Distribution Analysis', bins=20):
+    mean = np.mean(data)
+    median = np.median(data)
+
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
+    fig.suptitle(title, fontsize=14)
+
+    ax1.hist(data, bins=bins, density=True, alpha=0.7, edgecolor='black')
+    ax1.axvline(mean, color='blue', linestyle='--', label=f'Mean: {mean:.1f}')
+    ax1.axvline(median, color='red', linestyle='--', label=f'Median: {median:.1f}')
+    ax1.legend()
+    ax1.set_title('Histogram')
+
+    ax2.boxplot(data)
+    ax2.set_title('Box Plot')
+
+    plt.tight_layout()
+    plt.show()
+```
+
+## Box Plot with Reference Lines
+
+Add horizontal reference lines to compare distributions against benchmarks.
+
+### 1. Single Reference Line
+
+```python
+fig, ax = plt.subplots()
+
+data = [np.random.normal(100, 15, 100) for _ in range(4)]
+ax.boxplot(data, labels=['Q1', 'Q2', 'Q3', 'Q4'])
+ax.axhline(y=100, color='red', linestyle='--', label='Target', alpha=0.7)
+ax.legend()
+ax.set_ylabel('Performance')
+
+plt.show()
+```
+
+### 2. Multiple Reference Lines
+
+```python
+fig, ax = plt.subplots()
+
+ax.boxplot(data, labels=['Q1', 'Q2', 'Q3', 'Q4'])
+ax.axhline(y=90, color='red', linestyle='--', label='Minimum', alpha=0.7)
+ax.axhline(y=100, color='green', linestyle='--', label='Target', alpha=0.7)
+ax.axhline(y=110, color='blue', linestyle='--', label='Stretch', alpha=0.7)
+ax.legend()
+
+plt.show()
+```
+
+### 3. Shaded Region
+
+```python
+fig, ax = plt.subplots()
+
+ax.boxplot(data, labels=['Q1', 'Q2', 'Q3', 'Q4'])
+ax.axhspan(95, 105, color='green', alpha=0.2, label='Acceptable Range')
+ax.legend()
+
+plt.show()
+```
+
+## Box Plot with Scatter Overlay
+
+Show individual data points alongside the box plot summary.
+
+### 1. Jittered Points
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+
+np.random.seed(42)
+data = [np.random.normal(0, std, 50) for std in range(1, 5)]
+
+fig, ax = plt.subplots()
+
+bp = ax.boxplot(data, patch_artist=True, showfliers=False)
+for patch in bp['boxes']:
+    patch.set_facecolor('lightblue')
+    patch.set_alpha(0.5)
+
+for i, d in enumerate(data, 1):
+    jitter = np.random.normal(0, 0.04, len(d))
+    ax.scatter(np.full_like(d, i) + jitter, d, alpha=0.5, s=20, c='steelblue')
+
+plt.show()
+```
+
+### 2. Swarm-Like Layout
+
+```python
+def add_points(ax, data, positions, width=0.2):
+    for pos, d in zip(positions, data):
+        n = len(d)
+        offsets = np.linspace(-width/2, width/2, n)
+        ax.scatter(np.full(n, pos) + offsets, np.sort(d), 
+                   alpha=0.4, s=15, c='darkblue')
+
+fig, ax = plt.subplots()
+bp = ax.boxplot(data, showfliers=False)
+add_points(ax, data, range(1, len(data) + 1))
+plt.show()
+```
+
+### 3. Strip Plot Style
+
+```python
+fig, ax = plt.subplots()
+
+ax.boxplot(data, showfliers=False, widths=0.3)
+
+for i, d in enumerate(data, 1):
+    y = d
+    x = np.random.uniform(i - 0.15, i + 0.15, len(d))
+    ax.scatter(x, y, alpha=0.3, s=10, c='black')
+
+plt.show()
+```
+
+## Grouped Box Plots
+
+Compare multiple categories across groups.
+
+### 1. Manual Positioning
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+
+np.random.seed(42)
+
+group1_a = np.random.normal(100, 10, 50)
+group1_b = np.random.normal(110, 15, 50)
+group2_a = np.random.normal(90, 12, 50)
+group2_b = np.random.normal(95, 18, 50)
+
+fig, ax = plt.subplots()
+
+positions_a = [1, 3]
+positions_b = [1.6, 3.6]
+
+bp1 = ax.boxplot([group1_a, group2_a], positions=positions_a, 
+                  widths=0.5, patch_artist=True)
+bp2 = ax.boxplot([group1_b, group2_b], positions=positions_b, 
+                  widths=0.5, patch_artist=True)
+
+for patch in bp1['boxes']:
+    patch.set_facecolor('lightblue')
+for patch in bp2['boxes']:
+    patch.set_facecolor('lightcoral')
+
+ax.set_xticks([1.3, 3.3])
+ax.set_xticklabels(['Group 1', 'Group 2'])
+ax.legend([bp1['boxes'][0], bp2['boxes'][0]], ['Method A', 'Method B'])
+
+plt.show()
+```
+
+### 2. Color by Category
+
+```python
+fig, ax = plt.subplots(figsize=(10, 5))
+
+data_dict = {
+    'Control': [np.random.normal(100, 10, 50) for _ in range(3)],
+    'Treatment': [np.random.normal(110, 12, 50) for _ in range(3)]
+}
+
+colors = {'Control': 'lightblue', 'Treatment': 'lightcoral'}
+positions = {'Control': [1, 4, 7], 'Treatment': [2, 5, 8]}
+
+for label, datasets in data_dict.items():
+    bp = ax.boxplot(datasets, positions=positions[label], 
+                    widths=0.8, patch_artist=True)
+    for patch in bp['boxes']:
+        patch.set_facecolor(colors[label])
+
+ax.set_xticks([1.5, 4.5, 7.5])
+ax.set_xticklabels(['Week 1', 'Week 2', 'Week 3'])
+
+plt.show()
+```
+
+### 3. Legend for Groups
+
+```python
+from matplotlib.patches import Patch
+
+legend_elements = [Patch(facecolor='lightblue', label='Control'),
+                   Patch(facecolor='lightcoral', label='Treatment')]
+ax.legend(handles=legend_elements, loc='upper right')
+```
+
+## Box Plot with Violin Overlay
+
+Combine box plots with violin plots for complete distribution visualization.
+
+### 1. Overlay Approach
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+
+np.random.seed(42)
+data = [np.random.normal(0, std, 200) for std in range(1, 5)]
+
+fig, ax = plt.subplots()
+
+vp = ax.violinplot(data, showextrema=False)
+for body in vp['bodies']:
+    body.set_alpha(0.3)
+
+ax.boxplot(data, widths=0.1)
+
+plt.show()
+```
+
+### 2. Side by Side
+
+```python
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5), sharey=True)
+
+ax1.violinplot(data)
+ax1.set_title('Violin Plot')
+
+ax2.boxplot(data)
+ax2.set_title('Box Plot')
+
+plt.tight_layout()
+plt.show()
+```
+
+### 3. Hybrid Visualization
+
+```python
+fig, ax = plt.subplots()
+
+vp = ax.violinplot(data, showmedians=False, showextrema=False)
+for body in vp['bodies']:
+    body.set_facecolor('lightblue')
+    body.set_alpha(0.5)
+
+bp = ax.boxplot(data, widths=0.15, patch_artist=True,
+                boxprops=dict(facecolor='white', edgecolor='black'),
+                medianprops=dict(color='red', linewidth=2))
+
+plt.show()
+```

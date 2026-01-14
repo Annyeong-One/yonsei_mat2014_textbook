@@ -1,0 +1,193 @@
+# Tick Labels
+
+Customize how tick labels appear on your axes.
+
+---
+
+## set_xticklabels and set_yticklabels
+
+Set custom text for tick labels:
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+
+x = np.linspace(-2*np.pi, 2*np.pi, 100)
+y = np.sin(x)
+
+fig, ax = plt.subplots(figsize=(12, 3))
+ax.plot(x, y)
+
+ax.set_xticks((-2*np.pi, -np.pi, 0, np.pi, 2*np.pi))
+ax.set_yticks((-1, 0, 1))
+ax.set_xticklabels(("-2$\\pi$", "-$\\pi$", "0", "$\\pi$", "2$\\pi$"))
+ax.set_yticklabels(("-1", "0", "1"))
+
+ax.spines["top"].set_visible(False)
+ax.spines["right"].set_visible(False)
+ax.spines["bottom"].set_position("zero")
+ax.spines["left"].set_position("zero")
+
+plt.show()
+```
+
+---
+
+## Getting Current Labels
+
+```python
+print(ax.get_xticklabels())
+print(ax.get_yticklabels())
+```
+
+Returns a list of `Text` objects.
+
+---
+
+## Rotating Labels
+
+Rotate labels to prevent overlap:
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+# Generate time series data
+np.random.seed(0)
+error = np.random.normal(size=(400,))
+index = pd.date_range(start='2019-09-01', end='2020-01-01', freq='D')
+
+mu = 50
+data = [mu + 0.4*error[t-1] + 0.3*error[t-2] + error[t] 
+        for t in range(2, len(index)+2)]
+s = pd.Series(data, index)
+
+fig, ax = plt.subplots(figsize=(12, 3))
+ax.plot(s)
+ax.axhline(mu, linestyle='--', color='grey')
+
+# Rotate and align labels
+for label in ax.get_xticklabels():
+    label.set_horizontalalignment("right")
+    label.set_rotation(45)
+
+plt.show()
+```
+
+---
+
+## Text Object Properties
+
+Each tick label is a `Text` object with many properties:
+
+```python
+for label in ax.get_xticklabels():
+    print(type(label))  # <class 'matplotlib.text.Text'>
+```
+
+Common Text methods:
+
+- `set_rotation(angle)`: Rotate the text
+- `set_horizontalalignment(align)`: 'left', 'center', 'right'
+- `set_verticalalignment(align)`: 'top', 'center', 'bottom', 'baseline'
+- `set_fontsize(size)`: Set font size
+- `set_color(color)`: Set text color
+- `set_bbox(dict)`: Add background box
+
+---
+
+## Adding Background to Labels
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+
+x = np.linspace(-10, 10, 500)
+y = np.sin(x) / x
+
+fig, ax = plt.subplots(figsize=(8, 4))
+ax.plot(x, y, linewidth=2)
+
+# Move spines to origin
+ax.spines['right'].set_color('none')
+ax.spines['top'].set_color('none')
+ax.spines['bottom'].set_position(('data', 0))
+ax.spines['left'].set_position(('data', 0))
+
+ax.set_xticks([-10, -5, 5, 10])
+ax.set_yticks([0.5, 1])
+
+# Add white background to labels
+for label in ax.get_xticklabels() + ax.get_yticklabels():
+    label.set_bbox({'facecolor': 'white', 'edgecolor': 'white'})
+
+plt.show()
+```
+
+---
+
+## Using tick_params for Styling
+
+Bulk styling of tick labels:
+
+```python
+ax.tick_params(
+    axis='x',
+    labelsize=12,
+    labelrotation=45,
+    labelcolor='blue'
+)
+
+ax.tick_params(
+    axis='y', 
+    labelsize=10,
+    labelcolor='green'
+)
+```
+
+---
+
+## Categorical Labels
+
+For bar charts or categorical data:
+
+```python
+import matplotlib.pyplot as plt
+
+categories = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']
+values = [10, 25, 15, 30, 20]
+
+fig, ax = plt.subplots()
+ax.bar(range(len(categories)), values)
+ax.set_xticks(range(len(categories)))
+ax.set_xticklabels(categories)
+plt.show()
+```
+
+---
+
+## Hiding Tick Labels
+
+Keep ticks but hide labels:
+
+```python
+ax.tick_params(labelbottom=False)  # Hide x-axis labels
+ax.tick_params(labelleft=False)    # Hide y-axis labels
+```
+
+Or set empty labels:
+
+```python
+ax.set_xticklabels([])
+```
+
+---
+
+## Key Takeaways
+
+- `set_xticklabels()` and `set_yticklabels()` set custom label text
+- Each label is a `Text` object with full formatting control
+- Use `set_rotation()` and `set_horizontalalignment()` for angled labels
+- `set_bbox()` adds a background to labels
+- `tick_params()` provides bulk styling options

@@ -1,0 +1,302 @@
+# Pie Chart Keywords
+
+Reference for `ax.pie()` keyword arguments.
+
+## Signature
+
+```python
+ax.pie(x, explode=None, labels=None, colors=None, autopct=None,
+       pctdistance=0.6, shadow=False, labeldistance=1.1, startangle=0,
+       radius=1, counterclock=True, wedgeprops=None, textprops=None,
+       center=(0, 0), frame=False, rotatelabels=False, normalize=True,
+       hatch=None)
+```
+
+## Data Parameter
+
+### x
+
+Array-like values for each wedge. Values are normalized to sum to 1 (or 360 degrees).
+
+```python
+vals = [1400, 600, 300, 410, 250]
+ax.pie(vals)
+```
+
+## Label Parameters
+
+### labels
+
+Sequence of strings for wedge labels.
+
+```python
+labels = ["Rent", "Food", "Phone", "Car", "Utilities"]
+ax.pie(vals, labels=labels)
+```
+
+### labeldistance
+
+Radial distance for labels (default: 1.1). Set to `None` to hide labels.
+
+```python
+ax.pie(vals, labels=labels, labeldistance=1.2)  # Further from center
+ax.pie(vals, labels=labels, labeldistance=None)  # No labels
+```
+
+### rotatelabels
+
+Rotate each label to angle of slice (default: False).
+
+```python
+ax.pie(vals, labels=labels, rotatelabels=True)
+```
+
+## Percentage Parameters
+
+### autopct
+
+Format string or function for percentage labels.
+
+```python
+# Format string
+ax.pie(vals, autopct='%1.1f%%')   # One decimal: 47.3%
+ax.pie(vals, autopct='%d%%')      # Integer: 47%
+ax.pie(vals, autopct='%.2f%%')    # Two decimals: 47.30%
+
+# Custom function
+def my_autopct(pct):
+    return f'{pct:.1f}%' if pct > 5 else ''
+
+ax.pie(vals, autopct=my_autopct)
+```
+
+### pctdistance
+
+Radial distance for percentage labels (default: 0.6).
+
+```python
+ax.pie(vals, autopct='%1.1f%%', pctdistance=0.5)  # Closer to center
+ax.pie(vals, autopct='%1.1f%%', pctdistance=0.8)  # Further from center
+```
+
+## Appearance Parameters
+
+### colors
+
+Sequence of colors for wedges.
+
+```python
+# Named colors
+colors = ['red', 'blue', 'green', 'orange', 'purple']
+ax.pie(vals, colors=colors)
+
+# Hex colors
+colors = ['#ff9999', '#66b3ff', '#99ff99', '#ffcc99', '#ff99cc']
+ax.pie(vals, colors=colors)
+
+# Colormap
+colors = plt.cm.Pastel1(np.linspace(0, 1, len(vals)))
+ax.pie(vals, colors=colors)
+```
+
+### explode
+
+Sequence of fractions to offset each wedge from center.
+
+```python
+explode = [0.1, 0, 0, 0, 0]  # Explode first slice
+ax.pie(vals, explode=explode)
+
+explode = [0.05] * len(vals)  # All slightly exploded
+ax.pie(vals, explode=explode)
+```
+
+### shadow
+
+Draw shadow beneath pie (default: False).
+
+```python
+ax.pie(vals, shadow=True)
+```
+
+### radius
+
+Radius of the pie (default: 1).
+
+```python
+ax.pie(vals, radius=0.8)  # Smaller pie
+ax.pie(vals, radius=1.2)  # Larger pie
+```
+
+## Orientation Parameters
+
+### startangle
+
+Angle in degrees to rotate pie (default: 0, starts from positive x-axis).
+
+```python
+ax.pie(vals, startangle=90)   # Start from top
+ax.pie(vals, startangle=180)  # Start from left
+ax.pie(vals, startangle=270)  # Start from bottom
+```
+
+### counterclock
+
+Direction of slices (default: True for counter-clockwise).
+
+```python
+ax.pie(vals, counterclock=True)   # Counter-clockwise (default)
+ax.pie(vals, counterclock=False)  # Clockwise
+```
+
+### center
+
+Center position of the pie (default: (0, 0)).
+
+```python
+ax.pie(vals, center=(0.5, 0.5))  # Offset center
+```
+
+## Style Parameters
+
+### wedgeprops
+
+Dictionary of properties for wedge patches.
+
+```python
+# White edge
+wedgeprops = {'edgecolor': 'white', 'linewidth': 2}
+ax.pie(vals, wedgeprops=wedgeprops)
+
+# Semi-transparent
+wedgeprops = {'alpha': 0.7}
+ax.pie(vals, wedgeprops=wedgeprops)
+
+# Custom width (for donut chart)
+wedgeprops = {'width': 0.5}
+ax.pie(vals, wedgeprops=wedgeprops)
+```
+
+### textprops
+
+Dictionary of properties for label and percentage text.
+
+```python
+textprops = {'fontsize': 12, 'fontweight': 'bold', 'color': 'navy'}
+ax.pie(vals, labels=labels, textprops=textprops)
+```
+
+### hatch
+
+Hatch pattern for wedges. Can be string or sequence.
+
+```python
+# Single pattern for all
+ax.pie(vals, hatch='/')
+
+# Different patterns
+hatches = ['/', '\\', '|', '-', '+']
+wedges, texts = ax.pie(vals)
+for wedge, hatch in zip(wedges, hatches):
+    wedge.set_hatch(hatch)
+```
+
+## Other Parameters
+
+### normalize
+
+Normalize values to sum to 1 (default: True). Set to False if values already represent fractions.
+
+```python
+# Values normalized automatically
+ax.pie([30, 20, 50], normalize=True)
+
+# Pre-normalized fractions (must sum to 1)
+ax.pie([0.3, 0.2, 0.5], normalize=False)
+```
+
+### frame
+
+Draw axes frame around pie (default: False).
+
+```python
+ax.pie(vals, frame=True)
+```
+
+## Return Values
+
+`ax.pie()` returns tuple depending on parameters:
+
+```python
+# Without autopct
+wedges, texts = ax.pie(vals, labels=labels)
+
+# With autopct
+wedges, texts, autotexts = ax.pie(vals, labels=labels, autopct='%1.1f%%')
+```
+
+### Modifying Return Values
+
+```python
+wedges, texts, autotexts = ax.pie(vals, labels=labels, autopct='%1.1f%%')
+
+# Modify wedges
+for wedge in wedges:
+    wedge.set_linewidth(2)
+    wedge.set_edgecolor('white')
+
+# Modify label texts
+for text in texts:
+    text.set_fontsize(10)
+    text.set_fontweight('bold')
+
+# Modify percentage texts
+for autotext in autotexts:
+    autotext.set_color('white')
+    autotext.set_fontweight('bold')
+```
+
+## Common Combinations
+
+### Styled Pie with Legend
+
+```python
+fig, ax = plt.subplots()
+wedges, texts, autotexts = ax.pie(
+    vals,
+    autopct='%1.1f%%',
+    startangle=90,
+    colors=plt.cm.Set2.colors[:len(vals)],
+    wedgeprops={'edgecolor': 'white', 'linewidth': 1.5},
+    pctdistance=0.7
+)
+ax.legend(wedges, labels, loc='center left', bbox_to_anchor=(1, 0.5))
+plt.tight_layout()
+plt.show()
+```
+
+### Donut Chart
+
+```python
+fig, ax = plt.subplots()
+ax.pie(vals, labels=labels, autopct='%1.1f%%',
+       wedgeprops={'width': 0.5}, startangle=90)
+ax.set_title('Donut Chart')
+plt.show()
+```
+
+### Nested Pie (Ring Chart)
+
+```python
+fig, ax = plt.subplots()
+
+# Outer ring
+ax.pie(outer_vals, radius=1, labels=outer_labels,
+       wedgeprops={'width': 0.3, 'edgecolor': 'white'})
+
+# Inner ring
+ax.pie(inner_vals, radius=0.7,
+       wedgeprops={'width': 0.3, 'edgecolor': 'white'})
+
+plt.show()
+```

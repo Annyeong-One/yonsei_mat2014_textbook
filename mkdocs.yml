@@ -611,17 +611,132 @@ nav:
           - Utility Functions: ch06/methods/utility.md
 
   - Chapter 7 Matplotlib:
-      - 7.1 Plotting Fundamentals:
-          - Figures and Axes: ch07/fundamentals/figures_axes.md
-          - Lines, Markers, and Styles: ch07/fundamentals/styles.md
-          - Axes Customization: ch07/fundamentals/axes_customization.md
-      - 7.2 Statistical Plots:
-          - Histograms and Density: ch07/plots/histograms.md
-          - Scatter and Heatmaps: ch07/plots/scatter_heatmaps.md
-      - 7.3 Layout and Output:
+      - 7.1 Introduction:
+          - Visualization Libraries: ch07/intro/visualization_libraries.md
+          - Python Data Science Ecosystem: ch07/intro/data_science_ecosystem.md
+          - Three Ways of Drawing: ch07/intro/three_ways_drawing.md
+          - Five Major Objects: ch07/intro/five_major_objects.md
+          - Interactive Mode: ch07/intro/interactive_mode.md
+
+      - 7.2 Getting Started:
+          - Installation and Import: ch07/setup/installation.md
+          - MATLAB vs OOP Style: ch07/setup/matlab_vs_oop.md
+          - plt.subplot vs plt.subplots: ch07/setup/subplot_vs_subplots.md
+
+      - 7.3 Figure Object:
+          - Creating Figures: ch07/figure/creating_figures.md
+          - Figure Styles: ch07/figure/figure_styles.md
+          - Figure Methods: ch07/figure/figure_methods.md
+          - Saving Figures: ch07/figure/saving_figures.md
+
+      - 7.4 Axes Object:
+          - Axes Basics: ch07/axes/axes_basics.md
+          - Creating Axes: ch07/axes/creating_axes.md
+          - Axes Shape Behavior: ch07/axes/axes_shape.md
+          - Unpacking Axes: ch07/axes/unpacking_axes.md
+
+      - 7.5 Line Plot:
+          - Basic Line Plot: ch07/line_plot/basic_line_plot.md
+          - Data Input Types: ch07/line_plot/data_input_types.md
+          - Line Styles and Colors: ch07/line_plot/line_styles_colors.md
+          - Markers: ch07/line_plot/markers.md
+          - Labels and Legends: ch07/line_plot/labels_legends.md
+
+      - 7.6 Axes Customization:
+          - Title and Labels: ch07/customization/title_labels.md
+          - Limits and Ticks: ch07/customization/limits_ticks.md
+          - Tick Labels: ch07/customization/tick_labels.md
+          - Grid and Axis: ch07/customization/grid_axis.md
+
+      - 7.7 Spine Object:
+          - Spine Basics: ch07/spine/spine_basics.md
+          - Spine Visibility: ch07/spine/spine_visibility.md
+          - Spine Position: ch07/spine/spine_position.md
+
+      - 7.8 Axis Object:
+          - XAxis and YAxis: ch07/axis/xaxis_yaxis.md
+          - Tick Locators: ch07/axis/tick_locators.md
+          - Tick Formatters: ch07/axis/tick_formatters.md
+
+      - 7.9 Text and Annotations:
+          - Text Object: ch07/text/text_object.md
+          - Adding Text: ch07/text/adding_text.md
+          - Annotations: ch07/text/annotations.md
+          - LaTeX Support: ch07/text/latex_support.md
+
+      - 7.10 Advanced Methods:
+          - Twin Axes: ch07/advanced/twin_axes.md
+          - Fill and Fill Between: ch07/advanced/fill_between.md
+          - Axhline and Axvline: ch07/advanced/axhline_axvline.md
+
+      - 7.11 Histogram:
+          - Basic Histogram: ch07/histogram/basic_histogram.md
+          - Histogram Keywords: ch07/histogram/histogram_keywords.md
+          - Return Values: ch07/histogram/return_values.md
+          - Distribution Fitting: ch07/histogram/distribution_fitting.md
+
+      - 7.12 Box Plot:
+          - Basic Box Plot: ch07/box_plot/basic_box_plot.md
+          - Box Plot Anatomy: ch07/box_plot/box_plot_anatomy.md
+          - Box Plot Keywords: ch07/box_plot/box_plot_keywords.md
+          - Styling and Colors: ch07/box_plot/styling_colors.md
+          - Combined Visualizations: ch07/box_plot/combined_visualizations.md
+
+      - 7.13 Scatter Plot:
+          - Basic Scatter Plot: ch07/scatter_plot/basic_scatter_plot.md
+          - Scatter Plot Keywords: ch07/scatter_plot/scatter_plot_keywords.md
+          - Color Mapping: ch07/scatter_plot/color_mapping.md
+
+      - 7.14 Bar Chart:
+          - Basic Bar Chart: ch07/bar_chart/basic_bar_chart.md
+          - Bar Chart Keywords: ch07/bar_chart/bar_chart_keywords.md
+          - Grouped and Stacked: ch07/bar_chart/grouped_stacked.md
+
+      - 7.15 Pie Chart:
+          - Basic Pie Chart: ch07/pie_chart/basic_pie_chart.md
+          - Pie Chart Keywords: ch07/pie_chart/pie_chart_keywords.md
+          - Keyword - startangle: ch07/pie_chart/startangle.md
+          - Keyword - shadow: ch07/pie_chart/shadow.md
+          - Keyword - counterclock: ch07/pie_chart/counterclock.md
+
+      - 7.16 Heatmap:
+          - Heatmaps with imshow: ch07/heatmap/imshow_heatmap.md
+          - Heatmaps with pcolormesh: ch07/heatmap/pcolormesh_heatmap.md
+          - Colorbars: ch07/heatmap/colorbars.md
+
+      - 7.17 Layout:
           - Subplots and Grids: ch07/layout/subplots.md
-          - Saving and Exporting Figures: ch07/layout/export.md
-          - Plot Lifecycle: ch07/layout/plot_lifecycle.md
+          - GridSpec: ch07/layout/gridspec.md
+          - Tight Layout: ch07/layout/tight_layout.md
+
+      - 7.18 Image Plot:
+          - Reading Web Images: ch07/image_plot/reading_web_images.md  # NEW
+          - Axes Method - imread: ch07/image_plot/imread.md  # NEW
+          - Axes Method - imshow: ch07/image_plot/imshow.md  # NEW
+          - Keyword - cmap: ch07/image_plot/cmap.md  # NEW
+          - Image Manipulation: ch07/image_plot/image_manipulation.md  # NEW
+          - np.where: ch07/image_plot/np_where.md  # NEW
+          - np.transpose: ch07/image_plot/np_transpose.md  # NEW
+          - np.roll: ch07/image_plot/np_roll.md  # NEW
+          - QR Code: ch07/image_plot/qr_code.md  # NEW
+          - Image Compression: ch07/image_plot/image_compression.md  # NEW
+
+      - 7.19 Contour Plot:
+          - Axes Method - contour: ch07/contour_plot/contour.md  # NEW
+          - Axes Method - clabel: ch07/contour_plot/clabel.md  # NEW
+
+      - 7.20 3D Plot:
+          - Creating 3D Axes: ch07/3d_plot/creating_3d_axes.md  # NEW
+
+      - 7.21 Colorbar:
+          - Axes Method - hexbin: ch07/colorbar/hexbin.md  # NEW
+          - Axes Method - imshow (KDE): ch07/colorbar/imshow_kde.md  # NEW
+          - Axes Method - hist2d: ch07/colorbar/hist2d.md  # NEW
+
+      - 7.22 Practical Examples:
+          - Financial Charts: ch07/examples/financial_charts.md
+          - Brownian Motion: ch07/examples/brownian_motion.md
+          - Mathematical Functions: ch07/examples/math_functions.md
 
   - Chapter 8 Pandas:
       - 8.1 Core pandas Objects:
