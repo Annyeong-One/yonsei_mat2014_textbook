@@ -571,6 +571,7 @@ nav:
           - Concatenation: ch06/manipulation/concatenation.md
           - Splitting Arrays: ch06/manipulation/splitting.md
           - Array Iteration: ch06/manipulation/iteration.md
+          - Roll: ch06/manipulation/roll.md
 
       - 6.10 Array Methods:
           - Reductions with axis: ch06/methods/reductions.md
@@ -642,6 +643,7 @@ nav:
           - Installation and Import: ch07/setup/installation.md
           - MATLAB vs OOP Style: ch07/setup/matlab_vs_oop.md
           - plt.subplot vs plt.subplots: ch07/setup/subplot_vs_subplots.md
+          - Style Sheets: ch07/setup/style_sheets.md                    # NEW
 
       - 7.3 Figure Object:
           - Creating Figures: ch07/figure/creating_figures.md
@@ -654,26 +656,30 @@ nav:
           - Creating Axes: ch07/axes/creating_axes.md
           - Axes Shape Behavior: ch07/axes/axes_shape.md
           - Unpacking Axes: ch07/axes/unpacking_axes.md
+          - add_subplot vs subplots: ch07/axes/add_subplot_vs_subplots.md  # NEW
 
-      - 7.5 Line Plot:
+      - 7.5 Layout:                                    # MOVED UP from 7.18
+          - Subplots and Grids: ch07/layout/subplots.md
+          - GridSpec: ch07/layout/gridspec.md
+          - Tight Layout: ch07/layout/tight_layout.md
+
+      - 7.6 Line Plot:
           - Basic Line Plot: ch07/line_plot/basic_line_plot.md
           - Data Input Types: ch07/line_plot/data_input_types.md
           - Line Styles and Colors: ch07/line_plot/line_styles_colors.md
           - Markers: ch07/line_plot/markers.md
           - Labels and Legends: ch07/line_plot/labels_legends.md
 
-      - 7.6 Axes Customization:
+      - 7.7 Axes Customization:
           - Title and Labels: ch07/customization/title_labels.md
           - Limits and Ticks: ch07/customization/limits_ticks.md
           - Tick Labels: ch07/customization/tick_labels.md
           - Grid and Axis: ch07/customization/grid_axis.md
 
-      - 7.7 Spine Object:
+      - 7.8 Spine and Axis:                           # MERGED from 7.7 + 7.8
           - Spine Basics: ch07/spine/spine_basics.md
           - Spine Visibility: ch07/spine/spine_visibility.md
           - Spine Position: ch07/spine/spine_position.md
-
-      - 7.8 Axis Object:
           - XAxis and YAxis: ch07/axis/xaxis_yaxis.md
           - Tick Locators: ch07/axis/tick_locators.md
           - Tick Formatters: ch07/axis/tick_formatters.md
@@ -684,7 +690,7 @@ nav:
           - Annotations: ch07/text/annotations.md
           - LaTeX Support: ch07/text/latex_support.md
 
-      - 7.10 Advanced Methods:
+      - 7.10 Axes Enhancements:                       # RENAMED from "Advanced Methods"
           - Twin Axes: ch07/advanced/twin_axes.md
           - Fill and Fill Between: ch07/advanced/fill_between.md
           - Axhline and Axvline: ch07/advanced/axhline_axvline.md
@@ -728,43 +734,35 @@ nav:
           - Axes Method - hexbin: ch07/density_2d/hexbin.md
           - Kernel Density Estimation: ch07/density_2d/kde_imshow.md
 
-      - 7.18 Layout:
-          - Subplots and Grids: ch07/layout/subplots.md
-          - GridSpec: ch07/layout/gridspec.md
-          - Tight Layout: ch07/layout/tight_layout.md
-
-      - 7.19 Image Plot:
+      - 7.18 Image Plot:
           - Reading Web Images: ch07/image_plot/reading_web_images.md
           - Axes Method - imread: ch07/image_plot/imread.md
           - Axes Method - imshow: ch07/image_plot/imshow.md
           - Keyword - cmap: ch07/image_plot/cmap.md
           - Image Manipulation: ch07/image_plot/image_manipulation.md
-          - np.where: ch07/image_plot/np_where.md
-          - np.transpose: ch07/image_plot/np_transpose.md
-          - np.roll: ch07/image_plot/np_roll.md
           - QR Code: ch07/image_plot/qr_code.md
           - Image Compression: ch07/image_plot/image_compression.md
 
-      - 7.20 Contour Plot:
+      - 7.19 Contour Plot:
           - Axes Method - contour: ch07/contour_plot/contour.md
           - Axes Method - contourf: ch07/contour_plot/contourf.md
           - Axes Method - clabel: ch07/contour_plot/clabel.md
           - Contour and Surface: ch07/contour_plot/contour_surface.md
 
-      - 7.21 3D Plot:
+      - 7.20 3D Plot:
           - Creating 3D Axes: ch07/3d_plot/creating_3d_axes.md
           - Axes Method - plot (3D Lines): ch07/3d_plot/plot_3d.md
           - Axes Method - plot_surface: ch07/3d_plot/plot_surface.md
           - Axes Method - view_init: ch07/3d_plot/view_init.md
           - Complex Function Visualization: ch07/3d_plot/complex_functions.md
 
-      - 7.22 Practical Examples:
+      - 7.21 Practical Examples:
           - Financial Charts: ch07/examples/financial_charts.md
           - Brownian Motion: ch07/examples/brownian_motion.md
           - Mathematical Functions: ch07/examples/math_functions.md
           - Statistical Distributions: ch07/examples/statistical_distributions.md
 
-      - 7.23 Matplotlib OOP Design:
+      - 7.22 Matplotlib OOP Design:
           - Matplotlib Hierarchy: ch07/oop/matplotlib_hierarchy.md
           - Matplotlib OOP vs Pyplot: ch07/oop/matplotlib_oop_pyplot.md
           - Matplotlib Artists: ch07/oop/matplotlib_artists.md
