@@ -441,59 +441,43 @@ nav:
           - Composition vs Inheritance: ch04/composition/composition_vs_inheritance.md
           - Design Guidelines: ch04/composition/design_guidelines.md
 
-      - 4.6 Properties & Attributes:
+      - 4.6 Properties:
           - Property Decorator: ch04/properties/property_decorator.md
           - Getter Setter Deleter: ch04/properties/getter_setter_deleter.md
           - Cached Properties: ch04/properties/cached_property.md
           - Read-Only Properties: ch04/properties/readonly_properties.md
 
-      - 4.7 Dynamic Attribute:
-          - getattr setattr delattr: ch04/dynamic/builtin_attr_functions.md
-          - Attribute Lookup Hierarchy: ch04/dynamic/attribute_lookup_hierarchy.md
-          - Dynamic vs Static Access: ch04/dynamic/dynamic_vs_static.md
-
-      - 4.8 Dunder Attr Access:
-          - __getattribute__: ch04/dunder_attrs/dunder_getattribute.md
-          - __getattr__: ch04/dunder_attrs/dunder_getattr.md
-          - __setattr__: ch04/dunder_attrs/dunder_setattr.md
-          - __delattr__: ch04/dunder_attrs/dunder_delattr.md
-          - Attribute Access Interplay: ch04/dunder_attrs/attribute_access_interplay.md
-
-      - 4.9 Descriptor Protocol:
-          - Descriptor Introduction: ch04/descriptors/descriptor_intro.md
-          - __get__ __set__ __delete__: ch04/descriptors/descriptor_methods.md
-          - Data vs Non-Data Descriptors: ch04/descriptors/descriptor_types.md
-          - Descriptor Use Cases: ch04/descriptors/descriptor_applications.md
-          - Properties as Descriptors: ch04/descriptors/property_descriptor_connection.md
-
-      - 4.10 Dunder Basics:
+      - 4.7 Dunder Basics:
           - Introduction to Dunder: ch04/dunder/dunder_intro.md
           - Object Lifecycle: ch04/dunder/dunder_lifecycle.md
           - String Representation: ch04/dunder/dunder_string.md
           - Arithmetic Operators: ch04/dunder/dunder_arithmetic.md
           - Comparison Operators: ch04/dunder/dunder_comparison.md
 
-      - 4.11 Dunder Advanced:
+      - 4.8 Dunder Advanced:
           - Container Protocol: ch04/dunder_advanced/dunder_containers.md
           - Iterable Protocol: ch04/dunder_advanced/dunder_iterables.md
           - Callable Objects: ch04/dunder_advanced/dunder_callable.md
           - Context Managers: ch04/dunder_advanced/dunder_context.md
 
-      - 4.12 OOP in Scientific Python:
-          - Overview: ch04/scientific_oop/overview.md
-          - NumPy ndarray Design: ch04/scientific_oop/numpy_ndarray.md
-          - NumPy dtype and Shape: ch04/scientific_oop/numpy_dtype_shape.md
-          - NumPy UFuncs: ch04/scientific_oop/numpy_ufuncs.md
-          - NumPy Broadcasting: ch04/scientific_oop/numpy_broadcasting.md
-          - NumPy Views vs Copies: ch04/scientific_oop/numpy_views_copies.md
-          - Pandas Series: ch04/scientific_oop/pandas_series.md
-          - Pandas DataFrame: ch04/scientific_oop/pandas_dataframe.md
-          - Pandas Index Objects: ch04/scientific_oop/pandas_index.md
-          - Pandas MultiIndex: ch04/scientific_oop/pandas_multiindex.md
-          - Pandas Method Chaining: ch04/scientific_oop/pandas_method_chaining.md
-          - Matplotlib Hierarchy: ch04/scientific_oop/matplotlib_hierarchy.md
-          - Matplotlib OOP vs Pyplot: ch04/scientific_oop/matplotlib_oop_pyplot.md
-          - Matplotlib Artists: ch04/scientific_oop/matplotlib_artists.md
+      - 4.9 Dynamic Attribute Access:
+          - getattr setattr delattr: ch04/dynamic/builtin_attr_functions.md
+          - Attribute Lookup Hierarchy: ch04/dynamic/attribute_lookup_hierarchy.md
+          - Dynamic vs Static Access: ch04/dynamic/dynamic_vs_static.md
+
+      - 4.10 Dunder Attribute Hooks:
+          - __getattribute__: ch04/dunder_attrs/dunder_getattribute.md
+          - __getattr__: ch04/dunder_attrs/dunder_getattr.md
+          - __setattr__: ch04/dunder_attrs/dunder_setattr.md
+          - __delattr__: ch04/dunder_attrs/dunder_delattr.md
+          - Attribute Access Interplay: ch04/dunder_attrs/attribute_access_interplay.md
+
+      - 4.11 Descriptor Protocol:
+          - Descriptor Introduction: ch04/descriptors/descriptor_intro.md
+          - __get__ __set__ __delete__: ch04/descriptors/descriptor_methods.md
+          - Data vs Non-Data Descriptors: ch04/descriptors/descriptor_types.md
+          - Descriptor Use Cases: ch04/descriptors/descriptor_applications.md
+          - Properties as Descriptors: ch04/descriptors/property_descriptor_connection.md
 
   - Chapter 5 Concurrency:
       - 5.1 Concurrency Concepts:
@@ -640,6 +624,13 @@ nav:
           - Filtering with where: ch06/methods/where.md
           - Utility Functions: ch06/methods/utility.md
 
+      - 6.16 NumPy OOP Design:
+          - NumPy ndarray Design: ch06/oop/numpy_ndarray.md
+          - NumPy dtype and Shape: ch06/oop/numpy_dtype_shape.md
+          - NumPy UFuncs: ch06/oop/numpy_ufuncs.md
+          - NumPy Broadcasting: ch06/oop/numpy_broadcasting.md
+          - NumPy Views vs Copies: ch06/oop/numpy_views_copies.md
+
   - Chapter 7 Matplotlib:
       - 7.1 Introduction:
           - Visualization Libraries: ch07/intro/visualization_libraries.md
@@ -774,6 +765,11 @@ nav:
           - Mathematical Functions: ch07/examples/math_functions.md
           - Statistical Distributions: ch07/examples/statistical_distributions.md
 
+      - 7.23 Matplotlib OOP Design:
+          - Matplotlib Hierarchy: ch07/oop/matplotlib_hierarchy.md
+          - Matplotlib OOP vs Pyplot: ch07/oop/matplotlib_oop_pyplot.md
+          - Matplotlib Artists: ch07/oop/matplotlib_artists.md
+
   - Chapter 8 Pandas:
       - 8.1 Core pandas Objects:
           - Series and DataFrame: ch08/core/series_dataframe.md
@@ -789,6 +785,13 @@ nav:
 
       - 8.4 Practical Examples:
           - Financial Data Workflow: ch08/examples/yfinance_workflow.md
+
+      - 8.5 Pandas OOP Design:
+          - Pandas Series: ch08/oop/pandas_series.md
+          - Pandas DataFrame: ch08/oop/pandas_dataframe.md
+          - Pandas Index Objects: ch08/oop/pandas_index.md
+          - Pandas MultiIndex: ch08/oop/pandas_multiindex.md
+          - Pandas Method Chaining: ch08/oop/pandas_method_chaining.md
 
   - Chapter 9 PyTorch:
       - 9.1 Tensors:
