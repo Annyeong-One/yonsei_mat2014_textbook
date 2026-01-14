@@ -733,7 +733,12 @@ nav:
           - Axes Method - imshow (KDE): ch07/colorbar/imshow_kde.md  # NEW
           - Axes Method - hist2d: ch07/colorbar/hist2d.md  # NEW
 
-      - 7.22 Practical Examples:
+      - 7.22 2D Histogram:
+          - Axes Method - hist2d: ch07/2d_histogram/hist2d.md  # NEW
+          - Axes Method - hexbin: ch07/2d_histogram/hexbin.md  # NEW
+          - Axes Method - imshow (KDE): ch07/2d_histogram/imshow_kde.md  # NEW
+
+      - 7.23 Practical Examples:
           - Financial Charts: ch07/examples/financial_charts.md
           - Brownian Motion: ch07/examples/brownian_motion.md
           - Mathematical Functions: ch07/examples/math_functions.md
