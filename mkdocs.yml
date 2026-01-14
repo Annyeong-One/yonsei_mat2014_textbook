@@ -698,6 +698,9 @@ nav:
           - Keyword - startangle: ch07/pie_chart/startangle.md
           - Keyword - shadow: ch07/pie_chart/shadow.md
           - Keyword - counterclock: ch07/pie_chart/counterclock.md
+          - Keyword - explode: ch07/pie_chart/explode.md
+          - Keyword - radius: ch07/pie_chart/radius.md
+          - Keyword - autopct: ch07/pie_chart/autopct.md
 
       - 7.16 Heatmap:
           - Heatmaps with imshow: ch07/heatmap/imshow_heatmap.md
@@ -726,12 +729,16 @@ nav:
           - Axes Method - clabel: ch07/contour_plot/clabel.md  # NEW
 
       - 7.20 3D Plot:
-          - Creating 3D Axes: ch07/3d_plot/creating_3d_axes.md  # NEW
+          - Creating 3D Axes: ch07/3d_plot/creating_3d_axes.md
+          - Axes Method - plot_surface: ch07/3d_plot/plot_surface.md
+          - Axes Method - view_init: ch07/3d_plot/view_init.md
+          - Axes Method - plot3D: ch07/3d_plot/plot3D.md
+          - Axes Method - pcolormesh: ch07/3d_plot/pcolormesh.md
 
       - 7.21 Colorbar:
-          - Axes Method - hexbin: ch07/colorbar/hexbin.md  # NEW
-          - Axes Method - imshow (KDE): ch07/colorbar/imshow_kde.md  # NEW
-          - Axes Method - hist2d: ch07/colorbar/hist2d.md  # NEW
+          - Axes Method - hexbin: ch07/colorbar/hexbin.md
+          - Axes Method - imshow (KDE): ch07/colorbar/imshow_kde.md
+          - Axes Method - hist2d: ch07/colorbar/hist2d.md
 
       - 7.22 2D Histogram:
           - Axes Method - hist2d: ch07/2d_histogram/hist2d.md  # NEW
