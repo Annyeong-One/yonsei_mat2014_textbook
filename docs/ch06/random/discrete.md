@@ -2,163 +2,52 @@
 
 NumPy provides functions for generating samples from discrete probability distributions.
 
-
-## np.random.binomial
-
-Generates samples from the binomial distribution $B(n, p)$.
-
-### 1. Coin Flip Model
-
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy import stats
-
-def main():
-    n = 10
-    p = 0.5
-    data = np.random.binomial(n, p, size=(1000,))
-    
-    fig, ax = plt.subplots(figsize=(10, 4))
-    
-    ax.set_title("Histogram of Binomial Samples", fontsize=15)
-    bins = np.arange(n + 2) - 0.5
-    ax.hist(data, bins=bins, density=True, alpha=0.4)
-    ax.set_xticks(np.arange(n + 1))
-    
-    x = np.arange(n + 1)
-    pmf = stats.binom(n, p).pmf(x)
-    for x_loc, p_loc in zip(x, pmf):
-        ax.plot((x_loc - 0.5, x_loc + 0.5), (p_loc, p_loc), 
-                color='red', alpha=0.9, linestyle='--')
-    
-    plt.show()
-
-if __name__ == "__main__":
-    main()
-```
-
-### 2. Interpretation
-
-Counts successes in $n$ independent Bernoulli trials with probability $p$.
-
-
-## np.random.geometric
-
-Generates samples from the geometric distribution.
-
-### 1. Waiting Time
-
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy import stats
-
-def main():
-    p = 0.5
-    data = np.random.geometric(p, size=(1000,))
-    
-    fig, ax = plt.subplots(figsize=(10, 4))
-    
-    ax.set_title("Histogram of Geometric Samples", fontsize=15)
-    bins = np.arange(10) - 0.5
-    ax.hist(data, bins=bins, density=True)
-    ax.set_xticks(np.arange(10))
-    
-    x = np.arange(9)
-    pmf = stats.geom(p).pmf(x)
-    for x_loc, p_loc in zip(x, pmf):
-        ax.plot((x_loc - 0.5, x_loc + 0.5), (p_loc, p_loc),
-                color='red', alpha=0.9, linestyle='--')
-    
-    plt.show()
-
-if __name__ == "__main__":
-    main()
-```
-
-### 2. Interpretation
-
-Number of trials until the first success in Bernoulli experiments.
-
-
-## np.random.poisson
-
-Generates samples from the Poisson distribution $\text{Pois}(\lambda)$.
-
-### 1. Event Counts
-
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy import stats
-
-def main():
-    la = 10
-    data = np.random.poisson(la, size=(1000,))
-    
-    fig, ax = plt.subplots(figsize=(10, 4))
-    
-    ax.set_title("Histogram of Poisson Samples", fontsize=15)
-    bins = np.arange(30) - 0.5
-    ax.hist(data, bins=bins, density=True)
-    ax.set_xticks(np.arange(30))
-    
-    x = np.arange(29)
-    pmf = stats.poisson(la).pmf(x)
-    for x_loc, p_loc in zip(x, pmf):
-        ax.plot((x_loc - 0.5, x_loc + 0.5), (p_loc, p_loc),
-                color='red', alpha=0.9, linestyle='--')
-    
-    plt.show()
-
-if __name__ == "__main__":
-    main()
-```
-
-### 2. Interpretation
-
-Models rare event counts over fixed intervals with rate $\lambda$.
-
-
-## np.random.exponential
-
-Generates samples from the exponential distribution.
-
-### 1. Inter-Arrival Times
-
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy import stats
-
-def main():
-    bt = 1 / 10  # scale = 1/lambda
-    data = np.random.exponential(bt, size=(1000,))
-    
-    fig, ax = plt.subplots()
-    
-    ax.set_title("Histogram of Exponential Samples", fontsize=15)
-    _, bins, _ = ax.hist(data, bins=100, density=True)
-    ax.plot(bins, stats.expon(scale=bt).pdf(bins),
-            color='red', linestyle='--', alpha=0.9)
-    
-    plt.show()
-
-if __name__ == "__main__":
-    main()
-```
-
-### 2. Poisson Connection
-
-Time between events in a Poisson process follows exponential distribution.
-
-
 ## np.random.randint
 
 Generates random integers from a discrete uniform distribution.
 
-### 1. Fair Dice
+### 1. Basic Usage
+
+```python
+import numpy as np
+
+def main():
+    np.random.seed(0)
+    
+    # Random integers from 0 to 9
+    samples = np.random.randint(0, 10, size=10)
+    print(f"Samples: {samples}")
+
+if __name__ == "__main__":
+    main()
+```
+
+**Output:**
+
+```
+Samples: [5 0 3 3 7 9 3 5 2 4]
+```
+
+### 2. Half-Open Interval
+
+`randint(low, high)` samples from $[\text{low}, \text{high})$ — high is excluded.
+
+```python
+import numpy as np
+
+def main():
+    np.random.seed(42)
+    
+    # Integers from 1 to 6 (inclusive)
+    # Use high=7 to include 6
+    dice = np.random.randint(1, 7, size=10)
+    print(f"Dice rolls: {dice}")
+
+if __name__ == "__main__":
+    main()
+```
+
+### 3. Fair Dice Histogram
 
 ```python
 import numpy as np
@@ -166,13 +55,18 @@ import matplotlib.pyplot as plt
 
 def main():
     np.random.seed(0)
-    data = np.random.randint(low=1, high=7, size=(1_000,))
+    
+    data = np.random.randint(low=1, high=7, size=10_000)
     
     fig, ax = plt.subplots(figsize=(10, 4))
-    ax.set_title("Histogram of Fair Dice Samples", fontsize=15)
+    ax.set_title("Fair Dice Rolls", fontsize=15)
     bins = np.arange(1, 8) - 0.5
     ax.hist(data, bins=bins, density=True, alpha=0.4, rwidth=0.9)
+    ax.axhline(1/6, color='r', linestyle='--', label='Expected: 1/6')
     ax.set_xticks(np.arange(1, 7))
+    ax.set_xlabel('Face')
+    ax.set_ylabel('Frequency')
+    ax.legend()
     ax.spines['right'].set_visible(False)
     ax.spines['top'].set_visible(False)
     plt.show()
@@ -181,42 +75,52 @@ if __name__ == "__main__":
     main()
 ```
 
-### 2. Half-Open Interval
-
-`randint(low, high)` samples from $[\text{low}, \text{high})$.
-
-
 ## np.random.choice
 
-Samples from a custom discrete distribution.
+Samples from a custom discrete distribution or array.
 
-### 1. Custom Weights
+### 1. Uniform Sampling
+
+```python
+import numpy as np
+
+def main():
+    np.random.seed(42)
+    
+    Omega = ['A', 'B', 'C', 'D', 'E']
+    samples = np.random.choice(Omega, size=10)
+    print(f"Samples: {samples}")
+
+if __name__ == "__main__":
+    main()
+```
+
+### 2. Custom Weights
 
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
 
 def main():
+    np.random.seed(0)
+    
     Omega = [-3, -1, 1, 2, 5]
     pmf = [0.1, 0.1, 0.1, 0.5, 0.2]
-    sample = np.random.choice(Omega, p=pmf, size=(1_000,))
     
-    fig, ax = plt.subplots(figsize=(12, 3))
-    ax.hist(sample, bins=np.arange(-3, 7) - 0.5, density=True)
+    sample = np.random.choice(Omega, p=pmf, size=10_000)
+    
+    fig, ax = plt.subplots(figsize=(10, 4))
+    ax.set_title("Custom Discrete Distribution", fontsize=15)
+    bins = np.array([-4, -2, 0, 1.5, 3.5, 6])
+    ax.hist(sample, bins=bins, density=True, alpha=0.4, rwidth=0.8)
+    
+    # Mark theoretical probabilities
+    for val, prob in zip(Omega, pmf):
+        ax.plot(val, prob, 'ro', markersize=10)
+    
+    ax.set_xlabel('Value')
+    ax.set_ylabel('Probability')
     plt.show()
-
-if __name__ == "__main__":
-    main()
-```
-
-### 2. Uniform Sampling
-
-```python
-import numpy as np
-
-def main():
-    Omega = [1, 2, 3, 4, 5, 6]
-    print(np.random.choice(Omega, size=(10,)))
 
 if __name__ == "__main__":
     main()
@@ -228,11 +132,239 @@ if __name__ == "__main__":
 import numpy as np
 
 def main():
-    Omega = [1, 2, 3, 4, 5, 6]
-    print(np.random.choice(Omega, size=(5,), replace=False))
+    np.random.seed(42)
+    
+    Omega = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    
+    # Sample 5 unique elements
+    sample = np.random.choice(Omega, size=5, replace=False)
+    print(f"Without replacement: {sample}")
+    
+    # With replacement allows duplicates
+    sample_wr = np.random.choice(Omega, size=5, replace=True)
+    print(f"With replacement:    {sample_wr}")
 
 if __name__ == "__main__":
     main()
 ```
 
-Set `replace=False` for sampling without replacement.
+## np.random.geometric
+
+Generates samples from the geometric distribution.
+
+### 1. Basic Usage
+
+```python
+import numpy as np
+
+def main():
+    np.random.seed(42)
+    
+    p = 0.3  # probability of success
+    samples = np.random.geometric(p, size=10)
+    print(f"Samples: {samples}")
+
+if __name__ == "__main__":
+    main()
+```
+
+### 2. Waiting Time
+
+Number of trials until the first success.
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import stats
+
+def main():
+    np.random.seed(0)
+    
+    p = 0.3
+    data = np.random.geometric(p, size=10_000)
+    
+    fig, ax = plt.subplots(figsize=(10, 4))
+    
+    ax.set_title(f"Geometric(p={p})", fontsize=15)
+    max_x = 20
+    bins = np.arange(1, max_x + 1) - 0.5
+    ax.hist(data[data < max_x], bins=bins, density=True, alpha=0.4, label='Samples')
+    
+    # Theoretical PMF
+    x = np.arange(1, max_x)
+    pmf = stats.geom(p).pmf(x)
+    ax.stem(x, pmf, linefmt='r-', markerfmt='ro', basefmt=' ', label='PMF')
+    
+    ax.set_xlabel('Number of Trials')
+    ax.set_ylabel('Probability')
+    ax.legend()
+    plt.show()
+
+if __name__ == "__main__":
+    main()
+```
+
+### 3. Mean and Variance
+
+$$E[X] = \frac{1}{p}, \quad \text{Var}(X) = \frac{1-p}{p^2}$$
+
+```python
+import numpy as np
+
+def main():
+    p = 0.3
+    samples = np.random.geometric(p, size=100_000)
+    
+    print(f"Theoretical mean: {1/p:.4f}")
+    print(f"Sample mean:      {samples.mean():.4f}")
+    print()
+    print(f"Theoretical var:  {(1-p)/p**2:.4f}")
+    print(f"Sample var:       {samples.var():.4f}")
+
+if __name__ == "__main__":
+    main()
+```
+
+## Categorical Sampling
+
+### 1. Multinomial
+
+```python
+import numpy as np
+
+def main():
+    np.random.seed(42)
+    
+    # Roll a biased die 100 times
+    probs = [0.1, 0.1, 0.2, 0.2, 0.2, 0.2]  # sum to 1
+    n_trials = 100
+    
+    counts = np.random.multinomial(n_trials, probs)
+    print(f"Face counts: {counts}")
+    print(f"Total: {counts.sum()}")
+
+if __name__ == "__main__":
+    main()
+```
+
+### 2. Multiple Experiments
+
+```python
+import numpy as np
+
+def main():
+    np.random.seed(42)
+    
+    probs = [0.2, 0.3, 0.5]
+    n_trials = 10
+    n_experiments = 5
+    
+    results = np.random.multinomial(n_trials, probs, size=n_experiments)
+    print("Results (rows=experiments, cols=categories):")
+    print(results)
+
+if __name__ == "__main__":
+    main()
+```
+
+### 3. Simulation Use Case
+
+```python
+import numpy as np
+
+def main():
+    np.random.seed(42)
+    
+    # Customer segments: [Budget, Standard, Premium]
+    segment_probs = [0.5, 0.35, 0.15]
+    
+    # Simulate 1000 customers
+    n_customers = 1000
+    segment_counts = np.random.multinomial(n_customers, segment_probs)
+    
+    labels = ['Budget', 'Standard', 'Premium']
+    for label, count in zip(labels, segment_counts):
+        print(f"{label:10}: {count} ({count/n_customers:.1%})")
+
+if __name__ == "__main__":
+    main()
+```
+
+## Applications
+
+### 1. Bootstrap Sampling
+
+```python
+import numpy as np
+
+def main():
+    np.random.seed(42)
+    
+    data = np.array([2.3, 3.1, 4.5, 2.8, 3.9, 4.2, 3.5])
+    
+    # Bootstrap: sample with replacement
+    n_bootstrap = 1000
+    means = []
+    
+    for _ in range(n_bootstrap):
+        sample = np.random.choice(data, size=len(data), replace=True)
+        means.append(sample.mean())
+    
+    means = np.array(means)
+    print(f"Original mean: {data.mean():.3f}")
+    print(f"Bootstrap mean: {means.mean():.3f}")
+    print(f"95% CI: [{np.percentile(means, 2.5):.3f}, {np.percentile(means, 97.5):.3f}]")
+
+if __name__ == "__main__":
+    main()
+```
+
+### 2. Random Index Selection
+
+```python
+import numpy as np
+
+def main():
+    np.random.seed(42)
+    
+    n_samples = 1000
+    n_select = 100
+    
+    # Random indices for train/test split
+    indices = np.arange(n_samples)
+    test_idx = np.random.choice(indices, size=n_select, replace=False)
+    train_idx = np.setdiff1d(indices, test_idx)
+    
+    print(f"Train size: {len(train_idx)}")
+    print(f"Test size:  {len(test_idx)}")
+
+if __name__ == "__main__":
+    main()
+```
+
+### 3. Weighted Random Selection
+
+```python
+import numpy as np
+
+def main():
+    np.random.seed(42)
+    
+    items = ['Apple', 'Banana', 'Cherry', 'Date']
+    weights = [10, 5, 3, 2]  # relative weights
+    
+    # Normalize to probabilities
+    probs = np.array(weights) / sum(weights)
+    
+    # Sample 20 items
+    samples = np.random.choice(items, size=20, p=probs)
+    
+    print("Samples:", samples)
+    print()
+    for item in items:
+        count = (samples == item).sum()
+        print(f"{item}: {count}")
+
+if __name__ == "__main__":
+    main()
+```

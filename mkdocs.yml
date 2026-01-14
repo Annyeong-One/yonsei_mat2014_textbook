@@ -508,25 +508,29 @@ nav:
           - Error Handling: ch05/patterns/error_handling.md
 
   - Chapter 6 NumPy:
-      - 6.1 Overview:
+      - 6.1 Getting Started:
+          - Installation: ch06/setup/installation.md
+          - Import Convention: ch06/setup/import_convention.md
+          - Version Check: ch06/setup/version_check.md
+      - 6.2 Overview:
           - Lists vs Arrays: ch06/overview/lists_vs_arrays.md
           - Arrays vs DataFrames: ch06/overview/arrays_vs_dataframes.md
           - PIL vs NumPy Images: ch06/overview/pil_vs_numpy.md
           - NumPy to PyTorch: ch06/overview/numpy_to_pytorch.md
           - NumPy Constants: ch06/overview/numpy_constants.md
           - NumPy vs C Arrays: ch06/overview/numpy_vs_c.md
-      - 6.2 NumPy Fundamentals:
+      - 6.3 NumPy Fundamentals:
           - Array Creation and dtypes: ch06/ndarray/creation.md
           - Shape, Strides, and Views: ch06/ndarray/shape_strides.md
           - linspace and Trigonometry: ch06/ndarray/linspace_trig.md
           - Type Promotion: ch06/ndarray/type_promotion.md
-      - 6.3 Array Generation:
+      - 6.4 Array Generation:
           - np.array and Dimensions: ch06/generation/np_array.md
           - np.zeros, np.ones, np.empty: ch06/generation/zeros_ones_empty.md
           - np.full and np.eye: ch06/generation/full_eye_identity.md
           - np.arange and np.linspace: ch06/generation/arange_linspace.md
           - np.diag and Diagonal Matrices: ch06/generation/diag_matrices.md
-      - 6.4 Array Attributes:
+      - 6.5 Array Attributes:
           - Shape and ndim: ch06/attributes/shape_ndim.md
           - Image Shape Examples: ch06/attributes/image_shape.md
           - Reshaping Arrays: ch06/attributes/reshape.md
@@ -534,37 +538,77 @@ nav:
           - Squeezing Dimensions: ch06/attributes/squeeze.md
           - Dtype Basics: ch06/attributes/dtype_basics.md
           - Changing Dtype: ch06/attributes/dtype_conversion.md
-      - 6.5 Indexing and Slicing:
+      - 6.6 Indexing and Slicing:
           - Basic Indexing: ch06/indexing/basic_indexing.md
           - Slicing Arrays: ch06/indexing/slicing.md
           - Shape After Indexing: ch06/indexing/shape_after_indexing.md
           - Image Manipulation: ch06/indexing/image_manipulation.md
           - Fancy Indexing: ch06/indexing/fancy_indexing.md
           - Boolean Masking: ch06/indexing/boolean_masking.md
-      - 6.6 Views and Copies:
+      - 6.7 Views and Copies:
           - View vs Copy Basics: ch06/memory/view_copy_basics.md
           - Operations That Return Views: ch06/memory/view_operations.md
           - Operations That Return Copies: ch06/memory/copy_operations.md
           - ravel vs flatten: ch06/memory/ravel_flatten.md
           - Memory Contiguity: ch06/memory/contiguity.md
           - Stride Tricks: ch06/memory/strides.md
-      - 6.7 Random Arrays:
+      - 6.8 Random Arrays:
           - Random Seed and Reproducibility: ch06/random/seed.md
           - Normal Distributions: ch06/random/normal.md
           - Uniform Distributions: ch06/random/uniform.md
+          - Binomial Distribution: ch06/random/binomial.md
+          - Poisson Distribution: ch06/random/poisson.md
+          - Exponential Distribution: ch06/random/exponential.md
           - Discrete Distributions: ch06/random/discrete.md
           - Random Permutations: ch06/random/permutations.md
-      - 6.8 Broadcasting:
+      - 6.9 Broadcasting:
           - Broadcasting Rules: ch06/broadcasting/broadcasting.md
-      - 6.9 Vectorization:
+      - 6.10 Element-wise Operations:
+          - Arithmetic Operations: ch06/operations/arithmetic.md
+          - Power Exp Log: ch06/operations/power_exp_log.md
+          - Rounding Functions: ch06/operations/rounding.md
+          - Comparison Operators: ch06/operations/comparison.md
+          - Universal Functions: ch06/operations/ufuncs.md
+      - 6.11 Array Manipulation:
+          - Transpose and Swapaxes: ch06/manipulation/transpose.md
+          - Concatenation: ch06/manipulation/concatenation.md
+          - Splitting Arrays: ch06/manipulation/splitting.md
+          - Array Iteration: ch06/manipulation/iteration.md
+      - 6.12 Vectorization:
           - Performance vs Loops: ch06/vectorization/performance.md
           - Vectorization Basics: ch06/vectorization/vectorization_basics.md
+          - Summation Benchmark: ch06/vectorization/summation_benchmark.md
+          - Numerical Integration: ch06/vectorization/numerical_integration.md
+          - Loop Hoisting: ch06/vectorization/loop_hoisting.md
           - Memory Preallocation: ch06/vectorization/preallocation.md
           - In-Place Operations: ch06/vectorization/inplace_operations.md
           - Profiling Tools: ch06/vectorization/profiling_tools.md
+          - Einsum Operations: ch06/vectorization/einsum.md
           - Acceleration Libraries: ch06/vectorization/acceleration_libs.md
-      - 6.10 Linear Algebra:
-          - Linear Algebra Basics: ch06/linalg/linalg.md
+      - 6.13 Mesh Grids:
+          - np.meshgrid: ch06/meshgrid/meshgrid.md
+          - np.mgrid and np.ogrid: ch06/meshgrid/mgrid_ogrid.md
+          - Surface Plotting: ch06/meshgrid/surface_plotting.md
+      - 6.14 Linear Algebra:
+          - Matrix Multiplication: ch06/linalg/matrix_multiply.md
+          - Determinant and Inverse: ch06/linalg/det_inv.md
+          - Solving Linear Systems: ch06/linalg/solve_systems.md
+          - Eigenvalues: ch06/linalg/eigenvalues.md
+          - Singular Value Decomposition: ch06/linalg/svd.md
+          - Matrix Norms: ch06/linalg/norms.md
+          - Cholesky Decomposition: ch06/linalg/cholesky.md
+          - QR Decomposition: ch06/linalg/qr.md
+      - 6.15 Array Methods:
+          - Reductions with axis: ch06/methods/reductions.md
+          - Min Max Argmin Argmax: ch06/methods/minmax.md
+          - Sum Prod Cumsum: ch06/methods/sum_prod.md
+          - Element-wise Min Max: ch06/methods/elementwise_minmax.md
+          - Statistics Methods: ch06/methods/statistics.md
+          - Covariance Correlation: ch06/methods/cov_corr.md
+          - Sorting Arrays: ch06/methods/sorting.md
+          - Searching Arrays: ch06/methods/searching.md
+          - Filtering with where: ch06/methods/where.md
+          - Utility Functions: ch06/methods/utility.md
 
   - Chapter 7 Matplotlib:
       - 7.1 Plotting Fundamentals:
@@ -625,30 +669,74 @@ nav:
           - Pearson and Spearman: ch10/correlation/correlation.md
           - Covariance: ch10/correlation/covariance.md
 
-  - Chapter 11 Scikit-Learn:
-      - 11.1 Data Preprocessing:
-          - Scaling and Normalization: ch11/preprocessing/scaling.md
-          - Encoding Categorical: ch11/preprocessing/encoding.md
-          - Missing Data Handling: ch11/preprocessing/missing_data.md
-      - 11.2 Model Selection:
-          - Train-Test Split: ch11/model_selection/train_test_split.md
-          - Cross-Validation: ch11/model_selection/cross_validation.md
-          - Grid Search and Tuning: ch11/model_selection/hyperparameters.md
-      - 11.3 Supervised ML:
-          - Linear Models: ch11/supervised/linear_models.md
-          - Tree-Based Models: ch11/supervised/tree_models.md
-          - Ensemble Methods: ch11/supervised/ensemble.md
-          - Support Vector Machines: ch11/supervised/svm.md
-      - 11.4 Unsupervised ML:
-          - Clustering Algorithms: ch11/unsupervised/clustering.md
-          - Dimensionality Reduction: ch11/unsupervised/dimensionality.md
-      - 11.5 Model Evaluation:
-          - Classification Metrics: ch11/evaluation/classification_metrics.md
-          - Regression Metrics: ch11/evaluation/regression_metrics.md
-          - Confusion Matrix: ch11/evaluation/confusion_matrix.md
-      - 11.6 Pipelines:
-          - Pipeline Construction: ch11/pipelines/pipeline_basics.md
-          - Feature Engineering: ch11/pipelines/feature_engineering.md
+  - Chapter 11 SciPy Linear Algebra:
+      - 11.1 Overview:
+          - SciPy vs NumPy Linalg: ch11/overview/scipy_vs_numpy.md
+          - Module Organization: ch11/overview/modules.md
+      - 11.2 Dense Matrix Operations:
+          - LU Decomposition: ch11/dense/lu.md
+          - Cholesky Decomposition: ch11/dense/cholesky.md
+          - QR Decomposition: ch11/dense/qr.md
+          - Schur Decomposition: ch11/dense/schur.md
+          - Hessenberg Form: ch11/dense/hessenberg.md
+      - 11.3 Eigenvalue Problems:
+          - General Eigenvalues: ch11/eigen/eig.md
+          - Symmetric Eigenvalues: ch11/eigen/eigh.md
+          - Generalized Eigenvalues: ch11/eigen/generalized.md
+          - Sparse Eigenvalues: ch11/eigen/sparse_eig.md
+      - 11.4 Matrix Functions:
+          - Matrix Exponential: ch11/functions/expm.md
+          - Matrix Logarithm: ch11/functions/logm.md
+          - Matrix Square Root: ch11/functions/sqrtm.md
+          - Fractional Power: ch11/functions/fractional_power.md
+      - 11.5 Sparse Matrix Basics:
+          - Why Sparse Matrices: ch11/sparse/why_sparse.md
+          - Storage Formats: ch11/sparse/formats.md
+          - Creating Sparse Matrices: ch11/sparse/creation.md
+          - Format Conversion: ch11/sparse/conversion.md
+      - 11.6 Sparse Matrix Operations:
+          - Arithmetic Operations: ch11/sparse/arithmetic.md
+          - Matrix Multiplication: ch11/sparse/matmul.md
+          - Slicing and Indexing: ch11/sparse/slicing.md
+      - 11.7 Sparse Linear Systems:
+          - Direct Solvers: ch11/sparse/direct_solvers.md
+          - Iterative Solvers: ch11/sparse/iterative_solvers.md
+          - Preconditioning: ch11/sparse/preconditioning.md
+      - 11.8 Special Matrices:
+          - Toeplitz and Circulant: ch11/special/toeplitz.md
+          - Block Matrices: ch11/special/block.md
+          - Companion Matrix: ch11/special/companion.md
+      - 11.9 Best Practices:
+          - Format Selection Guide: ch11/sparse/format_guide.md
+          - Performance Tips: ch11/sparse/performance.md
+      - 11.10 Applications:
+          - PDE Discretization: ch11/applications/pde.md
+          - Graph Algorithms: ch11/applications/graphs.md
+
+  - Chapter 12 Scikit-Learn:
+      - 12.1 Data Preprocessing:
+          - Scaling and Normalization: ch12/preprocessing/scaling.md
+          - Encoding Categorical: ch12/preprocessing/encoding.md
+          - Missing Data Handling: ch12/preprocessing/missing_data.md
+      - 12.2 Model Selection:
+          - Train-Test Split: ch12/model_selection/train_test_split.md
+          - Cross-Validation: ch12/model_selection/cross_validation.md
+          - Grid Search and Tuning: ch12/model_selection/hyperparameters.md
+      - 12.3 Supervised ML:
+          - Linear Models: ch12/supervised/linear_models.md
+          - Tree-Based Models: ch12/supervised/tree_models.md
+          - Ensemble Methods: ch12/supervised/ensemble.md
+          - Support Vector Machines: ch12/supervised/svm.md
+      - 12.4 Unsupervised ML:
+          - Clustering Algorithms: ch12/unsupervised/clustering.md
+          - Dimensionality Reduction: ch12/unsupervised/dimensionality.md
+      - 12.5 Model Evaluation:
+          - Classification Metrics: ch12/evaluation/classification_metrics.md
+          - Regression Metrics: ch12/evaluation/regression_metrics.md
+          - Confusion Matrix: ch12/evaluation/confusion_matrix.md
+      - 12.6 Pipelines:
+          - Pipeline Construction: ch12/pipelines/pipeline_basics.md
+          - Feature Engineering: ch12/pipelines/feature_engineering.md
 
 plugins:
   - search

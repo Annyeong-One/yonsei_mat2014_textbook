@@ -1,0 +1,436 @@
+# Element-wise Min Max
+
+## np.minimum
+
+### 1. Basic Usage
+
+`np.minimum` compares two arrays element-wise and returns the smaller value at each position.
+
+```python
+import numpy as np
+
+def main():
+    a = np.array([1, 5, 3, 7])
+    b = np.array([2, 3, 4, 6])
+    
+    c = np.minimum(a, b)
+    
+    print(f"a = {a}")
+    print(f"b = {b}")
+    print(f"np.minimum(a, b) = {c}")
+
+if __name__ == "__main__":
+    main()
+```
+
+**Output:**
+
+```
+a = [1 5 3 7]
+b = [2 3 4 6]
+np.minimum(a, b) = [1 3 3 6]
+```
+
+### 2. With Scalar
+
+Broadcasting allows comparing with a scalar.
+
+```python
+import numpy as np
+
+def main():
+    a = np.array([1, 5, 3, 7, 2])
+    threshold = 4
+    
+    c = np.minimum(a, threshold)
+    
+    print(f"a = {a}")
+    print(f"threshold = {threshold}")
+    print(f"np.minimum(a, threshold) = {c}")
+
+if __name__ == "__main__":
+    main()
+```
+
+**Output:**
+
+```
+a = [1 5 3 7 2]
+threshold = 4
+np.minimum(a, threshold) = [1 4 3 4 2]
+```
+
+### 3. Clamp Upper Bound
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+def main():
+    a = np.linspace(-2, 2, 11)
+    b = np.zeros_like(a)
+    c = np.minimum(a, b)
+    
+    fig, ax = plt.subplots(figsize=(6.5, 4))
+    
+    ax.plot(a, c, 'b-', linewidth=2)
+    
+    ax.spines['left'].set_position("zero")
+    ax.spines['bottom'].set_position("zero")
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+    
+    ax.set_xticks((-2, -1, 0, 1, 2))
+    ax.set_yticks((0, -1, -2))
+    ax.set_xlim(-2, 2)
+    ax.set_ylim(-2, 0.1)
+    ax.set_title('np.minimum(x, 0)')
+    
+    plt.show()
+
+if __name__ == "__main__":
+    main()
+```
+
+## np.maximum
+
+### 1. Basic Usage
+
+`np.maximum` compares two arrays element-wise and returns the larger value at each position.
+
+```python
+import numpy as np
+
+def main():
+    a = np.array([1, 5, 3, 7])
+    b = np.array([2, 3, 4, 6])
+    
+    c = np.maximum(a, b)
+    
+    print(f"a = {a}")
+    print(f"b = {b}")
+    print(f"np.maximum(a, b) = {c}")
+
+if __name__ == "__main__":
+    main()
+```
+
+**Output:**
+
+```
+a = [1 5 3 7]
+b = [2 3 4 6]
+np.maximum(a, b) = [2 5 4 7]
+```
+
+### 2. With Scalar
+
+```python
+import numpy as np
+
+def main():
+    a = np.array([1, 5, 3, 7, 2])
+    threshold = 4
+    
+    c = np.maximum(a, threshold)
+    
+    print(f"a = {a}")
+    print(f"threshold = {threshold}")
+    print(f"np.maximum(a, threshold) = {c}")
+
+if __name__ == "__main__":
+    main()
+```
+
+**Output:**
+
+```
+a = [1 5 3 7 2]
+threshold = 4
+np.maximum(a, threshold) = [4 5 4 7 4]
+```
+
+### 3. ReLU Activation
+
+The ReLU (Rectified Linear Unit) function is `max(0, x)`.
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+def main():
+    a = np.linspace(-2, 2, 11)
+    b = np.zeros_like(a)
+    c = np.maximum(a, b)
+    
+    fig, ax = plt.subplots(figsize=(12, 3))
+    
+    ax.plot(a, c, label='ReLU')
+    ax.legend(fontsize=15)
+    
+    ax.spines['left'].set_position("zero")
+    ax.spines['bottom'].set_position("zero")
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+    
+    ax.set_xticks((-2, -1, 0, 1, 2))
+    ax.set_yticks((0, 1, 2))
+    ax.set_xlim(-2, 2)
+    ax.set_ylim(-0.1, 2)
+    
+    plt.show()
+
+if __name__ == "__main__":
+    main()
+```
+
+## Broadcasting
+
+### 1. Scalar Broadcast
+
+Both `np.minimum` and `np.maximum` support broadcasting with scalars.
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+def main():
+    # ReLU with broadcasting (no zeros_like needed)
+    a = np.linspace(-2, 2, 11)
+    c = np.maximum(a, 0)  # scalar broadcasts
+    
+    fig, ax = plt.subplots(figsize=(12, 3))
+    
+    ax.plot(a, c, label='ReLU')
+    ax.legend(fontsize=15)
+    
+    ax.spines['left'].set_position("zero")
+    ax.spines['bottom'].set_position("zero")
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+    
+    ax.set_xticks((-2, -1, 0, 1, 2))
+    ax.set_yticks((0, 1, 2))
+    ax.set_xlim(-2, 2)
+    ax.set_ylim(-0.1, 2)
+    
+    plt.show()
+
+if __name__ == "__main__":
+    main()
+```
+
+### 2. Array Broadcast
+
+```python
+import numpy as np
+
+def main():
+    # 2D array vs 1D array
+    a = np.array([[1, 5, 3],
+                  [4, 2, 6]])
+    
+    b = np.array([2, 3, 4])  # broadcasts to each row
+    
+    print("a =")
+    print(a)
+    print()
+    print(f"b = {b}")
+    print()
+    print("np.maximum(a, b) =")
+    print(np.maximum(a, b))
+
+if __name__ == "__main__":
+    main()
+```
+
+**Output:**
+
+```
+a =
+[[1 5 3]
+ [4 2 6]]
+
+b = [2 3 4]
+
+np.maximum(a, b) =
+[[2 5 4]
+ [4 3 6]]
+```
+
+### 3. Different Shapes
+
+```python
+import numpy as np
+
+def main():
+    # Column vector vs row vector
+    a = np.array([[1], [2], [3]])  # (3, 1)
+    b = np.array([10, 20])         # (2,)
+    
+    print(f"a.shape = {a.shape}")
+    print(f"b.shape = {b.shape}")
+    print()
+    
+    result = np.maximum(a, b)
+    print(f"np.maximum(a, b).shape = {result.shape}")
+    print(result)
+
+if __name__ == "__main__":
+    main()
+```
+
+## min vs minimum
+
+### 1. Key Difference
+
+- `np.min` / `a.min()`: Reduction (finds minimum in array)
+- `np.minimum`: Element-wise comparison of two arrays
+
+```python
+import numpy as np
+
+def main():
+    a = np.array([1, 5, 3])
+    b = np.array([2, 3, 4])
+    
+    print("Reduction (single array):")
+    print(f"  np.min(a) = {np.min(a)}")
+    print(f"  a.min() = {a.min()}")
+    print()
+    
+    print("Element-wise (two arrays):")
+    print(f"  np.minimum(a, b) = {np.minimum(a, b)}")
+
+if __name__ == "__main__":
+    main()
+```
+
+### 2. Similar Pattern
+
+```python
+import numpy as np
+
+def main():
+    a = np.array([1, 5, 3])
+    b = np.array([2, 3, 4])
+    
+    print("Reduction functions:")
+    print(f"  np.min(a) = {np.min(a)}")
+    print(f"  np.max(a) = {np.max(a)}")
+    print()
+    
+    print("Element-wise functions:")
+    print(f"  np.minimum(a, b) = {np.minimum(a, b)}")
+    print(f"  np.maximum(a, b) = {np.maximum(a, b)}")
+
+if __name__ == "__main__":
+    main()
+```
+
+### 3. Use Case Summary
+
+```python
+import numpy as np
+
+def main():
+    """
+    Use np.min/np.max when:
+    - Finding the smallest/largest value in one array
+    - Reducing along an axis
+    
+    Use np.minimum/np.maximum when:
+    - Comparing two arrays element by element
+    - Clamping values (with scalar broadcast)
+    - Implementing functions like ReLU
+    """
+    
+    data = np.array([[-1, 2], [3, -4]])
+    
+    # Find global minimum
+    print(f"Global min: {np.min(data)}")
+    
+    # Clamp negative values to 0
+    print(f"ReLU result:\n{np.maximum(data, 0)}")
+
+if __name__ == "__main__":
+    main()
+```
+
+## Practical Examples
+
+### 1. Clip Values
+
+```python
+import numpy as np
+
+def main():
+    data = np.array([0.1, 0.5, 1.2, -0.3, 0.8])
+    
+    # Clip to [0, 1] range
+    clipped = np.minimum(np.maximum(data, 0), 1)
+    
+    print(f"Original: {data}")
+    print(f"Clipped:  {clipped}")
+    
+    # Equivalent using np.clip
+    clipped2 = np.clip(data, 0, 1)
+    print(f"np.clip:  {clipped2}")
+
+if __name__ == "__main__":
+    main()
+```
+
+### 2. Leaky ReLU
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+def leaky_relu(x, alpha=0.1):
+    return np.maximum(x, alpha * x)
+
+def main():
+    x = np.linspace(-2, 2, 100)
+    y = leaky_relu(x, alpha=0.1)
+    
+    fig, ax = plt.subplots(figsize=(8, 4))
+    
+    ax.plot(x, y, label='Leaky ReLU (α=0.1)')
+    ax.plot(x, np.maximum(x, 0), '--', label='ReLU')
+    ax.legend()
+    
+    ax.axhline(0, color='gray', linewidth=0.5)
+    ax.axvline(0, color='gray', linewidth=0.5)
+    ax.set_xlabel('x')
+    ax.set_ylabel('y')
+    ax.set_title('Leaky ReLU vs ReLU')
+    
+    plt.show()
+
+if __name__ == "__main__":
+    main()
+```
+
+### 3. Soft Maximum
+
+```python
+import numpy as np
+
+def main():
+    # Element-wise max of multiple arrays
+    a = np.array([1, 4, 2])
+    b = np.array([3, 2, 5])
+    c = np.array([2, 3, 1])
+    
+    # Chain maximum calls
+    result = np.maximum(np.maximum(a, b), c)
+    
+    print(f"a = {a}")
+    print(f"b = {b}")
+    print(f"c = {c}")
+    print(f"Element-wise max = {result}")
+
+if __name__ == "__main__":
+    main()
+```
