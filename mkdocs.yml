@@ -733,6 +733,7 @@ nav:
           - Axes Method - plot_surface: ch07/3d_plot/plot_surface.md
           - Axes Method - view_init: ch07/3d_plot/view_init.md
           - Axes Method - plot3D: ch07/3d_plot/plot3D.md
+          - Axes Method - plot: ch07/3d_plot/3d_plot.md
           - Axes Method - pcolormesh: ch07/3d_plot/pcolormesh.md
 
       - 7.21 Colorbar:
