@@ -386,7 +386,6 @@ nav:
       - 3.3 Recursion:
           - Recursion Fundamentals: ch03/recursion/fundamentals.md  # merge basics + patterns
           - Recursive Patterns: ch03/recursion/patterns.md
-          - Tail Recursion: ch03/recursion/tail_recursion.md  # optional new
 
       - 3.4 Functional Programming:
           - Lambda Expressions: ch03/functional/lambda.md  # merge with best practices
@@ -406,7 +405,7 @@ nav:
           - Class Decorators: ch03/decorators/class_decorators.md
           - Practical Decorators: ch03/decorators/practical_decorators.md
           - Decorator Patterns: ch03/decorators/patterns.md
-          - Decorator vs Closure: ch03/decorators/closures_vs_decorators.md
+          - Decorator vs Closure: ch03/decorators/decorator_vs_closure.md
 
   - Chapter 4 OOP:
       - 4.1 OOP Foundations:
