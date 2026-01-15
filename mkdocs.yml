@@ -267,10 +267,7 @@ nav:
           - Terminology: ch02/closures/terminology.md
           - Common Pitfalls: ch02/closures/common_pitfalls.md
           - Practical Applications: ch02/closures/practical_applications.md
-          - Closure Lifetime: ch02/closures/closure_lifetime.md
-          - Closure Memory: ch02/closures/closure_memory.md
-          - Closure Performance: ch02/closures/closure_performance.md
-          - Closure Scope Chain: ch02/closures/closure_scope_chain.md
+          - Closure Internals: ch02/closures/closure_internals.md
 
       - 2.23 Assignment Rules:
           - Assignment Process: ch02/assignment/process_breakdown.md
@@ -292,9 +289,7 @@ nav:
           - Strong vs Weak: ch02/gc/strong_vs_weak.md
           - Breaking Cycles: ch02/gc/breaking_cycles.md
           - Weak Ref Applications: ch02/gc/weak_ref_applications.md
-          - Observer Pattern: ch02/gc/observer_pattern.md
-          - Self-Cleaning Cache: ch02/gc/self_cleaning_cache.md
-          - Parent-Child Relationships: ch02/gc/parent_child_relationships.md
+          - Weak Reference Patterns: ch02/gc/weak_ref_patterns.md
           - When to Use Weak Refs: ch02/gc/when_to_use_weakref.md
           - GC Module: ch02/gc/gc_module.md
           - GC Algorithms: ch02/gc/gc_algorithms.md
