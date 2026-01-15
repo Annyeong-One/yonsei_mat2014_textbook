@@ -203,20 +203,20 @@ nav:
           - global and nonlocal: ch02/scope/global_nonlocal.md
           - Scope Lifetime: ch02/scope/scope_lifetime.md
 
-      - 2.16 Closures:
-          - Closure Fundamentals: ch02/closures/closure_fundamentals.md
-          - Late Binding: ch02/closures/late_binding.md
-          - nonlocal and Mutation: ch02/closures/nonlocal_mutation.md
-          - Scoping Rules: ch02/closures/scoping_rules.md
-          - Practical Patterns: ch02/closures/practical_patterns.md
-
-      - 2.17 Function Parameters:
+      - 2.16 Function Parameters:
           - Call-by-Object-Reference: ch02/functions/call_by_object_reference.md
           - Parameter Mechanisms: ch02/functions/parameter_mechanisms.md
           - Default Parameter Gotcha: ch02/functions/default_parameter_gotcha.md
           - Closure Capture: ch02/functions/closure_capture.md
           - First Class Functions: ch02/functions/first_class_functions.md
           - Parameter Passing: ch02/functions/parameter_passing.md
+
+      - 2.17 Closures:
+          - Closure Fundamentals: ch02/closures/closure_fundamentals.md
+          - Late Binding: ch02/closures/late_binding.md
+          - nonlocal and Mutation: ch02/closures/nonlocal_mutation.md
+          - Scoping Rules: ch02/closures/scoping_rules.md
+          - Practical Patterns: ch02/closures/practical_patterns.md
 
       - 2.18 Performance Basics:
           - Time vs Space Trade-offs: ch02/performance/tradeoffs.md
@@ -687,7 +687,10 @@ nav:
           - Matplotlib Artists: ch08/oop/matplotlib_artists.md
 
   - Chapter 9 Pandas:
-      - 9.1 Core pandas Objects:
+      - 9.1 Overview:
+          - Arrays vs DataFrames: ch09/overview/arrays_vs_dataframes.md  # moved from ch07
+
+      - 9.2 Core pandas Objects:
           - Series: ch09/core/series.md
           - DataFrame: ch09/core/dataframe.md
           - Series vs DataFrame: ch09/core/series_vs_dataframe.md
@@ -695,21 +698,21 @@ nav:
           - Hierarchical Indexing: ch09/core/hierarchical_indexing.md
           - Indexing and Selection: ch09/core/indexing.md
 
-      - 9.2 Creating DataFrames:
+      - 9.3 Creating DataFrames:
           - DataFrame Creation: ch09/creation/dataframe_creation.md
           - Series Creation: ch09/creation/series_creation.md
           - Loading CSV Files: ch09/creation/read_csv.md
           - Loading Excel and JSON: ch09/creation/read_excel_json.md
           - Saving DataFrames: ch09/creation/saving.md
 
-      - 9.3 DataFrame Inspection:
+      - 9.4 DataFrame Inspection:
           - Attributes: ch09/inspection/attributes.md
           - Basic Methods: ch09/inspection/basic_methods.md
           - Statistical Methods: ch09/inspection/statistical_methods.md
           - Value Counts and Unique: ch09/inspection/value_counts.md
           - Memory Usage: ch09/inspection/memory_usage.md
 
-      - 9.4 Handling Missing Data:
+      - 9.5 Handling Missing Data:
           - Detecting Missing Values: ch09/missing/detecting.md
           - fillna Method: ch09/missing/fillna.md
           - fillna Keywords: ch09/missing/fillna_keywords.md
@@ -718,7 +721,7 @@ nav:
           - dropna Keywords: ch09/missing/dropna_keywords.md
           - replace Method: ch09/missing/replace.md
 
-      - 9.5 Data Manipulation:
+      - 9.6 Data Manipulation:
           - Renaming Axes: ch09/manipulation/renaming.md
           - Type Conversion with astype: ch09/manipulation/astype.md
           - map Method: ch09/manipulation/map.md
@@ -729,7 +732,7 @@ nav:
           - drop Method: ch09/manipulation/drop.md
           - drop_duplicates Method: ch09/manipulation/drop_duplicates.md
 
-      - 9.6 Filtering Data:
+      - 9.7 Filtering Data:
           - Boolean Indexing: ch09/filtering/boolean_indexing.md
           - query Method: ch09/filtering/query.md
           - isin Method: ch09/filtering/isin.md
@@ -737,26 +740,26 @@ nav:
           - String Methods: ch09/filtering/string_methods.md
           - eval Method: ch09/filtering/eval.md
 
-      - 9.7 Accessor Methods:
+      - 9.8 Accessor Methods:
           - String Accessor (str): ch09/accessors/str_accessor.md
           - String Methods Reference: ch09/accessors/str_methods.md
           - Datetime Accessor (dt): ch09/accessors/dt_accessor.md
           - Datetime Methods Reference: ch09/accessors/dt_methods.md
           - Categorical Accessor (cat): ch09/accessors/cat_accessor.md
 
-      - 9.8 Categorical Data:
+      - 9.9 Categorical Data:
           - Introduction to Categoricals: ch09/categorical/introduction.md
           - Creating Categoricals: ch09/categorical/creating.md
           - Memory Efficiency: ch09/categorical/memory_efficiency.md
           - Ordered Categoricals: ch09/categorical/ordered.md
           - Categorical Operations: ch09/categorical/operations.md
 
-      - 9.9 Aggregations:
+      - 9.10 Aggregations:
           - Basic Aggregations: ch09/aggregation/basic_aggregations.md
           - agg Method: ch09/aggregation/agg_method.md
           - agg with Multiple Functions: ch09/aggregation/agg_multiple.md
 
-      - 9.10 Merging DataFrames:
+      - 9.11 Merging DataFrames:
           - merge vs join: ch09/merge/merge_vs_join.md
           - merge Method: ch09/merge/merge_method.md
           - Keyword - on: ch09/merge/keyword_on.md
@@ -768,23 +771,23 @@ nav:
           - Cross Merge: ch09/merge/cross_merge.md
           - merge_asof Method: ch09/merge/merge_asof.md
 
-      - 9.11 Joining DataFrames:
+      - 9.12 Joining DataFrames:
           - join Method: ch09/join/join_method.md
           - Keyword - how: ch09/join/keyword_how.md
 
-      - 9.12 Concatenating DataFrames:
+      - 9.13 Concatenating DataFrames:
           - concat Method: ch09/concat/concat_method.md
           - Keyword - axis: ch09/concat/keyword_axis.md
           - Keyword - ignore_index: ch09/concat/keyword_ignore_index.md
 
-      - 9.13 Reshaping Data:
+      - 9.14 Reshaping Data:
           - melt Method: ch09/reshape/melt.md
           - pivot vs melt: ch09/reshape/pivot_vs_melt.md
           - stack Method: ch09/reshape/stack.md
           - unstack Method: ch09/reshape/unstack.md
           - stack vs unstack: ch09/reshape/stack_vs_unstack.md
 
-      - 9.14 GroupBy:
+      - 9.15 GroupBy:
           - GroupBy Object: ch09/groupby/groupby_object.md
           - Iteration with GroupBy: ch09/groupby/iteration.md
           - get_group Method: ch09/groupby/get_group.md
@@ -794,12 +797,12 @@ nav:
           - filter Method: ch09/groupby/filter.md
           - Multi-Level Grouping: ch09/groupby/multi_level.md
 
-      - 9.15 Pivot Tables:
+      - 9.16 Pivot Tables:
           - pivot Method: ch09/pivot/pivot_method.md
           - pivot_table Method: ch09/pivot/pivot_table_method.md
           - pivot vs pivot_table: ch09/pivot/pivot_vs_pivot_table.md
 
-      - 9.16 Time Series:
+      - 9.17 Time Series:
           - DatetimeIndex: ch09/timeseries/datetimeindex.md
           - Creating Date Ranges: ch09/timeseries/date_ranges.md
           - Parsing Dates: ch09/timeseries/parsing_dates.md
@@ -808,48 +811,48 @@ nav:
           - shift and diff: ch09/timeseries/shift_diff.md
           - pct_change Method: ch09/timeseries/pct_change.md
 
-      - 9.17 Window Functions:
+      - 9.18 Window Functions:
           - Window Functions Overview: ch09/window/overview.md
           - rolling Method: ch09/window/rolling.md
           - expanding Method: ch09/window/expanding.md
           - ewm Method: ch09/window/ewm.md
           - Window with GroupBy: ch09/window/window_groupby.md
 
-      - 9.18 Panel Data:
+      - 9.19 Panel Data:
           - Introduction to Panel Data: ch09/panel/introduction.md
           - Building Panel DataFrames: ch09/panel/building.md
           - Accessing Panel Data: ch09/panel/accessing.md
           - Panel Aggregations: ch09/panel/aggregations.md
           - Reshaping Panel Data: ch09/panel/reshaping.md
 
-      - 9.19 Performance Optimization:
+      - 9.20 Performance Optimization:
           - Memory Optimization: ch09/performance/memory_optimization.md
           - Vectorization: ch09/performance/vectorization.md
           - Chunked Processing: ch09/performance/chunked_processing.md
           - Introduction to Dask: ch09/performance/dask_intro.md
 
-      - 9.20 Common Pitfalls:
+      - 9.21 Common Pitfalls:
           - View vs Copy: ch09/pitfalls/view_vs_copy.md
           - Chained Assignment: ch09/pitfalls/chained_assignment.md
           - Index Misalignment: ch09/pitfalls/index_misalignment.md
           - Unexpected NaNs: ch09/pitfalls/unexpected_nans.md
           - Performance Traps: ch09/pitfalls/performance_traps.md
 
-      - 9.21 Practical Examples:
+      - 9.22 Practical Examples:
           - Financial Data Workflow: ch09/examples/yfinance_workflow.md
           - SP500 Analysis: ch09/examples/sp500_analysis.md
           - LeetCode Patterns: ch09/examples/leetcode_patterns.md
           - LeetCode Series Problems: ch09/examples/leetcode_series.md
           - LeetCode DataFrame Problems: ch09/examples/leetcode_dataframe.md
 
-      - 9.22 Pandas OOP Design:
+      - 9.23 Pandas OOP Design:
           - Pandas Series: ch09/oop/pandas_series.md
           - Pandas DataFrame: ch09/oop/pandas_dataframe.md
           - Pandas Index Objects: ch09/oop/pandas_index.md
           - Pandas MultiIndex: ch09/oop/pandas_multiindex.md
           - Pandas Method Chaining: ch09/oop/pandas_method_chaining.md
 
-      - 9.23 Pandas Plotting:
+      - 9.24 Pandas Plotting:
           - plot Method: ch09/plotting/plot_method.md
           - plot Keywords: ch09/plotting/plot_keywords.md
           - Plot Types (kind): ch09/plotting/plot_kinds.md
