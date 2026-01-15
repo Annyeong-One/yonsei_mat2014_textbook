@@ -1,6 +1,6 @@
 # Compile vs Runtime Errors
 
-Programming errors fall into two main categories based on when they occur: compile-time errors (caught before execution) and runtime errors (caught during execution).
+Programming errors fall into three main categories based on when they occur: compile-time errors (caught before execution), runtime errors (caught during execution), and logical errors (never caught by Python).
 
 
 ## Compile-Time Errors
@@ -41,6 +41,38 @@ message = "Hello
 ```
 
 
+## Compile Errors Prevent Execution
+
+With a syntax error, no code runs at all.
+
+```python
+print("This never prints")
+
+if True  # SyntaxError here
+    print("Hello")
+
+print("This also never prints")
+```
+
+None of the `print` statements execute because Python fails to parse the file.
+
+
+## Compile Errors Cannot Be Caught
+
+Syntax errors cannot be caught with `try/except` in the same file.
+
+```python
+# This doesn't work
+try:
+    if True  # SyntaxError
+        pass
+except SyntaxError:
+    print("Caught")  # Never reached
+```
+
+The entire file fails to parse, so `try/except` never executes.
+
+
 ## Runtime Errors
 
 Runtime errors occur during program execution when the code encounters a situation it cannot handle.
@@ -77,33 +109,6 @@ f = open("nonexistent.txt")
 | `AttributeError` | Object has no attribute |
 | `NameError` | Name not defined |
 | `FileNotFoundError` | File does not exist |
-
-
-## Key Differences
-
-| Feature | Compile Error | Runtime Error |
-|---------|---------------|---------------|
-| When detected | Before execution | During execution |
-| Program runs? | No | Partially (until error) |
-| Type in Python | `SyntaxError` | Various exception types |
-| Can be caught? | No | Yes, with `try/except` |
-| Fix required | Yes, to run at all | Yes, for correct behavior |
-
-
-## Compile Errors Prevent Execution
-
-With a syntax error, no code runs at all.
-
-```python
-print("This never prints")
-
-if True  # SyntaxError here
-    print("Hello")
-
-print("This also never prints")
-```
-
-None of the `print` statements execute because Python fails to parse the file.
 
 
 ## Runtime Errors Allow Partial Execution
@@ -146,20 +151,116 @@ Result: 0
 ```
 
 
-## Compile Errors Cannot Be Caught
+## Forward Referencing Errors
 
-Syntax errors cannot be caught with `try/except` in the same file.
+Forward referencing errors occur when code attempts to use a variable, function, or class before it has been defined. These are runtime errors (`NameError`) caused by Python's sequential execution model.
+
+
+### Variable Forward Reference
+
+Using a variable before assignment raises `NameError`.
 
 ```python
-# This doesn't work
-try:
-    if True  # SyntaxError
-        pass
-except SyntaxError:
-    print("Caught")  # Never reached
+print(x)  # NameError: name 'x' is not defined
+x = 10
 ```
 
-The entire file fails to parse, so `try/except` never executes.
+**Fix**: Define variables before use.
+
+```python
+x = 10
+print(x)  # 10
+```
+
+
+### Function Forward Reference
+
+Calling a function before its definition raises `NameError`.
+
+```python
+result = add(5, 3)  # NameError: name 'add' is not defined
+
+def add(a, b):
+    return a + b
+```
+
+**Fix**: Define functions before calling them.
+
+```python
+def add(a, b):
+    return a + b
+
+result = add(5, 3)
+print(result)  # 8
+```
+
+
+### Why Forward Referencing Errors Occur
+
+Python processes code sequentially:
+
+1. The interpreter reads code line by line
+2. Names are added to the namespace when assigned
+3. Referencing a name requires it to already exist
+
+```python
+# At this point, 'x' is not in the namespace
+print(x)  # NameError
+
+# Now 'x' is added to the namespace
+x = 10
+```
+
+
+### Functions Can Reference Each Other
+
+Function bodies are not executed until called, so mutual references work.
+
+```python
+def is_even(n):
+    if n == 0:
+        return True
+    return is_odd(n - 1)  # is_odd not defined yet, but OK
+
+def is_odd(n):
+    if n == 0:
+        return False
+    return is_even(n - 1)
+
+print(is_even(4))  # True
+```
+
+This works because `is_odd` is only looked up when `is_even` is actually called, by which time both functions exist.
+
+
+### Default Parameter Pitfall
+
+A common forward referencing error occurs when using `self` in default parameter values.
+
+```python
+class BlackScholes:
+    def __init__(self, T):
+        self.T = T
+    
+    # ERROR: self doesn't exist when default is evaluated
+    def run_MC(self, num_steps=int(self.T * 12 * 21)):
+        pass
+```
+
+This fails because default parameter values are evaluated at function definition time, not at call time. At definition time, `self` doesn't exist yet.
+
+**Fix**: Use `None` as default and set the value inside the method.
+
+```python
+class BlackScholes:
+    def __init__(self, T):
+        self.T = T
+    
+    def run_MC(self, num_steps=None):
+        if num_steps is None:
+            num_steps = int(self.T * 12 * 21)
+        # ... method body
+```
 
 
 ## Logical Errors
@@ -176,3 +277,52 @@ print(result)  # 30, but should be 15
 ```
 
 Logical errors are the hardest to find because Python cannot detect them.
+
+
+## Key Differences Summary
+
+| Feature | Compile Error | Runtime Error | Logical Error |
+|---------|---------------|---------------|---------------|
+| When detected | Before execution | During execution | Never (by Python) |
+| Program runs? | No | Partially (until error) | Yes, completely |
+| Type in Python | `SyntaxError` | Various exception types | None |
+| Can be caught? | No | Yes, with `try/except` | No |
+| Detection method | Parser | Interpreter | Testing/review |
+
+
+## Best Practices
+
+1. **Define variables before use**
+   ```python
+   x = 10
+   print(x)
+   ```
+
+2. **Define functions before calling**
+   ```python
+   def greet():
+       print("Hello")
+   
+   greet()
+   ```
+
+3. **Use `None` for instance-dependent defaults**
+   ```python
+   def method(self, value=None):
+       if value is None:
+           value = self.default_value
+   ```
+
+4. **Organize code with definitions first**
+   ```python
+   # Constants
+   MAX_SIZE = 100
+   
+   # Functions
+   def process():
+       pass
+   
+   # Main execution
+   if __name__ == "__main__":
+       process()
+   ```
