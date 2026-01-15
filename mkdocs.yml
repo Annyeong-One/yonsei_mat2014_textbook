@@ -449,7 +449,6 @@ nav:
 
       - 7.2 Overview:
           - Lists vs Arrays: ch07/overview/lists_vs_arrays.md
-          - Arrays vs DataFrames: ch07/overview/arrays_vs_dataframes.md
           - NumPy Constants: ch07/overview/numpy_constants.md
 
       - 7.3 Array Creation:
