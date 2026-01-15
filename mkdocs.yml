@@ -247,27 +247,11 @@ nav:
           - Namespace Implementation: ch02/binding/namespace_implementation.md
 
       - 2.22 Closures & Late Binding:
-          - Closure Cells & Free Vars: ch02/closures/cells_freevars.md
-          - cellvars vs freevars: ch02/closures/cellvars_vs_freevars.md
-          - Code Objects: ch02/closures/code_objects.md
-          - Late Binding Problem: ch02/closures/late_binding_problem.md
-          - Late Binding Solutions: ch02/closures/late_binding_solutions.md
-          - Default Parameters: ch02/closures/default_parameters.md
-          - Function Factory Pattern: ch02/closures/function_factory.md
-          - functools.partial: ch02/closures/functools_partial.md
-          - Closure vs Defaults: ch02/closures/closure_vs_defaults.md
-          - nonlocal and Rebinding: ch02/closures/nonlocal_rebinding.md
-          - Rebinding vs Mutation: ch02/closures/rebinding_vs_mutation.md
-          - Advanced Concepts: ch02/closures/advanced_concepts.md
-          - Cell Sharing: ch02/closures/cell_sharing.md
-          - Generator Scoping: ch02/closures/generator_scoping.md
-          - Comprehension Scoping: ch02/closures/comprehension_scoping.md
-          - lambda vs def: ch02/closures/lambda_vs_def.md
-          - Debugging Tools: ch02/closures/debugging_tools.md
-          - Terminology: ch02/closures/terminology.md
-          - Common Pitfalls: ch02/closures/common_pitfalls.md
-          - Practical Applications: ch02/closures/practical_applications.md
-          - Closure Internals: ch02/closures/closure_internals.md
+          - Closure Fundamentals: ch02/closures/closure_fundamentals.md
+          - Late Binding: ch02/closures/late_binding.md
+          - nonlocal and Mutation: ch02/closures/nonlocal_mutation.md
+          - Scoping Rules: ch02/closures/scoping_rules.md
+          - Practical Patterns: ch02/closures/practical_patterns.md
 
       - 2.23 Assignment Rules:
           - Assignment Process: ch02/assignment/process_breakdown.md
@@ -283,21 +267,10 @@ nav:
       - 2.24 Reference Counting and GC:
           - Memory Management: ch02/gc/memory_management_overview.md
           - Reference Counting: ch02/gc/reference_counting.md
-          - Circular References: ch02/gc/circular_references.md
           - Garbage Collection: ch02/gc/garbage_collection.md
           - Weak References: ch02/gc/weak_references.md
-          - Strong vs Weak: ch02/gc/strong_vs_weak.md
-          - Breaking Cycles: ch02/gc/breaking_cycles.md
-          - Weak Ref Applications: ch02/gc/weak_ref_applications.md
           - Weak Reference Patterns: ch02/gc/weak_ref_patterns.md
-          - When to Use Weak Refs: ch02/gc/when_to_use_weakref.md
-          - GC Module: ch02/gc/gc_module.md
-          - GC Algorithms: ch02/gc/gc_algorithms.md
-          - Generations: ch02/gc/generations.md
-          - Finalizers: ch02/gc/finalizers.md
           - Memory Leaks: ch02/gc/memory_leaks.md
-          - GC Performance: ch02/gc/gc_performance.md
-          - GC Tuning: ch02/gc/gc_tuning.md
 
       - 2.25 Scope & Namespace:
           - LEGB Resolution: ch02/scope/legb_resolution.md
@@ -342,21 +315,6 @@ nav:
           - Style Guide: ch02/practical/style_guide.md
           - Real World Examples: ch02/practical/real_world_examples.md
           - Interview Questions: ch02/practical/interview_questions.md
-
-      - 2.29 Resources:
-          - Key Takeaways: ch02/conclusion/key_takeaways.md
-          - Chapter Summary: ch02/conclusion/chapter_summary.md
-          - Mental Models: ch02/conclusion/mental_models.md
-          - Common Mistakes: ch02/conclusion/common_mistakes.md
-          - Graduate Insights: ch02/conclusion/graduate_insights.md
-          - Glossary: ch02/conclusion/glossary.md
-          - Further Reading: ch02/conclusion/further_reading.md
-          - Essential Reading: ch02/conclusion/essential_reading.md
-          - CPython Resources: ch02/conclusion/cpython_resources.md
-          - Academic Papers: ch02/conclusion/academic_papers.md
-          - Profiling Tools: ch02/conclusion/profiling_tools.md
-          - Communities: ch02/conclusion/communities.md
-          - Next Steps: ch02/conclusion/next_steps.md
 
   - Chapter 3 Functions:
       - 3.1 First-Class Functions:
@@ -756,20 +714,89 @@ nav:
   - Chapter 8 Pandas:
       - 8.1 Core pandas Objects:
           - Series and DataFrame: ch08/core/series_dataframe.md
+          - Index Objects: ch08/core/index_objects.md
           - Indexing and Selection: ch08/core/indexing.md
 
-      - 8.2 Data Wrangling:
-          - GroupBy and Aggregation: ch08/wrangling/groupby.md
-          - Merge and Join: ch08/wrangling/merge_join.md
+      - 8.2 Handling Missing Data:
+          - Detecting Missing Values: ch08/missing/detecting.md
+          - fillna Method: ch08/missing/fillna.md
+          - fillna Keywords: ch08/missing/fillna_keywords.md
+          - interpolate Method: ch08/missing/interpolate.md
+          - dropna Method: ch08/missing/dropna.md
+          - dropna Keywords: ch08/missing/dropna_keywords.md
+          - replace Method: ch08/missing/replace.md
 
-      - 8.3 Time Series:
+      - 8.3 Data Manipulation:
+          - Renaming Axes: ch08/manipulation/renaming.md
+          - map Method: ch08/manipulation/map.md
+          - apply Method: ch08/manipulation/apply.md
+          - apply with axis: ch08/manipulation/apply_axis.md
+          - Sorting by Index and Values: ch08/manipulation/sorting.md
+
+      - 8.4 Aggregations:
+          - Basic Aggregations: ch08/aggregation/basic_aggregations.md
+          - agg Method: ch08/aggregation/agg_method.md
+          - agg with Multiple Functions: ch08/aggregation/agg_multiple.md
+
+      - 8.5 Merging DataFrames:
+          - merge vs join: ch08/merge/merge_vs_join.md
+          - merge Method: ch08/merge/merge_method.md
+          - Keyword - on: ch08/merge/keyword_on.md
+          - Keyword - left_on right_on: ch08/merge/keyword_left_right_on.md
+          - Keyword - how: ch08/merge/keyword_how.md
+          - Keyword - suffixes: ch08/merge/keyword_suffixes.md
+          - Keyword - indicator: ch08/merge/keyword_indicator.md
+          - Self Merge: ch08/merge/self_merge.md
+          - Cross Merge: ch08/merge/cross_merge.md
+          - merge_asof Method: ch08/merge/merge_asof.md
+
+      - 8.6 Joining DataFrames:
+          - join Method: ch08/join/join_method.md
+          - Keyword - how: ch08/join/keyword_how.md
+
+      - 8.7 Concatenating DataFrames:
+          - concat Method: ch08/concat/concat_method.md
+          - Keyword - axis: ch08/concat/keyword_axis.md
+          - Keyword - ignore_index: ch08/concat/keyword_ignore_index.md
+
+      - 8.8 Reshaping Data:
+          - melt Method: ch08/reshape/melt.md
+          - pivot vs melt: ch08/reshape/pivot_vs_melt.md
+
+      - 8.9 GroupBy:
+          - GroupBy Object: ch08/groupby/groupby_object.md
+          - Iteration with GroupBy: ch08/groupby/iteration.md
+          - get_group Method: ch08/groupby/get_group.md
+          - GroupBy Aggregations: ch08/groupby/aggregations.md
+          - transform Method: ch08/groupby/transform.md
+          - rank Method: ch08/groupby/rank.md
+          - filter Method: ch08/groupby/filter.md
+          - Multi-Level Grouping: ch08/groupby/multi_level.md
+
+      - 8.10 Pivot Tables:
+          - pivot Method: ch08/pivot/pivot_method.md
+          - pivot_table Method: ch08/pivot/pivot_table_method.md
+          - pivot vs pivot_table: ch08/pivot/pivot_vs_pivot_table.md
+
+      - 8.11 Time Series:
           - DatetimeIndex: ch08/timeseries/datetimeindex.md
-          - Resampling and Rolling: ch08/timeseries/resampling.md
+          - Creating Date Ranges: ch08/timeseries/date_ranges.md
+          - Time Indexing: ch08/timeseries/time_indexing.md
+          - Resampling: ch08/timeseries/resampling.md
 
-      - 8.4 Practical Examples:
+      - 8.12 Window Functions:
+          - Window Functions Overview: ch08/window/overview.md
+          - rolling Method: ch08/window/rolling.md
+          - expanding Method: ch08/window/expanding.md
+          - ewm Method: ch08/window/ewm.md
+          - Window with GroupBy: ch08/window/window_groupby.md
+
+      - 8.13 Practical Examples:
           - Financial Data Workflow: ch08/examples/yfinance_workflow.md
+          - SP500 Analysis: ch08/examples/sp500_analysis.md
+          - LeetCode Patterns: ch08/examples/leetcode_patterns.md
 
-      - 8.5 Pandas OOP Design:
+      - 8.14 Pandas OOP Design:
           - Pandas Series: ch08/oop/pandas_series.md
           - Pandas DataFrame: ch08/oop/pandas_dataframe.md
           - Pandas Index Objects: ch08/oop/pandas_index.md

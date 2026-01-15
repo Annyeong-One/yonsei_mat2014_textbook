@@ -1,66 +1,171 @@
-# Resampling and
+# Resampling
 
-Resampling and rolling operations summarize time series over different horizons, which is central to financial analysis.
+Resampling changes the frequency of time series data, either downsampling (e.g., daily to monthly) or upsampling (e.g., monthly to daily).
 
----
+## Basic Resampling
 
-## Resampling
+Change time series frequency.
 
-Resampling changes the frequency of a time series.
-
-```python
-s.resample("M").mean()
-```
-
-Common frequencies:
-- `"D"` daily
-- `"W"` weekly
-- `"M"` monthly
-
----
-
-## OHLC aggregation
+### 1. Monthly Average
 
 ```python
-prices.resample("D").ohlc()
+import pandas as pd
+
+s = pd.Series(
+    range(100),
+    index=pd.date_range('2025-01-01', periods=100, freq='D')
+)
+
+monthly = s.resample('M').mean()
+print(monthly)
 ```
 
-This is standard for financial price data.
-
----
-
-## Rolling windows
-
-Rolling operations compute statistics over moving windows.
+### 2. Weekly Sum
 
 ```python
-returns.rolling(20).std()
+weekly = s.resample('W').sum()
 ```
 
-This computes a 20-period rolling volatility.
-
----
-
-## Expanding windows
+### 3. Quarterly Max
 
 ```python
-returns.expanding().mean()
+quarterly = s.resample('Q').max()
 ```
 
-Expanding windows include all data up to the current point.
+## Common Frequencies
 
----
+Resampling frequency strings.
 
-## Practical
+### 1. Time-based
 
-- Rolling windows introduce NaNs.
-- Window size affects smoothness.
-- Align windows carefully in backtests.
+```python
+s.resample('D').mean()   # Daily
+s.resample('W').mean()   # Weekly
+s.resample('M').mean()   # Monthly
+s.resample('Q').mean()   # Quarterly
+s.resample('Y').mean()   # Yearly
+```
 
----
+### 2. Business Frequencies
 
-## Key takeaways
+```python
+s.resample('B').mean()   # Business day
+s.resample('BM').mean()  # Business month end
+```
 
-- Resampling changes time frequency.
-- Rolling windows capture local behavior.
-- Essential for time-series finance.
+### 3. Intraday
+
+```python
+s.resample('H').mean()   # Hourly
+s.resample('T').mean()   # Minute
+```
+
+## OHLC Aggregation
+
+Financial price data aggregation.
+
+### 1. Open-High-Low-Close
+
+```python
+prices = pd.Series(
+    [100, 101, 99, 102, 98, 103],
+    index=pd.date_range('2025-01-01', periods=6, freq='D')
+)
+
+ohlc = prices.resample('W').ohlc()
+print(ohlc)
+```
+
+### 2. Standard for Financial Data
+
+OHLC is standard for representing price bars.
+
+### 3. With Volume
+
+```python
+# For DataFrame with price and volume
+df.resample('W').agg({
+    'price': 'ohlc',
+    'volume': 'sum'
+})
+```
+
+## Aggregation Functions
+
+Apply various aggregations when resampling.
+
+### 1. Built-in Functions
+
+```python
+s.resample('M').mean()
+s.resample('M').sum()
+s.resample('M').first()
+s.resample('M').last()
+s.resample('M').count()
+```
+
+### 2. Multiple Functions
+
+```python
+s.resample('M').agg(['mean', 'std', 'min', 'max'])
+```
+
+### 3. Custom Function
+
+```python
+s.resample('M').apply(lambda x: x.max() - x.min())
+```
+
+## Upsampling
+
+Increase frequency (requires filling).
+
+### 1. Daily to Hourly
+
+```python
+daily = pd.Series([100, 101, 102], index=pd.date_range('2025-01-01', periods=3, freq='D'))
+hourly = daily.resample('H').ffill()  # Forward fill
+```
+
+### 2. Fill Methods
+
+```python
+s.resample('H').ffill()    # Forward fill
+s.resample('H').bfill()    # Backward fill
+s.resample('H').asfreq()   # No fill (NaN)
+```
+
+### 3. Interpolation
+
+```python
+s.resample('H').interpolate()
+```
+
+## Practical Examples
+
+Financial analysis with resampling.
+
+### 1. Monthly Returns
+
+```python
+import yfinance as yf
+
+aapl = yf.download('AAPL', start='2023-01-01', end='2024-01-01')
+monthly_avg = aapl['Close'].resample('M').mean()
+print(monthly_avg)
+```
+
+### 2. Rolling Analysis on Resampled Data
+
+```python
+monthly_returns = aapl['Close'].resample('M').last().pct_change()
+```
+
+### 3. Plotting
+
+```python
+import matplotlib.pyplot as plt
+
+monthly_avg.plot(title='AAPL Monthly Average Closing Price')
+plt.show()
+```
