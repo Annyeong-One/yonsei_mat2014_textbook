@@ -112,7 +112,7 @@ nav:
           - Shorthand Operators: ch02/variables/shorthand_operators.md
           - Simultaneous Assignment: ch02/variables/simultaneous_assignment.md
           - Chained Assignment: ch02/variables/chained_assignment.md
-          - Naming Constraints: ch02/naming/naming_constraints
+          - Naming Constraints: ch02/naming/naming_constraints.md
           - Unicode Identifiers: ch02/naming/unicode_identifiers.md
           - Underscore Convention: ch02/naming/underscore_convention.md
           - Bad Naming Practices: ch02/naming/bad_practices.md
