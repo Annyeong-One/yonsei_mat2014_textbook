@@ -236,20 +236,17 @@ nav:
           - Immutable vs Mutable: ch03/objects/immutable_mutable.md
           - Mutation vs Assignment: ch03/objects/mutation_vs_assignment.md
 
-      - 3.3 Name Binding:
+      - 3.3 Names, Binding, and Assignment:
           - Formal Binding Model: ch03/binding/formal_model.md
-          - Simple Name Binding: ch03/binding/simple_binding.md
-          - Complex Binding Scenarios: ch03/binding/complex_scenarios.md
+          - Assignment Process: ch03/binding/assignment_process.md        # merge simple_binding into this
+          - Assignment vs Mutation: ch03/binding/assignment_vs_mutation.md
+          - Identity and Equality: ch03/binding/identity_equality.md
+          - Unpacking and Destructuring: ch03/binding/unpacking.md
           - Namespace Hierarchies: ch03/binding/namespace_hierarchies.md
           - Namespace Implementation: ch03/binding/namespace_implementation.md
+          - Complex Binding Scenarios: ch03/binding/complex_scenarios.md
 
-      - 3.4 Assignment Semantics:
-          - Assignment Process: ch03/assignment/assignment_process.md
-          - Assignment vs Mutation: ch03/assignment/assignment_vs_mutation.md
-          - Identity and Equality: ch03/assignment/identity_equality.md
-          - Unpacking and Destructuring: ch03/assignment/unpacking.md
-
-      - 3.5 Memory Architecture:
+      - 3.4 Memory Architecture:
           - Stack vs Heap Overview: ch03/memory/stack_heap_overview.md
           - Frame Objects: ch03/memory/frame_objects.md
           - Heap Object Storage: ch03/memory/heap_storage.md
@@ -260,41 +257,41 @@ nav:
           - Stack Overflow: ch03/memory/stack_overflow.md
           - Python vs C Memory: ch03/memory/python_vs_c_memory.md
 
-      - 3.6 Reference Counting and GC:
+      - 3.5 Reference Counting and GC:
           - Memory Management Overview: ch03/gc/memory_management_overview.md
           - Reference Counting: ch03/gc/reference_counting.md
           - Garbage Collection: ch03/gc/garbage_collection.md
           - Memory Leaks: ch03/gc/memory_leaks.md
 
-      - 3.7 Weak References:
+      - 3.6 Weak References:
           - Weak Reference Basics: ch03/gc/weak_references.md
           - Weak Reference Patterns: ch03/gc/weak_ref_patterns.md
 
-      - 3.8 CPython Implementation Details:
+      - 3.7 CPython Implementation Details:
           - Impl vs Guarantees: ch03/implementation/guarantees_vs_details.md
           - Integer Interning: ch03/implementation/integer_interning.md
           - String Interning: ch03/implementation/string_interning.md
           - Object Interning: ch03/implementation/object_interning.md
 
-      - 3.9 Advanced Numeric Internals:
+      - 3.8 Advanced Numeric Internals:
           - int Logical Operations: ch03/numerics/int_logical_operations.md
           - int Two's Complement: ch03/numerics/int_twos_complement.md
           - float Machine Precision: ch03/numerics/float_machine_precision.md
           - float Numerical Stability: ch03/numerics/float_numerical_stability.md
 
-      - 3.10 Advanced String Internals:
+      - 3.9 Advanced String Internals:
           - str Unpacking: ch03/strings/str_unpacking.md
           - str Python vs C: ch03/strings/str_python_vs_c.md
 
-      - 3.11 Advanced Memory Topics:
+      - 3.10 Advanced Memory Topics:
           - Caching Strategies: ch03/advanced_memory/caching_strategies.md
           - Memory Management: ch03/advanced_memory/memory_management.md
           - Memory Optimization: ch03/advanced_memory/memory_optimization.md
 
-      - 3.12 Performance Internals:
+      - 3.11 Performance Internals:
           - Python Execution Model: ch03/performance/execution_model.md
 
-      - 3.13 Practical Implications:
+      - 3.12 Practical Implications:
           - Pythonic Patterns: ch03/practical/pythonic_patterns.md
           - Anti-Patterns and Pitfalls: ch03/practical/anti_patterns.md
           - Namespace Internals: ch03/practical/namespace_internals.md

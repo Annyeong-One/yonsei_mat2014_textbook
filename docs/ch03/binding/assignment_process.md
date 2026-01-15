@@ -32,19 +32,15 @@ x = 42  # Creates binding in local namespace
 # Equivalent to: locals()['x'] = 42
 ```
 
-## Binding Semantics
+## Basic Binding Operations
 
-### Name Binding
-
-Assignment creates a binding from a name to an object:
+### Create Binding
 
 ```python
 x = 42
-# Creates/updates binding
-# x → 42 object (integer)
+# Name 'x' now bound to 42
+print(x)  # 42
 ```
-
-The name `x` is now a reference to the integer object `42`.
 
 ### Rebinding
 
@@ -57,9 +53,29 @@ x = "hello"  # x now refers to a different object
 
 The old object (`42`) is not modified—`x` simply points to a new object.
 
+### Delete Binding
+
+```python
+x = 42
+print(x)  # 42
+
+del x
+# print(x)  # NameError
+```
+
+Note that `del` removes the binding, not the object:
+
+```python
+x = [1, 2, 3]
+y = x
+
+del x
+print(y)  # [1, 2, 3] - object still exists
+```
+
 ## Multiple Assignment
 
-### Tuple Unpacking
+### Simultaneous (Tuple Unpacking)
 
 ```python
 a, b = 1, 2
@@ -67,6 +83,11 @@ a, b = 1, 2
 # temp = (1, 2)
 # a = temp[0]
 # b = temp[1]
+```
+
+```python
+x, y, z = 1, 2, 3
+print(x, y, z)  # 1 2 3
 ```
 
 ### Chained Assignment
@@ -85,12 +106,37 @@ a, b = b, a
 # Then unpacked to a, b
 ```
 
-## Namespace Updates
+## Namespace and Scope
+
+### Local Namespace
+
+```python
+def function():
+    x = 10  # Binds in local namespace
+    y = 20
+    print(locals())  # {'x': 10, 'y': 20}
+
+function()
+# print(x)  # NameError - not in scope
+```
+
+### Global Namespace
+
+```python
+x = 10  # Module-level binding
+
+def function():
+    print(x)  # Access global
+
+function()  # 10
+print('x' in globals())  # True
+```
+
+### Namespace Updates
 
 Assignment modifies the appropriate namespace:
 
 ```python
-# Global scope
 x = 10  # Updates globals()
 
 def func():
@@ -99,10 +145,41 @@ def func():
     z = 30  # Updates globals()
 ```
 
-## Order of Operations
+## Special Binding Forms
+
+### Import Bindings
 
 ```python
-# Complex example
+import math
+# 'math' bound in namespace
+print('math' in dir())  # True
+
+from math import pi
+# 'pi' bound in namespace
+print(pi)  # 3.14159...
+```
+
+### Function and Class Bindings
+
+```python
+def greet():
+    return "Hello"
+
+# 'greet' bound to function object
+print(type(greet))  # <class 'function'>
+```
+
+```python
+class MyClass:
+    pass
+
+# 'MyClass' bound to class object
+print(type(MyClass))  # <class 'type'>
+```
+
+### Walrus Operator
+
+```python
 x = (a := 5) + (b := 10)
 # 1. Evaluate (a := 5) → assigns 5 to a, returns 5
 # 2. Evaluate (b := 10) → assigns 10 to b, returns 10
@@ -118,8 +195,18 @@ x = (a := 5) + (b := 10)
 | 2 | Create object (if needed) |
 | 3 | Bind name to object in namespace |
 
+### Binding Operations
+
+| Operation | Syntax | Effect |
+|-----------|--------|--------|
+| Create | `x = value` | New binding |
+| Update | `x = new_value` | Rebind name |
+| Delete | `del x` | Remove binding |
+| Access | `x` | Lookup in namespace |
+
 Key points:
 - RHS always evaluated first
 - Assignment binds names, doesn't copy values
 - Multiple assignment uses unpacking
 - Namespace determines scope of binding
+- `del` removes bindings, not objects
