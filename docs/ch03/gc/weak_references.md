@@ -1,235 +1,246 @@
 # Weak References
 
-강한 참조와 달리 가비지 컬렉션을 방해하지 않는 참조입니다.
+Weak references allow referencing objects without preventing garbage collection.
 
-## Strong vs Weak References
-
-### Strong References (Normal)
-
-```python
-x = [1, 2, 3]
-y = x
-# Strong refs prevent GC
-# refcount = 2
-```
-
-### Weak References
+## Basic Weak References
 
 ```python
 import weakref
 
-obj = [1, 2, 3]
-weak = weakref.ref(obj)
+class MyClass:
+    pass
 
-print(weak())  # [1, 2, 3]
+obj = MyClass()
+weak_ref = weakref.ref(obj)
 
+# Access via call
+print(weak_ref())  # <MyClass object>
+
+# After deletion
 del obj
-print(weak())  # None (collected)
+print(weak_ref())  # None (object was collected)
 ```
 
-| Type | Prevents GC | Use Case |
-|------|-------------|----------|
-| Strong | Yes | Ownership |
-| Weak | No | Caching, back-references |
+## WeakValueDictionary
 
----
-
-## Weak Reference Types
-
-### 1. weakref.ref()
+A dictionary that doesn't prevent values from being garbage collected:
 
 ```python
 import weakref
 
-obj = [1, 2, 3]
-ref = weakref.ref(obj)
-
-# Access (always check for None)
-if ref() is not None:
-    print(ref())
-```
-
-### 2. WeakValueDictionary
-
-```python
-import weakref
+class Data:
+    def __init__(self, value):
+        self.value = value
 
 cache = weakref.WeakValueDictionary()
-obj = [1, 2, 3]
+
+obj = Data(42)
 cache['key'] = obj
 
+print(cache['key'].value)  # 42
+
 del obj
-# cache['key'] automatically removed
+# cache['key'] no longer exists (auto-removed)
 ```
 
-### 3. WeakKeyDictionary
+## WeakKeyDictionary
+
+A dictionary that doesn't prevent keys from being garbage collected:
 
 ```python
 import weakref
 
-data = weakref.WeakKeyDictionary()
-key_obj = SomeClass()
-data[key_obj] = "value"
+cache = weakref.WeakKeyDictionary()
 
-del key_obj
-# Entry automatically removed
-```
+key = MyClass()
+cache[key] = "value"
 
-### 4. WeakSet
-
-```python
-import weakref
-
-objects = weakref.WeakSet()
-obj = [1, 2, 3]
-objects.add(obj)
-
-del obj
-# obj removed from set automatically
+del key
+# Entry auto-removed when key is collected
 ```
 
 ---
 
-## Callbacks
+## Advanced Features
 
-객체가 수집될 때 콜백을 실행할 수 있습니다.
+### WeakMethod
+
+For weak references to bound methods:
+
+```python
+import weakref
+
+class MyClass:
+    def method(self):
+        return "called"
+
+obj = MyClass()
+weak_method = weakref.WeakMethod(obj.method)
+
+# Call the weak method
+result = weak_method()()  # First () gets method, second () calls it
+print(result)  # "called"
+```
+
+### Proxy Objects
+
+Transparent weak references that act like the original object:
+
+```python
+import weakref
+
+obj = [1, 2, 3]
+proxy = weakref.proxy(obj)
+
+# Use like normal object
+print(proxy[0])  # 1
+print(len(proxy))  # 3
+proxy.append(4)
+print(obj)  # [1, 2, 3, 4]
+
+# After deletion
+del obj
+# proxy[0]  # ReferenceError: weakly-referenced object no longer exists
+```
+
+### Callbacks
+
+Execute code when referenced object is collected:
 
 ```python
 import weakref
 
 def callback(ref):
-    print("Object collected")
+    print("Object was collected!")
 
-obj = [1, 2, 3]
-ref = weakref.ref(obj, callback)
+obj = MyClass()
+weak_ref = weakref.ref(obj, callback)
 
-del obj  # Prints: Object collected
+del obj  # Prints: "Object was collected!"
 ```
-
----
-
-## Breaking Reference Cycles
-
-순환 참조를 방지하는 방법입니다.
-
-### Manual Breaking
-
-```python
-class Node:
-    def __init__(self):
-        self.next = None
-
-# Create cycle
-a = Node()
-b = Node()
-a.next = b
-b.next = a
-
-# Break cycle before cleanup
-a.next = None
-```
-
-### Context Managers
-
-```python
-class Resource:
-    def __init__(self):
-        self.ref = None
-    
-    def __enter__(self):
-        return self
-    
-    def __exit__(self, *args):
-        self.ref = None  # Break reference
-
-with Resource() as r:
-    # use r
-    pass
-# ref cleared automatically
-```
-
-### Weak Back-References
-
-```python
-import weakref
-
-class Parent:
-    def __init__(self):
-        self.children = []
-    
-    def add_child(self, child):
-        self.children.append(child)
-        child.set_parent(self)
-
-class Child:
-    def __init__(self):
-        self._parent_ref = None
-    
-    def set_parent(self, parent):
-        self._parent_ref = weakref.ref(parent)
-    
-    @property
-    def parent(self):
-        if self._parent_ref is None:
-            return None
-        return self._parent_ref()
-
-# No cycle: parent → child → weak_ref
-```
-
----
-
-## When to Use Weak References
-
-### ✅ Use For
-
-| Use Case | Type | Reason |
-|----------|------|--------|
-| Caches | `WeakValueDictionary` | Auto-evict when unused |
-| Observers | `WeakSet` | Auto-unsubscribe |
-| Back-references | `weakref.ref()` | Break cycles |
-| Callbacks | `weakref.ref(obj, fn)` | Cleanup notification |
-
-### ❌ Don't Use For
-
-- Data that must be accessible (use strong refs)
-- Simple, non-cyclic structures
-- Immutable types (int, str can't be weakref'd)
 
 ---
 
 ## Limitations
 
-### Not All Types Support Weak References
+### Types That Support Weak References
+
+Most objects can be weakly referenced:
 
 ```python
 import weakref
 
-# TypeError: cannot create weak reference
-# x = 42
-# ref = weakref.ref(x)
-
 # These work
-obj = [1, 2, 3]
-ref = weakref.ref(obj)  # ✓
-
-class MyClass:
-    pass
-ref = weakref.ref(MyClass())  # ✓
+ref = weakref.ref([1, 2, 3])      # list
+ref = weakref.ref({1, 2, 3})      # set
+ref = weakref.ref({'a': 1})       # dict
+ref = weakref.ref(MyClass())      # user-defined classes
 ```
 
-Types that **cannot** be weakref'd:
-- `int`, `str`, `tuple`, `frozenset`
-- Most built-in immutable types
+### Types That Don't Support Weak References
+
+Built-in immutable types cannot be weakly referenced:
+
+```python
+import weakref
+
+# These raise TypeError
+# weakref.ref(42)           # int
+# weakref.ref("hello")      # str
+# weakref.ref((1, 2, 3))    # tuple
+# weakref.ref(None)         # NoneType
+# weakref.ref(True)         # bool
+```
+
+### Enabling Weak References in Custom Classes
+
+By default, classes with `__slots__` don't support weak references:
+
+```python
+class NoWeakRef:
+    __slots__ = ['x', 'y']
+
+# weakref.ref(NoWeakRef())  # TypeError
+
+# Add __weakref__ to slots to enable
+class WithWeakRef:
+    __slots__ = ['x', 'y', '__weakref__']
+
+ref = weakref.ref(WithWeakRef())  # Works
+```
+
+---
+
+## Use Cases
+
+### Caching
+
+```python
+import weakref
+
+class ExpensiveObject:
+    pass
+
+_cache = weakref.WeakValueDictionary()
+
+def get_cached(key):
+    if key not in _cache:
+        _cache[key] = ExpensiveObject()
+    return _cache[key]
+
+# Objects removed from cache when no longer referenced elsewhere
+```
+
+### Observer Pattern
+
+```python
+import weakref
+
+class Subject:
+    def __init__(self):
+        self._observers = weakref.WeakSet()
+    
+    def attach(self, observer):
+        self._observers.add(observer)
+    
+    def notify(self):
+        for observer in self._observers:
+            observer.update()
+
+# Observers auto-removed when deleted
+```
+
+### Parent-Child References
+
+```python
+import weakref
+
+class Child:
+    def __init__(self, parent):
+        self._parent = weakref.ref(parent)
+    
+    @property
+    def parent(self):
+        return self._parent()
+
+# Avoids circular reference preventing garbage collection
+```
 
 ---
 
 ## Summary
 
-| Feature | Description |
-|---------|-------------|
-| Purpose | Reference without preventing GC |
-| Main Types | `ref()`, `WeakValueDictionary`, `WeakSet` |
-| Use Cases | Caching, observers, back-references |
-| Callbacks | Available via `weakref.ref(obj, callback)` |
-| Limitation | Not all types supported |
+| Type | Description | Use Case |
+|------|-------------|----------|
+| `weakref.ref()` | Basic weak reference | General use |
+| `WeakValueDictionary` | Dict with weak values | Caching |
+| `WeakKeyDictionary` | Dict with weak keys | Metadata storage |
+| `WeakSet` | Set with weak members | Observer pattern |
+| `WeakMethod` | Weak reference to bound method | Callbacks |
+| `proxy()` | Transparent weak reference | Drop-in replacement |
+
+Key points:
+- Weak references don't prevent garbage collection
+- Useful for caches and avoiding circular references
+- Not all types support weak references
+- Add `__weakref__` to `__slots__` if needed
