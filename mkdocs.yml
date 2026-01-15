@@ -857,23 +857,58 @@ nav:
           - scatter_matrix: ch09/plotting/scatter_matrix.md
           - Bar Plots: ch09/plotting/bar_plots.md
 
-  - Chapter 10 PyTorch:
-      - 10.1 Tensors:
-          - Tensor Basics: ch10/tensors/basics.md
-          - NumPy to PyTorch: ch10/tensors/numpy_to_pytorch.md
+  - Chapter 10 SciPy Linear Algebra:
+      - 10.1 Overview:
+          - SciPy vs NumPy Linalg: ch10/overview/scipy_vs_numpy.md
+          - Module Organization: ch10/overview/modules.md
 
-      - 10.2 Autograd:
-          - Autograd Mechanics: ch10/autograd/autograd.md
+      - 10.2 Dense Matrix Operations:
+          - LU Decomposition: ch10/dense/lu.md
+          - Cholesky Decomposition: ch10/dense/cholesky.md
+          - QR Decomposition: ch10/dense/qr.md
+          - Schur Decomposition: ch10/dense/schur.md
+          - Hessenberg Form: ch10/dense/hessenberg.md
 
-      - 10.3 Neural Network:
-          - Modules and Parameters: ch10/nn/modules.md
-          - Loss and Optimizers: ch10/nn/optimizers.md
+      - 10.3 Eigenvalue Problems:
+          - General Eigenvalues: ch10/eigen/eig.md
+          - Symmetric Eigenvalues: ch10/eigen/eigh.md
+          - Generalized Eigenvalues: ch10/eigen/generalized.md
+          - Sparse Eigenvalues: ch10/eigen/sparse_eig.md
 
-      - 10.4 Training:
-          - Training Loops: ch10/training/training_loops.md
+      - 10.4 Matrix Functions:
+          - Matrix Exponential: ch10/functions/expm.md
+          - Matrix Logarithm: ch10/functions/logm.md
+          - Matrix Square Root: ch10/functions/sqrtm.md
+          - Fractional Power: ch10/functions/fractional_power.md
 
-      - 10.5 Performance:
-          - GPU and Performance: ch10/performance/gpu.md
+      - 10.5 Sparse Matrix Basics:
+          - Why Sparse Matrices: ch10/sparse/why_sparse.md
+          - Storage Formats: ch10/sparse/formats.md
+          - Creating Sparse Matrices: ch10/sparse/creation.md
+          - Format Conversion: ch10/sparse/conversion.md
+
+      - 10.6 Sparse Matrix Operations:
+          - Arithmetic Operations: ch10/sparse/arithmetic.md
+          - Matrix Multiplication: ch10/sparse/matmul.md
+          - Slicing and Indexing: ch10/sparse/slicing.md
+
+      - 10.7 Sparse Linear Systems:
+          - Direct Solvers: ch10/sparse/direct_solvers.md
+          - Iterative Solvers: ch10/sparse/iterative_solvers.md
+          - Preconditioning: ch10/sparse/preconditioning.md
+
+      - 10.8 Special Matrices:
+          - Toeplitz and Circulant: ch10/special/toeplitz.md
+          - Block Matrices: ch10/special/block.md
+          - Companion Matrix: ch10/special/companion.md
+
+      - 10.9 Best Practices:
+          - Format Selection Guide: ch10/sparse/format_guide.md
+          - Performance Tips: ch10/sparse/performance.md
+
+      - 10.10 Applications:
+          - PDE Discretization: ch10/applications/pde.md
+          - Graph Algorithms: ch10/applications/graphs.md
 
   - Chapter 11 SciPy Stats:
       - 11.1 Distributions:
@@ -898,89 +933,6 @@ nav:
       - 11.5 Correlation:
           - Pearson and Spearman: ch11/correlation/correlation.md
           - Covariance: ch11/correlation/covariance.md
-
-  - Chapter 12 SciPy Linear Algebra:
-      - 12.1 Overview:
-          - SciPy vs NumPy Linalg: ch12/overview/scipy_vs_numpy.md
-          - Module Organization: ch12/overview/modules.md
-
-      - 12.2 Dense Matrix Operations:
-          - LU Decomposition: ch12/dense/lu.md
-          - Cholesky Decomposition: ch12/dense/cholesky.md
-          - QR Decomposition: ch12/dense/qr.md
-          - Schur Decomposition: ch12/dense/schur.md
-          - Hessenberg Form: ch12/dense/hessenberg.md
-
-      - 12.3 Eigenvalue Problems:
-          - General Eigenvalues: ch12/eigen/eig.md
-          - Symmetric Eigenvalues: ch12/eigen/eigh.md
-          - Generalized Eigenvalues: ch12/eigen/generalized.md
-          - Sparse Eigenvalues: ch12/eigen/sparse_eig.md
-
-      - 12.4 Matrix Functions:
-          - Matrix Exponential: ch12/functions/expm.md
-          - Matrix Logarithm: ch12/functions/logm.md
-          - Matrix Square Root: ch12/functions/sqrtm.md
-          - Fractional Power: ch12/functions/fractional_power.md
-
-      - 12.5 Sparse Matrix Basics:
-          - Why Sparse Matrices: ch12/sparse/why_sparse.md
-          - Storage Formats: ch12/sparse/formats.md
-          - Creating Sparse Matrices: ch12/sparse/creation.md
-          - Format Conversion: ch12/sparse/conversion.md
-
-      - 12.6 Sparse Matrix Operations:
-          - Arithmetic Operations: ch12/sparse/arithmetic.md
-          - Matrix Multiplication: ch12/sparse/matmul.md
-          - Slicing and Indexing: ch12/sparse/slicing.md
-
-      - 12.7 Sparse Linear Systems:
-          - Direct Solvers: ch12/sparse/direct_solvers.md
-          - Iterative Solvers: ch12/sparse/iterative_solvers.md
-          - Preconditioning: ch12/sparse/preconditioning.md
-
-      - 12.8 Special Matrices:
-          - Toeplitz and Circulant: ch12/special/toeplitz.md
-          - Block Matrices: ch12/special/block.md
-          - Companion Matrix: ch12/special/companion.md
-
-      - 12.9 Best Practices:
-          - Format Selection Guide: ch12/sparse/format_guide.md
-          - Performance Tips: ch12/sparse/performance.md
-
-      - 12.10 Applications:
-          - PDE Discretization: ch12/applications/pde.md
-          - Graph Algorithms: ch12/applications/graphs.md
-
-  - Chapter 13 Scikit-Learn:
-      - 13.1 Data Preprocessing:
-          - Scaling and Normalization: ch13/preprocessing/scaling.md
-          - Encoding Categorical: ch13/preprocessing/encoding.md
-          - Missing Data Handling: ch13/preprocessing/missing_data.md
-
-      - 13.2 Model Selection:
-          - Train-Test Split: ch13/model_selection/train_test_split.md
-          - Cross-Validation: ch13/model_selection/cross_validation.md
-          - Grid Search and Tuning: ch13/model_selection/hyperparameters.md
-
-      - 13.3 Supervised ML:
-          - Linear Models: ch13/supervised/linear_models.md
-          - Tree-Based Models: ch13/supervised/tree_models.md
-          - Ensemble Methods: ch13/supervised/ensemble.md
-          - Support Vector Machines: ch13/supervised/svm.md
-
-      - 13.4 Unsupervised ML:
-          - Clustering Algorithms: ch13/unsupervised/clustering.md
-          - Dimensionality Reduction: ch13/unsupervised/dimensionality.md
-
-      - 13.5 Model Evaluation:
-          - Classification Metrics: ch13/evaluation/classification_metrics.md
-          - Regression Metrics: ch13/evaluation/regression_metrics.md
-          - Confusion Matrix: ch13/evaluation/confusion_matrix.md
-
-      - 13.6 Pipelines:
-          - Pipeline Construction: ch13/pipelines/pipeline_basics.md
-          - Feature Engineering: ch13/pipelines/feature_engineering.md
 
 plugins:
   - search
