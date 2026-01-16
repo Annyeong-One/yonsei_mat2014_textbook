@@ -422,9 +422,6 @@ nav:
           - Metaclasses Introduction: ch05/metaclasses/metaclasses_intro.md
           - __init_subclass__: ch05/metaclasses/init_subclass.md
 
-      - 5.15 Memory Optimization:
-          - __slots__: ch05/memory/slots.md
-
   - Chapter 6 Concurrency:
       - 6.1 Concurrency Concepts:
           - Introduction: ch06/concepts/introduction.md
