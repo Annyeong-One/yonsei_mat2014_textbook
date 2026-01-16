@@ -13,9 +13,6 @@ markdown_extensions:
 nav:
   - Home: index.md
 
-nav:
-  - Home: index.md
-
   - Chapter 1 Python Basics:
       - 1.1 Getting Started:
           - Why Python: ch01/setup/why_python.md
@@ -25,11 +22,14 @@ nav:
 
       - 1.2 Basic Syntax:
           - Expressions and Statements: ch01/basics/expressions.md
+          - Operators Overview: ch01/basics/operators_overview.md  # NEW
           - Indentation and Blocks: ch01/basics/indentation.md
           - Comments: ch01/basics/comments.md
+          - pass Statement: ch01/basics/pass_statement.md  # NEW
 
       - 1.3 Control Flow:
           - if / for / while: ch01/control_flow/control_flow.md
+          - break and continue: ch01/control_flow/break_continue.md  # NEW
 
       - 1.4 Essential Built-ins:
           - print() and input(): ch01/builtins/print_input.md
@@ -65,12 +65,16 @@ nav:
           - str Check Methods: ch01/types/str_check_methods.md
           - str Split and Join: ch01/types/str_split_join.md
           - str Modify Methods: ch01/types/str_modify_methods.md
-          - str Align Methods: ch01/types/str_align_methods.md
+          # MOVED TO CH02: str_align_methods.md, str_format_specifiers.md
           - str Formatting Methods: ch01/types/str_formatting_methods.md
-          - str Format Specifiers: ch01/types/str_format_specifiers.md
           - str Built-in Funcs: ch01/types/str_builtin_funcs.md
 
-      - 1.8 Composite Data Types:
+      - 1.8 Functions Basics:
+          - Function and Call Stack: ch01/functions/functions.md
+          - Parameters & Returns: ch01/functions/parameters.md
+          - Type Hints: ch01/functions/type_hints.md
+
+      - 1.9 Composite Data Types:
           - Sequences Overview: ch01/composite_data_types/sequences.md
           - tuple and Immutability: ch01/composite_data_types/tuple.md
           - list and Dynamic Arrays: ch01/composite_data_types/list.md
@@ -79,11 +83,6 @@ nav:
           - dict Methods: ch01/composite_data_types/dict_methods.md
           - set and Membership: ch01/composite_data_types/set.md
           - Comprehensions Overview: ch01/composite_data_types/comprehensions.md
-
-      - 1.9 Functions Basics:
-          - Function and Call Stack: ch01/functions/functions.md
-          - Parameters & Returns: ch01/functions/parameters.md
-          - Type Hints: ch01/functions/type_hints.md
 
       - 1.10 Exceptions:
           - Exception Hierarchy: ch01/exceptions/hierarchy.md
@@ -144,6 +143,10 @@ nav:
           - str UTF-8 Encoding: ch02/strings/str_utf8_encoding.md
           - str Encode and Decode: ch02/strings/str_encode_decode.md
           - str Immutability: ch02/strings/str_immutability.md
+          # MOVED FROM CH01: Advanced string methods for intermediate users
+          - str Align Methods: ch02/strings/str_align_methods.md
+          - str Format Specifiers: ch02/strings/str_format_specifiers.md
+          - F-String Debugging: ch02/strings/fstring_debugging.md
 
       - 2.6 Composite Types Deep Dive:
           - list Copying: ch02/composites/list_copying.md
@@ -157,17 +160,22 @@ nav:
           - deque: ch02/collections/deque.md
           - OrderedDict and ChainMap: ch02/collections/ordereddict_chainmap.md
 
-      - 2.8 Iteration Protocol:
+      - 2.8 itertools Module:
+          - itertools Overview: ch02/itertools/itertools_module.md
+
+      - 2.9 functools Module:
+          - functools Overview: ch02/functools/functools_module.md
+
+      - 2.10 Iteration Protocol:
           - Iterables and Iterators: ch02/iteration/iterables.md
           - Generators and yield: ch02/iteration/generators.md
 
-      - 2.9 Advanced Built-ins:
+      - 2.11 Advanced Built-ins:
           - The builtins Namespace: ch02/advanced_builtins/builtins_namespace.md
-          - map(), filter(), sorted(): ch02/advanced_builtins/map_filter_sorted.md
-          - sorted() with key Function: ch02/advanced_builtins/sorted_key.md
+          - sorted(): ch02/advanced_builtins/sorted.md
           - id(), type(), isinstance(): ch02/advanced_builtins/introspection.md
 
-      - 2.10 Operators Deep Dive:
+      - 2.12 Operators Deep Dive:
           - Operators Overview: ch02/operators/operators_overview.md
           - Arithmetic Operators: ch02/operators/arithmetic.md
           - Comparison Operators: ch02/operators/comparison.md
@@ -176,49 +184,48 @@ nav:
           - Membership Operators: ch02/operators/membership.md
           - Precedence and Associativity: ch02/operators/precedence.md
 
-      - 2.11 Exceptions Deep Dive:
+      - 2.13 Exceptions Deep Dive:
           - Custom Exceptions: ch02/exceptions/custom_exceptions.md
           - assert Statement: ch02/exceptions/assert.md
           - Compile vs Runtime Errors: ch02/exceptions/compile_vs_runtime.md
 
-      - 2.12 File I/O Deep Dive:
+      - 2.14 File I/O Deep Dive:
           - Binary Files: ch02/io/binary_files.md
 
-      - 2.13 Modules Deep Dive:
+      - 2.15 Modules Deep Dive:
           - sys.path and Module Search: ch02/modules/module_search.md
           - Relative Imports: ch02/modules/relative_imports.md
           - Package Init Files: ch02/modules/init_files.md
           - Package Creation: ch02/modules/package_creation.md
           - Command Line Arguments: ch02/modules/argparse.md
 
-      - 2.14 Package Managers:
+      - 2.16 Package Managers:
           - conda and Anaconda: ch02/package_managers/conda.md
           - conda-forge and Miniforge: ch02/package_managers/conda_forge.md
           - mamba: ch02/package_managers/mamba.md
           - Homebrew: ch02/package_managers/homebrew.md
           - Comparison: ch02/package_managers/pkg_manager_comparison.md
 
-      - 2.15 Scope and Namespace:
+      - 2.17 Scope and Namespace:
           - LEGB Resolution: ch02/scope/legb_resolution.md
           - global and nonlocal: ch02/scope/global_nonlocal.md
           - Scope Lifetime: ch02/scope/scope_lifetime.md
 
-      - 2.16 Function Parameters:
+      - 2.18 Function Parameters:
           - Call-by-Object-Reference: ch02/functions/call_by_object_reference.md
           - Parameter Mechanisms: ch02/functions/parameter_mechanisms.md
           - Default Parameter Gotcha: ch02/functions/default_parameter_gotcha.md
-          - Closure Capture: ch02/functions/closure_capture.md
           - First Class Functions: ch02/functions/first_class_functions.md
           - Parameter Passing: ch02/functions/parameter_passing.md
 
-      - 2.17 Closures:
+      - 2.19 Closures:
           - Closure Fundamentals: ch02/closures/closure_fundamentals.md
           - Late Binding: ch02/closures/late_binding.md
           - nonlocal and Mutation: ch02/closures/nonlocal_mutation.md
           - Scoping Rules: ch02/closures/scoping_rules.md
           - Practical Patterns: ch02/closures/practical_patterns.md
 
-      - 2.18 Performance Basics:
+      - 2.20 Performance Basics:
           - Time vs Space Trade-offs: ch02/performance/tradeoffs.md
 
   - Chapter 3 Python Internals:
@@ -234,11 +241,10 @@ nav:
           - Identity Type Value: ch03/objects/identity_type_value.md
           - PyObject Structure: ch03/objects/pyobject_structure.md
           - Immutable vs Mutable: ch03/objects/immutable_mutable.md
-          - Mutation vs Assignment: ch03/objects/mutation_vs_assignment.md
 
       - 3.3 Names, Binding, and Assignment:
           - Formal Binding Model: ch03/binding/formal_model.md
-          - Assignment Process: ch03/binding/assignment_process.md        # merge simple_binding into this
+          - Assignment Process: ch03/binding/assignment_process.md
           - Assignment vs Mutation: ch03/binding/assignment_vs_mutation.md
           - Identity and Equality: ch03/binding/identity_equality.md
           - Unpacking and Destructuring: ch03/binding/unpacking.md
@@ -287,11 +293,11 @@ nav:
           - Caching Strategies: ch03/advanced_memory/caching_strategies.md
           - Memory Management: ch03/advanced_memory/memory_management.md
           - Memory Optimization: ch03/advanced_memory/memory_optimization.md
+          - __slots__: ch03/advanced_memory/slots.md              # NEW
+          - sys.getsizeof(): ch03/advanced_memory/getsizeof.md    # NEW
+          - tracemalloc: ch03/advanced_memory/tracemalloc.md      # NEW
 
-      - 3.11 Performance Internals:
-          - Python Execution Model: ch03/performance/execution_model.md
-
-      - 3.12 Practical Implications:
+      - 3.11 Practical Implications:
           - Pythonic Patterns: ch03/practical/pythonic_patterns.md
           - Anti-Patterns and Pitfalls: ch03/practical/anti_patterns.md
           - Namespace Internals: ch03/practical/namespace_internals.md
@@ -301,7 +307,7 @@ nav:
 
   - Chapter 4 Functions:
       - 4.1 First-Class Functions:
-          - Functions as Objects: ch04/functions/first_class_objects.md
+          - Lambda Expressions: ch04/functions/lambda.md
           - Function Factories: ch04/functions/function_factories.md
 
       - 4.2 Parameters:
@@ -315,7 +321,6 @@ nav:
           - Recursive Patterns: ch04/recursion/patterns.md
 
       - 4.4 Functional Programming:
-          - Lambda Expressions: ch04/functional/lambda.md
           - map(), filter(), reduce(): ch04/functional/map_filter_reduce.md
           - Comprehensions: ch04/functional/comprehensions.md
           - Generator Expressions: ch04/functional/generator_expressions.md
@@ -323,6 +328,9 @@ nav:
           - Higher-Order Functions: ch04/functional/higher_order.md
           - Partial Application: ch04/functional/partial_application.md
           - Function Composition: ch04/functional/composition.md
+          - operator Module: ch04/functional/operator_module.md        # NEW
+          - functools.cache: ch04/functional/functools_cache.md        # NEW
+          - Callback Patterns: ch04/functional/callback_patterns.md    # NEW
 
       - 4.5 Decorators:
           - Decorator Fundamentals: ch04/decorators/decorator_fundamentals.md
@@ -330,6 +338,7 @@ nav:
           - Stacked Decorators: ch04/decorators/stacked_decorators.md
           - Class Decorators: ch04/decorators/class_decorators.md
           - Practical Patterns: ch04/decorators/practical_patterns.md
+          - functools.wraps: ch04/decorators/functools_wraps.md  # NEW
 
   - Chapter 5 OOP:
       - 5.1 OOP Foundations:
@@ -378,30 +387,43 @@ nav:
           - Callable Objects: ch05/dunder_advanced/dunder_callable.md
           - Context Managers: ch05/dunder_advanced/dunder_context.md
 
-      - 5.8 Descriptor Protocol:
-          - Descriptor Introduction: ch05/descriptors/descriptor_intro.md
-          - __get__ __set__ __delete__: ch05/descriptors/descriptor_methods.md
-          - Data vs Non-Data Descriptors: ch05/descriptors/descriptor_types.md
-          - Descriptor Use Cases: ch05/descriptors/descriptor_applications.md
-
-      - 5.9 Properties:
+      - 5.8 Properties:
           - Property Decorator: ch05/properties/property_decorator.md
           - Getter Setter Deleter: ch05/properties/getter_setter_deleter.md
           - Cached Properties: ch05/properties/cached_property.md
           - Read-Only Properties: ch05/properties/readonly_properties.md
           - Properties as Descriptors: ch05/properties/property_descriptor_connection.md
 
+      - 5.9 Descriptor Protocol:
+          - Descriptor Introduction: ch05/descriptors/descriptor_intro.md
+          - __get__ __set__ __delete__: ch05/descriptors/descriptor_methods.md
+          - Data vs Non-Data Descriptors: ch05/descriptors/descriptor_types.md
+          - Descriptor Use Cases: ch05/descriptors/descriptor_applications.md
+          - Attribute Access Lookup: ch05/descriptors/attribute_access_lookup.md
+
       - 5.10 Dunder Attribute Hooks:
           - __getattribute__: ch05/dunder_attrs/dunder_getattribute.md
           - __getattr__: ch05/dunder_attrs/dunder_getattr.md
           - __setattr__: ch05/dunder_attrs/dunder_setattr.md
           - __delattr__: ch05/dunder_attrs/dunder_delattr.md
-          - Attribute Access Interplay: ch05/dunder_attrs/attribute_access_interplay.md
 
       - 5.11 Dynamic Attribute Access:
           - getattr setattr delattr: ch05/dynamic/builtin_attr_functions.md
-          - Attribute Lookup Hierarchy: ch05/dynamic/attribute_lookup_hierarchy.md
           - Dynamic vs Static Access: ch05/dynamic/dynamic_vs_static.md
+
+      - 5.12 dataclasses:
+          - dataclasses Module: ch05/dataclasses/dataclasses.md
+
+      - 5.13 Abstract Base Classes:
+          - ABC and abstractmethod: ch05/abc/abstract_base_classes.md
+          - typing.Protocol: ch05/abc/typing_protocol.md
+
+      - 5.14 Metaclasses:
+          - Metaclasses Introduction: ch05/metaclasses/metaclasses_intro.md
+          - __init_subclass__: ch05/metaclasses/init_subclass.md
+
+      - 5.15 Memory Optimization:
+          - __slots__: ch05/memory/slots.md
 
   - Chapter 6 Concurrency:
       - 6.1 Concurrency Concepts:
@@ -410,21 +432,21 @@ nav:
           - CPU-bound vs IO-bound: ch06/concepts/cpu_vs_io.md
           - Threads vs Processes: ch06/concepts/threads_vs_processes.md
 
-      - 6.2 Threading:
-          - Thread Basics: ch06/threading/thread_basics.md
-          - Thread Synchronization: ch06/threading/synchronization.md
-          - Thread Communication: ch06/threading/communication.md
-
-      - 6.3 Multiprocessing:
-          - Process Basics: ch06/multiprocessing/process_basics.md
-          - Process Pool: ch06/multiprocessing/pool.md
-          - Sharing State: ch06/multiprocessing/sharing_state.md
-
-      - 6.4 concurrent.futures:
+      - 6.2 concurrent.futures:
           - Executor Interface: ch06/futures/executor_interface.md
           - ThreadPoolExecutor: ch06/futures/thread_pool.md
           - ProcessPoolExecutor: ch06/futures/process_pool.md
           - Future Objects: ch06/futures/future_objects.md
+
+      - 6.3 Threading:
+          - Thread Basics: ch06/threading/thread_basics.md
+          - Thread Synchronization: ch06/threading/synchronization.md
+          - Thread Communication: ch06/threading/communication.md
+
+      - 6.4 Multiprocessing:
+          - Process Basics: ch06/multiprocessing/process_basics.md
+          - Process Pool: ch06/multiprocessing/pool.md
+          - Sharing State: ch06/multiprocessing/sharing_state.md
 
       - 6.5 Asyncio:
           - Asyncio Introduction: ch06/asyncio/introduction.md
@@ -459,6 +481,7 @@ nav:
           - Shape and ndim: ch07/attributes/shape_ndim.md
           - Reshaping Arrays: ch07/attributes/reshape.md
           - Expanding Dimensions: ch07/attributes/expand_dims.md
+          - np.newaxis: ch07/attributes/numpy_newaxis.md
           - Squeezing Dimensions: ch07/attributes/squeeze.md
           - Dtype Basics: ch07/attributes/dtype_basics.md
           - Changing Dtype: ch07/attributes/dtype_conversion.md
@@ -472,31 +495,44 @@ nav:
           - Boolean Masking: ch07/indexing/boolean_masking.md
 
       - 7.6 Views and Copies:
-          - View vs Copy Basics: ch07/memory/view_copy_basics.md
+          - View vs Copy: ch07/memory/numpy_views_copies.md
           - Operations That Return Views: ch07/memory/view_operations.md
           - Operations That Return Copies: ch07/memory/copy_operations.md
           - ravel vs flatten: ch07/memory/ravel_flatten.md
           - Memory Contiguity: ch07/memory/contiguity.md
           - Stride Tricks: ch07/memory/strides.md
 
-      - 7.7 Broadcasting:
-          - Broadcasting Rules: ch07/broadcasting/broadcasting.md
-
-      - 7.8 Element-wise Operations:
+      - 7.7 Element-wise Operations:
           - Arithmetic Operations: ch07/operations/arithmetic.md
           - Power Exp Log: ch07/operations/power_exp_log.md
           - Rounding Functions: ch07/operations/rounding.md
           - Comparison Operators: ch07/operations/comparison.md
           - Universal Functions: ch07/operations/ufuncs.md
 
-      - 7.9 Array Manipulation:
+      - 7.8 Broadcasting:
+          - Broadcasting Rules: ch07/broadcasting/broadcasting.md
+
+      - 7.9 Vectorization:
+          - Performance vs Loops: ch07/vectorization/performance.md
+          - Vectorization Basics: ch07/vectorization/vectorization_basics.md
+          - Summation Benchmark: ch07/vectorization/summation_benchmark.md
+          - Numerical Integration: ch07/vectorization/numerical_integration.md
+          - Loop Hoisting: ch07/vectorization/loop_hoisting.md
+          - Memory Preallocation: ch07/vectorization/preallocation.md
+          - In-Place Operations: ch07/vectorization/inplace_operations.md
+          - Profiling Tools: ch07/vectorization/profiling_tools.md
+          - Einsum Operations: ch07/vectorization/einsum.md
+          - Acceleration Libraries: ch07/vectorization/acceleration_libs.md
+          - np.vectorize: ch07/vectorization/numpy_vectorize.md
+
+      - 7.10 Array Manipulation:
           - Transpose and Swapaxes: ch07/manipulation/transpose.md
           - Concatenation: ch07/manipulation/concatenation.md
           - Splitting Arrays: ch07/manipulation/splitting.md
           - Array Iteration: ch07/manipulation/iteration.md
           - Roll: ch07/manipulation/roll.md
 
-      - 7.10 Array Methods:
+      - 7.11 Array Methods:
           - Reductions with axis: ch07/methods/reductions.md
           - Min Max Argmin Argmax: ch07/methods/minmax.md
           - Sum Prod Cumsum: ch07/methods/sum_prod.md
@@ -508,7 +544,10 @@ nav:
           - Filtering with where: ch07/methods/where.md
           - Utility Functions: ch07/methods/utility.md
 
-      - 7.11 Random Arrays:
+      - 7.12 Array Utilities:
+          - clip, unique, diff, gradient: ch07/utilities/numpy_utilities.md
+
+      - 7.13 Random Arrays:
           - Random Seed and Reproducibility: ch07/random/seed.md
           - Normal Distributions: ch07/random/normal.md
           - Uniform Distributions: ch07/random/uniform.md
@@ -518,24 +557,12 @@ nav:
           - Discrete Distributions: ch07/random/discrete.md
           - Random Permutations: ch07/random/permutations.md
 
-      - 7.12 Vectorization:
-          - Performance vs Loops: ch07/vectorization/performance.md
-          - Vectorization Basics: ch07/vectorization/vectorization_basics.md
-          - Summation Benchmark: ch07/vectorization/summation_benchmark.md
-          - Numerical Integration: ch07/vectorization/numerical_integration.md
-          - Loop Hoisting: ch07/vectorization/loop_hoisting.md
-          - Memory Preallocation: ch07/vectorization/preallocation.md
-          - In-Place Operations: ch07/vectorization/inplace_operations.md
-          - Profiling Tools: ch07/vectorization/profiling_tools.md
-          - Einsum Operations: ch07/vectorization/einsum.md
-          - Acceleration Libraries: ch07/vectorization/acceleration_libs.md
-
-      - 7.13 Mesh Grids:
+      - 7.14 Mesh Grids:
           - np.meshgrid: ch07/meshgrid/meshgrid.md
           - np.mgrid and np.ogrid: ch07/meshgrid/mgrid_ogrid.md
           - Surface Plotting: ch07/meshgrid/surface_plotting.md
 
-      - 7.14 Linear Algebra:
+      - 7.15 Linear Algebra:
           - Matrix Multiplication: ch07/linalg/matrix_multiply.md
           - Determinant and Inverse: ch07/linalg/det_inv.md
           - Solving Linear Systems: ch07/linalg/solve_systems.md
@@ -545,12 +572,22 @@ nav:
           - Cholesky Decomposition: ch07/linalg/cholesky.md
           - QR Decomposition: ch07/linalg/qr.md
 
-      - 7.15 NumPy OOP Design:
+      - 7.16 Polynomial and Curve Fitting:
+          - np.polyfit and np.poly1d: ch07/fitting/numpy_polyfit.md
+
+      - 7.17 Fourier Transforms:
+          - np.fft Module: ch07/fft/numpy_fft.md
+
+      - 7.18 Array I/O:
+          - save, load, savez: ch07/io/numpy_io.md
+
+      - 7.19 Structured Arrays:
+          - Record Arrays: ch07/structured/numpy_structured.md
+
+      - 7.20 NumPy OOP Design:
           - NumPy ndarray Design: ch07/oop/numpy_ndarray.md
           - NumPy dtype and Shape: ch07/oop/numpy_dtype_shape.md
           - NumPy UFuncs: ch07/oop/numpy_ufuncs.md
-          - NumPy Broadcasting: ch07/oop/numpy_broadcasting.md
-          - NumPy Views vs Copies: ch07/oop/numpy_views_copies.md
           - NumPy vs C Arrays: ch07/oop/numpy_vs_c.md
           - PIL vs NumPy Images: ch07/oop/pil_vs_numpy.md
 
@@ -564,7 +601,7 @@ nav:
 
       - 8.2 Getting Started:
           - Installation and Import: ch08/setup/installation.md
-          - MATLAB vs OOP Style: ch08/setup/matlab_vs_oop.md
+          - OOP vs Pyplot Style: ch08/setup/matplotlib_oop_vs_pyplot.md
           - plt.subplot vs plt.subplots: ch08/setup/subplot_vs_subplots.md
           - Style Sheets: ch08/setup/style_sheets.md
 
@@ -679,12 +716,11 @@ nav:
 
       - 8.22 Matplotlib OOP Design:
           - Matplotlib Hierarchy: ch08/oop/matplotlib_hierarchy.md
-          - Matplotlib OOP vs Pyplot: ch08/oop/matplotlib_oop_pyplot.md
           - Matplotlib Artists: ch08/oop/matplotlib_artists.md
 
   - Chapter 9 Pandas:
       - 9.1 Overview:
-          - Arrays vs DataFrames: ch09/overview/arrays_vs_dataframes.md  # moved from ch07
+          - Arrays vs DataFrames: ch09/overview/arrays_vs_dataframes.md
 
       - 9.2 Core pandas Objects:
           - Series: ch09/core/series.md
@@ -708,14 +744,13 @@ nav:
           - Value Counts and Unique: ch09/inspection/value_counts.md
           - Memory Usage: ch09/inspection/memory_usage.md
 
-      - 9.5 Handling Missing Data:
-          - Detecting Missing Values: ch09/missing/detecting.md
-          - fillna Method: ch09/missing/fillna.md
-          - fillna Keywords: ch09/missing/fillna_keywords.md
-          - interpolate Method: ch09/missing/interpolate.md
-          - dropna Method: ch09/missing/dropna.md
-          - dropna Keywords: ch09/missing/dropna_keywords.md
-          - replace Method: ch09/missing/replace.md
+      - 9.5 Filtering Data:
+          - Boolean Indexing: ch09/filtering/boolean_indexing.md
+          - query Method: ch09/filtering/query.md
+          - isin Method: ch09/filtering/isin.md
+          - between Method: ch09/filtering/between.md
+          - String Methods: ch09/filtering/string_methods.md
+          - eval Method: ch09/filtering/eval.md
 
       - 9.6 Data Manipulation:
           - Renaming Axes: ch09/manipulation/renaming.md
@@ -728,32 +763,33 @@ nav:
           - drop Method: ch09/manipulation/drop.md
           - drop_duplicates Method: ch09/manipulation/drop_duplicates.md
 
-      - 9.7 Filtering Data:
-          - Boolean Indexing: ch09/filtering/boolean_indexing.md
-          - query Method: ch09/filtering/query.md
-          - isin Method: ch09/filtering/isin.md
-          - between Method: ch09/filtering/between.md
-          - String Methods: ch09/filtering/string_methods.md
-          - eval Method: ch09/filtering/eval.md
+      - 9.7 Handling Missing Data:
+          - Detecting Missing Values: ch09/missing/detecting.md
+          - fillna Method: ch09/missing/fillna.md
+          - fillna Keywords: ch09/missing/fillna_keywords.md
+          - interpolate Method: ch09/missing/interpolate.md
+          - dropna Method: ch09/missing/dropna.md
+          - dropna Keywords: ch09/missing/dropna_keywords.md
+          - replace Method: ch09/missing/replace.md
 
-      - 9.8 Accessor Methods:
+      - 9.8 Aggregations:
+          - Basic Aggregations: ch09/aggregation/basic_aggregations.md
+          - agg Method: ch09/aggregation/agg_method.md
+          - agg with Multiple Functions: ch09/aggregation/agg_multiple.md
+
+      - 9.9 Accessor Methods:
           - String Accessor (str): ch09/accessors/str_accessor.md
           - String Methods Reference: ch09/accessors/str_methods.md
           - Datetime Accessor (dt): ch09/accessors/dt_accessor.md
           - Datetime Methods Reference: ch09/accessors/dt_methods.md
           - Categorical Accessor (cat): ch09/accessors/cat_accessor.md
 
-      - 9.9 Categorical Data:
+      - 9.10 Categorical Data:
           - Introduction to Categoricals: ch09/categorical/introduction.md
           - Creating Categoricals: ch09/categorical/creating.md
           - Memory Efficiency: ch09/categorical/memory_efficiency.md
           - Ordered Categoricals: ch09/categorical/ordered.md
           - Categorical Operations: ch09/categorical/operations.md
-
-      - 9.10 Aggregations:
-          - Basic Aggregations: ch09/aggregation/basic_aggregations.md
-          - agg Method: ch09/aggregation/agg_method.md
-          - agg with Multiple Functions: ch09/aggregation/agg_multiple.md
 
       - 9.11 Merging DataFrames:
           - merge vs join: ch09/merge/merge_vs_join.md

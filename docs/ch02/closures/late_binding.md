@@ -1,10 +1,96 @@
-# Late Binding
+# Late Binding and Closure Capture
 
-클로저에서 가장 흔한 실수: 변수는 **호출 시점**에 조회됩니다.
+When a nested function references variables from its enclosing scope, Python creates a closure. Understanding how closures capture variables—and the "late binding" behavior—is essential for avoiding subtle bugs.
 
-## The Problem
+---
 
-### Classic Loop Bug
+## What is a Closure?
+
+A closure is a function that remembers values from its enclosing scope, even after that scope has finished executing.
+
+```python
+def make_multiplier(n):
+    def multiplier(x):
+        return x * n  # n is captured from enclosing scope
+    return multiplier
+
+double = make_multiplier(2)
+triple = make_multiplier(3)
+
+print(double(5))  # 10
+print(triple(5))  # 15
+```
+
+The inner function `multiplier` "closes over" the variable `n`.
+
+---
+
+## How Capture Works
+
+Python captures **variables by reference**, not by value. The closure stores a reference to the variable, not a copy of its value.
+
+```python
+def make_counter():
+    count = 0
+    
+    def counter():
+        nonlocal count
+        count += 1
+        return count
+    
+    return counter
+
+c = make_counter()
+print(c())  # 1
+print(c())  # 2
+print(c())  # 3
+```
+
+Each call modifies the same `count` variable.
+
+---
+
+## Inspecting Closures
+
+You can examine captured variables through `__closure__`:
+
+```python
+def outer(x):
+    def inner():
+        return x
+    return inner
+
+f = outer(10)
+
+print(f.__closure__)           # (<cell at 0x...>,)
+print(f.__closure__[0].cell_contents)  # 10
+```
+
+---
+
+## Late Binding Explained
+
+Python uses **late binding** for closures—the value is looked up when the function is **called**, not when it's **defined**.
+
+```python
+def outer():
+    x = 10
+    def inner():
+        return x  # x is looked up when inner() is called
+    x = 20  # Change x after defining inner
+    return inner
+
+f = outer()
+print(f())  # 20 (not 10!)
+```
+
+The closure sees the final value of `x`.
+
+---
+
+## The Loop Variable Gotcha
+
+The most common closure pitfall involves loops:
 
 ```python
 funcs = []
@@ -14,7 +100,7 @@ for i in range(3):
 print([f() for f in funcs])  # [2, 2, 2] — NOT [0, 1, 2]!
 ```
 
-**왜?** 모든 람다가 같은 변수 `i`를 참조하고, 호출 시점에 `i`는 2입니다.
+**All functions return 2!** Why? All lambdas reference the same variable `i`, and when called, `i` is 2.
 
 ### Visualizing the Problem
 
@@ -26,6 +112,23 @@ Loop iteration 2: lambda captures reference to i (i=2)
 After loop: i = 2
 
 Call all lambdas: all look up i → all get 2
+```
+
+### With def Statement
+
+```python
+def create_functions():
+    functions = []
+    for i in range(3):
+        def f():
+            return i
+        functions.append(f)
+    return functions
+
+funcs = create_functions()
+print(funcs[0]())  # 2 (expected 0)
+print(funcs[1]())  # 2 (expected 1)
+print(funcs[2]())  # 2 (expected 2)
 ```
 
 ### List Comprehension Version
@@ -40,9 +143,9 @@ print([f() for f in funcs])  # [2, 2, 2]
 
 ## Solutions
 
-### 1. Default Parameter (Most Common)
+### Solution 1: Default Parameter (Most Common)
 
-값을 **정의 시점**에 캡처합니다:
+Capture the current value using a default parameter:
 
 ```python
 funcs = []
@@ -52,15 +155,17 @@ for i in range(3):
 print([f() for f in funcs])  # [0, 1, 2] ✓
 ```
 
+Default parameters use **early binding**—the value is captured when the function is defined.
+
 ```python
 # List comprehension version
 funcs = [lambda x=i: x for i in range(3)]
 print([f() for f in funcs])  # [0, 1, 2] ✓
 ```
 
-### 2. Factory Function
+### Solution 2: Factory Function
 
-각 반복에서 새로운 스코프를 생성합니다:
+Create a separate scope for each iteration:
 
 ```python
 def make_func(val):
@@ -70,7 +175,11 @@ funcs = [make_func(i) for i in range(3)]
 print([f() for f in funcs])  # [0, 1, 2] ✓
 ```
 
-### 3. functools.partial
+Each call to `make_func` creates a new scope with its own `val`.
+
+### Solution 3: functools.partial
+
+Use `partial` to bind the current value:
 
 ```python
 from functools import partial
@@ -82,7 +191,9 @@ funcs = [partial(return_val, i) for i in range(3)]
 print([f() for f in funcs])  # [0, 1, 2] ✓
 ```
 
-### 4. Closure Factory (Explicit)
+### Solution 4: Closure Factory (IIFE Pattern)
+
+Immediately invoked function expression:
 
 ```python
 funcs = [(lambda x: lambda: x)(i) for i in range(3)]
@@ -91,7 +202,7 @@ print([f() for f in funcs])  # [0, 1, 2] ✓
 
 ---
 
-## Comparison
+## Solution Comparison
 
 | Method | Pros | Cons |
 |--------|------|------|
@@ -108,12 +219,30 @@ print([f() for f in funcs])  # [0, 1, 2] ✓
 
 ---
 
+## Early Binding with Defaults
+
+Default parameters use **early binding**—the value is captured when the function is defined:
+
+```python
+def outer():
+    x = 10
+    def inner(x=x):  # x captured NOW (value 10)
+        return x
+    x = 20  # Too late, inner already captured x=10
+    return inner
+
+f = outer()
+print(f())  # 10
+```
+
+---
+
 ## Common Pitfalls
 
 ### Pitfall 1: Event Handlers
 
 ```python
-# Bug
+# Bug: All buttons do the same thing
 buttons = []
 for i in range(3):
     btn = Button(command=lambda: print(i))
@@ -156,11 +285,37 @@ for i in range(3):
     threading.Thread(target=lambda x=i: print(x)).start()
 ```
 
+### Pitfall 4: Nested Loops
+
+The gotcha compounds with nested loops:
+
+```python
+# Bug
+matrix = []
+for i in range(3):
+    row = []
+    for j in range(3):
+        row.append(lambda: (i, j))
+    matrix.append(row)
+
+print(matrix[0][0]())  # (2, 2) - Wrong!
+
+# Fix
+matrix = []
+for i in range(3):
+    row = []
+    for j in range(3):
+        row.append(lambda i=i, j=j: (i, j))
+    matrix.append(row)
+
+print(matrix[0][0]())  # (0, 0) - Correct!
+```
+
 ---
 
 ## Memory Consideration
 
-Default parameter는 값을 복사하지 않고 참조합니다:
+Default parameters capture references, not copies:
 
 ```python
 # Mutable object caution
@@ -180,10 +335,23 @@ f = lambda x=list(data): x
 
 ## Summary
 
+| Binding Type | When Value is Captured | Syntax |
+|--------------|------------------------|--------|
+| Late binding | When function is called | `def f(): return x` |
+| Early binding | When function is defined | `def f(x=x): return x` |
+
 | Issue | Cause | Solution |
 |-------|-------|----------|
-| All closures return same value | Late binding — variable looked up at call time | Capture value at definition time |
-| Loop variable captured | Same variable `i` shared | Use `x=i` default parameter |
+| All closures return same value | Late binding | Capture value at definition time |
+| Loop variable captured | Same variable shared | Use `x=i` default parameter |
 | Callback returns wrong value | Reference to final loop value | Factory function or partial |
 
-**Golden Rule**: 루프에서 클로저를 만들 때는 항상 **값을 캡처**하세요.
+**Key Takeaways**:
+
+1. Closures capture **variables by reference**, not by value
+2. Loop variables change, but all closures share the same reference
+3. Use **default parameters** to capture the current value
+4. Or use a **factory function** to create separate scopes
+5. This applies to `def`, `lambda`, and comprehensions
+
+**Golden Rule**: When creating closures in a loop, always **capture the value** at definition time.

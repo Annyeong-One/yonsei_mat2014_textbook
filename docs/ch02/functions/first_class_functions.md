@@ -2,6 +2,7 @@
 
 In Python, functions are **first-class objects**. This means functions can be treated like any other value—assigned to variables, passed as arguments, returned from other functions, and stored in data structures.
 
+---
 
 ## Functions Are Objects
 
@@ -15,6 +16,7 @@ print(type(greet))        # <class 'function'>
 print(isinstance(greet, object))  # True
 ```
 
+---
 
 ## Assigning Functions to Variables
 
@@ -31,40 +33,23 @@ print(greet("Alice"))      # "Hello, Alice!"
 print(say_hello is greet)  # True (same object)
 ```
 
-
-## Function Attributes
-
-Functions have attributes like any other object:
-
-```python
-def greet(name):
-    """Return a greeting."""
-    return f"Hello, {name}!"
-
-print(greet.__name__)      # 'greet'
-print(greet.__doc__)       # 'Return a greeting.'
-print(greet.__module__)    # '__main__'
-print(greet.__code__)      # <code object greet at ...>
-```
-
-You can even add custom attributes:
-
-```python
-def counter():
-    counter.calls += 1
-    return counter.calls
-
-counter.calls = 0
-
-print(counter())  # 1
-print(counter())  # 2
-print(counter())  # 3
-```
-
+---
 
 ## Passing Functions as Arguments
 
 Functions can be passed to other functions (higher-order functions):
+
+```python
+def apply(func, value):
+    return func(value)
+
+def square(x):
+    return x ** 2
+
+result = apply(square, 5)  # 25
+```
+
+### Applying Multiple Times
 
 ```python
 def apply_twice(func, value):
@@ -77,7 +62,7 @@ result = apply_twice(add_ten, 5)
 print(result)  # 25 (5 + 10 + 10)
 ```
 
-Built-in examples:
+### Built-in Examples
 
 ```python
 numbers = [3, 1, 4, 1, 5]
@@ -92,6 +77,7 @@ list(map(str, numbers))  # ['3', '1', '4', '1', '5']
 list(filter(lambda x: x > 2, numbers))  # [3, 4, 5]
 ```
 
+---
 
 ## Returning Functions
 
@@ -99,9 +85,9 @@ Functions can create and return other functions:
 
 ```python
 def make_multiplier(n):
-    def multiplier(x):
+    def multiply(x):
         return x * n
-    return multiplier
+    return multiply
 
 double = make_multiplier(2)
 triple = make_multiplier(3)
@@ -110,35 +96,46 @@ print(double(5))   # 10
 print(triple(5))   # 15
 ```
 
+---
 
 ## Storing Functions in Data Structures
 
-Functions can be stored in lists, dictionaries, etc.:
+Functions can be stored in lists, dictionaries, etc.
+
+### Lists
 
 ```python
-# List of functions
 operations = [
     lambda x: x + 1,
     lambda x: x * 2,
     lambda x: x ** 2
 ]
 
+# Apply each operation
+for op in operations:
+    print(op(5))  # 6, 10, 25
+
+# Chain operations
 value = 3
 for op in operations:
     value = op(value)
 print(value)  # ((3 + 1) * 2) ** 2 = 64
+```
 
-# Dictionary of functions
+### Dictionaries
+
+```python
 commands = {
     'add': lambda a, b: a + b,
     'sub': lambda a, b: a - b,
     'mul': lambda a, b: a * b,
 }
 
-print(commands['add'](5, 3))  # 8
-print(commands['mul'](5, 3))  # 15
+print(commands['add'](10, 5))  # 15
+print(commands['mul'](5, 3))   # 15
 ```
 
+---
 
 ## Function Dispatch Table
 
@@ -171,10 +168,44 @@ print(dispatch('POST', {}))    # "POST response"
 print(dispatch('PATCH', {}))   # "Unknown method"
 ```
 
+---
+
+## Function Attributes
+
+Functions have attributes like any other object:
+
+```python
+def greet(name):
+    """Return a greeting."""
+    return f"Hello, {name}!"
+
+print(greet.__name__)      # 'greet'
+print(greet.__doc__)       # 'Return a greeting.'
+print(greet.__module__)    # '__main__'
+print(greet.__code__)      # <code object greet at ...>
+```
+
+### Custom Attributes
+
+You can even add custom attributes:
+
+```python
+def counter():
+    counter.calls += 1
+    return counter.calls
+
+counter.calls = 0
+
+print(counter())  # 1
+print(counter())  # 2
+print(counter())  # 3
+```
+
+---
 
 ## Introspection
 
-You can inspect function properties:
+You can inspect function properties using the `inspect` module:
 
 ```python
 def example(a, b, c=10, *args, **kwargs):
@@ -201,6 +232,7 @@ args: VAR_POSITIONAL, default=<class 'inspect._empty'>
 kwargs: VAR_KEYWORD, default=<class 'inspect._empty'>
 ```
 
+---
 
 ## Callable Objects
 
@@ -219,8 +251,7 @@ print(add_five(10))  # 15
 print(callable(add_five))  # True
 ```
 
-
-## Checking Callability
+### Checking Callability
 
 Use `callable()` to check if something can be called:
 
@@ -242,6 +273,7 @@ print(callable(42))             # False
 print(callable("hello"))        # False
 ```
 
+---
 
 ## Practical Applications
 
@@ -306,6 +338,7 @@ Calling add
 Returned 5
 ```
 
+---
 
 ## Summary
 

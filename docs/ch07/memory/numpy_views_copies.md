@@ -4,6 +4,22 @@ NumPy's handling of views and copies differs significantly from Python lists and
 
 ---
 
+## Core Concept
+
+### View Definition
+
+A **view** shares the same underlying data buffer with the original array. Mutations propagate to both.
+
+### Copy Definition
+
+A **copy** allocates new, independent memory. Mutations are isolated from the original.
+
+### Default Behavior
+
+NumPy prefers views for fast computation and efficient memory usage.
+
+---
+
 ## The Key Difference
 
 | Operation | Python List | NumPy Array |
@@ -24,6 +40,28 @@ arr = np.array([1, 2, 3, 4, 5])
 arr_slice = arr[1:4]
 arr_slice[0] = 99
 print(arr)          # [ 1 99  3  4  5] (changed!)
+```
+
+---
+
+## Visual Comparison
+
+### View Diagram
+
+```
+Original Array:  [1, 2, 3, 4, 5]
+                      ↑
+                 (shared memory)
+                      ↓
+View:               [2, 3, 4]
+```
+
+### Copy Diagram
+
+```
+Original Array:  [1, 2, 3, 4, 5]
+                 (separate memory)
+Copy:               [2, 3, 4]
 ```
 
 ---
@@ -121,6 +159,40 @@ print(np.shares_memory(arr, fancy_copy))   # False
 
 ---
 
+## Why Views Exist
+
+Views provide significant performance benefits:
+
+1. **Memory Efficiency**: No data duplication means lower memory consumption
+2. **Speed**: Avoiding memory allocation and copying is faster
+3. **Large Arrays**: Critical when working with gigabyte-scale datasets
+4. **In-place Operations**: Modify subsets directly
+
+```python
+# Process large array efficiently
+data = np.random.randn(1_000_000)
+
+# View: no memory overhead
+subset = data[::100]          # Every 100th element
+subset *= 2                   # Modify in-place (affects data!)
+
+# If you need independence:
+subset = data[::100].copy()
+subset *= 2                   # data unchanged
+```
+
+---
+
+## When to Copy
+
+Explicit copies protect data integrity:
+
+1. **Data Preservation**: Copy when you need to preserve the original unchanged
+2. **Multi-threaded Code**: Copy to avoid race conditions in parallel processing
+3. **Function Returns**: Copy when returning array subsets from functions
+
+---
+
 ## Comparison: NumPy vs MATLAB vs R
 
 ### Copy-on-Write Semantics
@@ -185,28 +257,6 @@ b = a.copy()     # Explicit copy
 
 ---
 
-## Why NumPy Uses Views
-
-1. **Performance**: No memory allocation for slices
-2. **Memory efficiency**: Large arrays don't duplicate
-3. **In-place operations**: Modify subsets directly
-4. **Explicitness**: Programmer controls when to copy
-
-```python
-# Process large array efficiently
-data = np.random.randn(1_000_000)
-
-# View: no memory overhead
-subset = data[::100]          # Every 100th element
-subset *= 2                   # Modify in-place (affects data!)
-
-# If you need independence:
-subset = data[::100].copy()
-subset *= 2                   # data unchanged
-```
-
----
-
 ## Common Pitfalls
 
 ### Pitfall 1: Unexpected Modification
@@ -260,6 +310,17 @@ def safe_normalize(arr):
 
 ---
 
+## Quick Reference
+
+| Need | Action |
+|------|--------|
+| Check if view | `arr.base is not None` or `np.shares_memory(a, b)` |
+| Force copy | `arr.copy()` or `np.copy(arr)` |
+| Flatten (always copy) | `arr.flatten()` |
+| Flatten (view if possible) | `arr.ravel()` |
+
+---
+
 ## Key Takeaways
 
 - NumPy slicing returns **views** (unlike Python lists)
@@ -268,3 +329,4 @@ def safe_normalize(arr):
 - Fancy/boolean indexing returns **copies**
 - MATLAB and R use copy-on-write; NumPy uses explicit views
 - Check with `np.shares_memory()` or `.base` attribute
+- Defensive copying in functions prevents accidental mutation

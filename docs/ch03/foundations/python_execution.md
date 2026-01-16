@@ -1,6 +1,6 @@
 # Python Execution Model
 
-Is Python compiled or interpreted? The answer is **both** — Python compiles source code to bytecode, then interprets the bytecode.
+Is Python compiled or interpreted? The answer is **both** — Python compiles source code to bytecode, then interprets the bytecode. Understanding this model explains why some operations are fast and others are slow.
 
 ---
 
@@ -54,7 +54,7 @@ When you run this, Python:
 
 ### Step 2: Bytecode Interpretation
 
-The Python Virtual Machine (PVM) reads bytecode instructions and executes them one by one.
+The Python Virtual Machine (PVM) reads bytecode instructions and executes them one by one. This per-instruction overhead is what makes Python slower than compiled languages.
 
 ---
 
@@ -78,6 +78,8 @@ Output:
               4 BINARY_ADD
               6 RETURN_VALUE
 ```
+
+This reveals the low-level operations executed by the VM.
 
 ---
 
@@ -146,8 +148,6 @@ def subtract(x, y):
 ops = (add, subtract)  # Works!
 ```
 
-### Why?
-
 Python executes top-to-bottom. When it sees `add` in the tuple, the function hasn't been defined yet.
 
 ---
@@ -180,6 +180,52 @@ if __name__ == "__main__":
 
 - When run directly: `__name__` is `"__main__"` → `main()` executes
 - When imported: `__name__` is `"my_module"` → `main()` doesn't execute
+
+---
+
+## Performance: Where Python is Slow
+
+Python is slow when:
+
+- **Looping in pure Python**: Each iteration has VM overhead
+- **Creating many small objects**: Memory allocation cost
+- **Calling functions repeatedly in tight loops**: Function call overhead
+
+```python
+# Slow: Pure Python loop
+total = 0
+for i in range(1_000_000):
+    total += i
+```
+
+### Why Python is "Slow"
+
+1. **Dynamic typing**: Type checks at runtime
+2. **Interpretation**: Bytecode interpreted, not native machine code
+3. **GIL**: Global Interpreter Lock limits multi-threading
+
+---
+
+## Performance: Where Python is Fast
+
+Python is fast when:
+
+- **Delegating to C extensions**: NumPy, pandas, etc.
+- **Using built-in functions**: Implemented in C
+- **Minimizing Python-level loops**: Vectorized operations
+
+```python
+# Fast: NumPy vectorized (C extension)
+import numpy as np
+total = np.arange(1_000_000).sum()
+```
+
+### Mental Model for Performance
+
+Think in terms of:
+- Reducing Python-level operations
+- Pushing work into optimized libraries
+- Clarity before optimization (profile first!)
 
 ---
 
@@ -231,40 +277,24 @@ python3 --version   # Explicitly Python 3
 
 ---
 
-## Performance Considerations
+## Summary
 
-### Why Python is "Slow"
+| Aspect | Details |
+|--------|---------|
+| Compilation | Source → Bytecode → PVM execution |
+| Bytecode cache | `__pycache__/*.pyc` files |
+| Order | Define before using (top-to-bottom execution) |
+| Slow operations | Pure Python loops, many small objects, tight function calls |
+| Fast operations | C extensions, built-ins, vectorized operations |
+| Standard implementation | CPython (from python.org) |
+| Faster alternative | PyPy (JIT compilation) |
 
-1. **Dynamic typing**: Type checks at runtime
-2. **Interpretation**: Bytecode interpreted, not native
-3. **GIL**: Global Interpreter Lock limits threading
-
-### When Speed Matters
-
-- Use NumPy/Pandas (C extensions)
-- Use PyPy for JIT compilation
-- Use Cython for C-like speed
-- Use multiprocessing instead of threading
-
-```python
-# Slow: Pure Python loop
-total = 0
-for i in range(1000000):
-    total += i
-
-# Fast: NumPy vectorized
-import numpy as np
-total = np.arange(1000000).sum()
-```
-
----
-
-## Key Takeaways
+**Key Takeaways**:
 
 - Python is **compiled to bytecode**, then **interpreted** by the PVM
-- Bytecode is cached in `__pycache__/*.pyc` files
+- The VM executes instruction by instruction, introducing overhead
 - **Order matters**: Define before using
 - Use `dis` module to inspect bytecode
 - Use `if __name__ == "__main__":` for script entry points
+- **Performance** comes from pushing work to C extensions and built-ins
 - **Always use Python 3** (Python 2 is EOL)
-- CPython is the standard; PyPy is faster for some workloads
