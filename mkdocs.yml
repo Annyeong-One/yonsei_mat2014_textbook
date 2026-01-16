@@ -618,6 +618,7 @@ nav:
       - 8.5 Layout:
           - Subplots and Grids: ch08/layout/subplots.md
           - GridSpec: ch08/layout/gridspec.md
+          - subplot_mosaic: ch08/layout/subplot_mosaic.md  # NEW
           - Tight Layout: ch08/layout/tight_layout.md
 
       - 8.6 Line Plot:
@@ -626,12 +627,14 @@ nav:
           - Line Styles and Colors: ch08/line_plot/line_styles_colors.md
           - Markers: ch08/line_plot/markers.md
           - Labels and Legends: ch08/line_plot/labels_legends.md
+          - Error Bars: ch08/line_plot/errorbar.md  # NEW
 
       - 8.7 Axes Customization:
           - Title and Labels: ch08/customization/title_labels.md
           - Limits and Ticks: ch08/customization/limits_ticks.md
           - Tick Labels: ch08/customization/tick_labels.md
           - Grid and Axis: ch08/customization/grid_axis.md
+          - Logarithmic Scales: ch08/customization/log_scales.md  # NEW
 
       - 8.8 Spine and Axis:
           - Spine Customization: ch08/spine_axis/spine_customization.md
@@ -645,8 +648,12 @@ nav:
 
       - 8.10 Axes Enhancements:
           - Twin Axes: ch08/advanced/twin_axes.md
+          - Secondary Axes: ch08/advanced/secondary_axes.md  # NEW
           - Fill and Fill Between: ch08/advanced/fill_between.md
           - Axhline and Axvline: ch08/advanced/axhline_axvline.md
+          - Animation (FuncAnimation): ch08/advanced/animation.md  # NEW
+          - Polar Plots: ch08/advanced/polar_plots.md  # NEW
+          - Quiver Plots: ch08/advanced/quiver_plots.md  # NEW
 
       - 8.11 Histogram:
           - Basic Histogram: ch08/histogram/basic_histogram.md
@@ -659,6 +666,7 @@ nav:
           - Box Plot Anatomy: ch08/box_plot/box_plot_anatomy.md
           - Box Plot Keywords: ch08/box_plot/box_plot_keywords.md
           - Styling and Colors: ch08/box_plot/styling_colors.md
+          - Violin Plot: ch08/box_plot/violin_plot.md  # NEW
           - Combined Visualizations: ch08/box_plot/combined_visualizations.md
 
       - 8.13 Scatter Plot:
