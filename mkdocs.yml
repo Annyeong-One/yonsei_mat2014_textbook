@@ -991,6 +991,53 @@ nav:
           - Common Patterns: ch12/patterns/common_patterns.md
           - Error Handling: ch12/patterns/error_handling.md
 
+  - Chapter 13 Computer Fundamentals:
+      - 13.1 Computer Architecture:
+          - Von Neumann Architecture: ch13/architecture/von_neumann.md
+          - CPU Basics: ch13/architecture/cpu_basics.md
+          - CPU Cores and Threads: ch13/architecture/cpu_cores_threads.md
+          - Clock Speed and Instructions: ch13/architecture/clock_instructions.md
+          - GPU Architecture: ch13/architecture/gpu_architecture.md
+          - CPU vs GPU: ch13/architecture/cpu_vs_gpu.md         
+
+      - 13.2 Memory Hierarchy:
+          - Memory Overview: ch13/memory/memory_overview.md
+          - Registers and Cache: ch13/memory/registers_cache.md
+          - RAM (Main Memory): ch13/memory/ram.md
+          - Virtual Memory: ch13/memory/virtual_memory.md
+          - Storage (SSD/HDD): ch13/memory/storage.md
+          - Memory Access Patterns: ch13/memory/access_patterns.md
+
+      - 13.3 Data Representation:
+          - Bits and Bytes: ch13/data/bits_bytes.md
+          - Binary and Hexadecimal: ch13/data/number_systems.md
+          - Integer Representation: ch13/data/integer_representation.md
+          - Floating Point (IEEE 754 Preview): ch13/data/floating_point_preview.md
+          - Character Encoding Preview: ch13/data/character_encoding_preview.md
+
+      - 13.4 Bus and Communication:
+          - System Bus: ch13/communication/system_bus.md
+          - CPU-Memory Communication: ch13/communication/cpu_memory.md
+          - CPU-GPU Communication: ch13/communication/cpu_gpu.md
+          - I/O and Peripherals: ch13/communication/io_peripherals.md
+
+      - 13.5 Networking Fundamentals:
+          - Network Basics: ch13/networking/network_basics.md
+          - Client-Server Model: ch13/networking/client_server.md
+          - Protocols (TCP/IP, HTTP): ch13/networking/protocols.md
+          - Latency and Bandwidth: ch13/networking/latency_bandwidth.md
+          - Local vs Remote Computation: ch13/networking/local_vs_remote.md
+
+      - 13.6 Distributed Systems Preview:
+          - Single Machine vs Cluster: ch13/distributed/single_vs_cluster.md
+          - GPU Clusters: ch13/distributed/gpu_clusters.md
+          - Cloud Computing Basics: ch13/distributed/cloud_basics.md
+
+      - 13.7 Connecting to Python:
+          - Hardware and Interpreted Languages: ch13/python_connection/interpreted_languages.md
+          - Why Python is Slow: ch13/python_connection/why_python_slow.md
+          - How NumPy Bridges the Gap: ch13/python_connection/numpy_bridge.md
+          - GIL and Hardware: ch13/python_connection/gil_hardware.md
 
 plugins:
   - search
