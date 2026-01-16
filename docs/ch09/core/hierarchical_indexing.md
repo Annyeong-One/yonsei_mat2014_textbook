@@ -230,6 +230,55 @@ new york us                21        68
 chicago  us                14        65
 ```
 
+### Reordering Levels
+
+For MultiIndex with more than 2 levels, use `reorder_levels()`.
+
+```python
+# Create 3-level MultiIndex
+index = pd.MultiIndex.from_tuples([
+    ('2024', 'Q1', 'Jan'),
+    ('2024', 'Q1', 'Feb'),
+    ('2024', 'Q2', 'Apr'),
+    ('2024', 'Q2', 'May')
+], names=['year', 'quarter', 'month'])
+
+df = pd.DataFrame({'value': [10, 20, 30, 40]}, index=index)
+print(df)
+```
+
+```
+                        value
+year quarter month           
+2024 Q1      Jan          10
+             Feb          20
+     Q2      Apr          30
+             May          40
+```
+
+```python
+# Reorder to: month, year, quarter
+df_reordered = df.reorder_levels(['month', 'year', 'quarter'])
+print(df_reordered)
+```
+
+```
+                        value
+month year quarter           
+Jan   2024 Q1             10
+Feb   2024 Q1             20
+Apr   2024 Q2             30
+May   2024 Q2             40
+```
+
+```python
+# Use integer positions
+df_reordered = df.reorder_levels([2, 0, 1])  # Same result
+
+# Sort after reordering for proper order
+df_reordered = df.reorder_levels(['month', 'year', 'quarter']).sort_index()
+```
+
 ### Sorting by Index
 
 ```python

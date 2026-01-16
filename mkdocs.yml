@@ -724,7 +724,7 @@ nav:
           - DataFrame: ch09/core/dataframe.md
           - Series vs DataFrame: ch09/core/series_vs_dataframe.md
           - Index Objects: ch09/core/index_objects.md
-          - Hierarchical Indexing: ch09/core/hierarchical_indexing.md
+          - Hierarchical Indexing: ch09/core/hierarchical_indexing.md  # UPDATED: added reorder_levels
           - Indexing and Selection: ch09/core/indexing.md
 
       - 9.3 Creating DataFrames:
@@ -732,6 +732,7 @@ nav:
           - Series Creation: ch09/creation/series_creation.md
           - Loading CSV Files: ch09/creation/read_csv.md
           - Loading Excel and JSON: ch09/creation/read_excel_json.md
+          - Loading SQL and Parquet: ch09/creation/read_sql_parquet.md  # NEW
           - Saving DataFrames: ch09/creation/saving.md
 
       - 9.4 DataFrame Inspection:
@@ -748,6 +749,7 @@ nav:
           - between Method: ch09/filtering/between.md
           - String Methods: ch09/filtering/string_methods.md
           - eval Method: ch09/filtering/eval.md
+          - select_dtypes Method: ch09/filtering/select_dtypes.md  # NEW
 
       - 9.6 Data Manipulation:
           - Renaming Axes: ch09/manipulation/renaming.md
@@ -755,13 +757,14 @@ nav:
           - map Method: ch09/manipulation/map.md
           - apply Method: ch09/manipulation/apply.md
           - apply with axis: ch09/manipulation/apply_axis.md
-          - Sorting by Index and Values: ch09/manipulation/sorting.md
+          - Sorting by Index and Values: ch09/manipulation/sorting.md  # UPDATED: expanded nlargest/nsmallest
           - assign Method: ch09/manipulation/assign.md
           - drop Method: ch09/manipulation/drop.md
           - drop_duplicates Method: ch09/manipulation/drop_duplicates.md
+          - clip Method: ch09/manipulation/clip.md  # NEW
 
       - 9.7 Handling Missing Data:
-          - Detecting Missing Values: ch09/missing/detecting.md
+          - Detecting Missing Values: ch09/missing/detecting.md  # UPDATED: expanded NA vs nan vs None
           - fillna Method: ch09/missing/fillna.md
           - fillna Keywords: ch09/missing/fillna_keywords.md
           - interpolate Method: ch09/missing/interpolate.md
@@ -787,6 +790,8 @@ nav:
           - Memory Efficiency: ch09/categorical/memory_efficiency.md
           - Ordered Categoricals: ch09/categorical/ordered.md
           - Categorical Operations: ch09/categorical/operations.md
+          - Binning (cut and qcut): ch09/categorical/binning.md  # NEW - HIGH PRIORITY
+          - One-Hot Encoding (get_dummies): ch09/categorical/encoding.md  # NEW
 
       - 9.11 Merging DataFrames:
           - merge vs join: ch09/merge/merge_vs_join.md
@@ -815,6 +820,7 @@ nav:
           - stack Method: ch09/reshape/stack.md
           - unstack Method: ch09/reshape/unstack.md
           - stack vs unstack: ch09/reshape/stack_vs_unstack.md
+          - explode Method: ch09/reshape/explode.md  # NEW
 
       - 9.15 GroupBy:
           - GroupBy Object: ch09/groupby/groupby_object.md
@@ -879,7 +885,7 @@ nav:
           - Pandas DataFrame: ch09/oop/pandas_dataframe.md
           - Pandas Index Objects: ch09/oop/pandas_index.md
           - Pandas MultiIndex: ch09/oop/pandas_multiindex.md
-          - Pandas Method Chaining: ch09/oop/pandas_method_chaining.md
+          - Pandas Method Chaining: ch09/oop/pandas_method_chaining.md  # UPDATED: expanded pipe method
 
       - 9.24 Pandas Plotting:
           - plot Method: ch09/plotting/plot_method.md

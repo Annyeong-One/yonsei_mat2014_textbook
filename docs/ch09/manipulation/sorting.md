@@ -186,26 +186,172 @@ df['DenseRank'] = df['Score'].rank(ascending=False, method='dense')
 
 Common sorting scenarios.
 
-### 1. Top N Values
+### 1. Top N Values with nlargest
+
+The `nlargest()` method is more efficient than `sort_values().head()` for finding top N values.
 
 ```python
-# Top 3 highest salaries
-df.sort_values('Salary', ascending=False).head(3)
+df = pd.DataFrame({
+    'Name': ['Alice', 'Bob', 'Carol', 'David', 'Eve'],
+    'Salary': [75000, 60000, 90000, 55000, 85000],
+    'Experience': [5, 3, 8, 2, 6]
+})
 
-# Using nlargest
-df.nlargest(3, 'Salary')
+# Get top 3 highest salaries
+top_earners = df.nlargest(3, 'Salary')
+print(top_earners)
 ```
 
-### 2. Bottom N Values
+```
+    Name  Salary  Experience
+2  Carol   90000           8
+4    Eve   85000           6
+0  Alice   75000           5
+```
+
+### 2. Bottom N Values with nsmallest
 
 ```python
-df.sort_values('Salary').head(3)
-
-# Using nsmallest
-df.nsmallest(3, 'Salary')
+# Get 3 employees with least experience
+newest = df.nsmallest(3, 'Experience')
+print(newest)
 ```
 
-### 3. Reset Index After Sort
+```
+    Name  Salary  Experience
+3  David   55000           2
+1    Bob   60000           3
+0  Alice   75000           5
+```
+
+### 3. Multiple Columns in nlargest/nsmallest
+
+```python
+# Top 3 by salary, then by experience (tie-breaker)
+df.nlargest(3, ['Salary', 'Experience'])
+
+# Equivalent to sorting by multiple columns
+df.sort_values(['Salary', 'Experience'], ascending=[False, False]).head(3)
+```
+
+### 4. Performance Comparison
+
+```python
+import time
+import numpy as np
+
+# Large DataFrame
+large_df = pd.DataFrame({
+    'value': np.random.randn(1_000_000)
+})
+
+# Method 1: sort_values + head (slower)
+start = time.time()
+result1 = large_df.sort_values('value', ascending=False).head(10)
+sort_time = time.time() - start
+
+# Method 2: nlargest (faster)
+start = time.time()
+result2 = large_df.nlargest(10, 'value')
+nlargest_time = time.time() - start
+
+print(f"sort_values + head: {sort_time:.3f}s")
+print(f"nlargest: {nlargest_time:.3f}s")
+print(f"Speedup: {sort_time/nlargest_time:.1f}x")
+```
+
+Typical result: `nlargest` is 5-10x faster for large DataFrames with small N.
+
+### 5. Series nlargest and nsmallest
+
+```python
+s = pd.Series([3, 1, 4, 1, 5, 9, 2, 6], index=list('abcdefgh'))
+
+# Top 3 values
+print(s.nlargest(3))
+```
+
+```
+f    9
+h    6
+e    5
+dtype: int64
+```
+
+```python
+# Bottom 3 values
+print(s.nsmallest(3))
+```
+
+```
+b    1
+d    1
+g    2
+dtype: int64
+```
+
+### 6. Financial Example: Top Performers
+
+```python
+import yfinance as yf
+
+# Get stock data
+tickers = ['AAPL', 'GOOGL', 'MSFT', 'AMZN', 'META', 'NVDA', 'TSLA']
+returns = {}
+
+for ticker in tickers:
+    data = yf.Ticker(ticker).history(period='1y')
+    returns[ticker] = (data['Close'].iloc[-1] / data['Close'].iloc[0]) - 1
+
+returns_df = pd.DataFrame({
+    'Ticker': list(returns.keys()),
+    'Annual_Return': list(returns.values())
+})
+
+# Top 3 performers
+print("Top 3 Performers:")
+print(returns_df.nlargest(3, 'Annual_Return'))
+
+# Bottom 3 performers
+print("\nBottom 3 Performers:")
+print(returns_df.nsmallest(3, 'Annual_Return'))
+```
+
+### 7. Keep Parameter (Handling Duplicates)
+
+```python
+df = pd.DataFrame({
+    'name': ['A', 'B', 'C', 'D'],
+    'value': [10, 20, 20, 30]  # B and C have same value
+})
+
+# 'first' (default): keep first occurrence
+print(df.nlargest(3, 'value', keep='first'))
+
+# 'last': keep last occurrence
+print(df.nlargest(3, 'value', keep='last'))
+
+# 'all': keep all duplicates (may return more than n rows)
+print(df.nlargest(3, 'value', keep='all'))
+```
+
+### 8. Combining with groupby
+
+```python
+df = pd.DataFrame({
+    'department': ['Sales', 'Sales', 'IT', 'IT', 'HR', 'HR'],
+    'employee': ['A', 'B', 'C', 'D', 'E', 'F'],
+    'salary': [50000, 55000, 70000, 65000, 45000, 48000]
+})
+
+# Top 1 earner per department
+top_per_dept = df.groupby('department').apply(
+    lambda x: x.nlargest(1, 'salary')
+).reset_index(drop=True)
+print(top_per_dept)
+```
+
+### 9. Reset Index After Sort
 
 ```python
 df_sorted = df.sort_values('Age').reset_index(drop=True)
