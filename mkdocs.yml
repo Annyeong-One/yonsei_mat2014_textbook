@@ -228,7 +228,7 @@ nav:
       - 2.20 Performance Basics:
           - Time vs Space Trade-offs: ch02/performance/tradeoffs.md
 
-  - Chapter 3 Python Internals:
+  - Chapter 3 Object Model and Binding:
       - 3.1 Language Foundations:
           - CPython vs Language Spec: ch03/foundations/cpython_vs_language.md
           - Key Terms Glossary: ch03/foundations/terminology.md
@@ -252,210 +252,178 @@ nav:
           - Namespace Implementation: ch03/binding/namespace_implementation.md
           - Complex Binding Scenarios: ch03/binding/complex_scenarios.md
 
-      - 3.4 Memory Architecture:
-          - Stack vs Heap Overview: ch03/memory/stack_heap_overview.md
-          - Frame Objects: ch03/memory/frame_objects.md
-          - Heap Object Storage: ch03/memory/heap_storage.md
-          - Stack-Heap Interaction: ch03/memory/stack_heap_interaction.md
-          - Recursion and Stack Growth: ch03/memory/recursion_stack.md
-          - Object Identity Stability: ch03/memory/identity_stability.md
-          - Buffer Reallocation: ch03/memory/buffer_reallocation.md
-          - Stack Overflow: ch03/memory/stack_overflow.md
-          - Python vs C Memory: ch03/memory/python_vs_c_memory.md
-
-      - 3.5 Reference Counting and GC:
-          - Memory Management Overview: ch03/gc/memory_management_overview.md
-          - Reference Counting: ch03/gc/reference_counting.md
-          - Garbage Collection: ch03/gc/garbage_collection.md
-          - Memory Leaks: ch03/gc/memory_leaks.md
-
-      - 3.6 Weak References:
-          - Weak Reference Basics: ch03/gc/weak_references.md
-          - Weak Reference Patterns: ch03/gc/weak_ref_patterns.md
-
-      - 3.7 CPython Implementation Details:
+      - 3.4 CPython Implementation Details:
           - Impl vs Guarantees: ch03/implementation/guarantees_vs_details.md
           - Integer Interning: ch03/implementation/integer_interning.md
           - String Interning: ch03/implementation/string_interning.md
           - Object Interning: ch03/implementation/object_interning.md
 
-      - 3.8 Advanced Numeric Internals:
+      - 3.5 Advanced Numeric Internals:
           - int Logical Operations: ch03/numerics/int_logical_operations.md
           - int Two's Complement: ch03/numerics/int_twos_complement.md
           - float Machine Precision: ch03/numerics/float_machine_precision.md
           - float Numerical Stability: ch03/numerics/float_numerical_stability.md
 
-      - 3.9 Advanced String Internals:
+      - 3.6 Advanced String Internals:
           - str Unpacking: ch03/strings/str_unpacking.md
           - str Python vs C: ch03/strings/str_python_vs_c.md
 
-      - 3.10 Advanced Memory Topics:
-          - Caching Strategies: ch03/advanced_memory/caching_strategies.md
-          - Memory Management: ch03/advanced_memory/memory_management.md
-          - Memory Optimization: ch03/advanced_memory/memory_optimization.md
-          - __slots__: ch03/advanced_memory/slots.md              # NEW
-          - sys.getsizeof(): ch03/advanced_memory/getsizeof.md    # NEW
-          - tracemalloc: ch03/advanced_memory/tracemalloc.md      # NEW
-
-      - 3.11 Practical Implications:
+      - 3.7 Practical Implications:
           - Pythonic Patterns: ch03/practical/pythonic_patterns.md
           - Anti-Patterns and Pitfalls: ch03/practical/anti_patterns.md
           - Namespace Internals: ch03/practical/namespace_internals.md
-          - Performance and Memory: ch03/practical/performance_memory.md
           - Code Quality: ch03/practical/code_quality.md
           - Examples and Interview: ch03/practical/examples_interview.md
 
-  - Chapter 4 Functions:
-      - 4.1 First-Class Functions:
-          - Lambda Expressions: ch04/functions/lambda.md
-          - Function Factories: ch04/functions/function_factories.md
+  - Chapter 4 Memory and Performance:
+      - 4.1 Memory Architecture:
+          - Stack vs Heap Overview: ch04/memory/stack_heap_overview.md
+          - Frame Objects: ch04/memory/frame_objects.md
+          - Heap Object Storage: ch04/memory/heap_storage.md
+          - Stack-Heap Interaction: ch04/memory/stack_heap_interaction.md
+          - Recursion and Stack Growth: ch04/memory/recursion_stack.md
+          - Object Identity Stability: ch04/memory/identity_stability.md
+          - Buffer Reallocation: ch04/memory/buffer_reallocation.md
+          - Stack Overflow: ch04/memory/stack_overflow.md
+          - Python vs C Memory: ch04/memory/python_vs_c_memory.md
 
-      - 4.2 Parameters:
-          - "*args and **kwargs": ch04/params/args_kwargs.md
-          - Keyword-Only Arguments: ch04/params/keyword_only.md
-          - Positional-Only Arguments: ch04/params/positional_only.md
-          - Parameter Best Practices: ch04/params/best_practices.md
+      - 4.2 Reference Counting and GC:
+          - Memory Management Overview: ch04/gc/memory_management_overview.md
+          - Reference Counting: ch04/gc/reference_counting.md
+          - Garbage Collection: ch04/gc/garbage_collection.md
+          - Memory Leaks: ch04/gc/memory_leaks.md
 
-      - 4.3 Recursion:
-          - Recursion Fundamentals: ch04/recursion/fundamentals.md
-          - Recursive Patterns: ch04/recursion/patterns.md
+      - 4.3 Weak References:
+          - Weak Reference Basics: ch04/gc/weak_references.md
+          - Weak Reference Patterns: ch04/gc/weak_ref_patterns.md
 
-      - 4.4 Functional Programming:
-          - map(), filter(), reduce(): ch04/functional/map_filter_reduce.md
-          - Comprehensions: ch04/functional/comprehensions.md
-          - Generator Expressions: ch04/functional/generator_expressions.md
-          - Pure Functions: ch04/functional/pure_functions.md
-          - Higher-Order Functions: ch04/functional/higher_order.md
-          - Partial Application: ch04/functional/partial_application.md
-          - Function Composition: ch04/functional/composition.md
-          - operator Module: ch04/functional/operator_module.md        # NEW
-          - functools.cache: ch04/functional/functools_cache.md        # NEW
-          - Callback Patterns: ch04/functional/callback_patterns.md    # NEW
+      - 4.4 Advanced Memory Topics:
+          - Caching Strategies: ch04/advanced_memory/caching_strategies.md
+          - Memory Management: ch04/advanced_memory/memory_management.md
+          - Memory Optimization: ch04/advanced_memory/memory_optimization.md
+          - __slots__: ch04/advanced_memory/slots.md
+          - sys.getsizeof(): ch04/advanced_memory/getsizeof.md
+          - tracemalloc: ch04/advanced_memory/tracemalloc.md
 
-      - 4.5 Decorators:
-          - Decorator Fundamentals: ch04/decorators/decorator_fundamentals.md
-          - Decorator Factories: ch04/decorators/decorator_factories.md
-          - Stacked Decorators: ch04/decorators/stacked_decorators.md
-          - Class Decorators: ch04/decorators/class_decorators.md
-          - Practical Patterns: ch04/decorators/practical_patterns.md
-          - functools.wraps: ch04/decorators/functools_wraps.md  # NEW
+      - 4.5 Performance and Profiling:
+          - Performance and Memory: ch04/practical/performance_memory.md
 
-  - Chapter 5 OOP:
-      - 5.1 OOP Foundations:
-          - Procedural vs OOP: ch05/foundations/procedural_vs_oop.md
-          - Functions to Classes: ch05/foundations/functions_to_classes.md
-          - Classes and Instances: ch05/foundations/classes_instances.md
-          - Constructor and Destructor: ch05/foundations/constructor_destructor.md
+  - Chapter 5 Functions:
+      - 5.1 First-Class Functions:
+          - Lambda Expressions: ch05/functions/lambda.md
+          - Function Factories: ch05/functions/function_factories.md
 
-      - 5.2 Attributes and Methods:
-          - Instance Attributes: ch05/attributes/instance_attributes.md
-          - Class Attributes: ch05/attributes/class_attributes.md
-          - Attribute Lookup: ch05/attributes/attribute_lookup.md
-          - Instance Methods: ch05/methods/instance_methods.md
-          - Class Methods: ch05/methods/class_methods.md
-          - Static Methods: ch05/methods/static_methods.md
+      - 5.2 Parameters:
+          - "*args and **kwargs": ch05/params/args_kwargs.md
+          - Keyword-Only Arguments: ch05/params/keyword_only.md
+          - Positional-Only Arguments: ch05/params/positional_only.md
+          - Parameter Best Practices: ch05/params/best_practices.md
 
-      - 5.3 Four Pillars of OOP:
-          - Encapsulation: ch05/pillars/encapsulation.md
-          - Abstraction: ch05/pillars/abstraction.md
-          - Polymorphism: ch05/pillars/polymorphism.md
-          - Inheritance Basics: ch05/pillars/inheritance.md
+      - 5.3 Recursion:
+          - Recursion Fundamentals: ch05/recursion/fundamentals.md
+          - Recursive Patterns: ch05/recursion/patterns.md
 
-      - 5.4 Advanced Inheritance:
-          - Initialization Patterns: ch05/inheritance/initialization_patterns.md
-          - super() and Cooperation: ch05/inheritance/super.md
-          - Method Resolution Order: ch05/inheritance/mro.md
-          - C3 Linearization: ch05/inheritance/c3_linearization.md
+      - 5.4 Functional Programming:
+          - map(), filter(), reduce(): ch05/functional/map_filter_reduce.md
+          - Comprehensions: ch05/functional/comprehensions.md
+          - Generator Expressions: ch05/functional/generator_expressions.md
+          - Pure Functions: ch05/functional/pure_functions.md
+          - Higher-Order Functions: ch05/functional/higher_order.md
+          - Partial Application: ch05/functional/partial_application.md
+          - Function Composition: ch05/functional/composition.md
+          - operator Module: ch05/functional/operator_module.md        # NEW
+          - functools.cache: ch05/functional/functools_cache.md        # NEW
+          - Callback Patterns: ch05/functional/callback_patterns.md    # NEW
 
-      - 5.5 Composition and Aggregation:
-          - Is-a vs Has-a: ch05/composition/isa_vs_hasa.md
-          - Composition Pattern: ch05/composition/composition_pattern.md
-          - Aggregation Pattern: ch05/composition/aggregation_pattern.md
-          - Composition vs Inheritance: ch05/composition/composition_vs_inheritance.md
-          - Design Guidelines: ch05/composition/design_guidelines.md
+      - 5.5 Decorators:
+          - Decorator Fundamentals: ch05/decorators/decorator_fundamentals.md
+          - Decorator Factories: ch05/decorators/decorator_factories.md
+          - Stacked Decorators: ch05/decorators/stacked_decorators.md
+          - Class Decorators: ch05/decorators/class_decorators.md
+          - Practical Patterns: ch05/decorators/practical_patterns.md
+          - functools.wraps: ch05/decorators/functools_wraps.md  # NEW
 
-      - 5.6 Dunder Basics:
-          - Introduction to Dunder: ch05/dunder/dunder_intro.md
-          - Object Lifecycle: ch05/dunder/dunder_lifecycle.md
-          - String Representation: ch05/dunder/dunder_string.md
-          - Arithmetic Operators: ch05/dunder/dunder_arithmetic.md
-          - Comparison Operators: ch05/dunder/dunder_comparison.md
+  - Chapter 6 OOP:
+      - 6.1 OOP Foundations:
+          - Procedural vs OOP: ch06/foundations/procedural_vs_oop.md
+          - Functions to Classes: ch06/foundations/functions_to_classes.md
+          - Classes and Instances: ch06/foundations/classes_instances.md
+          - Constructor and Destructor: ch06/foundations/constructor_destructor.md
 
-      - 5.7 Dunder Advanced:
-          - Container Protocol: ch05/dunder_advanced/dunder_containers.md
-          - Iterable Protocol: ch05/dunder_advanced/dunder_iterables.md
-          - Callable Objects: ch05/dunder_advanced/dunder_callable.md
-          - Context Managers: ch05/dunder_advanced/dunder_context.md
+      - 6.2 Attributes and Methods:
+          - Instance Attributes: ch06/attributes/instance_attributes.md
+          - Class Attributes: ch06/attributes/class_attributes.md
+          - Attribute Lookup: ch06/attributes/attribute_lookup.md
+          - Instance Methods: ch06/methods/instance_methods.md
+          - Class Methods: ch06/methods/class_methods.md
+          - Static Methods: ch06/methods/static_methods.md
 
-      - 5.8 Properties:
-          - Property Decorator: ch05/properties/property_decorator.md
-          - Getter Setter Deleter: ch05/properties/getter_setter_deleter.md
-          - Cached Properties: ch05/properties/cached_property.md
-          - Read-Only Properties: ch05/properties/readonly_properties.md
-          - Properties as Descriptors: ch05/properties/property_descriptor_connection.md
+      - 6.3 Four Pillars of OOP:
+          - Encapsulation: ch06/pillars/encapsulation.md
+          - Abstraction: ch06/pillars/abstraction.md
+          - Polymorphism: ch06/pillars/polymorphism.md
+          - Inheritance Basics: ch06/pillars/inheritance.md
 
-      - 5.9 Descriptor Protocol:
-          - Descriptor Introduction: ch05/descriptors/descriptor_intro.md
-          - __get__ __set__ __delete__: ch05/descriptors/descriptor_methods.md
-          - Data vs Non-Data Descriptors: ch05/descriptors/descriptor_types.md
-          - Descriptor Use Cases: ch05/descriptors/descriptor_applications.md
-          - Attribute Access Lookup: ch05/descriptors/attribute_access_lookup.md
+      - 6.4 Advanced Inheritance:
+          - Initialization Patterns: ch06/inheritance/initialization_patterns.md
+          - super() and Cooperation: ch06/inheritance/super.md
+          - Method Resolution Order: ch06/inheritance/mro.md
+          - C3 Linearization: ch06/inheritance/c3_linearization.md
 
-      - 5.10 Dunder Attribute Hooks:
-          - __getattribute__: ch05/dunder_attrs/dunder_getattribute.md
-          - __getattr__: ch05/dunder_attrs/dunder_getattr.md
-          - __setattr__: ch05/dunder_attrs/dunder_setattr.md
-          - __delattr__: ch05/dunder_attrs/dunder_delattr.md
+      - 6.5 Composition and Aggregation:
+          - Is-a vs Has-a: ch06/composition/isa_vs_hasa.md
+          - Composition Pattern: ch06/composition/composition_pattern.md
+          - Aggregation Pattern: ch06/composition/aggregation_pattern.md
+          - Composition vs Inheritance: ch06/composition/composition_vs_inheritance.md
+          - Design Guidelines: ch06/composition/design_guidelines.md
 
-      - 5.11 Dynamic Attribute Access:
-          - getattr setattr delattr: ch05/dynamic/builtin_attr_functions.md
-          - Dynamic vs Static Access: ch05/dynamic/dynamic_vs_static.md
+      - 6.6 Dunder Basics:
+          - Introduction: ch06/dunder/dunder_intro.md
+          - Arithmetic Operators: ch06/dunder/dunder_arithmetic.md      # EXPANDED: 422 lines
+          - Comparison Operators: ch06/dunder/dunder_comparison.md      # EXPANDED: 447 lines
+          - Object Lifecycle: ch06/dunder/dunder_lifecycle.md           # EXPANDED: 465 lines
+          - String Representation: ch06/dunder/dunder_string.md         # EXPANDED: 446 lines
 
-      - 5.12 dataclasses:
-          - dataclasses Module: ch05/dataclasses/dataclasses.md
+      - 6.7 Dunder Advanced:
+          - Container Protocol: ch06/dunder_advanced/dunder_containers.md   # EXPANDED: 439 lines
+          - Iteration Protocol: ch06/dunder_advanced/dunder_iterables.md    # EXPANDED: 482 lines
+          - Callable Objects: ch06/dunder_advanced/dunder_callable.md
+          - Context Managers: ch06/dunder_advanced/dunder_context.md
 
-      - 5.13 Abstract Base Classes:
-          - ABC and abstractmethod: ch05/abc/abstract_base_classes.md
-          - typing.Protocol: ch05/abc/typing_protocol.md
+      - 6.8 Properties:
+          - Property Decorator: ch06/properties/property_decorator.md
+          - Getter Setter Deleter: ch06/properties/getter_setter_deleter.md
+          - Cached Properties: ch06/properties/cached_property.md
+          - Read-Only Properties: ch06/properties/readonly_properties.md
+          - Properties as Descriptors: ch06/properties/property_descriptor_connection.md
 
-      - 5.14 Metaclasses:
-          - Metaclasses Introduction: ch05/metaclasses/metaclasses_intro.md
-          - __init_subclass__: ch05/metaclasses/init_subclass.md
+      - 6.9 Descriptor Protocol:
+          - Descriptor Introduction: ch06/descriptors/descriptor_intro.md
+          - __get__ __set__ __delete__: ch06/descriptors/descriptor_methods.md
+          - Data vs Non-Data Descriptors: ch06/descriptors/descriptor_types.md
+          - Descriptor Use Cases: ch06/descriptors/descriptor_applications.md
+          - Attribute Access Lookup: ch06/descriptors/attribute_access_lookup.md
 
-  - Chapter 6 Concurrency:
-      - 6.1 Concurrency Concepts:
-          - Introduction: ch06/concepts/introduction.md
-          - GIL Explained: ch06/concepts/gil.md
-          - CPU-bound vs IO-bound: ch06/concepts/cpu_vs_io.md
-          - Threads vs Processes: ch06/concepts/threads_vs_processes.md
+      - 6.10 Dunder Attribute Hooks:
+          - __getattribute__: ch06/dunder_attrs/dunder_getattribute.md
+          - __getattr__: ch06/dunder_attrs/dunder_getattr.md
+          - __setattr__: ch06/dunder_attrs/dunder_setattr.md
+          - __delattr__: ch06/dunder_attrs/dunder_delattr.md
 
-      - 6.2 concurrent.futures:
-          - Executor Interface: ch06/futures/executor_interface.md
-          - ThreadPoolExecutor: ch06/futures/thread_pool.md
-          - ProcessPoolExecutor: ch06/futures/process_pool.md
-          - Future Objects: ch06/futures/future_objects.md
+      - 6.11 Dynamic Attribute Access:
+          - getattr setattr delattr: ch06/dynamic/builtin_attr_functions.md
+          - Dynamic vs Static Access: ch06/dynamic/dynamic_vs_static.md
 
-      - 6.3 Threading:
-          - Thread Basics: ch06/threading/thread_basics.md
-          - Thread Synchronization: ch06/threading/synchronization.md
-          - Thread Communication: ch06/threading/communication.md
+      - 6.12 dataclasses:
+          - dataclasses Module: ch06/dataclasses/dataclasses.md
 
-      - 6.4 Multiprocessing:
-          - Process Basics: ch06/multiprocessing/process_basics.md
-          - Process Pool: ch06/multiprocessing/pool.md
-          - Sharing State: ch06/multiprocessing/sharing_state.md
+      - 6.13 Abstract Base Classes:
+          - ABC and abstractmethod: ch06/abc/abstract_base_classes.md
+          - typing.Protocol: ch06/abc/typing_protocol.md
 
-      - 6.5 Asyncio:
-          - Asyncio Introduction: ch06/asyncio/introduction.md
-          - async and await: ch06/asyncio/async_await.md
-          - Event Loop: ch06/asyncio/event_loop.md
-          - Tasks and Coroutines: ch06/asyncio/tasks_coroutines.md
-          - Asyncio Patterns: ch06/asyncio/patterns.md
-
-      - 6.6 Practical Patterns:
-          - When to Use What: ch06/patterns/decision_guide.md
-          - Common Patterns: ch06/patterns/common_patterns.md
-          - Error Handling: ch06/patterns/error_handling.md
+      - 6.14 Metaclasses:
+          - Metaclasses Introduction: ch06/metaclasses/metaclasses_intro.md
+          - __init_subclass__: ch06/metaclasses/init_subclass.md
 
   - Chapter 7 NumPy:
       - 7.1 Getting Started:
@@ -980,6 +948,49 @@ nav:
       - 11.5 Correlation:
           - Pearson and Spearman: ch11/correlation/correlation.md
           - Covariance: ch11/correlation/covariance.md
+
+  - Chapter 12 Concurrency:
+      - 12.1 Concurrency Concepts:
+          - Introduction: ch12/concepts/introduction.md
+          - GIL Explained: ch12/concepts/gil.md
+          - CPU-bound vs IO-bound: ch12/concepts/cpu_vs_io.md
+          - Threads vs Processes: ch12/concepts/threads_vs_processes.md
+          - Deadlocks: ch12/concepts/deadlocks.md  # NEW - HIGH PRIORITY
+          - Race Conditions: ch12/concepts/race_conditions.md  # NEW - HIGH PRIORITY
+
+      - 12.2 concurrent.futures:
+          - Executor Interface: ch12/futures/executor_interface.md
+          - ThreadPoolExecutor: ch12/futures/thread_pool.md
+          - ProcessPoolExecutor: ch12/futures/process_pool.md
+          - Future Objects: ch12/futures/future_objects.md
+
+      - 12.3 Threading:
+          - Thread Basics: ch12/threading/thread_basics.md
+          - Thread Synchronization: ch12/threading/synchronization.md
+          - Thread Communication: ch12/threading/communication.md
+          - Thread-Local Storage: ch12/threading/thread_local.md  # NEW - MEDIUM PRIORITY
+
+      - 12.4 Multiprocessing:
+          - Process Basics: ch12/multiprocessing/process_basics.md
+          - Process Pool: ch12/multiprocessing/pool.md
+          - Sharing State: ch12/multiprocessing/sharing_state.md
+
+      - 12.5 Asyncio:
+          - Asyncio Introduction: ch12/asyncio/introduction.md
+          - async and await: ch12/asyncio/async_await.md
+          - Event Loop: ch12/asyncio/event_loop.md
+          - Tasks and Coroutines: ch12/asyncio/tasks_coroutines.md
+          - gather vs wait: ch12/asyncio/gather_vs_wait.md  # NEW - MEDIUM PRIORITY
+          - Async Iteration (async for/with): ch12/asyncio/async_iteration.md  # NEW - MEDIUM PRIORITY
+          - Asyncio Patterns: ch12/asyncio/patterns.md
+          - Async HTTP (aiohttp): ch12/asyncio/aiohttp_examples.md  # NEW - MEDIUM PRIORITY
+          - Context Variables: ch12/asyncio/contextvars.md  # NEW - LOW PRIORITY
+
+      - 12.6 Practical Patterns:
+          - When to Use What: ch12/patterns/decision_guide.md
+          - Common Patterns: ch12/patterns/common_patterns.md
+          - Error Handling: ch12/patterns/error_handling.md
+
 
 plugins:
   - search
