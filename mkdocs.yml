@@ -601,7 +601,7 @@ nav:
 
       - 8.2 Getting Started:
           - Installation and Import: ch08/setup/installation.md
-          - OOP vs Pyplot Style: ch08/setup/matplotlib_oop_vs_pyplot.md
+          - OOP vs Pyplot Style: ch08/fundamentals/matplotlib_oop_vs_pyplot.md
           - plt.subplot vs plt.subplots: ch08/setup/subplot_vs_subplots.md
           - Style Sheets: ch08/setup/style_sheets.md
 
