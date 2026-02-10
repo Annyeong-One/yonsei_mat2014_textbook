@@ -13,8 +13,31 @@ markdown_extensions:
 nav:
     - Home: index.md
 
+    - 0 Computer Fundamentals:
+        - 0.1 Computer Architecture:
+            - Von Neumann Architecture: ch00/architecture/von_neumann.md
+            - CPU Basics: ch00/architecture/cpu_basics.md
+            - CPU Cores and Threads: ch00/architecture/cpu_cores_threads.md
+            - Clock Speed and Instructions: ch00/architecture/clock_instructions.md
+            - GPU Architecture: ch00/architecture/gpu_architecture.md
+            - CPU vs GPU: ch00/architecture/cpu_vs_gpu.md
 
-    - Chapter 1 Python Basics:
+        - 0.2 Memory Hierarchy:
+            - Memory Overview: ch00/memory/memory_overview.md
+            - Registers and Cache: ch00/memory/registers_cache.md
+            - RAM (Main Memory): ch00/memory/ram.md
+            - Virtual Memory: ch00/memory/virtual_memory.md
+            - Storage (SSD/HDD): ch00/memory/storage.md
+            - Memory Access Patterns: ch00/memory/access_patterns.md
+
+        - 0.3 Data Representation:
+            - Bits and Bytes: ch00/data/bits_bytes.md
+            - Binary and Hexadecimal: ch00/data/number_systems.md
+            - Integer Representation: ch00/data/integer_representation.md
+            - Floating Point (IEEE 754 Preview): ch00/data/floating_point_preview.md
+            - Character Encoding Preview: ch00/data/character_encoding_preview.md
+
+    - 1 Python Basics:
         - 1.1 Getting Started:
             - Why Python: ch01/setup/why_python.md
             - Installing Python: ch01/setup/installing_python.md
@@ -104,7 +127,7 @@ nav:
             - Scripts vs Modules: ch01/modules/scripts_vs_modules.md
             - pip and PyPI: ch01/package_managers/pip.md
 
-    - Chapter 2 Python Intermediate:
+    - 2 Python Intermediate:
         - 2.1 Variables and Naming:
             - Variables as Names: ch02/variables/names_not_containers.md
             - Language Comparison: ch02/variables/language_comparison.md
@@ -241,7 +264,7 @@ nav:
             - Lookahead and Lookbehind: ch02/regex/lookahead_lookbehind.md
             - Practical Examples: ch02/regex/practical_examples.md
 
-    - Chapter 3 Object Model and Binding:
+    - 3 Object Model and Binding:
         - 3.1 Language Foundations:
             - CPython vs Language Spec: ch03/foundations/cpython_vs_language.md
             - Key Terms Glossary: ch03/foundations/terminology.md
@@ -288,7 +311,7 @@ nav:
             - Code Quality: ch03/practical/code_quality.md
             - Examples and Interview: ch03/practical/examples_interview.md
 
-    - Chapter 4 Memory and Performance:
+    - 4 Memory and Performance:
         - 4.1 Memory Architecture:
             - Stack vs Heap Overview: ch04/memory/stack_heap_overview.md
             - Frame Objects: ch04/memory/frame_objects.md
@@ -321,7 +344,7 @@ nav:
         - 4.5 Performance and Profiling:
             - Performance and Memory: ch04/practical/performance_memory.md
 
-    - Chapter 5 Functions:
+    - 5 Functions:
         - 5.1 First-Class Functions:
             - Lambda Expressions: ch05/functions/lambda.md
             - Function Factories: ch05/functions/function_factories.md
@@ -356,7 +379,7 @@ nav:
             - Practical Patterns: ch05/decorators/practical_patterns.md
             - functools.wraps: ch05/decorators/functools_wraps.md  # NEW
 
-    - Chapter 6 OOP:
+    - 6 OOP:
         - 6.1 OOP Foundations:
             - Procedural vs OOP: ch06/foundations/procedural_vs_oop.md
             - Functions to Classes: ch06/foundations/functions_to_classes.md
@@ -438,7 +461,7 @@ nav:
             - Metaclasses Introduction: ch06/metaclasses/metaclasses_intro.md
             - __init_subclass__: ch06/metaclasses/init_subclass.md
 
-    - Chapter 7 NumPy:
+    - 7 NumPy:
         - 7.1 Getting Started:
             - Installation: ch07/setup/installation.md
             - Import Convention: ch07/setup/import_convention.md
@@ -569,7 +592,7 @@ nav:
             - NumPy vs C Arrays: ch07/oop/numpy_vs_c.md
             - PIL vs NumPy Images: ch07/oop/pil_vs_numpy.md
 
-    - Chapter 8 Matplotlib:
+    - 8 Matplotlib:
         - 8.1 Introduction:
             - Visualization Libraries: ch08/intro/visualization_libraries.md
             - Python Data Science Ecosystem: ch08/intro/data_science_ecosystem.md
@@ -704,7 +727,7 @@ nav:
             - Matplotlib Hierarchy: ch08/oop/matplotlib_hierarchy.md
             - Matplotlib Artists: ch08/oop/matplotlib_artists.md
 
-    - Chapter 9 Pandas:
+    - 9 Pandas:
         - 9.1 Overview:
             - Arrays vs DataFrames: ch09/overview/arrays_vs_dataframes.md
 
@@ -885,7 +908,7 @@ nav:
             - scatter_matrix: ch09/plotting/scatter_matrix.md
             - Bar Plots: ch09/plotting/bar_plots.md
 
-    - Chapter 10 SciPy Linear Algebra:
+    - 10 SciPy Linear Algebra:
         - 10.1 Overview:
             - SciPy vs NumPy Linalg: ch10/overview/scipy_vs_numpy.md
             - Module Organization: ch10/overview/modules.md
@@ -938,7 +961,7 @@ nav:
             - PDE Discretization: ch10/applications/pde.md
             - Graph Algorithms: ch10/applications/graphs.md
 
-    - Chapter 11 SciPy Stats:
+    - 11 SciPy Stats:
         - 11.1 Distributions:
             - Continuous Distributions: ch11/distributions/continuous.md
             - Discrete Distributions: ch11/distributions/discrete.md
@@ -962,7 +985,7 @@ nav:
             - Pearson and Spearman: ch11/correlation/correlation.md
             - Covariance: ch11/correlation/covariance.md
 
-    - Chapter 12 Concurrency:
+    - 12 Concurrency:
         - 12.1 Concurrency Concepts:
             - Introduction: ch12/concepts/introduction.md
             - GIL Explained: ch12/concepts/gil.md
@@ -1004,49 +1027,26 @@ nav:
             - Common Patterns: ch12/patterns/common_patterns.md
             - Error Handling: ch12/patterns/error_handling.md
 
-    - Chapter 13 Computer Fundamentals:
-        - 13.1 Computer Architecture:
-            - Von Neumann Architecture: ch13/architecture/von_neumann.md
-            - CPU Basics: ch13/architecture/cpu_basics.md
-            - CPU Cores and Threads: ch13/architecture/cpu_cores_threads.md
-            - Clock Speed and Instructions: ch13/architecture/clock_instructions.md
-            - GPU Architecture: ch13/architecture/gpu_architecture.md
-            - CPU vs GPU: ch13/architecture/cpu_vs_gpu.md         
-
-        - 13.2 Memory Hierarchy:
-            - Memory Overview: ch13/memory/memory_overview.md
-            - Registers and Cache: ch13/memory/registers_cache.md
-            - RAM (Main Memory): ch13/memory/ram.md
-            - Virtual Memory: ch13/memory/virtual_memory.md
-            - Storage (SSD/HDD): ch13/memory/storage.md
-            - Memory Access Patterns: ch13/memory/access_patterns.md
-
-        - 13.3 Data Representation:
-            - Bits and Bytes: ch13/data/bits_bytes.md
-            - Binary and Hexadecimal: ch13/data/number_systems.md
-            - Integer Representation: ch13/data/integer_representation.md
-            - Floating Point (IEEE 754 Preview): ch13/data/floating_point_preview.md
-            - Character Encoding Preview: ch13/data/character_encoding_preview.md
-
-        - 13.4 Bus and Communication:
+    - 13 Systems and Networking:
+        - 13.1 Bus and Communication:
             - System Bus: ch13/communication/system_bus.md
             - CPU-Memory Communication: ch13/communication/cpu_memory.md
             - CPU-GPU Communication: ch13/communication/cpu_gpu.md
             - I/O and Peripherals: ch13/communication/io_peripherals.md
 
-        - 13.5 Networking Fundamentals:
+        - 13.2 Networking Fundamentals:
             - Network Basics: ch13/networking/network_basics.md
             - Client-Server Model: ch13/networking/client_server.md
             - Protocols (TCP/IP, HTTP): ch13/networking/protocols.md
             - Latency and Bandwidth: ch13/networking/latency_bandwidth.md
             - Local vs Remote Computation: ch13/networking/local_vs_remote.md
 
-        - 13.6 Distributed Systems Preview:
+        - 13.3 Distributed Systems Preview:
             - Single Machine vs Cluster: ch13/distributed/single_vs_cluster.md
             - GPU Clusters: ch13/distributed/gpu_clusters.md
             - Cloud Computing Basics: ch13/distributed/cloud_basics.md
 
-        - 13.7 Connecting to Python:
+        - 13.4 Connecting to Python:
             - Hardware and Interpreted Languages: ch13/python_connection/interpreted_languages.md
             - Why Python is Slow: ch13/python_connection/why_python_slow.md
             - How NumPy Bridges the Gap: ch13/python_connection/numpy_bridge.md
