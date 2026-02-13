@@ -1,14 +1,14 @@
 site_name: Python
 theme:
-  name: material
+    name: material
 
 markdown_extensions:
-  - admonition
-  - toc:
-      permalink: true
-  - pymdownx.superfences
-  - pymdownx.arithmatex:
-      generic: true
+    - admonition
+    - toc:
+        permalink: true
+    - pymdownx.superfences
+    - pymdownx.arithmatex:
+        generic: true
 
 nav:
     - Home: index.md
@@ -54,10 +54,19 @@ nav:
         - 1.3 Control Flow:
             - if / for / while: ch01/control_flow/control_flow.md
             - break and continue: ch01/control_flow/break_continue.md
+            - for...else and while...else: ch01/control_flow/loop_else.md
+            - Ternary Expressions: ch01/control_flow/ternary.md
+            - match / case (Structural Pattern Matching): ch01/control_flow/match_case.md
 
         - 1.4 Essential Built-ins:
             - print() and input(): ch01/builtins/print_input.md
             - len(), range(), enumerate(): ch01/builtins/len_range_enumerate.md
+            - zip(): ch01/builtins/zip.md
+            - min(), max(), sum(): ch01/builtins/min_max_sum.md
+            - abs() and round(): ch01/builtins/abs_round.md
+            - any() and all(): ch01/builtins/any_all.md
+            - sorted() and reversed(): ch01/builtins/sorted_reversed.md
+            - help() and dir(): ch01/builtins/help_dir.md
 
         - 1.5 Numeric Types:
             - int Fundamentals: ch01/types/int_fundamentals.md
@@ -117,7 +126,7 @@ nav:
             - Opening and Reading Files: ch01/io/file_reading.md
             - Writing Files: ch01/io/file_writing.md
             - Context Managers (with): ch01/io/context_managers.md
-            - CSV and JSON: ch01/io/csv_json.md
+            - CSV and JSON Basics: ch01/io/csv_json.md
             - Path Handling (pathlib): ch01/io/pathlib.md
 
         - 1.12 Modules and Imports:
@@ -159,6 +168,8 @@ nav:
 
         - 2.4 Boolean Deep Dive:
             - bool Subclass of int: ch02/bool/bool_subclass_int.md
+            - Short-Circuit Evaluation: ch02/bool/short_circuit.md
+            - and/or Return Values: ch02/bool/and_or_return_values.md
             - bool Applications: ch02/bool/bool_applications.md
 
         - 2.5 String Internals:
@@ -171,26 +182,37 @@ nav:
             - F-String Debugging: ch02/strings/fstring_debugging.md
 
         - 2.6 Composite Types Deep Dive:
-            - list Copying: ch02/composites/list_copying.md
+            - Shallow and Deep Copying (copy module): ch02/composites/list_copying.md
             - Nested Data Structures: ch02/composites/nested_structures.md
+            - tuple Optimization: ch02/composites/tuple_optimization.md
+            - dict Internals (Hash Tables): ch02/composites/dict_internals.md
+            - dict Ordering Guarantees: ch02/composites/dict_ordering.md
+            - dict Merge Operators: ch02/composites/dict_merge_operators.md
+            - set Internals: ch02/composites/set_internals.md
+            - Time Complexity of Operations: ch02/composites/time_complexity.md
 
         - 2.7 Iteration Protocol:
             - Iterables and Iterators: ch02/iteration/iterables.md
             - Generators and yield: ch02/iteration/generators.md
+            - yield from: ch02/iteration/yield_from.md
+            - StopIteration Mechanics: ch02/iteration/stopiteration.md
+            - Lazy Evaluation Patterns: ch02/iteration/lazy_evaluation.md
+            - Iterator Chaining: ch02/iteration/iterator_chaining.md
 
         - 2.8 Advanced Built-ins:
             - The builtins Namespace: ch02/advanced_builtins/builtins_namespace.md
-            - sorted(): ch02/advanced_builtins/sorted.md
+            - sorted() Advanced (key, stability): ch02/advanced_builtins/sorted.md
             - id(), type(), isinstance(): ch02/advanced_builtins/introspection.md
 
         - 2.9 Operators Deep Dive:
-            - Operators Overview: ch02/operators/operators_overview.md
+            - Operators Overview: ch02/operators/operators_deep_dive_overview.md
             - Arithmetic Operators: ch02/operators/arithmetic.md
             - Comparison Operators: ch02/operators/comparison.md
             - Sequence Comparison: ch02/operators/sequence_comparison.md
             - Identity Operators: ch02/operators/identity.md
             - Membership Operators: ch02/operators/membership.md
             - Precedence and Associativity: ch02/operators/precedence.md
+            - Walrus Operator (:=): ch02/operators/walrus_operator.md
 
         - 2.10 Exceptions Deep Dive:
             - Custom Exceptions: ch02/exceptions/custom_exceptions.md
@@ -199,6 +221,11 @@ nav:
 
         - 2.11 File I/O Deep Dive:
             - Binary Files: ch02/io/binary_files.md
+            - pickle and Serialization: ch02/io/pickle.md
+            - io.StringIO and io.BytesIO: ch02/io/string_bytes_io.md
+            - tempfile Module: ch02/io/tempfile.md
+            - Encoding Issues: ch02/io/encoding_issues.md
+            - shelve Module: ch02/io/shelve.md
 
         - 2.12 Scope and Namespace:
             - LEGB Resolution: ch02/scope/legb_resolution.md
@@ -221,6 +248,9 @@ nav:
 
         - 2.15 Performance Basics:
             - Time vs Space Trade-offs: ch02/performance/tradeoffs.md
+            - Big-O Notation: ch02/performance/big_o.md
+            - Python Operation Costs: ch02/performance/operation_costs.md
+            - timeit Module: ch02/performance/timeit.md
 
     - 3 Object Model and Binding:
         - 3.1 Language Foundations:
@@ -301,6 +331,12 @@ nav:
 
         - 4.5 Performance and Profiling:
             - Performance and Memory: ch04/practical/performance_memory.md
+            - cProfile Module: ch04/practical/cprofile.md
+            - line_profiler: ch04/practical/line_profiler.md
+            - memory_profiler: ch04/practical/memory_profiler.md
+            - Benchmarking Methodology: ch04/practical/benchmarking.md
+            - Optimization Strategies: ch04/practical/optimization_strategies.md
+            - Profiling Visualization (snakeviz): ch04/practical/profiling_visualization.md
 
     - 5 Functions:
         - 5.1 First-Class Functions:
@@ -316,6 +352,13 @@ nav:
         - 5.3 Recursion:
             - Recursion Fundamentals: ch05/recursion/fundamentals.md
             - Recursive Patterns: ch05/recursion/patterns.md
+            - Tree Recursion: ch05/recursion/tree_recursion.md
+            - Recursion vs Iteration: ch05/recursion/recursion_vs_iteration.md
+            - Tail Recursion: ch05/recursion/tail_recursion.md
+            - Memoization and Recursion: ch05/recursion/memoization.md
+            - sys.setrecursionlimit(): ch05/recursion/recursion_limit.md
+            - Divide and Conquer: ch05/recursion/divide_and_conquer.md
+            - Backtracking: ch05/recursion/backtracking.md
 
         - 5.4 Functional Programming:
             - map(), filter(), reduce(): ch05/functional/map_filter_reduce.md
@@ -418,12 +461,30 @@ nav:
 
         - 6.12 dataclasses:
             - dataclasses Module: ch06/dataclasses/dataclasses.md
+            - field() Function: ch06/dataclasses/field.md
+            - __post_init__ Method: ch06/dataclasses/post_init.md
+            - Frozen Dataclasses: ch06/dataclasses/frozen.md
+            - Dataclass Inheritance: ch06/dataclasses/inheritance.md
+            - slots and kw_only: ch06/dataclasses/slots_kw_only.md
+            - Dataclass vs NamedTuple vs attrs: ch06/dataclasses/comparison.md
+            - Practical Patterns: ch06/dataclasses/practical_patterns.md
 
-        - 6.13 Abstract Base Classes:
+        - 6.13 Enumerations:
+            - Enum Basics: ch06/enum/enum_basics.md
+            - Enum Members and Values: ch06/enum/members_values.md
+            - IntEnum and StrEnum: ch06/enum/int_str_enum.md
+            - Flag and IntFlag: ch06/enum/flag.md
+            - auto() Function: ch06/enum/auto.md
+            - Enum Methods and Customization: ch06/enum/methods_customization.md
+            - Enum Practical Patterns: ch06/enum/practical_patterns.md
+
+        - 6.14 Abstract Base Classes:
             - ABC and abstractmethod: ch06/abc/abstract_base_classes.md
             - typing.Protocol: ch06/abc/typing_protocol.md
+            - collections.abc: ch06/abc/collections_abc.md
+            - Virtual Subclasses (register): ch06/abc/virtual_subclasses.md
 
-        - 6.14 Metaclasses:
+        - 6.15 Metaclasses:
             - Metaclasses Introduction: ch06/metaclasses/metaclasses_intro.md
             - __init_subclass__: ch06/metaclasses/init_subclass.md
 
@@ -438,22 +499,83 @@ nav:
 
         - 7.2 itertools Module:
             - itertools Overview: ch07/itertools/itertools_module.md
+            - Infinite Iterators (count, cycle, repeat): ch07/itertools/infinite_iterators.md
+            - chain and chain.from_iterable: ch07/itertools/chain.md
+            - islice: ch07/itertools/islice.md
+            - product: ch07/itertools/product.md
+            - permutations and combinations: ch07/itertools/permutations_combinations.md
+            - groupby: ch07/itertools/groupby.md
+            - starmap: ch07/itertools/starmap.md
+            - tee: ch07/itertools/tee.md
+            - accumulate: ch07/itertools/accumulate.md
+            - zip_longest: ch07/itertools/zip_longest.md
+            - compress and filterfalse: ch07/itertools/compress_filterfalse.md
+            - takewhile and dropwhile: ch07/itertools/takewhile_dropwhile.md
+            - itertools Recipes: ch07/itertools/recipes.md
 
-        - 7.3 Modules Deep Dive:
+        - 7.3 typing Module:
+            - typing Overview: ch07/typing/typing_overview.md
+            - Basic Annotations (int, str, list): ch07/typing/basic_annotations.md
+            - Optional and Union: ch07/typing/optional_union.md
+            - List[int] vs list[int]: ch07/typing/generic_syntax.md
+            - Callable and TypeAlias: ch07/typing/callable_typealias.md
+            - TypeVar and Generic: ch07/typing/typevar_generic.md
+            - TypeGuard and TypeNarrowing: ch07/typing/typeguard.md
+            - TYPE_CHECKING and Forward References: ch07/typing/type_checking.md
+            - Practical Type Hint Patterns: ch07/typing/practical_patterns.md
+
+        - 7.4 datetime Module:
+            - datetime Overview: ch07/datetime/datetime_overview.md
+            - date, time, datetime Objects: ch07/datetime/date_time_datetime.md
+            - timedelta Arithmetic: ch07/datetime/timedelta.md
+            - Formatting (strftime) and Parsing (strptime): ch07/datetime/strftime_strptime.md
+            - Timezone Handling (timezone, zoneinfo): ch07/datetime/timezones.md
+            - calendar Module: ch07/datetime/calendar.md
+            - Practical Patterns: ch07/datetime/practical_patterns.md
+
+        - 7.5 json Module:
+            - json Overview: ch07/json/json_overview.md
+            - json.dumps and json.loads: ch07/json/dumps_loads.md
+            - json.dump and json.load (File I/O): ch07/json/dump_load.md
+            - Formatting and Pretty Printing: ch07/json/formatting.md
+            - Custom Encoders (JSONEncoder): ch07/json/custom_encoders.md
+            - Custom Decoders (object_hook): ch07/json/custom_decoders.md
+            - JSON and Python Type Mapping: ch07/json/type_mapping.md
+
+        - 7.6 logging Module:
+            - logging Overview: ch07/logging/logging_overview.md
+            - Log Levels: ch07/logging/log_levels.md
+            - Logger Objects: ch07/logging/logger_objects.md
+            - Handlers (Stream, File, Rotating): ch07/logging/handlers.md
+            - Formatters: ch07/logging/formatters.md
+            - Configuration (dictConfig, fileConfig): ch07/logging/configuration.md
+            - Logging Best Practices: ch07/logging/best_practices.md
+
+        - 7.7 Modules Deep Dive:
             - sys.path and Module Search: ch07/modules/module_search.md
             - Relative Imports: ch07/modules/relative_imports.md
             - Package Init Files: ch07/modules/init_files.md
             - Package Creation: ch07/modules/package_creation.md
             - Command Line Arguments: ch07/modules/argparse.md
 
-        - 7.4 Package Managers:
+        - 7.8 os and sys Modules:
+            - os Module Overview: ch07/os_sys/os_overview.md
+            - File System Operations (os): ch07/os_sys/os_filesystem.md
+            - Environment Variables (os.environ): ch07/os_sys/os_environ.md
+            - Process Management (os): ch07/os_sys/os_process.md
+            - os.path vs pathlib: ch07/os_sys/os_path_vs_pathlib.md
+            - sys Module Overview: ch07/os_sys/sys_overview.md
+            - sys.argv and sys.exit: ch07/os_sys/sys_argv_exit.md
+            - sys Runtime Information: ch07/os_sys/sys_runtime.md
+
+        - 7.9 Package Managers:
             - conda and Anaconda: ch07/package_managers/conda.md
             - conda-forge and Miniforge: ch07/package_managers/conda_forge.md
             - mamba: ch07/package_managers/mamba.md
             - Homebrew: ch07/package_managers/homebrew.md
             - Comparison: ch07/package_managers/pkg_manager_comparison.md
 
-        - 7.5 Regular Expressions:
+        - 7.10 Regular Expressions:
             - re Module Overview: ch07/regex/re_overview.md
             - Pattern Syntax Basics: ch07/regex/pattern_syntax.md
             - Character Classes: ch07/regex/character_classes.md
@@ -464,6 +586,22 @@ nav:
             - Compiling Patterns: ch07/regex/compiled_patterns.md
             - Lookahead and Lookbehind: ch07/regex/lookahead_lookbehind.md
             - Practical Examples: ch07/regex/practical_examples.md
+
+        - 7.11 Debugging:
+            - breakpoint() and pdb Basics: ch07/debugging/breakpoint_pdb.md
+            - Common pdb Commands: ch07/debugging/pdb_commands.md
+            - Post-Mortem Debugging: ch07/debugging/post_mortem.md
+            - IDE Debugging Overview: ch07/debugging/ide_debugging.md
+
+        - 7.12 Testing:
+            - Testing Overview: ch07/testing/testing_overview.md
+            - unittest Basics: ch07/testing/unittest_basics.md
+            - unittest.TestCase Methods: ch07/testing/testcase_methods.md
+            - pytest Basics: ch07/testing/pytest_basics.md
+            - pytest Fixtures: ch07/testing/pytest_fixtures.md
+            - pytest Parametrize: ch07/testing/pytest_parametrize.md
+            - Mocking (unittest.mock): ch07/testing/mocking.md
+            - Test Organization and Best Practices: ch07/testing/best_practices.md
 
     - 8 NumPy:
         - 8.1 Getting Started:
@@ -516,6 +654,10 @@ nav:
 
         - 8.8 Broadcasting:
             - Broadcasting Rules: ch08/broadcasting/broadcasting.md
+            - Broadcasting with Different ndims: ch08/broadcasting/different_ndims.md
+            - Common Broadcasting Patterns: ch08/broadcasting/common_patterns.md
+            - Broadcasting Failures and Debugging: ch08/broadcasting/failures_debugging.md
+            - Performance Implications: ch08/broadcasting/performance.md
 
         - 8.9 Vectorization:
             - Performance vs Loops: ch08/vectorization/performance.md
@@ -579,6 +721,9 @@ nav:
 
         - 8.16 Polynomial and Curve Fitting:
             - np.polyfit and np.poly1d: ch08/fitting/numpy_polyfit.md
+            - np.polynomial Module (Modern API): ch08/fitting/numpy_polynomial.md
+            - Polynomial Class: ch08/fitting/polynomial_class.md
+            - Least Squares Connection: ch08/fitting/least_squares.md
 
         - 8.17 Fourier Transforms:
             - np.fft Module: ch08/fft/numpy_fft.md
@@ -824,11 +969,17 @@ nav:
         - 10.12 Joining DataFrames:
             - join Method: ch10/join/join_method.md
             - Keyword - how: ch10/join/keyword_how.md
+            - Keyword - on and lsuffix/rsuffix: ch10/join/keyword_on_suffixes.md
+            - Multi-Index Joins: ch10/join/multiindex_joins.md
+            - join vs merge: ch10/join/join_vs_merge.md
 
         - 10.13 Concatenating DataFrames:
             - concat Method: ch10/concat/concat_method.md
             - Keyword - axis: ch10/concat/keyword_axis.md
             - Keyword - ignore_index: ch10/concat/keyword_ignore_index.md
+            - Keyword - keys and names: ch10/concat/keyword_keys_names.md
+            - Keyword - join and verify_integrity: ch10/concat/keyword_join_verify.md
+            - concat vs append vs merge: ch10/concat/concat_vs_append_merge.md
 
         - 10.14 Reshaping Data:
             - melt Method: ch10/reshape/melt.md
@@ -928,7 +1079,6 @@ nav:
             - General Eigenvalues: ch11/eigen/eig.md
             - Symmetric Eigenvalues: ch11/eigen/eigh.md
             - Generalized Eigenvalues: ch11/eigen/generalized.md
-            - Sparse Eigenvalues: ch11/eigen/sparse_eig.md
 
         - 11.4 Matrix Functions:
             - Matrix Exponential: ch11/functions/expm.md
@@ -947,10 +1097,11 @@ nav:
             - Matrix Multiplication: ch11/sparse/matmul.md
             - Slicing and Indexing: ch11/sparse/slicing.md
 
-        - 11.7 Sparse Linear Systems:
+        - 11.7 Sparse Solvers:
             - Direct Solvers: ch11/sparse/direct_solvers.md
             - Iterative Solvers: ch11/sparse/iterative_solvers.md
             - Preconditioning: ch11/sparse/preconditioning.md
+            - Sparse Eigenvalues: ch11/eigen/sparse_eig.md
 
         - 11.8 Special Matrices:
             - Toeplitz and Circulant: ch11/special/toeplitz.md
@@ -966,28 +1117,109 @@ nav:
             - Graph Algorithms: ch11/applications/graphs.md
 
     - 12 SciPy Stats:
-        - 12.1 Distributions:
-            - Continuous Distributions: ch12/distributions/continuous.md
-            - Discrete Distributions: ch12/distributions/discrete.md
-            - Distribution Methods: ch12/distributions/methods.md
-
-        - 12.2 Descriptive Statistics:
+        - 12.1 Descriptive Statistics:
             - Summary Statistics: ch12/descriptive/summary_stats.md
             - Moments and Skewness: ch12/descriptive/moments.md
+            - Percentiles and Quantiles: ch12/descriptive/percentiles.md
+            - Outlier Detection: ch12/descriptive/outlier_detection.md
+            - Robust Statistics (MAD, Trimmed): ch12/descriptive/robust_statistics.md
 
-        - 12.3 Statistical Tests:
-            - Parametric Tests: ch12/tests/parametric.md
-            - Non-Parametric Tests: ch12/tests/nonparametric.md
-            - Goodness of Fit: ch12/tests/goodness_of_fit.md
+        - 12.2 Distribution Object Model:
+            - rv_continuous and rv_discrete: ch12/distributions/rv_classes.md
+            - Frozen Distributions: ch12/distributions/frozen.md
+            - Sampling (rvs): ch12/distributions/rvs.md
+            - Density and Mass (pdf, pmf): ch12/distributions/pdf_pmf.md
+            - Cumulative Distribution (cdf, sf): ch12/distributions/cdf_sf.md
+            - Quantile Function (ppf, isf): ch12/distributions/ppf_isf.md
+            - Moments and Stats (mean, var, moment, stats): ch12/distributions/moments_stats.md
+            - Fitting Distributions to Data (fit): ch12/distributions/fit.md
+            - Confidence Intervals (interval): ch12/distributions/interval.md
 
-        - 12.4 Hypothesis Testing:
-            - Null Hypothesis: ch12/hypothesis/null_hypothesis.md
+        - 12.3 Distribution Families:
+            - Normal Distribution: ch12/families/normal.md
+            - t-Distribution: ch12/families/t_distribution.md
+            - Chi-Square Distribution: ch12/families/chi_square.md
+            - F-Distribution: ch12/families/f_distribution.md
+            - Exponential and Gamma: ch12/families/exponential_gamma.md
+            - Beta Distribution: ch12/families/beta.md
+            - Uniform Distribution: ch12/families/uniform.md
+            - Lognormal and Weibull: ch12/families/lognormal_weibull.md
+            - Binomial and Poisson: ch12/families/binomial_poisson.md
+            - Multivariate Normal: ch12/families/multivariate_normal.md
+            - Custom Distributions (rv_continuous subclass): ch12/families/custom_distributions.md
+
+        - 12.4 Density Estimation:
+            - gaussian_kde: ch12/density/gaussian_kde.md
+            - Bandwidth Selection: ch12/density/bandwidth.md
+            - KDE vs Histogram: ch12/density/kde_vs_histogram.md
+            - Multivariate KDE: ch12/density/multivariate_kde.md
+            - Evaluate and Resample: ch12/density/evaluate_resample.md
+
+        - 12.5 Hypothesis Testing:
+            - Null and Alternative Hypotheses: ch12/hypothesis/null_hypothesis.md
             - p-values and Significance: ch12/hypothesis/pvalues.md
+            - Type I and Type II Errors: ch12/hypothesis/type_errors.md
             - Power Analysis: ch12/hypothesis/power_analysis.md
+            - Confidence Intervals: ch12/hypothesis/confidence_intervals.md
+            - Multiple Testing Correction (Bonferroni, FDR): ch12/hypothesis/multiple_testing.md
+            - One-Sided vs Two-Sided Tests: ch12/hypothesis/one_vs_two_sided.md
+            - Effect Size: ch12/hypothesis/effect_size.md
 
-        - 12.5 Correlation:
+        - 12.6 Statistical Tests:
+            - t-Tests (ttest_1samp, ttest_ind, ttest_rel): ch12/tests/t_tests.md
+            - ANOVA (f_oneway): ch12/tests/anova.md
+            - Chi-Square Tests (chi2_contingency, chisquare): ch12/tests/chi_square.md
+            - Normality Tests (Shapiro, Anderson, D'Agostino): ch12/tests/normality.md
+            - Non-Parametric Tests (Mann-Whitney, Wilcoxon, Kruskal): ch12/tests/nonparametric.md
+            - Goodness of Fit (kstest, anderson): ch12/tests/goodness_of_fit.md
+            - Variance Tests (Levene, Bartlett): ch12/tests/variance_tests.md
+            - Test Selection Guide: ch12/tests/selection_guide.md
+
+        - 12.7 Correlation:
             - Pearson and Spearman: ch12/correlation/correlation.md
-            - Covariance: ch12/correlation/covariance.md
+            - Kendall's Tau: ch12/correlation/kendall.md
+            - Partial Correlation: ch12/correlation/partial_correlation.md
+            - Autocorrelation: ch12/correlation/autocorrelation.md
+            - Covariance and Covariance Matrix: ch12/correlation/covariance.md
+            - Correlation Pitfalls: ch12/correlation/pitfalls.md
+
+        - 12.8 Regression:
+            - linregress: ch12/regression/linregress.md
+            - OLS Fundamentals: ch12/regression/ols_fundamentals.md
+            - Residual Analysis: ch12/regression/residual_analysis.md
+            - Multiple Regression Concepts: ch12/regression/multiple_regression.md
+            - Polynomial Regression: ch12/regression/polynomial_regression.md
+            - Regularization Preview (Ridge, Lasso): ch12/regression/regularization_preview.md
+            - Logistic Regression Preview: ch12/regression/logistic_preview.md
+
+        - 12.9 Resampling Methods:
+            - Bootstrap Basics (scipy.stats.bootstrap): ch12/resampling/bootstrap.md
+            - Bootstrap Confidence Intervals: ch12/resampling/bootstrap_ci.md
+            - Permutation Tests (permutation_test): ch12/resampling/permutation.md
+            - Jackknife Method: ch12/resampling/jackknife.md
+            - Monte Carlo Simulation: ch12/resampling/monte_carlo.md
+
+        - 12.10 Probability Plots and Diagnostics:
+            - QQ Plots (probplot): ch12/diagnostics/qq_plots.md
+            - PP Plots: ch12/diagnostics/pp_plots.md
+            - Residual Diagnostics: ch12/diagnostics/residual_plots.md
+            - Distribution Comparison Visualization: ch12/diagnostics/distribution_comparison.md
+            - Normality Visualization: ch12/diagnostics/normality_visualization.md
+
+        - 12.11 Information Theory:
+            - Entropy (shannon_entropy): ch12/information/entropy.md
+            - KL Divergence: ch12/information/kl_divergence.md
+            - Cross-Entropy: ch12/information/cross_entropy.md
+            - Mutual Information: ch12/information/mutual_information.md
+            - Connection to ML Loss Functions: ch12/information/ml_loss_connection.md
+
+        - 12.12 Practical Applications:
+            - A/B Testing Workflow: ch12/applications/ab_testing.md
+            - Financial Returns Analysis: ch12/applications/financial_returns.md
+            - Feature Selection for ML: ch12/applications/feature_selection.md
+            - Statistical Preprocessing: ch12/applications/preprocessing.md
+            - Monte Carlo Methods in Finance: ch12/applications/monte_carlo_finance.md
+            - Bayesian Inference Preview: ch12/applications/bayesian_preview.md
 
     - 13 Concurrency:
         - 13.1 Concurrency Concepts:
@@ -1057,4 +1289,4 @@ nav:
             - GIL and Hardware: ch14/python_connection/gil_hardware.md
 
 plugins:
-  - search
+    - search
