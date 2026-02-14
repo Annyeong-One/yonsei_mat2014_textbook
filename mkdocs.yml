@@ -767,6 +767,7 @@ nav:
             - Acceleration Libraries: ch08/vectorization/acceleration_libs.md
             - np.vectorize: ch08/vectorization/numpy_vectorize.md
             - Performance Tutorial (Python): ch08/vectorization/performance_tutorial.py
+            - scipy.integrate Tutorial (Python): ch08/vectorization/scipy_integrate_tutorial.py
 
         - 8.10 Array Manipulation:
             - Transpose and Swapaxes: ch08/manipulation/transpose.md
@@ -820,9 +821,12 @@ nav:
             - np.polynomial Module (Modern API): ch08/fitting/numpy_polynomial.md
             - Polynomial Class: ch08/fitting/polynomial_class.md
             - Least Squares Connection: ch08/fitting/least_squares.md
+            - scipy.interpolate — Spline Interpolation: ch08/fitting/scipy_interpolation.md
+            - 2D Surface Interpolation (Python): ch08/fitting/scipy_interpolation_2d.py
 
         - 8.17 Fourier Transforms:
             - np.fft Module: ch08/fft/numpy_fft.md
+            - DFT Matrix Implementation (Python): ch08/fft/dft_matrix_implementation.py
 
         - 8.18 Array I/O:
             - save, load, savez: ch08/io/numpy_io.md

@@ -210,32 +210,147 @@ Any vectorized function works with this pattern.
 
 ## scipy.integrate
 
-### 1. Higher Accuracy
+For production-quality numerical integration, `scipy.integrate` provides adaptive quadrature methods that are far more accurate and robust than simple Riemann sums.
 
-For production use, prefer `scipy.integrate`.
+### Basic Usage: quad
+
+The `quad` function integrates a callable over a finite or infinite interval and returns both the result and an error estimate:
 
 ```python
 import numpy as np
-from scipy import integrate
+from scipy.integrate import quad
 
 def f(x):
-    return x ** 3
+    return np.exp(-x**2 / 2) / np.sqrt(2 * np.pi)
 
-def main():
-    result, error = integrate.quad(f, 0, 1)
-    
-    print(f"Result: {result:.10f}")
-    print(f"Error:  {error:.2e}")
-
-if __name__ == "__main__":
-    main()
+result, error = quad(f, -3, 3)
+print(f"Result: {result:.10f}")   # ≈ 0.9973002040
+print(f"Error:  {error:.2e}")
 ```
 
-### 2. Adaptive Methods
+### Infinite Integration Domains
 
-`scipy.integrate.quad` uses adaptive quadrature for better accuracy.
+Replace finite bounds with `np.inf` or `-np.inf` for improper integrals:
 
-### 3. When to Use Each
+```python
+result, error = quad(f, -np.inf, np.inf)
+print(f"Result: {result:.10f}")   # ≈ 1.0 (standard normal integrates to 1)
+```
 
-- Simple Riemann: Educational, quick estimates
-- scipy.integrate: Production, high accuracy needed
+### Functions with Extra Parameters
+
+Pass additional arguments via the `args` tuple:
+
+```python
+def f(x, mu, sigma):
+    return np.exp(-(x - mu)**2 / (2 * sigma**2)) / np.sqrt(2 * np.pi * sigma**2)
+
+mu, sigma = 3, 2
+result, error = quad(f, -np.inf, np.inf, args=(mu, sigma))
+print(f"Result: {result:.10f}")   # ≈ 1.0
+```
+
+### Controlling Precision
+
+The `epsabs` parameter trades accuracy for speed. Reducing precision can halve computation time when integrating repeatedly:
+
+```python
+import time
+
+n = 10_000
+t1 = time.perf_counter()
+[quad(f, -np.inf, np.inf, args=(mu, sigma)) for _ in range(n)]
+t2 = time.perf_counter()
+print(f"Default precision: {t2 - t1:.2f} sec")
+
+t1 = time.perf_counter()
+[quad(f, -np.inf, np.inf, args=(mu, sigma), epsabs=1e-4) for _ in range(n)]
+t2 = time.perf_counter()
+print(f"Reduced precision: {t2 - t1:.2f} sec")
+```
+
+### Difficult Integrands: the points Parameter
+
+When a function has sharp peaks far from the origin, `quad` may miss them. The `points` parameter directs the adaptive algorithm to examine specific locations:
+
+```python
+def f(x):
+    return np.exp(-(x - 700)**2) + np.exp(-(x + 700)**2)
+
+# Without guidance — may return 0 (misses the peaks)
+result, _ = quad(f, -np.inf, np.inf)
+
+# With guidance — finds both peaks (cannot use infinite bounds with points)
+result, _ = quad(f, -800, 800, points=[-700, 700])
+print(f"Result: {result:.10f}")   # ≈ 2√π ≈ 3.5449077
+```
+
+### Vectorized Integration: quad_vec
+
+When you need to evaluate the same integral for many parameter values, `quad_vec` is dramatically faster than looping over `quad`:
+
+```python
+from scipy.integrate import quad_vec
+
+def f(x, alpha):
+    return np.exp(-alpha * x**2)
+
+alphas = np.linspace(1, 2, 10_000)
+
+# quad_vec: single call, vectorized over alpha (100x+ faster)
+result, error = quad_vec(f, -1, 3, args=(alphas,))
+print(f"Mean result: {result.mean():.10f}")
+```
+
+The speedup comes from evaluating the integrand at all parameter values simultaneously for each quadrature point, rather than running separate adaptive integrations.
+
+### quad_vec with Multiple Parameters
+
+For parameter grids, use `np.meshgrid` to create broadcast-compatible arrays:
+
+```python
+import matplotlib.pyplot as plt
+from scipy.integrate import quad_vec
+
+def f(x, a, b):
+    return np.exp(-a * (x - b)**2)
+
+a = np.arange(1, 20, 1)
+b = np.linspace(0, 5, 100)
+av, bv = np.meshgrid(a, b)
+
+integral = quad_vec(f, -1, 3, args=(av, bv))[0]
+
+plt.pcolormesh(av, bv, integral, shading='auto')
+plt.xlabel('$a$')
+plt.ylabel('$b$')
+plt.colorbar(label='Integral value')
+plt.show()
+```
+
+### Combining Interpolation with Integration
+
+A powerful pattern is to interpolate discrete data with `scipy.interpolate.interp1d` and then integrate the smooth interpolant:
+
+```python
+from scipy.interpolate import interp1d
+from scipy.integrate import quad
+
+x = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.55, 0.662, 0.8, 1., 1.25,
+              1.5, 2., 3., 4., 5., 6., 8., 10.])
+y = np.array([0., 0.032, 0.06, 0.086, 0.109, 0.131, 0.151, 0.185,
+              0.212, 0.238, 0.257, 0.274, 0.256, 0.205, 0.147, 0.096, 0.029, 0.002])
+
+f = interp1d(x, y, 'cubic')
+numerator = quad(lambda t: t * f(t), x.min(), x.max())[0]
+denominator = quad(f, x.min(), x.max())[0]
+mean = numerator / denominator   # Weighted mean ≈ 3.38
+```
+
+This technique is directly applicable to computing expected values from empirical probability distributions — a common task in financial mathematics.
+
+### When to Use Each
+
+- **Riemann sums** (earlier sections): Educational, quick vectorized estimates, full control over grid
+- **quad**: Single integrals requiring high accuracy, supports infinite bounds and singularities
+- **quad_vec**: Batch evaluation of parameterized integrals, orders of magnitude faster than looping `quad`

@@ -25,6 +25,61 @@ Time Domain          Fourier Transform       Frequency Domain
 
 ---
 
+## Mathematical Foundations of the DFT
+
+The Discrete Fourier Transform (DFT) converts a length-$N$ sequence $\{x_0, x_1, \ldots, x_{N-1}\}$ in the time domain to a length-$N$ sequence $\{y_0, y_1, \ldots, y_{N-1}\}$ in the frequency domain:
+
+$$y_k = \sum_{n=0}^{N-1} e^{-i\frac{2\pi}{N}nk} x_n, \qquad k = 0, 1, \ldots, N-1$$
+
+The inverse DFT recovers the original sequence:
+
+$$x_n = \frac{1}{N} \sum_{k=0}^{N-1} e^{i\frac{2\pi}{N}nk} y_k, \qquad n = 0, 1, \ldots, N-1$$
+
+### Matrix Form
+
+The DFT can be expressed as a matrix-vector multiplication $\mathbf{y} = W \mathbf{x}$, where $W$ is the DFT matrix with entries $W_{kn} = e^{-i 2\pi kn / N}$. The inverse DFT is $\mathbf{x} = \frac{1}{N} W^* \mathbf{y}$, where $W^*$ is the conjugate of $W$.
+
+### Manual DFT Implementation
+
+Building the DFT from the matrix formula reinforces the linear algebra connection:
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+N = 100
+time = np.linspace(-2, 2, N)
+x = np.zeros_like(time)
+x[abs(time) < 1] = time[abs(time) < 1]  # Tent function
+
+# Build the DFT matrix
+n = np.arange(N).reshape((N, 1))
+k = np.arange(N).reshape((1, N))
+nk = n @ k  # (N, N) outer product
+W = np.exp(-1j * (2 * np.pi / N) * nk)       # DFT matrix
+W_inv = np.exp(1j * (2 * np.pi / N) * nk)    # Inverse DFT matrix
+
+# Forward and inverse transforms
+y = W @ x
+x_recovered = (W_inv @ y) / N
+
+fig, (ax0, ax1, ax2) = plt.subplots(1, 3, figsize=(12, 3))
+ax0.plot(x, '--ok', markersize=1, label='Original')
+ax1.plot(np.real(y), '--ob', markersize=1, label='Real')
+ax1.plot(np.imag(y), '--or', markersize=1, label='Imag')
+ax2.plot(x, '--ok', markersize=1, label='Original')
+ax2.plot(np.real(x_recovered), '--ob', markersize=1, label='Recovered Real')
+for ax, title in zip((ax0, ax1, ax2), ('Time Domain', 'Frequency Domain', 'Time Domain')):
+    ax.legend()
+    ax.set_title(title)
+plt.tight_layout()
+plt.show()
+```
+
+The manual implementation confirms that `np.fft.fft()` and `np.fft.ifft()` are simply optimized algorithms (the Fast Fourier Transform) for computing this matrix-vector product in $O(N \log N)$ instead of $O(N^2)$.
+
+---
+
 ## Basic FFT
 
 ### np.fft.fft() — 1D Transform
@@ -265,6 +320,24 @@ def next_power_of_2(x):
 
 signal_padded = np.pad(signal, (0, next_power_of_2(len(signal)) - len(signal)))
 ```
+
+---
+
+## scipy.fft Module
+
+The `scipy.fft` module provides the same FFT functions as `np.fft` but with additional features such as multithreading support via the `workers` parameter:
+
+```python
+import scipy.fft as fft
+
+y = fft.fft(x)
+x_recovered = fft.ifft(y)
+
+# Parallel computation with multiple workers
+y_parallel = fft.fft(x, workers=-1)  # Use all available CPU cores
+```
+
+For most use cases, `np.fft` and `scipy.fft` produce identical results. Use `scipy.fft` when you need the extra performance from multithreading or access to additional transform types.
 
 ---
 

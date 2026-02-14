@@ -88,6 +88,84 @@ Loop with append: 0.0987s
 List comprehension: 0.0654s
 ```
 
+### Four Ways to Transform a List
+
+Python offers four common patterns for applying a function to every element. Each has different performance characteristics because of how much work stays in the interpreter versus compiled C code:
+
+```python
+import time
+
+words = ['hello', 'world', 'python'] * 10_000
+
+# 1. Explicit for loop with append
+tic = time.time()
+result = []
+for word in words:
+    result.append(word.upper())
+loop_time = time.time() - tic
+
+# 2. map() — pushes the loop into C
+tic = time.time()
+result = list(map(str.upper, words))
+map_time = time.time() - tic
+
+# 3. List comprehension
+tic = time.time()
+result = [w.upper() for w in words]
+comp_time = time.time() - tic
+
+# 4. Generator expression (lazy, no intermediate list)
+tic = time.time()
+result = list(s.upper() for s in words)
+gen_time = time.time() - tic
+
+print(f"for loop:       {loop_time:.4f}s")
+print(f"map():          {map_time:.4f}s")
+print(f"comprehension:  {comp_time:.4f}s")
+print(f"generator:      {gen_time:.4f}s")
+```
+
+`map()` is typically fastest because the entire iteration happens in C with no per-element bytecode overhead. List comprehensions are faster than explicit loops because the append is handled internally. Generator expressions avoid allocating the full list but add per-element suspension overhead.
+
+---
+
+## Attribute Lookup Overhead
+
+### Avoiding Dots in Inner Loops
+
+Every dot (`.`) in Python triggers an attribute lookup. In tight loops over large data, caching the method reference outside the loop can produce measurable speedups:
+
+```python
+import timeit
+
+# With dots: word.upper() resolves the method on every iteration
+code_with_dot = """
+oldlist = ['some', 'string', 'that', 'is', 'big'] * 50000
+newlist = []
+for word in oldlist:
+    newlist.append(word.upper())
+"""
+
+# Without dots: pre-bind both upper and append
+code_without_dot = """
+oldlist = ['some', 'string', 'that', 'is', 'big'] * 50000
+upper = str.upper
+newlist = []
+append = newlist.append
+for word in oldlist:
+    append(upper(word))
+"""
+
+t_dot = timeit.timeit(stmt=code_with_dot, number=10)
+t_nodot = timeit.timeit(stmt=code_without_dot, number=10)
+
+print(f"With dots:    {t_dot:.4f}s")
+print(f"Without dots: {t_nodot:.4f}s")
+print(f"Speedup:      {t_dot / t_nodot:.2f}x")
+```
+
+The speedup comes from eliminating two dictionary lookups per iteration: one for `newlist.append` and one for `word.upper`. For small loops the difference is negligible, but for millions of iterations it adds up. This technique is most useful in performance-critical inner loops where every microsecond matters.
+
 ## Function Call Overhead
 
 ### Builtin vs User Functions
