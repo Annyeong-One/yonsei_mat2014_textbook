@@ -62,6 +62,7 @@ nav:
             - match / case (Structural Pattern Matching): ch01/control_flow/match_case.md
             - Control Flow Examples (Python): ch01/control_flow/control_flow_examples.py
             - Loops Examples (Python): ch01/control_flow/loops_examples.py
+            - Pattern Matching with Guards (Python): ch01/control_flow/pattern_matching_with_guards.py
 
         - 1.4 Essential Built-ins:
             - print() and input(): ch01/builtins/print_input.md
@@ -132,6 +133,7 @@ nav:
             - Comprehensions Practical (Python): ch01/composite_data_types/comprehensions_practical.py
             - Comprehensions Quick Reference: ch01/composite_data_types/comprehensions_quick_reference.md
             - Comprehensions Exercises: ch01/composite_data_types/comprehensions_exercises.md
+            - Dict Construction Patterns (Python): ch01/composite_data_types/dict_construction_patterns.py
 
         - 1.10 Exceptions:
             - Exception Hierarchy: ch01/exceptions/hierarchy.md
@@ -198,6 +200,7 @@ nav:
             - str Align Methods: ch02/strings/str_align_methods.md
             - str Format Specifiers: ch02/strings/str_format_specifiers.md
             - F-String Debugging: ch02/strings/fstring_debugging.md
+            - Unicode Normalization Comparison (Python): ch02/strings/unicode_normalization_comparison.py
 
         - 2.6 Composite Types Deep Dive:
             - Shallow and Deep Copying (copy module): ch02/composites/list_copying.md
@@ -220,6 +223,8 @@ nav:
             - Intermediate Generators (Python): ch02/iteration/intermediate_generators.py
             - Advanced Generators (Python): ch02/iteration/advanced_generators.py
             - Practical Applications (Python): ch02/iteration/practical_applications.py
+            - Iterator Protocol - Sentence (Python): ch02/iteration/iterator_protocol_sentence.py
+            - Generator with yield (Python): ch02/iteration/generator_with_yield.py
 
         - 2.8 Advanced Built-ins:
             - The builtins Namespace: ch02/advanced_builtins/builtins_namespace.md
@@ -271,6 +276,8 @@ nav:
             - Closures Examples (Python): ch02/closures/closures_examples.py
             - Closures Mini-Project (Python): ch02/closures/closures_mini_project.py
             - Closures Cheat Sheet: ch02/closures/closures_cheat_sheet.md
+            - Closure Mutable State (Python): ch02/closures/closure_mutable_state_example.py
+            - Closure vs Class Comparison (Python): ch02/closures/closure_vs_class_comparison.py
 
         - 2.15 Performance Basics:
             - Time vs Space Trade-offs: ch02/performance/tradeoffs.md
@@ -341,6 +348,9 @@ nav:
             - Immutable Types (Python): ch04/memory/immutable_types.py
             - Mutable Types (Python): ch04/memory/mutable_types.py
             - Aliasing and Copying (Python): ch04/memory/aliasing_and_copying.py
+            - Defensive Copying Pattern (Python): ch04/memory/defensive_copying_pattern.py
+            - Mutable Default Arguments Gotcha (Python): ch04/memory/mutable_default_arguments_gotcha.py
+            - Aliasing via Mutable Parameters (Python): ch04/memory/aliasing_via_mutable_parameters.py
 
         - 4.2 Reference Counting and GC:
             - Memory Management Overview: ch04/gc/memory_management_overview.md
@@ -362,6 +372,7 @@ nav:
             - sys.getsizeof(): ch04/advanced_memory/getsizeof.md
             - tracemalloc: ch04/advanced_memory/tracemalloc.md
             - List Internals (Python): ch04/advanced_memory/list_internals.py
+            - Weak Reference Practical (Python): ch04/advanced_memory/weakref_practical_example.py
 
         - 4.5 Performance and Profiling:
             - Performance and Memory: ch04/practical/performance_memory.md
@@ -432,6 +443,12 @@ nav:
             - Decorator Examples (Python): ch05/decorators/decorator_examples.py
             - Decorator Mini-Project (Python): ch05/decorators/decorator_mini_project.py
             - Decorators Cheat Sheet: ch05/decorators/decorators_cheat_sheet.md
+            - Singledispatch Example (Python): ch05/decorators/singledispatch_example.py
+            - Function Registration Pattern (Python): ch05/decorators/function_registration_pattern.py
+            - Timing Decorator Professional (Python): ch05/decorators/timing_decorator_professional.py
+
+        - 5.7 Design Patterns:
+            - Strategy Pattern (Python): ch05/design_patterns/strategy_pattern_example.py
 
     - 6 OOP:
         - 6.1 OOP Foundations:
@@ -473,6 +490,8 @@ nav:
             - Diamond Problem (Python): ch06/inheritance/diamond_problem.py
             - super() and MRO (Python): ch06/inheritance/super_and_mro.py
             - C3 Linearization Examples (Python): ch06/inheritance/c3_linearization_examples.py
+            - MRO Diamond Problem (Python): ch06/inheritance/mro_diamond_problem.py
+            - Mixin Pattern (Python): ch06/inheritance/mixin_pattern.py
 
         - 6.5 Composition and Aggregation:
             - Is-a vs Has-a: ch06/composition/isa_vs_hasa.md
@@ -492,6 +511,9 @@ nav:
             - Arithmetic Operators Tutorial (Python): ch06/dunder/arithmetic_operators_tutorial.py
             - Magic Methods Quick Reference: ch06/dunder/magic_methods_quick_reference.md
             - Magic Methods Exercises: ch06/dunder/magic_methods_exercises.md
+            - Sequence Protocol Example (Python): ch06/dunder/sequence_protocol_example.py
+            - Vector Arithmetic Operators (Python): ch06/dunder/vector_arithmetic_operators.py
+            - Operator Overloading Vector (Python): ch06/dunder/operator_overloading_vector.py
 
         - 6.7 Dunder Advanced:
             - Container Protocol: ch06/dunder_advanced/dunder_containers.md
@@ -500,6 +522,8 @@ nav:
             - Context Managers: ch06/dunder_advanced/dunder_context.md
             - Container Methods Tutorial (Python): ch06/dunder_advanced/container_methods_tutorial.py
             - Callable and Context Tutorial (Python): ch06/dunder_advanced/callable_and_context_tutorial.py
+            - Context Manager Protocol (Python): ch06/dunder_advanced/context_manager_protocol.py
+            - Context Manager Decorator (Python): ch06/dunder_advanced/context_manager_decorator.py
 
         - 6.8 Properties:
             - Property Decorator: ch06/properties/property_decorator.md
@@ -507,6 +531,7 @@ nav:
             - Cached Properties: ch06/properties/cached_property.md
             - Read-Only Properties: ch06/properties/readonly_properties.md
             - Properties as Descriptors: ch06/properties/property_descriptor_connection.md
+            - Property Decorator Basic (Python): ch06/properties/property_decorator_basic.py
 
         - 6.9 Descriptor Protocol:
             - Descriptor Introduction: ch06/descriptors/descriptor_intro.md
@@ -514,6 +539,8 @@ nav:
             - Data vs Non-Data Descriptors: ch06/descriptors/descriptor_types.md
             - Descriptor Use Cases: ch06/descriptors/descriptor_applications.md
             - Attribute Access Lookup: ch06/descriptors/attribute_access_lookup.md
+            - Descriptor Kinds Demo (Python): ch06/descriptors/descriptor_kinds_demo.py
+            - Method as Descriptor (Python): ch06/descriptors/method_as_descriptor.py
 
         - 6.10 Dunder Attribute Hooks:
             - __getattribute__: ch06/dunder_attrs/dunder_getattribute.md
@@ -534,6 +561,11 @@ nav:
             - slots and kw_only: ch06/dataclasses/slots_kw_only.md
             - Dataclass vs NamedTuple vs attrs: ch06/dataclasses/comparison.md
             - Practical Patterns: ch06/dataclasses/practical_patterns.md
+            - Dataclass Basics Tutorial (Python): ch06/dataclasses/dataclass_basics_tutorial.py
+            - Dataclass Immutable with Methods (Python): ch06/dataclasses/dataclass_immutable_with_methods.py
+            - Dataclass Fields and Defaults (Python): ch06/dataclasses/dataclass_fields_and_defaults.py
+            - NamedTuple Basic Example (Python): ch06/dataclasses/namedtuple_basic_example.py
+            - NamedTuple Typed with Methods (Python): ch06/dataclasses/namedtuple_typed_with_methods.py
 
         - 6.13 Enumerations:
             - Enum Basics: ch06/enum/enum_basics.md
@@ -549,10 +581,12 @@ nav:
             - typing.Protocol: ch06/abc/typing_protocol.md
             - collections.abc: ch06/abc/collections_abc.md
             - Virtual Subclasses (register): ch06/abc/virtual_subclasses.md
+            - Abstract Base Class Example (Python): ch06/abc/abstract_base_class_example.py
 
         - 6.15 Metaclasses:
             - Metaclasses Introduction: ch06/metaclasses/metaclasses_intro.md
             - __init_subclass__: ch06/metaclasses/init_subclass.md
+            - Class Factory with type() (Python): ch06/metaclasses/class_factory_type.py
 
         - 6.16 OOP Projects:
             - Task Management System: ch06/projects/task_management_project.md
@@ -1372,6 +1406,7 @@ nav:
             - ThreadPoolExecutor: ch13/futures/thread_pool.md
             - ProcessPoolExecutor: ch13/futures/process_pool.md
             - Future Objects: ch13/futures/future_objects.md
+            - ThreadPoolExecutor.map() (Python): ch13/futures/threadpool_executor_map.py
 
         - 13.3 Threading:
             - Thread Basics: ch13/threading/thread_basics.md
@@ -1380,6 +1415,7 @@ nav:
             - Thread-Local Storage: ch13/threading/thread_local.md
             - Threading Basics Tutorial (Python): ch13/threading/threading_basics_tutorial.py
             - Thread Safety Tutorial (Python): ch13/threading/thread_safety_tutorial.py
+            - Thread Event Pattern (Python): ch13/threading/thread_event_pattern.py
 
         - 13.4 Multiprocessing:
             - Process Basics: ch13/multiprocessing/process_basics.md
