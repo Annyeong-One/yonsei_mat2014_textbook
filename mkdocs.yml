@@ -211,6 +211,10 @@ nav:
             - dict Merge Operators: ch02/composites/dict_merge_operators.md
             - set Internals: ch02/composites/set_internals.md
             - Time Complexity of Operations: ch02/composites/time_complexity.md
+            - Bisect Module Tutorial (Python): ch02/composites/bisect_module_tutorial.py
+            - Hashing Implementation (Python): ch02/composites/hashing_implementation_tutorial.py
+            - Hash Function Performance (Python): ch02/composites/hash_function_performance.py
+            - Set vs List Performance (Python): ch02/composites/set_vs_list_performance.py
 
         - 2.7 Iteration Protocol:
             - Iterables and Iterators: ch02/iteration/iterables.md
@@ -225,6 +229,7 @@ nav:
             - Practical Applications (Python): ch02/iteration/practical_applications.py
             - Iterator Protocol - Sentence (Python): ch02/iteration/iterator_protocol_sentence.py
             - Generator with yield (Python): ch02/iteration/generator_with_yield.py
+            - Generator Performance - Fibonacci (Python): ch02/iteration/generator_performance_fibonacci.py
 
         - 2.8 Advanced Built-ins:
             - The builtins Namespace: ch02/advanced_builtins/builtins_namespace.md
@@ -284,6 +289,7 @@ nav:
             - Big-O Notation: ch02/performance/big_o.md
             - Python Operation Costs: ch02/performance/operation_costs.md
             - timeit Module: ch02/performance/timeit.md
+            - Reducing Operations (Python): ch02/performance/reducing_operations.py
 
     - 3 Object Model and Binding:
         - 3.1 Language Foundations:
@@ -802,6 +808,8 @@ nav:
             - np.vectorize: ch08/vectorization/numpy_vectorize.md
             - Performance Tutorial (Python): ch08/vectorization/performance_tutorial.py
             - scipy.integrate Tutorial (Python): ch08/vectorization/scipy_integrate_tutorial.py
+            - Norm Optimization Progression (Python): ch08/vectorization/norm_optimization_progression.py
+            - Python vs NumPy Diffusion (Python): ch08/vectorization/python_vs_numpy_diffusion.py
 
         - 8.10 Array Manipulation:
             - Transpose and Swapaxes: ch08/manipulation/transpose.md
@@ -1188,6 +1196,7 @@ nav:
             - Chunked Processing: ch10/performance/chunked_processing.md
             - Introduction to Dask: ch10/performance/dask_intro.md
             - Performance Tutorial (Python): ch10/performance/performance_tutorial.py
+            - Iteration Methods Comparison (Python): ch10/performance/iteration_methods_comparison.py
 
         - 10.21 Common Pitfalls:
             - View vs Copy: ch10/pitfalls/view_vs_copy.md
@@ -1423,6 +1432,7 @@ nav:
             - Sharing State: ch13/multiprocessing/sharing_state.md
             - Process Basics Tutorial (Python): ch13/multiprocessing/process_basics_tutorial.py
             - Process Pool Tutorial (Python): ch13/multiprocessing/pool_tutorial.py
+            - Prime Validation with Pool (Python): ch13/multiprocessing/prime_validation_pool.py
 
         - 13.5 Asyncio:
             - Asyncio Introduction: ch13/asyncio/introduction.md
