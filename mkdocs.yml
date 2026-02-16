@@ -10,6 +10,10 @@ markdown_extensions:
     - pymdownx.arithmatex:
         generic: true
 
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
+
 nav:
     - Home: index.md
 
@@ -869,6 +873,14 @@ nav:
         - 8.17 Fourier Transforms:
             - np.fft Module: ch08/fft/numpy_fft.md
             - DFT Matrix Implementation (Python): ch08/fft/dft_matrix_implementation.py
+            - Spectrogram and STFT: ch08/fft/spectrogram_stft.md
+            - Window Functions: ch08/fft/windowing.md
+            - 2D FFT for Images: ch08/fft/fft_2d_image.md
+
+        - 8.21 scipy.ndimage:
+            - Convolution and Filtering: ch08/ndimage/convolution_filtering.md
+            - Generic Filters: ch08/ndimage/generic_filter.md
+            - Binary Structure and Morphology: ch08/ndimage/binary_structure.md
 
         - 8.18 Array I/O:
             - save, load, savez: ch08/io/numpy_io.md
@@ -1267,6 +1279,7 @@ nav:
             - Iterative Solvers: ch11/sparse/iterative_solvers.md
             - Preconditioning: ch11/sparse/preconditioning.md
             - Sparse Eigenvalues: ch11/eigen/sparse_eig.md
+            - Spectral Methods (Python): ch11/eigen/spectral_methods_example.py
 
         - 11.8 Special Matrices:
             - Toeplitz and Circulant: ch11/special/toeplitz.md
@@ -1280,6 +1293,9 @@ nav:
         - 11.10 Applications:
             - PDE Discretization: ch11/applications/pde.md
             - Graph Algorithms: ch11/applications/graphs.md
+            - Sparse Matrix Applications: ch11/sparse/applications.md
+            - Variation of Information (Python): ch11/sparse/variation_of_information.py
+            - Delaunay Triangulation (Python): ch11/applications/delaunay_triangulation.py
 
     - 12 SciPy Stats:
         - 12.1 Descriptive Statistics:
@@ -1391,7 +1407,10 @@ nav:
             - Mutual Information: ch12/information/mutual_information.md
             - Connection to ML Loss Functions: ch12/information/ml_loss_connection.md
 
-        - 12.12 Practical Applications:
+        - 12.12 Data Preprocessing:
+            - Quantile Normalization: ch12/preprocessing/quantile_normalization.md
+
+        - 12.13 Practical Applications:
             - A/B Testing Workflow: ch12/applications/ab_testing.md
             - Financial Returns Analysis: ch12/applications/financial_returns.md
             - Feature Selection for ML: ch12/applications/feature_selection.md
@@ -1400,84 +1419,99 @@ nav:
             - Bayesian Inference Preview: ch12/applications/bayesian_preview.md
             - Advanced Topics (Python): ch12/applications/advanced_topics.py
 
-    - 13 Concurrency:
-        - 13.1 Concurrency Concepts:
-            - Introduction: ch13/concepts/introduction.md
-            - GIL Explained: ch13/concepts/gil.md
-            - CPU-bound vs IO-bound: ch13/concepts/cpu_vs_io.md
-            - Threads vs Processes: ch13/concepts/threads_vs_processes.md
-            - Deadlocks: ch13/concepts/deadlocks.md
-            - Race Conditions: ch13/concepts/race_conditions.md
-            - GIL Tutorial (Python): ch13/concepts/gil_tutorial.py
+    - 13 SciPy Optimize:
+        - 13.1 Overview:
+            - scipy.optimize Overview: ch13/overview/scipy_optimize_overview.md
+        - 13.2 Minimization:
+            - Minimize Basics: ch13/minimization/minimize_basics.md
+            - Optimization Methods: ch13/minimization/optimization_methods.md
+            - Local vs Global Optimization: ch13/minimization/local_vs_global.md
+            - Optimization Methods Comparison (Python): ch13/minimization/optimization_comparison.py
+        - 13.3 Constrained Optimization:
+            - Constrained Optimization: ch13/constraints/constrained_optimization.md
+        - 13.4 Curve Fitting:
+            - Curve Fitting with curve_fit: ch13/curve_fitting/curve_fit.md
+        - 13.5 Root Finding:
+            - Root and Scalar Root Finding: ch13/root_finding/root_scalar.md
 
-        - 13.2 concurrent.futures:
-            - Executor Interface: ch13/futures/executor_interface.md
-            - ThreadPoolExecutor: ch13/futures/thread_pool.md
-            - ProcessPoolExecutor: ch13/futures/process_pool.md
-            - Future Objects: ch13/futures/future_objects.md
-            - ThreadPoolExecutor.map() (Python): ch13/futures/threadpool_executor_map.py
+    - 14 Concurrency:
+        - 14.1 Concurrency Concepts:
+            - Introduction: ch14/concepts/introduction.md
+            - GIL Explained: ch14/concepts/gil.md
+            - CPU-bound vs IO-bound: ch14/concepts/cpu_vs_io.md
+            - Threads vs Processes: ch14/concepts/threads_vs_processes.md
+            - Deadlocks: ch14/concepts/deadlocks.md
+            - Race Conditions: ch14/concepts/race_conditions.md
+            - GIL Tutorial (Python): ch14/concepts/gil_tutorial.py
 
-        - 13.3 Threading:
-            - Thread Basics: ch13/threading/thread_basics.md
-            - Thread Synchronization: ch13/threading/synchronization.md
-            - Thread Communication: ch13/threading/communication.md
-            - Thread-Local Storage: ch13/threading/thread_local.md
-            - Threading Basics Tutorial (Python): ch13/threading/threading_basics_tutorial.py
-            - Thread Safety Tutorial (Python): ch13/threading/thread_safety_tutorial.py
-            - Thread Event Pattern (Python): ch13/threading/thread_event_pattern.py
+        - 14.2 concurrent.futures:
+            - Executor Interface: ch14/futures/executor_interface.md
+            - ThreadPoolExecutor: ch14/futures/thread_pool.md
+            - ProcessPoolExecutor: ch14/futures/process_pool.md
+            - Future Objects: ch14/futures/future_objects.md
+            - ThreadPoolExecutor.map() (Python): ch14/futures/threadpool_executor_map.py
 
-        - 13.4 Multiprocessing:
-            - Process Basics: ch13/multiprocessing/process_basics.md
-            - Process Pool: ch13/multiprocessing/pool.md
-            - Sharing State: ch13/multiprocessing/sharing_state.md
-            - Process Basics Tutorial (Python): ch13/multiprocessing/process_basics_tutorial.py
-            - Process Pool Tutorial (Python): ch13/multiprocessing/pool_tutorial.py
-            - Prime Validation with Pool (Python): ch13/multiprocessing/prime_validation_pool.py
+        - 14.3 Threading:
+            - Thread Basics: ch14/threading/thread_basics.md
+            - Thread Synchronization: ch14/threading/synchronization.md
+            - Thread Communication: ch14/threading/communication.md
+            - Thread-Local Storage: ch14/threading/thread_local.md
+            - Threading Basics Tutorial (Python): ch14/threading/threading_basics_tutorial.py
+            - Thread Safety Tutorial (Python): ch14/threading/thread_safety_tutorial.py
+            - Thread Event Pattern (Python): ch14/threading/thread_event_pattern.py
 
-        - 13.5 Asyncio:
-            - Asyncio Introduction: ch13/asyncio/introduction.md
-            - async and await: ch13/asyncio/async_await.md
-            - Event Loop: ch13/asyncio/event_loop.md
-            - Tasks and Coroutines: ch13/asyncio/tasks_coroutines.md
-            - gather vs wait: ch13/asyncio/gather_vs_wait.md
-            - Async Iteration (async for/with): ch13/asyncio/async_iteration.md
-            - Asyncio Patterns: ch13/asyncio/patterns.md
-            - Async HTTP (aiohttp): ch13/asyncio/aiohttp_examples.md
-            - Context Variables: ch13/asyncio/contextvars.md
-            - Async/Await Tutorial (Python): ch13/asyncio/async_await_tutorial.py
-            - Event Loop Tutorial (Python): ch13/asyncio/event_loop_tutorial.py
-            - Gather vs Wait Tutorial (Python): ch13/asyncio/gather_vs_wait_tutorial.py
+        - 14.4 Multiprocessing:
+            - Process Basics: ch14/multiprocessing/process_basics.md
+            - Process Pool: ch14/multiprocessing/pool.md
+            - Sharing State: ch14/multiprocessing/sharing_state.md
+            - Process Basics Tutorial (Python): ch14/multiprocessing/process_basics_tutorial.py
+            - Process Pool Tutorial (Python): ch14/multiprocessing/pool_tutorial.py
+            - Prime Validation with Pool (Python): ch14/multiprocessing/prime_validation_pool.py
 
-        - 13.6 Practical Patterns:
-            - When to Use What: ch13/patterns/decision_guide.md
-            - Common Patterns: ch13/patterns/common_patterns.md
-            - Error Handling: ch13/patterns/error_handling.md
-            - Decision Guide Tutorial (Python): ch13/patterns/decision_guide_tutorial.py
+        - 14.5 Asyncio:
+            - Asyncio Introduction: ch14/asyncio/introduction.md
+            - async and await: ch14/asyncio/async_await.md
+            - Event Loop: ch14/asyncio/event_loop.md
+            - Tasks and Coroutines: ch14/asyncio/tasks_coroutines.md
+            - gather vs wait: ch14/asyncio/gather_vs_wait.md
+            - Async Iteration (async for/with): ch14/asyncio/async_iteration.md
+            - Asyncio Patterns: ch14/asyncio/patterns.md
+            - Async HTTP (aiohttp): ch14/asyncio/aiohttp_examples.md
+            - Context Variables: ch14/asyncio/contextvars.md
+            - Async/Await Tutorial (Python): ch14/asyncio/async_await_tutorial.py
+            - Event Loop Tutorial (Python): ch14/asyncio/event_loop_tutorial.py
+            - Gather vs Wait Tutorial (Python): ch14/asyncio/gather_vs_wait_tutorial.py
 
-    - 14 Systems and Networking:
-        - 14.1 Bus and Communication:
-            - System Bus: ch14/communication/system_bus.md
-            - CPU-Memory Communication: ch14/communication/cpu_memory.md
-            - CPU-GPU Communication: ch14/communication/cpu_gpu.md
-            - I/O and Peripherals: ch14/communication/io_peripherals.md
+        - 14.6 Practical Patterns:
+            - When to Use What: ch14/patterns/decision_guide.md
+            - Common Patterns: ch14/patterns/common_patterns.md
+            - Error Handling: ch14/patterns/error_handling.md
+            - Decision Guide Tutorial (Python): ch14/patterns/decision_guide_tutorial.py
 
-        - 14.2 Networking Fundamentals:
-            - Network Basics: ch14/networking/network_basics.md
-            - Client-Server Model: ch14/networking/client_server.md
-            - Protocols (TCP/IP, HTTP): ch14/networking/protocols.md
-            - Latency and Bandwidth: ch14/networking/latency_bandwidth.md
-            - Local vs Remote Computation: ch14/networking/local_vs_remote.md
+    - 15 Systems and Networking:
+        - 15.1 Bus and Communication:
+            - System Bus: ch15/communication/system_bus.md
+            - CPU-Memory Communication: ch15/communication/cpu_memory.md
+            - CPU-GPU Communication: ch15/communication/cpu_gpu.md
+            - I/O and Peripherals: ch15/communication/io_peripherals.md
 
-        - 14.3 Distributed Systems Preview:
-            - Single Machine vs Cluster: ch14/distributed/single_vs_cluster.md
-            - GPU Clusters: ch14/distributed/gpu_clusters.md
-            - Cloud Computing Basics: ch14/distributed/cloud_basics.md
+        - 15.2 Networking Fundamentals:
+            - Network Basics: ch15/networking/network_basics.md
+            - Client-Server Model: ch15/networking/client_server.md
+            - Protocols (TCP/IP, HTTP): ch15/networking/protocols.md
+            - Latency and Bandwidth: ch15/networking/latency_bandwidth.md
+            - Local vs Remote Computation: ch15/networking/local_vs_remote.md
 
-        - 14.4 Connecting to Python:
-            - Hardware and Interpreted Languages: ch14/python_connection/interpreted_languages.md
-            - Why Python is Slow: ch14/python_connection/why_python_slow.md
-            - How NumPy Bridges the Gap: ch14/python_connection/numpy_bridge.md
-            - GIL and Hardware: ch14/python_connection/gil_hardware.md
+        - 15.3 Distributed Systems Preview:
+            - Single Machine vs Cluster: ch15/distributed/single_vs_cluster.md
+            - GPU Clusters: ch15/distributed/gpu_clusters.md
+            - Cloud Computing Basics: ch15/distributed/cloud_basics.md
+
+        - 15.4 Connecting to Python:
+            - Hardware and Interpreted Languages: ch15/python_connection/interpreted_languages.md
+            - Why Python is Slow: ch15/python_connection/why_python_slow.md
+            - How NumPy Bridges the Gap: ch15/python_connection/numpy_bridge.md
+            - GIL and Hardware: ch15/python_connection/gil_hardware.md
 
 plugins:
     - search
