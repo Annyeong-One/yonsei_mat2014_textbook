@@ -716,6 +716,7 @@ nav:
             - Groups and Capturing Tutorial (Python): ch07/regex/groups_capturing_tutorial.py
             - Lookahead/Lookbehind Tutorial (Python): ch07/regex/lookahead_lookbehind_tutorial.py
             - Practical Applications Tutorial (Python): ch07/regex/practical_applications_tutorial.py
+            - Regex Web Scraping Tutorial (Python): ch07/regex/regex_web_scraping_tutorial.py
 
         - 7.11 Debugging:
             - breakpoint() and pdb Basics: ch07/debugging/breakpoint_pdb.md
@@ -1501,6 +1502,7 @@ nav:
             - Protocols (TCP/IP, HTTP): ch15/networking/protocols.md
             - Latency and Bandwidth: ch15/networking/latency_bandwidth.md
             - Local vs Remote Computation: ch15/networking/local_vs_remote.md
+            - Web Scraping and API Tutorial (Python): ch15/networking/web_scraping_api_tutorial.py
 
         - 15.3 Distributed Systems Preview:
             - Single Machine vs Cluster: ch15/distributed/single_vs_cluster.md
