@@ -11,13 +11,14 @@ markdown_extensions:
         generic: true
 
 extra_javascript:
-  - javascripts/mathjax.js
-  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
+    - javascripts/mathjax.js
+    - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
 
 nav:
     - Home: index.md
 
     - 0 Computer Fundamentals:
+        - Chapter Overview: ch00/index.md
         - 0.1 Computer Architecture:
             - Von Neumann Architecture: ch00/architecture/von_neumann.md
             - CPU Basics: ch00/architecture/cpu_basics.md
@@ -42,6 +43,7 @@ nav:
             - Character Encoding Preview: ch00/data/character_encoding_preview.md
 
     - 1 Python Basics:
+        - Chapter Overview: ch01/index.md
         - 1.1 Getting Started:
             - Why Python: ch01/setup/why_python.md
             - Installing Python: ch01/setup/installing_python.md
@@ -160,6 +162,7 @@ nav:
             - pip and PyPI: ch01/package_managers/pip.md
 
     - 2 Python Intermediate:
+        - Chapter Overview: ch02/index.md
         - 2.1 Variables and Naming:
             - Variables as Names: ch02/variables/names_not_containers.md
             - Language Comparison: ch02/variables/language_comparison.md
@@ -296,6 +299,7 @@ nav:
             - Reducing Operations (Python): ch02/performance/reducing_operations.py
 
     - 3 Object Model and Binding:
+        - Chapter Overview: ch03/index.md
         - 3.1 Language Foundations:
             - CPython vs Language Spec: ch03/foundations/cpython_vs_language.md
             - Key Terms Glossary: ch03/foundations/terminology.md
@@ -343,6 +347,7 @@ nav:
             - Examples and Interview: ch03/practical/examples_interview.md
 
     - 4 Memory and Performance:
+        - Chapter Overview: ch04/index.md
         - 4.1 Memory Architecture:
             - Stack vs Heap Overview: ch04/memory/stack_heap_overview.md
             - Frame Objects: ch04/memory/frame_objects.md
@@ -397,6 +402,7 @@ nav:
             - cProfile Tutorial (Python): ch04/practical/cprofile_tutorial.py
 
     - 5 Functions:
+        - Chapter Overview: ch05/index.md
         - 5.1 First-Class Functions:
             - Lambda Expressions: ch05/functions/lambda.md
             - Function Factories: ch05/functions/function_factories.md
@@ -461,6 +467,7 @@ nav:
             - Strategy Pattern (Python): ch05/design_patterns/strategy_pattern_example.py
 
     - 6 OOP:
+        - Chapter Overview: ch06/index.md
         - 6.1 OOP Foundations:
             - Procedural vs OOP: ch06/foundations/procedural_vs_oop.md
             - Functions to Classes: ch06/foundations/functions_to_classes.md
@@ -606,6 +613,7 @@ nav:
             - Notification System: ch06/projects/notification_system_project.md
 
     - 7 Standard Library and Tools:
+        - Chapter Overview: ch07/index.md
         - 7.1 collections Module:
             - collections Overview: ch07/collections/collections_overview.md
             - namedtuple: ch07/collections/namedtuple.md
@@ -738,6 +746,7 @@ nav:
             - Mocking Basics Tutorial (Python): ch07/testing/mocking_basics_tutorial.py
 
     - 8 NumPy:
+        - Chapter Overview: ch08/index.md
         - 8.1 Getting Started:
             - Installation: ch08/setup/installation.md
             - Import Convention: ch08/setup/import_convention.md
@@ -897,6 +906,7 @@ nav:
             - PIL vs NumPy Images: ch08/oop/pil_vs_numpy.md
 
     - 9 Matplotlib:
+        - Chapter Overview: ch09/index.md
         - 9.1 Introduction:
             - Visualization Libraries: ch09/intro/visualization_libraries.md
             - Python Data Science Ecosystem: ch09/intro/data_science_ecosystem.md
@@ -1044,6 +1054,7 @@ nav:
             - Matplotlib Artists: ch09/oop/matplotlib_artists.md
 
     - 10 Pandas:
+        - Chapter Overview: ch10/index.md
         - 10.1 Overview:
             - Arrays vs DataFrames: ch10/overview/arrays_vs_dataframes.md
 
@@ -1242,6 +1253,7 @@ nav:
             - Bar Plots: ch10/plotting/bar_plots.md
 
     - 11 SciPy Linear Algebra:
+        - Chapter Overview: ch11/index.md
         - 11.1 Overview:
             - SciPy vs NumPy Linalg: ch11/overview/scipy_vs_numpy.md
             - Module Organization: ch11/overview/modules.md
@@ -1299,6 +1311,7 @@ nav:
             - Delaunay Triangulation (Python): ch11/applications/delaunay_triangulation.py
 
     - 12 SciPy Stats:
+        - Chapter Overview: ch12/index.md
         - 12.1 Descriptive Statistics:
             - Summary Statistics: ch12/descriptive/summary_stats.md
             - Moments and Skewness: ch12/descriptive/moments.md
@@ -1421,6 +1434,7 @@ nav:
             - Advanced Topics (Python): ch12/applications/advanced_topics.py
 
     - 13 SciPy Optimize:
+        - Chapter Overview: ch13/index.md
         - 13.1 Overview:
             - scipy.optimize Overview: ch13/overview/scipy_optimize_overview.md
         - 13.2 Minimization:
@@ -1436,6 +1450,7 @@ nav:
             - Root and Scalar Root Finding: ch13/root_finding/root_scalar.md
 
     - 14 Concurrency:
+        - Chapter Overview: ch14/index.md
         - 14.1 Concurrency Concepts:
             - Introduction: ch14/concepts/introduction.md
             - GIL Explained: ch14/concepts/gil.md
@@ -1490,6 +1505,7 @@ nav:
             - Decision Guide Tutorial (Python): ch14/patterns/decision_guide_tutorial.py
 
     - 15 Systems and Networking:
+        - Chapter Overview: ch15/index.md
         - 15.1 Bus and Communication:
             - System Bus: ch15/communication/system_bus.md
             - CPU-Memory Communication: ch15/communication/cpu_memory.md
