@@ -1,6 +1,7 @@
 site_name: Python
 theme:
     name: material
+    favicon: assets/favicon.ico
 
 markdown_extensions:
     - admonition
@@ -69,6 +70,7 @@ nav:
             - Control Flow Examples (Python): ch01/control_flow/control_flow_examples.py
             - Loops Examples (Python): ch01/control_flow/loops_examples.py
             - Pattern Matching with Guards (Python): ch01/control_flow/pattern_matching_with_guards.py
+            - Loop Practice Problems (Python): ch01/control_flow/loop_practice_problems.py
 
         - 1.4 Essential Built-ins:
             - print() and input(): ch01/builtins/print_input.md
@@ -122,6 +124,7 @@ nav:
             - Function and Call Stack: ch01/functions/functions.md
             - Parameters & Returns: ch01/functions/parameters.md
             - Type Hints: ch01/functions/type_hints.md
+            - Function Practice Examples (Python): ch01/functions/function_practice_examples.py
 
         - 1.9 Composite Data Types:
             - Sequences Overview: ch01/composite_data_types/sequences.md
@@ -237,6 +240,7 @@ nav:
             - Iterator Protocol - Sentence (Python): ch02/iteration/iterator_protocol_sentence.py
             - Generator with yield (Python): ch02/iteration/generator_with_yield.py
             - Generator Performance - Fibonacci (Python): ch02/iteration/generator_performance_fibonacci.py
+            - Iterator Protocol - Prime and Fibonacci (Python): ch02/iteration/iterator_protocol_prime_fib.py
 
         - 2.8 Advanced Built-ins:
             - The builtins Namespace: ch02/advanced_builtins/builtins_namespace.md
@@ -297,6 +301,7 @@ nav:
             - Python Operation Costs: ch02/performance/operation_costs.md
             - timeit Module: ch02/performance/timeit.md
             - Reducing Operations (Python): ch02/performance/reducing_operations.py
+            - Search Algorithms and Complexity (Python): ch02/performance/search_algorithms_complexity.py
 
     - 3 Object Model and Binding:
         - Chapter Overview: ch03/index.md
@@ -306,6 +311,7 @@ nav:
             - Everything is an Object: ch03/foundations/everything_is_object.md
             - Methods and Attributes: ch03/foundations/methods_and_attributes.md
             - Python Execution Model: ch03/foundations/python_execution.md
+            - Code Object Anatomy (Python): ch03/foundations/code_object_anatomy.py
 
         - 3.2 Python's Object Model:
             - Names vs Objects: ch03/objects/names_vs_objects.md
@@ -351,6 +357,7 @@ nav:
         - 4.1 Memory Architecture:
             - Stack vs Heap Overview: ch04/memory/stack_heap_overview.md
             - Frame Objects: ch04/memory/frame_objects.md
+            - Frame Introspection (Python): ch04/memory/frame_introspection.py
             - Heap Object Storage: ch04/memory/heap_storage.md
             - Stack-Heap Interaction: ch04/memory/stack_heap_interaction.md
             - Recursion and Stack Growth: ch04/memory/recursion_stack.md
@@ -426,6 +433,9 @@ nav:
             - Divide and Conquer: ch05/recursion/divide_and_conquer.md
             - Backtracking: ch05/recursion/backtracking.md
             - Recursion Examples (Python): ch05/recursion/recursion_examples.py
+            - Sorting Algorithms (Python): ch05/recursion/sorting_algorithms_example.py
+            - Greedy Algorithm - Knapsack (Python): ch05/recursion/greedy_algorithm_example.py
+            - Backtracking - Knight's Tour (Python): ch05/recursion/backtracking_knights_tour.py
 
         - 5.4 Functional Programming:
             - map(), filter(), reduce(): ch05/functional/map_filter_reduce.md
@@ -462,6 +472,8 @@ nav:
             - Singledispatch Example (Python): ch05/decorators/singledispatch_example.py
             - Function Registration Pattern (Python): ch05/decorators/function_registration_pattern.py
             - Timing Decorator Professional (Python): ch05/decorators/timing_decorator_professional.py
+            - Decorator Factory Strategy (Python): ch05/decorators/decorator_factory_strategy_example.py
+            - Singleton Decorator (Python): ch05/decorators/singleton_decorator_example.py
 
         - 5.7 Design Patterns:
             - Strategy Pattern (Python): ch05/design_patterns/strategy_pattern_example.py
@@ -509,6 +521,7 @@ nav:
             - C3 Linearization Examples (Python): ch06/inheritance/c3_linearization_examples.py
             - MRO Diamond Problem (Python): ch06/inheritance/mro_diamond_problem.py
             - Mixin Pattern (Python): ch06/inheritance/mixin_pattern.py
+            - MRO Mixin SetOnce (Python): ch06/inheritance/mro_mixin_setonce_example.py
 
         - 6.5 Composition and Aggregation:
             - Is-a vs Has-a: ch06/composition/isa_vs_hasa.md
@@ -531,6 +544,7 @@ nav:
             - Sequence Protocol Example (Python): ch06/dunder/sequence_protocol_example.py
             - Vector Arithmetic Operators (Python): ch06/dunder/vector_arithmetic_operators.py
             - Operator Overloading Vector (Python): ch06/dunder/operator_overloading_vector.py
+            - Hash Eq and Slots (Python): ch06/dunder/hash_eq_slots_example.py
 
         - 6.7 Dunder Advanced:
             - Container Protocol: ch06/dunder_advanced/dunder_containers.md
@@ -541,6 +555,7 @@ nav:
             - Callable and Context Tutorial (Python): ch06/dunder_advanced/callable_and_context_tutorial.py
             - Context Manager Protocol (Python): ch06/dunder_advanced/context_manager_protocol.py
             - Context Manager Decorator (Python): ch06/dunder_advanced/context_manager_decorator.py
+            - Hash Digest Callable (Python): ch06/dunder_advanced/hash_digest_callable_example.py
 
         - 6.8 Properties:
             - Property Decorator: ch06/properties/property_decorator.md
@@ -592,6 +607,7 @@ nav:
             - auto() Function: ch06/enum/auto.md
             - Enum Methods and Customization: ch06/enum/methods_customization.md
             - Enum Practical Patterns: ch06/enum/practical_patterns.md
+            - Poker Game with Enum (Python): ch06/enum/poker_game_example.py
 
         - 6.14 Abstract Base Classes:
             - ABC and abstractmethod: ch06/abc/abstract_base_classes.md
@@ -599,11 +615,13 @@ nav:
             - collections.abc: ch06/abc/collections_abc.md
             - Virtual Subclasses (register): ch06/abc/virtual_subclasses.md
             - Abstract Base Class Example (Python): ch06/abc/abstract_base_class_example.py
+            - Factory Pattern with ABC (Python): ch06/abc/factory_pattern_with_abc_example.py
 
         - 6.15 Metaclasses:
             - Metaclasses Introduction: ch06/metaclasses/metaclasses_intro.md
             - __init_subclass__: ch06/metaclasses/init_subclass.md
             - Class Factory with type() (Python): ch06/metaclasses/class_factory_type.py
+            - Singleton Metaclass (Python): ch06/metaclasses/singleton_metaclass_example.py
 
         - 6.16 OOP Projects:
             - Task Management System: ch06/projects/task_management_project.md
@@ -744,6 +762,7 @@ nav:
             - unittest Basics Tutorial (Python): ch07/testing/unittest_basics_tutorial.py
             - pytest Basics Tutorial (Python): ch07/testing/pytest_basics_tutorial.py
             - Mocking Basics Tutorial (Python): ch07/testing/mocking_basics_tutorial.py
+            - Search and Sort Tests (Python): ch07/testing/search_sort_test_example.py
 
     - 8 NumPy:
         - Chapter Overview: ch08/index.md
@@ -1068,6 +1087,7 @@ nav:
             - Series Tutorial (Python): ch10/core/series_tutorial.py
             - DataFrame Tutorial (Python): ch10/core/dataframe_tutorial.py
             - MultiIndex Tutorial (Python): ch10/core/multiindex_tutorial.py
+            - Python vs NumPy vs Pandas Comparison (Python): ch10/core/python_numpy_pandas_comparison.py
 
         - 10.3 Creating DataFrames:
             - DataFrame Creation: ch10/creation/dataframe_creation.md
@@ -1115,6 +1135,7 @@ nav:
             - dropna Keywords: ch10/missing/dropna_keywords.md
             - replace Method: ch10/missing/replace.md
             - Data Cleaning Tutorial (Python): ch10/missing/data_cleaning_tutorial.py
+            - Data Preprocessing Workflow (Python): ch10/missing/data_preprocessing_workflow.py
 
         - 10.8 Aggregations:
             - Basic Aggregations: ch10/aggregation/basic_aggregations.md
@@ -1184,6 +1205,7 @@ nav:
             - filter Method: ch10/groupby/filter.md
             - Multi-Level Grouping: ch10/groupby/multi_level.md
             - GroupBy Tutorial (Python): ch10/groupby/groupby_tutorial.py
+            - Business Analytics Example (Python): ch10/groupby/business_analytics_example.py
 
         - 10.16 Pivot Tables:
             - pivot Method: ch10/pivot/pivot_method.md
@@ -1475,6 +1497,7 @@ nav:
             - Threading Basics Tutorial (Python): ch14/threading/threading_basics_tutorial.py
             - Thread Safety Tutorial (Python): ch14/threading/thread_safety_tutorial.py
             - Thread Event Pattern (Python): ch14/threading/thread_event_pattern.py
+            - Bank Account Condition (Python): ch14/threading/bank_account_condition_example.py
 
         - 14.4 Multiprocessing:
             - Process Basics: ch14/multiprocessing/process_basics.md
@@ -1497,6 +1520,7 @@ nav:
             - Async/Await Tutorial (Python): ch14/asyncio/async_await_tutorial.py
             - Event Loop Tutorial (Python): ch14/asyncio/event_loop_tutorial.py
             - Gather vs Wait Tutorial (Python): ch14/asyncio/gather_vs_wait_tutorial.py
+            - Coroutine Prime Filter (Python): ch14/asyncio/coroutine_prime_filter_example.py
 
         - 14.6 Practical Patterns:
             - When to Use What: ch14/patterns/decision_guide.md
