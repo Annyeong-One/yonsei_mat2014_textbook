@@ -152,10 +152,10 @@ class Money:
 
 m = Money(1234.567)
 print(f"{m}")         # 1234.57 USD
-print(f"{m:short}")   # $1234.57
+print(f"{m:short}")   # \$1234.57
 print(f"{m:full}")    # 1234.57 USD (US Dollars)
 print(f"{m:,.2f}")    # 1,234.57 USD
-print(format(m, 'short'))  # $1234.57
+print(format(m, 'short'))  # \$1234.57
 ```
 
 ### Complex Format Specifications

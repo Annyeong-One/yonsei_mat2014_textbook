@@ -111,9 +111,9 @@ for original, rounded in zip(discounted, final):
 
 Output:
 ```
-17.9910 -> $17.99
-22.9500 -> $22.95
-11.1105 -> $11.11
+17.9910 -> \$17.99
+22.9500 -> \$22.95
+11.1105 -> \$11.11
 ```
 
 ### Statistical Analysis

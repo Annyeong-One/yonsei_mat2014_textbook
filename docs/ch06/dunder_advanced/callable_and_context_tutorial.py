@@ -119,6 +119,8 @@ class DatabaseConnection:
 
 # Examples
 if __name__ == "__main__":
+
+    # ============================================================================
     print("=== Callable Objects: Multiplier ===")
     double = Multiplier(2)
     triple = Multiplier(3)

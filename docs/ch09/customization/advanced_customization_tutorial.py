@@ -28,413 +28,415 @@ import numpy as np
 # SECTION 1: Customizing Axes Limits
 # ============================================================================
 
-"""
-Controlling what portion of data is visible
-"""
+if __name__ == "__main__":
 
-x = np.linspace(0, 10, 100)
-y = np.sin(x)
+    """
+    Controlling what portion of data is visible
+    """
 
-fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+    x = np.linspace(0, 10, 100)
+    y = np.sin(x)
 
-# Default limits (automatic)
-axes[0, 0].plot(x, y)
-axes[0, 0].set_title('Default limits (automatic)')
-axes[0, 0].grid(True, alpha=0.3)
+    fig, axes = plt.subplots(2, 2, figsize=(12, 10))
 
-# Custom x-limits only
-axes[0, 1].plot(x, y)
-axes[0, 1].set_xlim(2, 8)  # Show only x from 2 to 8
-axes[0, 1].set_title('Custom xlim(2, 8)')
-axes[0, 1].grid(True, alpha=0.3)
+    # Default limits (automatic)
+    axes[0, 0].plot(x, y)
+    axes[0, 0].set_title('Default limits (automatic)')
+    axes[0, 0].grid(True, alpha=0.3)
 
-# Custom y-limits only
-axes[1, 0].plot(x, y)
-axes[1, 0].set_ylim(-2, 2)  # Extend y-axis range
-axes[1, 0].set_title('Custom ylim(-2, 2)')
-axes[1, 0].grid(True, alpha=0.3)
+    # Custom x-limits only
+    axes[0, 1].plot(x, y)
+    axes[0, 1].set_xlim(2, 8)  # Show only x from 2 to 8
+    axes[0, 1].set_title('Custom xlim(2, 8)')
+    axes[0, 1].grid(True, alpha=0.3)
 
-# Both custom limits
-axes[1, 1].plot(x, y)
-axes[1, 1].set_xlim(3, 7)
-axes[1, 1].set_ylim(-0.5, 0.5)
-axes[1, 1].set_title('Custom xlim and ylim')
-axes[1, 1].grid(True, alpha=0.3)
+    # Custom y-limits only
+    axes[1, 0].plot(x, y)
+    axes[1, 0].set_ylim(-2, 2)  # Extend y-axis range
+    axes[1, 0].set_title('Custom ylim(-2, 2)')
+    axes[1, 0].grid(True, alpha=0.3)
 
-plt.tight_layout()
-plt.show()
+    # Both custom limits
+    axes[1, 1].plot(x, y)
+    axes[1, 1].set_xlim(3, 7)
+    axes[1, 1].set_ylim(-0.5, 0.5)
+    axes[1, 1].set_title('Custom xlim and ylim')
+    axes[1, 1].grid(True, alpha=0.3)
 
-# ============================================================================
-# SECTION 2: Customizing Ticks and Tick Labels
-# ============================================================================
+    plt.tight_layout()
+    plt.show()
 
-"""
-Ticks are the marks on the axes.
-Tick labels are the text at each tick.
-"""
+    # ============================================================================
+    # SECTION 2: Customizing Ticks and Tick Labels
+    # ============================================================================
 
-x = np.linspace(0, 10, 100)
-y = np.sin(x)
+    """
+    Ticks are the marks on the axes.
+    Tick labels are the text at each tick.
+    """
 
-fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+    x = np.linspace(0, 10, 100)
+    y = np.sin(x)
 
-# Default ticks
-axes[0, 0].plot(x, y)
-axes[0, 0].set_title('Default ticks')
-axes[0, 0].grid(True, alpha=0.3)
+    fig, axes = plt.subplots(2, 2, figsize=(12, 10))
 
-# Custom tick positions
-axes[0, 1].plot(x, y)
-axes[0, 1].set_xticks([0, 2, 4, 6, 8, 10])  # Specific positions
-axes[0, 1].set_yticks([-1, -0.5, 0, 0.5, 1])
-axes[0, 1].set_title('Custom tick positions')
-axes[0, 1].grid(True, alpha=0.3)
+    # Default ticks
+    axes[0, 0].plot(x, y)
+    axes[0, 0].set_title('Default ticks')
+    axes[0, 0].grid(True, alpha=0.3)
 
-# Custom tick labels (different from positions)
-axes[1, 0].plot(x, y)
-axes[1, 0].set_xticks([0, np.pi, 2*np.pi, 3*np.pi])
-axes[1, 0].set_xticklabels(['0', 'π', '2π', '3π'])
-axes[1, 0].set_title('Custom tick labels')
-axes[1, 0].grid(True, alpha=0.3)
+    # Custom tick positions
+    axes[0, 1].plot(x, y)
+    axes[0, 1].set_xticks([0, 2, 4, 6, 8, 10])  # Specific positions
+    axes[0, 1].set_yticks([-1, -0.5, 0, 0.5, 1])
+    axes[0, 1].set_title('Custom tick positions')
+    axes[0, 1].grid(True, alpha=0.3)
 
-# Rotated and formatted labels
-axes[1, 1].plot(x, y)
-axes[1, 1].set_xticks(np.arange(0, 11, 1))
-axes[1, 1].set_xticklabels([f'x={i}' for i in range(11)], rotation=45, ha='right')
-axes[1, 1].set_title('Rotated tick labels')
-axes[1, 1].grid(True, alpha=0.3)
+    # Custom tick labels (different from positions)
+    axes[1, 0].plot(x, y)
+    axes[1, 0].set_xticks([0, np.pi, 2*np.pi, 3*np.pi])
+    axes[1, 0].set_xticklabels(['0', 'π', '2π', '3π'])
+    axes[1, 0].set_title('Custom tick labels')
+    axes[1, 0].grid(True, alpha=0.3)
 
-plt.tight_layout()
-plt.show()
+    # Rotated and formatted labels
+    axes[1, 1].plot(x, y)
+    axes[1, 1].set_xticks(np.arange(0, 11, 1))
+    axes[1, 1].set_xticklabels([f'x={i}' for i in range(11)], rotation=45, ha='right')
+    axes[1, 1].set_title('Rotated tick labels')
+    axes[1, 1].grid(True, alpha=0.3)
 
-# ============================================================================
-# SECTION 3: Grid Customization
-# ============================================================================
+    plt.tight_layout()
+    plt.show()
 
-"""
-Grids help read values from plots
-"""
+    # ============================================================================
+    # SECTION 3: Grid Customization
+    # ============================================================================
 
-x = np.linspace(0, 10, 100)
-y = np.sin(x)
+    """
+    Grids help read values from plots
+    """
 
-fig, axes = plt.subplots(2, 3, figsize=(15, 10))
+    x = np.linspace(0, 10, 100)
+    y = np.sin(x)
 
-# No grid
-axes[0, 0].plot(x, y)
-axes[0, 0].set_title('No grid')
+    fig, axes = plt.subplots(2, 3, figsize=(15, 10))
 
-# Basic grid
-axes[0, 1].plot(x, y)
-axes[0, 1].grid(True)
-axes[0, 1].set_title('Basic grid')
+    # No grid
+    axes[0, 0].plot(x, y)
+    axes[0, 0].set_title('No grid')
 
-# Customized grid (color, style, width)
-axes[0, 2].plot(x, y)
-axes[0, 2].grid(True, color='red', linestyle='--', linewidth=0.5, alpha=0.7)
-axes[0, 2].set_title('Customized grid')
+    # Basic grid
+    axes[0, 1].plot(x, y)
+    axes[0, 1].grid(True)
+    axes[0, 1].set_title('Basic grid')
 
-# Grid only on y-axis
-axes[1, 0].plot(x, y)
-axes[1, 0].grid(True, axis='y', alpha=0.5)
-axes[1, 0].set_title('Grid on y-axis only')
+    # Customized grid (color, style, width)
+    axes[0, 2].plot(x, y)
+    axes[0, 2].grid(True, color='red', linestyle='--', linewidth=0.5, alpha=0.7)
+    axes[0, 2].set_title('Customized grid')
 
-# Grid with minor ticks
-axes[1, 1].plot(x, y)
-axes[1, 1].minorticks_on()
-axes[1, 1].grid(True, which='major', linestyle='-', linewidth=0.8, alpha=0.7)
-axes[1, 1].grid(True, which='minor', linestyle=':', linewidth=0.5, alpha=0.4)
-axes[1, 1].set_title('Major and minor grids')
+    # Grid only on y-axis
+    axes[1, 0].plot(x, y)
+    axes[1, 0].grid(True, axis='y', alpha=0.5)
+    axes[1, 0].set_title('Grid on y-axis only')
 
-# Grid behind plot
-axes[1, 2].plot(x, y, linewidth=3, zorder=3)  # zorder=3 brings line to front
-axes[1, 2].grid(True, zorder=0, alpha=0.5)  # zorder=0 puts grid in back
-axes[1, 2].set_title('Grid behind line (zorder)')
+    # Grid with minor ticks
+    axes[1, 1].plot(x, y)
+    axes[1, 1].minorticks_on()
+    axes[1, 1].grid(True, which='major', linestyle='-', linewidth=0.8, alpha=0.7)
+    axes[1, 1].grid(True, which='minor', linestyle=':', linewidth=0.5, alpha=0.4)
+    axes[1, 1].set_title('Major and minor grids')
 
-plt.tight_layout()
-plt.show()
+    # Grid behind plot
+    axes[1, 2].plot(x, y, linewidth=3, zorder=3)  # zorder=3 brings line to front
+    axes[1, 2].grid(True, zorder=0, alpha=0.5)  # zorder=0 puts grid in back
+    axes[1, 2].set_title('Grid behind line (zorder)')
 
-# ============================================================================
-# SECTION 4: Spine Customization
-# ============================================================================
+    plt.tight_layout()
+    plt.show()
 
-"""
-Spines are the lines connecting the axis tick marks and noting the boundaries of the data area.
-There are 4 spines: 'left', 'right', 'top', 'bottom'
-"""
+    # ============================================================================
+    # SECTION 4: Spine Customization
+    # ============================================================================
 
-x = np.linspace(-5, 5, 100)
-y = x ** 2
+    """
+    Spines are the lines connecting the axis tick marks and noting the boundaries of the data area.
+    There are 4 spines: 'left', 'right', 'top', 'bottom'
+    """
 
-fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+    x = np.linspace(-5, 5, 100)
+    y = x ** 2
 
-# All spines visible (default)
-axes[0, 0].plot(x, y)
-axes[0, 0].set_title('All spines (default)')
+    fig, axes = plt.subplots(2, 2, figsize=(12, 10))
 
-# Hide top and right spines (common for scientific plots)
-axes[0, 1].plot(x, y)
-axes[0, 1].spines['top'].set_visible(False)
-axes[0, 1].spines['right'].set_visible(False)
-axes[0, 1].set_title('Top and right spines hidden')
+    # All spines visible (default)
+    axes[0, 0].plot(x, y)
+    axes[0, 0].set_title('All spines (default)')
 
-# Customize spine position (centered at zero)
-axes[1, 0].plot(x, y)
-axes[1, 0].spines['left'].set_position('zero')  # Move left spine to x=0
-axes[1, 0].spines['bottom'].set_position('zero')  # Move bottom spine to y=0
-axes[1, 0].spines['top'].set_visible(False)
-axes[1, 0].spines['right'].set_visible(False)
-axes[1, 0].set_title('Spines at zero (classic math axes)')
+    # Hide top and right spines (common for scientific plots)
+    axes[0, 1].plot(x, y)
+    axes[0, 1].spines['top'].set_visible(False)
+    axes[0, 1].spines['right'].set_visible(False)
+    axes[0, 1].set_title('Top and right spines hidden')
 
-# Customize spine colors and linewidth
-axes[1, 1].plot(x, y)
-for spine in axes[1, 1].spines.values():
-    spine.set_edgecolor('red')
-    spine.set_linewidth(2)
-axes[1, 1].set_title('Custom spine color and width')
+    # Customize spine position (centered at zero)
+    axes[1, 0].plot(x, y)
+    axes[1, 0].spines['left'].set_position('zero')  # Move left spine to x=0
+    axes[1, 0].spines['bottom'].set_position('zero')  # Move bottom spine to y=0
+    axes[1, 0].spines['top'].set_visible(False)
+    axes[1, 0].spines['right'].set_visible(False)
+    axes[1, 0].set_title('Spines at zero (classic math axes)')
 
-plt.tight_layout()
-plt.show()
+    # Customize spine colors and linewidth
+    axes[1, 1].plot(x, y)
+    for spine in axes[1, 1].spines.values():
+        spine.set_edgecolor('red')
+        spine.set_linewidth(2)
+    axes[1, 1].set_title('Custom spine color and width')
 
-# ============================================================================
-# SECTION 5: Adding Text and Annotations
-# ============================================================================
+    plt.tight_layout()
+    plt.show()
 
-"""
-Text and annotations help explain features in plots
-"""
+    # ============================================================================
+    # SECTION 5: Adding Text and Annotations
+    # ============================================================================
 
-x = np.linspace(0, 10, 100)
-y = np.sin(x)
+    """
+    Text and annotations help explain features in plots
+    """
 
-fig, ax = plt.subplots(figsize=(12, 6))
-ax.plot(x, y, 'b-', linewidth=2)
+    x = np.linspace(0, 10, 100)
+    y = np.sin(x)
 
-# Simple text at data coordinates
-ax.text(5, 0.5, 'Simple text', fontsize=14)
+    fig, ax = plt.subplots(figsize=(12, 6))
+    ax.plot(x, y, 'b-', linewidth=2)
 
-# Text with background box
-ax.text(8, -0.5, 'Text with box', fontsize=12,
-        bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5))
+    # Simple text at data coordinates
+    ax.text(5, 0.5, 'Simple text', fontsize=14)
 
-# Annotation with arrow pointing to data
-ax.annotate('Local maximum', 
-            xy=(np.pi/2, 1),  # Point to annotate
-            xytext=(2, 1.3),  # Text position
-            fontsize=12,
-            arrowprops=dict(arrowstyle='->', color='red', lw=2),
-            bbox=dict(boxstyle='round', facecolor='yellow', alpha=0.7))
+    # Text with background box
+    ax.text(8, -0.5, 'Text with box', fontsize=12,
+            bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5))
 
-# Another annotation
-ax.annotate('Zero crossing',
-            xy=(np.pi, 0),
-            xytext=(4, -0.5),
-            fontsize=12,
-            arrowprops=dict(arrowstyle='->', color='green', lw=2))
+    # Annotation with arrow pointing to data
+    ax.annotate('Local maximum', 
+                xy=(np.pi/2, 1),  # Point to annotate
+                xytext=(2, 1.3),  # Text position
+                fontsize=12,
+                arrowprops=dict(arrowstyle='->', color='red', lw=2),
+                bbox=dict(boxstyle='round', facecolor='yellow', alpha=0.7))
 
-ax.set_xlabel('x', fontsize=14)
-ax.set_ylabel('sin(x)', fontsize=14)
-ax.set_title('Adding Text and Annotations', fontsize=16)
-ax.grid(True, alpha=0.3)
+    # Another annotation
+    ax.annotate('Zero crossing',
+                xy=(np.pi, 0),
+                xytext=(4, -0.5),
+                fontsize=12,
+                arrowprops=dict(arrowstyle='->', color='green', lw=2))
 
-plt.show()
-
-# ============================================================================
-# SECTION 6: Advanced Legend Customization
-# ============================================================================
-
-"""
-Legends explain what each line/marker represents
-"""
-
-x = np.linspace(0, 10, 100)
-
-fig, axes = plt.subplots(2, 2, figsize=(12, 10))
-
-# Different legend locations
-for i, loc in enumerate(['upper right', 'upper left', 'lower left', 'best']):
-    ax = axes[i // 2, i % 2]
-    ax.plot(x, np.sin(x), 'r-', label='sin(x)')
-    ax.plot(x, np.cos(x), 'b--', label='cos(x)')
-    ax.plot(x, np.sin(2*x), 'g:', label='sin(2x)')
-    ax.legend(loc=loc)
-    ax.set_title(f"loc='{loc}'")
+    ax.set_xlabel('x', fontsize=14)
+    ax.set_ylabel('sin(x)', fontsize=14)
+    ax.set_title('Adding Text and Annotations', fontsize=16)
     ax.grid(True, alpha=0.3)
 
-plt.tight_layout()
-plt.show()
+    plt.show()
 
-# Highly customized legend
-fig, ax = plt.subplots(figsize=(10, 6))
+    # ============================================================================
+    # SECTION 6: Advanced Legend Customization
+    # ============================================================================
 
-ax.plot(x, np.sin(x), 'r-', linewidth=2, label='sin(x)')
-ax.plot(x, np.cos(x), 'b--', linewidth=2, label='cos(x)')
-ax.plot(x, np.tan(x), 'g:', linewidth=2, label='tan(x)')
+    """
+    Legends explain what each line/marker represents
+    """
 
-ax.legend(
-    loc='upper right',
-    fontsize=12,
-    frameon=True,          # Draw frame
-    framealpha=0.9,        # Frame transparency
-    shadow=True,           # Add shadow
-    fancybox=True,         # Rounded corners
-    title='Functions',     # Legend title
-    title_fontsize=14
-)
+    x = np.linspace(0, 10, 100)
 
-ax.set_ylim(-3, 3)
-ax.set_title('Customized Legend', fontsize=16)
-ax.grid(True, alpha=0.3)
+    fig, axes = plt.subplots(2, 2, figsize=(12, 10))
 
-plt.show()
+    # Different legend locations
+    for i, loc in enumerate(['upper right', 'upper left', 'lower left', 'best']):
+        ax = axes[i // 2, i % 2]
+        ax.plot(x, np.sin(x), 'r-', label='sin(x)')
+        ax.plot(x, np.cos(x), 'b--', label='cos(x)')
+        ax.plot(x, np.sin(2*x), 'g:', label='sin(2x)')
+        ax.legend(loc=loc)
+        ax.set_title(f"loc='{loc}'")
+        ax.grid(True, alpha=0.3)
 
-# ============================================================================
-# SECTION 7: Colormaps for Multiple Lines
-# ============================================================================
+    plt.tight_layout()
+    plt.show()
 
-"""
-When plotting many lines, colormaps provide systematic colors
-"""
+    # Highly customized legend
+    fig, ax = plt.subplots(figsize=(10, 6))
 
-x = np.linspace(0, 10, 100)
+    ax.plot(x, np.sin(x), 'r-', linewidth=2, label='sin(x)')
+    ax.plot(x, np.cos(x), 'b--', linewidth=2, label='cos(x)')
+    ax.plot(x, np.tan(x), 'g:', linewidth=2, label='tan(x)')
 
-fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+    ax.legend(
+        loc='upper right',
+        fontsize=12,
+        frameon=True,          # Draw frame
+        framealpha=0.9,        # Frame transparency
+        shadow=True,           # Add shadow
+        fancybox=True,         # Rounded corners
+        title='Functions',     # Legend title
+        title_fontsize=14
+    )
 
-# Manual colors (tedious for many lines)
-colors = ['red', 'blue', 'green', 'orange', 'purple']
-for i, color in enumerate(colors):
-    axes[0].plot(x, np.sin(x + i*0.5), color=color, label=f'Line {i}')
-axes[0].set_title('Manual colors')
-axes[0].legend()
+    ax.set_ylim(-3, 3)
+    ax.set_title('Customized Legend', fontsize=16)
+    ax.grid(True, alpha=0.3)
 
-# Using colormap (systematic and scalable)
-n_lines = 10
-colormap = plt.cm.viridis  # Choose a colormap
-colors = [colormap(i / n_lines) for i in range(n_lines)]
+    plt.show()
 
-for i, color in enumerate(colors):
-    axes[1].plot(x, np.sin(x + i*0.3), color=color, label=f'Line {i}')
+    # ============================================================================
+    # SECTION 7: Colormaps for Multiple Lines
+    # ============================================================================
 
-axes[1].set_title('Using colormap (viridis)')
-axes[1].legend()
+    """
+    When plotting many lines, colormaps provide systematic colors
+    """
 
-plt.tight_layout()
-plt.show()
+    x = np.linspace(0, 10, 100)
 
-# ============================================================================
-# SECTION 8: Figure Size and DPI
-# ============================================================================
+    fig, axes = plt.subplots(1, 2, figsize=(14, 5))
 
-"""
-Control figure dimensions and resolution
-"""
+    # Manual colors (tedious for many lines)
+    colors = ['red', 'blue', 'green', 'orange', 'purple']
+    for i, color in enumerate(colors):
+        axes[0].plot(x, np.sin(x + i*0.5), color=color, label=f'Line {i}')
+    axes[0].set_title('Manual colors')
+    axes[0].legend()
 
-x = np.linspace(0, 10, 100)
-y = np.sin(x)
+    # Using colormap (systematic and scalable)
+    n_lines = 10
+    colormap = plt.cm.viridis  # Choose a colormap
+    colors = [colormap(i / n_lines) for i in range(n_lines)]
 
-# Small figure, low DPI
-fig1, ax1 = plt.subplots(figsize=(4, 3), dpi=50)
-ax1.plot(x, y)
-ax1.set_title('4"×3", 50 DPI (looks pixelated)')
-plt.show()
+    for i, color in enumerate(colors):
+        axes[1].plot(x, np.sin(x + i*0.3), color=color, label=f'Line {i}')
 
-# Large figure, high DPI
-fig2, ax2 = plt.subplots(figsize=(10, 6), dpi=150)
-ax2.plot(x, y, linewidth=2)
-ax2.set_xlabel('x', fontsize=14)
-ax2.set_ylabel('sin(x)', fontsize=14)
-ax2.set_title('10"×6", 150 DPI (sharp and clear)', fontsize=16)
-ax2.grid(True, alpha=0.3)
-plt.show()
+    axes[1].set_title('Using colormap (viridis)')
+    axes[1].legend()
 
-print("Figure size = (width, height) in inches")
-print("DPI = dots per inch (resolution)")
-print("Pixel dimensions = (width × DPI, height × DPI)")
-print("Example: (10, 6) at 150 DPI = 1500×900 pixels")
+    plt.tight_layout()
+    plt.show()
 
-# ============================================================================
-# SECTION 9: Publication-Quality Figure Example
-# ============================================================================
+    # ============================================================================
+    # SECTION 8: Figure Size and DPI
+    # ============================================================================
 
-"""
-Combining everything for a professional-looking plot
-"""
+    """
+    Control figure dimensions and resolution
+    """
 
-# Generate data
-x = np.linspace(0, 10, 200)
-y1 = np.sin(x)
-y2 = np.sin(x) * np.exp(-x/5)
-y3 = np.cos(x) * np.exp(-x/5)
+    x = np.linspace(0, 10, 100)
+    y = np.sin(x)
 
-# Create figure with specific size and DPI
-fig, ax = plt.subplots(figsize=(10, 6), dpi=120)
+    # Small figure, low DPI
+    fig1, ax1 = plt.subplots(figsize=(4, 3), dpi=50)
+    ax1.plot(x, y)
+    ax1.set_title('4"×3", 50 DPI (looks pixelated)')
+    plt.show()
 
-# Plot with careful styling
-line1, = ax.plot(x, y1, color='#1f77b4', linestyle='-', linewidth=2.5, 
-                 label='sin(x)', alpha=0.9)
-line2, = ax.plot(x, y2, color='#ff7f0e', linestyle='--', linewidth=2.5,
-                 label='sin(x)·exp(-x/5)', alpha=0.9)
-line3, = ax.plot(x, y3, color='#2ca02c', linestyle='-.', linewidth=2.5,
-                 label='cos(x)·exp(-x/5)', alpha=0.9)
+    # Large figure, high DPI
+    fig2, ax2 = plt.subplots(figsize=(10, 6), dpi=150)
+    ax2.plot(x, y, linewidth=2)
+    ax2.set_xlabel('x', fontsize=14)
+    ax2.set_ylabel('sin(x)', fontsize=14)
+    ax2.set_title('10"×6", 150 DPI (sharp and clear)', fontsize=16)
+    ax2.grid(True, alpha=0.3)
+    plt.show()
 
-# Customize axes
-ax.set_xlabel('x', fontsize=14, fontweight='bold')
-ax.set_ylabel('y', fontsize=14, fontweight='bold')
-ax.set_title('Damped Oscillations', fontsize=16, fontweight='bold', pad=20)
+    print("Figure size = (width, height) in inches")
+    print("DPI = dots per inch (resolution)")
+    print("Pixel dimensions = (width × DPI, height × DPI)")
+    print("Example: (10, 6) at 150 DPI = 1500×900 pixels")
 
-# Set limits
-ax.set_xlim(0, 10)
-ax.set_ylim(-1.2, 1.2)
+    # ============================================================================
+    # SECTION 9: Publication-Quality Figure Example
+    # ============================================================================
 
-# Customize ticks
-ax.tick_params(axis='both', which='major', labelsize=12, length=6, width=1.5)
-ax.minorticks_on()
-ax.tick_params(axis='both', which='minor', length=3, width=1)
+    """
+    Combining everything for a professional-looking plot
+    """
 
-# Grid
-ax.grid(True, which='major', linestyle='-', linewidth=0.8, alpha=0.3)
-ax.grid(True, which='minor', linestyle=':', linewidth=0.5, alpha=0.2)
+    # Generate data
+    x = np.linspace(0, 10, 200)
+    y1 = np.sin(x)
+    y2 = np.sin(x) * np.exp(-x/5)
+    y3 = np.cos(x) * np.exp(-x/5)
 
-# Customize spines
-ax.spines['top'].set_visible(False)
-ax.spines['right'].set_visible(False)
-ax.spines['left'].set_linewidth(1.5)
-ax.spines['bottom'].set_linewidth(1.5)
+    # Create figure with specific size and DPI
+    fig, ax = plt.subplots(figsize=(10, 6), dpi=120)
 
-# Legend
-ax.legend(loc='upper right', fontsize=12, framealpha=0.9, 
-          shadow=True, fancybox=True)
+    # Plot with careful styling
+    line1, = ax.plot(x, y1, color='#1f77b4', linestyle='-', linewidth=2.5, 
+                     label='sin(x)', alpha=0.9)
+    line2, = ax.plot(x, y2, color='#ff7f0e', linestyle='--', linewidth=2.5,
+                     label='sin(x)·exp(-x/5)', alpha=0.9)
+    line3, = ax.plot(x, y3, color='#2ca02c', linestyle='-.', linewidth=2.5,
+                     label='cos(x)·exp(-x/5)', alpha=0.9)
 
-# Tight layout to prevent label cutoff
-plt.tight_layout()
+    # Customize axes
+    ax.set_xlabel('x', fontsize=14, fontweight='bold')
+    ax.set_ylabel('y', fontsize=14, fontweight='bold')
+    ax.set_title('Damped Oscillations', fontsize=16, fontweight='bold', pad=20)
 
-plt.show()
+    # Set limits
+    ax.set_xlim(0, 10)
+    ax.set_ylim(-1.2, 1.2)
 
-# ============================================================================
-# KEY TAKEAWAYS
-# ============================================================================
+    # Customize ticks
+    ax.tick_params(axis='both', which='major', labelsize=12, length=6, width=1.5)
+    ax.minorticks_on()
+    ax.tick_params(axis='both', which='minor', length=3, width=1)
 
-"""
-1. Axes limits: set_xlim(), set_ylim()
-2. Ticks: set_xticks(), set_yticks(), set_xticklabels(), set_yticklabels()
-3. Grid: grid(True/False), customize with color, linestyle, linewidth, alpha
-4. Spines: 4 spines (top, bottom, left, right), can hide or reposition
-5. Text: text() for simple text, annotate() for text with arrows
-6. Legend: customize location, frame, font, shadow
-7. Colormaps: systematic colors for many lines
-8. Figure size: figsize=(width, height) in inches
-9. DPI: resolution (dots per inch), higher = sharper
-10. Publication quality: careful attention to all visual elements
+    # Grid
+    ax.grid(True, which='major', linestyle='-', linewidth=0.8, alpha=0.3)
+    ax.grid(True, which='minor', linestyle=':', linewidth=0.5, alpha=0.2)
 
-Common Customization Workflow:
------------------------------
-1. Plot data with clear line styles
-2. Add labels (xlabel, ylabel, title) with appropriate font sizes
-3. Set limits if needed
-4. Add grid with alpha < 0.5 for subtlety
-5. Hide top/right spines for cleaner look
-6. Add legend with framealpha and shadow
-7. Set figure size and DPI for intended output
-8. Use tight_layout() to prevent cutoff
-9. Save with savefig() before show()
-"""
+    # Customize spines
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['left'].set_linewidth(1.5)
+    ax.spines['bottom'].set_linewidth(1.5)
+
+    # Legend
+    ax.legend(loc='upper right', fontsize=12, framealpha=0.9, 
+              shadow=True, fancybox=True)
+
+    # Tight layout to prevent label cutoff
+    plt.tight_layout()
+
+    plt.show()
+
+    # ============================================================================
+    # KEY TAKEAWAYS
+    # ============================================================================
+
+    """
+    1. Axes limits: set_xlim(), set_ylim()
+    2. Ticks: set_xticks(), set_yticks(), set_xticklabels(), set_yticklabels()
+    3. Grid: grid(True/False), customize with color, linestyle, linewidth, alpha
+    4. Spines: 4 spines (top, bottom, left, right), can hide or reposition
+    5. Text: text() for simple text, annotate() for text with arrows
+    6. Legend: customize location, frame, font, shadow
+    7. Colormaps: systematic colors for many lines
+    8. Figure size: figsize=(width, height) in inches
+    9. DPI: resolution (dots per inch), higher = sharper
+    10. Publication quality: careful attention to all visual elements
+
+    Common Customization Workflow:
+    -----------------------------
+    1. Plot data with clear line styles
+    2. Add labels (xlabel, ylabel, title) with appropriate font sizes
+    3. Set limits if needed
+    4. Add grid with alpha < 0.5 for subtlety
+    5. Hide top/right spines for cleaner look
+    6. Add legend with framealpha and shadow
+    7. Set figure size and DPI for intended output
+    8. Use tight_layout() to prevent cutoff
+    9. Save with savefig() before show()
+    """

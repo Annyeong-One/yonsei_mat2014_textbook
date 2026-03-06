@@ -55,7 +55,7 @@ The walrus operator `:=` combines the search and check in one expression:
 ```python
 import re
 
-text = "Price: $42.99"
+text = "Price: \$42.99"
 if m := re.search(r'\$(\d+\.\d{2})', text):
     print(f"Found price: {m.group(1)}")  # Found price: 42.99
 ```
@@ -133,11 +133,11 @@ print(is_valid_email_simple("user@example.com foo"))  # False
 ```python
 import re
 
-text = "Prices: $10, $25, $100, and $3.50"
+text = "Prices: \$10, \$25, $100, and \$3.50"
 
 # No groups — returns list of full matches
 re.findall(r'\$[\d.]+', text)
-# ['$10', '$25', '$100', '$3.50']
+# ['\$10', '\$25', '\$100', '\$3.50']
 
 # One group — returns list of group contents
 re.findall(r'\$([\d.]+)', text)

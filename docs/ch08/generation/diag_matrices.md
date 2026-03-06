@@ -8,9 +8,11 @@ The `np.diag` function provides bidirectional conversion between diagonal compon
 `np.diag` works in two directions depending on input dimensionality.
 
 $$
+
 \text{diagonal components}
 \quad\stackrel{\text{np.diag}}{\longleftrightarrow}\quad
 \text{diagonal matrix}
+
 $$
 
 

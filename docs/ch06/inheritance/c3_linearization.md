@@ -27,7 +27,9 @@ Not depth-first or breadth-first—a specialized merge algorithm.
 For a class `C(B1, B2, ..., Bn)`:
 
 $$
+
 L[C] = [C] + \text{merge}(L[B1], L[B2], \ldots, L[Bn], [B1, B2, \ldots, Bn])
+
 $$
 
 where:
@@ -77,7 +79,9 @@ class D(B, C): pass
 ### 3. Apply Formula
 
 $$
+
 L[D] = [D] + \text{merge}([B, A, \text{object}], [C, A, \text{object}], [B, C])
+
 $$
 
 ---
@@ -90,7 +94,7 @@ $$
 - $[C, A, \text{object}]$ : head $C$, tail $[A, \text{object}]$
 - $[B, C]$ : head $B$, tail $[C]$
 
-### 2. Pick $B$
+### 2. Pick B
 
 $B$ is a head and not in any tail → append $B$.
 
@@ -101,7 +105,7 @@ Updated lists:
 - $[C, A, \text{object}]$
 - $[C]$
 
-### 3. Pick $C$
+### 3. Pick C
 
 $C$ is a head and not in any tail → append $C$.
 
@@ -112,7 +116,7 @@ Updated lists:
 - $[A, \text{object}]$
 - $[]$
 
-### 4. Pick $A$
+### 4. Pick A
 
 $A$ is a head and not in any tail → append $A$.
 
@@ -136,7 +140,9 @@ All lists empty—done!
 ## Final MRO
 
 $$
+
 L[D] = [D, B, C, A, \text{object}]
+
 $$
 
 ```python
@@ -164,7 +170,9 @@ class E(D, C): pass
 - $L[C] = [C, A, \text{object}]$
 
 $$
+
 L[E] = [E] + \text{merge}([D, B, C, A, \text{object}], [C, A, \text{object}], [D, C])
+
 $$
 
 ### 3. Merge Process

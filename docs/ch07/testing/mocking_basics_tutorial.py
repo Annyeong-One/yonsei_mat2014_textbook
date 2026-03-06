@@ -33,6 +33,8 @@ print("Status: Educational content ready for classroom use")
 if __name__ == "__main__":
     print("\n============================================================")
     print("15 MOCKING BASICS - TUTORIAL MODULE")
+
+    # ============================================================================
     print("============================================================")
     print("\nThis module provides comprehensive coverage of the topic.")
     print("Includes theory, examples, and hands-on practice.")

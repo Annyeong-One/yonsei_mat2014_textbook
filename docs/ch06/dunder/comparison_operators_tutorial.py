@@ -97,6 +97,8 @@ class Version:
 
 # Examples
 if __name__ == "__main__":
+
+    # ============================================================================
     print("=== Student Comparison Examples ===")
     alice = Student("Alice", 85)
     bob = Student("Bob", 92)

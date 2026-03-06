@@ -30,556 +30,558 @@ from ctypes import py_object, c_void_p, cast
 # SECTION 1: Object Creation Lifecycle
 # ============================================================================
 
-print("=" * 70)
-print("SECTION 1: Object Creation - __new__ and __init__")
-print("=" * 70)
+if __name__ == "__main__":
 
-# Object creation is a TWO-STEP process in Python:
-# 1. __new__: Allocates memory and creates the object
-# 2. __init__: Initializes the object's state
+    print("=" * 70)
+    print("SECTION 1: Object Creation - __new__ and __init__")
+    print("=" * 70)
 
-class LifecycleDemo:
-    """Demonstrates the complete object creation lifecycle"""
-    
-    def __new__(cls, value):
-        """
-        __new__ is called FIRST
-        - It's a static method (takes cls, not self)
-        - Allocates memory for the object
-        - Returns the new instance
-        """
-        print(f"  1. __new__ called with value={value}")
-        print(f"     Allocating memory...")
-        instance = super().__new__(cls)
-        print(f"     Object created at id={id(instance)}")
-        return instance
-    
-    def __init__(self, value):
-        """
-        __init__ is called SECOND
-        - Receives the object created by __new__
-        - Initializes object attributes
-        - Returns None
-        """
-        print(f"  2. __init__ called")
-        print(f"     Initializing object with value={value}")
-        self.value = value
-        print(f"     Initialization complete")
+    # Object creation is a TWO-STEP process in Python:
+    # 1. __new__: Allocates memory and creates the object
+    # 2. __init__: Initializes the object's state
 
-print("Creating object:")
-obj = LifecycleDemo(42)
-print(f"\nFinal object: {obj.value} at id={id(obj)}")
+    class LifecycleDemo:
+        """Demonstrates the complete object creation lifecycle"""
 
-print("""
-LIFECYCLE STAGES:
+        def __new__(cls, value):
+            """
+            __new__ is called FIRST
+            - It's a static method (takes cls, not self)
+            - Allocates memory for the object
+            - Returns the new instance
+            """
+            print(f"  1. __new__ called with value={value}")
+            print(f"     Allocating memory...")
+            instance = super().__new__(cls)
+            print(f"     Object created at id={id(instance)}")
+            return instance
 
-1. ALLOCATION (__new__):
-   - Memory allocated on heap
-   - PyObject structure created
-   - Reference count initialized to 0
-   
-2. INITIALIZATION (__init__):
-   - Object attributes set
-   - Object becomes usable
-   - Reference count increased to 1
-   
-3. USAGE:
-   - Object referenced by variables
-   - Reference count increases/decreases
-   - Object may be passed to functions
-   
-4. CLEANUP (__del__ if defined):
-   - Called when refcount reaches 0
-   - Allows cleanup of resources
-   - Should not be relied upon for critical cleanup
-   
-5. DEALLOCATION:
-   - Memory returned to Python's memory pool
-   - Object no longer exists
-""")
+        def __init__(self, value):
+            """
+            __init__ is called SECOND
+            - Receives the object created by __new__
+            - Initializes object attributes
+            - Returns None
+            """
+            print(f"  2. __init__ called")
+            print(f"     Initializing object with value={value}")
+            self.value = value
+            print(f"     Initialization complete")
 
-# ============================================================================
-# SECTION 2: Object Destruction - __del__
-# ============================================================================
+    print("Creating object:")
+    obj = LifecycleDemo(42)
+    print(f"\nFinal object: {obj.value} at id={id(obj)}")
 
-print("\n" + "=" * 70)
-print("SECTION 2: Object Destruction - __del__")
-print("=" * 70)
+    print("""
+    LIFECYCLE STAGES:
 
-class TrackedObject:
-    """Object that tracks its lifecycle"""
-    
-    count = 0  # Class variable to track instances
-    
-    def __init__(self, name):
-        TrackedObject.count += 1
-        self.name = name
-        print(f"  Created {self.name} (total: {TrackedObject.count})")
-    
-    def __del__(self):
-        """
-        __del__ is called when object is about to be destroyed
-        - Reference count has reached 0
-        - Object is being garbage collected
-        """
-        TrackedObject.count -= 1
-        print(f"  Destroying {self.name} (remaining: {TrackedObject.count})")
+    1. ALLOCATION (__new__):
+       - Memory allocated on heap
+       - PyObject structure created
+       - Reference count initialized to 0
 
-print("Creating objects:")
-obj1 = TrackedObject("Object1")
-obj2 = TrackedObject("Object2")
-obj3 = TrackedObject("Object3")
+    2. INITIALIZATION (__init__):
+       - Object attributes set
+       - Object becomes usable
+       - Reference count increased to 1
 
-print(f"\nCurrent count: {TrackedObject.count}")
+    3. USAGE:
+       - Object referenced by variables
+       - Reference count increases/decreases
+       - Object may be passed to functions
 
-print("\nDeleting obj1:")
-del obj1  # __del__ called immediately (refcount = 0)
+    4. CLEANUP (__del__ if defined):
+       - Called when refcount reaches 0
+       - Allows cleanup of resources
+       - Should not be relied upon for critical cleanup
 
-print("\nCreating alias for obj2:")
-obj2_alias = obj2  # Both obj2 and obj2_alias reference same object
+    5. DEALLOCATION:
+       - Memory returned to Python's memory pool
+       - Object no longer exists
+    """)
 
-print("\nDeleting obj2:")
-del obj2  # __del__ NOT called yet (obj2_alias still references it)
+    # ============================================================================
+    # SECTION 2: Object Destruction - __del__
+    # ============================================================================
 
-print(f"Object still alive! Refcount: {sys.getrefcount(obj2_alias)}")
+    print("\n" + "=" * 70)
+    print("SECTION 2: Object Destruction - __del__")
+    print("=" * 70)
 
-print("\nDeleting obj2_alias:")
-del obj2_alias  # NOW __del__ is called (refcount = 0)
+    class TrackedObject:
+        """Object that tracks its lifecycle"""
 
-print("\nDeleting obj3:")
-del obj3
+        count = 0  # Class variable to track instances
 
-print("""
-__del__ CAUTIONS:
+        def __init__(self, name):
+            TrackedObject.count += 1
+            self.name = name
+            print(f"  Created {self.name} (total: {TrackedObject.count})")
 
-1. DON'T RELY ON __del__ for critical cleanup:
-   - Timing is unpredictable
-   - May not be called in some situations
-   - Can be called at interpreter shutdown
-   
-2. BETTER ALTERNATIVES:
-   - Use context managers (with statement)
-   - Explicitly call cleanup methods
-   - Use try/finally blocks
-   
-3. CYCLIC REFERENCES:
-   - __del__ can prevent garbage collection of cycles
-   - May cause memory leaks
-   
-4. EXCEPTIONS IN __del__:
-   - Are printed but otherwise ignored
-   - Don't propagate to caller
-""")
+        def __del__(self):
+            """
+            __del__ is called when object is about to be destroyed
+            - Reference count has reached 0
+            - Object is being garbage collected
+            """
+            TrackedObject.count -= 1
+            print(f"  Destroying {self.name} (remaining: {TrackedObject.count})")
 
-# ============================================================================
-# SECTION 3: PyObject Structure and Memory Layout
-# ============================================================================
+    print("Creating objects:")
+    obj1 = TrackedObject("Object1")
+    obj2 = TrackedObject("Object2")
+    obj3 = TrackedObject("Object3")
 
-print("\n" + "=" * 70)
-print("SECTION 3: PyObject Structure and Memory Overhead")
-print("=" * 70)
+    print(f"\nCurrent count: {TrackedObject.count}")
 
-# Every Python object has overhead from the PyObject structure:
-# - ob_refcnt: Reference count (8 bytes on 64-bit)
-# - ob_type: Pointer to type object (8 bytes on 64-bit)
-# - + actual object data
+    print("\nDeleting obj1:")
+    del obj1  # __del__ called immediately (refcount = 0)
 
-print("Memory sizes of Python objects:\n")
+    print("\nCreating alias for obj2:")
+    obj2_alias = obj2  # Both obj2 and obj2_alias reference same object
 
-# Integers
-print("INTEGERS:")
-for val in [0, 1, 100, 10000, 10**100]:
-    size = sys.getsizeof(val)
-    print(f"  {str(val):20} : {size} bytes")
+    print("\nDeleting obj2:")
+    del obj2  # __del__ NOT called yet (obj2_alias still references it)
 
-# The first few integers (usually -5 to 256) are pre-allocated
-# Larger integers take more space
+    print(f"Object still alive! Refcount: {sys.getrefcount(obj2_alias)}")
 
-print("\nSTRINGS:")
-strings = ["", "a", "hello", "a" * 100]
-for s in strings:
-    size = sys.getsizeof(s)
-    print(f"  {repr(s[:20]):22} : {size} bytes")
+    print("\nDeleting obj2_alias:")
+    del obj2_alias  # NOW __del__ is called (refcount = 0)
 
-print("\nLISTS:")
-lists = [[], [1], [1]*10, [1]*100]
-for lst in lists:
-    size = sys.getsizeof(lst)
-    print(f"  {len(lst):3} elements : {size} bytes")
+    print("\nDeleting obj3:")
+    del obj3
 
-print("\nDICTIONARIES:")
-dicts = [{}, {"a": 1}, {f"k{i}": i for i in range(10)}]
-for d in dicts:
-    size = sys.getsizeof(d)
-    print(f"  {len(d):3} items : {size} bytes")
+    print("""
+    __del__ CAUTIONS:
 
-print("""
-MEMORY OVERHEAD BREAKDOWN:
+    1. DON'T RELY ON __del__ for critical cleanup:
+       - Timing is unpredictable
+       - May not be called in some situations
+       - Can be called at interpreter shutdown
 
-For most objects on 64-bit Python:
-- PyObject header: 16 bytes (refcount + type pointer)
-- Object-specific data varies by type
+    2. BETTER ALTERNATIVES:
+       - Use context managers (with statement)
+       - Explicitly call cleanup methods
+       - Use try/finally blocks
 
-Examples:
-- int: 28 bytes minimum (header + value)
-- str: 49+ bytes (header + length + hash + chars)
-- list: 56 bytes empty + 8 bytes per element (for pointers)
-- dict: 64 bytes empty + overhead per key-value pair
+    3. CYCLIC REFERENCES:
+       - __del__ can prevent garbage collection of cycles
+       - May cause memory leaks
 
-IMPLICATIONS:
-- Small objects have high overhead ratio
-- Lists of integers: each int is a separate object!
-- array.array or numpy can be more memory-efficient
-""")
+    4. EXCEPTIONS IN __del__:
+       - Are printed but otherwise ignored
+       - Don't propagate to caller
+    """)
 
-# ============================================================================
-# SECTION 4: Object Identity and Equality
-# ============================================================================
+    # ============================================================================
+    # SECTION 3: PyObject Structure and Memory Layout
+    # ============================================================================
 
-print("\n" + "=" * 70)
-print("SECTION 4: Object Identity vs Equality")
-print("=" * 70)
+    print("\n" + "=" * 70)
+    print("SECTION 3: PyObject Structure and Memory Overhead")
+    print("=" * 70)
 
-# Identity: Same object in memory (id)
-# Equality: Same value (__eq__)
+    # Every Python object has overhead from the PyObject structure:
+    # - ob_refcnt: Reference count (8 bytes on 64-bit)
+    # - ob_type: Pointer to type object (8 bytes on 64-bit)
+    # - + actual object data
 
-a = [1, 2, 3]
-b = [1, 2, 3]
-c = a
+    print("Memory sizes of Python objects:\n")
 
-print("Three variables:")
-print(f"a = {a}, id = {id(a)}")
-print(f"b = {b}, id = {id(b)}")
-print(f"c = {c}, id = {id(c)}")
+    # Integers
+    print("INTEGERS:")
+    for val in [0, 1, 100, 10000, 10**100]:
+        size = sys.getsizeof(val)
+        print(f"  {str(val):20} : {size} bytes")
 
-print("\nIdentity (is operator):")
-print(f"  a is b: {a is b}  # Different objects")
-print(f"  a is c: {a is c}  # Same object")
+    # The first few integers (usually -5 to 256) are pre-allocated
+    # Larger integers take more space
 
-print("\nEquality (== operator):")
-print(f"  a == b: {a == b}  # Same values")
-print(f"  a == c: {a == c}  # Same values")
+    print("\nSTRINGS:")
+    strings = ["", "a", "hello", "a" * 100]
+    for s in strings:
+        size = sys.getsizeof(s)
+        print(f"  {repr(s[:20]):22} : {size} bytes")
 
-# The 'is' operator is implemented as:
-# a is b  ⟺  id(a) == id(b)
+    print("\nLISTS:")
+    lists = [[], [1], [1]*10, [1]*100]
+    for lst in lists:
+        size = sys.getsizeof(lst)
+        print(f"  {len(lst):3} elements : {size} bytes")
 
-print("\nChecking with id():")
-print(f"  id(a) == id(b): {id(a) == id(b)}")
-print(f"  id(a) == id(c): {id(a) == id(c)}")
+    print("\nDICTIONARIES:")
+    dicts = [{}, {"a": 1}, {f"k{i}": i for i in range(10)}]
+    for d in dicts:
+        size = sys.getsizeof(d)
+        print(f"  {len(d):3} items : {size} bytes")
 
-# ============================================================================
-# SECTION 5: Context Managers and Resource Management
-# ============================================================================
+    print("""
+    MEMORY OVERHEAD BREAKDOWN:
 
-print("\n" + "=" * 70)
-print("SECTION 5: Context Managers (Better than __del__)")
-print("=" * 70)
+    For most objects on 64-bit Python:
+    - PyObject header: 16 bytes (refcount + type pointer)
+    - Object-specific data varies by type
 
-class ResourceManager:
-    """Demonstrates proper resource management using context manager"""
-    
-    def __init__(self, name):
-        self.name = name
-    
-    def __enter__(self):
-        """Called when entering 'with' block"""
-        print(f"  Acquiring resource: {self.name}")
-        return self
-    
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        """Called when exiting 'with' block (GUARANTEED)"""
-        print(f"  Releasing resource: {self.name}")
-        # Return False to propagate exceptions, True to suppress
-        return False
-    
-    def use(self):
-        print(f"  Using resource: {self.name}")
+    Examples:
+    - int: 28 bytes minimum (header + value)
+    - str: 49+ bytes (header + length + hash + chars)
+    - list: 56 bytes empty + 8 bytes per element (for pointers)
+    - dict: 64 bytes empty + overhead per key-value pair
 
-print("Using context manager:")
-with ResourceManager("Database Connection") as resource:
+    IMPLICATIONS:
+    - Small objects have high overhead ratio
+    - Lists of integers: each int is a separate object!
+    - array.array or numpy can be more memory-efficient
+    """)
+
+    # ============================================================================
+    # SECTION 4: Object Identity and Equality
+    # ============================================================================
+
+    print("\n" + "=" * 70)
+    print("SECTION 4: Object Identity vs Equality")
+    print("=" * 70)
+
+    # Identity: Same object in memory (id)
+    # Equality: Same value (__eq__)
+
+    a = [1, 2, 3]
+    b = [1, 2, 3]
+    c = a
+
+    print("Three variables:")
+    print(f"a = {a}, id = {id(a)}")
+    print(f"b = {b}, id = {id(b)}")
+    print(f"c = {c}, id = {id(c)}")
+
+    print("\nIdentity (is operator):")
+    print(f"  a is b: {a is b}  # Different objects")
+    print(f"  a is c: {a is c}  # Same object")
+
+    print("\nEquality (== operator):")
+    print(f"  a == b: {a == b}  # Same values")
+    print(f"  a == c: {a == c}  # Same values")
+
+    # The 'is' operator is implemented as:
+    # a is b  ⟺  id(a) == id(b)
+
+    print("\nChecking with id():")
+    print(f"  id(a) == id(b): {id(a) == id(b)}")
+    print(f"  id(a) == id(c): {id(a) == id(c)}")
+
+    # ============================================================================
+    # SECTION 5: Context Managers and Resource Management
+    # ============================================================================
+
+    print("\n" + "=" * 70)
+    print("SECTION 5: Context Managers (Better than __del__)")
+    print("=" * 70)
+
+    class ResourceManager:
+        """Demonstrates proper resource management using context manager"""
+
+        def __init__(self, name):
+            self.name = name
+
+        def __enter__(self):
+            """Called when entering 'with' block"""
+            print(f"  Acquiring resource: {self.name}")
+            return self
+
+        def __exit__(self, exc_type, exc_val, exc_tb):
+            """Called when exiting 'with' block (GUARANTEED)"""
+            print(f"  Releasing resource: {self.name}")
+            # Return False to propagate exceptions, True to suppress
+            return False
+
+        def use(self):
+            print(f"  Using resource: {self.name}")
+
+    print("Using context manager:")
+    with ResourceManager("Database Connection") as resource:
+        resource.use()
+        print("  Doing work...")
+        # __exit__ will be called even if exception occurs!
+    print("Outside with block - resource released\n")
+
+    # Compare to manual cleanup (error-prone):
+    print("Manual cleanup (DON'T DO THIS):")
+    resource = ResourceManager("File Handle")
+    resource.__enter__()
     resource.use()
-    print("  Doing work...")
-    # __exit__ will be called even if exception occurs!
-print("Outside with block - resource released\n")
+    # What if exception occurs here? Resource won't be released!
+    resource.__exit__(None, None, None)
 
-# Compare to manual cleanup (error-prone):
-print("Manual cleanup (DON'T DO THIS):")
-resource = ResourceManager("File Handle")
-resource.__enter__()
-resource.use()
-# What if exception occurs here? Resource won't be released!
-resource.__exit__(None, None, None)
+    print("""
+    CONTEXT MANAGER BENEFITS:
 
-print("""
-CONTEXT MANAGER BENEFITS:
+    1. GUARANTEED CLEANUP:
+       - __exit__ always called
+       - Even if exception occurs
+       - Even if return statement executed
 
-1. GUARANTEED CLEANUP:
-   - __exit__ always called
-   - Even if exception occurs
-   - Even if return statement executed
-   
-2. EXPLICIT SCOPE:
-   - Clear where resource is acquired/released
-   - Easy to reason about resource lifetime
-   
-3. PYTHONIC:
-   - with statement is idiomatic Python
-   - Widely understood pattern
-   
-4. COMPOSABLE:
-   - Can use multiple context managers
-   - with open('a') as f1, open('b') as f2:
-""")
+    2. EXPLICIT SCOPE:
+       - Clear where resource is acquired/released
+       - Easy to reason about resource lifetime
 
-# ============================================================================
-# SECTION 6: Memory Profiling in Detail
-# ============================================================================
+    3. PYTHONIC:
+       - with statement is idiomatic Python
+       - Widely understood pattern
 
-print("\n" + "=" * 70)
-print("SECTION 6: Advanced Memory Profiling")
-print("=" * 70)
+    4. COMPOSABLE:
+       - Can use multiple context managers
+       - with open('a') as f1, open('b') as f2:
+    """)
 
-def memory_intensive_function():
-    """Function that allocates significant memory"""
-    # Create large data structures
-    data = []
-    for i in range(1000):
-        data.append([i] * 100)
-    return data
+    # ============================================================================
+    # SECTION 6: Memory Profiling in Detail
+    # ============================================================================
 
-# Using tracemalloc for detailed profiling
-import tracemalloc
+    print("\n" + "=" * 70)
+    print("SECTION 6: Advanced Memory Profiling")
+    print("=" * 70)
 
-tracemalloc.start()
+    def memory_intensive_function():
+        """Function that allocates significant memory"""
+        # Create large data structures
+        data = []
+        for i in range(1000):
+            data.append([i] * 100)
+        return data
 
-# Get baseline
-snapshot_before = tracemalloc.take_snapshot()
+    # Using tracemalloc for detailed profiling
+    import tracemalloc
 
-# Run memory-intensive code
-result = memory_intensive_function()
+    tracemalloc.start()
 
-# Get snapshot after
-snapshot_after = tracemalloc.take_snapshot()
+    # Get baseline
+    snapshot_before = tracemalloc.take_snapshot()
 
-# Analyze differences
-top_stats = snapshot_after.compare_to(snapshot_before, 'lineno')
+    # Run memory-intensive code
+    result = memory_intensive_function()
 
-print("Top memory allocations:")
-for i, stat in enumerate(top_stats[:5], 1):
-    print(f"\n#{i}: {stat}")
-    for line in stat.traceback.format():
-        print(f"  {line}")
+    # Get snapshot after
+    snapshot_after = tracemalloc.take_snapshot()
 
-# Overall memory usage
-current, peak = tracemalloc.get_traced_memory()
-print(f"\nCurrent memory: {current / 1024:.1f} KB")
-print(f"Peak memory: {peak / 1024:.1f} KB")
+    # Analyze differences
+    top_stats = snapshot_after.compare_to(snapshot_before, 'lineno')
 
-tracemalloc.stop()
+    print("Top memory allocations:")
+    for i, stat in enumerate(top_stats[:5], 1):
+        print(f"\n#{i}: {stat}")
+        for line in stat.traceback.format():
+            print(f"  {line}")
 
-# Clean up
-del result
+    # Overall memory usage
+    current, peak = tracemalloc.get_traced_memory()
+    print(f"\nCurrent memory: {current / 1024:.1f} KB")
+    print(f"Peak memory: {peak / 1024:.1f} KB")
 
-# ============================================================================
-# SECTION 7: Debugging Memory Issues
-# ============================================================================
+    tracemalloc.stop()
 
-print("\n" + "=" * 70)
-print("SECTION 7: Debugging Memory Problems")
-print("=" * 70)
+    # Clean up
+    del result
 
-# Finding objects that keep other objects alive
-class Container:
-    def __init__(self, name):
-        self.name = name
-        self.items = []
+    # ============================================================================
+    # SECTION 7: Debugging Memory Issues
+    # ============================================================================
 
-# Create structure
-container = Container("MyContainer")
-item = [1, 2, 3]
-container.items.append(item)
+    print("\n" + "=" * 70)
+    print("SECTION 7: Debugging Memory Problems")
+    print("=" * 70)
 
-print(f"item refcount: {sys.getrefcount(item)}")
+    # Finding objects that keep other objects alive
+    class Container:
+        def __init__(self, name):
+            self.name = name
+            self.items = []
 
-# Find what's referencing an object
-referrers = gc.get_referrers(item)
-print(f"\nObjects referencing item: {len(referrers)}")
-for ref in referrers:
-    print(f"  {type(ref).__name__}: {ref if len(str(ref)) < 50 else str(ref)[:50]+'...'}")
+    # Create structure
+    container = Container("MyContainer")
+    item = [1, 2, 3]
+    container.items.append(item)
 
-# Find what an object references
-referents = gc.get_referents(container)
-print(f"\nObjects referenced by container: {len(referents)}")
-for ref in referents[:5]:  # Limit output
-    print(f"  {type(ref).__name__}")
+    print(f"item refcount: {sys.getrefcount(item)}")
 
-# ============================================================================
-# SECTION 8: Object Interning and Caching
-# ============================================================================
+    # Find what's referencing an object
+    referrers = gc.get_referrers(item)
+    print(f"\nObjects referencing item: {len(referrers)}")
+    for ref in referrers:
+        print(f"  {type(ref).__name__}: {ref if len(str(ref)) < 50 else str(ref)[:50]+'...'}")
 
-print("\n" + "=" * 70)
-print("SECTION 8: Object Interning and Caching")
-print("=" * 70)
+    # Find what an object references
+    referents = gc.get_referents(container)
+    print(f"\nObjects referenced by container: {len(referents)}")
+    for ref in referents[:5]:  # Limit output
+        print(f"  {type(ref).__name__}")
 
-# Python caches small integers
-print("INTEGER CACHING:")
-a = 256
-b = 256
-print(f"256: a is b = {a is b}  # Cached")
+    # ============================================================================
+    # SECTION 8: Object Interning and Caching
+    # ============================================================================
 
-a = 257
-b = 257
-print(f"257: a is b = {a is b}  # Not cached (usually)")
+    print("\n" + "=" * 70)
+    print("SECTION 8: Object Interning and Caching")
+    print("=" * 70)
 
-# String interning
-print("\nSTRING INTERNING:")
-s1 = "hello"
-s2 = "hello"
-print(f"'hello': s1 is s2 = {s1 is s2}  # Interned")
+    # Python caches small integers
+    print("INTEGER CACHING:")
+    a = 256
+    b = 256
+    print(f"256: a is b = {a is b}  # Cached")
 
-s1 = "hello world"
-s2 = "hello world"
-print(f"'hello world': s1 is s2 = {s1 is s2}  # May or may not be interned")
+    a = 257
+    b = 257
+    print(f"257: a is b = {a is b}  # Not cached (usually)")
 
-# Explicit interning
-s1 = sys.intern("hello world")
-s2 = sys.intern("hello world")
-print(f"sys.intern('hello world'): s1 is s2 = {s1 is s2}  # Explicitly interned")
+    # String interning
+    print("\nSTRING INTERNING:")
+    s1 = "hello"
+    s2 = "hello"
+    print(f"'hello': s1 is s2 = {s1 is s2}  # Interned")
 
-print("""
-INTERNING BENEFITS:
+    s1 = "hello world"
+    s2 = "hello world"
+    print(f"'hello world': s1 is s2 = {s1 is s2}  # May or may not be interned")
 
-1. MEMORY SAVINGS:
-   - One copy of string instead of many
-   - Useful for large codebases with repeated strings
-   
-2. FASTER COMPARISONS:
-   - Identity check (is) instead of value check (==)
-   - O(1) instead of O(n)
-   
-3. AUTOMATIC FOR:
-   - Python identifiers (variable names, function names)
-   - Small integers (-5 to 256)
-   - Some strings (compile-time constants)
+    # Explicit interning
+    s1 = sys.intern("hello world")
+    s2 = sys.intern("hello world")
+    print(f"sys.intern('hello world'): s1 is s2 = {s1 is s2}  # Explicitly interned")
 
-WHEN TO USE sys.intern():
-   - Dictionary keys used repeatedly
-   - Configuration strings
-   - Strings from large datasets with repetition
-""")
+    print("""
+    INTERNING BENEFITS:
 
-# ============================================================================
-# SECTION 9: Memory-Efficient Data Structures
-# ============================================================================
+    1. MEMORY SAVINGS:
+       - One copy of string instead of many
+       - Useful for large codebases with repeated strings
 
-print("\n" + "=" * 70)
-print("SECTION 9: Memory-Efficient Alternatives")
-print("=" * 70)
+    2. FASTER COMPARISONS:
+       - Identity check (is) instead of value check (==)
+       - O(1) instead of O(n)
 
-import array
+    3. AUTOMATIC FOR:
+       - Python identifiers (variable names, function names)
+       - Small integers (-5 to 256)
+       - Some strings (compile-time constants)
 
-# Compare list vs array.array
-print("STORING 1000 INTEGERS:\n")
+    WHEN TO USE sys.intern():
+       - Dictionary keys used repeatedly
+       - Configuration strings
+       - Strings from large datasets with repetition
+    """)
 
-# Using list (each int is a separate PyObject)
-int_list = list(range(1000))
-list_size = sys.getsizeof(int_list)
-list_item_size = sum(sys.getsizeof(i) for i in int_list[:10])  # Sample
-print(f"List:")
-print(f"  Container: {list_size} bytes")
-print(f"  10 items: {list_item_size} bytes (~{list_item_size/10:.0f} bytes each)")
-print(f"  Total (estimated): {list_size + 1000 * (list_item_size/10):.0f} bytes")
+    # ============================================================================
+    # SECTION 9: Memory-Efficient Data Structures
+    # ============================================================================
 
-# Using array.array (compact storage)
-int_array = array.array('i', range(1000))
-array_size = sys.getsizeof(int_array)
-print(f"\nArray:")
-print(f"  Total: {array_size} bytes")
-print(f"  Savings: {(1 - array_size / (list_size + 1000 * (list_item_size/10))) * 100:.1f}%")
+    print("\n" + "=" * 70)
+    print("SECTION 9: Memory-Efficient Alternatives")
+    print("=" * 70)
 
-print("""
-MEMORY-EFFICIENT CHOICES:
+    import array
 
-1. FOR NUMERIC DATA:
-   - array.array: Compact, homogeneous types
-   - numpy.ndarray: Best for scientific computing
-   - struct: Binary data packing
-   
-2. FOR STRINGS:
-   - str: Use for text
-   - bytes: Use for binary data (more compact)
-   - bytearray: Mutable bytes
-   
-3. FOR COLLECTIONS:
-   - tuple instead of list (if immutable)
-   - set for membership testing
-   - collections.deque for queues
-   - dict for key-value (optimized in Python 3.6+)
-   
-4. FOR CLASSES:
-   - __slots__: Reduces per-instance overhead
-   - namedtuple: Immutable, lightweight
-   - dataclass: Convenient, reasonable overhead
-""")
+    # Compare list vs array.array
+    print("STORING 1000 INTEGERS:\n")
 
-# ============================================================================
-# SECTION 10: Key Takeaways
-# ============================================================================
+    # Using list (each int is a separate PyObject)
+    int_list = list(range(1000))
+    list_size = sys.getsizeof(int_list)
+    list_item_size = sum(sys.getsizeof(i) for i in int_list[:10])  # Sample
+    print(f"List:")
+    print(f"  Container: {list_size} bytes")
+    print(f"  10 items: {list_item_size} bytes (~{list_item_size/10:.0f} bytes each)")
+    print(f"  Total (estimated): {list_size + 1000 * (list_item_size/10):.0f} bytes")
 
-print("\n" + "=" * 70)
-print("KEY TAKEAWAYS")
-print("=" * 70)
+    # Using array.array (compact storage)
+    int_array = array.array('i', range(1000))
+    array_size = sys.getsizeof(int_array)
+    print(f"\nArray:")
+    print(f"  Total: {array_size} bytes")
+    print(f"  Savings: {(1 - array_size / (list_size + 1000 * (list_item_size/10))) * 100:.1f}%")
 
-print("""
-1. Object creation: __new__ (allocate) then __init__ (initialize)
-2. Object destruction: refcount → 0, then __del__ (if defined), then deallocate
-3. Use context managers (with) instead of __del__ for cleanup
-4. Every Python object has 16-byte overhead (64-bit systems)
-5. Integer caching: -5 to 256 pre-allocated
-6. String interning: automatic for identifiers, manual with sys.intern()
-7. Use tracemalloc and gc.get_referrers() for debugging
-8. Choose appropriate data structures for memory efficiency
-9. array.array and __slots__ can save significant memory
-10. Profile before optimizing - measure actual memory usage!
+    print("""
+    MEMORY-EFFICIENT CHOICES:
 
-BEST PRACTICES:
-- Use 'with' for resource management
-- Prefer array.array for numeric data
-- Use __slots__ for classes with many instances
-- Profile with tracemalloc before optimizing
-- Explicitly del large objects when done
-- Use generators for large sequences
-- Consider namedtuple or dataclass over dict
-""")
+    1. FOR NUMERIC DATA:
+       - array.array: Compact, homogeneous types
+       - numpy.ndarray: Best for scientific computing
+       - struct: Binary data packing
 
-# ============================================================================
-# PRACTICE EXERCISES
-# ============================================================================
+    2. FOR STRINGS:
+       - str: Use for text
+       - bytes: Use for binary data (more compact)
+       - bytearray: Mutable bytes
 
-print("\n" + "=" * 70)
-print("PRACTICE EXERCISES")
-print("=" * 70)
+    3. FOR COLLECTIONS:
+       - tuple instead of list (if immutable)
+       - set for membership testing
+       - collections.deque for queues
+       - dict for key-value (optimized in Python 3.6+)
 
-print("""
-Master object lifecycle with these exercises:
+    4. FOR CLASSES:
+       - __slots__: Reduces per-instance overhead
+       - namedtuple: Immutable, lightweight
+       - dataclass: Convenient, reasonable overhead
+    """)
 
-1. Create a class that implements __new__, __init__, and __del__.
-   Track the complete lifecycle of instances.
+    # ============================================================================
+    # SECTION 10: Key Takeaways
+    # ============================================================================
 
-2. Implement a context manager for a database connection simulator.
-   Ensure cleanup happens even with exceptions.
+    print("\n" + "=" * 70)
+    print("KEY TAKEAWAYS")
+    print("=" * 70)
 
-3. Use tracemalloc to profile memory usage of list vs array.array
-   for storing 1 million integers.
+    print("""
+    1. Object creation: __new__ (allocate) then __init__ (initialize)
+    2. Object destruction: refcount → 0, then __del__ (if defined), then deallocate
+    3. Use context managers (with) instead of __del__ for cleanup
+    4. Every Python object has 16-byte overhead (64-bit systems)
+    5. Integer caching: -5 to 256 pre-allocated
+    6. String interning: automatic for identifiers, manual with sys.intern()
+    7. Use tracemalloc and gc.get_referrers() for debugging
+    8. Choose appropriate data structures for memory efficiency
+    9. array.array and __slots__ can save significant memory
+    10. Profile before optimizing - measure actual memory usage!
 
-4. Create a class without __slots__, then add __slots__. 
-   Create 100,000 instances and compare memory usage.
+    BEST PRACTICES:
+    - Use 'with' for resource management
+    - Prefer array.array for numeric data
+    - Use __slots__ for classes with many instances
+    - Profile with tracemalloc before optimizing
+    - Explicitly del large objects when done
+    - Use generators for large sequences
+    - Consider namedtuple or dataclass over dict
+    """)
 
-5. Write a decorator that profiles memory usage of a function
-   and reports allocations and peak usage.
+    # ============================================================================
+    # PRACTICE EXERCISES
+    # ============================================================================
 
-6. Create a circular reference and use gc.get_referrers() to
-   debug what's keeping objects alive.
+    print("\n" + "=" * 70)
+    print("PRACTICE EXERCISES")
+    print("=" * 70)
 
-See exercises_03_advanced.py for complete practice problems!
-""")
+    print("""
+    Master object lifecycle with these exercises:
+
+    1. Create a class that implements __new__, __init__, and __del__.
+       Track the complete lifecycle of instances.
+
+    2. Implement a context manager for a database connection simulator.
+       Ensure cleanup happens even with exceptions.
+
+    3. Use tracemalloc to profile memory usage of list vs array.array
+       for storing 1 million integers.
+
+    4. Create a class without __slots__, then add __slots__. 
+       Create 100,000 instances and compare memory usage.
+
+    5. Write a decorator that profiles memory usage of a function
+       and reports allocations and peak usage.
+
+    6. Create a circular reference and use gc.get_referrers() to
+       debug what's keeping objects alive.
+
+    See exercises_03_advanced.py for complete practice problems!
+    """)

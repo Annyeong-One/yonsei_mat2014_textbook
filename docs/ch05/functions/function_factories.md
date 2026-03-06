@@ -117,7 +117,7 @@ def make_formatter(prefix, suffix=""):
 format_currency = make_formatter("$", " USD")
 format_percent = make_formatter("", "%")
 
-print(format_currency(100))   # $100 USD
+print(format_currency(100))   # \$100 USD
 print(format_percent(85.5))   # 85.5%
 ```
 

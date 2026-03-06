@@ -1,6 +1,10 @@
 """Abstract Base Classes (ABC) - Defining contracts"""
 from abc import ABC, abstractmethod
 
+# =============================================================================
+# Definitions
+# =============================================================================
+
 class PaymentProcessor(ABC):
     """Abstract interface for payment processing"""
     
@@ -37,6 +41,10 @@ class PayPalProcessor(PaymentProcessor):
 # Polymorphism with abstraction
 def process_order(processor: PaymentProcessor, amount):
     processor.process_payment(amount)
+
+# =============================================================================
+# Main
+# =============================================================================
 
 if __name__ == "__main__":
     stripe = StripeProcessor()

@@ -6,6 +6,10 @@ Compares asyncio.gather() and asyncio.wait() for different use cases.
 
 import asyncio
 
+# =============================================================================
+# Definitions
+# =============================================================================
+
 async def demonstrate_gather_vs_wait():
     print("\n--- gather() vs wait() ---")
     print("""
@@ -32,6 +36,10 @@ async def demonstrate_gather_vs_wait():
 
 async def main():
     await demonstrate_gather_vs_wait()
+
+# =============================================================================
+# Main
+# =============================================================================
 
 if __name__ == "__main__":
     asyncio.run(main())

@@ -6,18 +6,15 @@ within a class, while controlling access to prevent misuse.
 """
 
 # BAD EXAMPLE - No Encapsulation
+
+# =============================================================================
+# Definitions
+# =============================================================================
+
 class BankAccountBad:
     def __init__(self, owner, balance):
         self.owner = owner
         self.balance = balance  # Anyone can modify this!
-
-# Problem with no encapsulation
-bad_account = BankAccountBad("John", 1000)
-print(f"Initial balance: ${bad_account.balance}")
-
-# Direct access allows invalid operations
-bad_account.balance = -5000  # Negative balance? No validation!
-print(f"After direct modification: ${bad_account.balance}")  # This is bad!
 
 
 # GOOD EXAMPLE - With Encapsulation
@@ -45,12 +42,24 @@ class BankAccountGood:
         return self.__balance
 
 
-# Using encapsulated class
+# =============================================================================
+# Main
+# =============================================================================
+
 if __name__ == "__main__":
+    # BAD EXAMPLE - No encapsulation (problem with no encapsulation)
+    bad_account = BankAccountBad("John", 1000)
+    print(f"Initial balance: ${bad_account.balance}")
+
+    # Direct access allows invalid operations
+    bad_account.balance = -5000  # Negative balance? No validation!
+    print(f"After direct modification: ${bad_account.balance}")  # This is bad!
+
     print("\n" + "=" * 60)
     print("ENCAPSULATION DEMONSTRATION")
     print("=" * 60)
-    
+
+    # GOOD EXAMPLE - Using encapsulated class
     good_account = BankAccountGood("Jane", 1000)
     print(f"\nInitial balance: ${good_account.get_balance()}")
     

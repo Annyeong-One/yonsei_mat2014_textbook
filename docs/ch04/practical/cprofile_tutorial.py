@@ -19,6 +19,10 @@ import pstats
 from io import StringIO
 
 
+# =============================================================================
+# Definitions
+# =============================================================================
+
 def fibonacci_recursive(n):
     """Inefficient recursive Fibonacci"""
     if n <= 1:
@@ -131,6 +135,10 @@ def main():
     - High ncalls: Function is called very frequently
     - Focus optimization on high cumtime AND high tottime
     """)
+
+# =============================================================================
+# Main
+# =============================================================================
 
 if __name__ == "__main__":
     main()

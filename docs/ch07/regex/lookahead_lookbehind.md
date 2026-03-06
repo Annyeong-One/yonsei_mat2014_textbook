@@ -105,7 +105,7 @@ Matches a position where the lookbehind pattern **exists** before:
 import re
 
 # Find numbers preceded by a dollar sign
-re.findall(r'(?<=\$)\d+', 'Price: $42, €50, $100')
+re.findall(r'(?<=\$)\d+', 'Price: \$42, €50, \$100')
 # ['42', '100']
 
 # Find words preceded by "@" (mentions)
@@ -120,17 +120,17 @@ re.findall(r'(?<=@)\w+', 'Hello @alice and @bob')
 import re
 
 # Fixed-width — OK
-re.findall(r'(?<=\$)\d+', '$42')          # ['42']
+re.findall(r'(?<=\$)\d+', '\$42')          # ['42']
 re.findall(r'(?<=USD\s)\d+', 'USD 42')    # ['42']
 
 # Variable-width — ERROR
 try:
-    re.findall(r'(?<=\$\d+\.)\d+', '$3.50')
+    re.findall(r'(?<=\$\d+\.)\d+', '\$3.50')
 except re.error as e:
     print(e)  # look-behind requires fixed-width pattern
 
 # Alternation of fixed widths — OK
-re.findall(r'(?<=\$|€)\d+', '$42 €50')    # ['42', '50']
+re.findall(r'(?<=\$|€)\d+', '\$42 €50')    # ['42', '50']
 ```
 
 ## Negative Lookbehind `(?<!...)`
@@ -141,7 +141,7 @@ Matches a position where the lookbehind pattern does **not** exist:
 import re
 
 # Match numbers NOT preceded by a dollar sign
-re.findall(r'(?<!\$)\b\d+', 'Price: $42, quantity: 100, code: $7')
+re.findall(r'(?<!\$)\b\d+', 'Price: $42, quantity: 100, code: \$7')
 # ['100']
 
 # Match "test" NOT preceded by "unit"
@@ -157,7 +157,7 @@ Lookarounds can be combined for precise matching:
 import re
 
 # Find numbers that are both preceded by $ and followed by a decimal point
-re.findall(r'(?<=\$)\d+(?=\.)', '$42.99 $100 €50.00')
+re.findall(r'(?<=\$)\d+(?=\.)', '\$42.99 \$100 €50.00')
 # ['42']
 
 # Find words surrounded by underscores (like _word_) 

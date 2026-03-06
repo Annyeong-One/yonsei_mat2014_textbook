@@ -130,6 +130,7 @@ plt.show()
 
 !!! note "Symmetry in Real Images"
     For real-valued images (typical case), the FFT has Hermitian symmetry:
+
     $$X(-u, -v) = X^*(u, v)$$
 
     This means the negative frequencies contain redundant information (they're complex conjugates of positive frequencies). In some applications, you only need half the FFT output.

@@ -49,7 +49,7 @@ nav:
             - Why Python: ch01/setup/why_python.md
             - Installing Python: ch01/setup/installing_python.md
             - Development Tools: ch01/setup/development_tools.md
-            - Python Interpreter and REPL: ch01/setup/python_interpreter.md
+            - Python Interpreter and Read-Eval-Print Loop: ch01/setup/python_interpreter.md
 
         - 1.2 Basic Syntax:
             - Expressions and Statements: ch01/basics/expressions.md
@@ -117,12 +117,12 @@ nav:
             - str Split and Join: ch01/types/str_split_join.md
             - str Modify Methods: ch01/types/str_modify_methods.md
             - str Formatting Methods: ch01/types/str_formatting_methods.md
-            - str Built-in Funcs: ch01/types/str_builtin_funcs.md
+            - str Built-in Functions: ch01/types/str_builtin_funcs.md
             - Strings Examples (Python): ch01/types/strings_examples.py
 
         - 1.8 Functions Basics:
             - Function and Call Stack: ch01/functions/functions.md
-            - Parameters & Returns: ch01/functions/parameters.md
+            - 'Parameters & Returns': ch01/functions/parameters.md
             - Type Hints: ch01/functions/type_hints.md
             - Function Practice Examples (Python): ch01/functions/function_practice_examples.py
 
@@ -255,7 +255,7 @@ nav:
             - Identity Operators: ch02/operators/identity.md
             - Membership Operators: ch02/operators/membership.md
             - Precedence and Associativity: ch02/operators/precedence.md
-            - Walrus Operator (:=): ch02/operators/walrus_operator.md
+            - 'Walrus Operator (:=)': ch02/operators/walrus_operator.md
 
         - 2.10 Exceptions Deep Dive:
             - Custom Exceptions: ch02/exceptions/custom_exceptions.md
@@ -330,7 +330,7 @@ nav:
             - Complex Binding Scenarios: ch03/binding/complex_scenarios.md
 
         - 3.4 CPython Implementation Details:
-            - Impl vs Guarantees: ch03/implementation/guarantees_vs_details.md
+            - Implementation vs Guarantees: ch03/implementation/guarantees_vs_details.md
             - Integer Interning: ch03/implementation/integer_interning.md
             - String Interning: ch03/implementation/string_interning.md
             - Object Interning: ch03/implementation/object_interning.md
@@ -374,7 +374,7 @@ nav:
             - Mutable Default Arguments Gotcha (Python): ch04/memory/mutable_default_arguments_gotcha.py
             - Aliasing via Mutable Parameters (Python): ch04/memory/aliasing_via_mutable_parameters.py
 
-        - 4.2 Reference Counting and GC:
+        - 4.2 Reference Counting and Garbage Collection:
             - Memory Management Overview: ch04/gc/memory_management_overview.md
             - Reference Counting: ch04/gc/reference_counting.md
             - Garbage Collection: ch04/gc/garbage_collection.md
@@ -478,10 +478,10 @@ nav:
         - 5.7 Design Patterns:
             - Strategy Pattern (Python): ch05/design_patterns/strategy_pattern_example.py
 
-    - 6 OOP:
+    - 6 Object-Oriented Programming:
         - Chapter Overview: ch06/index.md
-        - 6.1 OOP Foundations:
-            - Procedural vs OOP: ch06/foundations/procedural_vs_oop.md
+        - 6.1 Object-Oriented Programming Foundations:
+            - Procedural vs Object-Oriented: ch06/foundations/procedural_vs_oop.md
             - Functions to Classes: ch06/foundations/functions_to_classes.md
             - Classes and Instances: ch06/foundations/classes_instances.md
             - Constructor and Destructor: ch06/foundations/constructor_destructor.md
@@ -499,7 +499,7 @@ nav:
             - Instance vs Class Tutorial (Python): ch06/attributes/instance_vs_class_tutorial.py
             - Properties Tutorial (Python): ch06/attributes/properties_tutorial.py
 
-        - 6.3 Four Pillars of OOP:
+        - 6.3 Four Pillars of Object-Oriented Programming:
             - Encapsulation: ch06/pillars/encapsulation.md
             - Abstraction: ch06/pillars/abstraction.md
             - Polymorphism: ch06/pillars/polymorphism.md
@@ -508,7 +508,7 @@ nav:
             - Inheritance Examples (Python): ch06/pillars/inheritance_examples.py
             - Method Overriding Examples (Python): ch06/pillars/method_overriding_examples.py
             - super() Function Examples (Python): ch06/pillars/super_function_examples.py
-            - Polymorphism Demo (Python): ch06/pillars/polymorphism_demo.py
+            - Polymorphism Demonstration (Python): ch06/pillars/polymorphism_demo.py
             - Abstract Base Classes Examples (Python): ch06/pillars/abstract_base_classes_examples.py
 
         - 6.4 Advanced Inheritance:
@@ -517,11 +517,11 @@ nav:
             - Method Resolution Order: ch06/inheritance/mro.md
             - C3 Linearization: ch06/inheritance/c3_linearization.md
             - Diamond Problem (Python): ch06/inheritance/diamond_problem.py
-            - super() and MRO (Python): ch06/inheritance/super_and_mro.py
+            - super() and Method Resolution Order (Python): ch06/inheritance/super_and_mro.py
             - C3 Linearization Examples (Python): ch06/inheritance/c3_linearization_examples.py
-            - MRO Diamond Problem (Python): ch06/inheritance/mro_diamond_problem.py
+            - Method Resolution Order Diamond Problem (Python): ch06/inheritance/mro_diamond_problem.py
             - Mixin Pattern (Python): ch06/inheritance/mixin_pattern.py
-            - MRO Mixin SetOnce (Python): ch06/inheritance/mro_mixin_setonce_example.py
+            - Method Resolution Order Mixin SetOnce (Python): ch06/inheritance/mro_mixin_setonce_example.py
 
         - 6.5 Composition and Aggregation:
             - Is-a vs Has-a: ch06/composition/isa_vs_hasa.md
@@ -544,7 +544,7 @@ nav:
             - Sequence Protocol Example (Python): ch06/dunder/sequence_protocol_example.py
             - Vector Arithmetic Operators (Python): ch06/dunder/vector_arithmetic_operators.py
             - Operator Overloading Vector (Python): ch06/dunder/operator_overloading_vector.py
-            - Hash Eq and Slots (Python): ch06/dunder/hash_eq_slots_example.py
+            - Hash Equality and Slots (Python): ch06/dunder/hash_eq_slots_example.py
 
         - 6.7 Dunder Advanced:
             - Container Protocol: ch06/dunder_advanced/dunder_containers.md
@@ -571,7 +571,7 @@ nav:
             - Data vs Non-Data Descriptors: ch06/descriptors/descriptor_types.md
             - Descriptor Use Cases: ch06/descriptors/descriptor_applications.md
             - Attribute Access Lookup: ch06/descriptors/attribute_access_lookup.md
-            - Descriptor Kinds Demo (Python): ch06/descriptors/descriptor_kinds_demo.py
+            - Descriptor Kinds Demonstration (Python): ch06/descriptors/descriptor_kinds_demo.py
             - Method as Descriptor (Python): ch06/descriptors/method_as_descriptor.py
 
         - 6.10 Dunder Attribute Hooks:
@@ -610,12 +610,12 @@ nav:
             - Poker Game with Enum (Python): ch06/enum/poker_game_example.py
 
         - 6.14 Abstract Base Classes:
-            - ABC and abstractmethod: ch06/abc/abstract_base_classes.md
+            - Abstract Base Class and abstractmethod: ch06/abc/abstract_base_classes.md
             - typing.Protocol: ch06/abc/typing_protocol.md
             - collections.abc: ch06/abc/collections_abc.md
             - Virtual Subclasses (register): ch06/abc/virtual_subclasses.md
             - Abstract Base Class Example (Python): ch06/abc/abstract_base_class_example.py
-            - Factory Pattern with ABC (Python): ch06/abc/factory_pattern_with_abc_example.py
+            - Factory Pattern with Abstract Base Class (Python): ch06/abc/factory_pattern_with_abc_example.py
 
         - 6.15 Metaclasses:
             - Metaclasses Introduction: ch06/metaclasses/metaclasses_intro.md
@@ -623,10 +623,10 @@ nav:
             - Class Factory with type() (Python): ch06/metaclasses/class_factory_type.py
             - Singleton Metaclass (Python): ch06/metaclasses/singleton_metaclass_example.py
 
-        - 6.16 OOP Projects:
+        - 6.16 Object-Oriented Programming Projects:
             - Task Management System: ch06/projects/task_management_project.md
             - User Authentication System: ch06/projects/user_auth_project.md
-            - RPG Character System: ch06/projects/rpg_character_project.md
+            - Role-Playing Game Character System: ch06/projects/rpg_character_project.md
             - Banking System: ch06/projects/banking_system_project.md
             - Notification System: ch06/projects/notification_system_project.md
 
@@ -660,7 +660,7 @@ nav:
             - typing Overview: ch07/typing/typing_overview.md
             - Basic Annotations (int, str, list): ch07/typing/basic_annotations.md
             - Optional and Union: ch07/typing/optional_union.md
-            - List[int] vs list[int]: ch07/typing/generic_syntax.md
+            - 'List[int] vs list[int]': ch07/typing/generic_syntax.md
             - Callable and TypeAlias: ch07/typing/callable_typealias.md
             - TypeVar and Generic: ch07/typing/typevar_generic.md
             - TypeGuard and TypeNarrowing: ch07/typing/typeguard.md
@@ -736,19 +736,19 @@ nav:
             - Compiling Patterns: ch07/regex/compiled_patterns.md
             - Lookahead and Lookbehind: ch07/regex/lookahead_lookbehind.md
             - Practical Examples: ch07/regex/practical_examples.md
-            - Regex Basics Tutorial (Python): ch07/regex/regex_basics_tutorial.py
+            - Regular Expression Basics Tutorial (Python): ch07/regex/regex_basics_tutorial.py
             - Character Classes Tutorial (Python): ch07/regex/character_classes_tutorial.py
             - Quantifiers Tutorial (Python): ch07/regex/quantifiers_tutorial.py
             - Groups and Capturing Tutorial (Python): ch07/regex/groups_capturing_tutorial.py
             - Lookahead/Lookbehind Tutorial (Python): ch07/regex/lookahead_lookbehind_tutorial.py
             - Practical Applications Tutorial (Python): ch07/regex/practical_applications_tutorial.py
-            - Regex Web Scraping Tutorial (Python): ch07/regex/regex_web_scraping_tutorial.py
+            - Regular Expression Web Scraping Tutorial (Python): ch07/regex/regex_web_scraping_tutorial.py
 
         - 7.11 Debugging:
             - breakpoint() and pdb Basics: ch07/debugging/breakpoint_pdb.md
             - Common pdb Commands: ch07/debugging/pdb_commands.md
             - Post-Mortem Debugging: ch07/debugging/post_mortem.md
-            - IDE Debugging Overview: ch07/debugging/ide_debugging.md
+            - Integrated Development Environment Debugging: ch07/debugging/ide_debugging.md
 
         - 7.12 Testing:
             - Testing Overview: ch07/testing/testing_overview.md
@@ -813,7 +813,7 @@ nav:
 
         - 8.7 Element-wise Operations:
             - Arithmetic Operations: ch08/operations/arithmetic.md
-            - Power Exp Log: ch08/operations/power_exp_log.md
+            - Power Exponential Logarithm: ch08/operations/power_exp_log.md
             - Rounding Functions: ch08/operations/rounding.md
             - Comparison Operators: ch08/operations/comparison.md
             - Universal Functions: ch08/operations/ufuncs.md
@@ -893,7 +893,7 @@ nav:
 
         - 8.16 Polynomial and Curve Fitting:
             - np.polyfit and np.poly1d: ch08/fitting/numpy_polyfit.md
-            - np.polynomial Module (Modern API): ch08/fitting/numpy_polynomial.md
+            - np.polynomial Module (Modern Interface): ch08/fitting/numpy_polynomial.md
             - Polynomial Class: ch08/fitting/polynomial_class.md
             - Least Squares Connection: ch08/fitting/least_squares.md
             - scipy.interpolate — Spline Interpolation: ch08/fitting/scipy_interpolation.md
@@ -901,10 +901,10 @@ nav:
 
         - 8.17 Fourier Transforms:
             - np.fft Module: ch08/fft/numpy_fft.md
-            - DFT Matrix Implementation (Python): ch08/fft/dft_matrix_implementation.py
-            - Spectrogram and STFT: ch08/fft/spectrogram_stft.md
+            - Discrete Fourier Transform Matrix (Python): ch08/fft/dft_matrix_implementation.py
+            - Spectrogram and Short-Time Fourier Transform: ch08/fft/spectrogram_stft.md
             - Window Functions: ch08/fft/windowing.md
-            - 2D FFT for Images: ch08/fft/fft_2d_image.md
+            - 2D Fast Fourier Transform for Images: ch08/fft/fft_2d_image.md
 
         - 8.21 scipy.ndimage:
             - Convolution and Filtering: ch08/ndimage/convolution_filtering.md
@@ -917,10 +917,10 @@ nav:
         - 8.19 Structured Arrays:
             - Record Arrays: ch08/structured/numpy_structured.md
 
-        - 8.20 NumPy OOP Design:
+        - 8.20 NumPy Object-Oriented Design:
             - NumPy ndarray Design: ch08/oop/numpy_ndarray.md
             - NumPy dtype and Shape: ch08/oop/numpy_dtype_shape.md
-            - NumPy UFuncs: ch08/oop/numpy_ufuncs.md
+            - NumPy Universal Functions: ch08/oop/numpy_ufuncs.md
             - NumPy vs C Arrays: ch08/oop/numpy_vs_c.md
             - PIL vs NumPy Images: ch08/oop/pil_vs_numpy.md
 
@@ -939,7 +939,7 @@ nav:
 
         - 9.2 Getting Started:
             - Installation and Import: ch09/setup/installation.md
-            - OOP vs Pyplot Style: ch09/fundamentals/matplotlib_oop_vs_pyplot.md
+            - Object-Oriented vs Pyplot Style: ch09/fundamentals/matplotlib_oop_vs_pyplot.md
             - plt.subplot vs plt.subplots: ch09/setup/subplot_vs_subplots.md
             - Style Sheets: ch09/setup/style_sheets.md
             - Plotting Styles Tutorial (Python): ch09/fundamentals/plotting_styles_tutorial.py
@@ -1068,7 +1068,7 @@ nav:
             - Mathematical Functions: ch09/examples/math_functions.md
             - Statistical Distributions: ch09/examples/statistical_distributions.md
 
-        - 9.22 Matplotlib OOP Design:
+        - 9.22 Matplotlib Object-Oriented Design:
             - Matplotlib Hierarchy: ch09/oop/matplotlib_hierarchy.md
             - Matplotlib Artists: ch09/oop/matplotlib_artists.md
 
@@ -1253,12 +1253,12 @@ nav:
 
         - 10.22 Practical Examples:
             - Financial Data Workflow: ch10/examples/yfinance_workflow.md
-            - SP500 Analysis: ch10/examples/sp500_analysis.md
+            - 'S&P 500 Analysis': ch10/examples/sp500_analysis.md
             - LeetCode Patterns: ch10/examples/leetcode_patterns.md
             - LeetCode Series Problems: ch10/examples/leetcode_series.md
             - LeetCode DataFrame Problems: ch10/examples/leetcode_dataframe.md
 
-        - 10.23 Pandas OOP Design:
+        - 10.23 Pandas Object-Oriented Design:
             - Pandas Series: ch10/oop/pandas_series.md
             - Pandas DataFrame: ch10/oop/pandas_dataframe.md
             - Pandas Index Objects: ch10/oop/pandas_index.md
@@ -1277,7 +1277,7 @@ nav:
     - 11 SciPy Linear Algebra:
         - Chapter Overview: ch11/index.md
         - 11.1 Overview:
-            - SciPy vs NumPy Linalg: ch11/overview/scipy_vs_numpy.md
+            - SciPy vs NumPy Linear Algebra: ch11/overview/scipy_vs_numpy.md
             - Module Organization: ch11/overview/modules.md
 
         - 11.2 Dense Matrix Operations:
@@ -1326,7 +1326,7 @@ nav:
             - Performance Tips: ch11/sparse/performance.md
 
         - 11.10 Applications:
-            - PDE Discretization: ch11/applications/pde.md
+            - Partial Differential Equation Discretization: ch11/applications/pde.md
             - Graph Algorithms: ch11/applications/graphs.md
             - Sparse Matrix Applications: ch11/sparse/applications.md
             - Variation of Information (Python): ch11/sparse/variation_of_information.py
@@ -1339,7 +1339,7 @@ nav:
             - Moments and Skewness: ch12/descriptive/moments.md
             - Percentiles and Quantiles: ch12/descriptive/percentiles.md
             - Outlier Detection: ch12/descriptive/outlier_detection.md
-            - Robust Statistics (MAD, Trimmed): ch12/descriptive/robust_statistics.md
+            - Robust Statistics (Median Absolute Deviation, Trimmed): ch12/descriptive/robust_statistics.md
             - Outlier Detection Methods (Python): ch12/descriptive/outlier_detection_methods.py
 
         - 12.2 Distribution Object Model:
@@ -1374,8 +1374,8 @@ nav:
         - 12.4 Density Estimation:
             - gaussian_kde: ch12/density/gaussian_kde.md
             - Bandwidth Selection: ch12/density/bandwidth.md
-            - KDE vs Histogram: ch12/density/kde_vs_histogram.md
-            - Multivariate KDE: ch12/density/multivariate_kde.md
+            - Kernel Density Estimation vs Histogram: ch12/density/kde_vs_histogram.md
+            - Multivariate Kernel Density Estimation: ch12/density/multivariate_kde.md
             - Evaluate and Resample: ch12/density/evaluate_resample.md
             - Seaborn Distribution Plots (Python): ch12/density/seaborn_distributions.py
 
@@ -1385,7 +1385,7 @@ nav:
             - Type I and Type II Errors: ch12/hypothesis/type_errors.md
             - Power Analysis: ch12/hypothesis/power_analysis.md
             - Confidence Intervals: ch12/hypothesis/confidence_intervals.md
-            - Multiple Testing Correction (Bonferroni, FDR): ch12/hypothesis/multiple_testing.md
+            - Multiple Testing Correction (Bonferroni, False Discovery Rate): ch12/hypothesis/multiple_testing.md
             - One-Sided vs Two-Sided Tests: ch12/hypothesis/one_vs_two_sided.md
             - Effect Size: ch12/hypothesis/effect_size.md
             - Advanced Hypothesis Testing (Python): ch12/hypothesis/hypothesis_testing_advanced.py
@@ -1413,7 +1413,7 @@ nav:
 
         - 12.8 Regression:
             - linregress: ch12/regression/linregress.md
-            - OLS Fundamentals: ch12/regression/ols_fundamentals.md
+            - Ordinary Least Squares Fundamentals: ch12/regression/ols_fundamentals.md
             - Residual Analysis: ch12/regression/residual_analysis.md
             - Multiple Regression Concepts: ch12/regression/multiple_regression.md
             - Polynomial Regression: ch12/regression/polynomial_regression.md
@@ -1430,18 +1430,18 @@ nav:
             - Seaborn Statistical Estimation (Python): ch12/resampling/seaborn_statistical_estimation.py
 
         - 12.10 Probability Plots and Diagnostics:
-            - QQ Plots (probplot): ch12/diagnostics/qq_plots.md
-            - PP Plots: ch12/diagnostics/pp_plots.md
+            - Quantile-Quantile Plots (probplot): ch12/diagnostics/qq_plots.md
+            - Probability-Probability Plots: ch12/diagnostics/pp_plots.md
             - Residual Diagnostics: ch12/diagnostics/residual_plots.md
             - Distribution Comparison Visualization: ch12/diagnostics/distribution_comparison.md
             - Normality Visualization: ch12/diagnostics/normality_visualization.md
 
         - 12.11 Information Theory:
             - Entropy (shannon_entropy): ch12/information/entropy.md
-            - KL Divergence: ch12/information/kl_divergence.md
+            - Kullback-Leibler Divergence: ch12/information/kl_divergence.md
             - Cross-Entropy: ch12/information/cross_entropy.md
             - Mutual Information: ch12/information/mutual_information.md
-            - Connection to ML Loss Functions: ch12/information/ml_loss_connection.md
+            - Connection to Machine Learning Loss Functions: ch12/information/ml_loss_connection.md
 
         - 12.12 Data Preprocessing:
             - Quantile Normalization: ch12/preprocessing/quantile_normalization.md
@@ -1449,7 +1449,7 @@ nav:
         - 12.13 Practical Applications:
             - A/B Testing Workflow: ch12/applications/ab_testing.md
             - Financial Returns Analysis: ch12/applications/financial_returns.md
-            - Feature Selection for ML: ch12/applications/feature_selection.md
+            - Feature Selection for Machine Learning: ch12/applications/feature_selection.md
             - Statistical Preprocessing: ch12/applications/preprocessing.md
             - Monte Carlo Methods in Finance: ch12/applications/monte_carlo_finance.md
             - Bayesian Inference Preview: ch12/applications/bayesian_preview.md
@@ -1475,12 +1475,12 @@ nav:
         - Chapter Overview: ch14/index.md
         - 14.1 Concurrency Concepts:
             - Introduction: ch14/concepts/introduction.md
-            - GIL Explained: ch14/concepts/gil.md
-            - CPU-bound vs IO-bound: ch14/concepts/cpu_vs_io.md
+            - Global Interpreter Lock Explained: ch14/concepts/gil.md
+            - CPU-Bound vs Input/Output-Bound: ch14/concepts/cpu_vs_io.md
             - Threads vs Processes: ch14/concepts/threads_vs_processes.md
             - Deadlocks: ch14/concepts/deadlocks.md
             - Race Conditions: ch14/concepts/race_conditions.md
-            - GIL Tutorial (Python): ch14/concepts/gil_tutorial.py
+            - Global Interpreter Lock Tutorial (Python): ch14/concepts/gil_tutorial.py
 
         - 14.2 concurrent.futures:
             - Executor Interface: ch14/futures/executor_interface.md
@@ -1515,7 +1515,7 @@ nav:
             - gather vs wait: ch14/asyncio/gather_vs_wait.md
             - Async Iteration (async for/with): ch14/asyncio/async_iteration.md
             - Asyncio Patterns: ch14/asyncio/patterns.md
-            - Async HTTP (aiohttp): ch14/asyncio/aiohttp_examples.md
+            - Asynchronous HTTP (aiohttp): ch14/asyncio/aiohttp_examples.md
             - Context Variables: ch14/asyncio/contextvars.md
             - Async/Await Tutorial (Python): ch14/asyncio/async_await_tutorial.py
             - Event Loop Tutorial (Python): ch14/asyncio/event_loop_tutorial.py
@@ -1553,7 +1553,7 @@ nav:
             - Hardware and Interpreted Languages: ch15/python_connection/interpreted_languages.md
             - Why Python is Slow: ch15/python_connection/why_python_slow.md
             - How NumPy Bridges the Gap: ch15/python_connection/numpy_bridge.md
-            - GIL and Hardware: ch15/python_connection/gil_hardware.md
+            - Global Interpreter Lock and Hardware: ch15/python_connection/gil_hardware.md
 
 plugins:
     - search

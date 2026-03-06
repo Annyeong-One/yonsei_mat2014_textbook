@@ -6,111 +6,113 @@
 
 import numpy as np
 
-print("="*80)
-print("ARRAY INDEXING AND SLICING")
-print("="*80)
-print("\n🔗 Views vs Copies - Critical concept from Topic #24!")
+if __name__ == "__main__":
 
-# ============================================================================
-# 1D Indexing (like Python lists)
-# ============================================================================
+    print("="*80)
+    print("ARRAY INDEXING AND SLICING")
+    print("="*80)
+    print("\n🔗 Views vs Copies - Critical concept from Topic #24!")
 
-print("\n" + "="*80)
-print("1D Indexing")
-print("="*80)
+    # ============================================================================
+    # 1D Indexing (like Python lists)
+    # ============================================================================
 
-arr = np.array([10, 20, 30, 40, 50])
-print(f"Array: {arr}")
-print(f"  arr[0] = {arr[0]}")  # First element
-print(f"  arr[-1] = {arr[-1]}")  # Last element
-print(f"  arr[1:4] = {arr[1:4]}")  # Slicing
+    print("\n" + "="*80)
+    print("1D Indexing")
+    print("="*80)
 
-# ============================================================================
-# CRITICAL: Slices are VIEWS! (Topic #24)
-# ============================================================================
+    arr = np.array([10, 20, 30, 40, 50])
+    print(f"Array: {arr}")
+    print(f"  arr[0] = {arr[0]}")  # First element
+    print(f"  arr[-1] = {arr[-1]}")  # Last element
+    print(f"  arr[1:4] = {arr[1:4]}")  # Slicing
 
-print("\n" + "="*80)
-print("CRITICAL: Slices Return VIEWS (Topic #24)")
-print("="*80)
+    # ============================================================================
+    # CRITICAL: Slices are VIEWS! (Topic #24)
+    # ============================================================================
 
-arr = np.array([1, 2, 3, 4, 5])
-view = arr[1:4]  # Elements at index 1, 2, 3
+    print("\n" + "="*80)
+    print("CRITICAL: Slices Return VIEWS (Topic #24)")
+    print("="*80)
 
-print(f"Original: {arr}")
-print(f"View: {view}")
-print(f"\nview.base is arr: {view.base is arr} ← It's a VIEW!")
+    arr = np.array([1, 2, 3, 4, 5])
+    view = arr[1:4]  # Elements at index 1, 2, 3
 
-# Modify the view
-view[0] = 999
-print(f"\nAfter view[0] = 999:")
-print(f"  Original: {arr} ← CHANGED!")
-print(f"  View: {view}")
+    print(f"Original: {arr}")
+    print(f"View: {view}")
+    print(f"\nview.base is arr: {view.base is arr} ← It's a VIEW!")
 
-print("""
-This is DIFFERENT from Python lists!
-Python: slice_copy = my_list[1:4]  # Creates COPY
-NumPy:  view = arr[1:4]            # Creates VIEW
+    # Modify the view
+    view[0] = 999
+    print(f"\nAfter view[0] = 999:")
+    print(f"  Original: {arr} ← CHANGED!")
+    print(f"  View: {view}")
 
-Why? Memory efficiency (Topic #24)!
-Views share memory, no copying needed.
-""")
+    print("""
+    This is DIFFERENT from Python lists!
+    Python: slice_copy = my_list[1:4]  # Creates COPY
+    NumPy:  view = arr[1:4]            # Creates VIEW
 
-# Want an independent copy? Use .copy()
-arr = np.array([1, 2, 3, 4, 5])
-independent = arr[1:4].copy()
-independent[0] = 888
+    Why? Memory efficiency (Topic #24)!
+    Views share memory, no copying needed.
+    """)
 
-print(f"\nUsing .copy():")
-print(f"  Original: {arr} ← Unchanged")
-print(f"  Copy: {independent}")
+    # Want an independent copy? Use .copy()
+    arr = np.array([1, 2, 3, 4, 5])
+    independent = arr[1:4].copy()
+    independent[0] = 888
 
-# ============================================================================
-# Multi-dimensional Indexing
-# ============================================================================
+    print(f"\nUsing .copy():")
+    print(f"  Original: {arr} ← Unchanged")
+    print(f"  Copy: {independent}")
 
-print("\n" + "="*80)
-print("2D Indexing")
-print("="*80)
+    # ============================================================================
+    # Multi-dimensional Indexing
+    # ============================================================================
 
-matrix = np.array([[10, 20, 30],
-                   [40, 50, 60],
-                   [70, 80, 90]])
-print(f"Matrix:\n{matrix}\n")
+    print("\n" + "="*80)
+    print("2D Indexing")
+    print("="*80)
 
-print(f"matrix[0, 0] = {matrix[0, 0]}  ← Row 0, Col 0")
-print(f"matrix[1, 2] = {matrix[1, 2]}  ← Row 1, Col 2")
-print(f"matrix[-1, -1] = {matrix[-1, -1]}  ← Last row, last col")
+    matrix = np.array([[10, 20, 30],
+                       [40, 50, 60],
+                       [70, 80, 90]])
+    print(f"Matrix:\n{matrix}\n")
 
-# Slicing rows and columns
-print(f"\nmatrix[0, :] = {matrix[0, :]}  ← First row (all cols)")
-print(f"matrix[:, 0] = {matrix[:, 0]}  ← First column (all rows)")
-print(f"matrix[1:, 1:] = \n{matrix[1:, 1:]}  ← Bottom-right 2x2")
+    print(f"matrix[0, 0] = {matrix[0, 0]}  ← Row 0, Col 0")
+    print(f"matrix[1, 2] = {matrix[1, 2]}  ← Row 1, Col 2")
+    print(f"matrix[-1, -1] = {matrix[-1, -1]}  ← Last row, last col")
 
-# ============================================================================
-# Boolean Indexing (returns COPY!)
-# ============================================================================
+    # Slicing rows and columns
+    print(f"\nmatrix[0, :] = {matrix[0, :]}  ← First row (all cols)")
+    print(f"matrix[:, 0] = {matrix[:, 0]}  ← First column (all rows)")
+    print(f"matrix[1:, 1:] = \n{matrix[1:, 1:]}  ← Bottom-right 2x2")
 
-print("\n" + "="*80)
-print("Boolean Indexing")
-print("="*80)
+    # ============================================================================
+    # Boolean Indexing (returns COPY!)
+    # ============================================================================
 
-arr = np.array([10, 15, 20, 25, 30])
-mask = arr > 18  # Boolean array
-print(f"Array: {arr}")
-print(f"Mask (arr > 18): {mask}")
-print(f"arr[mask] = {arr[mask]}  ← Elements where mask is True")
+    print("\n" + "="*80)
+    print("Boolean Indexing")
+    print("="*80)
 
-print("""
-\nNote: Boolean indexing creates a COPY, not a view!
-Why? Selected elements may not be contiguous in memory.
-""")
+    arr = np.array([10, 15, 20, 25, 30])
+    mask = arr > 18  # Boolean array
+    print(f"Array: {arr}")
+    print(f"Mask (arr > 18): {mask}")
+    print(f"arr[mask] = {arr[mask]}  ← Elements where mask is True")
 
-print("""
-\n🎯 KEY TAKEAWAYS:
-1. Slicing returns VIEWS (shares memory!)
-2. Use .copy() for independent arrays
-3. Boolean indexing returns COPIES
-4. .base attribute checks if it's a view
+    print("""
+    \nNote: Boolean indexing creates a COPY, not a view!
+    Why? Selected elements may not be contiguous in memory.
+    """)
 
-🔜 NEXT: 04_basic_operations.py
-""")
+    print("""
+    \n🎯 KEY TAKEAWAYS:
+    1. Slicing returns VIEWS (shares memory!)
+    2. Use .copy() for independent arrays
+    3. Boolean indexing returns COPIES
+    4. .base attribute checks if it's a view
+
+    🔜 NEXT: 04_basic_operations.py
+    """)

@@ -6,6 +6,7 @@ to be treated as objects of a common parent class, and the correct method
 is called based on the object's actual type.
 """
 
+# ============================================================================
 # Example 1: Basic Polymorphism
 class PaymentMethod:
     def __init__(self, name):
@@ -47,6 +48,7 @@ class Bitcoin(PaymentMethod):
         return f"Processing {btc_amount:.6f} BTC to wallet {self.wallet_address[:8]}..."
 
 
+# ============================================================================
 # Example 2: Polymorphism with Different Return Types
 class DataProcessor:
     def process(self, data):
@@ -71,6 +73,7 @@ class ListProcessor(DataProcessor):
         return sorted(data)
 
 
+# ============================================================================
 # Example 3: Duck Typing (Python's Polymorphism)
 class Duck:
     def speak(self):
@@ -105,6 +108,7 @@ def make_it_speak_and_swim(entity):
     print(entity.swim())
 
 
+# ============================================================================
 # Example 4: Polymorphism in Action - File System
 class FileSystemItem:
     def __init__(self, name):

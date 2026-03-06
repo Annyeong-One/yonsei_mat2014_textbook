@@ -9,7 +9,7 @@
 | **Persistence** | Volatile (lost on power off) | Non-volatile (survives power off) |
 | **Latency** | ~60 ns | ~100 μs (SSD) to ~10 ms (HDD) |
 | **Bandwidth** | ~50 GB/s | ~500 MB/s to ~5 GB/s |
-| **Cost/GB** | ~$3-5 | ~$0.05-0.20 |
+| **Cost/GB** | ~\$3-5 | ~\$0.05-0.20 |
 | **Capacity** | 8-128 GB | 256 GB - 20 TB |
 
 ## Hard Disk Drives (HDD)

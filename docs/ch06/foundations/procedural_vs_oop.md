@@ -51,6 +51,7 @@ From function-centric to object-centric design.
 ## Comparison Table
 
 $$
+
 \begin{array}{lcc}
 \textbf{Feature} & \textbf{Procedural} & \textbf{OOP} \\
 \hline
@@ -60,6 +61,7 @@ $$
 \text{Code Reuse} & \text{Limited} & \text{Inheritance} \\
 \text{State Management} & \text{External} & \text{Internal} \\
 \end{array}
+
 $$
 
 ---

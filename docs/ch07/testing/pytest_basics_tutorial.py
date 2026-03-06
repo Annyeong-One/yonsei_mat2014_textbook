@@ -6,6 +6,10 @@ Modern, powerful testing with pytest framework.
 # pytest uses simple functions, not classes (though classes work too)
 # No need to import unittest or inherit from TestCase
 
+# =============================================================================
+# Definitions
+# =============================================================================
+
 def add(a, b):
     """Add two numbers."""
     return a + b
@@ -38,30 +42,36 @@ def test_dict_operations():
 # pytest fixtures (simple version)
 import pytest
 
-@pytest.fixture
-def sample_list():
-    """Fixture that provides a sample list."""
-    return [1, 2, 3, 4, 5]
 
-def test_with_fixture(sample_list):
-    """Test using a fixture."""
-    assert len(sample_list) == 5
-    assert sum(sample_list) == 15
+# =============================================================================
+# Main
+# =============================================================================
 
-# Testing exceptions with pytest
-def divide(a, b):
-    if b == 0:
-        raise ValueError("Cannot divide by zero")
-    return a / b
+if __name__ == "__main__":
+    @pytest.fixture
+    def sample_list():
+        """Fixture that provides a sample list."""
+        return [1, 2, 3, 4, 5]
 
-def test_divide_by_zero():
-    """Test that division by zero raises ValueError."""
-    with pytest.raises(ValueError):
-        divide(10, 0)
+    def test_with_fixture(sample_list):
+        """Test using a fixture."""
+        assert len(sample_list) == 5
+        assert sum(sample_list) == 15
 
-def test_divide_by_zero_message():
-    """Test exception message."""
-    with pytest.raises(ValueError, match="Cannot divide"):
-        divide(10, 0)
+    # Testing exceptions with pytest
+    def divide(a, b):
+        if b == 0:
+            raise ValueError("Cannot divide by zero")
+        return a / b
 
-# Run with: pytest 08_pytest_basics.py -v
+    def test_divide_by_zero():
+        """Test that division by zero raises ValueError."""
+        with pytest.raises(ValueError):
+            divide(10, 0)
+
+    def test_divide_by_zero_message():
+        """Test exception message."""
+        with pytest.raises(ValueError, match="Cannot divide"):
+            divide(10, 0)
+
+    # Run with: pytest 08_pytest_basics.py -v

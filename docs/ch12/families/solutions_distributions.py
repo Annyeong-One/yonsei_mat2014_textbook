@@ -8,27 +8,33 @@ import numpy as np
 from scipy import stats
 import matplotlib.pyplot as plt
 
-print("="*80)
-print("SOLUTIONS: PROBABILITY DISTRIBUTIONS")
-print("="*80)
-print()
+# =============================================================================
+# Main
+# =============================================================================
 
-# Solution 1
-print("Solution 1: Exponential Distribution")
-print("-" * 40)
+if __name__ == "__main__":
 
-mean_time = 5  # minutes
-expo_dist = stats.expon(scale=mean_time)
+    print("="*80)
+    print("SOLUTIONS: PROBABILITY DISTRIBUTIONS")
+    print("="*80)
+    print()
 
-# Part a
-prob_within_3 = expo_dist.cdf(3)
-print(f"a) P(X ≤ 3) = {prob_within_3:.4f}")
-print()
+    # Solution 1
+    print("Solution 1: Exponential Distribution")
+    print("-" * 40)
 
-# Part b - Memoryless property
-prob_within_2 = expo_dist.cdf(2)
-print(f"b) P(X ≤ 6 | X > 4) = P(X ≤ 2) = {prob_within_2:.4f}")
-print(f"   This equals P(X ≤ 2) due to memoryless property\n")
+    mean_time = 5  # minutes
+    expo_dist = stats.expon(scale=mean_time)
 
-# Detailed solutions continue...
-print("="*80)
+    # Part a
+    prob_within_3 = expo_dist.cdf(3)
+    print(f"a) P(X ≤ 3) = {prob_within_3:.4f}")
+    print()
+
+    # Part b - Memoryless property
+    prob_within_2 = expo_dist.cdf(2)
+    print(f"b) P(X ≤ 6 | X > 4) = P(X ≤ 2) = {prob_within_2:.4f}")
+    print(f"   This equals P(X ≤ 2) due to memoryless property\n")
+
+    # Detailed solutions continue...
+    print("="*80)

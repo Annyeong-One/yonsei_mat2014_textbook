@@ -116,8 +116,8 @@ re.findall(r'\.', 'version 3.14.1')
 # ['.', '.']
 
 # Match a literal dollar sign
-re.search(r'\$\d+', 'Price: $25')
-# <re.Match object; span=(7, 10), match='$25'>
+re.search(r'\$\d+', 'Price: \$25')
+# <re.Match object; span=(7, 10), match='\$25'>
 
 # Match literal parentheses
 re.search(r'\(.*?\)', 'func(arg)')
@@ -127,7 +127,7 @@ re.search(r'\(.*?\)', 'func(arg)')
 You can also use `re.escape()` to escape all metacharacters in a string:
 
 ```python
-special = "price is $5.00 (USD)"
+special = "price is \$5.00 (USD)"
 escaped = re.escape(special)
 print(escaped)
 # price\ is\ \$5\.00\ \(USD\)

@@ -171,7 +171,7 @@ table = str.maketrans(
     "!@#$%^&*()"           # delete
 )
 
-s = "Price: $99.99!"
+s = "Price: \$99.99!"
 print(s.translate(table))  # Price: OO.OO
 ```
 

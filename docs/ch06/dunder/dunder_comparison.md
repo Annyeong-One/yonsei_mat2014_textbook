@@ -431,9 +431,9 @@ for emp in sorted(employees):
     print(emp)
 
 # Output:
-# Employee('Bob', $80000, 3y)
-# Employee('Charlie', $75000, 8y)
-# Employee('Alice', $75000, 5y)
+# Employee('Bob', \$80000, 3y)
+# Employee('Charlie', \$75000, 8y)
+# Employee('Alice', \$75000, 5y)
 ```
 
 ## Key Takeaways

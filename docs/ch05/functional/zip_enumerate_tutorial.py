@@ -2,75 +2,80 @@
 02_zip_enumerate_functions.py - zip() and enumerate()
 """
 
-print("=" * 70)
-print("ZIP() AND ENUMERATE() FUNCTIONS")
-print("=" * 70)
+if __name__ == "__main__":
 
-# zip() - Combine multiple iterables
-print("\n1. zip() - Combine Iterables")
-names = ["Alice", "Bob", "Charlie"]
-ages = [25, 30, 35]
-cities = ["NYC", "LA", "Chicago"]
+    print("=" * 70)
+    print("ZIP() AND ENUMERATE() FUNCTIONS")
+    print("=" * 70)
 
-print(f"Names: {names}")
-print(f"Ages: {ages}")
-print(f"Cities: {cities}")
+    # zip() - Combine multiple iterables
+    print("\n1. zip() - Combine Iterables")
+    names = ["Alice", "Bob", "Charlie"]
+    ages = [25, 30, 35]
+    cities = ["NYC", "LA", "Chicago"]
 
-# Zip them together
-combined = list(zip(names, ages, cities))
-print(f"\nzipped: {combined}")
+    print(f"Names: {names}")
+    print(f"Ages: {ages}")
+    print(f"Cities: {cities}")
 
-# Iterate over zipped data
-print("\nIterating:")
-for name, age, city in zip(names, ages, cities):
-    print(f"  {name} is {age} years old and lives in {city}")
+    # Zip them together
+    combined = list(zip(names, ages, cities))
+    print(f"\nzipped: {combined}")
 
-# Unzipping
-print("\nUnzipping:")
-pairs = [("Alice", 25), ("Bob", 30), ("Charlie", 35)]
-names, ages = zip(*pairs)  # * unpacks the list
-print(f"Names: {names}")
-print(f"Ages: {ages}")
+    # Iterate over zipped data
+    print("\nIterating:")
+    for name, age, city in zip(names, ages, cities):
+        print(f"  {name} is {age} years old and lives in {city}")
 
-# enumerate() - Add index to iterable
-print("\n2. enumerate() - Add Index")
-fruits = ["apple", "banana", "cherry"]
+    # Unzipping
+    print("\nUnzipping:")
+    pairs = [("Alice", 25), ("Bob", 30), ("Charlie", 35)]
+    names, ages = zip(*pairs)  # * unpacks the list
+    print(f"Names: {names}")
+    print(f"Ages: {ages}")
 
-print("Without enumerate:")
-for i in range(len(fruits)):
-    print(f"  {i}: {fruits[i]}")
+    # enumerate() - Add index to iterable
+    print("\n2. enumerate() - Add Index")
+    fruits = ["apple", "banana", "cherry"]
 
-print("\nWith enumerate:")
-for i, fruit in enumerate(fruits):
-    print(f"  {i}: {fruit}")
+    print("Without enumerate:")
+    for i in range(len(fruits)):
+        print(f"  {i}: {fruits[i]}")
 
-print("\nWith enumerate (start=1):")
-for i, fruit in enumerate(fruits, start=1):
-    print(f"  {i}: {fruit}")
+    print("\nWith enumerate:")
+    for i, fruit in enumerate(fruits):
+        print(f"  {i}: {fruit}")
 
-# Practical Examples
-print("\n" + "=" * 70)
-print("PRACTICAL EXAMPLES")
-print("=" * 70)
+    print("\nWith enumerate (start=1):")
+    for i, fruit in enumerate(fruits, start=1):
+        print(f"  {i}: {fruit}")
 
-# Example 1: Create dictionary from two lists
-print("\nExample 1: Lists to Dictionary")
-keys = ["name", "age", "city"]
-values = ["Alice", 25, "NYC"]
-person = dict(zip(keys, values))
-print(f"Dictionary: {person}")
+    # Practical Examples
+    print("\n" + "=" * 70)
+    print("PRACTICAL EXAMPLES")
+    print("=" * 70)
 
-# Example 2: Parallel iteration with enumerate
-print("\nExample 2: Numbered list with enumerate")
-tasks = ["Buy groceries", "Call mom", "Finish homework"]
-for i, task in enumerate(tasks, start=1):
-    print(f"{i}. {task}")
+    # ============================================================================
+    # Example 1: Create dictionary from two lists
+    print("\nExample 1: Lists to Dictionary")
+    keys = ["name", "age", "city"]
+    values = ["Alice", 25, "NYC"]
+    person = dict(zip(keys, values))
+    print(f"Dictionary: {person}")
 
-# Example 3: Find index of matching items
-print("\nExample 3: Find indices")
-numbers = [10, 25, 30, 15, 40]
-for i, num in enumerate(numbers):
-    if num > 20:
-        print(f"  Index {i}: {num} > 20")
+    # ============================================================================
+    # Example 2: Parallel iteration with enumerate
+    print("\nExample 2: Numbered list with enumerate")
+    tasks = ["Buy groceries", "Call mom", "Finish homework"]
+    for i, task in enumerate(tasks, start=1):
+        print(f"{i}. {task}")
 
-print("\nSee exercises.py for practice!")
+    # ============================================================================
+    # Example 3: Find index of matching items
+    print("\nExample 3: Find indices")
+    numbers = [10, 25, 30, 15, 40]
+    for i, num in enumerate(numbers):
+        if num > 20:
+            print(f"  Index {i}: {num} > 20")
+
+    print("\nSee exercises.py for practice!")

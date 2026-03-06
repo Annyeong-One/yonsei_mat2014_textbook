@@ -201,13 +201,13 @@ ML Platforms:
 # Example: Launch GPU instance for training
 
 # AWS EC2 GPU instances:
-# - p3.2xlarge: 1x V100 (16GB) - ~$3/hour
-# - p3.8xlarge: 4x V100 - ~$12/hour
-# - p4d.24xlarge: 8x A100 - ~$33/hour
+# - p3.2xlarge: 1x V100 (16GB) - ~\$3/hour
+# - p3.8xlarge: 4x V100 - ~\$12/hour
+# - p4d.24xlarge: 8x A100 - ~\$33/hour
 
 # Google Cloud:
-# - a2-highgpu-1g: 1x A100 - ~$3/hour
-# - a2-highgpu-8g: 8x A100 - ~$25/hour
+# - a2-highgpu-1g: 1x A100 - ~\$3/hour
+# - a2-highgpu-8g: 8x A100 - ~\$25/hour
 
 # Can also attach GPUs to regular VMs:
 # gcloud compute instances create my-gpu-vm \
@@ -298,10 +298,10 @@ Spot/Preemptible:
 # 5. Choose appropriate storage tier
 
 # Example: S3 storage tiers
-# Standard:          $0.023/GB/month (frequent access)
-# Infrequent Access: $0.0125/GB/month
-# Glacier:           $0.004/GB/month (archival)
-# Glacier Deep:      $0.00099/GB/month (rarely accessed)
+# Standard:          \$0.023/GB/month (frequent access)
+# Infrequent Access: \$0.0125/GB/month
+# Glacier:           \$0.004/GB/month (archival)
+# Glacier Deep:      \$0.00099/GB/month (rarely accessed)
 ```
 
 ## Getting Started

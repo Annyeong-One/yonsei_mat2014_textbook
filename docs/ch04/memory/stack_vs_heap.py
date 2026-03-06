@@ -3,79 +3,85 @@
 Topic #23: Memory and Namespace
 """
 
-print("=" * 70)
-print("STACK VS HEAP MEMORY")
-print("=" * 70)
+# =============================================================================
+# Main
+# =============================================================================
 
-print("""
-COMPUTER MEMORY (RAM) IS DIVIDED INTO:
+if __name__ == "__main__":
 
-STACK                          HEAP
-- Organized (frames)          - Unorganized (flexible)
-- Automatic management        - Requires GC
-- Fixed size per frame        - Variable size allocations
-- Very fast                   - Slower
-- LIFO structure              - Random access
-- Function calls              - All Python objects
-- Local variable NAMES        - Everything is an object!
+    print("=" * 70)
+    print("STACK VS HEAP MEMORY")
+    print("=" * 70)
 
-KEY INSIGHT:
-Variable NAMES live on stack
-Variable OBJECTS live on heap
-""")
+    print("""
+    COMPUTER MEMORY (RAM) IS DIVIDED INTO:
 
-# Simple example
-x = 42
-name = "Alice"
-numbers = [1, 2, 3]
+    STACK                          HEAP
+    - Organized (frames)          - Unorganized (flexible)
+    - Automatic management        - Requires GC
+    - Fixed size per frame        - Variable size allocations
+    - Very fast                   - Slower
+    - LIFO structure              - Random access
+    - Function calls              - All Python objects
+    - Local variable NAMES        - Everything is an object!
 
-print(f"\nCreated: x={x}, name='{name}', numbers={numbers}")
+    KEY INSIGHT:
+    Variable NAMES live on stack
+    Variable OBJECTS live on heap
+    """)
 
-print("""
-MEMORY MODEL:
+    # Simple example
+    x = 42
+    name = "Alice"
+    numbers = [1, 2, 3]
 
-STACK:                  HEAP:
-┌──────────┐           ┌─────────────┐
-│ x    ────┼──────────→│ int: 42     │
-│ name ────┼──────────→│ str: "Alice"│
-│ numbers ─┼──────────→│ list: [...]│
-└──────────┘           └─────────────┘
+    print(f"\nCreated: x={x}, name='{name}', numbers={numbers}")
 
-Stack holds NAMES (references)
-Heap holds OBJECTS (actual data)
-""")
+    print("""
+    MEMORY MODEL:
 
-# Function call stack
-def outer():
-    print("  → outer() called")
-    inner()
-    print("  ← outer() returns")
+    STACK:                  HEAP:
+    ┌──────────┐           ┌─────────────┐
+    │ x    ────┼──────────→│ int: 42     │
+    │ name ────┼──────────→│ str: "Alice"│
+    │ numbers ─┼──────────→│ list: [...]│
+    └──────────┘           └─────────────┘
 
-def inner():
-    print("    → inner() called")
-    x = 100
-    print(f"    x = {x}")
-    print("    ← inner() returns")
+    Stack holds NAMES (references)
+    Heap holds OBJECTS (actual data)
+    """)
 
-print("\nFunction call stack demonstration:")
-outer()
+    # Function call stack
+    def outer():
+        print("  → outer() called")
+        inner()
+        print("  ← outer() returns")
 
-print("""
-STACK FRAMES:
+    def inner():
+        print("    → inner() called")
+        x = 100
+        print(f"    x = {x}")
+        print("    ← inner() returns")
 
-Start:           [global]
-Call outer():    [outer] [global]
-Call inner():    [inner] [outer] [global]  ← Stack grows
-inner returns:   [outer] [global]
-outer returns:   [global]                  ← Stack shrinks
+    print("\nFunction call stack demonstration:")
+    outer()
 
-Each function gets its own frame!
-""")
+    print("""
+    STACK FRAMES:
 
-print("\nKey takeaways:")
-print("1. Stack: Fast, automatic, organized")
-print("2. Heap: Flexible, requires GC, all objects")
-print("3. Names on stack point to objects on heap")
-print("4. Understanding this helps debug memory issues")
+    Start:           [global]
+    Call outer():    [outer] [global]
+    Call inner():    [inner] [outer] [global]  ← Stack grows
+    inner returns:   [outer] [global]
+    outer returns:   [global]                  ← Stack shrinks
 
-print("\nSee exercises.py for practice!")
+    Each function gets its own frame!
+    """)
+
+    print("\nKey takeaways:")
+    print("1. Stack: Fast, automatic, organized")
+    print("2. Heap: Flexible, requires GC, all objects")
+    print("3. Names on stack point to objects on heap")
+    print("4. Understanding this helps debug memory issues")
+
+    print("\nSee exercises.py for practice!")

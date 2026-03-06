@@ -14,256 +14,258 @@ This is based on the Bus example from Fluent Python by Luciano Ramalho.
 
 import copy
 
-print("=" * 70)
-print("TUTORIAL: Defensive Copying Pattern")
-print("=" * 70)
+if __name__ == "__main__":
 
-# ============ EXAMPLE 1: The Correct Bus Class (with defensive copying)
-print("\n# ============ EXAMPLE 1: The Correct Bus Class")
-print("Define a Bus class that makes defensive copies of the passenger list")
-print("so external changes can't corrupt our data:\n")
+    print("=" * 70)
+    print("TUTORIAL: Defensive Copying Pattern")
+    print("=" * 70)
 
-
-class Bus:
-    """A bus with its own copy of the passenger list"""
-
-    def __init__(self, passengers=None):
-        # WHY defensive copying? If passengers is provided, we DON'T assign it
-        # directly. Instead, we create a NEW list with list(passengers).
-        # This means our self.passengers is independent from the original list.
-        if passengers is None:
-            self.passengers = []
-        else:
-            # Make a defensive copy! This is the KEY difference.
-            self.passengers = list(passengers)
-
-    def pick(self, name):
-        """Add a passenger to the bus"""
-        self.passengers.append(name)
-
-    def drop(self, name):
-        """Remove a passenger from the bus"""
-        self.passengers.remove(name)
+    # ============ EXAMPLE 1: The Correct Bus Class (with defensive copying)
+    print("\n# ============ EXAMPLE 1: The Correct Bus Class")
+    print("Define a Bus class that makes defensive copies of the passenger list")
+    print("so external changes can't corrupt our data:\n")
 
 
-# Test 1: Create buses with initial passengers
-print("Creating bus1 with ['Alice', 'Bill', 'Claire', 'David']")
-bus1 = Bus(['Alice', 'Bill', 'Claire', 'David'])
-print(f"bus1.passengers = {bus1.passengers}")
+    class Bus:
+        """A bus with its own copy of the passenger list"""
 
-print("\nCreating bus2 as a shallow copy of bus1 (copy.copy)")
-bus2 = copy.copy(bus1)
-print(f"bus2.passengers = {bus2.passengers}")
+        def __init__(self, passengers=None):
+            # WHY defensive copying? If passengers is provided, we DON'T assign it
+            # directly. Instead, we create a NEW list with list(passengers).
+            # This means our self.passengers is independent from the original list.
+            if passengers is None:
+                self.passengers = []
+            else:
+                # Make a defensive copy! This is the KEY difference.
+                self.passengers = list(passengers)
 
-print("\nCreating bus3 as a deep copy of bus1 (copy.deepcopy)")
-bus3 = copy.deepcopy(bus1)
-print(f"bus3.passengers = {bus3.passengers}")
+        def pick(self, name):
+            """Add a passenger to the bus"""
+            self.passengers.append(name)
 
-# Now drop a passenger from bus1
-print("\nDropping 'Bill' from bus1...")
-bus1.drop('Bill')
-print(f"bus1.passengers = {bus1.passengers}")
-
-# Check bus2 - it was a SHALLOW copy, so it shares the same passenger list
-print(f"bus2.passengers = {bus2.passengers}")
-print("-> bus2 also changed because shallow copy shares the list object!")
-
-# Check bus3 - it was a DEEP copy, so it has its own completely independent copy
-print(f"bus3.passengers = {bus3.passengers}")
-print("-> bus3 remains unchanged because deep copy made independent copies!")
-
-# ============ EXAMPLE 2: Why Defensive Copying Matters in __init__
-print("\n" + "=" * 70)
-print("# ============ EXAMPLE 2: Why Defensive Copying Matters in __init__")
-print("Demonstrate what happens WITHOUT defensive copying:\n")
+        def drop(self, name):
+            """Remove a passenger from the bus"""
+            self.passengers.remove(name)
 
 
-class UnsafeBus:
-    """A bus that doesn't make defensive copies (ANTI-PATTERN)"""
+    # Test 1: Create buses with initial passengers
+    print("Creating bus1 with ['Alice', 'Bill', 'Claire', 'David']")
+    bus1 = Bus(['Alice', 'Bill', 'Claire', 'David'])
+    print(f"bus1.passengers = {bus1.passengers}")
 
-    def __init__(self, passengers=None):
-        # WRONG: Direct assignment creates an alias!
-        # If passengers is a list, self.passengers now points to THE SAME list
-        if passengers is None:
-            self.passengers = []
-        else:
-            self.passengers = passengers  # ALIASING! Shared reference!
+    print("\nCreating bus2 as a shallow copy of bus1 (copy.copy)")
+    bus2 = copy.copy(bus1)
+    print(f"bus2.passengers = {bus2.passengers}")
 
-    def pick(self, name):
-        self.passengers.append(name)
+    print("\nCreating bus3 as a deep copy of bus1 (copy.deepcopy)")
+    bus3 = copy.deepcopy(bus1)
+    print(f"bus3.passengers = {bus3.passengers}")
 
-    def drop(self, name):
-        self.passengers.remove(name)
+    # Now drop a passenger from bus1
+    print("\nDropping 'Bill' from bus1...")
+    bus1.drop('Bill')
+    print(f"bus1.passengers = {bus1.passengers}")
 
+    # Check bus2 - it was a SHALLOW copy, so it shares the same passenger list
+    print(f"bus2.passengers = {bus2.passengers}")
+    print("-> bus2 also changed because shallow copy shares the list object!")
 
-print("Creating a passenger list we'll reuse:")
-original_passengers = ['Alice', 'Bill', 'Claire']
-print(f"original_passengers = {original_passengers}")
+    # Check bus3 - it was a DEEP copy, so it has its own completely independent copy
+    print(f"bus3.passengers = {bus3.passengers}")
+    print("-> bus3 remains unchanged because deep copy made independent copies!")
 
-print("\nCreating unsafe_bus with this list...")
-unsafe_bus = UnsafeBus(original_passengers)
-print(f"unsafe_bus.passengers = {unsafe_bus.passengers}")
-
-print("\nNow drop 'Bill' from the bus...")
-unsafe_bus.drop('Bill')
-print(f"unsafe_bus.passengers = {unsafe_bus.passengers}")
-
-print("\nBUT LOOK - the original list was also modified!")
-print(f"original_passengers = {original_passengers}")
-print("-> This is the ALIASING BUG! Both variables point to the same list.")
-print("-> Modifying one affects the other - data corruption!")
-
-# ============ EXAMPLE 3: Comparing Safe vs Unsafe
-print("\n" + "=" * 70)
-print("# ============ EXAMPLE 3: Comparing Safe vs Unsafe")
-print("Side-by-side comparison of defensive vs non-defensive copying:\n")
-
-print("Scenario: We have a list of guests and create two buses")
-guests = ['Eve', 'Frank', 'Grace']
-print(f"guests = {guests}")
-
-print("\nSafe Bus (with defensive copying):")
-safe_bus = Bus(guests)
-print(f"safe_bus.passengers = {safe_bus.passengers}")
-safe_bus.drop('Frank')
-print(f"After dropping 'Frank': safe_bus.passengers = {safe_bus.passengers}")
-print(f"Original list unchanged: guests = {guests}")
-print("-> Our bus can't corrupt external data!")
-
-guests = ['Eve', 'Frank', 'Grace']  # Reset
-print("\nUnsafe Bus (without defensive copying):")
-unsafe_bus = UnsafeBus(guests)
-print(f"unsafe_bus.passengers = {unsafe_bus.passengers}")
-unsafe_bus.drop('Frank')
-print(f"After dropping 'Frank': unsafe_bus.passengers = {unsafe_bus.passengers}")
-print(f"Original list corrupted: guests = {guests}")
-print("-> The bus corrupted the external data!")
-
-# ============ EXAMPLE 4: Understanding What list() Does
-print("\n" + "=" * 70)
-print("# ============ EXAMPLE 4: Understanding What list() Does")
-print("The list() constructor creates a new list with the same elements:\n")
-
-original = [1, 2, 3]
-copy1 = list(original)
-
-print(f"original = {original}")
-print(f"copy1 = list(original) = {copy1}")
-print(f"copy1 == original: {copy1 == original}  (same contents)")
-print(f"copy1 is original: {copy1 is original}  (different objects)")
-
-print("\nModifying copy1 doesn't affect original:")
-copy1.append(4)
-print(f"After copy1.append(4):")
-print(f"original = {original}")
-print(f"copy1 = {copy1}")
-print("-> They're completely independent!")
-
-# ============ EXAMPLE 5: When to Use Defensive Copying
-print("\n" + "=" * 70)
-print("# ============ EXAMPLE 5: When to Use Defensive Copying")
-print("Best practices for defensive copying:\n")
-
-print("""
-RULE 1: If a parameter is a MUTABLE collection (list, dict, set),
-        and you store it as an instance variable, make a copy.
-
-RULE 2: Use list(param) for lists, dict(param) for dicts, set(param) for sets.
-        These are shallow copies - good enough for most cases.
-
-RULE 3: Only use copy.deepcopy() if your collections contain mutable objects
-        that also need to be protected from external modification.
-
-WHY? Because Python objects are references. Without copying, you create
-an ALIAS - two variables pointing to the same object. Changes through
-one variable affect what the other sees.
-
-WHEN? Defensive copying is mainly for:
-  - __init__ methods (protect your instance variables)
-  - Public methods that accept mutable parameters
-  - Any time you store a parameter as instance state
-
-NOT NEEDED for:
-  - Immutable objects (strings, tuples, numbers)
-  - When you process and discard the parameter (not storing it)
-  - When aliasing is intentional and documented
-""")
-
-# ============ EXAMPLE 6: Defensive Copying with Different Collections
-print("\n" + "=" * 70)
-print("# ============ EXAMPLE 6: Defensive Copying with Different Collections")
-print("Different collection types need different copy approaches:\n")
+    # ============ EXAMPLE 2: Why Defensive Copying Matters in __init__
+    print("\n" + "=" * 70)
+    print("# ============ EXAMPLE 2: Why Defensive Copying Matters in __init__")
+    print("Demonstrate what happens WITHOUT defensive copying:\n")
 
 
-class Config:
-    """Configuration class demonstrating defensive copying for different types"""
+    class UnsafeBus:
+        """A bus that doesn't make defensive copies (ANTI-PATTERN)"""
 
-    def __init__(self, names=None, settings=None, allowed_tags=None):
-        # Copy each mutable parameter appropriately
-        self.names = list(names) if names is not None else []
-        self.settings = dict(settings) if settings is not None else {}
-        self.allowed_tags = set(allowed_tags) if allowed_tags is not None else set()
+        def __init__(self, passengers=None):
+            # WRONG: Direct assignment creates an alias!
+            # If passengers is a list, self.passengers now points to THE SAME list
+            if passengers is None:
+                self.passengers = []
+            else:
+                self.passengers = passengers  # ALIASING! Shared reference!
+
+        def pick(self, name):
+            self.passengers.append(name)
+
+        def drop(self, name):
+            self.passengers.remove(name)
 
 
-print("Creating initial data:")
-names = ['Alice', 'Bob']
-settings = {'theme': 'dark', 'lang': 'en'}
-tags = {'python', 'tutorial'}
+    print("Creating a passenger list we'll reuse:")
+    original_passengers = ['Alice', 'Bill', 'Claire']
+    print(f"original_passengers = {original_passengers}")
 
-config = Config(names, settings, tags)
-print(f"config.names = {config.names}")
-print(f"config.settings = {config.settings}")
-print(f"config.allowed_tags = {config.allowed_tags}")
+    print("\nCreating unsafe_bus with this list...")
+    unsafe_bus = UnsafeBus(original_passengers)
+    print(f"unsafe_bus.passengers = {unsafe_bus.passengers}")
 
-print("\nModifying original data:")
-names.append('Charlie')
-settings['theme'] = 'light'
-tags.add('advanced')
+    print("\nNow drop 'Bill' from the bus...")
+    unsafe_bus.drop('Bill')
+    print(f"unsafe_bus.passengers = {unsafe_bus.passengers}")
 
-print(f"names = {names}, config.names = {config.names} (unchanged)")
-print(f"settings = {settings}, config.settings = {config.settings} (unchanged)")
-print(f"tags = {tags}, config.allowed_tags = {config.allowed_tags} (unchanged)")
-print("-> All config data protected by defensive copying!")
+    print("\nBUT LOOK - the original list was also modified!")
+    print(f"original_passengers = {original_passengers}")
+    print("-> This is the ALIASING BUG! Both variables point to the same list.")
+    print("-> Modifying one affects the other - data corruption!")
 
-# ============ EXAMPLE 7: The Cost of Defensive Copying
-print("\n" + "=" * 70)
-print("# ============ EXAMPLE 7: The Cost of Defensive Copying")
-print("Defensive copying uses memory - but it's almost always worth it:\n")
+    # ============ EXAMPLE 3: Comparing Safe vs Unsafe
+    print("\n" + "=" * 70)
+    print("# ============ EXAMPLE 3: Comparing Safe vs Unsafe")
+    print("Side-by-side comparison of defensive vs non-defensive copying:\n")
 
-print("""
-MEMORY: Copying uses extra memory proportional to the data size
-SPEED:  list(param) is very fast - typically negligible overhead
+    print("Scenario: We have a list of guests and create two buses")
+    guests = ['Eve', 'Frank', 'Grace']
+    print(f"guests = {guests}")
 
-TRADE-OFF: A tiny bit of memory and CPU to prevent BUGS and DATA CORRUPTION
-           This is almost always the right choice!
+    print("\nSafe Bus (with defensive copying):")
+    safe_bus = Bus(guests)
+    print(f"safe_bus.passengers = {safe_bus.passengers}")
+    safe_bus.drop('Frank')
+    print(f"After dropping 'Frank': safe_bus.passengers = {safe_bus.passengers}")
+    print(f"Original list unchanged: guests = {guests}")
+    print("-> Our bus can't corrupt external data!")
 
-EXCEPTION: In rare high-performance scenarios with huge lists where you
-           KNOW aliasing is safe, you might skip defensive copying.
-           But document it clearly!
+    guests = ['Eve', 'Frank', 'Grace']  # Reset
+    print("\nUnsafe Bus (without defensive copying):")
+    unsafe_bus = UnsafeBus(guests)
+    print(f"unsafe_bus.passengers = {unsafe_bus.passengers}")
+    unsafe_bus.drop('Frank')
+    print(f"After dropping 'Frank': unsafe_bus.passengers = {unsafe_bus.passengers}")
+    print(f"Original list corrupted: guests = {guests}")
+    print("-> The bus corrupted the external data!")
 
-PRINCIPLE: Be DEFENSIVE. Assume users will modify their data.
-           Protect your instance variables by copying mutable inputs.
-""")
+    # ============ EXAMPLE 4: Understanding What list() Does
+    print("\n" + "=" * 70)
+    print("# ============ EXAMPLE 4: Understanding What list() Does")
+    print("The list() constructor creates a new list with the same elements:\n")
 
-print("\n" + "=" * 70)
-print("SUMMARY")
-print("=" * 70)
-print("""
-KEY TAKEAWAYS:
+    original = [1, 2, 3]
+    copy1 = list(original)
 
-1. ALIASING: In Python, assignment creates references, not copies.
-   Multiple variables can point to the same mutable object.
+    print(f"original = {original}")
+    print(f"copy1 = list(original) = {copy1}")
+    print(f"copy1 == original: {copy1 == original}  (same contents)")
+    print(f"copy1 is original: {copy1 is original}  (different objects)")
 
-2. DEFENSIVE COPYING: In __init__, copy mutable parameters using:
-   - list(param) for lists
-   - dict(param) for dicts
-   - set(param) for sets
+    print("\nModifying copy1 doesn't affect original:")
+    copy1.append(4)
+    print(f"After copy1.append(4):")
+    print(f"original = {original}")
+    print(f"copy1 = {copy1}")
+    print("-> They're completely independent!")
 
-3. WHY: This prevents external code from corrupting your object's data
-        through the original reference they passed in.
+    # ============ EXAMPLE 5: When to Use Defensive Copying
+    print("\n" + "=" * 70)
+    print("# ============ EXAMPLE 5: When to Use Defensive Copying")
+    print("Best practices for defensive copying:\n")
 
-4. COST: Minimal - it's a shallow copy, very fast for most cases.
+    print("""
+    RULE 1: If a parameter is a MUTABLE collection (list, dict, set),
+            and you store it as an instance variable, make a copy.
 
-5. BEST PRACTICE: Always use defensive copying for mutable parameters
-                  unless there's a documented reason not to.
-""")
+    RULE 2: Use list(param) for lists, dict(param) for dicts, set(param) for sets.
+            These are shallow copies - good enough for most cases.
+
+    RULE 3: Only use copy.deepcopy() if your collections contain mutable objects
+            that also need to be protected from external modification.
+
+    WHY? Because Python objects are references. Without copying, you create
+    an ALIAS - two variables pointing to the same object. Changes through
+    one variable affect what the other sees.
+
+    WHEN? Defensive copying is mainly for:
+      - __init__ methods (protect your instance variables)
+      - Public methods that accept mutable parameters
+      - Any time you store a parameter as instance state
+
+    NOT NEEDED for:
+      - Immutable objects (strings, tuples, numbers)
+      - When you process and discard the parameter (not storing it)
+      - When aliasing is intentional and documented
+    """)
+
+    # ============ EXAMPLE 6: Defensive Copying with Different Collections
+    print("\n" + "=" * 70)
+    print("# ============ EXAMPLE 6: Defensive Copying with Different Collections")
+    print("Different collection types need different copy approaches:\n")
+
+
+    class Config:
+        """Configuration class demonstrating defensive copying for different types"""
+
+        def __init__(self, names=None, settings=None, allowed_tags=None):
+            # Copy each mutable parameter appropriately
+            self.names = list(names) if names is not None else []
+            self.settings = dict(settings) if settings is not None else {}
+            self.allowed_tags = set(allowed_tags) if allowed_tags is not None else set()
+
+
+    print("Creating initial data:")
+    names = ['Alice', 'Bob']
+    settings = {'theme': 'dark', 'lang': 'en'}
+    tags = {'python', 'tutorial'}
+
+    config = Config(names, settings, tags)
+    print(f"config.names = {config.names}")
+    print(f"config.settings = {config.settings}")
+    print(f"config.allowed_tags = {config.allowed_tags}")
+
+    print("\nModifying original data:")
+    names.append('Charlie')
+    settings['theme'] = 'light'
+    tags.add('advanced')
+
+    print(f"names = {names}, config.names = {config.names} (unchanged)")
+    print(f"settings = {settings}, config.settings = {config.settings} (unchanged)")
+    print(f"tags = {tags}, config.allowed_tags = {config.allowed_tags} (unchanged)")
+    print("-> All config data protected by defensive copying!")
+
+    # ============ EXAMPLE 7: The Cost of Defensive Copying
+    print("\n" + "=" * 70)
+    print("# ============ EXAMPLE 7: The Cost of Defensive Copying")
+    print("Defensive copying uses memory - but it's almost always worth it:\n")
+
+    print("""
+    MEMORY: Copying uses extra memory proportional to the data size
+    SPEED:  list(param) is very fast - typically negligible overhead
+
+    TRADE-OFF: A tiny bit of memory and CPU to prevent BUGS and DATA CORRUPTION
+               This is almost always the right choice!
+
+    EXCEPTION: In rare high-performance scenarios with huge lists where you
+               KNOW aliasing is safe, you might skip defensive copying.
+               But document it clearly!
+
+    PRINCIPLE: Be DEFENSIVE. Assume users will modify their data.
+               Protect your instance variables by copying mutable inputs.
+    """)
+
+    print("\n" + "=" * 70)
+    print("SUMMARY")
+    print("=" * 70)
+    print("""
+    KEY TAKEAWAYS:
+
+    1. ALIASING: In Python, assignment creates references, not copies.
+       Multiple variables can point to the same mutable object.
+
+    2. DEFENSIVE COPYING: In __init__, copy mutable parameters using:
+       - list(param) for lists
+       - dict(param) for dicts
+       - set(param) for sets
+
+    3. WHY: This prevents external code from corrupting your object's data
+            through the original reference they passed in.
+
+    4. COST: Minimal - it's a shallow copy, very fast for most cases.
+
+    5. BEST PRACTICE: Always use defensive copying for mutable parameters
+                      unless there's a documented reason not to.
+    """)

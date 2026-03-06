@@ -7,54 +7,60 @@ Detailed solutions with interpretations.
 import numpy as np
 from scipy import stats
 
-print("="*80)
-print("SOLUTIONS: STATISTICAL TESTS")
-print("="*80)
-print()
+# =============================================================================
+# Main
+# =============================================================================
 
-# Solution 1
-print("Solution 1: Comparing Two Teaching Methods")
-print("-" * 40)
+if __name__ == "__main__":
 
-method_A = np.array([78, 82, 75, 88, 72, 90, 85, 77, 83, 79])
-method_B = np.array([85, 88, 91, 84, 89, 92, 87, 90, 86, 93])
+    print("="*80)
+    print("SOLUTIONS: STATISTICAL TESTS")
+    print("="*80)
+    print()
 
-print("Step 1: State hypotheses")
-print("  H₀: μ_A = μ_B (no difference)")
-print("  H₁: μ_A ≠ μ_B (significant difference)\n")
+    # Solution 1
+    print("Solution 1: Comparing Two Teaching Methods")
+    print("-" * 40)
 
-# Part a: t-test
-t_stat, p_value = stats.ttest_ind(method_A, method_B)
-print(f"a) Two-sample t-test:")
-print(f"   t-statistic = {t_stat:.4f}")
-print(f"   p-value = {p_value:.4f}")
+    method_A = np.array([78, 82, 75, 88, 72, 90, 85, 77, 83, 79])
+    method_B = np.array([85, 88, 91, 84, 89, 92, 87, 90, 86, 93])
 
-alpha = 0.05
-if p_value < alpha:
-    print(f"   Decision: Reject H₀ (p < {alpha})")
-    print(f"   Conclusion: Method B produces significantly higher scores\n")
-else:
-    print(f"   Decision: Fail to reject H₀\n")
+    print("Step 1: State hypotheses")
+    print("  H₀: μ_A = μ_B (no difference)")
+    print("  H₁: μ_A ≠ μ_B (significant difference)\n")
 
-# Part b: Effect size
-mean_diff = np.mean(method_B) - np.mean(method_A)
-pooled_std = np.sqrt(((len(method_A)-1)*np.var(method_A, ddof=1) +
-                      (len(method_B)-1)*np.var(method_B, ddof=1)) /
-                     (len(method_A) + len(method_B) - 2))
-cohens_d = mean_diff / pooled_std
+    # Part a: t-test
+    t_stat, p_value = stats.ttest_ind(method_A, method_B)
+    print(f"a) Two-sample t-test:")
+    print(f"   t-statistic = {t_stat:.4f}")
+    print(f"   p-value = {p_value:.4f}")
 
-print(f"b) Cohen\'s d = {cohens_d:.4f}")
-if abs(cohens_d) > 0.8:
-    print(f"   Interpretation: Large effect size\n")
+    alpha = 0.05
+    if p_value < alpha:
+        print(f"   Decision: Reject H₀ (p < {alpha})")
+        print(f"   Conclusion: Method B produces significantly higher scores\n")
+    else:
+        print(f"   Decision: Fail to reject H₀\n")
 
-# Part c: Confidence interval
-se_diff = pooled_std * np.sqrt(1/len(method_A) + 1/len(method_B))
-df = len(method_A) + len(method_B) - 2
-t_critical = stats.t.ppf(0.975, df)
-margin = t_critical * se_diff
+    # Part b: Effect size
+    mean_diff = np.mean(method_B) - np.mean(method_A)
+    pooled_std = np.sqrt(((len(method_A)-1)*np.var(method_A, ddof=1) +
+                          (len(method_B)-1)*np.var(method_B, ddof=1)) /
+                         (len(method_A) + len(method_B) - 2))
+    cohens_d = mean_diff / pooled_std
 
-print(f"c) 95% CI for difference: [{mean_diff - margin:.2f}, {mean_diff + margin:.2f}]")
-print(f"   We are 95% confident the true difference is in this range\n")
+    print(f"b) Cohen\'s d = {cohens_d:.4f}")
+    if abs(cohens_d) > 0.8:
+        print(f"   Interpretation: Large effect size\n")
 
-# Detailed solutions continue...
-print("="*80)
+    # Part c: Confidence interval
+    se_diff = pooled_std * np.sqrt(1/len(method_A) + 1/len(method_B))
+    df = len(method_A) + len(method_B) - 2
+    t_critical = stats.t.ppf(0.975, df)
+    margin = t_critical * se_diff
+
+    print(f"c) 95% CI for difference: [{mean_diff - margin:.2f}, {mean_diff + margin:.2f}]")
+    print(f"   We are 95% confident the true difference is in this range\n")
+
+    # Detailed solutions continue...
+    print("="*80)

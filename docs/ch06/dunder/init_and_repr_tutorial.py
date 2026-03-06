@@ -38,6 +38,7 @@ class Book:
 if __name__ == "__main__":
     book = Book("1984", "George Orwell", 1949, 328)
     
+    # ============================================================================
     print("=== Representation Examples ===")
     print(f"repr(book): {repr(book)}")
     print(f"str(book):  {str(book)}")

@@ -6,6 +6,11 @@ where a child class inherits attributes and methods from a parent class.
 """
 
 # Parent Class (also called Base Class or Superclass)
+
+# =============================================================================
+# Definitions
+# =============================================================================
+
 class Animal:
     def __init__(self, name, species):
         self.name = name
@@ -44,6 +49,11 @@ class Cat(Animal):
 
 
 # Testing the classes
+
+# =============================================================================
+# Main
+# =============================================================================
+
 if __name__ == "__main__":
     print("=" * 50)
     print("BASIC INHERITANCE DEMO")

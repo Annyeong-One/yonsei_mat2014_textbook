@@ -370,6 +370,7 @@ plt.show()
 ### 3. Uniform Distribution
 
 For $X \sim U(a, b)$:
+
 $$\varphi(t) = \frac{e^{itb} - e^{ita}}{it(b-a)}$$
 
 ```python

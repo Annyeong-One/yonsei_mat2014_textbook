@@ -5,6 +5,10 @@ Method overriding allows a child class to provide a specific implementation
 of a method that is already defined in its parent class.
 """
 
+# =============================================================================
+# Definitions
+# =============================================================================
+
 class Shape:
     def __init__(self, name):
         self.name = name
@@ -77,6 +81,11 @@ class Triangle(Shape):
 
 
 # Testing method overriding
+
+# =============================================================================
+# Main
+# =============================================================================
+
 if __name__ == "__main__":
     print("=" * 60)
     print("METHOD OVERRIDING DEMO")

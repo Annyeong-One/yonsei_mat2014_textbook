@@ -359,9 +359,9 @@ class Money:
 price = Money(19.99)
 tax = Money(1.60)
 total = price + tax
-print(total)        # $21.59 USD
-print(total * 2)    # $43.18 USD
-print(2 * total)    # $43.18 USD (uses __rmul__)
+print(total)        # \$21.59 USD
+print(total * 2)    # \$43.18 USD
+print(2 * total)    # \$43.18 USD (uses __rmul__)
 ```
 
 ## Returning NotImplemented

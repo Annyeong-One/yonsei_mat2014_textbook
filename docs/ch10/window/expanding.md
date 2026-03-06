@@ -45,6 +45,7 @@ At time t, includes observations 1 to t.
 ### 2. Formula for Mean
 
 At time $t$:
+
 $$\text{Expanding Mean}_t = \frac{1}{t} \sum_{i=1}^{t} x_i$$
 
 ### 3. vs Rolling

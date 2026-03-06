@@ -35,6 +35,7 @@ det(A) = -2.0
 ### 2. Mathematical Form
 
 For 2×2 matrix:
+
 $$\det\begin{pmatrix} a & b \\ c & d \end{pmatrix} = ad - bc$$
 
 ```python

@@ -123,6 +123,8 @@ class Matrix:
 
 # Examples
 if __name__ == "__main__":
+
+    # ============================================================================
     print("=== Playlist Examples ===")
     playlist = Playlist("My Favorites")
     

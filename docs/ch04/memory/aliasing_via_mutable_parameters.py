@@ -14,428 +14,430 @@ their copy of the list. "Twilight Bus" makes passengers vanish through this
 aliasing bug!
 """
 
-print("=" * 70)
-print("TUTORIAL: Aliasing via Mutable Parameters")
-print("=" * 70)
+if __name__ == "__main__":
 
-# ============ EXAMPLE 1: The Problem - Aliasing Through Parameters
-print("\n# ============ EXAMPLE 1: The Problem - Aliasing Through Parameters")
-print("When you assign a mutable parameter directly, both sides share the list:\n")
+    print("=" * 70)
+    print("TUTORIAL: Aliasing via Mutable Parameters")
+    print("=" * 70)
 
+    # ============ EXAMPLE 1: The Problem - Aliasing Through Parameters
+    print("\n# ============ EXAMPLE 1: The Problem - Aliasing Through Parameters")
+    print("When you assign a mutable parameter directly, both sides share the list:\n")
 
-class TwilightBus:
-    """A bus where passengers mysteriously vanish (ANTI-PATTERN)"""
 
-    def __init__(self, passengers=None):
-        # WRONG: If passengers is a list, self.passengers points to THE SAME list!
-        # The caller can modify our internal state by modifying their list!
-        if passengers is None:
-            self.passengers = []
-        else:
-            self.passengers = passengers  # ALIASING! Shared reference!
+    class TwilightBus:
+        """A bus where passengers mysteriously vanish (ANTI-PATTERN)"""
 
-    def pick(self, name):
-        """Add a passenger"""
-        self.passengers.append(name)
+        def __init__(self, passengers=None):
+            # WRONG: If passengers is a list, self.passengers points to THE SAME list!
+            # The caller can modify our internal state by modifying their list!
+            if passengers is None:
+                self.passengers = []
+            else:
+                self.passengers = passengers  # ALIASING! Shared reference!
 
-    def drop(self, name):
-        """Remove a passenger"""
-        self.passengers.remove(name)
+        def pick(self, name):
+            """Add a passenger"""
+            self.passengers.append(name)
 
+        def drop(self, name):
+            """Remove a passenger"""
+            self.passengers.remove(name)
 
-print("Scenario: Basketball team gets on a bus")
-basketball_team = ['Sue', 'Tina', 'Maya', 'Diana', 'Pat']
-print(f"basketball_team = {basketball_team}")
 
-print("\nCreating a TwilightBus with the team:")
-bus = TwilightBus(basketball_team)
-print(f"bus.passengers = {bus.passengers}")
-print(f"basketball_team and bus.passengers are the same object: {basketball_team is bus.passengers}")
+    print("Scenario: Basketball team gets on a bus")
+    basketball_team = ['Sue', 'Tina', 'Maya', 'Diana', 'Pat']
+    print(f"basketball_team = {basketball_team}")
 
-print("\nDropping 'Tina' from the bus:")
-bus.drop('Tina')
-print(f"bus.passengers = {bus.passengers}")
+    print("\nCreating a TwilightBus with the team:")
+    bus = TwilightBus(basketball_team)
+    print(f"bus.passengers = {bus.passengers}")
+    print(f"basketball_team and bus.passengers are the same object: {basketball_team is bus.passengers}")
 
-print("\nDropping 'Pat' from the bus:")
-bus.drop('Pat')
-print(f"bus.passengers = {bus.passengers}")
+    print("\nDropping 'Tina' from the bus:")
+    bus.drop('Tina')
+    print(f"bus.passengers = {bus.passengers}")
 
-print("\nBut LOOK what happened to the original list:")
-print(f"basketball_team = {basketball_team}")
-print("ALIASING BUG! Modifying the bus's passengers modified the original list!")
+    print("\nDropping 'Pat' from the bus:")
+    bus.drop('Pat')
+    print(f"bus.passengers = {bus.passengers}")
 
-# ============ EXAMPLE 2: Understanding the Aliasing Mechanism
-print("\n" + "=" * 70)
-print("# ============ EXAMPLE 2: Understanding the Aliasing Mechanism")
-print("How aliasing corrupts external data:\n")
+    print("\nBut LOOK what happened to the original list:")
+    print(f"basketball_team = {basketball_team}")
+    print("ALIASING BUG! Modifying the bus's passengers modified the original list!")
 
-print("""
-THE MECHANISM:
+    # ============ EXAMPLE 2: Understanding the Aliasing Mechanism
+    print("\n" + "=" * 70)
+    print("# ============ EXAMPLE 2: Understanding the Aliasing Mechanism")
+    print("How aliasing corrupts external data:\n")
 
-1. Caller creates a list:
-   my_list = [1, 2, 3]
+    print("""
+    THE MECHANISM:
 
-2. Caller passes it to function:
-   obj = MyClass(my_list)
+    1. Caller creates a list:
+       my_list = [1, 2, 3]
 
-3. Function assigns directly (NO COPY):
-   self.items = my_list
+    2. Caller passes it to function:
+       obj = MyClass(my_list)
 
-   Result: my_list and self.items now point to THE SAME list object
+    3. Function assigns directly (NO COPY):
+       self.items = my_list
 
-4. Function modifies through its variable:
-   self.items.remove(1)
+       Result: my_list and self.items now point to THE SAME list object
 
-   Result: my_list ALSO shows [2, 3] because it's the same object!
+    4. Function modifies through its variable:
+       self.items.remove(1)
 
-KEY INSIGHT:
-In Python, assignment (=) never copies data. It only creates a new variable
-that points to the same object. To break the alias, you must explicitly
-make a copy.
-""")
+       Result: my_list ALSO shows [2, 3] because it's the same object!
 
-# ============ EXAMPLE 3: Object Identity vs Equality
-print("\n" + "=" * 70)
-print("# ============ EXAMPLE 3: Object Identity vs Equality")
-print("Understanding 'is' vs '==':\n")
+    KEY INSIGHT:
+    In Python, assignment (=) never copies data. It only creates a new variable
+    that points to the same object. To break the alias, you must explicitly
+    make a copy.
+    """)
 
-list1 = [1, 2, 3]
-list2 = [1, 2, 3]
-list3 = list1
+    # ============ EXAMPLE 3: Object Identity vs Equality
+    print("\n" + "=" * 70)
+    print("# ============ EXAMPLE 3: Object Identity vs Equality")
+    print("Understanding 'is' vs '==':\n")
 
-print(f"list1 = {list1}")
-print(f"list2 = {list2}")
-print(f"list3 = list1")
+    list1 = [1, 2, 3]
+    list2 = [1, 2, 3]
+    list3 = list1
 
-print("\nEquality (==) checks if contents are the same:")
-print(f"list1 == list2: {list1 == list2}  (same contents)")
+    print(f"list1 = {list1}")
+    print(f"list2 = {list2}")
+    print(f"list3 = list1")
 
-print("\nIdentity (is) checks if they're the SAME object:")
-print(f"list1 is list2: {list1 is list2}  (different objects)")
-print(f"list1 is list3: {list1 is list3}  (same object!)")
+    print("\nEquality (==) checks if contents are the same:")
+    print(f"list1 == list2: {list1 == list2}  (same contents)")
 
-print("\nModifying list1 affects list3 but not list2:")
-list1.append(4)
-print(f"After list1.append(4):")
-print(f"list1 = {list1}")
-print(f"list2 = {list2}")
-print(f"list3 = {list3}  (changed because it's the same object as list1)")
+    print("\nIdentity (is) checks if they're the SAME object:")
+    print(f"list1 is list2: {list1 is list2}  (different objects)")
+    print(f"list1 is list3: {list1 is list3}  (same object!)")
 
-# ============ EXAMPLE 4: The Correct Solution - Defensive Copying
-print("\n" + "=" * 70)
-print("# ============ EXAMPLE 4: The Correct Solution - Defensive Copying")
-print("Use defensive copying to break the alias:\n")
+    print("\nModifying list1 affects list3 but not list2:")
+    list1.append(4)
+    print(f"After list1.append(4):")
+    print(f"list1 = {list1}")
+    print(f"list2 = {list2}")
+    print(f"list3 = {list3}  (changed because it's the same object as list1)")
 
+    # ============ EXAMPLE 4: The Correct Solution - Defensive Copying
+    print("\n" + "=" * 70)
+    print("# ============ EXAMPLE 4: The Correct Solution - Defensive Copying")
+    print("Use defensive copying to break the alias:\n")
 
-class SafeBus:
-    """A bus that makes a defensive copy of passenger list"""
 
-    def __init__(self, passengers=None):
-        # CORRECT: Make a copy! list(passengers) creates a NEW list
-        # Now self.passengers is independent from the caller's list
-        if passengers is None:
-            self.passengers = []
-        else:
-            self.passengers = list(passengers)  # Make a defensive copy!
+    class SafeBus:
+        """A bus that makes a defensive copy of passenger list"""
 
-    def pick(self, name):
-        self.passengers.append(name)
+        def __init__(self, passengers=None):
+            # CORRECT: Make a copy! list(passengers) creates a NEW list
+            # Now self.passengers is independent from the caller's list
+            if passengers is None:
+                self.passengers = []
+            else:
+                self.passengers = list(passengers)  # Make a defensive copy!
 
-    def drop(self, name):
-        self.passengers.remove(name)
+        def pick(self, name):
+            self.passengers.append(name)
 
+        def drop(self, name):
+            self.passengers.remove(name)
 
-print("Same scenario with SafeBus:")
-basketball_team = ['Sue', 'Tina', 'Maya', 'Diana', 'Pat']
-print(f"basketball_team = {basketball_team}")
 
-safe_bus = SafeBus(basketball_team)
-print(f"\nsafe_bus.passengers = {safe_bus.passengers}")
-print(f"basketball_team and safe_bus.passengers are the same object: {basketball_team is safe_bus.passengers}")
+    print("Same scenario with SafeBus:")
+    basketball_team = ['Sue', 'Tina', 'Maya', 'Diana', 'Pat']
+    print(f"basketball_team = {basketball_team}")
 
-print("\nDropping 'Tina' and 'Pat' from the safe_bus:")
-safe_bus.drop('Tina')
-safe_bus.drop('Pat')
-print(f"safe_bus.passengers = {safe_bus.passengers}")
+    safe_bus = SafeBus(basketball_team)
+    print(f"\nsafe_bus.passengers = {safe_bus.passengers}")
+    print(f"basketball_team and safe_bus.passengers are the same object: {basketball_team is safe_bus.passengers}")
 
-print("\nCheck the original list:")
-print(f"basketball_team = {basketball_team}")
-print("PROTECTED! The original list remains unchanged!")
+    print("\nDropping 'Tina' and 'Pat' from the safe_bus:")
+    safe_bus.drop('Tina')
+    safe_bus.drop('Pat')
+    print(f"safe_bus.passengers = {safe_bus.passengers}")
 
-# ============ EXAMPLE 5: How list() Creates a Copy
-print("\n" + "=" * 70)
-print("# ============ EXAMPLE 5: How list() Creates a Copy")
-print("Understanding shallow copying with the list() constructor:\n")
+    print("\nCheck the original list:")
+    print(f"basketball_team = {basketball_team}")
+    print("PROTECTED! The original list remains unchanged!")
 
-original = ['A', 'B', 'C']
-copy_via_list = list(original)
+    # ============ EXAMPLE 5: How list() Creates a Copy
+    print("\n" + "=" * 70)
+    print("# ============ EXAMPLE 5: How list() Creates a Copy")
+    print("Understanding shallow copying with the list() constructor:\n")
 
-print(f"original = {original}")
-print(f"copy_via_list = list(original) = {copy_via_list}")
+    original = ['A', 'B', 'C']
+    copy_via_list = list(original)
 
-print("\nAre they equal?")
-print(f"copy_via_list == original: {copy_via_list == original}  (same contents)")
+    print(f"original = {original}")
+    print(f"copy_via_list = list(original) = {copy_via_list}")
 
-print("\nAre they the same object?")
-print(f"copy_via_list is original: {copy_via_list is original}  (different objects)")
+    print("\nAre they equal?")
+    print(f"copy_via_list == original: {copy_via_list == original}  (same contents)")
 
-print("\nModifying the copy doesn't affect the original:")
-copy_via_list.append('D')
-print(f"After copy_via_list.append('D'):")
-print(f"original = {original}")
-print(f"copy_via_list = {copy_via_list}")
-print("They are completely independent!")
+    print("\nAre they the same object?")
+    print(f"copy_via_list is original: {copy_via_list is original}  (different objects)")
 
-# ============ EXAMPLE 6: Real-World Aliasing Bugs
-print("\n" + "=" * 70)
-print("# ============ EXAMPLE 6: Real-World Aliasing Bugs")
-print("Where aliasing bugs commonly occur:\n")
+    print("\nModifying the copy doesn't affect the original:")
+    copy_via_list.append('D')
+    print(f"After copy_via_list.append('D'):")
+    print(f"original = {original}")
+    print(f"copy_via_list = {copy_via_list}")
+    print("They are completely independent!")
 
-# Example 1: Data store without defensive copying
-class BuggyDataStore:
-    """Store that accidentally aliases caller's data"""
+    # ============ EXAMPLE 6: Real-World Aliasing Bugs
+    print("\n" + "=" * 70)
+    print("# ============ EXAMPLE 6: Real-World Aliasing Bugs")
+    print("Where aliasing bugs commonly occur:\n")
 
-    def __init__(self, records=None):
-        if records is None:
-            self.records = []
-        else:
-            self.records = records  # BUG: Direct assignment!
+    # Example 1: Data store without defensive copying
+    class BuggyDataStore:
+        """Store that accidentally aliases caller's data"""
 
-    def add_record(self, record):
-        self.records.append(record)
+        def __init__(self, records=None):
+            if records is None:
+                self.records = []
+            else:
+                self.records = records  # BUG: Direct assignment!
 
-    def clear(self):
-        self.records.clear()
+        def add_record(self, record):
+            self.records.append(record)
 
+        def clear(self):
+            self.records.clear()
 
-print("Buggy version - direct assignment:")
-company_records = ['Alice', 'Bob', 'Charlie']
-print(f"company_records = {company_records}")
 
-buggy_store = BuggyDataStore(company_records)
-print(f"buggy_store.records = {buggy_store.records}")
+    print("Buggy version - direct assignment:")
+    company_records = ['Alice', 'Bob', 'Charlie']
+    print(f"company_records = {company_records}")
 
-print("\nClearing the store (intentionally):")
-buggy_store.clear()
-print(f"buggy_store.records = {buggy_store.records}")
+    buggy_store = BuggyDataStore(company_records)
+    print(f"buggy_store.records = {buggy_store.records}")
 
-print("\nBUT the original list is also cleared!")
-print(f"company_records = {company_records}")
-print("-> The external data was corrupted!")
+    print("\nClearing the store (intentionally):")
+    buggy_store.clear()
+    print(f"buggy_store.records = {buggy_store.records}")
 
-# Safe version
-class SafeDataStore:
-    """Store that makes defensive copies"""
+    print("\nBUT the original list is also cleared!")
+    print(f"company_records = {company_records}")
+    print("-> The external data was corrupted!")
 
-    def __init__(self, records=None):
-        if records is None:
-            self.records = []
-        else:
-            self.records = list(records)  # SAFE: Make a copy!
+    # Safe version
+    class SafeDataStore:
+        """Store that makes defensive copies"""
 
-    def add_record(self, record):
-        self.records.append(record)
+        def __init__(self, records=None):
+            if records is None:
+                self.records = []
+            else:
+                self.records = list(records)  # SAFE: Make a copy!
 
-    def clear(self):
-        self.records.clear()
+        def add_record(self, record):
+            self.records.append(record)
 
+        def clear(self):
+            self.records.clear()
 
-print("\n" + "-" * 70)
-print("Safe version - defensive copying:")
-print("-" * 70)
 
-company_records = ['Alice', 'Bob', 'Charlie']
-print(f"company_records = {company_records}")
+    print("\n" + "-" * 70)
+    print("Safe version - defensive copying:")
+    print("-" * 70)
 
-safe_store = SafeDataStore(company_records)
-print(f"safe_store.records = {safe_store.records}")
+    company_records = ['Alice', 'Bob', 'Charlie']
+    print(f"company_records = {company_records}")
 
-print("\nClearing the store:")
-safe_store.clear()
-print(f"safe_store.records = {safe_store.records}")
+    safe_store = SafeDataStore(company_records)
+    print(f"safe_store.records = {safe_store.records}")
 
-print("\nThe original list is unchanged:")
-print(f"company_records = {company_records}")
-print("-> Protected by defensive copying!")
+    print("\nClearing the store:")
+    safe_store.clear()
+    print(f"safe_store.records = {safe_store.records}")
 
-# ============ EXAMPLE 7: Comparing Buggy vs Safe Approach
-print("\n" + "=" * 70)
-print("# ============ EXAMPLE 7: Comparing Buggy vs Safe Approach")
-print("Side-by-side comparison:\n")
+    print("\nThe original list is unchanged:")
+    print(f"company_records = {company_records}")
+    print("-> Protected by defensive copying!")
 
+    # ============ EXAMPLE 7: Comparing Buggy vs Safe Approach
+    print("\n" + "=" * 70)
+    print("# ============ EXAMPLE 7: Comparing Buggy vs Safe Approach")
+    print("Side-by-side comparison:\n")
 
-class GroupBuggy:
-    """Group without defensive copying"""
 
-    def __init__(self, members=None):
-        if members is None:
-            self.members = []
-        else:
-            self.members = members  # BUG!
+    class GroupBuggy:
+        """Group without defensive copying"""
 
+        def __init__(self, members=None):
+            if members is None:
+                self.members = []
+            else:
+                self.members = members  # BUG!
 
-class GroupSafe:
-    """Group with defensive copying"""
 
-    def __init__(self, members=None):
-        if members is None:
-            self.members = []
-        else:
-            self.members = list(members)  # SAFE!
+    class GroupSafe:
+        """Group with defensive copying"""
 
+        def __init__(self, members=None):
+            if members is None:
+                self.members = []
+            else:
+                self.members = list(members)  # SAFE!
 
-print("Scenario: We have a list of people")
-people = ['Alice', 'Bob']
-print(f"people = {people}")
 
-print("\nWith buggy version:")
-buggy_group = GroupBuggy(people)
-people.append('Charlie')  # Caller modifies their list
-print(f"After people.append('Charlie'):")
-print(f"people = {people}")
-print(f"buggy_group.members = {buggy_group.members}")
-print("-> Group's members unexpectedly changed!")
-
-people = ['Alice', 'Bob']
-print("\nWith safe version:")
-safe_group = GroupSafe(people)
-people.append('Charlie')  # Caller modifies their list
-print(f"After people.append('Charlie'):")
-print(f"people = {people}")
-print(f"safe_group.members = {safe_group.members}")
-print("-> Group's members protected from external changes!")
-
-# ============ EXAMPLE 8: When Parameters Shouldn't be Copied
-print("\n" + "=" * 70)
-print("# ============ EXAMPLE 8: When Parameters Shouldn't be Copied")
-print("Sometimes aliasing is intentional - always document it:\n")
-
-print("""
-RULE: Copy mutable parameters when you STORE them as instance state.
-
-Examples where copying IS necessary:
-  - __init__(self, items=[]):        Store items -> COPY!
-  - add_items(self, items=[]):       Store items -> COPY!
-  - set_config(self, config=None):   Store config -> COPY!
-
-Examples where copying is NOT needed:
-  - process_items(self, items=[]):   Just iterate over items, don't store
-  - count_items(self, items=[]):     Just read items, don't store
-  - contains(self, items=[]):        Just check items, don't store
-
-KEY: If you're storing the parameter for later use, COPY IT.
-     If you're just using it immediately and discarding it, you might not need to copy.
-""")
-
-
-def bad_processor(items):
-    """This just processes items, doesn't store them"""
-    # No need to copy here - we're not storing the parameter
-    return sum(items)  # Just using it, then discarding
-
-
-def bad_storage(items):
-    """This stores items - should copy!"""
-    # WRONG: Aliasing! We stored a reference to the caller's list
-    self.items = items  # BUG: Should be list(items)
-
-
-# ============ EXAMPLE 9: Detecting Aliasing Bugs
-print("\n" + "=" * 70)
-print("# ============ EXAMPLE 9: Detecting Aliasing Bugs")
-print("How to spot aliasing bugs in your code:\n")
-
-print("""
-RED FLAGS:
-
-1. Direct assignment of mutable parameters:
-   def __init__(self, items=[]):
-       self.items = items                  <- RED FLAG!
-
-2. Unexpected changes to external data:
-   "I didn't modify my list, why did it change?"
-   -> You probably passed it to an object that aliases it
-
-3. State mysteriously changing:
-   obj.items changed without calling obj methods
-   -> Probably someone has access to the list and is modifying it
-
-4. Problems with shallow copies of objects:
-   obj2 = copy.copy(obj1)
-   "They're supposed to be independent, why do they share items?"
-   -> Because obj1 and obj2 share the same list via aliasing!
-
-HOW TO FIX:
-   1. Always copy mutable parameters in __init__
-   2. Use: list(param), dict(param), set(param)
-   3. Consider copying in other methods too
-   4. Document when aliasing is intentional
-""")
-
-# ============ EXAMPLE 10: Summary of Copying Strategies
-print("\n" + "=" * 70)
-print("# ============ EXAMPLE 10: Summary of Copying Strategies")
-print("Different ways to copy mutable collections:\n")
-
-original_list = [1, 2, 3]
-original_dict = {'a': 1, 'b': 2}
-original_set = {1, 2, 3}
-
-print("SHALLOW COPIES (copy just the container, not the contents):")
-print(f"  list(original_list) = {list(original_list)}")
-print(f"  dict(original_dict) = {dict(original_dict)}")
-print(f"  set(original_set) = {set(original_set)}")
-
-print("\nOther shallow copy methods:")
-print(f"  original_list[:] = {original_list[:]}")
-print(f"  original_list.copy() = {original_list.copy()}")
-
-import copy
-print("\nDEEP COPIES (copy container AND contents recursively):")
-nested = [[1, 2], [3, 4]]
-print(f"  original nested = {nested}")
-print(f"  copy.copy(nested) = {copy.copy(nested)}")
-print(f"  copy.deepcopy(nested) = {copy.deepcopy(nested)}")
-
-print("\nFor most cases, shallow copy is sufficient:")
-print("  Use list(param) for lists")
-print("  Use dict(param) for dicts")
-print("  Use set(param) for sets")
-
-print("\n" + "=" * 70)
-print("SUMMARY")
-print("=" * 70)
-print("""
-KEY TAKEAWAYS:
-
-1. ALIASING: When you assign a mutable parameter directly to an instance
-   variable, both the caller and your object share the same data.
-
-2. THE PROBLEM: The caller can modify your object's internal state by
-   modifying their copy of the parameter.
-
-3. THE SOLUTION: Use defensive copying in __init__:
-   def __init__(self, passengers=None):
-       if passengers is None:
-           self.passengers = []
-       else:
-           self.passengers = list(passengers)  # Make a copy!
-
-4. COPY STRATEGIES:
-   - list(param)  - for lists
-   - dict(param)  - for dicts
-   - set(param)   - for sets
-   - param[:]     - for lists (alternate)
-   - param.copy() - for lists/dicts (alternate)
-
-5. WHEN TO COPY:
-   - Always in __init__ with mutable parameters
-   - When you store parameters as instance variables
-   - When external code might modify the parameter
-
-6. WHY IT MATTERS:
-   - Prevents data corruption
-   - Provides data isolation
-   - Makes objects more predictable
-   - Essential for reliable code
-""")
+    print("Scenario: We have a list of people")
+    people = ['Alice', 'Bob']
+    print(f"people = {people}")
+
+    print("\nWith buggy version:")
+    buggy_group = GroupBuggy(people)
+    people.append('Charlie')  # Caller modifies their list
+    print(f"After people.append('Charlie'):")
+    print(f"people = {people}")
+    print(f"buggy_group.members = {buggy_group.members}")
+    print("-> Group's members unexpectedly changed!")
+
+    people = ['Alice', 'Bob']
+    print("\nWith safe version:")
+    safe_group = GroupSafe(people)
+    people.append('Charlie')  # Caller modifies their list
+    print(f"After people.append('Charlie'):")
+    print(f"people = {people}")
+    print(f"safe_group.members = {safe_group.members}")
+    print("-> Group's members protected from external changes!")
+
+    # ============ EXAMPLE 8: When Parameters Shouldn't be Copied
+    print("\n" + "=" * 70)
+    print("# ============ EXAMPLE 8: When Parameters Shouldn't be Copied")
+    print("Sometimes aliasing is intentional - always document it:\n")
+
+    print("""
+    RULE: Copy mutable parameters when you STORE them as instance state.
+
+    Examples where copying IS necessary:
+      - __init__(self, items=[]):        Store items -> COPY!
+      - add_items(self, items=[]):       Store items -> COPY!
+      - set_config(self, config=None):   Store config -> COPY!
+
+    Examples where copying is NOT needed:
+      - process_items(self, items=[]):   Just iterate over items, don't store
+      - count_items(self, items=[]):     Just read items, don't store
+      - contains(self, items=[]):        Just check items, don't store
+
+    KEY: If you're storing the parameter for later use, COPY IT.
+         If you're just using it immediately and discarding it, you might not need to copy.
+    """)
+
+
+    def bad_processor(items):
+        """This just processes items, doesn't store them"""
+        # No need to copy here - we're not storing the parameter
+        return sum(items)  # Just using it, then discarding
+
+
+    def bad_storage(items):
+        """This stores items - should copy!"""
+        # WRONG: Aliasing! We stored a reference to the caller's list
+        self.items = items  # BUG: Should be list(items)
+
+
+    # ============ EXAMPLE 9: Detecting Aliasing Bugs
+    print("\n" + "=" * 70)
+    print("# ============ EXAMPLE 9: Detecting Aliasing Bugs")
+    print("How to spot aliasing bugs in your code:\n")
+
+    print("""
+    RED FLAGS:
+
+    1. Direct assignment of mutable parameters:
+       def __init__(self, items=[]):
+           self.items = items                  <- RED FLAG!
+
+    2. Unexpected changes to external data:
+       "I didn't modify my list, why did it change?"
+       -> You probably passed it to an object that aliases it
+
+    3. State mysteriously changing:
+       obj.items changed without calling obj methods
+       -> Probably someone has access to the list and is modifying it
+
+    4. Problems with shallow copies of objects:
+       obj2 = copy.copy(obj1)
+       "They're supposed to be independent, why do they share items?"
+       -> Because obj1 and obj2 share the same list via aliasing!
+
+    HOW TO FIX:
+       1. Always copy mutable parameters in __init__
+       2. Use: list(param), dict(param), set(param)
+       3. Consider copying in other methods too
+       4. Document when aliasing is intentional
+    """)
+
+    # ============ EXAMPLE 10: Summary of Copying Strategies
+    print("\n" + "=" * 70)
+    print("# ============ EXAMPLE 10: Summary of Copying Strategies")
+    print("Different ways to copy mutable collections:\n")
+
+    original_list = [1, 2, 3]
+    original_dict = {'a': 1, 'b': 2}
+    original_set = {1, 2, 3}
+
+    print("SHALLOW COPIES (copy just the container, not the contents):")
+    print(f"  list(original_list) = {list(original_list)}")
+    print(f"  dict(original_dict) = {dict(original_dict)}")
+    print(f"  set(original_set) = {set(original_set)}")
+
+    print("\nOther shallow copy methods:")
+    print(f"  original_list[:] = {original_list[:]}")
+    print(f"  original_list.copy() = {original_list.copy()}")
+
+    import copy
+    print("\nDEEP COPIES (copy container AND contents recursively):")
+    nested = [[1, 2], [3, 4]]
+    print(f"  original nested = {nested}")
+    print(f"  copy.copy(nested) = {copy.copy(nested)}")
+    print(f"  copy.deepcopy(nested) = {copy.deepcopy(nested)}")
+
+    print("\nFor most cases, shallow copy is sufficient:")
+    print("  Use list(param) for lists")
+    print("  Use dict(param) for dicts")
+    print("  Use set(param) for sets")
+
+    print("\n" + "=" * 70)
+    print("SUMMARY")
+    print("=" * 70)
+    print("""
+    KEY TAKEAWAYS:
+
+    1. ALIASING: When you assign a mutable parameter directly to an instance
+       variable, both the caller and your object share the same data.
+
+    2. THE PROBLEM: The caller can modify your object's internal state by
+       modifying their copy of the parameter.
+
+    3. THE SOLUTION: Use defensive copying in __init__:
+       def __init__(self, passengers=None):
+           if passengers is None:
+               self.passengers = []
+           else:
+               self.passengers = list(passengers)  # Make a copy!
+
+    4. COPY STRATEGIES:
+       - list(param)  - for lists
+       - dict(param)  - for dicts
+       - set(param)   - for sets
+       - param[:]     - for lists (alternate)
+       - param.copy() - for lists/dicts (alternate)
+
+    5. WHEN TO COPY:
+       - Always in __init__ with mutable parameters
+       - When you store parameters as instance variables
+       - When external code might modify the parameter
+
+    6. WHY IT MATTERS:
+       - Prevents data corruption
+       - Provides data isolation
+       - Makes objects more predictable
+       - Essential for reliable code
+    """)

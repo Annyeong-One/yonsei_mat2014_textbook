@@ -27,29 +27,29 @@ Create an abstract `BankAccount` class with:
 Implement these account types:
 
 **SavingsAccount**
-- Minimum balance: $100
-- Monthly fee: $0 (no fee)
+- Minimum balance: \$100
+- Monthly fee: \$0 (no fee)
 - Interest rate: 2% annual (compounded monthly)
 - Withdrawal limit: 6 per month
-- Penalty: $5 fee if minimum balance not maintained
+- Penalty: \$5 fee if minimum balance not maintained
 
 **CheckingAccount**
-- Minimum balance: $25
-- Monthly fee: $5 (waived if balance > $500)
+- Minimum balance: \$25
+- Monthly fee: \$5 (waived if balance > \$500)
 - Interest rate: 0.1% annual
 - No withdrawal limit
-- Overdraft protection: Can go negative up to -$100 (with $35 fee)
+- Overdraft protection: Can go negative up to -\$100 (with \$35 fee)
 
 **BusinessAccount**
-- Minimum balance: $1000
-- Monthly fee: $15
+- Minimum balance: \$1000
+- Monthly fee: \$15
 - Interest rate: 1.5% annual
 - No withdrawal limit
-- Transaction fee: $0.50 per transaction after 50 transactions/month
+- Transaction fee: \$0.50 per transaction after 50 transactions/month
 
 **StudentAccount** (inherits from SavingsAccount)
-- Minimum balance: $0
-- Monthly fee: $0
+- Minimum balance: \$0
+- Monthly fee: \$0
 - Interest rate: 1.5% annual
 - Withdrawal limit: 10 per month
 - Age restriction: Account holder must be student

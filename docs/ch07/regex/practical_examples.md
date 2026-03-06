@@ -36,7 +36,7 @@ re.sub(r'[^a-zA-Z0-9\s.,!?-]', '', text)
 ```python
 import re
 
-prices = ["$1,234.56", "€ 2,100.00", "¥10,000", "$42", "N/A"]
+prices = ["\$1,234.56", "€ 2,100.00", "¥10,000", "\$42", "N/A"]
 
 def extract_number(s):
     """Extract numeric value from a price string."""
@@ -47,10 +47,10 @@ def extract_number(s):
 
 for p in prices:
     print(f"{p:>12} → {extract_number(p)}")
-#    $1,234.56 → 1234.56
+#    \$1,234.56 → 1234.56
 #   € 2,100.00 → 2100.0
 #      ¥10,000 → 10000.0
-#          $42 → 42.0
+#          \$42 → 42.0
 #          N/A → None
 ```
 
@@ -277,9 +277,9 @@ print(snake_to_camel("http_response"))      # httpResponse
 import re
 
 text = """
-AAPL closed at $182.63 (+1.25%)
-GOOGL rose to $141.80 (-0.34%)
-MSFT ended at $378.91 (+0.89%)
+AAPL closed at \$182.63 (+1.25%)
+GOOGL rose to \$141.80 (-0.34%)
+MSFT ended at \$378.91 (+0.89%)
 """
 
 STOCK_RE = re.compile(r'(?P<ticker>[A-Z]{1,5})\s+\w+\s+\w+\s+\$(?P<price>[\d.]+)\s+\((?P<change>[+-][\d.]+%)\)')
@@ -287,9 +287,9 @@ STOCK_RE = re.compile(r'(?P<ticker>[A-Z]{1,5})\s+\w+\s+\w+\s+\$(?P<price>[\d.]+)
 for m in STOCK_RE.finditer(text):
     d = m.groupdict()
     print(f"  {d['ticker']:>5}: ${d['price']} ({d['change']})")
-#    AAPL: $182.63 (+1.25%)
-#   GOOGL: $141.80 (-0.34%)
-#    MSFT: $378.91 (+0.89%)
+#    AAPL: \$182.63 (+1.25%)
+#   GOOGL: \$141.80 (-0.34%)
+#    MSFT: \$378.91 (+0.89%)
 ```
 
 ### CSV Line Parser

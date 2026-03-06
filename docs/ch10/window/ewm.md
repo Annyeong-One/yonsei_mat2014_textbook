@@ -63,6 +63,7 @@ How exponentially weighted mean is calculated.
 ### 1. Recursive Formula
 
 When `adjust=False`:
+
 $$\text{EWMA}_t = (1 - \alpha) \cdot \text{EWMA}_{t-1} + \alpha \cdot x_t$$
 
 ### 2. Alpha from Span

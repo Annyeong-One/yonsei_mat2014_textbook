@@ -33,6 +33,7 @@ Verify A @ x = [5. 6.]
 ### 2. Mathematical Form
 
 Solve:
+
 $$\begin{cases} 1x_1 + 2x_2 = 5 \\ 3x_1 + 4x_2 = 6 \end{cases}$$
 
 ### 3. Multiple Right-Hand Sides

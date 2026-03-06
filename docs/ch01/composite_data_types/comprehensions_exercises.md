@@ -81,7 +81,7 @@ text = "hello world"
 Create a dictionary where keys are numbers 1-10 and values are their squares.
 
 ### Exercise 13: Filter Dictionary
-Given a dictionary of products and prices, create a new dictionary with only products under $50.
+Given a dictionary of products and prices, create a new dictionary with only products under \$50.
 ```python
 products = {'laptop': 1200, 'mouse': 25, 'keyboard': 75, 'monitor': 300, 'cable': 15}
 # Expected: {'mouse': 25, 'cable': 15}
@@ -186,7 +186,7 @@ scores = [92, 85, 67, 78, 95, 71]
 ### Exercise 30: Data Transformation
 From this data, create:
 1. A list of tuples (name, salary_after_raise) where raise is 10%
-2. A dictionary of employees earning over $50,000 after raise
+2. A dictionary of employees earning over \$50,000 after raise
 3. A set of unique salary brackets (e.g., "40k-50k", "50k-60k")
 
 ```python

@@ -118,6 +118,8 @@ class Money:
 
 # Examples
 if __name__ == "__main__":
+
+    # ============================================================================
     print("=== Vector Arithmetic Examples ===")
     v1 = Vector(3, 4)
     v2 = Vector(1, 2)

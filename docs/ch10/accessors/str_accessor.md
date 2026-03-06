@@ -301,7 +301,7 @@ dtype: object
 ### With Regex
 
 ```python
-s = pd.Series(['price: $100', 'cost: $200', 'value: $300'])
+s = pd.Series(['price: $100', 'cost: $200', 'value: \$300'])
 
 # Remove dollar amounts
 print(s.str.replace(r'\$\d+', 'XXX', regex=True))

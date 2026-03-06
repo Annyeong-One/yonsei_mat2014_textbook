@@ -279,8 +279,8 @@ Combine symbols with number formatting.
 ```python
 price = 1234.5
 
-print(f"${price:,.2f}")      # $1,234.50
-print(f"${price:>10,.2f}")   #  $1,234.50
+print(f"${price:,.2f}")      # \$1,234.50
+print(f"${price:>10,.2f}")   #  \$1,234.50
 ```
 
 ### 2. Table Alignment

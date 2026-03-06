@@ -5,6 +5,10 @@ The super() function is used to call methods from the parent class.
 This is especially useful when you want to extend (not replace) parent functionality.
 """
 
+# =============================================================================
+# Definitions
+# =============================================================================
+
 class Employee:
     def __init__(self, name, employee_id, salary):
         self.name = name
@@ -85,6 +89,11 @@ class TechLead(Manager, Developer):
 
 
 # Testing super() usage
+
+# =============================================================================
+# Main
+# =============================================================================
+
 if __name__ == "__main__":
     print("=" * 70)
     print("SUPER() FUNCTION DEMO")

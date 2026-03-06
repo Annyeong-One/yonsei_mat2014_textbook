@@ -208,13 +208,17 @@ In 8-bit:
 For an N-bit system:
 
 $$
+
 -2^{(N-1)} \text{ to } 2^{(N-1)} - 1
+
 $$
 
 For 8-bit:
 
 $$
+
 -128 \text{ to } 127
+
 $$
 
 ---
