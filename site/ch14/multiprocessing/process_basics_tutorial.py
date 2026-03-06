@@ -1,0 +1,622 @@
+"""
+Topic 45.3 - Multiprocessing with multiprocessing.Process
+
+Complete guide to process-based parallelism in Python, which bypasses
+the GIL and achieves true parallel execution on multiple CPU cores.
+
+Learning Objectives:
+- Create and manage processes
+- Pass data to processes
+- Retrieve results from processes
+- Process synchronization
+- Shared memory between processes
+- Process vs Thread comparison
+
+Author: Python Educator
+Date: 2024
+"""
+
+import multiprocessing
+import os
+import time
+import random
+from multiprocessing import Process, Value, Array, Queue
+
+
+# ============================================================================
+# PART 1: BEGINNER - Creating and Managing Processes
+# ============================================================================
+
+def basic_process_creation():
+    """
+    Create a simple process - similar to threading but with true parallelism.
+    Each process gets its own Python interpreter and memory space.
+    """
+    print("=" * 70)
+    print("BEGINNER: Creating Your First Process")
+    print("=" * 70)
+    
+    def worker():
+        """Function that runs in a separate process"""
+        # Each process has its own process ID
+        print(f"  Worker process ID: {os.getpid()}")
+        print(f"  Worker parent process ID: {os.getppid()}")
+        time.sleep(1)
+        print(f"  Worker process completed")
+    
+    print(f"\nMain process ID: {os.getpid()}")
+    print("\n📝 Creating a process:")
+    print("   process = multiprocessing.Process(target=worker)")
+    print("   process.start()")
+    
+    # Create the process
+    process = Process(target=worker)
+    
+    print("\nStarting worker process...")
+    process.start()  # Start the process
+    
+    print("Main process continues while worker runs...")
+    
+    # Wait for process to complete
+    process.join()
+    
+    print("Worker process has finished.")
+    print("\n💡 Key Difference from Threading:")
+    print("   Each process has its own memory space and Python interpreter")
+    print("   Processes can run on different CPU cores simultaneously")
+    
+    print("\n" + "=" * 70 + "\n")
+
+
+def process_with_arguments():
+    """
+    Pass arguments to processes using args and kwargs.
+    """
+    print("=" * 70)
+    print("BEGINNER: Passing Arguments to Processes")
+    print("=" * 70)
+    
+    def calculate_square(number, result_label="Result"):
+        """
+        Calculate square of a number in a separate process.
+        
+        Args:
+            number: Number to square
+            result_label: Label for the result
+        """
+        result = number ** 2
+        pid = os.getpid()
+        print(f"[PID {pid}] {result_label}: {number}² = {result}")
+        time.sleep(0.5)
+    
+    print("\n📝 Method 1: Using args tuple")
+    p1 = Process(target=calculate_square, args=(5,))
+    p1.start()
+    p1.join()
+    
+    print("\n📝 Method 2: Using kwargs dictionary")
+    p2 = Process(
+        target=calculate_square,
+        kwargs={"number": 7, "result_label": "Calculation"}
+    )
+    p2.start()
+    p2.join()
+    
+    print("\n📝 Method 3: Mixed args and kwargs")
+    p3 = Process(
+        target=calculate_square,
+        args=(12,),
+        kwargs={"result_label": "Final Result"}
+    )
+    p3.start()
+    p3.join()
+    
+    print("\n" + "=" * 70 + "\n")
+
+
+def multiple_processes_cpu_bound():
+    """
+    Demonstrate true parallelism with CPU-bound tasks.
+    Unlike threading, multiprocessing achieves real speedup!
+    """
+    print("=" * 70)
+    print("BEGINNER: Multiple Processes for CPU-Bound Tasks")
+    print("=" * 70)
+    
+    def cpu_intensive_task(task_id, iterations):
+        """
+        CPU-intensive computation.
+        
+        Args:
+            task_id: Task identifier
+            iterations: Number of iterations
+        """
+        pid = os.getpid()
+        print(f"[Task {task_id}, PID {pid}] Starting...")
+        
+        # Heavy computation
+        total = 0
+        for i in range(iterations):
+            total += i ** 2
+        
+        print(f"[Task {task_id}, PID {pid}] Completed. Sum: {total}")
+        return total
+    
+    iterations = 10_000_000
+    num_processes = 4
+    
+    print(f"\n⏱️  Running {num_processes} CPU-intensive processes:\n")
+    start_time = time.time()
+    
+    # Create multiple processes
+    processes = []
+    for i in range(num_processes):
+        process = Process(
+            target=cpu_intensive_task,
+            args=(i, iterations // num_processes),
+            name=f"Worker-{i}"
+        )
+        processes.append(process)
+        process.start()
+    
+    # Wait for all processes
+    for process in processes:
+        process.join()
+    
+    elapsed = time.time() - start_time
+    print(f"\n✓ All processes completed in {elapsed:.2f} seconds")
+    
+    # Check CPU count
+    cpu_count = multiprocessing.cpu_count()
+    print(f"\n💡 Your system has {cpu_count} CPU cores")
+    print(f"   Using {num_processes} processes = true parallel execution!")
+    
+    print("\n" + "=" * 70 + "\n")
+
+
+# ============================================================================
+# PART 2: INTERMEDIATE - Process Communication and Data Sharing
+# ============================================================================
+
+def process_with_queue():
+    """
+    Use Queue for safe inter-process communication.
+    Queue is process-safe (unlike regular Python lists).
+    """
+    print("=" * 70)
+    print("INTERMEDIATE: Process Communication with Queue")
+    print("=" * 70)
+    
+    def producer(queue, num_items):
+        """
+        Produce items and put them in queue.
+        
+        Args:
+            queue: Multiprocessing Queue
+            num_items: Number of items to produce
+        """
+        pid = os.getpid()
+        for i in range(num_items):
+            item = f"Item-{i}"
+            queue.put(item)
+            print(f"[Producer PID {pid}] Produced: {item}")
+            time.sleep(0.3)
+        
+        # Signal completion
+        queue.put(None)
+        print(f"[Producer PID {pid}] Finished")
+    
+    def consumer(queue):
+        """
+        Consume items from queue.
+        
+        Args:
+            queue: Multiprocessing Queue
+        """
+        pid = os.getpid()
+        while True:
+            item = queue.get()
+            if item is None:
+                break
+            
+            print(f"[Consumer PID {pid}] Consumed: {item}")
+            time.sleep(0.5)
+        
+        print(f"[Consumer PID {pid}] Finished")
+    
+    print("\n⚙️  Starting producer-consumer with processes:\n")
+    
+    # Create a multiprocessing Queue
+    queue = Queue()
+    
+    # Create processes
+    prod = Process(target=producer, args=(queue, 5))
+    cons = Process(target=consumer, args=(queue,))
+    
+    # Start both
+    prod.start()
+    cons.start()
+    
+    # Wait for completion
+    prod.join()
+    cons.join()
+    
+    print("\n✓ Producer-consumer completed")
+    print("\n💡 Queue is process-safe - no need for locks!")
+    
+    print("\n" + "=" * 70 + "\n")
+
+
+def shared_memory_with_value_and_array():
+    """
+    Share simple data between processes using Value and Array.
+    These are backed by shared memory and protected by locks.
+    """
+    print("=" * 70)
+    print("INTERMEDIATE: Shared Memory with Value and Array")
+    print("=" * 70)
+    
+    def increment_counter(counter, array, process_id):
+        """
+        Increment shared counter and modify shared array.
+        
+        Args:
+            counter: Shared Value object
+            array: Shared Array object
+            process_id: Process identifier
+        """
+        pid = os.getpid()
+        
+        for i in range(5):
+            # Access shared value (thread-safe)
+            with counter.get_lock():
+                counter.value += 1
+                current = counter.value
+            
+            # Modify shared array
+            with array.get_lock():
+                array[process_id] += 1
+            
+            print(f"[Process {process_id}, PID {pid}] Counter: {current}")
+            time.sleep(0.1)
+    
+    print("\n📝 Creating shared memory objects:")
+    
+    # Create shared Value (integer)
+    counter = Value('i', 0)  # 'i' = integer
+    print(f"   counter = Value('i', 0)")
+    
+    # Create shared Array (5 integers)
+    array = Array('i', [0, 0, 0, 0, 0])  # 'i' = integer array
+    print(f"   array = Array('i', [0, 0, 0, 0, 0])")
+    
+    print("\n⚙️  Starting processes with shared memory:\n")
+    
+    # Create multiple processes
+    processes = []
+    for i in range(5):
+        p = Process(target=increment_counter, args=(counter, array, i))
+        processes.append(p)
+        p.start()
+    
+    # Wait for all
+    for p in processes:
+        p.join()
+    
+    # Read results
+    print(f"\n📊 Final Results:")
+    print(f"   Counter value: {counter.value}")
+    print(f"   Array values: {list(array)}")
+    
+    print("\n💡 Value and Array provide:")
+    print("   ✓ Shared memory between processes")
+    print("   ✓ Built-in locking for thread safety")
+    print("   ✓ Efficient for simple data types")
+    
+    print("\n" + "=" * 70 + "\n")
+
+
+def process_properties_and_lifecycle():
+    """
+    Explore process properties and lifecycle management.
+    """
+    print("=" * 70)
+    print("INTERMEDIATE: Process Properties and Lifecycle")
+    print("=" * 70)
+    
+    def worker(duration):
+        """Worker that sleeps for duration"""
+        pid = os.getpid()
+        print(f"  [Worker PID {pid}] Working for {duration}s...")
+        time.sleep(duration)
+        print(f"  [Worker PID {pid}] Done!")
+    
+    # Create process
+    process = Process(target=worker, args=(2,), name="MyWorker")
+    
+    print("\n📊 Before Starting:")
+    print(f"  Name: {process.name}")
+    print(f"  PID: {process.pid}")  # None until started
+    print(f"  Is alive: {process.is_alive()}")
+    print(f"  Daemon: {process.daemon}")
+    
+    # Start process
+    print("\n🚀 Starting process...")
+    process.start()
+    
+    print("\n📊 After Starting:")
+    print(f"  Name: {process.name}")
+    print(f"  PID: {process.pid}")  # Now has a PID
+    print(f"  Is alive: {process.is_alive()}")
+    
+    # Wait for it
+    process.join()
+    
+    print("\n📊 After Completion:")
+    print(f"  Is alive: {process.is_alive()}")
+    print(f"  Exit code: {process.exitcode}")  # 0 = success
+    
+    print("\n💡 Exit Codes:")
+    print("   0 = Success")
+    print("   1 = Exception occurred")
+    print("   -N = Killed by signal N")
+    
+    print("\n" + "=" * 70 + "\n")
+
+
+# ============================================================================
+# PART 3: ADVANCED - Process Patterns and Best Practices
+# ============================================================================
+
+class WorkerProcess(Process):
+    """
+    Custom process class - inherits from multiprocessing.Process.
+    Override run() to define process behavior.
+    """
+    
+    def __init__(self, task_name, data, result_queue):
+        """
+        Initialize custom process.
+        
+        Args:
+            task_name: Name of the task
+            data: Input data
+            result_queue: Queue to store results
+        """
+        super().__init__()
+        self.task_name = task_name
+        self.data = data
+        self.result_queue = result_queue
+    
+    def run(self):
+        """
+        This is called when start() is invoked.
+        """
+        pid = os.getpid()
+        print(f"[{self.name}, PID {pid}] Starting task: {self.task_name}")
+        
+        # Process the data
+        result = sum(x ** 2 for x in self.data)
+        
+        # Put result in queue
+        self.result_queue.put({
+            'task': self.task_name,
+            'pid': pid,
+            'result': result
+        })
+        
+        print(f"[{self.name}, PID {pid}] Completed: {self.task_name}")
+
+
+def custom_process_class_example():
+    """
+    Demonstrate custom process class.
+    """
+    print("=" * 70)
+    print("ADVANCED: Custom Process Class")
+    print("=" * 70)
+    
+    print("\n⚙️  Creating custom process instances:\n")
+    
+    # Queue to collect results
+    result_queue = Queue()
+    
+    # Create processes
+    processes = []
+    for i in range(3):
+        data = list(range(i * 100, (i + 1) * 100))
+        p = WorkerProcess(f"Task-{i}", data, result_queue)
+        processes.append(p)
+        p.start()
+    
+    # Wait for all
+    for p in processes:
+        p.join()
+    
+    # Collect results
+    print("\n📊 Results:")
+    while not result_queue.empty():
+        result = result_queue.get()
+        print(f"   {result['task']} (PID {result['pid']}): {result['result']}")
+    
+    print("\n💡 Custom process classes are useful for:")
+    print("   ✓ Encapsulating complex logic")
+    print("   ✓ Managing process state")
+    print("   ✓ Reusable process patterns")
+    
+    print("\n" + "=" * 70 + "\n")
+
+
+def process_synchronization_with_lock():
+    """
+    Use Lock for process synchronization when sharing resources.
+    """
+    print("=" * 70)
+    print("ADVANCED: Process Synchronization with Lock")
+    print("=" * 70)
+    
+    def critical_section_worker(lock, shared_counter, worker_id):
+        """
+        Worker that accesses shared resource with lock protection.
+        
+        Args:
+            lock: Multiprocessing Lock
+            shared_counter: Shared Value
+            worker_id: Worker identifier
+        """
+        pid = os.getpid()
+        
+        for i in range(5):
+            # Acquire lock before accessing shared resource
+            lock.acquire()
+            try:
+                # Critical section - only one process at a time
+                current = shared_counter.value
+                print(f"[Worker {worker_id}, PID {pid}] Read: {current}")
+                time.sleep(0.1)  # Simulate work
+                shared_counter.value = current + 1
+                print(f"[Worker {worker_id}, PID {pid}] Wrote: {shared_counter.value}")
+            finally:
+                # Always release the lock
+                lock.release()
+            
+            time.sleep(0.05)
+    
+    print("\n⚙️  Starting synchronized processes:\n")
+    
+    # Create shared resources
+    lock = multiprocessing.Lock()
+    counter = Value('i', 0)
+    
+    # Create processes
+    processes = []
+    for i in range(3):
+        p = Process(
+            target=critical_section_worker,
+            args=(lock, counter, i)
+        )
+        processes.append(p)
+        p.start()
+    
+    # Wait for all
+    for p in processes:
+        p.join()
+    
+    print(f"\n📊 Final counter value: {counter.value}")
+    print(f"   Expected: {3 * 5} (3 workers × 5 increments)")
+    
+    print("\n💡 Lock ensures:")
+    print("   ✓ Only one process in critical section at a time")
+    print("   ✓ No race conditions")
+    print("   ✓ Consistent shared state")
+    
+    print("\n" + "=" * 70 + "\n")
+
+
+def process_vs_thread_comparison():
+    """
+    Direct comparison of processes vs threads for different workloads.
+    """
+    print("=" * 70)
+    print("ADVANCED: Process vs Thread Performance Comparison")
+    print("=" * 70)
+    
+    import threading
+    
+    def cpu_work(n):
+        """CPU-intensive work"""
+        total = 0
+        for i in range(n):
+            total += i ** 2
+        return total
+    
+    def io_work(n):
+        """I/O-intensive work"""
+        time.sleep(n)
+    
+    iterations = 5_000_000
+    
+    # Test 1: CPU-bound with processes
+    print("\n⏱️  CPU-bound with 4 processes:")
+    start = time.time()
+    procs = [
+        Process(target=cpu_work, args=(iterations // 4,))
+        for _ in range(4)
+    ]
+    for p in procs:
+        p.start()
+    for p in procs:
+        p.join()
+    proc_time = time.time() - start
+    print(f"   Time: {proc_time:.2f}s")
+    
+    # Test 2: CPU-bound with threads
+    print("\n⏱️  CPU-bound with 4 threads:")
+    start = time.time()
+    threads = [
+        threading.Thread(target=cpu_work, args=(iterations // 4,))
+        for _ in range(4)
+    ]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+    thread_time = time.time() - start
+    print(f"   Time: {thread_time:.2f}s")
+    
+    print(f"\n📊 CPU-bound Result:")
+    print(f"   Processes: {proc_time:.2f}s")
+    print(f"   Threads: {thread_time:.2f}s")
+    print(f"   Winner: {'Processes' if proc_time < thread_time else 'Threads'}")
+    print(f"   Speedup: {thread_time/proc_time:.2f}x with multiprocessing")
+    
+    print("\n💡 Recommendation:")
+    print("   ✓ Use multiprocessing for CPU-bound tasks")
+    print("   ✓ Use threading for I/O-bound tasks")
+    print("   ✓ Profile your specific workload")
+    
+    print("\n" + "=" * 70 + "\n")
+
+
+# ============================================================================
+# MAIN EXECUTION
+# ============================================================================
+
+def main():
+    """Run all multiprocessing demonstrations."""
+    print("\n" + "=" * 70)
+    print(" " * 20 + "MULTIPROCESSING")
+    print(" " * 15 + "multiprocessing.Process Tutorial")
+    print("=" * 70 + "\n")
+    
+    # Beginner level
+    basic_process_creation()
+    process_with_arguments()
+    multiple_processes_cpu_bound()
+    
+    # Intermediate level
+    process_with_queue()
+    shared_memory_with_value_and_array()
+    process_properties_and_lifecycle()
+    
+    # Advanced level
+    custom_process_class_example()
+    process_synchronization_with_lock()
+    process_vs_thread_comparison()
+    
+    print("\n" + "=" * 70)
+    print("Multiprocessing Tutorial Complete!")
+    print("=" * 70)
+    print("\n💡 Key Takeaways:")
+    print("1. Processes bypass the GIL - true parallel execution")
+    print("2. Each process has its own memory space")
+    print("3. Use Queue for inter-process communication")
+    print("4. Value and Array provide shared memory")
+    print("5. Locks prevent race conditions in shared memory")
+    print("6. Multiprocessing is ideal for CPU-bound tasks")
+    print("=" * 70 + "\n")
+
+
+if __name__ == "__main__":
+    # IMPORTANT: This guard is required on Windows
+    main()

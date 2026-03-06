@@ -27,9 +27,7 @@ Not depth-first or breadth-first—a specialized merge algorithm.
 For a class `C(B1, B2, ..., Bn)`:
 
 $$
-
 L[C] = [C] + \text{merge}(L[B1], L[B2], \ldots, L[Bn], [B1, B2, \ldots, Bn])
-
 $$
 
 where:
@@ -79,9 +77,7 @@ class D(B, C): pass
 ### 3. Apply Formula
 
 $$
-
 L[D] = [D] + \text{merge}([B, A, \text{object}], [C, A, \text{object}], [B, C])
-
 $$
 
 ---
@@ -140,9 +136,7 @@ All lists empty—done!
 ## Final MRO
 
 $$
-
 L[D] = [D, B, C, A, \text{object}]
-
 $$
 
 ```python
@@ -170,9 +164,7 @@ class E(D, C): pass
 - $L[C] = [C, A, \text{object}]$
 
 $$
-
 L[E] = [E] + \text{merge}([D, B, C, A, \text{object}], [C, A, \text{object}], [D, C])
-
 $$
 
 ### 3. Merge Process

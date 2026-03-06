@@ -42,6 +42,8 @@ The communication pathway connecting CPU and memory:
 - **Data Bus**: Transfers actual data between CPU and memory
 - **Control Bus**: Carries signals like "read" or "write"
 
+> **Note**: The control bus signals "read" and "write" are sometimes compared to Unix `rwx` permissions, but the analogy breaks down at **execute** (`x`). Execute is a software/OS abstraction — at the hardware level, the CPU doesn't receive an "execute" signal over the bus. Instead, it simply *fetches* an instruction (a read), and the CPU's internal logic decodes and runs it. There is no separate "execute" bus signal.
+
 ### Input/Output
 
 CPUs also communicate with peripherals (keyboard, disk, GPU, network) through I/O controllers connected to the bus system. I/O is not shown in the simplified diagram above but is an essential part of any real system.
@@ -59,6 +61,8 @@ The CPU operates in a continuous loop:
 ```
 
 1. **Fetch**: Read the next instruction from memory (address stored in Program Counter)
+
+   > **What "fetch" means**: The CPU retrieves the instruction stored at the memory address pointed to by the Program Counter (PC), loads it into the Instruction Register (IR), then increments the PC. Think of the PC as a bookmark — fetch is literally fetching the next instruction from that bookmark location.
 2. **Decode**: Control Unit interprets what the instruction means
 3. **Execute**: ALU or other components perform the operation
 4. **Writeback**: Results are written back to registers or memory
@@ -81,6 +85,30 @@ This creates a bottleneck because the CPU must wait for memory transfers, and in
 
 The **Harvard architecture** separates instruction memory from data memory, eliminating the competition between the two. Most microcontrollers use a pure Harvard design. Modern desktop CPUs use a **modified Harvard architecture**: physically they follow Von Neumann (unified RAM), but the L1 cache is split into separate instruction and data caches, recovering much of Harvard's benefit.
 
+The three designs can be compared as a spectrum:
+
+```
+Pure Von Neumann          Modified Harvard           Pure Harvard
+(unified everything)      (modern CPUs)              (separate everything)
+
+CPU                       CPU chip                   CPU
+ └── one bus               ├── L1i (separate)         ├── instr bus
+      └── RAM              ├── L1d (separate)         │    └── instr RAM
+    (instr + data)         ├── L2  (unified)          └── data bus
+                           └── L3  (unified)               └── data RAM
+                          Outside CPU chip
+                           └── RAM (unified)
+```
+
+> **Important**: L1, L2, and L3 caches are all **inside the CPU chip**. Only RAM sits outside. The distinction between levels is not inside vs outside the CPU, but rather:
+> - **L1** — split (Harvard-style), per-core, directly feeds the decoder and ALU
+> - **L2** — unified, per-core, slightly further from execution units
+> - **L3** — unified, shared across all cores
+
+**Why the L1 split is enough**: L1 is the hottest path — it directly feeds the decoder (from L1i) and the ALU (from L1d) simultaneously, recovering most of Harvard's parallelism. L2 and L3 remain unified because the CPU has already gotten the parallelism benefit from L1, and unifying the deeper levels simplifies design without meaningful cost.
+
+Since the CPU spends the vast majority of its time talking to cache rather than RAM, splitting L1 captures most of Harvard's benefit without requiring physically separate RAM or buses. The warehouse (RAM) stays shared; only the two desk drawers (L1i and L1d) are separate.
+
 ### Memory Hierarchy
 
 Modern systems mitigate the bottleneck through a hierarchy of progressively larger, slower storage:
@@ -95,6 +123,90 @@ Disk/SSD        ~100,000+ cycles
 ```
 
 Each level acts as a buffer, keeping frequently used data close to the CPU. Other techniques include **prefetching** (predicting what data will be needed next) and **speculative execution** (executing instructions before knowing if they're needed).
+
+### Data Flow: The Train Model
+
+Data flows in one direction — from RAM toward the CPU — like a train pulling cargo forward, carriage by carriage:
+
+```
+RAM          L3       L2       L1       Registers    CPU
+(original) → (copy) → (copy) → (copy) → (copy)    → execute
+```
+
+> **Fetch = Copy**: At every stage, "fetching" means copying forward — the original always stays in RAM. Nothing is moved or destroyed.
+
+> **Registers are the last stop**: The ALU can only operate on data sitting in registers — not directly from L1 cache. Registers are the smallest and fastest storage (~16 general-purpose registers in x86-64), holding only what the ALU needs right now.
+
+Each cache level holds a **copy**, pulled forward from the level behind it. When the CPU needs data:
+
+1. Checks **Registers** first — if found, ~1 cycle (already loaded)
+2. Not there? Checks **L1** — ~4 cycles (cache hit)
+3. Not there? Checks **L2** — ~12 cycles
+4. Not there? Checks **L3** — ~40 cycles
+5. Not there? Goes to **RAM** — ~100+ cycles (cache miss cascade)
+
+When a cache miss occurs, data is copied up the chain and cached at each level for future reuse. If the same data is needed again soon (**temporal locality**), it's already waiting in L1.
+
+Refilling also works level by level:
+
+```
+RAM ←————————————————————————————————————
+          L3 ←——————————————————————————   (refills from RAM)
+                   L2 ←—————————————————  (refills from L3)
+                            L1 ←—————————  (refills from L2)
+                            Registers ←——  (refills from L1)
+                                 CPU executes here
+```
+
+### CPU Package and Internal Buses
+
+L3 is not on the same die as the CPU cores, but is packaged together with them as one unit you install on the motherboard:
+
+```
+CPU Package (what you buy & install)
+┌─────────────────────────────────────┐
+│  Core die(s)           L3 die       │
+│  ┌──────────┐        ┌──────────┐   │
+│  │ Core 0   │        │          │   │
+│  │ L1, L2   │◄══════►│    L3    │   │
+│  ├──────────┤        │ (shared) │   │
+│  │ Core 1   │        │          │   │
+│  │ L1, L2   │◄══════►│          │   │
+│  └──────────┘        └──────────┘   │
+└─────────────────────────────────────┘
+                ↕
+              RAM (separate sticks on motherboard)
+```
+
+Each connection is a bus — different names and speeds depending on what is connected:
+
+| Connection | Bus Name | Speed |
+|---|---|---|
+| L1 ↔ L2 | internal core bus | fastest |
+| L2 ↔ L3 | Infinity Fabric (AMD) / Ring Bus (Intel) | fast |
+| L3 ↔ RAM | memory bus (DDR5 etc.) | slower |
+| RAM ↔ GPU | PCIe bus | slower still |
+
+### Cache Eviction
+
+Each cache level has a **fixed size** — copies accumulate until the cache is full, at which point an **eviction policy** decides what to discard to make room for new data:
+
+```
+Typical sizes (modern CPU):
+L1  ~32 KB   per core
+L2  ~256 KB  per core
+L3  ~8 MB    shared across cores
+```
+
+Common eviction policies:
+
+| Policy | Description |
+|--------|-------------|
+| **LRU** (Least Recently Used) | Evict whatever was used longest ago |
+| **LFU** (Least Frequently Used) | Evict whatever was used least often |
+| **Random** | Evict a random entry (simpler hardware) |
+
+The cache is effectively a **fixed-size sliding window** of the most recently used data — constantly filling up and discarding stale copies to stay relevant to what the CPU needs next.
 
 ## Python Connection
 

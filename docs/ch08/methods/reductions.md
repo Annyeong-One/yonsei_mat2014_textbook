@@ -295,13 +295,11 @@ if __name__ == "__main__":
 For a 2D array $a = (a_{ij})$:
 
 $$
-
 \begin{aligned}
 \texttt{a.sum()} &= \sum_i \sum_j a_{ij} \\
 \texttt{a.sum(axis=0)[j]} &= \sum_i a_{ij} \\
 \texttt{a.sum(axis=1)[i]} &= \sum_j a_{ij}
 \end{aligned}
-
 $$
 
 ```python
