@@ -861,6 +861,28 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#numpy-lives-in-the-heap-too" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NumPy Lives in the Heap Too
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#contiguous-allocation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contiguous Allocation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#memory-mapped-files" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1176,14 +1198,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../data/floating_point_preview/" class="md-nav__link">
+      <a href="../../data/floating_point_representation/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Floating Point (IEEE 754 Preview)
+    Floating Point
   
 
     
@@ -1204,14 +1226,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../data/character_encoding_preview/" class="md-nav__link">
+      <a href="../../data/character_encoding/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Character Encoding Preview
+    Character Encoding
   
 
     
@@ -44099,6 +44121,28 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#numpy-lives-in-the-heap-too" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NumPy Lives in the Heap Too
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#contiguous-allocation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contiguous Allocation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#memory-mapped-files" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -44208,15 +44252,21 @@
 │  ├─────────────────────────────────────────────────────┤   │
 │  │              Python Interpreter                      │   │
 │  ├─────────────────────────────────────────────────────┤   │
-│  │              Python Objects (Heap)                   │   │
+│  │              Stack                                   │   │
+│  │   (function calls, local variables, return addr)    │   │
+│  ├─────────────────────────────────────────────────────┤   │
+│  │              Heap                                    │   │
+│  │                                                     │   │
 │  │  ┌──────┐ ┌──────┐ ┌──────┐ ┌──────┐               │   │
 │  │  │ int  │ │ str  │ │ list │ │ dict │  ...          │   │
 │  │  └──────┘ └──────┘ └──────┘ └──────┘               │   │
-│  ├─────────────────────────────────────────────────────┤   │
-│  │              NumPy Arrays                            │   │
-│  │  ┌─────────────────────────────────────────────┐   │   │
-│  │  │ Contiguous data buffers                     │   │   │
-│  │  └─────────────────────────────────────────────┘   │   │
+│  │  (scattered, each with per-object overhead)         │   │
+│  │                                                     │   │
+│  │  ┌──────────┐   ┌────────────────────────────┐     │   │
+│  │  │ ndarray  │──▶│ 1.0 │ 2.0 │ 3.0 │ 4.0 │..│     │   │
+│  │  │ (object) │   └────────────────────────────┘     │   │
+│  │  └──────────┘   contiguous raw values, no overhead  │   │
+│  │                                                     │   │
 │  ├─────────────────────────────────────────────────────┤   │
 │  │              Other Applications                      │   │
 │  └─────────────────────────────────────────────────────┘   │
@@ -44409,7 +44459,63 @@ Higher speed with higher CL can have same actual latency!
 <span class="n">tracemalloc</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
 </code></pre></div>
 <h2 id="numpy-and-ram">NumPy and RAM<a class="headerlink" href="#numpy-and-ram" title="Permanent link">&para;</a></h2>
-<p>NumPy allocates contiguous memory blocks:</p>
+<h3 id="numpy-lives-in-the-heap-too">NumPy Lives in the Heap Too<a class="headerlink" href="#numpy-lives-in-the-heap-too" title="Permanent link">&para;</a></h3>
+<p>NumPy arrays live in the heap just like all other Python objects — they get no special separate memory region. What makes NumPy different is not <em>where</em> the data lives, but <em>how</em> it is laid out.</p>
+<p>All Python objects have metadata and data. The real distinction is whether the actual values are <strong>contiguous raw bytes</strong> or <strong>scattered objects accessed via pointers</strong>:</p>
+<div class="highlight"><pre><span></span><code>Python list [1.0, 2.0, 3.0]:
+
+Heap:
+┌──────────┐      ┌──────────┐
+│   list   │─────▶│ ref[0]   │──▶ [PyObject float: 1.0] (somewhere in heap)
+│  object  │      │ ref[1]   │──▶ [PyObject float: 2.0] (somewhere else)
+└──────────┘      │ ref[2]   │──▶ [PyObject float: 3.0] (somewhere else)
+                  └──────────┘
+                  stores pointers,     actual values scattered
+                  not values           all over heap
+
+
+NumPy array([1.0, 2.0, 3.0]):
+
+Heap:
+┌──────────┐      ┌────────────────────────┐
+│ ndarray  │─────▶│ 1.0 │ 2.0 │ 3.0 │ ... │
+│  object  │      └────────────────────────┘
+└──────────┘      actual values, contiguous,
+                  no per-element overhead
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Python list</th>
+<th>NumPy array</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Stores</strong></td>
+<td>Pointers to objects</td>
+<td>Raw values directly</td>
+</tr>
+<tr>
+<td><strong>Values location</strong></td>
+<td>Scattered across heap</td>
+<td>Contiguous block in heap</td>
+</tr>
+<tr>
+<td><strong>Per-element overhead</strong></td>
+<td>28 bytes per int</td>
+<td>0 bytes</td>
+</tr>
+<tr>
+<td><strong>Cache friendliness</strong></td>
+<td>Poor (pointer chasing)</td>
+<td>Excellent (one block)</td>
+</tr>
+</tbody>
+</table>
+<p>Both are in the heap. The difference is purely layout — and that layout difference is what makes NumPy cache-friendly and fast.</p>
+<h3 id="contiguous-allocation">Contiguous Allocation<a class="headerlink" href="#contiguous-allocation" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="c1"># Allocate 1 GB array</span>

@@ -525,6 +525,39 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#data-flow-the-train-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data Flow: The Train Model
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpu-package-and-internal-buses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CPU Package and Internal Buses
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cache-eviction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cache Eviction
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1109,14 +1142,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../data/floating_point_preview/" class="md-nav__link">
+      <a href="../../data/floating_point_representation/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Floating Point (IEEE 754 Preview)
+    Floating Point
   
 
     
@@ -1137,14 +1170,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../data/character_encoding_preview/" class="md-nav__link">
+      <a href="../../data/character_encoding/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Character Encoding Preview
+    Character Encoding
   
 
     
@@ -43975,6 +44008,39 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#data-flow-the-train-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data Flow: The Train Model
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpu-package-and-internal-buses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CPU Package and Internal Buses
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cache-eviction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cache Eviction
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -44103,8 +44169,12 @@
 <ul>
 <li><strong>Address Bus</strong>: Specifies which memory location to access</li>
 <li><strong>Data Bus</strong>: Transfers actual data between CPU and memory</li>
-<li><strong>Control Bus</strong>: Carries signals like "read" or "write"</li>
+<li><strong>Control Bus</strong>: Carries coordination signals including read, write, interrupt request, bus grant, clock, and reset — "read" and "write" are the most commonly cited examples, but the control bus is a collection of many dedicated signaling lines</li>
 </ul>
+<blockquote>
+<p><strong>Note</strong>: The control bus signals "read" and "write" are sometimes compared to Unix <code>rwx</code> permissions, but the analogy breaks down at <strong>execute</strong> (<code>x</code>). Execute is a software/OS abstraction — at the hardware level, the CPU doesn't receive an "execute" signal over the bus. Instead, it simply <em>fetches</em> an instruction (a read), and the CPU's internal logic decodes and runs it. There is no separate "execute" bus signal.</p>
+<p>The control bus also carries many other signals beyond read/write, including: <strong>clock</strong> (synchronizes all components), <strong>interrupt request/acknowledge</strong> (peripherals signal the CPU and receive confirmation), <strong>bus request/grant</strong> (arbitrates access in multi-master scenarios such as DMA), <strong>reset</strong> (forces the system to its initial state), and <strong>bus ready/wait</strong> (lets slow devices stall the CPU). "Read" and "write" are the entry-point examples — not an exhaustive list.</p>
+</blockquote>
 <h3 id="inputoutput">Input/Output<a class="headerlink" href="#inputoutput" title="Permanent link">&para;</a></h3>
 <p>CPUs also communicate with peripherals (keyboard, disk, GPU, network) through I/O controllers connected to the bus system. I/O is not shown in the simplified diagram above but is an essential part of any real system.</p>
 <h2 id="the-fetch-decode-execute-cycle">The Fetch-Decode-Execute Cycle<a class="headerlink" href="#the-fetch-decode-execute-cycle" title="Permanent link">&para;</a></h2>
@@ -44122,6 +44192,9 @@
 <li><strong>Writeback</strong>: Results are written back to registers or memory</li>
 <li><strong>Repeat</strong>: Program Counter increments, cycle continues</li>
 </ol>
+<blockquote>
+<p><strong>What "fetch" means</strong>: The CPU retrieves the instruction stored at the memory address pointed to by the Program Counter (PC), loads it into the Instruction Register (IR), then increments the PC. Think of the PC as a bookmark — fetch is literally fetching the next instruction from that bookmark location.</p>
+</blockquote>
 <p>Conceptually, instructions execute one at a time in sequence. In practice, modern CPUs use <strong>pipelining</strong>, <strong>superscalar execution</strong>, and <strong>out-of-order execution</strong> to process multiple instructions simultaneously — but the programmer-visible model remains sequential.</p>
 <h2 id="the-von-neumann-bottleneck">The Von Neumann Bottleneck<a class="headerlink" href="#the-von-neumann-bottleneck" title="Permanent link">&para;</a></h2>
 <p>The defining limitation of the architecture: instructions and data share the same memory and the same communication pathway.</p>
@@ -44130,7 +44203,27 @@
 </code></pre></div>
 <p>This creates a bottleneck because the CPU must wait for memory transfers, and instruction fetches compete with data loads for the same bus. As CPU speeds have grown far faster than memory speeds (the "memory wall"), this bottleneck has become the central constraint in modern computing.</p>
 <h3 id="harvard-architecture-the-contrast">Harvard Architecture: The Contrast<a class="headerlink" href="#harvard-architecture-the-contrast" title="Permanent link">&para;</a></h3>
-<p>The <strong>Harvard architecture</strong> separates instruction memory from data memory, eliminating the competition between the two. Most microcontrollers use a pure Harvard design. Modern desktop CPUs use a <strong>modified Harvard architecture</strong>: physically they follow Von Neumann (unified RAM), but the L1 cache is split into separate instruction and data caches, recovering much of Harvard's benefit.</p>
+<p>The <strong>Harvard architecture</strong> separates instruction memory from data memory, eliminating the competition between the two. Most microcontrollers — small, independent computers dedicated to a single specific task — use a pure Harvard design. Modern desktop CPUs use a <strong>modified Harvard architecture</strong>: physically they follow Von Neumann (unified RAM), but the L1 cache is split into separate instruction and data caches, recovering much of Harvard's benefit.</p>
+<p>The three designs can be compared as a spectrum:</p>
+<div class="highlight"><pre><span></span><code>Pure Von Neumann          Modified Harvard           Pure Harvard
+(unified everything)      (modern CPUs)              (separate everything)
+
+CPU                       CPU chip                   CPU
+ └── one bus               ├── L1i (separate)         ├── instr bus
+      └── RAM              ├── L1d (separate)         │    └── instr RAM
+    (instr + data)         ├── L2  (unified)          └── data bus
+                           └── L3  (unified)               └── data RAM
+                          Outside CPU chip
+                           └── RAM (unified)
+</code></pre></div>
+<blockquote>
+<p><strong>Important</strong>: L1, L2, and L3 caches are all <strong>inside the CPU chip</strong>. Only RAM sits outside. The distinction between levels is not inside vs outside the CPU, but rather:
+- <strong>L1</strong> — split (Harvard-style), per-core, directly feeds the decoder and ALU
+- <strong>L2</strong> — unified, per-core, slightly further from execution units
+- <strong>L3</strong> — unified, shared across all cores</p>
+</blockquote>
+<p><strong>Why the L1 split is enough</strong>: L1 is the hottest path — it directly feeds the decoder (from L1i) and the ALU (from L1d) simultaneously, recovering most of Harvard's parallelism. L2 and L3 remain unified because the CPU has already gotten the parallelism benefit from L1, and unifying the deeper levels simplifies design without meaningful cost.</p>
+<p>Since the CPU spends the vast majority of its time talking to cache rather than RAM, splitting L1 captures most of Harvard's benefit without requiring physically separate RAM or buses. The warehouse (RAM) stays shared; only the two desk drawers (L1i and L1d) are separate.</p>
 <h3 id="memory-hierarchy">Memory Hierarchy<a class="headerlink" href="#memory-hierarchy" title="Permanent link">&para;</a></h3>
 <p>Modern systems mitigate the bottleneck through a hierarchy of progressively larger, slower storage:</p>
 <div class="highlight"><pre><span></span><code>Registers       ~1 cycle
@@ -44141,6 +44234,111 @@ RAM             ~100+ cycles
 Disk/SSD        ~100,000+ cycles
 </code></pre></div>
 <p>Each level acts as a buffer, keeping frequently used data close to the CPU. Other techniques include <strong>prefetching</strong> (predicting what data will be needed next) and <strong>speculative execution</strong> (executing instructions before knowing if they're needed).</p>
+<h3 id="data-flow-the-train-model">Data Flow: The Train Model<a class="headerlink" href="#data-flow-the-train-model" title="Permanent link">&para;</a></h3>
+<p>Data flows in one direction — from RAM toward the CPU — like a train pulling cargo forward, carriage by carriage:</p>
+<div class="highlight"><pre><span></span><code>RAM          L3       L2       L1       Registers    CPU
+(original) → (copy) → (copy) → (copy) → (copy)    → execute
+</code></pre></div>
+<blockquote>
+<p><strong>Fetch = Copy</strong>: At every stage, "fetching" means copying forward — the original always stays in RAM. Nothing is moved or destroyed.</p>
+<p><strong>Registers are the last stop</strong>: The ALU can only operate on data sitting in registers — not directly from L1 cache. Registers are the smallest and fastest storage (~16 general-purpose registers in x86-64), holding only what the ALU needs right now.</p>
+</blockquote>
+<p>Each cache level holds a <strong>copy</strong>, pulled forward from the level behind it. When the CPU needs data:</p>
+<ol>
+<li>Checks <strong>Registers</strong> first — if found, ~1 cycle (already loaded)</li>
+<li>Not there? Checks <strong>L1</strong> — ~4 cycles (cache hit)</li>
+<li>Not there? Checks <strong>L2</strong> — ~12 cycles</li>
+<li>Not there? Checks <strong>L3</strong> — ~40 cycles</li>
+<li>Not there? Goes to <strong>RAM</strong> — ~100+ cycles (cache miss cascade)</li>
+</ol>
+<p>When a cache miss occurs, data is copied up the chain and cached at each level for future reuse. If the same data is needed again soon (<strong>temporal locality</strong>), it's already waiting in L1.</p>
+<p>Refilling also works level by level:</p>
+<div class="highlight"><pre><span></span><code>RAM ←————————————————————————————————————
+          L3 ←——————————————————————————   (refills from RAM)
+                   L2 ←—————————————————  (refills from L3)
+                            L1 ←—————————  (refills from L2)
+                            Registers ←——  (refills from L1)
+                                 CPU executes here
+</code></pre></div>
+<h3 id="cpu-package-and-internal-buses">CPU Package and Internal Buses<a class="headerlink" href="#cpu-package-and-internal-buses" title="Permanent link">&para;</a></h3>
+<p>L3 is not on the same die as the CPU cores, but is packaged together with them as one unit you install on the motherboard:</p>
+<div class="highlight"><pre><span></span><code>CPU Package (what you buy &amp; install)
+┌─────────────────────────────────────┐
+│  Core die(s)           L3 die       │
+│  ┌──────────┐        ┌──────────┐   │
+│  │ Core 0   │        │          │   │
+│  │ L1, L2   │◄══════►│    L3    │   │
+│  ├──────────┤        │ (shared) │   │
+│  │ Core 1   │        │          │   │
+│  │ L1, L2   │◄══════►│          │   │
+│  └──────────┘        └──────────┘   │
+└─────────────────────────────────────┘
+                ↕
+              RAM (separate sticks on motherboard)
+</code></pre></div>
+<p>Each connection is a bus — different names and speeds depending on what is connected:</p>
+<table>
+<thead>
+<tr>
+<th>Connection</th>
+<th>Bus Name</th>
+<th>Speed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L1 ↔ L2</td>
+<td>internal core bus</td>
+<td>fastest</td>
+</tr>
+<tr>
+<td>L2 ↔ L3</td>
+<td>Infinity Fabric (AMD) / Ring Bus (Intel)</td>
+<td>fast</td>
+</tr>
+<tr>
+<td>L3 ↔ RAM</td>
+<td>memory bus (DDR5 etc.)</td>
+<td>slower</td>
+</tr>
+<tr>
+<td>RAM ↔ GPU</td>
+<td>PCIe bus</td>
+<td>slower still</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cache-eviction">Cache Eviction<a class="headerlink" href="#cache-eviction" title="Permanent link">&para;</a></h3>
+<p>Each cache level has a <strong>fixed size</strong> — copies accumulate until the cache is full, at which point an <strong>eviction policy</strong> decides what to discard to make room for new data:</p>
+<div class="highlight"><pre><span></span><code>Typical sizes (modern CPU):
+L1  ~32 KB   per core
+L2  ~256 KB  per core
+L3  ~8 MB    shared across cores
+</code></pre></div>
+<p>Common eviction policies:</p>
+<table>
+<thead>
+<tr>
+<th>Policy</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>LRU</strong> (Least Recently Used)</td>
+<td>Evict whatever was used longest ago</td>
+</tr>
+<tr>
+<td><strong>LFU</strong> (Least Frequently Used)</td>
+<td>Evict whatever was used least often</td>
+</tr>
+<tr>
+<td><strong>Random</strong></td>
+<td>Evict a random entry (simpler hardware)</td>
+</tr>
+</tbody>
+</table>
+<p>The cache is effectively a <strong>fixed-size sliding window</strong> of the most recently used data — constantly filling up and discarding stale copies to stay relevant to what the CPU needs next.</p>
 <h2 id="python-connection">Python Connection<a class="headerlink" href="#python-connection" title="Permanent link">&para;</a></h2>
 <p>Understanding Von Neumann architecture explains several Python behaviors.</p>
 <h3 id="why-python-objects-have-overhead">Why Python Objects Have Overhead<a class="headerlink" href="#why-python-objects-have-overhead" title="Permanent link">&para;</a></h3>

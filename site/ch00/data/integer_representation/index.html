@@ -12,7 +12,7 @@
         <link rel="prev" href="../number_systems/">
       
       
-        <link rel="next" href="../floating_point_preview/">
+        <link rel="next" href="../floating_point_representation/">
       
       
         
@@ -994,6 +994,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#overflow-in-twos-complement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overflow in Two's Complement
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1016,6 +1027,17 @@
     <span class="md-ellipsis">
       
         Arbitrary Precision
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-python-actually-stores-integers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How Python Actually Stores Integers
       
     </span>
   </a>
@@ -1055,17 +1077,6 @@
     <span class="md-ellipsis">
       
         Overflow Behavior
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#overflow-detection" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Overflow Detection
       
     </span>
   </a>
@@ -1182,14 +1193,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../floating_point_preview/" class="md-nav__link">
+      <a href="../floating_point_representation/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Floating Point (IEEE 754 Preview)
+    Floating Point
   
 
     
@@ -1210,14 +1221,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../character_encoding_preview/" class="md-nav__link">
+      <a href="../character_encoding/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Character Encoding Preview
+    Character Encoding
   
 
     
@@ -44015,6 +44026,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#overflow-in-twos-complement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overflow in Two's Complement
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -44037,6 +44059,17 @@
     <span class="md-ellipsis">
       
         Arbitrary Precision
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-python-actually-stores-integers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How Python Actually Stores Integers
       
     </span>
   </a>
@@ -44076,17 +44109,6 @@
     <span class="md-ellipsis">
       
         Overflow Behavior
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#overflow-detection" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Overflow Detection
       
     </span>
   </a>
@@ -44262,7 +44284,7 @@ Value:     0 + 64 + 32 + 0 + 0 + 4 + 0 + 1 = 101
 <h2 id="signed-integers-twos-complement">Signed Integers: Two's Complement<a class="headerlink" href="#signed-integers-twos-complement" title="Permanent link">&para;</a></h2>
 <p>Most computers use <strong>two's complement</strong> to represent negative numbers.</p>
 <h3 id="how-twos-complement-works">How Two's Complement Works<a class="headerlink" href="#how-twos-complement-works" title="Permanent link">&para;</a></h3>
-<p>The most significant bit (MSB) has negative weight:</p>
+<p>In two's complement interpretation, the most significant bit (MSB) contributes −2^(n−1) to the value. This is a mathematical interpretation of the bit pattern — the hardware still performs ordinary binary addition on all bits; the "negative weight" is how we interpret the result:</p>
 <div class="highlight"><pre><span></span><code>8-bit signed integer (int8)
 
 Binary:    1 0 1 1 0 1 0 1
@@ -44317,6 +44339,7 @@ Add 1:      1111 1011  (-5)
 
 Verify: -128 + 64 + 32 + 16 + 8 + 0 + 2 + 1 = -5 ✓
 </code></pre></div>
+<p><strong>Why does this work?</strong> Two's complement represents −x as 2ⁿ − x (where n is the bit width). For 8-bit: −5 = 256 − 5 = 251 = <code>11111011</code>. Inverting all bits of x gives (2ⁿ − 1 − x), and adding 1 gives exactly 2ⁿ − x. This is why the "invert and add 1" trick works — it's not arbitrary, it follows directly from the definition.</p>
 <h3 id="why-twos-complement">Why Two's Complement?<a class="headerlink" href="#why-twos-complement" title="Permanent link">&para;</a></h3>
 <ol>
 <li><strong>Single zero</strong>: No separate +0 and -0</li>
@@ -44335,6 +44358,20 @@ Verify: -128 + 64 + 32 + 16 + 8 + 0 + 2 + 1 = -5 ✓
   ──────────────
   1 0000 0000  (0, carry discarded)
 </code></pre></div>
+<h3 id="overflow-in-twos-complement">Overflow in Two's Complement<a class="headerlink" href="#overflow-in-twos-complement" title="Permanent link">&para;</a></h3>
+<p>When a result exceeds the representable range, the bit pattern wraps around. This is the most important property of fixed-width integers:</p>
+<div class="highlight"><pre><span></span><code>  0111 1111  (127, max int8)
++ 0000 0001  (1)
+───────────
+  1000 0000  (-128!)
+
+The carry into the MSB flips the sign bit — the result wraps
+from the maximum positive value to the minimum negative value.
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">(</span><span class="mi">127</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># -128 (wrapped!)</span>
+</code></pre></div>
 <h2 id="pythons-integers">Python's Integers<a class="headerlink" href="#pythons-integers" title="Permanent link">&para;</a></h2>
 <h3 id="arbitrary-precision">Arbitrary Precision<a class="headerlink" href="#arbitrary-precision" title="Permanent link">&para;</a></h3>
 <p>Unlike C/NumPy, Python integers have <strong>unlimited size</strong>:</p>
@@ -44351,13 +44388,53 @@ Verify: -128 + 64 + 32 + 16 + 8 + 0 + 2 + 1 = -5 ✓
 <span class="nb">print</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">getsizeof</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">100</span><span class="p">))</span> <span class="c1"># 44 bytes</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">getsizeof</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">1000</span><span class="p">))</span> <span class="c1"># 160 bytes</span>
 </code></pre></div>
+<h3 id="how-python-actually-stores-integers">How Python Actually Stores Integers<a class="headerlink" href="#how-python-actually-stores-integers" title="Permanent link">&para;</a></h3>
+<p>Unlike C/NumPy which use two's complement, Python stores integers as <strong>sign + magnitude</strong> — the sign and the absolute value are kept separately:</p>
+<div class="highlight"><pre><span></span><code>Python int object in memory:
+┌─────────────┬───────────┬──────────────────┐
+│  ob_refcnt  │  ob_size  │   ob_digit[]     │
+│ (ref count) │ (+ or -)  │ (magnitude only) │
+└─────────────┴───────────┴──────────────────┘
+</code></pre></div>
+<ul>
+<li><code>ob_size</code> is negative if the number is negative, positive if positive</li>
+<li><code>ob_digit[]</code> stores the magnitude as an array of <strong>base-2³⁰ chunks</strong> (not decimal digits or single bits) — each element holds up to 30 bits of the integer's magnitude</li>
+<li>The sign is carried separately — more like how humans write <code>−5</code></li>
+</ul>
+<p>So <code>-5</code> is stored as: sign = negative, magnitude = 5. Not two's complement.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Storage</th>
+<th>Sign</th>
+<th>Overflow</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Two's complement</strong> (C/NumPy)</td>
+<td>Single bit pattern, sign baked in</td>
+<td>MSB has negative weight</td>
+<td>Possible</td>
+</tr>
+<tr>
+<td><strong>Python int</strong></td>
+<td>Sign field + magnitude separately</td>
+<td><code>ob_size</code> positive/negative</td>
+<td>Never</td>
+</tr>
+</tbody>
+</table>
+<p>In two's complement, <code>-5</code> and <code>5</code> look completely different in bits (<code>1111 1011</code> vs <code>0000 0101</code>). In Python, they have the <strong>same magnitude</strong> (<code>ob_digit = [5]</code>), just opposite <code>ob_size</code> signs.</p>
 <h3 id="pythons-twos-complement-convention">Python's Two's Complement Convention<a class="headerlink" href="#pythons-twos-complement-convention" title="Permanent link">&para;</a></h3>
-<p>Python conceptually uses infinite-width two's complement:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># Negative numbers have infinite leading 1s</span>
+<p><code>bin(-5)</code> returns <code>'-0b101'</code> — the <code>'-'</code> prefix is just a <strong>display convention</strong>, not the internal storage. Python's <code>bin()</code> reads the sign field and prepends <code>'-'</code> to the magnitude.</p>
+<p>However, Python <em>simulates</em> infinite-width two's complement when doing bitwise operations — it computes results <em>as if</em> the number were stored in two's complement with infinite width. A key mental model: <strong>negative numbers behave as if they have infinitely many leading 1 bits</strong> (e.g. −1 is conceptually <code>...11111111</code>, −5 is <code>...11111011</code>):</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># bin() shows sign-magnitude display, not internal storage</span>
 <span class="nb">print</span><span class="p">(</span><span class="nb">bin</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>   <span class="c1"># &#39;-0b1&#39; but conceptually ...1111111</span>
 <span class="nb">print</span><span class="p">(</span><span class="nb">bin</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">))</span>   <span class="c1"># &#39;-0b101&#39; but conceptually ...1111011</span>
 
-<span class="c1"># Bitwise operations work as expected</span>
+<span class="c1"># Bitwise ops simulate infinite two&#39;s complement</span>
 <span class="nb">print</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span>  <span class="c1"># 255 (mask to 8 bits)</span>
 <span class="nb">print</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span>  <span class="c1"># 251 (0b11111011)</span>
 </code></pre></div>
@@ -44384,7 +44461,7 @@ Verify: -128 + 64 + 32 + 16 + 8 + 0 + 2 + 1 = -5 ✓
 <h3 id="overflow-behavior">Overflow Behavior<a class="headerlink" href="#overflow-behavior" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="c1"># NumPy wraps on overflow (like C)</span>
+<span class="c1"># NumPy wraps on overflow (like C) — silently, with no warning</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">(</span><span class="mi">127</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># -128 (wrapped!)</span>
 
@@ -44394,22 +44471,9 @@ Verify: -128 + 64 + 32 + 16 + 8 + 0 + 2 + 1 = -5 ✓
 <span class="c1"># Python ints don&#39;t overflow</span>
 <span class="nb">print</span><span class="p">(</span><span class="mi">127</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># 128 (correct)</span>
 </code></pre></div>
-<h3 id="overflow-detection">Overflow Detection<a class="headerlink" href="#overflow-detection" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
-
-<span class="c1"># Enable overflow warnings</span>
-<span class="n">old_settings</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">seterr</span><span class="p">(</span><span class="n">over</span><span class="o">=</span><span class="s1">&#39;warn&#39;</span><span class="p">)</span>
-
-<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">(</span><span class="mi">127</span><span class="p">)</span>
-<span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">(</span><span class="n">record</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">w</span><span class="p">:</span>
-    <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;always&quot;</span><span class="p">)</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">w</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Overflow occurred!&quot;</span><span class="p">)</span>
-
-<span class="n">np</span><span class="o">.</span><span class="n">seterr</span><span class="p">(</span><span class="o">**</span><span class="n">old_settings</span><span class="p">)</span>
-</code></pre></div>
+<blockquote>
+<p><strong>Note</strong>: NumPy integer overflow is silent — there is no built-in warning mechanism for integer wraparound (unlike floating-point). Always validate your data range before choosing a dtype.</p>
+</blockquote>
 <h2 id="bit-manipulation-with-integers">Bit Manipulation with Integers<a class="headerlink" href="#bit-manipulation-with-integers" title="Permanent link">&para;</a></h2>
 <h3 id="extracting-bits">Extracting Bits<a class="headerlink" href="#extracting-bits" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">x</span> <span class="o">=</span> <span class="mb">0b11010110</span>
@@ -44453,6 +44517,8 @@ Verify: -128 + 64 + 32 + 16 + 8 + 0 + 2 + 1 = -5 ✓
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="c1"># Memory considerations</span>
+<span class="c1"># Memory considerations (rough estimates — sys.getsizeof counts</span>
+<span class="c1"># the integer object only, not list pointers or list array overhead)</span>
 <span class="n">data</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1_000_000</span><span class="p">))</span>
 
 <span class="c1"># Python list of ints: ~28 MB</span>
@@ -44481,6 +44547,9 @@ Verify: -128 + 64 + 32 + 16 + 8 + 0 + 2 + 1 = -5 ✓
 <span class="nb">print</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>  <span class="c1"># [30000 35000 40000] - Correct</span>
 </code></pre></div>
 <h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>Two ways Python handles negative integers</strong>: Python actually has two different representations depending on context. Native Python integers use <strong>sign + magnitude</strong> (the sign and absolute value stored separately) — this enables arbitrary precision and no overflow. NumPy integers use <strong>C-style two's complement</strong> — because under the hood, NumPy runs C code operating directly on fixed-width bit patterns. Same Python environment, two fundamentally different internal representations depending on whether you're using <code>int</code> or <code>np.int8/int32/int64</code>.</p>
+</blockquote>
 <table>
 <thead>
 <tr>
@@ -44514,7 +44583,7 @@ Verify: -128 + 64 + 32 + 16 + 8 + 0 + 2 + 1 = -5 ✓
 </table>
 <p>Key points:</p>
 <ul>
-<li>Two's complement is universal for signed integers</li>
+<li>Two's complement is the dominant representation for signed integers in modern hardware</li>
 <li>Python ints never overflow (but use more memory)</li>
 <li>NumPy ints overflow silently—choose appropriate dtype</li>
 <li>Bit width determines range and memory usage</li>

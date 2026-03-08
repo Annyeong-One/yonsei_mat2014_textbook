@@ -727,13 +727,41 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#what-is-virtual-memory" class="md-nav__link">
+  <a href="#who-controls-virtual-memory-os-or-cpu" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What is Virtual Memory?
+        Who Controls Virtual Memory: OS or CPU?
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Who Controls Virtual Memory: OS or CPU?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-broader-pattern-os-as-stage-cpu-as-performer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Broader Pattern: OS as Stage, CPU as Performer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#every-modern-os-uses-virtual-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Every Modern OS Uses Virtual Memory
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1143,14 +1171,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../data/floating_point_preview/" class="md-nav__link">
+      <a href="../../data/floating_point_representation/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Floating Point (IEEE 754 Preview)
+    Floating Point
   
 
     
@@ -1171,14 +1199,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../data/character_encoding_preview/" class="md-nav__link">
+      <a href="../../data/character_encoding/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Character Encoding Preview
+    Character Encoding
   
 
     
@@ -43904,13 +43932,41 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#what-is-virtual-memory" class="md-nav__link">
+  <a href="#who-controls-virtual-memory-os-or-cpu" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What is Virtual Memory?
+        Who Controls Virtual Memory: OS or CPU?
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Who Controls Virtual Memory: OS or CPU?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-broader-pattern-os-as-stage-cpu-as-performer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Broader Pattern: OS as Stage, CPU as Performer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#every-modern-os-uses-virtual-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Every Modern OS Uses Virtual Memory
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -44136,7 +44192,101 @@
 <li>Memory fragmentation wastes space</li>
 </ul>
 <p>Virtual memory solves all of these.</p>
-<h2 id="what-is-virtual-memory">What is Virtual Memory?<a class="headerlink" href="#what-is-virtual-memory" title="Permanent link">&para;</a></h2>
+<h2 id="who-controls-virtual-memory-os-or-cpu">Who Controls Virtual Memory: OS or CPU?<a class="headerlink" href="#who-controls-virtual-memory-os-or-cpu" title="Permanent link">&para;</a></h2>
+<p>Both — they play different roles and neither can do it alone.</p>
+<div class="highlight"><pre><span></span><code>Virtual Memory = OS (policy) + CPU/MMU (mechanism)
+</code></pre></div>
+<p>The <strong>CPU/MMU</strong> handles the mechanical part — actual address translation at hardware speed:</p>
+<div class="highlight"><pre><span></span><code>Every single memory access:
+
+Virtual address
+      │
+      ▼
+   MMU (hardware)
+      │  looks up page table
+      ▼
+Physical address → RAM
+
+This happens billions of times per second
+→ must be hardware, no time for OS involvement
+</code></pre></div>
+<p>The <strong>OS</strong> handles the policy part — decisions and setup:</p>
+<div class="highlight"><pre><span></span><code>OS is responsible for:
+
+- Creating page tables when a process starts
+- Deciding which pages to swap out when RAM is full
+- Handling page faults (loading pages back from disk)
+- Setting permissions (R/W/X) on each page
+- Destroying page tables when process exits
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Responsibility</th>
+<th>Who</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Building and maintaining page tables</td>
+<td>OS</td>
+</tr>
+<tr>
+<td>Actually translating addresses</td>
+<td>MMU (CPU)</td>
+</tr>
+<tr>
+<td>Deciding what to swap out</td>
+<td>OS</td>
+</tr>
+<tr>
+<td>Catching invalid accesses</td>
+<td>MMU raises exception → OS handles it</td>
+</tr>
+<tr>
+<td>TLB caching of translations</td>
+<td>MMU (CPU)</td>
+</tr>
+<tr>
+<td>Loading swapped pages back</td>
+<td>OS</td>
+</tr>
+</tbody>
+</table>
+<p>Neither works without the other — the MMU needs the OS to set up the page tables it reads from, and the OS needs the MMU to enforce the isolation it designed.</p>
+<h3 id="the-broader-pattern-os-as-stage-cpu-as-performer">The Broader Pattern: OS as Stage, CPU as Performer<a class="headerlink" href="#the-broader-pattern-os-as-stage-cpu-as-performer" title="Permanent link">&para;</a></h3>
+<p>This division generalizes to the entire relationship between OS and CPU:</p>
+<div class="highlight"><pre><span></span><code>Virtual Memory:
+  OS  → builds page tables, sets permissions
+  MMU → does every address translation
+
+Cache:
+  OS  → allocates memory regions
+  Cache Controller → does every promotion/eviction
+
+Interrupts:
+  OS  → registers interrupt handlers
+  CPU → detects the interrupt, jumps to handler
+
+Process Scheduling:
+  OS  → decides which process runs next
+  CPU → actually executes the instructions
+
+Boot:
+  BIOS/UEFI → sets up the working environment
+  CPU        → executes every instruction
+</code></pre></div>
+<p>The OS is a <strong>configuration and coordination layer</strong> — it makes decisions, sets up tables, registers handlers, and manages resources, but only runs when something needs to be decided or handled. The vast majority of actual work — billions of operations per second — is done by the CPU running autonomously within the environment the OS prepared.</p>
+<div class="highlight"><pre><span></span><code>OS  = rulebook + referee
+      (runs occasionally, when decisions needed)
+
+CPU = player
+      (runs constantly, does the actual work)
+</code></pre></div>
+<p>The OS is in control in the sense that it <em>defines the rules</em>. The CPU is in control in the sense that it <em>does everything</em>. They are complementary, not competing.</p>
+<h3 id="every-modern-os-uses-virtual-memory">Every Modern OS Uses Virtual Memory<a class="headerlink" href="#every-modern-os-uses-virtual-memory" title="Permanent link">&para;</a></h3>
+<p>Virtual memory is considered a fundamental requirement of any modern OS — Windows, Linux, macOS, iOS, Android all use it without exception. It became standard in the 1980s–90s as multitasking OSes took over, and today the MMU is built directly into CPU silicon because the hardware assumes virtual memory will always be in use.</p>
+<p>The only exceptions are bare-metal embedded systems and some real-time OSes (RTOS) where there is barely an "OS" in the traditional sense — programs run directly on hardware with no abstraction layer.</p>
 <p><strong>Virtual memory</strong> creates an abstraction where each process thinks it has its own private, contiguous address space.</p>
 <div class="highlight"><pre><span></span><code>Process A sees:              Process B sees:
 ┌─────────────────┐          ┌─────────────────┐

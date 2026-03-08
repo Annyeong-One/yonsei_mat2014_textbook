@@ -9,10 +9,10 @@
       
       
       
-        <link rel="prev" href="../floating_point_preview/">
+        <link rel="prev" href="../integer_representation/">
       
       
-        <link rel="next" href="../../../ch01/">
+        <link rel="next" href="../character_encoding/">
       
       
         
@@ -23,7 +23,7 @@
     
     
       
-        <title>Character Encoding Preview - Python</title>
+        <title>Floating Point - Python</title>
       
     
     
@@ -64,7 +64,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#character-encoding-preview" class="md-skip">
+        <a href="#floating-point-ieee-754-preview" class="md-skip">
           Skip to content
         </a>
       
@@ -100,7 +100,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Character Encoding Preview
+              Floating Point
             
           </span>
         </div>
@@ -876,34 +876,6 @@
                 
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../floating_point_preview/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Floating Point (IEEE 754 Preview)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
     
   
   
@@ -923,7 +895,7 @@
   <span class="md-ellipsis">
     
   
-    Character Encoding Preview
+    Floating Point
   
 
     
@@ -941,7 +913,7 @@
   <span class="md-ellipsis">
     
   
-    Character Encoding Preview
+    Floating Point
   
 
     
@@ -967,10 +939,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#the-problem-characters-are-not-numbers" class="md-nav__link">
+  <a href="#the-problem-with-real-numbers" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The Problem: Characters Are Not Numbers
+        The Problem with Real Numbers
       
     </span>
   </a>
@@ -978,22 +950,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ascii-the-foundation" class="md-nav__link">
+  <a href="#ieee-754-format" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ASCII: The Foundation
+        IEEE 754 Format
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="ASCII: The Foundation">
+    <nav class="md-nav" aria-label="IEEE 754 Format">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#ascii-in-python" class="md-nav__link">
+  <a href="#components" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ASCII in Python
+        Components
       
     </span>
   </a>
@@ -1001,10 +973,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ascii-limitations" class="md-nav__link">
+  <a href="#example-representing-65" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ASCII Limitations
+        Example: Representing 6.5
       
     </span>
   </a>
@@ -1017,33 +989,33 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#extended-ascii-and-code-pages" class="md-nav__link">
+  <a href="#precision-limitations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Extended ASCII and Code Pages
+        Precision Limitations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Precision Limitations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#not-all-numbers-are-representable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Not All Numbers Are Representable
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#unicode-universal-character-set" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Unicode: Universal Character Set
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Unicode: Universal Character Set">
-      <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#unicode-in-python" class="md-nav__link">
+  <a href="#precision-by-type" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Unicode in Python
+        Precision by Type
       
     </span>
   </a>
@@ -1056,22 +1028,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#utf-8-the-dominant-encoding" class="md-nav__link">
+  <a href="#special-values" class="md-nav__link">
     <span class="md-ellipsis">
       
-        UTF-8: The Dominant Encoding
+        Special Values
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="UTF-8: The Dominant Encoding">
+    <nav class="md-nav" aria-label="Special Values">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#utf-8-examples" class="md-nav__link">
+  <a href="#pythonnumpy-special-values" class="md-nav__link">
     <span class="md-ellipsis">
       
-        UTF-8 Examples
+        Python/NumPy Special Values
       
     </span>
   </a>
@@ -1079,10 +1051,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#why-utf-8-dominates" class="md-nav__link">
+  <a href="#nan-behavior" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Why UTF-8 Dominates
+        NaN Behavior
       
     </span>
   </a>
@@ -1095,44 +1067,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#encoding-and-decoding-in-python" class="md-nav__link">
+  <a href="#range-and-limits" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Encoding and Decoding in Python
+        Range and Limits
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Encoding and Decoding in Python">
+    <nav class="md-nav" aria-label="Range and Limits">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#string-bytes" class="md-nav__link">
+  <a href="#overflow-and-underflow" class="md-nav__link">
     <span class="md-ellipsis">
       
-        String ↔ Bytes
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#handling-encoding-errors" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Handling Encoding Errors
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#file-encoding" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        File Encoding
+        Overflow and Underflow
       
     </span>
   </a>
@@ -1141,39 +1091,6 @@
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#common-encodings" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Common Encodings
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#character-vs-byte-length" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Character vs Byte Length
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#numpy-and-strings" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        NumPy and Strings
-      
-    </span>
-  </a>
   
 </li>
       
@@ -1190,10 +1107,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#mojibake-garbled-text" class="md-nav__link">
+  <a href="#comparison-errors" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Mojibake (Garbled Text)
+        Comparison Errors
       
     </span>
   </a>
@@ -1201,10 +1118,60 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bom-byte-order-mark" class="md-nav__link">
+  <a href="#accumulation-errors" class="md-nav__link">
     <span class="md-ellipsis">
       
-        BOM (Byte Order Mark)
+        Accumulation Errors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loss-of-significance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Loss of Significance
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practical-guidelines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practical Guidelines
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Practical Guidelines">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#choosing-float-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choosing Float Type
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memory-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Memory Considerations
       
     </span>
   </a>
@@ -1231,6 +1198,34 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../character_encoding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Character Encoding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -43937,10 +43932,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#the-problem-characters-are-not-numbers" class="md-nav__link">
+  <a href="#the-problem-with-real-numbers" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The Problem: Characters Are Not Numbers
+        The Problem with Real Numbers
       
     </span>
   </a>
@@ -43948,22 +43943,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ascii-the-foundation" class="md-nav__link">
+  <a href="#ieee-754-format" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ASCII: The Foundation
+        IEEE 754 Format
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="ASCII: The Foundation">
+    <nav class="md-nav" aria-label="IEEE 754 Format">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#ascii-in-python" class="md-nav__link">
+  <a href="#components" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ASCII in Python
+        Components
       
     </span>
   </a>
@@ -43971,10 +43966,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ascii-limitations" class="md-nav__link">
+  <a href="#example-representing-65" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ASCII Limitations
+        Example: Representing 6.5
       
     </span>
   </a>
@@ -43987,33 +43982,33 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#extended-ascii-and-code-pages" class="md-nav__link">
+  <a href="#precision-limitations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Extended ASCII and Code Pages
+        Precision Limitations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Precision Limitations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#not-all-numbers-are-representable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Not All Numbers Are Representable
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#unicode-universal-character-set" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Unicode: Universal Character Set
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Unicode: Universal Character Set">
-      <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#unicode-in-python" class="md-nav__link">
+  <a href="#precision-by-type" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Unicode in Python
+        Precision by Type
       
     </span>
   </a>
@@ -44026,22 +44021,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#utf-8-the-dominant-encoding" class="md-nav__link">
+  <a href="#special-values" class="md-nav__link">
     <span class="md-ellipsis">
       
-        UTF-8: The Dominant Encoding
+        Special Values
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="UTF-8: The Dominant Encoding">
+    <nav class="md-nav" aria-label="Special Values">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#utf-8-examples" class="md-nav__link">
+  <a href="#pythonnumpy-special-values" class="md-nav__link">
     <span class="md-ellipsis">
       
-        UTF-8 Examples
+        Python/NumPy Special Values
       
     </span>
   </a>
@@ -44049,10 +44044,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#why-utf-8-dominates" class="md-nav__link">
+  <a href="#nan-behavior" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Why UTF-8 Dominates
+        NaN Behavior
       
     </span>
   </a>
@@ -44065,44 +44060,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#encoding-and-decoding-in-python" class="md-nav__link">
+  <a href="#range-and-limits" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Encoding and Decoding in Python
+        Range and Limits
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Encoding and Decoding in Python">
+    <nav class="md-nav" aria-label="Range and Limits">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#string-bytes" class="md-nav__link">
+  <a href="#overflow-and-underflow" class="md-nav__link">
     <span class="md-ellipsis">
       
-        String ↔ Bytes
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#handling-encoding-errors" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Handling Encoding Errors
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#file-encoding" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        File Encoding
+        Overflow and Underflow
       
     </span>
   </a>
@@ -44111,39 +44084,6 @@
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#common-encodings" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Common Encodings
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#character-vs-byte-length" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Character vs Byte Length
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#numpy-and-strings" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        NumPy and Strings
-      
-    </span>
-  </a>
   
 </li>
       
@@ -44160,10 +44100,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#mojibake-garbled-text" class="md-nav__link">
+  <a href="#comparison-errors" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Mojibake (Garbled Text)
+        Comparison Errors
       
     </span>
   </a>
@@ -44171,10 +44111,60 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bom-byte-order-mark" class="md-nav__link">
+  <a href="#accumulation-errors" class="md-nav__link">
     <span class="md-ellipsis">
       
-        BOM (Byte Order Mark)
+        Accumulation Errors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loss-of-significance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Loss of Significance
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practical-guidelines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practical Guidelines
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Practical Guidelines">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#choosing-float-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choosing Float Type
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memory-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Memory Considerations
       
     </span>
   </a>
@@ -44214,249 +44204,300 @@
 
 
 
-<h1 id="character-encoding-preview">Character Encoding Preview<a class="headerlink" href="#character-encoding-preview" title="Permanent link">&para;</a></h1>
-<h2 id="the-problem-characters-are-not-numbers">The Problem: Characters Are Not Numbers<a class="headerlink" href="#the-problem-characters-are-not-numbers" title="Permanent link">&para;</a></h2>
-<p>Computers store numbers, but humans communicate with text. <strong>Character encoding</strong> is the mapping between characters and numbers.</p>
-<div class="highlight"><pre><span></span><code>&#39;A&#39; → 65 → 0100 0001
- ↑     ↑       ↑
-char  number  bits
+<h1 id="floating-point-ieee-754-preview">Floating Point (IEEE 754 Preview)<a class="headerlink" href="#floating-point-ieee-754-preview" title="Permanent link">&para;</a></h1>
+<h2 id="the-problem-with-real-numbers">The Problem with Real Numbers<a class="headerlink" href="#the-problem-with-real-numbers" title="Permanent link">&para;</a></h2>
+<p>Computers work with finite bits, but real numbers can have infinite decimal places. Floating-point representation is a compromise—trading exactness for range.</p>
+<div class="highlight"><pre><span></span><code>π = 3.14159265358979323846...  (infinite digits)
 
-This mapping is arbitrary—just an agreed-upon convention.
+Stored as float32: 3.1415927   (7 significant digits)
+Stored as float64: 3.141592653589793  (15 significant digits)
 </code></pre></div>
-<h2 id="ascii-the-foundation">ASCII: The Foundation<a class="headerlink" href="#ascii-the-foundation" title="Permanent link">&para;</a></h2>
-<p><strong>ASCII</strong> (American Standard Code for Information Interchange) was the original standard, using 7 bits for 128 characters:</p>
-<div class="highlight"><pre><span></span><code>ASCII Table (partial)
-┌─────────┬────────┬─────────────────────────┐
-│ Decimal │  Char  │      Description        │
-├─────────┼────────┼─────────────────────────┤
-│  0-31   │ (ctrl) │ Control characters      │
-│  32     │ (space)│ Space                   │
-│  48-57  │ 0-9    │ Digits                  │
-│  65-90  │ A-Z    │ Uppercase letters       │
-│  97-122 │ a-z    │ Lowercase letters       │
-│  127    │ (del)  │ Delete                  │
-└─────────┴────────┴─────────────────────────┘
+<h2 id="ieee-754-format">IEEE 754 Format<a class="headerlink" href="#ieee-754-format" title="Permanent link">&para;</a></h2>
+<p>The standard representation for floating-point numbers:</p>
+<div class="highlight"><pre><span></span><code>32-bit float (float32 / single precision)
+┌───┬──────────┬───────────────────────────┐
+│ S │ Exponent │       Significand         │
+│ 1 │  8 bits  │        23 bits            │
+└───┴──────────┴───────────────────────────┘
+
+64-bit float (float64 / double precision)
+┌───┬─────────────┬────────────────────────────────────────────┐
+│ S │  Exponent   │             Significand                    │
+│ 1 │   11 bits   │               52 bits                      │
+└───┴─────────────┴────────────────────────────────────────────┘
+
+Value = (-1)^S × 1.Significand × 2^(Exponent - Bias)
+
+&gt; **Why Bias instead of two&#39;s complement for the exponent?** The exponent needs to represent both negative and positive powers, so a signed representation is needed. The exponent is stored using a bias so that both positive and negative exponents can be represented while keeping the stored exponent as a plain unsigned integer — simplifying hardware exponent arithmetic and allowing exponent comparisons to use unsigned comparators. The bias value is chosen as `2^(k-1) - 1` where `k` is the number of exponent bits: **127** for float32 (8 bits), **1023** for float64 (11 bits).
 </code></pre></div>
-<h3 id="ascii-in-python">ASCII in Python<a class="headerlink" href="#ascii-in-python" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="c1"># Character to code</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">))</span>  <span class="c1"># 65</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">))</span>  <span class="c1"># 97</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;0&#39;</span><span class="p">))</span>  <span class="c1"># 48</span>
-
-<span class="c1"># Code to character</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="mi">65</span><span class="p">))</span>   <span class="c1"># &#39;A&#39;</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="mi">97</span><span class="p">))</span>   <span class="c1"># &#39;a&#39;</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="mi">48</span><span class="p">))</span>   <span class="c1"># &#39;0&#39;</span>
-
-<span class="c1"># ASCII relationships</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">)</span> <span class="o">-</span> <span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">))</span>  <span class="c1"># 1</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="o">-</span> <span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">))</span>  <span class="c1"># 32 (lowercase offset)</span>
-</code></pre></div>
-<h3 id="ascii-limitations">ASCII Limitations<a class="headerlink" href="#ascii-limitations" title="Permanent link">&para;</a></h3>
-<p>ASCII only covers English:</p>
-<ul>
-<li>No accented characters (é, ñ, ü)</li>
-<li>No non-Latin scripts (中文, العربية, 한글)</li>
-<li>No emoji (😀)</li>
-<li>Only 128 characters total</li>
-</ul>
-<h2 id="extended-ascii-and-code-pages">Extended ASCII and Code Pages<a class="headerlink" href="#extended-ascii-and-code-pages" title="Permanent link">&para;</a></h2>
-<p>Various 8-bit extensions added 128 more characters:</p>
-<div class="highlight"><pre><span></span><code>Latin-1 (ISO-8859-1): Western European
-Latin-2 (ISO-8859-2): Central European
-Windows-1252: Microsoft&#39;s Western European
-</code></pre></div>
-<p><strong>Problem</strong>: Same byte could mean different characters in different encodings!</p>
-<div class="highlight"><pre><span></span><code>Byte 0xE9:
-  Latin-1:      é
-  Latin-2:      é
-  Windows-1252: é
-  Greek (1253): ι
-</code></pre></div>
-<h2 id="unicode-universal-character-set">Unicode: Universal Character Set<a class="headerlink" href="#unicode-universal-character-set" title="Permanent link">&para;</a></h2>
-<p><strong>Unicode</strong> assigns a unique number (code point) to every character in every language:</p>
-<div class="highlight"><pre><span></span><code>Unicode Code Points (examples)
-┌────────────┬───────┬──────────────────────┐
-│ Code Point │ Char  │    Description       │
-├────────────┼───────┼──────────────────────┤
-│ U+0041     │ A     │ Latin Capital A      │
-│ U+00E9     │ é     │ Latin Small E Acute  │
-│ U+4E2D     │ 中    │ CJK for &quot;middle&quot;     │
-│ U+1F600    │ 😀    │ Grinning Face        │
-│ U+1F9D1    │ 🧑    │ Person               │
-└────────────┴───────┴──────────────────────┘
-</code></pre></div>
-<h3 id="unicode-in-python">Unicode in Python<a class="headerlink" href="#unicode-in-python" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="c1"># Unicode escapes</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\u0041</span><span class="s1">&#39;</span><span class="p">)</span>      <span class="c1"># A</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\u00e9</span><span class="s1">&#39;</span><span class="p">)</span>      <span class="c1"># é</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\u4e2d</span><span class="s1">&#39;</span><span class="p">)</span>      <span class="c1"># 中</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\U0001F600</span><span class="s1">&#39;</span><span class="p">)</span>  <span class="c1"># 😀 (note: uppercase U for &gt;4 hex digits)</span>
-
-<span class="c1"># Get code point</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;中&#39;</span><span class="p">)))</span>  <span class="c1"># &#39;0x4e2d&#39;</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;😀&#39;</span><span class="p">)))</span>  <span class="c1"># &#39;0x1f600&#39;</span>
-
-<span class="c1"># Python strings are Unicode</span>
-<span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;Hello, 世界! 🌍&quot;</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>  <span class="c1"># 12 (characters, not bytes)</span>
-</code></pre></div>
-<h2 id="utf-8-the-dominant-encoding">UTF-8: The Dominant Encoding<a class="headerlink" href="#utf-8-the-dominant-encoding" title="Permanent link">&para;</a></h2>
-<p><strong>UTF-8</strong> is a variable-width encoding for Unicode:</p>
-<div class="highlight"><pre><span></span><code>UTF-8 Encoding Scheme
-┌──────────────────┬───────────────────────────────────────┐
-│ Code Point Range │           UTF-8 Bytes                 │
-├──────────────────┼───────────────────────────────────────┤
-│ U+0000 - U+007F  │ 0xxxxxxx (1 byte, ASCII compatible)   │
-│ U+0080 - U+07FF  │ 110xxxxx 10xxxxxx (2 bytes)           │
-│ U+0800 - U+FFFF  │ 1110xxxx 10xxxxxx 10xxxxxx (3 bytes)  │
-│ U+10000 - U+10FFFF│ 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx   │
-└──────────────────┴───────────────────────────────────────┘
-</code></pre></div>
-<h3 id="utf-8-examples">UTF-8 Examples<a class="headerlink" href="#utf-8-examples" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="c1"># ASCII characters: 1 byte</span>
-<span class="s1">&#39;A&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>  <span class="c1"># b&#39;A&#39; (1 byte: 0x41)</span>
-
-<span class="c1"># Accented: 2 bytes</span>
-<span class="s1">&#39;é&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>  <span class="c1"># b&#39;\xc3\xa9&#39; (2 bytes)</span>
-
-<span class="c1"># CJK: 3 bytes</span>
-<span class="s1">&#39;中&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>  <span class="c1"># b&#39;\xe4\xb8\xad&#39; (3 bytes)</span>
-
-<span class="c1"># Emoji: 4 bytes</span>
-<span class="s1">&#39;😀&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>  <span class="c1"># b&#39;\xf0\x9f\x98\x80&#39; (4 bytes)</span>
-</code></pre></div>
-<h3 id="why-utf-8-dominates">Why UTF-8 Dominates<a class="headerlink" href="#why-utf-8-dominates" title="Permanent link">&para;</a></h3>
-<ol>
-<li><strong>ASCII compatible</strong>: First 128 characters are identical</li>
-<li><strong>Compact for English</strong>: No wasted bytes for ASCII text</li>
-<li><strong>Self-synchronizing</strong>: Can find character boundaries in any position</li>
-<li><strong>No byte-order issues</strong>: Unlike UTF-16/32</li>
-</ol>
-<h2 id="encoding-and-decoding-in-python">Encoding and Decoding in Python<a class="headerlink" href="#encoding-and-decoding-in-python" title="Permanent link">&para;</a></h2>
-<h3 id="string-bytes">String ↔ Bytes<a class="headerlink" href="#string-bytes" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="c1"># Encode: str → bytes</span>
-<span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;Hello, 世界!&quot;</span>
-<span class="n">encoded</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">encoded</span><span class="p">)</span>  <span class="c1"># b&#39;Hello, \xe4\xb8\x96\xe7\x95\x8c!&#39;</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">encoded</span><span class="p">))</span>  <span class="c1"># 10, 14 (characters vs bytes)</span>
-
-<span class="c1"># Decode: bytes → str</span>
-<span class="n">decoded</span> <span class="o">=</span> <span class="n">encoded</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">decoded</span><span class="p">)</span>  <span class="c1"># Hello, 世界!</span>
-</code></pre></div>
-<h3 id="handling-encoding-errors">Handling Encoding Errors<a class="headerlink" href="#handling-encoding-errors" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="c1"># Invalid UTF-8 bytes</span>
-<span class="n">invalid</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\xff\xfe</span><span class="s1">&#39;</span>
-
-<span class="c1"># Default: raises exception</span>
-<span class="k">try</span><span class="p">:</span>
-    <span class="n">invalid</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
-<span class="k">except</span> <span class="ne">UnicodeDecodeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="c1"># Alternative error handlers</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">invalid</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;replace&#39;</span><span class="p">))</span>  <span class="c1"># ��</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">invalid</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">))</span>   <span class="c1"># (empty)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">invalid</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;backslashreplace&#39;</span><span class="p">))</span>  <span class="c1"># \xff\xfe</span>
-</code></pre></div>
-<h3 id="file-encoding">File Encoding<a class="headerlink" href="#file-encoding" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="c1"># Always specify encoding for text files</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;file.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;Hello, 世界!&#39;</span><span class="p">)</span>
-
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;file.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">content</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-
-<span class="c1"># Detect system default</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">locale</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">locale</span><span class="o">.</span><span class="n">getpreferredencoding</span><span class="p">())</span>  <span class="c1"># e.g., &#39;UTF-8&#39;</span>
-</code></pre></div>
-<h2 id="common-encodings">Common Encodings<a class="headerlink" href="#common-encodings" title="Permanent link">&para;</a></h2>
+<h3 id="components">Components<a class="headerlink" href="#components" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
-<th>Encoding</th>
-<th>Bytes per Char</th>
-<th>Use Case</th>
+<th>Component</th>
+<th>float32</th>
+<th>float64</th>
+<th>Purpose</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>ASCII</td>
-<td>1</td>
-<td>English only, legacy</td>
+<td><strong>Sign (S)</strong></td>
+<td>1 bit</td>
+<td>1 bit</td>
+<td>0 = positive, 1 = negative</td>
 </tr>
 <tr>
-<td>UTF-8</td>
-<td>1-4</td>
-<td>Web, Linux, general</td>
+<td><strong>Exponent</strong></td>
+<td>8 bits</td>
+<td>11 bits</td>
+<td>Scale (power of 2)</td>
 </tr>
 <tr>
-<td>UTF-16</td>
-<td>2-4</td>
-<td>Windows internal, Java</td>
-</tr>
-<tr>
-<td>UTF-32</td>
-<td>4</td>
-<td>Fixed width, processing</td>
-</tr>
-<tr>
-<td>Latin-1</td>
-<td>1</td>
-<td>Western European legacy</td>
+<td><strong>Significand</strong></td>
+<td>23 bits</td>
+<td>52 bits</td>
+<td>Precision digits (historically called mantissa)</td>
 </tr>
 </tbody>
 </table>
-<h2 id="character-vs-byte-length">Character vs Byte Length<a class="headerlink" href="#character-vs-byte-length" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<h3 id="example-representing-65">Example: Representing 6.5<a class="headerlink" href="#example-representing-65" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>6.5 in binary: 110.1
 
-<span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;Hello&quot;</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>  <span class="c1"># 5 characters</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)))</span>  <span class="c1"># 5 bytes (ASCII)</span>
+Scientific notation: 1.101 × 2²
 
-<span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;世界&quot;</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>  <span class="c1"># 2 characters</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)))</span>  <span class="c1"># 6 bytes (3 each)</span>
+Sign:     0 (positive)
+Exponent: 2 + 127 (bias) = 129 = 10000001
+Significand: 101 (the .101 part; the leading 1 is implicit — normalized
+             numbers in binary always start with 1.xxx, so storing it
+             would waste a bit. IEEE 754 omits it, gaining 1 free bit of
+             precision.)
 
-<span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;😀😀&quot;</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>  <span class="c1"># 2 characters</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)))</span>  <span class="c1"># 8 bytes (4 each)</span>
+32-bit representation:
+0 10000001 10100000000000000000000
+S Exponent Significand
 </code></pre></div>
-<h2 id="numpy-and-strings">NumPy and Strings<a class="headerlink" href="#numpy-and-strings" title="Permanent link">&para;</a></h2>
+<h2 id="precision-limitations">Precision Limitations<a class="headerlink" href="#precision-limitations" title="Permanent link">&para;</a></h2>
+<h3 id="not-all-numbers-are-representable">Not All Numbers Are Representable<a class="headerlink" href="#not-all-numbers-are-representable" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># Classic example</span>
+<span class="nb">print</span><span class="p">(</span><span class="mf">0.1</span> <span class="o">+</span> <span class="mf">0.2</span><span class="p">)</span>  <span class="c1"># 0.30000000000000004</span>
+
+<span class="c1"># 0.1 cannot be exactly represented in binary</span>
+<span class="c1"># Like 1/3 = 0.333... in decimal</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">format</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="s1">&#39;.20f&#39;</span><span class="p">))</span>  <span class="c1"># 0.10000000000000000555</span>
+</code></pre></div>
+<p>When a value falls between two representable numbers, IEEE 754 rounds to the nearest representable value (using <strong>round-to-nearest-even</strong> by default, which breaks ties by rounding to the value with an even last bit).</p>
+<h3 id="precision-by-type">Precision by Type<a class="headerlink" href="#precision-by-type" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Decimal Digits</th>
+<th>Example Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>float16</td>
+<td>~3-4</td>
+<td>ML inference, memory-constrained</td>
+</tr>
+<tr>
+<td>float32</td>
+<td>~7</td>
+<td>Graphics, ML training</td>
+</tr>
+<tr>
+<td>float64</td>
+<td>~15-16</td>
+<td>Scientific computing, default</td>
+</tr>
+</tbody>
+</table>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="c1"># Fixed-width Unicode strings</span>
-<span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;hello&#39;</span><span class="p">,</span> <span class="s1">&#39;world&#39;</span><span class="p">,</span> <span class="s1">&#39;世界&#39;</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">arr</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>  <span class="c1"># &#39;&lt;U5&#39; (Unicode, max 5 chars)</span>
+<span class="c1"># Demonstrating precision limits — add values near machine epsilon</span>
+<span class="c1"># float32 epsilon ~1.19e-7: adding 1e-8 has no effect</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="mf">1e-8</span><span class="p">))</span>   <span class="c1"># 1.0 — unchanged!</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="mf">1e-6</span><span class="p">))</span>   <span class="c1"># 1.000001 — just visible</span>
 
-<span class="c1"># Bytes</span>
-<span class="n">arr_bytes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="sa">b</span><span class="s1">&#39;hello&#39;</span><span class="p">,</span> <span class="sa">b</span><span class="s1">&#39;world&#39;</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">arr_bytes</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>  <span class="c1"># &#39;|S5&#39; (byte string, 5 bytes)</span>
+<span class="c1"># float64 epsilon ~2.22e-16: much finer resolution</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="mf">1e-15</span><span class="p">))</span>  <span class="c1"># 1.000000000000001</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="mf">1e-17</span><span class="p">))</span>  <span class="c1"># 1.0 — below epsilon, lost</span>
 
-<span class="c1"># Memory usage differs significantly</span>
-<span class="n">unicode_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>  <span class="c1"># 4 bytes per char (UTF-32 internally)</span>
-<span class="n">byte_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="sa">b</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>    <span class="c1"># 1 byte per char</span>
+<span class="c1"># Machine epsilon - smallest distinguishable difference from 1</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span><span class="p">)</span>  <span class="c1"># ~1.19e-07</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span><span class="p">)</span>  <span class="c1"># ~2.22e-16</span>
+</code></pre></div>
+<h2 id="special-values">Special Values<a class="headerlink" href="#special-values" title="Permanent link">&para;</a></h2>
+<p>IEEE 754 defines special values:</p>
+<div class="highlight"><pre><span></span><code>┌─────────────┬─────────────────────────────┐
+│    Value    │      Representation          │
+├─────────────┼─────────────────────────────┤
+│ +0          │ 0 00000000 00000...          │
+│ -0          │ 1 00000000 00000...          │
+│ +∞          │ 0 11111111 00000...          │
+│ -∞          │ 1 11111111 00000...          │
+│ NaN         │ X 11111111 XXXXX... (non-0)  │
+└─────────────┴─────────────────────────────┘
+</code></pre></div>
+<h3 id="pythonnumpy-special-values">Python/NumPy Special Values<a class="headerlink" href="#pythonnumpy-special-values" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># Infinity</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>                        <span class="c1"># inf</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="mf">0.0</span><span class="p">)</span>        <span class="c1"># inf (NumPy, not plain Python)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">))</span>             <span class="c1"># inf</span>
+<span class="c1"># Note: plain Python raises ZeroDivisionError for 1.0 / 0.0</span>
+
+<span class="c1"># Negative infinity</span>
+<span class="nb">print</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>          <span class="c1"># -inf</span>
+
+<span class="c1"># NaN (Not a Number)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>                         <span class="c1"># nan</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>           <span class="c1"># nan (NumPy; plain 0.0/0.0 raises ZeroDivisionError)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>               <span class="c1"># nan</span>
+
+<span class="c1"># Checking for special values</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">))</span>  <span class="c1"># True</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>  <span class="c1"># True</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="mf">1.0</span><span class="p">))</span>  <span class="c1"># True</span>
+</code></pre></div>
+<h3 id="nan-behavior">NaN Behavior<a class="headerlink" href="#nan-behavior" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># NaN is not equal to anything, including itself!</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>  <span class="c1"># False</span>
+
+<span class="c1"># Use isnan() instead</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>  <span class="c1"># True</span>
+
+<span class="c1"># NaN propagates through calculations</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>    <span class="c1"># nan</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="o">*</span> <span class="mi">0</span><span class="p">)</span>    <span class="c1"># nan</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>   <span class="c1"># nan (with warning)</span>
+</code></pre></div>
+<h2 id="range-and-limits">Range and Limits<a class="headerlink" href="#range-and-limits" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># float32 limits</span>
+<span class="n">info32</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;float32 max: </span><span class="si">{</span><span class="n">info32</span><span class="o">.</span><span class="n">max</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>     <span class="c1"># ~3.4e38</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;float32 min: </span><span class="si">{</span><span class="n">info32</span><span class="o">.</span><span class="n">min</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>     <span class="c1"># ~-3.4e38</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;float32 tiny: </span><span class="si">{</span><span class="n">info32</span><span class="o">.</span><span class="n">tiny</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>   <span class="c1"># ~1.2e-38 (smallest positive normal)</span>
+
+<span class="c1"># float64 limits</span>
+<span class="n">info64</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;float64 max: </span><span class="si">{</span><span class="n">info64</span><span class="o">.</span><span class="n">max</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>     <span class="c1"># ~1.8e308</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;float64 min: </span><span class="si">{</span><span class="n">info64</span><span class="o">.</span><span class="n">min</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>     <span class="c1"># ~-1.8e308</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;float64 tiny: </span><span class="si">{</span><span class="n">info64</span><span class="o">.</span><span class="n">tiny</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>   <span class="c1"># ~2.2e-308</span>
+</code></pre></div>
+<h3 id="overflow-and-underflow">Overflow and Underflow<a class="headerlink" href="#overflow-and-underflow" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># Overflow → infinity</span>
+<span class="n">huge</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="mf">1e308</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">huge</span> <span class="o">*</span> <span class="mi">10</span><span class="p">)</span>  <span class="c1"># inf</span>
+
+<span class="c1"># Underflow: very small numbers first become subnormal (losing precision</span>
+<span class="c1"># gradually), then underflow to zero. IEEE 754 supports subnormal numbers</span>
+<span class="c1"># to avoid an abrupt jump to zero.</span>
+<span class="n">tiny</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="mf">1e-308</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tiny</span> <span class="o">/</span> <span class="mf">1e10</span><span class="p">)</span>   <span class="c1"># subnormal (very small but nonzero)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tiny</span> <span class="o">/</span> <span class="mf">1e200</span><span class="p">)</span>  <span class="c1"># 0.0 (true underflow to zero)</span>
 </code></pre></div>
 <h2 id="common-pitfalls">Common Pitfalls<a class="headerlink" href="#common-pitfalls" title="Permanent link">&para;</a></h2>
-<h3 id="mojibake-garbled-text">Mojibake (Garbled Text)<a class="headerlink" href="#mojibake-garbled-text" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="c1"># Text encoded one way, decoded another</span>
-<span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;café&quot;</span>
-<span class="n">wrong</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;latin-1&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">wrong</span><span class="p">)</span>  <span class="c1"># cafÃ© (mojibake!)</span>
+<h3 id="comparison-errors">Comparison Errors<a class="headerlink" href="#comparison-errors" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># Bad: Direct equality comparison</span>
+<span class="k">if</span> <span class="mf">0.1</span> <span class="o">+</span> <span class="mf">0.2</span> <span class="o">==</span> <span class="mf">0.3</span><span class="p">:</span>  <span class="c1"># False!</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Equal&quot;</span><span class="p">)</span>
 
-<span class="c1"># Fix: use correct encoding</span>
-<span class="n">right</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">right</span><span class="p">)</span>  <span class="c1"># café</span>
+<span class="c1"># Good: Use tolerance</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="mf">0.1</span> <span class="o">+</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">):</span>  <span class="c1"># True</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Close enough&quot;</span><span class="p">)</span>
+
+<span class="c1"># For arrays</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.1</span> <span class="o">+</span> <span class="mf">0.2</span><span class="p">])</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.3</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">))</span>  <span class="c1"># True</span>
 </code></pre></div>
-<h3 id="bom-byte-order-mark">BOM (Byte Order Mark)<a class="headerlink" href="#bom-byte-order-mark" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="c1"># Some files start with BOM</span>
-<span class="n">bom_utf8</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\xef\xbb\xbf</span><span class="s1">&#39;</span>  <span class="c1"># UTF-8 BOM</span>
+<h3 id="accumulation-errors">Accumulation Errors<a class="headerlink" href="#accumulation-errors" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="c1"># Read with BOM handling</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;file.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8-sig&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">content</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>  <span class="c1"># BOM automatically stripped</span>
+<span class="c1"># Summing many small numbers</span>
+<span class="n">small</span> <span class="o">=</span> <span class="mf">1e-10</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">1_000_000</span>
+
+<span class="c1"># Bad: accumulated error</span>
+<span class="n">total</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">total</span> <span class="o">+=</span> <span class="n">small</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loop sum: </span><span class="si">{</span><span class="n">total</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># May not be exactly 1e-4</span>
+
+<span class="c1"># Better: use NumPy (uses pairwise summation)</span>
+<span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">small</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;NumPy sum: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># More accurate</span>
+
+<span class="c1"># Best for very high precision: math.fsum</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;fsum: </span><span class="si">{</span><span class="n">math</span><span class="o">.</span><span class="n">fsum</span><span class="p">([</span><span class="n">small</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="loss-of-significance">Loss of Significance<a class="headerlink" href="#loss-of-significance" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># Catastrophic cancellation: subtracting nearly equal numbers</span>
+<span class="c1"># destroys most significant digits</span>
+<span class="nb">print</span><span class="p">((</span><span class="mf">1e16</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1e16</span><span class="p">)</span>  <span class="c1"># 0.0 — the 1 is completely lost!</span>
+<span class="nb">print</span><span class="p">(</span><span class="mf">1e16</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">==</span> <span class="mf">1e16</span><span class="p">)</span>   <span class="c1"># True — 1 is below float64 precision at this scale</span>
+
+<span class="c1"># Subtler example: small difference between close values</span>
+<span class="n">a</span> <span class="o">=</span> <span class="mf">1.0000000001</span>
+<span class="n">b</span> <span class="o">=</span> <span class="mf">1.0000000000</span>
+<span class="c1"># Expected: 1e-10, but precision is lost in the last digits</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span>  <span class="c1"># 1.000000082740371e-10 (error in last digits)</span>
+</code></pre></div>
+<h2 id="practical-guidelines">Practical Guidelines<a class="headerlink" href="#practical-guidelines" title="Permanent link">&para;</a></h2>
+<h3 id="choosing-float-type">Choosing Float Type<a class="headerlink" href="#choosing-float-type" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Use Case</th>
+<th>Recommended Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Scientific computing</td>
+<td>float64 (default)</td>
+</tr>
+<tr>
+<td>Deep learning training</td>
+<td>float32 or float16</td>
+</tr>
+<tr>
+<td>Graphics</td>
+<td>float32</td>
+</tr>
+<tr>
+<td>Financial (exact)</td>
+<td>Decimal or integers</td>
+</tr>
+</tbody>
+</table>
+<h3 id="memory-considerations">Memory Considerations<a class="headerlink" href="#memory-considerations" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="mi">10_000_000</span>
+
+<span class="n">arr64</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="n">arr32</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="n">arr16</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float16</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;float64: </span><span class="si">{</span><span class="n">arr64</span><span class="o">.</span><span class="n">nbytes</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1e6</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2"> MB&quot;</span><span class="p">)</span>  <span class="c1"># 80 MB</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;float32: </span><span class="si">{</span><span class="n">arr32</span><span class="o">.</span><span class="n">nbytes</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1e6</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2"> MB&quot;</span><span class="p">)</span>  <span class="c1"># 40 MB</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;float16: </span><span class="si">{</span><span class="n">arr16</span><span class="o">.</span><span class="n">nbytes</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1e6</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2"> MB&quot;</span><span class="p">)</span>  <span class="c1"># 20 MB</span>
 </code></pre></div>
 <h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
 <table>
@@ -44468,40 +44509,37 @@ Windows-1252: Microsoft&#39;s Western European
 </thead>
 <tbody>
 <tr>
-<td><strong>ASCII</strong></td>
-<td>7-bit encoding for English (128 chars)</td>
+<td><strong>IEEE 754</strong></td>
+<td>Standard floating-point representation</td>
 </tr>
 <tr>
-<td><strong>Unicode</strong></td>
-<td>Universal character set (1.1M+ code points)</td>
+<td><strong>Sign/Exponent/Mantissa</strong></td>
+<td>Three components of a float</td>
 </tr>
 <tr>
-<td><strong>UTF-8</strong></td>
-<td>Variable-width Unicode encoding (1-4 bytes)</td>
+<td><strong>Precision</strong></td>
+<td>float32 ~7 digits, float64 ~15 digits</td>
 </tr>
 <tr>
-<td><strong>Code Point</strong></td>
-<td>Number assigned to a character (U+XXXX)</td>
+<td><strong>Special Values</strong></td>
+<td>±0, ±∞, NaN</td>
 </tr>
 <tr>
-<td><strong>Encoding</strong></td>
-<td>str → bytes</td>
-</tr>
-<tr>
-<td><strong>Decoding</strong></td>
-<td>bytes → str</td>
+<td><strong>Machine Epsilon</strong></td>
+<td>Smallest distinguishable difference from 1</td>
 </tr>
 </tbody>
 </table>
 <p>Key points:</p>
 <ul>
-<li>Always know your encoding (especially for files)</li>
-<li>UTF-8 is the default choice for most purposes</li>
-<li>String length ≠ byte length for non-ASCII text</li>
-<li>Use <code>encoding='utf-8'</code> explicitly in file operations</li>
-<li>Python 3 strings are Unicode; bytes are raw data</li>
+<li>Floating-point is an approximation, not exact</li>
+<li>Most decimal fractions (like 0.1) can't be exactly represented</li>
+<li>Use <code>np.isclose()</code> for comparisons, not <code>==</code></li>
+<li>Know your precision requirements and choose appropriate type</li>
+<li>Watch for accumulation errors in long computations</li>
+<li>NaN propagates and is not equal to itself</li>
 </ul>
-<p>This is a preview—see Chapter 2 (str ASCII and Unicode, str UTF-8 Encoding) for complete details.</p>
+<p>This is a preview—see Chapter 2 (float IEEE 754 Standard) for complete details.</p>
 
 
 

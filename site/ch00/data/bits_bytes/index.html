@@ -894,22 +894,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#data-size-units" class="md-nav__link">
+  <a href="#storage-unit-prefixes-iec-binary-vs-si-decimal" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Data Size Units
+        Storage Unit Prefixes: IEC (Binary) vs SI (Decimal)
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Data Size Units">
+    <nav class="md-nav" aria-label="Storage Unit Prefixes: IEC (Binary) vs SI (Decimal)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#binary-vs-decimal-prefixes" class="md-nav__link">
+  <a href="#iec-vs-si-comparison" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Binary vs Decimal Prefixes
+        IEC vs SI Comparison
       
     </span>
   </a>
@@ -972,10 +972,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#common-data-type-sizes" class="md-nav__link">
+  <a href="#common-data-type-sizes-cc-primitives" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Common Data Type Sizes
+        Common Data Type Sizes (C/C++ primitives)
       
     </span>
   </a>
@@ -1137,14 +1137,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../floating_point_preview/" class="md-nav__link">
+      <a href="../floating_point_representation/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Floating Point (IEEE 754 Preview)
+    Floating Point
   
 
     
@@ -1165,14 +1165,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../character_encoding_preview/" class="md-nav__link">
+      <a href="../character_encoding/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Character Encoding Preview
+    Character Encoding
   
 
     
@@ -43926,22 +43926,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#data-size-units" class="md-nav__link">
+  <a href="#storage-unit-prefixes-iec-binary-vs-si-decimal" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Data Size Units
+        Storage Unit Prefixes: IEC (Binary) vs SI (Decimal)
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Data Size Units">
+    <nav class="md-nav" aria-label="Storage Unit Prefixes: IEC (Binary) vs SI (Decimal)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#binary-vs-decimal-prefixes" class="md-nav__link">
+  <a href="#iec-vs-si-comparison" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Binary vs Decimal Prefixes
+        IEC vs SI Comparison
       
     </span>
   </a>
@@ -44004,10 +44004,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#common-data-type-sizes" class="md-nav__link">
+  <a href="#common-data-type-sizes-cc-primitives" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Common Data Type Sizes
+        Common Data Type Sizes (C/C++ primitives)
       
     </span>
   </a>
@@ -44119,7 +44119,7 @@
 <p>A <strong>bit</strong> (binary digit) is the smallest unit of data—it can be either 0 or 1.</p>
 <div class="highlight"><pre><span></span><code>Physical representations of bits:
 
-Voltage:     Low (0V) = 0    High (5V) = 1
+Voltage:     Low voltage  = 0    High voltage = 1
 Magnetism:   North = 0       South = 1
 Light:       Off = 0         On = 1
 Transistor:  Off = 0         On = 1
@@ -44130,7 +44130,7 @@ Transistor:  Off = 0         On = 1
 <div class="highlight"><pre><span></span><code>1 byte = 8 bits
 
 ┌───┬───┬───┬───┬───┬───┬───┬───┐
-│ 0 │ 1 │ 1 │ 0 │ 0 │ 1 │ 0 │ 1 │  = 101 in decimal
+│ 0 │ 1 │ 1 │ 0 │ 0 │ 1 │ 0 │ 1 │  ← example byte
 └───┴───┴───┴───┴───┴───┴───┴───┘
  bit bit bit bit bit bit bit bit
   7   6   5   4   3   2   1   0
@@ -44140,11 +44140,11 @@ Transistor:  Off = 0         On = 1
 <h3 id="why-8-bits">Why 8 Bits?<a class="headerlink" href="#why-8-bits" title="Permanent link">&para;</a></h3>
 <ul>
 <li>2⁸ = 256 possible values (0-255)</li>
-<li>Enough for ASCII characters (128 values)</li>
+<li>Originally enough for ASCII characters (128 values); modern text uses Unicode (UTF-8)</li>
 <li>Convenient for hexadecimal (2 hex digits)</li>
 <li>Historical: early microprocessors used 8-bit buses</li>
 </ul>
-<h2 id="data-size-units">Data Size Units<a class="headerlink" href="#data-size-units" title="Permanent link">&para;</a></h2>
+<h2 id="storage-unit-prefixes-iec-binary-vs-si-decimal">Storage Unit Prefixes: IEC (Binary) vs SI (Decimal)<a class="headerlink" href="#storage-unit-prefixes-iec-binary-vs-si-decimal" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -44169,39 +44169,62 @@ Transistor:  Off = 0         On = 1
 </tr>
 <tr>
 <td><strong>Kilobyte (KB)</strong></td>
+<td>1,000</td>
+<td>8,000</td>
+<td>Short text file</td>
+</tr>
+<tr>
+<td><strong>Kibibyte (KiB)</strong></td>
 <td>1,024</td>
 <td>8,192</td>
 <td>Short text file</td>
 </tr>
 <tr>
 <td><strong>Megabyte (MB)</strong></td>
+<td>1,000,000</td>
+<td>8,000,000</td>
+<td>MP3 song</td>
+</tr>
+<tr>
+<td><strong>Mebibyte (MiB)</strong></td>
 <td>1,048,576</td>
 <td>8,388,608</td>
 <td>MP3 song</td>
 </tr>
 <tr>
 <td><strong>Gigabyte (GB)</strong></td>
-<td>~1 billion</td>
-<td>~8 billion</td>
-<td>HD movie</td>
+<td>1,000,000,000</td>
+<td>8,000,000,000</td>
+<td>High-resolution video file</td>
+</tr>
+<tr>
+<td><strong>Gibibyte (GiB)</strong></td>
+<td>1,073,741,824</td>
+<td>8,589,934,592</td>
+<td>High-resolution video file</td>
 </tr>
 <tr>
 <td><strong>Terabyte (TB)</strong></td>
-<td>~1 trillion</td>
-<td>~8 trillion</td>
+<td>1,000,000,000,000</td>
+<td>8,000,000,000,000</td>
+<td>Large hard drive</td>
+</tr>
+<tr>
+<td><strong>Tebibyte (TiB)</strong></td>
+<td>1,099,511,627,776</td>
+<td>8,796,093,022,208</td>
 <td>Large hard drive</td>
 </tr>
 </tbody>
 </table>
-<h3 id="binary-vs-decimal-prefixes">Binary vs Decimal Prefixes<a class="headerlink" href="#binary-vs-decimal-prefixes" title="Permanent link">&para;</a></h3>
+<h3 id="iec-vs-si-comparison">IEC vs SI Comparison<a class="headerlink" href="#iec-vs-si-comparison" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code>Binary (IEC):                    Decimal (SI):
 1 KiB = 1,024 bytes             1 KB = 1,000 bytes
 1 MiB = 1,048,576 bytes         1 MB = 1,000,000 bytes
 1 GiB = 1,073,741,824 bytes     1 GB = 1,000,000,000 bytes
-
-Storage manufacturers use decimal (makes drives look bigger!)
-Operating systems often use binary (more accurate for memory)
 </code></pre></div>
+<p>Storage manufacturers use decimal (makes drives look bigger!)
+Operating systems often use binary (more accurate for memory)</p>
 <h2 id="bit-operations">Bit Operations<a class="headerlink" href="#bit-operations" title="Permanent link">&para;</a></h2>
 <h3 id="and-or-xor-not">AND, OR, XOR, NOT<a class="headerlink" href="#and-or-xor-not" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code>AND (&amp;): Both bits must be 1
@@ -44216,7 +44239,7 @@ OR (|): At least one bit must be 1
   0 OR 1 = 1
   0 OR 0 = 0
 
-XOR (^): Exactly one bit must be 1
+XOR (^): True if exactly one of two bits is 1
   1 XOR 1 = 0
   1 XOR 0 = 1
   0 XOR 1 = 1
@@ -44235,20 +44258,21 @@ NOT (~): Flip the bit
 <span class="nb">print</span><span class="p">(</span><span class="nb">bin</span><span class="p">(</span><span class="n">a</span> <span class="o">^</span> <span class="n">b</span><span class="p">))</span>   <span class="c1"># 0b0110 (XOR)</span>
 <span class="nb">print</span><span class="p">(</span><span class="nb">bin</span><span class="p">(</span><span class="o">~</span><span class="n">a</span><span class="p">))</span>      <span class="c1"># -0b1101 (NOT, with two&#39;s complement)</span>
 </code></pre></div>
+<blockquote>
+<p><strong>Note on <code>0b</code> prefix</strong>: <code>0b</code> is Python's binary literal prefix — it tells the interpreter the number is written in base 2, not base 10. The leading <code>0</code> is part of the prefix, not a sign indicator. For negative binary, write <code>-0b0001</code>. Python uses the same prefix convention for other bases: <code>0o</code> for octal and <code>0x</code> for hexadecimal. Leading zeros inside the literal (e.g. <code>0b0001</code> vs <code>0b1</code>) are just padding for readability — the value is identical.</p>
+</blockquote>
 <h3 id="bit-shifting">Bit Shifting<a class="headerlink" href="#bit-shifting" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="n">x</span> <span class="o">=</span> <span class="mb">0b0001</span>  <span class="c1"># 1</span>
+<div class="highlight"><pre><span></span><code><span class="n">x</span> <span class="o">=</span> <span class="mb">0b0001</span>  <span class="c1"># 1 </span>
 
 <span class="c1"># Left shift: multiply by 2^n</span>
 <span class="nb">print</span><span class="p">(</span><span class="nb">bin</span><span class="p">(</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">))</span>  <span class="c1"># 0b0010 (2)</span>
 <span class="nb">print</span><span class="p">(</span><span class="nb">bin</span><span class="p">(</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span><span class="p">))</span>  <span class="c1"># 0b0100 (4)</span>
 <span class="nb">print</span><span class="p">(</span><span class="nb">bin</span><span class="p">(</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">3</span><span class="p">))</span>  <span class="c1"># 0b1000 (8)</span>
-
-<span class="c1"># Right shift: divide by 2^n (floor)</span>
-<span class="n">y</span> <span class="o">=</span> <span class="mb">0b1000</span>  <span class="c1"># 8</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">bin</span><span class="p">(</span><span class="n">y</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">))</span>  <span class="c1"># 0b0100 (4)</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">bin</span><span class="p">(</span><span class="n">y</span> <span class="o">&gt;&gt;</span> <span class="mi">2</span><span class="p">))</span>  <span class="c1"># 0b0010 (2)</span>
 </code></pre></div>
-<h2 id="common-data-type-sizes">Common Data Type Sizes<a class="headerlink" href="#common-data-type-sizes" title="Permanent link">&para;</a></h2>
+<h2 id="common-data-type-sizes-cc-primitives">Common Data Type Sizes (C/C++ primitives)<a class="headerlink" href="#common-data-type-sizes-cc-primitives" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>Note</strong>: These sizes apply to <strong>C/C++ primitive types</strong>, not Python. In Python, <code>int</code> is arbitrary precision, <code>bool</code> is a full object (~28 bytes), and there is no <code>char</code> type. Use <code>numpy</code> dtypes (e.g. <code>np.int32</code>) when you need fixed-width types in Python.</p>
+</blockquote>
 <table>
 <thead>
 <tr>
@@ -44263,7 +44287,7 @@ NOT (~): Flip the bit
 <td><code>bool</code></td>
 <td>1</td>
 <td>8</td>
-<td>True/False (wastes 7 bits!)</td>
+<td>True/False (1 bit of info; 1 byte in C; ~28 bytes in CPython)</td>
 </tr>
 <tr>
 <td><code>char</code></td>
@@ -44303,6 +44327,9 @@ NOT (~): Flip the bit
 </tr>
 </tbody>
 </table>
+<blockquote>
+<p><strong>Why does <code>bool</code> use so much space?</strong> Most modern CPUs are <strong>byte-addressable</strong> — the smallest directly addressable unit is a byte, not a bit — so a C <code>bool</code> occupies 1 byte even though it only needs 1 bit of information. In CPython, however, <code>bool</code> is a full Python object (a subclass of <code>int</code>) and occupies around 28 bytes due to object overhead. Note that bit-addressable hardware does exist (e.g. Intel 8051, some DSPs), so byte-addressability is the norm, not a universal rule. If you need to pack multiple booleans efficiently, use bitmasks or <code>numpy.packbits()</code> (see Practical Applications).</p>
+</blockquote>
 <h2 id="pythons-bitbyte-functions">Python's Bit/Byte Functions<a class="headerlink" href="#pythons-bitbyte-functions" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="c1"># Number of bits needed to represent an integer</span>
 <span class="n">x</span> <span class="o">=</span> <span class="mi">255</span>
@@ -44315,7 +44342,7 @@ NOT (~): Flip the bit
 <span class="n">x</span> <span class="o">=</span> <span class="mb">0b11011</span>
 <span class="nb">print</span><span class="p">(</span><span class="nb">bin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">))</span>  <span class="c1"># 4</span>
 
-<span class="c1"># Python 3.10+</span>
+<span class="c1"># Python 3.10+: avoids string conversion, faster</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">bit_count</span><span class="p">())</span>  <span class="c1"># 4</span>
 
 <span class="c1"># Convert to/from bytes</span>
@@ -44344,6 +44371,17 @@ Bytes:   [78] [56] [34] [12]
 <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;big&#39;</span><span class="p">))</span>     <span class="c1"># b&#39;\x12\x34\x56\x78&#39;</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;little&#39;</span><span class="p">))</span>  <span class="c1"># b&#39;\x78\x56\x34\x12&#39;</span>
 </code></pre></div>
+<blockquote>
+<p><strong>Why little-endian on most modern systems?</strong> Big-endian feels more natural to humans (most significant byte first, like how we write numbers), but little-endian won the hardware war for two key reasons:</p>
+<ol>
+<li>
+<p><strong>Free integer size casting</strong>: With little-endian, a 1-byte and 4-byte integer at the same address share the same first byte correctly — reading fewer bytes always gives the right smaller value. With big-endian you'd read the wrong byte.</p>
+</li>
+<li>
+<p><strong>Intel won</strong>: x86 used little-endian and became the dominant PC architecture. ARM later adopted little-endian as default too. Network protocols (TCP/IP) went the other way, standardizing on big-endian — which is why big-endian is also called "network byte order."</p>
+</li>
+</ol>
+</blockquote>
 <h2 id="bits-in-numpy">Bits in NumPy<a class="headerlink" href="#bits-in-numpy" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 

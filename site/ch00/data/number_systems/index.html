@@ -1209,14 +1209,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../floating_point_preview/" class="md-nav__link">
+      <a href="../floating_point_representation/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Floating Point (IEEE 754 Preview)
+    Floating Point
   
 
     
@@ -1237,14 +1237,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../character_encoding_preview/" class="md-nav__link">
+      <a href="../character_encoding/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Character Encoding Preview
+    Character Encoding
   
 
     
@@ -44260,7 +44260,7 @@
 
 <h1 id="binary-and-hexadecimal">Binary and Hexadecimal<a class="headerlink" href="#binary-and-hexadecimal" title="Permanent link">&para;</a></h1>
 <h2 id="number-systems-overview">Number Systems Overview<a class="headerlink" href="#number-systems-overview" title="Permanent link">&para;</a></h2>
-<p>Computers use different bases for different purposes:</p>
+<p>Computers store data in binary, but programmers often use other bases (decimal, hexadecimal, octal) to represent or interpret that data:</p>
 <table>
 <thead>
 <tr>
@@ -44293,7 +44293,7 @@
 </table>
 <h2 id="binary-base-2">Binary (Base 2)<a class="headerlink" href="#binary-base-2" title="Permanent link">&para;</a></h2>
 <h3 id="place-values">Place Values<a class="headerlink" href="#place-values" title="Permanent link">&para;</a></h3>
-<p>Each position represents a power of 2:</p>
+<p>Binary is a positional number system like decimal — each digit's value depends on its position. Each position represents a power of 2:</p>
 <div class="highlight"><pre><span></span><code>Binary number: 1 0 1 1 0 1
                │ │ │ │ │ │
 Position:      5 4 3 2 1 0
@@ -44391,11 +44391,13 @@ Value = 2×256 + 10×16 + 15×1
 
 <span class="c1"># File permissions example</span>
 <span class="c1"># rwxr-xr-x = 111 101 101 = 7 5 5</span>
+<span class="c1"># r=4, w=2, x=1 → owner: 4+2+1=7, group: 4+0+1=5, others: 4+0+1=5</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="n">os</span><span class="o">.</span><span class="n">chmod</span><span class="p">(</span><span class="s1">&#39;file.txt&#39;</span><span class="p">,</span> <span class="mo">0o755</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="conversion-between-bases">Conversion Between Bases<a class="headerlink" href="#conversion-between-bases" title="Permanent link">&para;</a></h2>
 <h3 id="quick-reference-table">Quick Reference Table<a class="headerlink" href="#quick-reference-table" title="Permanent link">&para;</a></h3>
+<p>(Binary values use leading zeros for 4-bit alignment where applicable.)</p>
 <table>
 <thead>
 <tr>
@@ -44605,6 +44607,7 @@ Value = 2×256 + 10×16 + 15×1
 
 <span class="c1"># Binary representation of floats</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="mf">1.5</span><span class="p">)</span>
+<span class="c1"># Reinterpret the float&#39;s memory as a 32-bit integer to inspect raw bits</span>
 <span class="nb">print</span><span class="p">(</span><span class="nb">format</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">),</span> <span class="s1">&#39;032b&#39;</span><span class="p">))</span>
 <span class="c1"># 00111111110000000000000000000000</span>
 </code></pre></div>

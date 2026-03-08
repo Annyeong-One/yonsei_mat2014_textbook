@@ -704,6 +704,28 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#how-numpy-handles-variable-array-sizes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How NumPy Handles Variable Array Sizes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scalar-loop-vs-vectorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scalar Loop vs Vectorization
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1159,14 +1181,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../data/floating_point_preview/" class="md-nav__link">
+      <a href="../../data/floating_point_representation/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Floating Point (IEEE 754 Preview)
+    Floating Point
   
 
     
@@ -1187,14 +1209,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../data/character_encoding_preview/" class="md-nav__link">
+      <a href="../../data/character_encoding/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Character Encoding Preview
+    Character Encoding
   
 
     
@@ -43953,6 +43975,28 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#how-numpy-handles-variable-array-sizes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How NumPy Handles Variable Array Sizes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scalar-loop-vs-vectorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scalar Loop vs Vectorization
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -44269,10 +44313,44 @@ MOV RBX, [b_address]    ; Load &#39;b&#39; into register
 ADD RAX, RBX            ; Add in register
 MOV [x_address], RAX    ; Store result
 </code></pre></div>
-<p>NumPy operations spend more time in registers:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># NumPy: inner loop keeps values in registers</span>
-<span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>  <span class="c1"># Compiled C code uses registers efficiently</span>
+<p>NumPy operations are far more register-efficient than pure Python — but the reason is more nuanced than "it uses registers."</p>
+<h3 id="how-numpy-handles-variable-array-sizes">How NumPy Handles Variable Array Sizes<a class="headerlink" href="#how-numpy-handles-variable-array-sizes" title="Permanent link">&para;</a></h3>
+<p>NumPy's internals are pre-compiled C code (already compiled when you <code>pip install numpy</code>, sitting as a <code>.so</code> / <code>.dll</code> binary). This C code uses loops with <code>n</code> passed at runtime:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Simplified NumPy internals (pre-compiled, size n varies at runtime)</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">add_arrays</span><span class="p">(</span><span class="kt">double</span><span class="o">*</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="o">*</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="o">*</span><span class="w"> </span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
+<p>When you write <code>c = a + b</code> in Python, NumPy hands off to this compiled function immediately, passing the current array size as <code>n</code>. The compiled binary never changes — only <code>n</code> does.</p>
+<h3 id="scalar-loop-vs-vectorization">Scalar Loop vs Vectorization<a class="headerlink" href="#scalar-loop-vs-vectorization" title="Permanent link">&para;</a></h3>
+<p>The plain C loop above processes <strong>one element at a time</strong> — this is a <strong>scalar loop</strong>:</p>
+<div class="highlight"><pre><span></span><code>Scalar loop (one element per iteration):
+
+iteration 1: a[0] + b[0] → c[0]
+iteration 2: a[1] + b[1] → c[1]
+iteration 3: a[2] + b[2] → c[2]
+...
+</code></pre></div>
+<p><strong>Vectorization</strong> goes further — it uses special CPU instructions called <strong>SIMD (Single Instruction, Multiple Data)</strong> that process multiple elements simultaneously in one instruction:</p>
+<div class="highlight"><pre><span></span><code>Vectorization (multiple elements per instruction):
+
+instruction 1: a[0], a[1], a[2], a[3]
+             + b[0], b[1], b[2], b[3]
+             = c[0], c[1], c[2], c[3]   ← all 4 in ONE instruction
+
+instruction 2: a[4], a[5], a[6], a[7]
+             + b[4], b[5], b[6], b[7]
+             = c[4], c[5], c[6], c[7]   ← all 4 in ONE instruction
+</code></pre></div>
+<p>This is possible because SIMD registers are <strong>wider</strong> than normal registers:</p>
+<div class="highlight"><pre><span></span><code>Normal register:  64 bits  → holds 1 float64
+XMM register:    128 bits  → holds 2 float64s
+YMM register:    256 bits  → holds 4 float64s
+ZMM register:    512 bits  → holds 8 float64s
+</code></pre></div>
+<p>NumPy uses both — its compiled C code exploits SIMD instructions where possible. This is one of the core reasons NumPy is so fast: not just "compiled C" but "compiled C that uses SIMD vectorization." Your Python code never sees any of this — it just calls <code>c = a + b</code> and NumPy handles the rest invisibly.</p>
 <h2 id="cpu-cache">CPU Cache<a class="headerlink" href="#cpu-cache" title="Permanent link">&para;</a></h2>
 <p><strong>Cache</strong> is small, fast memory between registers and RAM. Modern CPUs have multiple cache levels.</p>
 <div class="highlight"><pre><span></span><code>┌─────────────────────────────────────────────────────────────┐

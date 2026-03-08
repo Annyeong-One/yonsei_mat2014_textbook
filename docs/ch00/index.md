@@ -25,5 +25,5 @@ This chapter covers the foundational hardware and data representation concepts t
 - [Bits and Bytes](data/bits_bytes.md)
 - [Binary and Hexadecimal](data/number_systems.md)
 - [Integer Representation](data/integer_representation.md)
-- [Floating Point (IEEE 754 Preview)](data/floating_point_preview.md)
-- [Character Encoding Preview](data/character_encoding_preview.md)
+- [Floating Point (IEEE 754 Preview)](data/floating_point_representation.md)
+- [Character Encoding Preview](data/character_encoding.md)

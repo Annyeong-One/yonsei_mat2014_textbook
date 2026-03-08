@@ -875,14 +875,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../ch00/data/floating_point_preview/" class="md-nav__link">
+      <a href="../../../ch00/data/floating_point_representation/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Floating Point (IEEE 754 Preview)
+    Floating Point
   
 
     
@@ -903,14 +903,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../ch00/data/character_encoding_preview/" class="md-nav__link">
+      <a href="../../../ch00/data/character_encoding/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Character Encoding Preview
+    Character Encoding
   
 
     
@@ -44641,9 +44641,9 @@
 <hr />
 <h2 id="the-formula">The Formula<a class="headerlink" href="#the-formula" title="Permanent link">&para;</a></h2>
 <p>For a class <code>C(B1, B2, ..., Bn)</code>:</p>
-<p>$$</p>
-<p>L[C] = [C] + \text{merge}(L[B1], L[B2], \ldots, L[Bn], [B1, B2, \ldots, Bn])</p>
-<p>$$</p>
+<div class="arithmatex">\[
+L[C] = [C] + \text{merge}(L[B1], L[B2], \ldots, L[Bn], [B1, B2, \ldots, Bn])
+\]</div>
 <p>where:</p>
 <ul>
 <li><span class="arithmatex">\(L[Bi]\)</span> is the MRO of parent <span class="arithmatex">\(Bi\)</span></li>
@@ -44674,9 +44674,9 @@
 <li><span class="arithmatex">\(L[C] = [C, A, \text{object}]\)</span></li>
 </ul>
 <h3 id="3-apply-formula">3. Apply Formula<a class="headerlink" href="#3-apply-formula" title="Permanent link">&para;</a></h3>
-<p>$$</p>
-<p>L[D] = [D] + \text{merge}([B, A, \text{object}], [C, A, \text{object}], [B, C])</p>
-<p>$$</p>
+<div class="arithmatex">\[
+L[D] = [D] + \text{merge}([B, A, \text{object}], [C, A, \text{object}], [B, C])
+\]</div>
 <hr />
 <h2 id="step-by-step-merge">Step-by-Step Merge<a class="headerlink" href="#step-by-step-merge" title="Permanent link">&para;</a></h2>
 <h3 id="1-initial-lists">1. Initial Lists<a class="headerlink" href="#1-initial-lists" title="Permanent link">&para;</a></h3>
@@ -44712,9 +44712,9 @@
 <p>All lists empty—done!</p>
 <hr />
 <h2 id="final-mro">Final MRO<a class="headerlink" href="#final-mro" title="Permanent link">&para;</a></h2>
-<p>$$</p>
-<p>L[D] = [D, B, C, A, \text{object}]</p>
-<p>$$</p>
+<div class="arithmatex">\[
+L[D] = [D, B, C, A, \text{object}]
+\]</div>
 <div class="highlight"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="n">D</span><span class="o">.</span><span class="n">mro</span><span class="p">())</span>
 <span class="c1"># [&lt;class &#39;D&#39;&gt;, &lt;class &#39;B&#39;&gt;, &lt;class &#39;C&#39;&gt;, &lt;class &#39;A&#39;&gt;, &lt;class &#39;object&#39;&gt;]</span>
 </code></pre></div>
@@ -44732,9 +44732,9 @@
 <li><span class="arithmatex">\(L[D] = [D, B, C, A, \text{object}]\)</span></li>
 <li><span class="arithmatex">\(L[C] = [C, A, \text{object}]\)</span></li>
 </ul>
-<p>$$</p>
-<p>L[E] = [E] + \text{merge}([D, B, C, A, \text{object}], [C, A, \text{object}], [D, C])</p>
-<p>$$</p>
+<div class="arithmatex">\[
+L[E] = [E] + \text{merge}([D, B, C, A, \text{object}], [C, A, \text{object}], [D, C])
+\]</div>
 <h3 id="3-merge-process">3. Merge Process<a class="headerlink" href="#3-merge-process" title="Permanent link">&para;</a></h3>
 <p>Following the same merge rules:</p>
 <p><span class="arithmatex">\(L[E] = [E, D, B, C, A, \text{object}]\)</span></p>
