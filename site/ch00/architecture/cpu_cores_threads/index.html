@@ -465,10 +465,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#from-single-core-to-multi-core" class="md-nav__link">
+  <a href="#what-is-a-core" class="md-nav__link">
     <span class="md-ellipsis">
       
-        From Single-Core to Multi-Core
+        What Is a Core?
       
     </span>
   </a>
@@ -476,10 +476,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#what-is-a-core" class="md-nav__link">
+  <a href="#from-single-core-to-multi-core" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What is a Core?
+        From Single-Core to Multi-Core
       
     </span>
   </a>
@@ -510,10 +510,60 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#logical-cores-hyperthreadingsmt" class="md-nav__link">
+  <a href="#logical-cores-and-smt-hyperthreading" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Logical Cores (Hyperthreading/SMT)
+        Logical Cores and SMT (Hyperthreading)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#concurrency-vs-parallelism" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Concurrency vs Parallelism
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Concurrency vs Parallelism">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#concurrency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Concurrency
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parallelism" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parallelism
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-relationship" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Relationship
       
     </span>
   </a>
@@ -565,22 +615,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#parallelism-vs-concurrency" class="md-nav__link">
+  <a href="#python-and-the-gil" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Parallelism vs Concurrency
+        Python and the GIL
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Parallelism vs Concurrency">
+    <nav class="md-nav" aria-label="Python and the GIL">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#concurrency" class="md-nav__link">
+  <a href="#the-global-interpreter-lock" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Concurrency
+        The Global Interpreter Lock
       
     </span>
   </a>
@@ -588,10 +638,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#parallelism" class="md-nav__link">
+  <a href="#python-313-the-free-threaded-build" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Parallelism
+        Python 3.13+: The Free-Threaded Build
       
     </span>
   </a>
@@ -599,10 +649,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#the-relationship" class="md-nav__link">
+  <a href="#workarounds-current-practice" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The Relationship
+        Workarounds (Current Practice)
       
     </span>
   </a>
@@ -615,49 +665,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#python-and-parallelism" class="md-nav__link">
+  <a href="#os-scheduling-and-core-affinity" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Python and Parallelism
+        OS Scheduling and Core Affinity
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Python and Parallelism">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#the-gil-problem" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        The GIL Problem
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#workarounds" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Workarounds
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#core-affinity-and-scheduling" class="md-nav__link">
+  <a href="#amdahls-law-the-ceiling-on-parallel-speedup" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Core Affinity and Scheduling
+        Amdahl's Law: The Ceiling on Parallel Speedup
       
     </span>
   </a>
@@ -675,6 +697,17 @@
   
     <nav class="md-nav" aria-label="Practical Guidelines">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#choosing-an-approach" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choosing an Approach
+      
+    </span>
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#choosing-worker-count" class="md-nav__link">
@@ -43915,10 +43948,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#from-single-core-to-multi-core" class="md-nav__link">
+  <a href="#what-is-a-core" class="md-nav__link">
     <span class="md-ellipsis">
       
-        From Single-Core to Multi-Core
+        What Is a Core?
       
     </span>
   </a>
@@ -43926,10 +43959,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#what-is-a-core" class="md-nav__link">
+  <a href="#from-single-core-to-multi-core" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What is a Core?
+        From Single-Core to Multi-Core
       
     </span>
   </a>
@@ -43960,10 +43993,60 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#logical-cores-hyperthreadingsmt" class="md-nav__link">
+  <a href="#logical-cores-and-smt-hyperthreading" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Logical Cores (Hyperthreading/SMT)
+        Logical Cores and SMT (Hyperthreading)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#concurrency-vs-parallelism" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Concurrency vs Parallelism
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Concurrency vs Parallelism">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#concurrency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Concurrency
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parallelism" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parallelism
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-relationship" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Relationship
       
     </span>
   </a>
@@ -44015,22 +44098,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#parallelism-vs-concurrency" class="md-nav__link">
+  <a href="#python-and-the-gil" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Parallelism vs Concurrency
+        Python and the GIL
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Parallelism vs Concurrency">
+    <nav class="md-nav" aria-label="Python and the GIL">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#concurrency" class="md-nav__link">
+  <a href="#the-global-interpreter-lock" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Concurrency
+        The Global Interpreter Lock
       
     </span>
   </a>
@@ -44038,10 +44121,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#parallelism" class="md-nav__link">
+  <a href="#python-313-the-free-threaded-build" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Parallelism
+        Python 3.13+: The Free-Threaded Build
       
     </span>
   </a>
@@ -44049,10 +44132,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#the-relationship" class="md-nav__link">
+  <a href="#workarounds-current-practice" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The Relationship
+        Workarounds (Current Practice)
       
     </span>
   </a>
@@ -44065,49 +44148,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#python-and-parallelism" class="md-nav__link">
+  <a href="#os-scheduling-and-core-affinity" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Python and Parallelism
+        OS Scheduling and Core Affinity
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Python and Parallelism">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#the-gil-problem" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        The GIL Problem
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#workarounds" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Workarounds
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#core-affinity-and-scheduling" class="md-nav__link">
+  <a href="#amdahls-law-the-ceiling-on-parallel-speedup" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Core Affinity and Scheduling
+        Amdahl's Law: The Ceiling on Parallel Speedup
       
     </span>
   </a>
@@ -44125,6 +44180,17 @@
   
     <nav class="md-nav" aria-label="Practical Guidelines">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#choosing-an-approach" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choosing an Approach
+      
+    </span>
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#choosing-worker-count" class="md-nav__link">
@@ -44171,230 +44237,362 @@
 
 
 <h1 id="cpu-cores-and-threads">CPU Cores and Threads<a class="headerlink" href="#cpu-cores-and-threads" title="Permanent link">&para;</a></h1>
+<h2 id="what-is-a-core">What Is a Core?<a class="headerlink" href="#what-is-a-core" title="Permanent link">&para;</a></h2>
+<p>A <strong>core</strong> is a complete, independent processing unit on the CPU die. Each core has its own:</p>
+<ul>
+<li><strong>Execution units</strong> — arithmetic/logic units (ALUs), branch units, load/store units</li>
+<li><strong>Registers</strong> — fast on-chip storage holding the current thread's state</li>
+<li><strong>L1 cache</strong> — private, fastest cache (~4 cycles latency, typically 32–64 KB)</li>
+<li><strong>L2 cache</strong> — usually private, slightly larger and slower (~12 cycles)</li>
+</ul>
+<p><strong>L3 cache</strong> is shared across all cores on the same chip, acting as a common pool (~40 cycles latency, typically 8–64 MB).</p>
+<p>Multiple cores can execute entirely different instructions at the same instant — this is <strong>true parallelism</strong>.</p>
 <h2 id="from-single-core-to-multi-core">From Single-Core to Multi-Core<a class="headerlink" href="#from-single-core-to-multi-core" title="Permanent link">&para;</a></h2>
-<p>Early CPUs had a single core—one execution unit that processed instructions sequentially. Clock speeds eventually faced power and thermal limits, so performance improvements increasingly came from parallelism through multiple cores.</p>
-<div class="highlight"><pre><span></span><code>Single-Core CPU (2000s)          Multi-Core CPU (Today)
-┌─────────────────────┐          ┌─────────────────────────────┐
-│     ┌───────┐       │          │  ┌───────┐    ┌───────┐    │
-│     │ Core  │       │          │  │ Core 0│    │ Core 1│    │
-│     └───────┘       │          │  └───────┘    └───────┘    │
-│         │           │          │      │            │        │
-│     ┌───────┐       │          │  ┌───────┐    ┌───────┐    │
-│     │L1/L2  │       │          │  │ Core 2│    │ Core 3│    │
-│     └───────┘       │          │  └───────┘    └───────┘    │
-└─────────────────────┘          │         │    │             │
-                                 │     ┌───────────────┐      │
-                                 │     │ Shared L3 Cache│      │
-                                 │     └───────────────┘      │
-                                 └─────────────────────────────┘
-</code></pre></div>
-<h2 id="what-is-a-core">What is a Core?<a class="headerlink" href="#what-is-a-core" title="Permanent link">&para;</a></h2>
-<p>A <strong>core</strong> is a complete, independent processing unit capable of executing instructions. Each core typically has its own execution units, registers, and L1 cache, and often its own L2 cache. L3 cache is usually shared across all cores.</p>
-<p>Multiple cores can execute different instructions simultaneously—true parallelism.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-
-<span class="c1"># Check number of CPU cores</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">())</span>  <span class="c1"># e.g., 8</span>
+<p>Early CPUs had a single core. Clock frequency scaling delivered consistent performance gains through the 1990s, but by the mid-2000s this hit hard physical limits: power consumption and heat scale roughly as the cube of clock frequency. Doubling the clock speed would require eight times the cooling. The industry pivoted to putting <strong>multiple cores on one chip</strong> instead.</p>
+<div class="highlight"><pre><span></span><code>Single-Core CPU (early 2000s)        Quad-Core CPU (today)
+┌──────────────────────┐             ┌───────────────────────────────┐
+│   ┌────────────┐     │             │  ┌─────────┐   ┌─────────┐   │
+│   │    Core    │     │             │  │ Core 0  │   │ Core 1  │   │
+│   │ (ALU, Reg) │     │             │  │(L1, L2) │   │(L1, L2) │   │
+│   └─────┬──────┘     │             │  └────┬────┘   └────┬────┘   │
+│   ┌─────┴──────┐     │             │  ┌────┴────┐   ┌────┴────┐   │
+│   │  L1/L2     │     │             │  │ Core 2  │   │ Core 3  │   │
+│   │  Cache     │     │             │  │(L1, L2) │   │(L1, L2) │   │
+│   └────────────┘     │             │  └────┬────┘   └────┬────┘   │
+└──────────────────────┘             │       └──────┬───────┘        │
+                                     │    ┌─────────┴──────────┐     │
+                                     │    │   Shared L3 Cache  │     │
+                                     │    └────────────────────┘     │
+                                     └───────────────────────────────┘
 </code></pre></div>
 <h2 id="physical-vs-logical-cores">Physical vs Logical Cores<a class="headerlink" href="#physical-vs-logical-cores" title="Permanent link">&para;</a></h2>
 <h3 id="physical-cores">Physical Cores<a class="headerlink" href="#physical-cores" title="Permanent link">&para;</a></h3>
-<p>The actual hardware execution units on the CPU die.</p>
-<h3 id="logical-cores-hyperthreadingsmt">Logical Cores (Hyperthreading/SMT)<a class="headerlink" href="#logical-cores-hyperthreadingsmt" title="Permanent link">&para;</a></h3>
-<p><strong>Simultaneous Multithreading (SMT)</strong>, Intel's version called <strong>Hyperthreading</strong>, allows one physical core to appear as two logical cores:</p>
-<div class="highlight"><pre><span></span><code>Physical Core with Hyperthreading
-┌─────────────────────────────────────────┐
-│           Physical Core                 │
-│  ┌─────────────┐  ┌─────────────┐      │
-│  │  Thread 0   │  │  Thread 1   │      │
-│  │  (Arch.     │  │  (Arch.     │      │
-│  │   State)    │  │   State)    │      │
-│  └──────┬──────┘  └──────┬──────┘      │
-│         │                │              │
-│         └───────┬────────┘              │
-│                 ▼                       │
-│  ┌─────────────────────────────┐       │
-│  │    Shared Execution Units   │       │
-│  │    (ALU, Cache, etc.)       │       │
-│  └─────────────────────────────┘       │
-└─────────────────────────────────────────┘
+<p>Physical cores are the actual distinct hardware execution units. A quad-core CPU has four independent pipelines that can each execute a separate stream of instructions.</p>
+<h3 id="logical-cores-and-smt-hyperthreading">Logical Cores and SMT (Hyperthreading)<a class="headerlink" href="#logical-cores-and-smt-hyperthreading" title="Permanent link">&para;</a></h3>
+<p><strong>Simultaneous Multithreading (SMT)</strong> — Intel's marketing name is <strong>Hyperthreading</strong> — allows one physical core to present itself to the operating system as two logical cores.</p>
+<p>The key insight: a single core's execution units are rarely 100% utilized. A thread often stalls waiting for data from memory (a cache miss can cost 200+ cycles). SMT exploits these idle cycles by maintaining two separate <strong>architectural states</strong> (register files, program counters, stack pointers) and switching between them in hardware:</p>
+<div class="highlight"><pre><span></span><code>Physical Core with SMT (Hyperthreading)
+
+  ┌───────────────────────────────────────────────┐
+  │                  Physical Core                │
+  │                                               │
+  │  ┌──────────────────┐  ┌──────────────────┐  │
+  │  │   Thread 0       │  │   Thread 1       │  │
+  │  │  (private regs,  │  │  (private regs,  │  │
+  │  │   program ctr,   │  │   program ctr,   │  │
+  │  │   stack pointer) │  │   stack pointer) │  │
+  │  └────────┬─────────┘  └────────┬─────────┘  │
+  │           └──────────┬──────────┘             │
+  │                      ▼                        │
+  │  ┌─────────────────────────────────────────┐  │
+  │  │       Shared Execution Units            │  │
+  │  │  (ALUs, branch unit, load/store unit)   │  │
+  │  └─────────────────────────────────────────┘  │
+  │  ┌─────────────────────────────────────────┐  │
+  │  │       Shared L2 Cache                   │  │
+  │  └─────────────────────────────────────────┘  │
+  └───────────────────────────────────────────────┘
 </code></pre></div>
-<p>Each logical thread has its own architectural state (registers, program counter), but shares execution resources (ALU, cache). This helps when one thread is stalled (e.g., waiting for memory), allowing the other thread to use the execution units.</p>
+<blockquote>
+<p><strong>Important</strong>: L1 cache is <em>partitioned</em> between the two threads (not fully shared); each thread's private registers are truly separate. The execution units — ALUs, branch units — are shared and scheduled between threads in hardware.</p>
+</blockquote>
+<p>When Thread 0 stalls on a cache miss, the core switches to executing Thread 1 in that cycle, keeping execution units busy. In practice, SMT yields <strong>15–30% more throughput</strong> for mixed workloads, not a full 2×. For some workloads (where both threads compete heavily for cache), SMT can even reduce performance.</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">psutil</span>
 
-<span class="c1"># Distinguish physical from logical</span>
+<span class="c1"># Distinguish physical from logical cores</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Physical cores: </span><span class="si">{</span><span class="n">psutil</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">(</span><span class="n">logical</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Logical cores:  </span><span class="si">{</span><span class="n">psutil</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">(</span><span class="n">logical</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<span class="c1"># Example output on a 4-core, 8-thread CPU:</span>
+<span class="c1"># On a 4-core/8-thread CPU (e.g., Intel Core i7):</span>
 <span class="c1"># Physical cores: 4</span>
 <span class="c1"># Logical cores:  8</span>
+
+<span class="c1"># Note: os.cpu_count() returns logical cores, same as psutil.cpu_count(logical=True)</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">())</span>  <span class="c1"># 8  ← logical, not physical</span>
 </code></pre></div>
-<h2 id="threads-vs-processes">Threads vs Processes<a class="headerlink" href="#threads-vs-processes" title="Permanent link">&para;</a></h2>
-<h3 id="process">Process<a class="headerlink" href="#process" title="Permanent link">&para;</a></h3>
-<p>A <strong>process</strong> is an independent program execution with its own:</p>
-<ul>
-<li>Memory space</li>
-<li>File handles</li>
-<li>System resources</li>
-</ul>
-<p>Processes are isolated—one process cannot directly access another's memory.</p>
-<h3 id="thread">Thread<a class="headerlink" href="#thread" title="Permanent link">&para;</a></h3>
-<p>A <strong>thread</strong> is a lightweight execution unit within a process:</p>
-<ul>
-<li>Shares memory space with other threads in the same process</li>
-<li>Has its own stack and registers</li>
-<li>Can communicate easily with sibling threads</li>
-</ul>
-<div class="highlight"><pre><span></span><code>Process
-┌─────────────────────────────────────────────────┐
-│                                                 │
-│   ┌─────────┐  ┌─────────┐  ┌─────────┐       │
-│   │ Thread 1│  │ Thread 2│  │ Thread 3│       │
-│   │ (stack) │  │ (stack) │  │ (stack) │       │
-│   └────┬────┘  └────┬────┘  └────┬────┘       │
-│        │            │            │             │
-│        └────────────┼────────────┘             │
-│                     ▼                          │
-│   ┌─────────────────────────────────────┐     │
-│   │         Shared Memory (Heap)        │     │
-│   │    (Global variables, objects)      │     │
-│   └─────────────────────────────────────┘     │
-│                                                 │
-└─────────────────────────────────────────────────┘
-</code></pre></div>
-<h2 id="parallelism-vs-concurrency">Parallelism vs Concurrency<a class="headerlink" href="#parallelism-vs-concurrency" title="Permanent link">&para;</a></h2>
-<p>These terms are often confused:</p>
+<h2 id="concurrency-vs-parallelism">Concurrency vs Parallelism<a class="headerlink" href="#concurrency-vs-parallelism" title="Permanent link">&para;</a></h2>
+<p>These terms are frequently conflated but describe fundamentally different things.</p>
 <h3 id="concurrency">Concurrency<a class="headerlink" href="#concurrency" title="Permanent link">&para;</a></h3>
-<p>Multiple tasks making progress over time, possibly by interleaving:</p>
-<div class="highlight"><pre><span></span><code>Concurrent (single core, time-slicing)
+<p><strong>Concurrency</strong> is a property of program <em>structure</em>: the program is organized as multiple tasks that can make progress independently, without requiring each to finish before the next begins.</p>
+<p>On a single core, the OS <strong>time-slices</strong> between threads — each gets a short quantum (typically 1–10 ms), then is preempted so another can run:</p>
+<div class="highlight"><pre><span></span><code>Concurrent execution on a single core (time-slicing)
 
-Core:  [Task A][Task B][Task A][Task B][Task A]
-       ─────────────────────────────────────────▶ Time
+Core 0: [Task A]─[Task B]─[Task A]─[Task B]─[Task A]
+        ──────────────────────────────────────────────▶ Time
+
+Tasks interleave. Only one runs at any instant.
 </code></pre></div>
-<p>Tasks take turns, giving the illusion of parallelism.</p>
 <h3 id="parallelism">Parallelism<a class="headerlink" href="#parallelism" title="Permanent link">&para;</a></h3>
-<p>Multiple tasks executing simultaneously on different cores:</p>
-<div class="highlight"><pre><span></span><code>Parallel (multiple cores)
+<p><strong>Parallelism</strong> is a property of <em>execution</em>: multiple tasks are literally running at the same physical instant on separate hardware units.</p>
+<div class="highlight"><pre><span></span><code>Parallel execution on multiple cores
 
-Core 0: [────────── Task A ──────────]
-Core 1: [────────── Task B ──────────]
-        ─────────────────────────────▶ Time
+Core 0: [────────────── Task A ──────────────]
+Core 1: [────────────── Task B ──────────────]
+        ──────────────────────────────────────▶ Time
+
+Both tasks run simultaneously.
 </code></pre></div>
-<p>True simultaneous execution.</p>
 <h3 id="the-relationship">The Relationship<a class="headerlink" href="#the-relationship" title="Permanent link">&para;</a></h3>
-<ul>
-<li><strong>Concurrency</strong> is about program structure — organizing a program as multiple tasks that can make progress independently</li>
-<li><strong>Parallelism</strong> is about execution — tasks actually running at the same time on multiple hardware execution units (such as CPU cores)</li>
-</ul>
-<p>Concurrency is about dealing with many things at once. Parallelism is about doing many things at once. A concurrent program can run on a single core (via time-slicing) or on multiple cores (with true parallelism). Parallelism requires both concurrent structure and multiple execution units.</p>
-<h2 id="python-and-parallelism">Python and Parallelism<a class="headerlink" href="#python-and-parallelism" title="Permanent link">&para;</a></h2>
-<h3 id="the-gil-problem">The GIL Problem<a class="headerlink" href="#the-gil-problem" title="Permanent link">&para;</a></h3>
-<p>Python's <strong>Global Interpreter Lock (GIL)</strong> allows only one thread to execute Python bytecode at a time:</p>
-<div class="highlight"><pre><span></span><code>CPU-bound Python Threads on Multi-Core CPU
-
-Core 0: [Thread 1][        ][Thread 1][        ]
-Core 1: [        ][Thread 2][        ][Thread 2]
-        └─────────────────────────────────────────▶
-
-Only ONE thread executes Python bytecode at a time despite multiple cores!
-</code></pre></div>
-<p>This means Python threads don't achieve true parallelism for CPU-bound tasks. The GIL is automatically released during blocking I/O operations and by many C extensions (such as NumPy), allowing other threads to run while a thread is waiting.</p>
-<h3 id="workarounds">Workarounds<a class="headerlink" href="#workarounds" title="Permanent link">&para;</a></h3>
-<p><strong>For I/O-bound tasks</strong> (waiting for network, disk):</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
-
-<span class="c1"># Threads work well here - they release GIL while waiting</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">fetch_url</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>  <span class="c1"># GIL released during I/O</span>
-    <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span>
-
-<span class="n">threads</span> <span class="o">=</span> <span class="p">[</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">fetch_url</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">url</span><span class="p">,))</span> 
-           <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">urls</span><span class="p">]</span>
-</code></pre></div>
-<p><strong>For CPU-bound tasks</strong> (computation):</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">multiprocessing</span>
-
-<span class="c1"># Processes bypass GIL - each has its own interpreter</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">compute</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">heavy_calculation</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-
-<span class="k">with</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
-    <span class="n">results</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">compute</span><span class="p">,</span> <span class="n">data_chunks</span><span class="p">)</span>
-</code></pre></div>
-<p><strong>Using NumPy</strong> (releases GIL during computation):</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-
-<span class="c1"># NumPy operations release GIL and can use multiple cores</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">large_matrix1</span><span class="p">,</span> <span class="n">large_matrix2</span><span class="p">)</span>
-</code></pre></div>
-<h2 id="core-affinity-and-scheduling">Core Affinity and Scheduling<a class="headerlink" href="#core-affinity-and-scheduling" title="Permanent link">&para;</a></h2>
-<p>The operating system's <strong>scheduler</strong> decides which threads run on which cores:</p>
-<div class="highlight"><pre><span></span><code>OS Scheduler
-┌─────────────────────────────────────────────┐
-│                                             │
-│   Ready Queue: [T1] [T2] [T3] [T4] [T5]    │
-│                                             │
-│         ┌─────────┬─────────┐              │
-│         ▼         ▼         ▼              │
-│     ┌──────┐ ┌──────┐ ┌──────┐            │
-│     │Core 0│ │Core 1│ │Core 2│            │
-│     └──────┘ └──────┘ └──────┘            │
-│                                             │
-└─────────────────────────────────────────────┘
-</code></pre></div>
-<p>Python can set <strong>CPU affinity</strong> (which cores a process can use). This is usually unnecessary for most applications but can help in specialized performance tuning:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">psutil</span>
-
-<span class="c1"># Get current process</span>
-<span class="n">p</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">Process</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">())</span>
-
-<span class="c1"># Set affinity to cores 0 and 1 only</span>
-<span class="n">p</span><span class="o">.</span><span class="n">cpu_affinity</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-
-<span class="c1"># Check affinity</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">cpu_affinity</span><span class="p">())</span>  <span class="c1"># [0, 1]</span>
-</code></pre></div>
-<h2 id="practical-guidelines">Practical Guidelines<a class="headerlink" href="#practical-guidelines" title="Permanent link">&para;</a></h2>
+<p>Concurrency and parallelism are orthogonal concepts:</p>
 <table>
 <thead>
 <tr>
-<th>Task Type</th>
-<th>Recommended Approach</th>
+<th></th>
+<th>Concurrent structure</th>
+<th>Sequential structure</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>CPU-bound Python</strong></td>
-<td><code>multiprocessing</code> (separate processes)</td>
+<td><strong>Multiple cores</strong></td>
+<td>Concurrent + parallel</td>
+<td>Single-threaded parallel (unusual)</td>
 </tr>
 <tr>
-<td><strong>I/O-bound Python</strong></td>
-<td><code>threading</code> or <code>asyncio</code></td>
+<td><strong>Single core</strong></td>
+<td>Concurrent (interleaved)</td>
+<td>Purely sequential</td>
+</tr>
+</tbody>
+</table>
+<p>A useful framing: <strong>concurrency is about dealing with many things at once; parallelism is about doing many things at once</strong> (Rob Pike). You can have concurrency without parallelism (a single-core server juggling many connections), and you need concurrent program structure to exploit parallelism (you cannot parallelize an inherently sequential program).</p>
+<h2 id="threads-vs-processes">Threads vs Processes<a class="headerlink" href="#threads-vs-processes" title="Permanent link">&para;</a></h2>
+<h3 id="process">Process<a class="headerlink" href="#process" title="Permanent link">&para;</a></h3>
+<p>A <strong>process</strong> is an independent execution environment with its own:</p>
+<ul>
+<li><strong>Virtual address space</strong> (memory is fully isolated from other processes)</li>
+<li><strong>File descriptor table</strong></li>
+<li><strong>OS resources</strong> (signal handlers, environment, working directory)</li>
+</ul>
+<p>The OS enforces isolation: Process A cannot read or write Process B's memory without explicit IPC mechanisms (pipes, shared memory, sockets).</p>
+<h3 id="thread">Thread<a class="headerlink" href="#thread" title="Permanent link">&para;</a></h3>
+<p>A <strong>thread</strong> is a lightweight unit of execution <em>within</em> a process. All threads in a process share:</p>
+<ul>
+<li>The same heap (dynamically allocated objects, global variables)</li>
+<li>The same file descriptors and OS resources</li>
+</ul>
+<p>Each thread has its own:</p>
+<ul>
+<li><strong>Stack</strong> (local variables and call frames)</li>
+<li><strong>Registers</strong> (including the program counter — where it is in the code)</li>
+</ul>
+<div class="highlight"><pre><span></span><code>Process (shared address space)
+┌──────────────────────────────────────────────────┐
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐       │
+│  │ Thread 1 │  │ Thread 2 │  │ Thread 3 │       │
+│  │  stack   │  │  stack   │  │  stack   │       │
+│  │  regs    │  │  regs    │  │  regs    │       │
+│  └────┬─────┘  └────┬─────┘  └────┬─────┘       │
+│       └─────────────┼─────────────┘              │
+│                     ▼                             │
+│  ┌────────────────────────────────────────────┐  │
+│  │              Shared Heap                   │  │
+│  │  (objects, global variables, file handles) │  │
+│  └────────────────────────────────────────────┘  │
+└──────────────────────────────────────────────────┘
+</code></pre></div>
+<p><strong>Trade-off</strong>: threads are cheap to create and communicate easily through shared memory, but that shared memory requires careful synchronization (locks, semaphores) to avoid <strong>race conditions</strong>. Processes are safer (isolated by default) but inter-process communication has higher overhead.</p>
+<h2 id="python-and-the-gil">Python and the GIL<a class="headerlink" href="#python-and-the-gil" title="Permanent link">&para;</a></h2>
+<h3 id="the-global-interpreter-lock">The Global Interpreter Lock<a class="headerlink" href="#the-global-interpreter-lock" title="Permanent link">&para;</a></h3>
+<p>CPython (the standard Python implementation) uses a <strong>Global Interpreter Lock (GIL)</strong>: a mutex that ensures only one thread executes Python bytecode at any moment, even on a multi-core machine.</p>
+<p>The GIL exists because CPython's memory management (reference counting) is not thread-safe. Rather than making every reference count update atomic — which would be expensive — CPython serializes all execution through one lock.</p>
+<p>The consequence for CPU-bound workloads is stark:</p>
+<div class="highlight"><pre><span></span><code>CPU-bound Python threads — what actually happens
+
+              GIL held by Thread 1     GIL held by Thread 2
+              ◄──────────────────►     ◄──────────────────►
+Core 0: [  Thread 1  ][          ][  Thread 1  ][          ]
+Core 1: [            ][ Thread 2 ][            ][ Thread 2 ]
+        ─────────────────────────────────────────────────────▶ Time
+
+Only one thread executes Python bytecode at a time.
+The other thread is blocked waiting for the GIL, even if a free core exists.
+Total throughput is no better than a single thread.
+</code></pre></div>
+<p>The GIL is <strong>automatically released</strong> in two situations:
+1. <strong>Blocking I/O</strong> — when a thread calls <code>read()</code>, <code>recv()</code>, etc., it releases the GIL while waiting for the OS, letting other threads run.
+2. <strong>C extensions</strong> — libraries like NumPy release the GIL around their inner computation loops, enabling real multi-core use.</p>
+<h3 id="python-313-the-free-threaded-build">Python 3.13+: The Free-Threaded Build<a class="headerlink" href="#python-313-the-free-threaded-build" title="Permanent link">&para;</a></h3>
+<p>Python 3.13 introduced an <strong>experimental no-GIL build</strong> (<code>python3.13t</code>), and Python 3.12 added per-subinterpreter GILs. These changes are opt-in and the ecosystem is still adapting, but they signal the direction: the GIL is on its way out for CPU-bound parallelism.</p>
+<h3 id="workarounds-current-practice">Workarounds (Current Practice)<a class="headerlink" href="#workarounds-current-practice" title="Permanent link">&para;</a></h3>
+<p><strong>For I/O-bound tasks</strong> (network requests, disk reads): threads work well, since the GIL is released during I/O.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">fetch_url</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">results</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>   <span class="c1"># GIL released while waiting for network</span>
+    <span class="n">results</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span>
+
+<span class="n">urls</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;https://example.com&quot;</span><span class="p">,</span> <span class="s2">&quot;https://example.org&quot;</span><span class="p">]</span>
+<span class="n">results</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">urls</span><span class="p">)</span>
+<span class="n">threads</span> <span class="o">=</span> <span class="p">[</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">fetch_url</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">results</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
+           <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">url</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">urls</span><span class="p">)]</span>
+
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">threads</span><span class="p">:</span>
+    <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">threads</span><span class="p">:</span>
+    <span class="n">t</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>   <span class="c1"># wait for all threads to finish</span>
+</code></pre></div>
+<p><strong>For I/O-bound tasks with many concurrent connections</strong>: <code>asyncio</code> is often preferable to threads. It uses a single thread with an <strong>event loop</strong> — tasks voluntarily yield control at <code>await</code> points rather than being preempted by the OS. This avoids thread overhead entirely and scales to thousands of concurrent connections.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">aiohttp</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">fetch_url</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">urls</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+        <span class="n">tasks</span> <span class="o">=</span> <span class="p">[</span><span class="n">fetch_url</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span> <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">urls</span><span class="p">]</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="n">tasks</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>For CPU-bound tasks</strong>: use <code>multiprocessing</code>. Each process gets its own Python interpreter and GIL, so they truly run in parallel.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">multiprocessing</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">compute</span><span class="p">(</span><span class="n">data_chunk</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">heavy_calculation</span><span class="p">(</span><span class="n">data_chunk</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="n">processes</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">compute</span><span class="p">,</span> <span class="n">data_chunks</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>For CPU-bound numerical work</strong>: NumPy releases the GIL around its C-level kernels and links against multi-threaded BLAS (e.g., OpenBLAS, MKL), so operations like matrix multiplication use multiple cores automatically.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># np.dot releases the GIL; OpenBLAS/MKL spawns threads across cores internally</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span>   <span class="c1"># A, B are large 2D arrays</span>
+</code></pre></div>
+<h2 id="os-scheduling-and-core-affinity">OS Scheduling and Core Affinity<a class="headerlink" href="#os-scheduling-and-core-affinity" title="Permanent link">&para;</a></h2>
+<p>The OS <strong>scheduler</strong> decides which thread runs on which core at each moment. It maintains a <strong>run queue</strong> of ready threads and dispatches them to available cores:</p>
+<div class="highlight"><pre><span></span><code>OS Scheduler (run queue → cores)
+
+  Ready: [T1][T2][T3][T4][T5]
+               │
+         ┌─────┼──────┐
+         ▼     ▼      ▼
+      ┌──────┬──────┬──────┐
+      │Core 0│Core 1│Core 2│
+      └──────┴──────┴──────┘
+</code></pre></div>
+<p>The scheduler also handles <strong>context switches</strong>: saving the register state of a running thread and restoring another's. Context switches are cheap within the same process (shared address space, no TLB flush) but more expensive across processes.</p>
+<p><strong>CPU affinity</strong> pins a process or thread to a specific set of cores. This is rarely needed but can reduce <strong>cache thrashing</strong> when a critical thread keeps migrating between cores and losing its warm cache:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">psutil</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">Process</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">())</span>
+
+<span class="n">p</span><span class="o">.</span><span class="n">cpu_affinity</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>   <span class="c1"># restrict this process to cores 0 and 1</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">cpu_affinity</span><span class="p">())</span>  <span class="c1"># [0, 1]</span>
+</code></pre></div>
+<p>Use affinity only when profiling reveals a concrete benefit — the OS scheduler is generally well-tuned.</p>
+<h2 id="amdahls-law-the-ceiling-on-parallel-speedup">Amdahl's Law: The Ceiling on Parallel Speedup<a class="headerlink" href="#amdahls-law-the-ceiling-on-parallel-speedup" title="Permanent link">&para;</a></h2>
+<p>Adding more cores does not give proportional speedup. Every real program has a <strong>serial fraction</strong> — setup, I/O coordination, sequential data dependencies — that cannot be parallelized. Amdahl's Law quantifies the resulting ceiling.</p>
+<p>If a fraction <span class="arithmatex">\(s\)</span> of total runtime is inherently serial, the maximum speedup <span class="arithmatex">\(S(n)\)</span> achievable with <span class="arithmatex">\(n\)</span> cores is:</p>
+<div class="arithmatex">\[S(n) = \frac{1}{s + \dfrac{1-s}{n}}\]</div>
+<p>As <span class="arithmatex">\(n \to \infty\)</span>, <span class="arithmatex">\(S(n) \to 1/s\)</span>. The serial portion alone determines the hard limit, regardless of how many cores you add.</p>
+<p><strong>Concrete example</strong>: suppose 10% of your program is serial (<span class="arithmatex">\(s = 0.1\)</span>).</p>
+<table>
+<thead>
+<tr>
+<th>Cores (<span class="arithmatex">\(n\)</span>)</th>
+<th>Speedup <span class="arithmatex">\(S(n)\)</span></th>
+<th>Efficiency <span class="arithmatex">\(S(n)/n\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1.00×</td>
+<td>100%</td>
 </tr>
 <tr>
-<td><strong>NumPy computation</strong></td>
-<td>Let NumPy handle it (uses BLAS threads)</td>
+<td>2</td>
+<td>1.82×</td>
+<td>91%</td>
 </tr>
 <tr>
-<td><strong>Mixed workloads</strong></td>
-<td><code>concurrent.futures</code> for flexibility</td>
+<td>4</td>
+<td>3.08×</td>
+<td>77%</td>
+</tr>
+<tr>
+<td>8</td>
+<td>4.71×</td>
+<td>59%</td>
+</tr>
+<tr>
+<td>16</td>
+<td>6.40×</td>
+<td>40%</td>
+</tr>
+<tr>
+<td>∞</td>
+<td><strong>10.0×</strong></td>
+<td>→ 0%</td>
+</tr>
+</tbody>
+</table>
+<p>With 10% serial code, you can never exceed a 10× speedup no matter how many cores you use. Doubling from 8 to 16 cores only gains 1.7×.</p>
+<p><strong>The practical implication</strong>: before adding more parallelism, profile and reduce the serial bottleneck. Halving the serial fraction (from 10% to 5%) doubles the theoretical ceiling (from 10× to 20×), more than any number of additional cores would achieve.</p>
+<h2 id="practical-guidelines">Practical Guidelines<a class="headerlink" href="#practical-guidelines" title="Permanent link">&para;</a></h2>
+<h3 id="choosing-an-approach">Choosing an Approach<a class="headerlink" href="#choosing-an-approach" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Workload</th>
+<th>Recommended Tool</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CPU-bound Python</td>
+<td><code>multiprocessing</code></td>
+<td>Bypasses GIL; each process has own interpreter</td>
+</tr>
+<tr>
+<td>I/O-bound, many connections</td>
+<td><code>asyncio</code></td>
+<td>Event loop; no thread overhead; scales to 10k+ connections</td>
+</tr>
+<tr>
+<td>I/O-bound, moderate concurrency</td>
+<td><code>threading</code></td>
+<td>Simpler code; GIL released during I/O</td>
+</tr>
+<tr>
+<td>Numerical computation</td>
+<td>NumPy / SciPy</td>
+<td>BLAS-level parallelism; GIL released in C kernels</td>
+</tr>
+<tr>
+<td>Mixed or flexible</td>
+<td><code>concurrent.futures</code></td>
+<td>Uniform API over threads and processes</td>
 </tr>
 </tbody>
 </table>
 <h3 id="choosing-worker-count">Choosing Worker Count<a class="headerlink" href="#choosing-worker-count" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">psutil</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">concurrent.futures</span><span class="w"> </span><span class="kn">import</span> <span class="n">ProcessPoolExecutor</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">psutil</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">concurrent.futures</span><span class="w"> </span><span class="kn">import</span> <span class="n">ProcessPoolExecutor</span><span class="p">,</span> <span class="n">ThreadPoolExecutor</span>
 
-<span class="c1"># For CPU-bound: use physical core count (hyperthreads rarely double performance)</span>
-<span class="n">cpu_workers</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">(</span><span class="n">logical</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="c1"># CPU-bound: match physical cores — hyperthreads rarely help for pure compute</span>
+<span class="n">cpu_workers</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">(</span><span class="n">logical</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># e.g., 4</span>
 
-<span class="c1"># For I/O-bound: can exceed core count</span>
-<span class="n">io_workers</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span> <span class="o">*</span> <span class="mi">2</span>  <span class="c1"># or more</span>
+<span class="c1"># I/O-bound: can safely exceed core count since threads mostly wait</span>
+<span class="n">io_workers</span> <span class="o">=</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span> <span class="ow">or</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">4</span>  <span class="c1"># e.g., 16–32; tune empirically</span>
 
+<span class="c1"># CPU-bound example</span>
 <span class="k">with</span> <span class="n">ProcessPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">cpu_workers</span><span class="p">)</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
-    <span class="n">results</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">cpu_task</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">executor</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">cpu_task</span><span class="p">,</span> <span class="n">data_chunks</span><span class="p">))</span>
+
+<span class="c1"># I/O-bound example</span>
+<span class="k">with</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">io_workers</span><span class="p">)</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">executor</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">io_task</span><span class="p">,</span> <span class="n">urls</span><span class="p">))</span>
 </code></pre></div>
+<p>For CPU-bound tasks, using logical (hyperthread) count instead of physical count often gives no benefit and can hurt performance due to resource contention within each physical core.</p>
 <h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -44406,40 +44604,45 @@ Only ONE thread executes Python bytecode at a time despite multiple cores!
 <tbody>
 <tr>
 <td><strong>Core</strong></td>
-<td>Independent execution unit with own ALU and cache</td>
+<td>Independent hardware execution unit with private L1/L2 cache</td>
+</tr>
+<tr>
+<td><strong>Logical core (SMT)</strong></td>
+<td>Software-visible thread slot on a physical core; shares execution units</td>
 </tr>
 <tr>
 <td><strong>Thread</strong></td>
-<td>Lightweight execution context within a process</td>
+<td>Lightweight execution context within a process; shares heap with siblings</td>
 </tr>
 <tr>
-<td><strong>Hyperthreading</strong></td>
-<td>One physical core appearing as two logical cores</td>
+<td><strong>Process</strong></td>
+<td>Isolated execution environment with its own memory space</td>
+</tr>
+<tr>
+<td><strong>Concurrency</strong></td>
+<td>Program structure enabling multiple tasks to make progress (possibly interleaved)</td>
 </tr>
 <tr>
 <td><strong>Parallelism</strong></td>
 <td>Simultaneous execution on multiple cores</td>
 </tr>
 <tr>
-<td><strong>Concurrency</strong></td>
-<td>Multiple tasks making progress (possibly interleaved)</td>
+<td><strong>GIL</strong></td>
+<td>CPython mutex serializing bytecode execution; prevents CPU-bound thread parallelism</td>
 </tr>
 <tr>
-<td><strong>GIL</strong></td>
-<td>Python lock preventing true thread parallelism for CPU-bound code</td>
+<td><strong>Amdahl's Law</strong></td>
+<td>Serial fraction <span class="arithmatex">\(s\)</span> caps speedup at <span class="arithmatex">\(1/s\)</span> regardless of core count</td>
 </tr>
 </tbody>
 </table>
-<p>Understanding cores and threads explains why:</p>
-<ul>
-<li>Python threads don't speed up CPU-bound code</li>
-<li><code>multiprocessing</code> bypasses the GIL</li>
-<li>NumPy can utilize multiple cores despite Python's limitations</li>
-<li>The number of workers should match your workload type</li>
-</ul>
-<blockquote>
-<p><strong>Amdahl's Law</strong>: Adding more cores does not give linear speedups. If a fraction <span class="arithmatex">\(s\)</span> of a program is inherently serial, the maximum speedup with <span class="arithmatex">\(n\)</span> cores is <span class="arithmatex">\(1 / (s + (1 - s) / n)\)</span>. Even with infinite cores, the serial portion limits the total speedup — which is why optimizing the serial bottleneck often matters more than adding cores.</p>
-</blockquote>
+<p>The four key takeaways for Python practitioners:</p>
+<ol>
+<li><strong>Python threads don't parallelize CPU-bound code</strong> — the GIL serializes bytecode execution.</li>
+<li><strong>Use <code>multiprocessing</code> for CPU-bound tasks</strong> — separate processes each have their own GIL.</li>
+<li><strong>Use <code>asyncio</code> or threads for I/O-bound tasks</strong> — the GIL is released during I/O waits.</li>
+<li><strong>More cores have diminishing returns</strong> — Amdahl's Law means reducing the serial bottleneck is often more effective than adding workers.</li>
+</ol>
 
 
 
