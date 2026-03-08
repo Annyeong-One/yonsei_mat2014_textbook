@@ -44271,8 +44271,8 @@
 │  │  │ Cache     │  │    │          │ ├─┤├─┤├─┤├─┤├─┤├─┤├─┤├─┤   │
 │  │  └───────────┘  │    │          │ ├─┤├─┤├─┤├─┤├─┤├─┤├─┤├─┤   │
 │  │  Branch Pred.   │    │          │ └─┘└─┘└─┘└─┘└─┘└─┘└─┘└─┘   │
-│  │  Out-of-Order   │    │          │       Thousands of         │
-│  └─────────────────┘    │          │       simple cores         │
+│  │  Out-of-Order   │    │          │    Thousands of parallel     │
+│  └─────────────────┘    │          │     arithmetic units      │
 │         × 4-16          │          │                             │
 └─────────────────────────┘          └─────────────────────────────┘
    Latency-optimized                    Throughput-optimized
@@ -44289,7 +44289,7 @@
 <tbody>
 <tr>
 <td><strong>Core Count</strong></td>
-<td>4-64</td>
+<td>4-128+</td>
 <td>1,000-10,000+</td>
 </tr>
 <tr>
@@ -44314,7 +44314,7 @@
 </tr>
 <tr>
 <td><strong>Memory Bandwidth</strong></td>
-<td>~50 GB/s</td>
+<td>~50–200 GB/s</td>
 <td>~1000 GB/s</td>
 </tr>
 <tr>
@@ -44330,6 +44330,7 @@
 </tbody>
 </table>
 <h2 id="latency-vs-throughput">Latency vs Throughput<a class="headerlink" href="#latency-vs-throughput" title="Permanent link">&para;</a></h2>
+<p>CPUs hide latency using speculation and complex control logic, while GPUs hide latency by running thousands of threads so another thread can execute while one waits for memory.</p>
 <h3 id="cpu-latency-optimized">CPU: Latency-Optimized<a class="headerlink" href="#cpu-latency-optimized" title="Permanent link">&para;</a></h3>
 <p>The CPU minimizes time to complete a single task:</p>
 <div class="highlight"><pre><span></span><code>CPU: Fast completion of individual tasks
@@ -44448,7 +44449,7 @@ Task 1000: [██████████████████████�
 
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;n=</span><span class="si">{</span><span class="n">n</span><span class="si">:</span><span class="s2">&gt;10</span><span class="si">}</span><span class="s2">: CPU=</span><span class="si">{</span><span class="n">cpu_time</span><span class="o">*</span><span class="mi">1000</span><span class="si">:</span><span class="s2">&gt;8.3f</span><span class="si">}</span><span class="s2">ms, GPU=</span><span class="si">{</span><span class="n">gpu_time</span><span class="o">*</span><span class="mi">1000</span><span class="si">:</span><span class="s2">&gt;8.3f</span><span class="si">}</span><span class="s2">ms&quot;</span><span class="p">)</span>
 </code></pre></div>
-<p>Typical results:</p>
+<p>Typical results (compute time only, excluding CPU–GPU transfer):</p>
 <div class="highlight"><pre><span></span><code>n=     1,000: CPU=   0.010ms, GPU=   0.150ms  ← CPU faster (overhead)
 n=    10,000: CPU=   0.050ms, GPU=   0.160ms  ← CPU faster
 n=   100,000: CPU=   0.400ms, GPU=   0.180ms  ← Crossover point
@@ -44489,9 +44490,12 @@ n=2048: CPU=0.750s, GPU=0.0040s, Speedup=188x
 n=4096: CPU=6.000s, GPU=0.0250s, Speedup=240x
 </code></pre></div>
 <h2 id="the-transfer-bottleneck">The Transfer Bottleneck<a class="headerlink" href="#the-transfer-bottleneck" title="Permanent link">&para;</a></h2>
-<p>Data must travel between CPU and GPU:</p>
-<div class="highlight"><pre><span></span><code>CPU Memory ←───── PCIe 4.0 ─────→ GPU Memory
-              (~32 GB/s max)
+<p>Data must travel between system RAM and GPU VRAM. The CPU orchestrates the transfer, but a DMA (Direct Memory Access) engine performs the actual copy — the CPU does not move bytes through its own registers:</p>
+<div class="highlight"><pre><span></span><code>CPU (control)
+ │
+ ▼
+System RAM ←──── PCIe 4.0 ────→ GPU VRAM
+               (~32 GB/s max)
 
 This transfer can dominate total time!
 </code></pre></div>
@@ -44557,7 +44561,8 @@ This transfer can dominate total time!
 <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;cuda&#39;</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">dataloader</span><span class="p">:</span>  <span class="c1"># CPU loads and preprocesses</span>
-    <span class="n">inputs</span> <span class="o">=</span> <span class="n">batch</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;cuda&#39;</span><span class="p">)</span>      <span class="c1"># Transfer to GPU</span>
+    <span class="n">inputs</span><span class="p">,</span> <span class="n">targets</span> <span class="o">=</span> <span class="n">batch</span>
+    <span class="n">inputs</span><span class="p">,</span> <span class="n">targets</span> <span class="o">=</span> <span class="n">inputs</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;cuda&#39;</span><span class="p">),</span> <span class="n">targets</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;cuda&#39;</span><span class="p">)</span>
     <span class="n">outputs</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>         <span class="c1"># GPU computation</span>
     <span class="n">loss</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">targets</span><span class="p">)</span>
     <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>                 <span class="c1"># GPU backward pass</span>

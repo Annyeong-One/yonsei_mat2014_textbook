@@ -448,6 +448,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#the-instruction-cycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Instruction Cycle
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#core-components" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -610,10 +621,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#why-python-is-slow" class="md-nav__link">
+  <a href="#why-python-is-slower-per-operation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Why Python is "Slow"
+        Why Python is Slower Per Operation
       
     </span>
   </a>
@@ -43909,6 +43920,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#the-instruction-cycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Instruction Cycle
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#core-components" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -44071,10 +44093,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#why-python-is-slow" class="md-nav__link">
+  <a href="#why-python-is-slower-per-operation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Why Python is "Slow"
+        Why Python is Slower Per Operation
       
     </span>
   </a>
@@ -44138,7 +44160,7 @@
 
 <h1 id="cpu-basics">CPU Basics<a class="headerlink" href="#cpu-basics" title="Permanent link">&para;</a></h1>
 <h2 id="what-is-a-cpu">What is a CPU?<a class="headerlink" href="#what-is-a-cpu" title="Permanent link">&para;</a></h2>
-<p>The <strong>Central Processing Unit (CPU)</strong> is the primary component that executes program instructions. Often called the "brain" of the computer, it performs arithmetic, logic, and control operations.</p>
+<p>The <strong>Central Processing Unit (CPU)</strong> is the hardware component responsible for executing machine instructions. It performs arithmetic, logic, and control operations.</p>
 <div class="highlight"><pre><span></span><code>┌─────────────────────────────────────────────────────────────┐
 │                          CPU                                │
 │                                                             │
@@ -44157,6 +44179,24 @@
                                │
                           To Memory
 </code></pre></div>
+<blockquote>
+<p><strong>Scope note</strong>: This diagram is a simplified conceptual model. Modern CPUs include many additional components — instruction decoders, branch predictors, load/store units, reorder buffers, and multiple execution units — not shown here. Modern CPUs distribute control logic across multiple pipeline stages rather than using a single centralized control unit.</p>
+</blockquote>
+<h2 id="the-instruction-cycle">The Instruction Cycle<a class="headerlink" href="#the-instruction-cycle" title="Permanent link">&para;</a></h2>
+<p>Before examining each component, it helps to understand the fundamental cycle that drives everything:</p>
+<div class="highlight"><pre><span></span><code>┌─────────┐     ┌─────────┐     ┌───────────┐     ┌───────────┐
+│  FETCH  │ ──▶ │ DECODE  │ ──▶ │  EXECUTE  │ ──▶ │ WRITEBACK │
+└─────────┘     └─────────┘     └───────────┘     └─────────┬─┘
+     ▲                                                        │
+     └────────────────────────────────────────────────────────┘
+</code></pre></div>
+<ol>
+<li><strong>Fetch</strong>: Read the next instruction from memory (address stored in Program Counter)</li>
+<li><strong>Decode</strong>: Determine what operation the instruction specifies</li>
+<li><strong>Execute</strong>: Perform the operation (arithmetic, logic, memory access, etc.)</li>
+<li><strong>Writeback</strong>: Store results back to registers or memory</li>
+</ol>
+<p>This cycle repeats continuously. Every component described below plays a role in one or more of these stages.</p>
 <h2 id="core-components">Core Components<a class="headerlink" href="#core-components" title="Permanent link">&para;</a></h2>
 <h3 id="control-unit-cu">Control Unit (CU)<a class="headerlink" href="#control-unit-cu" title="Permanent link">&para;</a></h3>
 <p>The control unit orchestrates CPU operations:</p>
@@ -44178,7 +44218,7 @@
 <tbody>
 <tr>
 <td><strong>Arithmetic</strong></td>
-<td>Addition, subtraction, multiplication, division</td>
+<td>Addition, subtraction, multiplication, division (multiplication and division often use separate execution units)</td>
 </tr>
 <tr>
 <td><strong>Logic</strong></td>
@@ -44199,20 +44239,19 @@
 <div class="highlight"><pre><span></span><code>┌─────────────────────────────────────────┐
 │              CPU Registers              │
 ├─────────────────────────────────────────┤
-│  Program Counter (PC)  │ Next instruction address  │
-│  Instruction Register  │ Current instruction       │
-│  Accumulator          │ Computation results       │
-│  General Purpose (R0-R15) │ Temporary data        │
-│  Stack Pointer        │ Top of call stack         │
-│  Flags/Status         │ Comparison results        │
+│  Program Counter (PC)    │ Next instruction address │
+│  Instruction Register    │ Current instruction      │
+│  General Purpose (R0–R15)│ Data and computation     │
+│  Stack Pointer           │ Top of call stack        │
+│  Flags/Status            │ Comparison results       │
 └─────────────────────────────────────────┘
 </code></pre></div>
-<p>Registers are measured in bits (32-bit or 64-bit), which determines:</p>
+<p>Registers typically have a fixed width (e.g., 32-bit or 64-bit), which influences:</p>
 <ul>
 <li>Maximum addressable memory</li>
 <li>Size of numbers that can be processed in one operation</li>
-<li>Overall architecture designation (x86 vs x86-64)</li>
 </ul>
+<p>The architecture designation (e.g., x86 vs x86-64) is determined by the ISA design as a whole — including register width, address space, and instruction encoding — not by register size alone.</p>
 <h2 id="instruction-execution">Instruction Execution<a class="headerlink" href="#instruction-execution" title="Permanent link">&para;</a></h2>
 <h3 id="machine-instructions">Machine Instructions<a class="headerlink" href="#machine-instructions" title="Permanent link">&para;</a></h3>
 <p>At the lowest level, CPUs execute <strong>machine instructions</strong>—binary patterns that specify operations:</p>
@@ -44222,7 +44261,7 @@ ADD EAX, EBX    ; Add register EBX to EAX
 
 Binary: 01 D8   ; The actual bytes the CPU sees
 </code></pre></div>
-<p>Each instruction type has an <strong>opcode</strong> (operation code) that tells the CPU what to do.</p>
+<p>Each instruction type has an <strong>opcode</strong> (operation code) that tells the CPU what to do. Note that x86 instructions are <strong>variable length</strong> — different instructions may occupy different numbers of bytes. Not all architectures work this way; ARM, for example, uses fixed-length instructions.</p>
 <h3 id="instruction-categories">Instruction Categories<a class="headerlink" href="#instruction-categories" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -44239,24 +44278,14 @@ Binary: 01 D8   ; The actual bytes the CPU sees
 <td><code>MOV</code>, <code>LOAD</code>, <code>STORE</code></td>
 </tr>
 <tr>
-<td><strong>Arithmetic</strong></td>
-<td>Mathematical operations</td>
-<td><code>ADD</code>, <code>SUB</code>, <code>MUL</code>, <code>DIV</code></td>
-</tr>
-<tr>
-<td><strong>Logic</strong></td>
-<td>Boolean operations</td>
-<td><code>AND</code>, <code>OR</code>, <code>XOR</code>, <code>NOT</code></td>
+<td><strong>Arithmetic/Logic</strong></td>
+<td>Mathematical and boolean operations, comparisons</td>
+<td><code>ADD</code>, <code>SUB</code>, <code>MUL</code>, <code>AND</code>, <code>CMP</code></td>
 </tr>
 <tr>
 <td><strong>Control Flow</strong></td>
 <td>Change execution order</td>
 <td><code>JMP</code>, <code>CALL</code>, <code>RET</code></td>
-</tr>
-<tr>
-<td><strong>Comparison</strong></td>
-<td>Set flags for branching</td>
-<td><code>CMP</code>, <code>TEST</code></td>
 </tr>
 </tbody>
 </table>
@@ -44269,77 +44298,74 @@ Instruction 2:        [Fetch][Decode][Execute][Write]
 Instruction 3:              [Fetch][Decode][Execute][Write]
 Instruction 4:                    [Fetch][Decode][Execute][Write]
 </code></pre></div>
-<p>This <strong>pipelining</strong> allows multiple instructions to be in-flight simultaneously.</p>
+<p>This <strong>pipelining</strong> allows multiple instructions to be in-flight simultaneously. However, pipelining introduces <strong>hazards</strong> — situations where the next instruction cannot proceed immediately (e.g., data dependencies between instructions, or branches whose target is not yet known). Modern CPUs address these with <strong>superscalar execution</strong> (multiple instructions per cycle using multiple execution units), <strong>out-of-order execution</strong> (reordering instructions to avoid stalls), and <strong>branch prediction</strong> (speculatively executing the likely path of a branch).</p>
 <h2 id="cpu-and-memory-interaction">CPU and Memory Interaction<a class="headerlink" href="#cpu-and-memory-interaction" title="Permanent link">&para;</a></h2>
 <h3 id="the-memory-hierarchy">The Memory Hierarchy<a class="headerlink" href="#the-memory-hierarchy" title="Permanent link">&para;</a></h3>
 <p>CPUs access data through a hierarchy of increasingly slower (but larger) storage:</p>
 <div class="highlight"><pre><span></span><code>Speed                              Size
-  ▲                                  ▲
+  ▲    Memory Hierarchy               ▲
   │   ┌──────────┐                   │
-  │   │ Registers│  ~100 bytes       │
+  │   │ L1 Cache │  32–64 KB         │
   │   ├──────────┤                   │
-  │   │ L1 Cache │  ~64 KB           │
+  │   │ L2 Cache │  512 KB–2 MB      │
   │   ├──────────┤                   │
-  │   │ L2 Cache │  ~256 KB          │
-  │   ├──────────┤                   │
-  │   │ L3 Cache │  ~8 MB            │
+  │   │ L3 Cache │  16–64 MB         │
   │   ├──────────┤                   │
   │   │   RAM    │  ~16 GB           │
   │   ├──────────┤                   │
-  │   │   SSD    │  ~500 GB          │
+  │       Storage                    │
+  │   ├──────────┤                   │
+  │   │ SSD/Disk │  ~500 GB          │
   │   └──────────┘                   │
   │                                  │
 </code></pre></div>
+<p>Registers (~100 bytes total) are part of the CPU datapath rather than the memory hierarchy proper — they are where the ALU operates directly on data.</p>
 <h3 id="access-latency">Access Latency<a class="headerlink" href="#access-latency" title="Permanent link">&para;</a></h3>
 <p>Approximate cycles to access different levels:</p>
 <table>
 <thead>
 <tr>
 <th>Level</th>
-<th>Latency (cycles)</th>
-<th>Latency (nanoseconds)</th>
+<th>Latency (order-of-magnitude cycles)</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>Register</td>
-<td>1</td>
-<td>~0.3 ns</td>
+<td>~1 cycle</td>
 </tr>
 <tr>
 <td>L1 Cache</td>
-<td>4</td>
-<td>~1 ns</td>
+<td>~4 cycles</td>
 </tr>
 <tr>
 <td>L2 Cache</td>
-<td>12</td>
-<td>~3 ns</td>
+<td>~12 cycles</td>
 </tr>
 <tr>
 <td>L3 Cache</td>
-<td>40</td>
-<td>~10 ns</td>
+<td>~40 cycles</td>
 </tr>
 <tr>
 <td>RAM</td>
-<td>200+</td>
-<td>~60 ns</td>
+<td>~200 cycles</td>
 </tr>
 </tbody>
 </table>
-<p>This explains why cache-friendly code is dramatically faster.</p>
+<p>Exact latency varies by CPU model and workload. Cycles are more stable than nanoseconds for comparison because nanoseconds depend on clock speed.</p>
+<p>This is why cache-friendly memory access patterns can dramatically improve performance. When the CPU loads a value from memory, it fetches the entire <strong>cache line</strong> (typically 64 bytes) containing that value. Sequential memory access therefore performs much better than random access, because nearby data is already in cache.</p>
 <h2 id="pythons-perspective">Python's Perspective<a class="headerlink" href="#pythons-perspective" title="Permanent link">&para;</a></h2>
 <h3 id="python-bytecode-vs-machine-code">Python Bytecode vs Machine Code<a class="headerlink" href="#python-bytecode-vs-machine-code" title="Permanent link">&para;</a></h3>
 <p>Python code doesn't run directly on the CPU. Instead:</p>
-<div class="highlight"><pre><span></span><code>┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-│ Python Code │ ──▶ │  Bytecode   │ ──▶ │ Machine Code│
-│   (.py)     │     │  (.pyc)     │     │   (CPU)     │
-└─────────────┘     └─────────────┘     └─────────────┘
-                           │
-                    CPython Interpreter
-                    (executes bytecode)
+<div class="highlight"><pre><span></span><code>┌─────────────┐     ┌─────────────┐     ┌──────────────────┐
+│ Python Code │ ──▶ │  Bytecode   │ ──▶ │   Interpreter    │
+│   (.py)     │     │  (.pyc)     │     │   Loop (C code)  │
+└─────────────┘     └─────────────┘     └────────┬─────────┘
+                                                 │
+                                        Machine Instructions
+                                           (on CPU)
 </code></pre></div>
+<p>CPython <strong>interprets</strong> bytecode — it does not compile bytecode to machine code. The interpreter is itself a compiled C program that reads each bytecode instruction and dispatches the corresponding C routine, which in turn executes as machine instructions on the CPU.</p>
 <p>A simple Python operation becomes many machine instructions:</p>
 <div class="highlight"><pre><span></span><code><span class="n">x</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
 </code></pre></div>
@@ -44352,7 +44378,7 @@ Instruction 4:                    [Fetch][Decode][Execute][Write]
 <li>Allocate memory for result</li>
 <li>Store result and bind to <code>x</code></li>
 </ol>
-<h3 id="why-python-is-slow">Why Python is "Slow"<a class="headerlink" href="#why-python-is-slow" title="Permanent link">&para;</a></h3>
+<h3 id="why-python-is-slower-per-operation">Why Python is Slower Per Operation<a class="headerlink" href="#why-python-is-slower-per-operation" title="Permanent link">&para;</a></h3>
 <p>Each Python operation involves:</p>
 <ul>
 <li><strong>Dynamic type checking</strong> at runtime</li>
@@ -44361,6 +44387,9 @@ Instruction 4:                    [Fetch][Decode][Execute][Write]
 <li><strong>Reference counting</strong> updates</li>
 </ul>
 <p>Compare to C, where <code>x = a + b</code> might be a single <code>ADD</code> instruction.</p>
+<blockquote>
+<p><strong>Note</strong>: Some Python implementations (e.g., PyPy) use JIT compilation instead of pure interpretation, significantly reducing this overhead for long-running code.</p>
+</blockquote>
 <h3 id="numpys-advantage">NumPy's Advantage<a class="headerlink" href="#numpys-advantage" title="Permanent link">&para;</a></h3>
 <p>NumPy bypasses Python's overhead by:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
@@ -44368,7 +44397,7 @@ Instruction 4:                    [Fetch][Decode][Execute][Write]
 <span class="c1"># Single Python call, millions of CPU operations</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">arr1</span><span class="p">,</span> <span class="n">arr2</span><span class="p">)</span>
 </code></pre></div>
-<p>The actual computation happens in compiled C code that directly uses CPU instructions, operating on contiguous memory.</p>
+<p>The actual computation happens in compiled C code that directly uses CPU instructions — including SIMD vector instructions (e.g., AVX, SSE, NEON) that process multiple data elements simultaneously (e.g., adding 8 numbers in one instruction) — operating on contiguous memory. Many scientific Python libraries follow this same pattern, moving computation into compiled C or C++ extensions.</p>
 <h2 id="key-cpu-metrics">Key CPU Metrics<a class="headerlink" href="#key-cpu-metrics" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -44386,7 +44415,7 @@ Instruction 4:                    [Fetch][Decode][Execute][Write]
 </tr>
 <tr>
 <td><strong>IPC</strong></td>
-<td>Instructions per cycle</td>
+<td>Instructions per cycle; peak ~4–6 on modern CPUs, but real workloads often achieve lower</td>
 <td>2-6</td>
 </tr>
 <tr>
@@ -44407,21 +44436,14 @@ Instruction 4:                    [Fetch][Decode][Execute][Write]
 </tbody>
 </table>
 <h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
-<p>The CPU executes programs through:</p>
-<ol>
-<li><strong>Fetch</strong>: Get instruction from memory</li>
-<li><strong>Decode</strong>: Determine what operation to perform</li>
-<li><strong>Execute</strong>: ALU performs the computation</li>
-<li><strong>Write Back</strong>: Store results</li>
-</ol>
 <p>Key points for Python programmers:</p>
 <ul>
-<li>Python adds layers of abstraction above raw CPU operations</li>
-<li>This abstraction costs performance but provides flexibility</li>
-<li>Understanding CPU basics explains why vectorized NumPy code is fast</li>
+<li>The CPU executes programs through a continuous <strong>fetch-decode-execute-writeback</strong> cycle</li>
+<li>Python adds layers of abstraction above raw CPU operations — this costs performance but provides flexibility</li>
+<li>Vectorized libraries like NumPy exploit SIMD and cache locality to achieve high performance</li>
 <li>Memory access patterns significantly impact performance</li>
 </ul>
-<p>The CPU's speed is ultimately limited by memory bandwidth—a constraint that shapes how we write efficient code.</p>
+<p>Performance is often limited either by computation or by memory access — understanding which constraint dominates shapes how we write efficient code.</p>
 
 
 

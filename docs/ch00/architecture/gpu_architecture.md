@@ -15,8 +15,8 @@ CPU vs GPU: Core Count
 │  │ C │ │ C │   │          │ ├─┤├─┤├─┤├─┤├─┤├─┤├─┤├─┤   │
 │  └───┘ └───┘   │          │ └─┘└─┘└─┘└─┘└─┘└─┘└─┘└─┘   │
 │                │          │      ... thousands ...      │
-│   4-16 cores   │          │     thousands of cores      │
-│   (complex)    │          │        (simple)             │
+│   4-16 cores   │          │  thousands of arithmetic    │
+│   (complex)    │          │    units (simple)           │
 └─────────────────┘          └─────────────────────────────┘
 ```
 
@@ -24,8 +24,8 @@ CPU vs GPU: Core Count
 
 | Aspect | CPU | GPU |
 |--------|-----|-----|
-| **Cores** | Few (4-64) | Many (thousands) |
-| **Core Complexity** | High (out-of-order, branch prediction) | Low (simple, in-order) |
+| **Execution Units** | Few complex cores (4-64) | Thousands of lightweight arithmetic units |
+| **Unit Complexity** | High (out-of-order, branch prediction) | Simple ALUs, but SMs include sophisticated scheduling hardware |
 | **Clock Speed** | High (3-5 GHz) | Lower (1-2 GHz) |
 | **Cache per Core** | Large | Small |
 | **Optimized For** | Latency (fast single tasks) | Throughput (many parallel tasks) |
@@ -89,7 +89,8 @@ Thread 3:  a[3] + b[3] → c[3]
    ...         ...
 Thread N:  a[N] + b[N] → c[N]
 
-All threads execute ADD simultaneously!
+Each warp (32 threads) executes ADD across its threads,
+while the SM schedules many warps to keep hardware busy.
 ```
 
 ### Warps and Thread Blocks
@@ -110,7 +111,7 @@ Grid (entire computation)
 └── ...
 ```
 
-- **Warp**: 32 threads that execute in lockstep
+- **Warp**: 32 threads that execute in lockstep. If threads in a warp follow different branches, the warp executes each path sequentially (**warp divergence**), reducing throughput
 - **Block**: Group of warps sharing memory
 - **Grid**: All blocks for a computation
 
@@ -120,11 +121,11 @@ Grid (entire computation)
 Speed                                    Size
   ▲                                        ▲
   │  ┌────────────────┐                    │
-  │  │   Registers    │  ~256 KB total     │
+  │  │   Registers    │  per thread         │
   │  ├────────────────┤                    │
-  │  │ Shared Memory  │  ~100 KB per SM    │
-  │  ├────────────────┤                    │
-  │  │   L1 Cache     │  ~128 KB per SM    │
+  │  │ Shared Memory/ │  ~128–228 KB per SM│
+  │  │ L1 Cache       │  (unified pool,    │
+  │  │                │   configurable)    │
   │  ├────────────────┤                    │
   │  │   L2 Cache     │  ~6 MB             │
   │  ├────────────────┤                    │
@@ -140,13 +141,15 @@ GPU memory bandwidth vastly exceeds CPU:
 
 | Component | Bandwidth |
 |-----------|-----------|
-| CPU RAM (DDR4) | ~50 GB/s |
+| CPU RAM (DDR4/DDR5) | ~50–200 GB/s |
 | GPU VRAM (GDDR6) | ~500 GB/s |
 | GPU VRAM (HBM2e) | ~2000 GB/s |
 
-This high bandwidth enables GPUs to feed thousands of cores with data.
+This high bandwidth enables GPUs to feed thousands of execution units with data. GPUs hide memory latency by scheduling many warps — when one warp stalls waiting for memory, another warp immediately executes on the same hardware.
 
 ## GPU Computing with Python
+
+GPU computations run in **kernels** — functions launched on the GPU and executed by thousands of parallel threads. Libraries like CuPy and PyTorch abstract kernel launches so you can write GPU code without managing threads directly.
 
 ### CUDA via CuPy
 
@@ -204,12 +207,12 @@ Traditional CUDA Core:
   One multiply-add per cycle
 
 Tensor Core:
-  4x4 matrix multiply-add per cycle (64 operations!)
+  Small matrix multiply-accumulate per cycle
 
 ┌─────────────────────────────────────────┐
 │  A (4×4)  ×  B (4×4)  +  C (4×4)  =  D  │
 │                                         │
-│  64 multiply-adds in ONE cycle          │
+│  Extremely efficient matrix operations  │
 └─────────────────────────────────────────┘
 ```
 
@@ -293,7 +296,7 @@ y_cpu = x_gpu.to('cpu')  # Transfer once at end
 
 | Concept | Description |
 |---------|-------------|
-| **GPU** | Massively parallel processor with thousands of cores |
+| **GPU** | Massively parallel processor with thousands of lightweight arithmetic units |
 | **CUDA Core** | Simple processing unit in NVIDIA GPUs |
 | **SM** | Streaming Multiprocessor - group of cores + shared memory |
 | **SIMT** | Single Instruction, Multiple Threads execution model |

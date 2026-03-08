@@ -44172,7 +44172,7 @@
 
 <h1 id="cpu-cores-and-threads">CPU Cores and Threads<a class="headerlink" href="#cpu-cores-and-threads" title="Permanent link">&para;</a></h1>
 <h2 id="from-single-core-to-multi-core">From Single-Core to Multi-Core<a class="headerlink" href="#from-single-core-to-multi-core" title="Permanent link">&para;</a></h2>
-<p>Early CPUs had a single core—one execution unit that processed instructions sequentially. As clock speeds hit physical limits (heat, power), manufacturers added more cores instead.</p>
+<p>Early CPUs had a single core—one execution unit that processed instructions sequentially. Clock speeds eventually faced power and thermal limits, so performance improvements increasingly came from parallelism through multiple cores.</p>
 <div class="highlight"><pre><span></span><code>Single-Core CPU (2000s)          Multi-Core CPU (Today)
 ┌─────────────────────┐          ┌─────────────────────────────┐
 │     ┌───────┐       │          │  ┌───────┐    ┌───────┐    │
@@ -44180,7 +44180,7 @@
 │     └───────┘       │          │  └───────┘    └───────┘    │
 │         │           │          │      │            │        │
 │     ┌───────┐       │          │  ┌───────┐    ┌───────┐    │
-│     │ Cache │       │          │  │ Core 2│    │ Core 3│    │
+│     │L1/L2  │       │          │  │ Core 2│    │ Core 3│    │
 │     └───────┘       │          │  └───────┘    └───────┘    │
 └─────────────────────┘          │         │    │             │
                                  │     ┌───────────────┐      │
@@ -44189,13 +44189,7 @@
                                  └─────────────────────────────┘
 </code></pre></div>
 <h2 id="what-is-a-core">What is a Core?<a class="headerlink" href="#what-is-a-core" title="Permanent link">&para;</a></h2>
-<p>A <strong>core</strong> is a complete, independent processing unit capable of executing instructions. Each core has its own:</p>
-<ul>
-<li>Control Unit</li>
-<li>ALU (Arithmetic Logic Unit)</li>
-<li>Registers</li>
-<li>L1 and L2 Cache</li>
-</ul>
+<p>A <strong>core</strong> is a complete, independent processing unit capable of executing instructions. Each core typically has its own execution units, registers, and L1 cache, and often its own L2 cache. L3 cache is usually shared across all cores.</p>
 <p>Multiple cores can execute different instructions simultaneously—true parallelism.</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
@@ -44212,7 +44206,8 @@
 │           Physical Core                 │
 │  ┌─────────────┐  ┌─────────────┐      │
 │  │  Thread 0   │  │  Thread 1   │      │
-│  │ (Registers) │  │ (Registers) │      │
+│  │  (Arch.     │  │  (Arch.     │      │
+│  │   State)    │  │   State)    │      │
 │  └──────┬──────┘  └──────┬──────┘      │
 │         │                │              │
 │         └───────┬────────┘              │
@@ -44223,7 +44218,7 @@
 │  └─────────────────────────────┘       │
 └─────────────────────────────────────────┘
 </code></pre></div>
-<p>Each logical core has its own registers and architectural state, but shares execution resources. This helps when one thread is waiting (e.g., for memory).</p>
+<p>Each logical thread has its own architectural state (registers, program counter), but shares execution resources (ALU, cache). This helps when one thread is stalled (e.g., waiting for memory), allowing the other thread to use the execution units.</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">psutil</span>
 
 <span class="c1"># Distinguish physical from logical</span>
@@ -44287,44 +44282,23 @@ Core 1: [────────── Task B ──────────]
 </code></pre></div>
 <p>True simultaneous execution.</p>
 <h3 id="the-relationship">The Relationship<a class="headerlink" href="#the-relationship" title="Permanent link">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th>Scenario</th>
-<th>Concurrent?</th>
-<th>Parallel?</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Single-core, multiple threads</td>
-<td>Yes</td>
-<td>No</td>
-</tr>
-<tr>
-<td>Multi-core, single thread</td>
-<td>No</td>
-<td>No</td>
-</tr>
-<tr>
-<td>Multi-core, multiple threads</td>
-<td>Yes</td>
-<td>Yes</td>
-</tr>
-</tbody>
-</table>
+<ul>
+<li><strong>Concurrency</strong> is about program structure — organizing a program as multiple tasks that can make progress independently</li>
+<li><strong>Parallelism</strong> is about execution — tasks actually running at the same time on multiple hardware execution units (such as CPU cores)</li>
+</ul>
+<p>Concurrency is about dealing with many things at once. Parallelism is about doing many things at once. A concurrent program can run on a single core (via time-slicing) or on multiple cores (with true parallelism). Parallelism requires both concurrent structure and multiple execution units.</p>
 <h2 id="python-and-parallelism">Python and Parallelism<a class="headerlink" href="#python-and-parallelism" title="Permanent link">&para;</a></h2>
 <h3 id="the-gil-problem">The GIL Problem<a class="headerlink" href="#the-gil-problem" title="Permanent link">&para;</a></h3>
 <p>Python's <strong>Global Interpreter Lock (GIL)</strong> allows only one thread to execute Python bytecode at a time:</p>
-<div class="highlight"><pre><span></span><code>Python Threads on Multi-Core CPU
+<div class="highlight"><pre><span></span><code>CPU-bound Python Threads on Multi-Core CPU
 
 Core 0: [Thread 1][        ][Thread 1][        ]
 Core 1: [        ][Thread 2][        ][Thread 2]
         └─────────────────────────────────────────▶
 
-Only ONE thread runs at a time despite multiple cores!
+Only ONE thread executes Python bytecode at a time despite multiple cores!
 </code></pre></div>
-<p>This means Python threads don't achieve true parallelism for CPU-bound tasks.</p>
+<p>This means Python threads don't achieve true parallelism for CPU-bound tasks. The GIL is automatically released during blocking I/O operations and by many C extensions (such as NumPy), allowing other threads to run while a thread is waiting.</p>
 <h3 id="workarounds">Workarounds<a class="headerlink" href="#workarounds" title="Permanent link">&para;</a></h3>
 <p><strong>For I/O-bound tasks</strong> (waiting for network, disk):</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
@@ -44368,7 +44342,7 @@ Only ONE thread runs at a time despite multiple cores!
 │                                             │
 └─────────────────────────────────────────────┘
 </code></pre></div>
-<p>Python can set <strong>CPU affinity</strong> (which cores a process can use):</p>
+<p>Python can set <strong>CPU affinity</strong> (which cores a process can use). This is usually unnecessary for most applications but can help in specialized performance tuning:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">psutil</span>
 
@@ -44409,11 +44383,11 @@ Only ONE thread runs at a time despite multiple cores!
 </tbody>
 </table>
 <h3 id="choosing-worker-count">Choosing Worker Count<a class="headerlink" href="#choosing-worker-count" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">psutil</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">concurrent.futures</span><span class="w"> </span><span class="kn">import</span> <span class="n">ProcessPoolExecutor</span>
 
-<span class="c1"># For CPU-bound: use physical core count</span>
-<span class="n">cpu_workers</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span>  <span class="c1"># or psutil.cpu_count(logical=False)</span>
+<span class="c1"># For CPU-bound: use physical core count (hyperthreads rarely double performance)</span>
+<span class="n">cpu_workers</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">(</span><span class="n">logical</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="c1"># For I/O-bound: can exceed core count</span>
 <span class="n">io_workers</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span> <span class="o">*</span> <span class="mi">2</span>  <span class="c1"># or more</span>
@@ -44452,7 +44426,7 @@ Only ONE thread runs at a time despite multiple cores!
 </tr>
 <tr>
 <td><strong>GIL</strong></td>
-<td>Python lock preventing true thread parallelism</td>
+<td>Python lock preventing true thread parallelism for CPU-bound code</td>
 </tr>
 </tbody>
 </table>
@@ -44463,6 +44437,9 @@ Only ONE thread runs at a time despite multiple cores!
 <li>NumPy can utilize multiple cores despite Python's limitations</li>
 <li>The number of workers should match your workload type</li>
 </ul>
+<blockquote>
+<p><strong>Amdahl's Law</strong>: Adding more cores does not give linear speedups. If a fraction <span class="arithmatex">\(s\)</span> of a program is inherently serial, the maximum speedup with <span class="arithmatex">\(n\)</span> cores is <span class="arithmatex">\(1 / (s + (1 - s) / n)\)</span>. Even with infinite cores, the serial portion limits the total speedup — which is why optimizing the serial bottleneck often matters more than adding cores.</p>
+</blockquote>
 
 
 

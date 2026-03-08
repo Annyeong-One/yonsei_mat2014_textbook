@@ -44184,7 +44184,7 @@
 
 <h1 id="clock-speed-and-instructions">Clock Speed and Instructions<a class="headerlink" href="#clock-speed-and-instructions" title="Permanent link">&para;</a></h1>
 <h2 id="the-cpu-clock">The CPU Clock<a class="headerlink" href="#the-cpu-clock" title="Permanent link">&para;</a></h2>
-<p>Every CPU has an internal clock—a crystal oscillator that generates a steady pulse. This pulse synchronizes all CPU operations.</p>
+<p>Every CPU's timing originates from a crystal oscillator, which feeds internal clock generators (via phase-locked loops) that synchronize all CPU operations.</p>
 <div class="highlight"><pre><span></span><code>Clock Signal
     │     │     │     │     │     │     │
 ────┴─────┴─────┴─────┴─────┴─────┴─────┴────
@@ -44244,15 +44244,15 @@
 </ul>
 <h2 id="instructions-per-cycle-ipc">Instructions Per Cycle (IPC)<a class="headerlink" href="#instructions-per-cycle-ipc" title="Permanent link">&para;</a></h2>
 <p>Clock speed alone doesn't determine performance. <strong>IPC</strong> measures how many instructions complete per cycle:</p>
-<div class="highlight"><pre><span></span><code>Performance = Clock Speed × IPC
+<div class="highlight"><pre><span></span><code>Performance ≈ Clock Speed × IPC
 </code></pre></div>
 <h3 id="why-ipc-varies">Why IPC Varies<a class="headerlink" href="#why-ipc-varies" title="Permanent link">&para;</a></h3>
 <p>Different instructions take different numbers of cycles:</p>
 <table>
 <thead>
 <tr>
-<th>Instruction Type</th>
-<th>Typical Cycles</th>
+<th>Operation</th>
+<th>Typical Latency (cycles)</th>
 </tr>
 </thead>
 <tbody>
@@ -44284,7 +44284,7 @@
 </table>
 <h3 id="pipelining-increases-ipc">Pipelining Increases IPC<a class="headerlink" href="#pipelining-increases-ipc" title="Permanent link">&para;</a></h3>
 <p>Modern CPUs overlap instruction stages:</p>
-<div class="highlight"><pre><span></span><code>Without Pipelining (IPC ≈ 0.25):
+<div class="highlight"><pre><span></span><code>Without Pipelining (one instruction every several cycles):
 ┌───────┬───────┬───────┬───────┐
 │ Fetch │Decode │Execute│ Write │ Instruction 1
 └───────┴───────┴───────┴───────┘
@@ -44292,7 +44292,7 @@
                                  │ Fetch │Decode │Execute│ Write │ Inst 2
                                  └───────┴───────┴───────┴───────┘
 
-With Pipelining (IPC ≈ 1):
+With Pipelining (roughly one instruction per cycle):
 ┌───────┬───────┬───────┬───────┐
 │ Fetch │Decode │Execute│ Write │ Instruction 1
 └───────┼───────┼───────┼───────┤
@@ -44303,7 +44303,7 @@ With Pipelining (IPC ≈ 1):
 </code></pre></div>
 <h3 id="superscalar-execution-ipc-1">Superscalar Execution (IPC &gt; 1)<a class="headerlink" href="#superscalar-execution-ipc-1" title="Permanent link">&para;</a></h3>
 <p>Modern CPUs have multiple execution units, allowing several instructions per cycle:</p>
-<div class="highlight"><pre><span></span><code>Superscalar CPU (IPC ≈ 4)
+<div class="highlight"><pre><span></span><code>Superscalar CPU
 
 Cycle N:
   ALU 0: [ADD instruction]
@@ -44311,7 +44311,7 @@ Cycle N:
   Load Unit: [LOAD instruction]
   Store Unit: [STORE instruction]
 
-  4 instructions complete in 1 cycle!
+  Up to several instructions can complete in one cycle!
 </code></pre></div>
 <h2 id="branch-prediction">Branch Prediction<a class="headerlink" href="#branch-prediction" title="Permanent link">&para;</a></h2>
 <p>Conditional branches create pipeline problems:</p>
@@ -44341,13 +44341,13 @@ If prediction is WRONG:
 <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="mi">100000</span><span class="p">))</span>
 <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">128</span><span class="p">:</span>  <span class="c1"># False for first half, True for second</span>
-        <span class="nb">sum</span> <span class="o">+=</span> <span class="n">x</span>
+        <span class="n">total</span> <span class="o">+=</span> <span class="n">x</span>
 
 <span class="c1"># Unpredictable branch (random outcomes)</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="mi">100000</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">128</span><span class="p">:</span>  <span class="c1"># Randomly True/False</span>
-        <span class="nb">sum</span> <span class="o">+=</span> <span class="n">x</span>
+        <span class="n">total</span> <span class="o">+=</span> <span class="n">x</span>
 
 <span class="c1"># The unpredictable version is significantly slower!</span>
 </code></pre></div>
@@ -44384,13 +44384,13 @@ If prediction is WRONG:
 </tr>
 </tbody>
 </table>
-<p>A modern CPU core achieves roughly 50-100 GFLOPS. A GPU can achieve 10+ TFLOPS.</p>
+<p>Modern CPU cores can reach tens to hundreds of GFLOPS depending on vector width (e.g., AVX2 vs AVX-512) and clock speed. A GPU can achieve 10+ TFLOPS.</p>
 <h3 id="python-flops-estimation">Python FLOPS Estimation<a class="headerlink" href="#python-flops-estimation" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">estimate_flops</span><span class="p">():</span>
-    <span class="n">n</span> <span class="o">=</span> <span class="mi">4096</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">2048</span>
     <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
     <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
 
@@ -44436,10 +44436,10 @@ During those 240 cycles, the CPU could have executed
 </code></pre></div>
 <h3 id="clock-cycles-in-python">Clock Cycles in Python<a class="headerlink" href="#clock-cycles-in-python" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="c1"># Python operations take thousands of CPU cycles</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>  <span class="c1"># ~1000+ cycles (type check, dict lookup, allocation)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>  <span class="c1"># thousands of cycles (type check, dict lookup, allocation)</span>
 
-<span class="c1"># NumPy operations: Python overhead + fast inner loop</span>
-<span class="n">np</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">arr1</span><span class="p">,</span> <span class="n">arr2</span><span class="p">)</span>  <span class="c1"># ~100 cycles Python + 1 cycle per element</span>
+<span class="c1"># NumPy operations: Python overhead + very fast vectorized inner loop</span>
+<span class="n">np</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">arr1</span><span class="p">,</span> <span class="n">arr2</span><span class="p">)</span>  <span class="c1"># Python dispatch overhead + fast SIMD loop</span>
 </code></pre></div>
 <h3 id="measuring-cpu-cycles">Measuring CPU Cycles<a class="headerlink" href="#measuring-cpu-cycles" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">timeit</span>
@@ -44492,7 +44492,7 @@ During those 240 cycles, the CPU could have executed
 </table>
 <p>Key insights for Python programmers:</p>
 <ul>
-<li>Clock speed × IPC = actual instruction throughput</li>
+<li>Clock speed × IPC ≈ instruction throughput</li>
 <li>Memory access often dominates execution time</li>
 <li>Branch-heavy Python code suffers from misprediction overhead</li>
 <li>NumPy achieves high FLOPS by amortizing Python overhead</li>

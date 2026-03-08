@@ -15,8 +15,8 @@ CPU: Few powerful cores              GPU: Many simple cores
 │  │  │ Cache     │  │    │          │ ├─┤├─┤├─┤├─┤├─┤├─┤├─┤├─┤   │
 │  │  └───────────┘  │    │          │ ├─┤├─┤├─┤├─┤├─┤├─┤├─┤├─┤   │
 │  │  Branch Pred.   │    │          │ └─┘└─┘└─┘└─┘└─┘└─┘└─┘└─┘   │
-│  │  Out-of-Order   │    │          │       Thousands of         │
-│  └─────────────────┘    │          │       simple cores         │
+│  │  Out-of-Order   │    │          │    Thousands of parallel     │
+│  └─────────────────┘    │          │     arithmetic units      │
 │         × 4-16          │          │                             │
 └─────────────────────────┘          └─────────────────────────────┘
    Latency-optimized                    Throughput-optimized
@@ -26,16 +26,18 @@ CPU: Few powerful cores              GPU: Many simple cores
 
 | Feature | CPU | GPU |
 |---------|-----|-----|
-| **Core Count** | 4-64 | 1,000-10,000+ |
+| **Core Count** | 4-128+ | 1,000-10,000+ |
 | **Clock Speed** | 3-5 GHz | 1-2 GHz |
 | **Cache per Core** | Large (MB) | Small (KB) |
 | **Branch Prediction** | Sophisticated | Minimal |
 | **Out-of-Order Execution** | Yes | No |
-| **Memory Bandwidth** | ~50 GB/s | ~1000 GB/s |
+| **Memory Bandwidth** | ~50–200 GB/s | ~1000 GB/s |
 | **Peak FLOPS** | ~1 TFLOPS | ~100 TFLOPS |
 | **Power** | 65-125W | 200-400W |
 
 ## Latency vs Throughput
+
+CPUs hide latency using speculation and complex control logic, while GPUs hide latency by running thousands of threads so another thread can execute while one waits for memory.
 
 ### CPU: Latency-Optimized
 
@@ -193,7 +195,7 @@ for n in sizes:
     print(f"n={n:>10}: CPU={cpu_time*1000:>8.3f}ms, GPU={gpu_time*1000:>8.3f}ms")
 ```
 
-Typical results:
+Typical results (compute time only, excluding CPU–GPU transfer):
 
 ```
 n=     1,000: CPU=   0.010ms, GPU=   0.150ms  ← CPU faster (overhead)
@@ -244,11 +246,14 @@ n=4096: CPU=6.000s, GPU=0.0250s, Speedup=240x
 
 ## The Transfer Bottleneck
 
-Data must travel between CPU and GPU:
+Data must travel between system RAM and GPU VRAM. The CPU orchestrates the transfer, but a DMA (Direct Memory Access) engine performs the actual copy — the CPU does not move bytes through its own registers:
 
 ```
-CPU Memory ←───── PCIe 4.0 ─────→ GPU Memory
-              (~32 GB/s max)
+CPU (control)
+ │
+ ▼
+System RAM ←──── PCIe 4.0 ────→ GPU VRAM
+               (~32 GB/s max)
 
 This transfer can dominate total time!
 ```
@@ -325,7 +330,8 @@ dataloader = DataLoader(dataset, num_workers=4)  # CPU workers
 model = model.to('cuda')
 
 for batch in dataloader:  # CPU loads and preprocesses
-    inputs = batch.to('cuda')      # Transfer to GPU
+    inputs, targets = batch
+    inputs, targets = inputs.to('cuda'), targets.to('cuda')
     outputs = model(inputs)         # GPU computation
     loss = criterion(outputs, targets)
     loss.backward()                 # GPU backward pass

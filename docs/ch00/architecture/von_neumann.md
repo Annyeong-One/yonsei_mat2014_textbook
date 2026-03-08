@@ -68,20 +68,41 @@ The CPU operates in a continuous loop:
 4. **Writeback**: Results are written back to registers or memory
 5. **Repeat**: Program Counter increments, cycle continues
 
-> **What "fetch" means**: The CPU retrieves the instruction stored at the memory address pointed to by the Program Counter (PC), loads it into the Instruction Register (IR), then increments the PC. Think of the PC as a bookmark — fetch is literally fetching the next instruction from that bookmark location.
+> **What "fetch" means**: The CPU retrieves the instruction stored at the memory address pointed to by the Program Counter (PC), loads it into the Instruction Register (IR), then advances the PC to the next instruction. Normally the PC advances sequentially, though branches and jumps can change it. Think of the PC as a bookmark — fetch is literally fetching the next instruction from that bookmark location.
 
-Conceptually, instructions execute one at a time in sequence. In practice, modern CPUs use **pipelining**, **superscalar execution**, and **out-of-order execution** to process multiple instructions simultaneously — but the programmer-visible model remains sequential.
+Conceptually, instructions execute one at a time in sequence. In practice, modern CPUs use **pipelining**, **superscalar execution** (executing multiple instructions per cycle using multiple execution units, typically 2–6 instructions per cycle), and **out-of-order execution** to process multiple instructions simultaneously — but the programmer-visible model remains sequential.
+
+## Memory Hierarchy
+
+Modern CPUs are far faster than RAM. To bridge this gap, systems use a hierarchy of progressively smaller, faster storage between the CPU and main memory:
+
+```
+CPU Memory Hierarchy
+Registers       ~1 cycle
+L1 cache        ~4 cycles
+L2 cache        ~12 cycles
+L3 cache        ~40 cycles
+RAM             ~100+ cycles
+
+Storage
+SSD / Disk      ~100,000+ cycles
+```
+
+Each level acts as a buffer, keeping frequently used data close to the CPU. Other techniques include **prefetching** (predicting what data will be needed next) and **speculative execution** (executing instructions before knowing if they're needed).
+
+Understanding this hierarchy is essential context for the bottleneck that defines the architecture.
 
 ## The Von Neumann Bottleneck
 
-The defining limitation of the architecture: instructions and data share the same memory and the same communication pathway.
+The defining limitation of the architecture: instructions and data ultimately compete for access to the same memory system.
 
 ```
-CPU  ◀════════ Single Bus ════════▶  Memory
-        (instructions AND data)
+CPU  ◀════════════════════▶  Memory
+     (instructions AND data
+      share the same path)
 ```
 
-This creates a bottleneck because the CPU must wait for memory transfers, and instruction fetches compete with data loads for the same bus. As CPU speeds have grown far faster than memory speeds (the "memory wall"), this bottleneck has become the central constraint in modern computing.
+This creates a bottleneck because the CPU must wait for memory transfers, and instruction fetches compete with data loads for the same bus. In early designs the bottleneck was literally a shared bus. In modern systems the limitation appears as memory latency and bandwidth rather than a single physical bus — but the fundamental constraint remains: CPU speed has grown far faster than memory speed (the "memory wall"), which is precisely why the memory hierarchy above exists.
 
 ### Harvard Architecture: The Contrast
 
@@ -111,24 +132,9 @@ CPU                       CPU chip                   CPU
 
 Since the CPU spends the vast majority of its time talking to cache rather than RAM, splitting L1 captures most of Harvard's benefit without requiring physically separate RAM or buses. The warehouse (RAM) stays shared; only the two desk drawers (L1i and L1d) are separate.
 
-### Memory Hierarchy
-
-Modern systems mitigate the bottleneck through a hierarchy of progressively larger, slower storage:
-
-```
-Registers       ~1 cycle
-L1 cache        ~4 cycles
-L2 cache        ~12 cycles
-L3 cache        ~40 cycles
-RAM             ~100+ cycles
-Disk/SSD        ~100,000+ cycles
-```
-
-Each level acts as a buffer, keeping frequently used data close to the CPU. Other techniques include **prefetching** (predicting what data will be needed next) and **speculative execution** (executing instructions before knowing if they're needed).
-
 ### Data Flow: The Train Model
 
-Data flows in one direction — from RAM toward the CPU — like a train pulling cargo forward, carriage by carriage:
+Conceptually, data flows in one direction — from RAM toward the CPU — like a train pulling cargo forward, carriage by carriage (though modern CPUs use more complex refill paths internally):
 
 ```
 RAM          L3       L2       L1       Registers    CPU
@@ -137,7 +143,7 @@ RAM          L3       L2       L1       Registers    CPU
 
 > **Fetch = Copy**: At every stage, "fetching" means copying forward — the original always stays in RAM. Nothing is moved or destroyed.
 
-> **Registers are the last stop**: The ALU can only operate on data sitting in registers — not directly from L1 cache. Registers are the smallest and fastest storage (~16 general-purpose registers in x86-64), holding only what the ALU needs right now.
+> **Registers are the last stop**: The ALU can only operate on data sitting in registers — not directly from L1 cache. Registers are the smallest and fastest storage (~16 general-purpose registers in x86-64, though internally CPUs often use many more physical registers through register renaming), holding only what the ALU needs right now.
 
 Each cache level holds a **copy**, pulled forward from the level behind it. When the CPU needs data:
 
@@ -162,19 +168,20 @@ RAM ←————————————————————————�
 
 ### CPU Package and Internal Buses
 
-L3 is not on the same die as the CPU cores, but is packaged together with them as one unit you install on the motherboard:
+On most modern CPUs, L3 is on the same die as the CPU cores. In chiplet-based designs (e.g., AMD Zen), L3 may reside on the same chiplet as a group of cores. Either way, all cache levels are packaged together as one unit you install on the motherboard:
 
 ```
 CPU Package (what you buy & install)
 ┌─────────────────────────────────────┐
-│  Core die(s)           L3 die       │
-│  ┌──────────┐        ┌──────────┐   │
-│  │ Core 0   │        │          │   │
-│  │ L1, L2   │◄══════►│    L3    │   │
-│  ├──────────┤        │ (shared) │   │
-│  │ Core 1   │        │          │   │
-│  │ L1, L2   │◄══════►│          │   │
-│  └──────────┘        └──────────┘   │
+│  Core 0          Core 1             │
+│  ┌──────────┐  ┌──────────┐         │
+│  │ L1, L2   │  │ L1, L2   │         │
+│  └────┬─────┘  └─────┬────┘         │
+│       └──────┬────────┘             │
+│         ┌────▼─────┐                │
+│         │    L3    │ (shared,        │
+│         │ same die │  on-chip)      │
+│         └──────────┘                │
 └─────────────────────────────────────┘
                 ↕
               RAM (separate sticks on motherboard)
@@ -182,22 +189,22 @@ CPU Package (what you buy & install)
 
 Each connection is a bus — different names and speeds depending on what is connected:
 
-| Connection | Bus Name | Speed |
+| Connection | Interconnect | Speed |
 |---|---|---|
 | L1 ↔ L2 | internal core bus | fastest |
 | L2 ↔ L3 | Infinity Fabric (AMD) / Ring Bus (Intel) | fast |
 | L3 ↔ RAM | memory bus (DDR5 etc.) | slower |
-| RAM ↔ GPU | PCIe bus | slower still |
+| RAM ↔ GPU | PCIe | slower still |
 
 ### Cache Eviction
 
 Each cache level has a **fixed size** — copies accumulate until the cache is full, at which point an **eviction policy** decides what to discard to make room for new data:
 
 ```
-Typical sizes (modern CPU):
-L1  ~32 KB   per core
-L2  ~256 KB  per core
-L3  ~8 MB    shared across cores
+Typical ranges (modern CPUs):
+L1  32–64 KB    per core
+L2  512 KB–2 MB per core
+L3  16–64 MB    shared across cores
 ```
 
 Common eviction policies:
@@ -207,6 +214,8 @@ Common eviction policies:
 | **LRU** (Least Recently Used) | Evict whatever was used longest ago |
 | **LFU** (Least Frequently Used) | Evict whatever was used least often |
 | **Random** | Evict a random entry (simpler hardware) |
+
+Hardware caches typically use approximations of LRU (pseudo-LRU) because exact LRU is too expensive to implement in hardware at high associativity.
 
 The cache is effectively a **fixed-size sliding window** of the most recently used data — constantly filling up and discarding stale copies to stay relevant to what the CPU needs next.
 
@@ -257,7 +266,7 @@ NumPy's speed comes from: contiguous memory layout (cache-friendly), vectorized 
 |---------|-------------|
 | **Stored Program** | Instructions and data share the same memory |
 | **Sequential Model** | Programmer-visible execution is sequential; hardware optimizations happen underneath |
-| **Single Bus** | CPU and memory communicate through a shared pathway |
+| **Shared Memory Path** | CPU and memory communicate through a shared pathway |
 | **Bottleneck** | Shared instruction/data path limits throughput; mitigated by caches and Harvard-style L1 split |
 | **Memory Hierarchy** | Registers → L1/L2/L3 cache → RAM → Disk bridges the speed gap |
 

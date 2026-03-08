@@ -2,7 +2,7 @@
 
 ## From Single-Core to Multi-Core
 
-Early CPUs had a single core—one execution unit that processed instructions sequentially. As clock speeds hit physical limits (heat, power), manufacturers added more cores instead.
+Early CPUs had a single core—one execution unit that processed instructions sequentially. Clock speeds eventually faced power and thermal limits, so performance improvements increasingly came from parallelism through multiple cores.
 
 ```
 Single-Core CPU (2000s)          Multi-Core CPU (Today)
@@ -12,7 +12,7 @@ Single-Core CPU (2000s)          Multi-Core CPU (Today)
 │     └───────┘       │          │  └───────┘    └───────┘    │
 │         │           │          │      │            │        │
 │     ┌───────┐       │          │  ┌───────┐    ┌───────┐    │
-│     │ Cache │       │          │  │ Core 2│    │ Core 3│    │
+│     │L1/L2  │       │          │  │ Core 2│    │ Core 3│    │
 │     └───────┘       │          │  └───────┘    └───────┘    │
 └─────────────────────┘          │         │    │             │
                                  │     ┌───────────────┐      │
@@ -23,12 +23,7 @@ Single-Core CPU (2000s)          Multi-Core CPU (Today)
 
 ## What is a Core?
 
-A **core** is a complete, independent processing unit capable of executing instructions. Each core has its own:
-
-- Control Unit
-- ALU (Arithmetic Logic Unit)
-- Registers
-- L1 and L2 Cache
+A **core** is a complete, independent processing unit capable of executing instructions. Each core typically has its own execution units, registers, and L1 cache, and often its own L2 cache. L3 cache is usually shared across all cores.
 
 Multiple cores can execute different instructions simultaneously—true parallelism.
 
@@ -55,7 +50,8 @@ Physical Core with Hyperthreading
 │           Physical Core                 │
 │  ┌─────────────┐  ┌─────────────┐      │
 │  │  Thread 0   │  │  Thread 1   │      │
-│  │ (Registers) │  │ (Registers) │      │
+│  │  (Arch.     │  │  (Arch.     │      │
+│  │   State)    │  │   State)    │      │
 │  └──────┬──────┘  └──────┬──────┘      │
 │         │                │              │
 │         └───────┬────────┘              │
@@ -67,7 +63,7 @@ Physical Core with Hyperthreading
 └─────────────────────────────────────────┘
 ```
 
-Each logical core has its own registers and architectural state, but shares execution resources. This helps when one thread is waiting (e.g., for memory).
+Each logical thread has its own architectural state (registers, program counter), but shares execution resources (ALU, cache). This helps when one thread is stalled (e.g., waiting for memory), allowing the other thread to use the execution units.
 
 ```python
 import psutil
@@ -153,11 +149,10 @@ True simultaneous execution.
 
 ### The Relationship
 
-| Scenario | Concurrent? | Parallel? |
-|----------|-------------|-----------|
-| Single-core, multiple threads | Yes | No |
-| Multi-core, single thread | No | No |
-| Multi-core, multiple threads | Yes | Yes |
+- **Concurrency** is about program structure — organizing a program as multiple tasks that can make progress independently
+- **Parallelism** is about execution — tasks actually running at the same time on multiple hardware execution units (such as CPU cores)
+
+Concurrency is about dealing with many things at once. Parallelism is about doing many things at once. A concurrent program can run on a single core (via time-slicing) or on multiple cores (with true parallelism). Parallelism requires both concurrent structure and multiple execution units.
 
 ## Python and Parallelism
 
@@ -166,16 +161,16 @@ True simultaneous execution.
 Python's **Global Interpreter Lock (GIL)** allows only one thread to execute Python bytecode at a time:
 
 ```
-Python Threads on Multi-Core CPU
+CPU-bound Python Threads on Multi-Core CPU
 
 Core 0: [Thread 1][        ][Thread 1][        ]
 Core 1: [        ][Thread 2][        ][Thread 2]
         └─────────────────────────────────────────▶
 
-Only ONE thread runs at a time despite multiple cores!
+Only ONE thread executes Python bytecode at a time despite multiple cores!
 ```
 
-This means Python threads don't achieve true parallelism for CPU-bound tasks.
+This means Python threads don't achieve true parallelism for CPU-bound tasks. The GIL is automatically released during blocking I/O operations and by many C extensions (such as NumPy), allowing other threads to run while a thread is waiting.
 
 ### Workarounds
 
@@ -234,7 +229,7 @@ OS Scheduler
 └─────────────────────────────────────────────┘
 ```
 
-Python can set **CPU affinity** (which cores a process can use):
+Python can set **CPU affinity** (which cores a process can use). This is usually unnecessary for most applications but can help in specialized performance tuning:
 
 ```python
 import os
@@ -262,11 +257,11 @@ print(p.cpu_affinity())  # [0, 1]
 ### Choosing Worker Count
 
 ```python
-import os
+import psutil
 from concurrent.futures import ProcessPoolExecutor
 
-# For CPU-bound: use physical core count
-cpu_workers = os.cpu_count()  # or psutil.cpu_count(logical=False)
+# For CPU-bound: use physical core count (hyperthreads rarely double performance)
+cpu_workers = psutil.cpu_count(logical=False)
 
 # For I/O-bound: can exceed core count
 io_workers = os.cpu_count() * 2  # or more
@@ -284,7 +279,7 @@ with ProcessPoolExecutor(max_workers=cpu_workers) as executor:
 | **Hyperthreading** | One physical core appearing as two logical cores |
 | **Parallelism** | Simultaneous execution on multiple cores |
 | **Concurrency** | Multiple tasks making progress (possibly interleaved) |
-| **GIL** | Python lock preventing true thread parallelism |
+| **GIL** | Python lock preventing true thread parallelism for CPU-bound code |
 
 Understanding cores and threads explains why:
 
@@ -292,3 +287,5 @@ Understanding cores and threads explains why:
 - `multiprocessing` bypasses the GIL
 - NumPy can utilize multiple cores despite Python's limitations
 - The number of workers should match your workload type
+
+> **Amdahl's Law**: Adding more cores does not give linear speedups. If a fraction $s$ of a program is inherently serial, the maximum speedup with $n$ cores is $1 / (s + (1 - s) / n)$. Even with infinite cores, the serial portion limits the total speedup — which is why optimizing the serial bottleneck often matters more than adding cores.

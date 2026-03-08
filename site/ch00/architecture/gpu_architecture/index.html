@@ -44217,8 +44217,8 @@
 │  │ C │ │ C │   │          │ ├─┤├─┤├─┤├─┤├─┤├─┤├─┤├─┤   │
 │  └───┘ └───┘   │          │ └─┘└─┘└─┘└─┘└─┘└─┘└─┘└─┘   │
 │                │          │      ... thousands ...      │
-│   4-16 cores   │          │     thousands of cores      │
-│   (complex)    │          │        (simple)             │
+│   4-16 cores   │          │  thousands of arithmetic    │
+│   (complex)    │          │    units (simple)           │
 └─────────────────┘          └─────────────────────────────┘
 </code></pre></div>
 <h2 id="gpu-vs-cpu-design-philosophy">GPU vs CPU Design Philosophy<a class="headerlink" href="#gpu-vs-cpu-design-philosophy" title="Permanent link">&para;</a></h2>
@@ -44232,14 +44232,14 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>Cores</strong></td>
-<td>Few (4-64)</td>
-<td>Many (thousands)</td>
+<td><strong>Execution Units</strong></td>
+<td>Few complex cores (4-64)</td>
+<td>Thousands of lightweight arithmetic units</td>
 </tr>
 <tr>
-<td><strong>Core Complexity</strong></td>
+<td><strong>Unit Complexity</strong></td>
 <td>High (out-of-order, branch prediction)</td>
-<td>Low (simple, in-order)</td>
+<td>Simple ALUs, but SMs include sophisticated scheduling hardware</td>
 </tr>
 <tr>
 <td><strong>Clock Speed</strong></td>
@@ -44331,7 +44331,8 @@ Thread 3:  a[3] + b[3] → c[3]
    ...         ...
 Thread N:  a[N] + b[N] → c[N]
 
-All threads execute ADD simultaneously!
+Each warp (32 threads) executes ADD across its threads,
+while the SM schedules many warps to keep hardware busy.
 </code></pre></div>
 <h3 id="warps-and-thread-blocks">Warps and Thread Blocks<a class="headerlink" href="#warps-and-thread-blocks" title="Permanent link">&para;</a></h3>
 <p>Threads are organized hierarchically:</p>
@@ -44348,7 +44349,7 @@ Grid (entire computation)
 └── ...
 </code></pre></div>
 <ul>
-<li><strong>Warp</strong>: 32 threads that execute in lockstep</li>
+<li><strong>Warp</strong>: 32 threads that execute in lockstep. If threads in a warp follow different branches, the warp executes each path sequentially (<strong>warp divergence</strong>), reducing throughput</li>
 <li><strong>Block</strong>: Group of warps sharing memory</li>
 <li><strong>Grid</strong>: All blocks for a computation</li>
 </ul>
@@ -44356,11 +44357,11 @@ Grid (entire computation)
 <div class="highlight"><pre><span></span><code>Speed                                    Size
   ▲                                        ▲
   │  ┌────────────────┐                    │
-  │  │   Registers    │  ~256 KB total     │
+  │  │   Registers    │  per thread         │
   │  ├────────────────┤                    │
-  │  │ Shared Memory  │  ~100 KB per SM    │
-  │  ├────────────────┤                    │
-  │  │   L1 Cache     │  ~128 KB per SM    │
+  │  │ Shared Memory/ │  ~128–228 KB per SM│
+  │  │ L1 Cache       │  (unified pool,    │
+  │  │                │   configurable)    │
   │  ├────────────────┤                    │
   │  │   L2 Cache     │  ~6 MB             │
   │  ├────────────────┤                    │
@@ -44380,8 +44381,8 @@ Grid (entire computation)
 </thead>
 <tbody>
 <tr>
-<td>CPU RAM (DDR4)</td>
-<td>~50 GB/s</td>
+<td>CPU RAM (DDR4/DDR5)</td>
+<td>~50–200 GB/s</td>
 </tr>
 <tr>
 <td>GPU VRAM (GDDR6)</td>
@@ -44393,8 +44394,9 @@ Grid (entire computation)
 </tr>
 </tbody>
 </table>
-<p>This high bandwidth enables GPUs to feed thousands of cores with data.</p>
+<p>This high bandwidth enables GPUs to feed thousands of execution units with data. GPUs hide memory latency by scheduling many warps — when one warp stalls waiting for memory, another warp immediately executes on the same hardware.</p>
 <h2 id="gpu-computing-with-python">GPU Computing with Python<a class="headerlink" href="#gpu-computing-with-python" title="Permanent link">&para;</a></h2>
+<p>GPU computations run in <strong>kernels</strong> — functions launched on the GPU and executed by thousands of parallel threads. Libraries like CuPy and PyTorch abstract kernel launches so you can write GPU code without managing threads directly.</p>
 <h3 id="cuda-via-cupy">CUDA via CuPy<a class="headerlink" href="#cuda-via-cupy" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">cupy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">cp</span>
 
@@ -44439,12 +44441,12 @@ Grid (entire computation)
   One multiply-add per cycle
 
 Tensor Core:
-  4x4 matrix multiply-add per cycle (64 operations!)
+  Small matrix multiply-accumulate per cycle
 
 ┌─────────────────────────────────────────┐
 │  A (4×4)  ×  B (4×4)  +  C (4×4)  =  D  │
 │                                         │
-│  64 multiply-adds in ONE cycle          │
+│  Extremely efficient matrix operations  │
 └─────────────────────────────────────────┘
 </code></pre></div>
 <p>Tensor Cores accelerate:</p>
@@ -44560,7 +44562,7 @@ GPU Memory ←→ GPU Cores
 <tbody>
 <tr>
 <td><strong>GPU</strong></td>
-<td>Massively parallel processor with thousands of cores</td>
+<td>Massively parallel processor with thousands of lightweight arithmetic units</td>
 </tr>
 <tr>
 <td><strong>CUDA Core</strong></td>

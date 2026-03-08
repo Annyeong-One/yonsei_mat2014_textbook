@@ -2,7 +2,7 @@
 
 ## The CPU Clock
 
-Every CPU has an internal clock—a crystal oscillator that generates a steady pulse. This pulse synchronizes all CPU operations.
+Every CPU's timing originates from a crystal oscillator, which feeds internal clock generators (via phase-locked loops) that synchronize all CPU operations.
 
 ```
 Clock Signal
@@ -61,15 +61,15 @@ Clock speeds plateaued around 2005 due to:
 Clock speed alone doesn't determine performance. **IPC** measures how many instructions complete per cycle:
 
 ```
-Performance = Clock Speed × IPC
+Performance ≈ Clock Speed × IPC
 ```
 
 ### Why IPC Varies
 
 Different instructions take different numbers of cycles:
 
-| Instruction Type | Typical Cycles |
-|-----------------|----------------|
+| Operation | Typical Latency (cycles) |
+|-----------|--------------------------|
 | Register-to-register add | 1 |
 | L1 cache access | 4 |
 | L2 cache access | 12 |
@@ -82,7 +82,7 @@ Different instructions take different numbers of cycles:
 Modern CPUs overlap instruction stages:
 
 ```
-Without Pipelining (IPC ≈ 0.25):
+Without Pipelining (one instruction every several cycles):
 ┌───────┬───────┬───────┬───────┐
 │ Fetch │Decode │Execute│ Write │ Instruction 1
 └───────┴───────┴───────┴───────┘
@@ -90,7 +90,7 @@ Without Pipelining (IPC ≈ 0.25):
                                  │ Fetch │Decode │Execute│ Write │ Inst 2
                                  └───────┴───────┴───────┴───────┘
 
-With Pipelining (IPC ≈ 1):
+With Pipelining (roughly one instruction per cycle):
 ┌───────┬───────┬───────┬───────┐
 │ Fetch │Decode │Execute│ Write │ Instruction 1
 └───────┼───────┼───────┼───────┤
@@ -105,7 +105,7 @@ With Pipelining (IPC ≈ 1):
 Modern CPUs have multiple execution units, allowing several instructions per cycle:
 
 ```
-Superscalar CPU (IPC ≈ 4)
+Superscalar CPU
 
 Cycle N:
   ALU 0: [ADD instruction]
@@ -113,7 +113,7 @@ Cycle N:
   Load Unit: [LOAD instruction]
   Store Unit: [STORE instruction]
 
-  4 instructions complete in 1 cycle!
+  Up to several instructions can complete in one cycle!
 ```
 
 ## Branch Prediction
@@ -154,13 +154,13 @@ import numpy as np
 data = np.sort(np.random.randint(0, 256, 100000))
 for x in data:
     if x < 128:  # False for first half, True for second
-        sum += x
+        total += x
 
 # Unpredictable branch (random outcomes)
 data = np.random.randint(0, 256, 100000)
 for x in data:
     if x < 128:  # Randomly True/False
-        sum += x
+        total += x
 
 # The unpredictable version is significantly slower!
 ```
@@ -176,7 +176,7 @@ for x in data:
 | Tera | TFLOPS | 10¹² |
 | Peta | PFLOPS | 10¹⁵ |
 
-A modern CPU core achieves roughly 50-100 GFLOPS. A GPU can achieve 10+ TFLOPS.
+Modern CPU cores can reach tens to hundreds of GFLOPS depending on vector width (e.g., AVX2 vs AVX-512) and clock speed. A GPU can achieve 10+ TFLOPS.
 
 ### Python FLOPS Estimation
 
@@ -185,7 +185,7 @@ import numpy as np
 import time
 
 def estimate_flops():
-    n = 4096
+    n = 2048
     A = np.random.rand(n, n)
     B = np.random.rand(n, n)
     
@@ -247,10 +247,10 @@ elapsed = time.perf_counter() - start
 
 ```python
 # Python operations take thousands of CPU cycles
-x = a + b  # ~1000+ cycles (type check, dict lookup, allocation)
+x = a + b  # thousands of cycles (type check, dict lookup, allocation)
 
-# NumPy operations: Python overhead + fast inner loop
-np.add(arr1, arr2)  # ~100 cycles Python + 1 cycle per element
+# NumPy operations: Python overhead + very fast vectorized inner loop
+np.add(arr1, arr2)  # Python dispatch overhead + fast SIMD loop
 ```
 
 ### Measuring CPU Cycles
@@ -280,7 +280,7 @@ print(f"Average: {result/10000*1e6:.2f} microseconds")
 
 Key insights for Python programmers:
 
-- Clock speed × IPC = actual instruction throughput
+- Clock speed × IPC ≈ instruction throughput
 - Memory access often dominates execution time
 - Branch-heavy Python code suffers from misprediction overhead
 - NumPy achieves high FLOPS by amortizing Python overhead
