@@ -15,8 +15,8 @@ CPU: Few powerful cores              GPU: Many simple cores
 │  │  │ Cache     │  │    │          │ ├─┤├─┤├─┤├─┤├─┤├─┤├─┤├─┤   │
 │  │  └───────────┘  │    │          │ ├─┤├─┤├─┤├─┤├─┤├─┤├─┤├─┤   │
 │  │  Branch Pred.   │    │          │ └─┘└─┘└─┘└─┘└─┘└─┘└─┘└─┘   │
-│  │  Out-of-Order   │    │          │    Thousands of parallel     │
-│  └─────────────────┘    │          │     arithmetic units      │
+│  │  Out-of-Order   │    │          │   Streaming multiprocessors  │
+│  └─────────────────┘    │          │    (many ALUs per SM)     │
 │         × 4-16          │          │                             │
 └─────────────────────────┘          └─────────────────────────────┘
    Latency-optimized                    Throughput-optimized
@@ -26,18 +26,18 @@ CPU: Few powerful cores              GPU: Many simple cores
 
 | Feature | CPU | GPU |
 |---------|-----|-----|
-| **Core Count** | 4-128+ | 1,000-10,000+ |
-| **Clock Speed** | 3-5 GHz | 1-2 GHz |
-| **Cache per Core** | Large (MB) | Small (KB) |
+| **Processing Units** | 4-128+ cores | Dozens to hundreds of SMs, each with many ALUs |
+| **Clock Speed** | 3-5 GHz | 1-2 GHz (lower because GPUs rely on parallelism, not frequency) |
+| **Cache** | Large per-core caches (MB) | Smaller per-SM caches (KB), larger shared L2 (tens of MB) |
 | **Branch Prediction** | Sophisticated | Minimal |
-| **Out-of-Order Execution** | Yes | No |
-| **Memory Bandwidth** | ~50–200 GB/s | ~1000 GB/s |
-| **Peak FLOPS** | ~1 TFLOPS | ~100 TFLOPS |
-| **Power** | 65-125W | 200-400W |
+| **Out-of-Order Execution** | Yes (general-purpose) | Limited / specialized scheduling (warp-level) |
+| **Memory Bandwidth** | ~50–200 GB/s | ~500 GB/s – several TB/s (GDDR6 vs HBM) |
+| **Peak FLOPS** | ~1 TFLOPS | ~10–100+ TFLOPS (depends on precision: FP32, FP16, tensor cores) |
+| **Power** | 65-125W | 200-700W (consumer to data center) |
 
 ## Latency vs Throughput
 
-CPUs hide latency using speculation and complex control logic, while GPUs hide latency by running thousands of threads so another thread can execute while one waits for memory.
+CPUs hide latency using speculation and complex control logic. GPUs use a different strategy: they execute threads in groups called **warps** (typically 32 threads) using the **SIMT** (Single Instruction, Multiple Threads) model. When one warp stalls waiting for memory, the warp scheduler switches to another ready warp, hiding latency through massive thread-level parallelism rather than per-thread complexity. However, if threads within a warp take different branches, execution becomes serialized (**warp divergence**), reducing parallel efficiency — this is why GPUs perform poorly on branch-heavy code.
 
 ### CPU: Latency-Optimized
 
@@ -195,7 +195,7 @@ for n in sizes:
     print(f"n={n:>10}: CPU={cpu_time*1000:>8.3f}ms, GPU={gpu_time*1000:>8.3f}ms")
 ```
 
-Typical results (compute time only, excluding CPU–GPU transfer):
+Typical results (compute time only, excluding CPU–GPU transfer). Note that vector addition is **memory-bandwidth bound** — the GPU advantage comes from higher memory bandwidth, not from compute power, so results vary by hardware. On CPUs with very high memory bandwidth or multi-threaded NumPy, the crossover point may occur at larger sizes:
 
 ```
 n=     1,000: CPU=   0.010ms, GPU=   0.150ms  ← CPU faster (overhead)
@@ -235,14 +235,16 @@ for n in [512, 1024, 2048, 4096]:
     benchmark_matmul(n)
 ```
 
-Typical results:
+Typical results (speedups vary widely depending on CPU BLAS library and GPU model; MKL/OpenBLAS with AVX-512 significantly narrows the gap):
 
 ```
-n=512:  CPU=0.015s, GPU=0.0003s, Speedup=50x
-n=1024: CPU=0.100s, GPU=0.0008s, Speedup=125x
-n=2048: CPU=0.750s, GPU=0.0040s, Speedup=188x
-n=4096: CPU=6.000s, GPU=0.0250s, Speedup=240x
+n=512:  CPU=0.015s, GPU=0.0003s, Speedup=~50x
+n=1024: CPU=0.100s, GPU=0.0008s, Speedup=~125x
+n=2048: CPU=0.750s, GPU=0.0040s, Speedup=~5–50x (varies by CPU BLAS)
+n=4096: CPU=6.000s, GPU=0.0250s, Speedup=~10–50x (varies by CPU BLAS)
 ```
+
+Note: With optimized multi-threaded BLAS (MKL, OpenBLAS), CPU performance for large matrices improves dramatically, and realistic speedups are typically in the **5–50x** range rather than 100x+.
 
 ## The Transfer Bottleneck
 
@@ -344,8 +346,9 @@ for batch in dataloader:  # CPU loads and preprocesses
                       │
                       ▼
          ┌───────────────────────┐
-         │  Is data size large?  │
-         │     (> 100K elements) │
+         │  Is data large enough  │
+         │  to amortize GPU      │
+         │  launch and transfer? │
          └───────────────────────┘
                  │         │
                 Yes        No

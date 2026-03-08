@@ -4,7 +4,10 @@
 
 The **Central Processing Unit (CPU)** is the hardware component responsible for executing machine instructions. It performs arithmetic, logic, and control operations.
 
+> **Scope note**: The following diagram is a simplified conceptual model — not a representation of modern CPU architecture. Modern CPUs include instruction decoders, branch predictors, load/store units, reorder buffers, and multiple execution units, and distribute control logic across many pipeline stages rather than using a single centralized control unit.
+
 ```
+Conceptual CPU Model (Simplified)
 ┌─────────────────────────────────────────────────────────────┐
 │                          CPU                                │
 │                                                             │
@@ -24,7 +27,7 @@ The **Central Processing Unit (CPU)** is the hardware component responsible for 
                           To Memory
 ```
 
-> **Scope note**: This diagram is a simplified conceptual model. Modern CPUs include many additional components — instruction decoders, branch predictors, load/store units, reorder buffers, and multiple execution units — not shown here. Modern CPUs distribute control logic across multiple pipeline stages rather than using a single centralized control unit.
+Modern CPUs distribute control across many pipeline stages and execution units rather than relying on a single centralized control unit.
 
 ## The Instruction Cycle
 
@@ -43,9 +46,9 @@ Before examining each component, it helps to understand the fundamental cycle th
 3. **Execute**: Perform the operation (arithmetic, logic, memory access, etc.)
 4. **Writeback**: Store results back to registers or memory
 
-This cycle repeats continuously. Every component described below plays a role in one or more of these stages.
+This cycle repeats continuously. Modern CPUs expand this conceptual cycle into many pipeline stages (often 10–20) and execute instructions out of order, with hundreds of instructions in flight simultaneously. Modern pipelines also include stages such as register renaming, instruction scheduling, and retirement. Every component described below plays a role in one or more of these stages.
 
-## Core Components
+## Conceptual CPU Components
 
 ### Control Unit (CU)
 
@@ -77,7 +80,7 @@ Registers are the fastest storage in a computer—small memory cells inside the 
 ├─────────────────────────────────────────┤
 │  Program Counter (PC)    │ Next instruction address │
 │  Instruction Register    │ Current instruction      │
-│  General Purpose (R0–R15)│ Data and computation     │
+│  General Purpose         │ Data and computation     │
 │  Stack Pointer           │ Top of call stack        │
 │  Flags/Status            │ Comparison results       │
 └─────────────────────────────────────────┘
@@ -127,11 +130,22 @@ Instruction 3:              [Fetch][Decode][Execute][Write]
 Instruction 4:                    [Fetch][Decode][Execute][Write]
 ```
 
-This **pipelining** allows multiple instructions to be in-flight simultaneously. However, pipelining introduces **hazards** — situations where the next instruction cannot proceed immediately (e.g., data dependencies between instructions, or branches whose target is not yet known). Modern CPUs address these with **superscalar execution** (multiple instructions per cycle using multiple execution units), **out-of-order execution** (reordering instructions to avoid stalls), and **branch prediction** (speculatively executing the likely path of a branch).
+This **pipelining** allows multiple instructions to be in-flight simultaneously — different stages of different instructions overlap in time. This is distinct from **superscalar execution**, which issues multiple instructions per cycle through parallel execution units. Together they provide two forms of parallelism:
+
+- **Pipeline parallelism**: Different stages of different instructions execute simultaneously
+- **Superscalar parallelism**: Multiple instructions are issued and executed per cycle
+
+Pipelining introduces **hazards** — situations where the next instruction cannot proceed immediately:
+
+- **Data hazards**: An instruction depends on the result of a previous instruction (often mitigated using forwarding — bypassing intermediate results directly between stages)
+- **Control hazards**: A branch instruction makes the next instruction uncertain
+- **Structural hazards**: Two instructions need the same hardware resource
+
+Modern CPUs address these with **out-of-order execution** (reordering instructions to avoid stalls) and **branch prediction** (speculatively executing the likely path of a branch).
 
 ## CPU and Memory Interaction
 
-### The Memory Hierarchy
+### The Memory and Storage Hierarchy
 
 CPUs access data through a hierarchy of increasingly slower (but larger) storage:
 
@@ -139,22 +153,22 @@ CPUs access data through a hierarchy of increasingly slower (but larger) storage
 Speed                              Size
   ▲    Memory Hierarchy               ▲
   │   ┌──────────┐                   │
-  │   │ L1 Cache │  32–64 KB         │
+  │   │ L1 Cache │  tens of KB        │
   │   ├──────────┤                   │
-  │   │ L2 Cache │  512 KB–2 MB      │
+  │   │ L2 Cache │  hundreds of KB   │
+  │   ├──────────┤    to a few MB    │
+  │   │ L3 Cache │  tens of MB       │
   │   ├──────────┤                   │
-  │   │ L3 Cache │  16–64 MB         │
+  │   │   RAM    │  GBs              │
   │   ├──────────┤                   │
-  │   │   RAM    │  ~16 GB           │
+  │    Secondary storage             │
   │   ├──────────┤                   │
-  │       Storage                    │
-  │   ├──────────┤                   │
-  │   │ SSD/Disk │  ~500 GB          │
+  │   │ SSD/Disk │  hundreds of GB+  │
   │   └──────────┘                   │
   │                                  │
 ```
 
-Registers (~100 bytes total) are part of the CPU datapath rather than the memory hierarchy proper — they are where the ALU operates directly on data.
+CPUs contain dozens of architectural registers plus additional vector and floating-point registers. Registers are part of the CPU datapath rather than the memory hierarchy proper — they are where the ALU operates directly on data. L3 cache is typically shared across multiple cores.
 
 ### Access Latency
 
@@ -168,15 +182,25 @@ Approximate cycles to access different levels:
 | L3 Cache | ~40 cycles |
 | RAM | ~200 cycles |
 
-Exact latency varies by CPU model and workload. Cycles are more stable than nanoseconds for comparison because nanoseconds depend on clock speed.
+Exact latency varies by CPU model and workload. Cycles are more stable than nanoseconds for comparison because nanoseconds depend on clock speed. Two aspects of memory performance matter:
 
-This is why cache-friendly memory access patterns can dramatically improve performance. When the CPU loads a value from memory, it fetches the entire **cache line** (typically 64 bytes) containing that value. Sequential memory access therefore performs much better than random access, because nearby data is already in cache.
+- **Latency**: Time to access a single value
+- **Bandwidth**: How much data can be transferred per second
+
+Both constrain performance, especially in scientific computing. Many data-intensive workloads (such as large matrix operations) are limited by memory bandwidth rather than latency.
+
+This is why cache-friendly memory access patterns can dramatically improve performance. When the CPU loads a value from memory, it fetches the entire **cache line** (typically 64 bytes) containing that value. Two forms of locality exploit this:
+
+- **Spatial locality**: Nearby data is likely to be accessed soon (sequential array traversal)
+- **Temporal locality**: Recently accessed data is likely to be accessed again (loop variables)
+
+Sequential memory access therefore performs much better than random access, because nearby data is already in cache. In parallel code, multiple threads modifying data in the same cache line can cause performance problems known as **false sharing**.
 
 ## Python's Perspective
 
 ### Python Bytecode vs Machine Code
 
-Python code doesn't run directly on the CPU. Instead:
+Most Python implementations (like CPython) execute bytecode via an interpreter rather than running directly on the CPU:
 
 ```
 ┌─────────────┐     ┌─────────────┐     ┌──────────────────┐
@@ -188,7 +212,7 @@ Python code doesn't run directly on the CPU. Instead:
                                            (on CPU)
 ```
 
-CPython **interprets** bytecode — it does not compile bytecode to machine code. The interpreter is itself a compiled C program that reads each bytecode instruction and dispatches the corresponding C routine, which in turn executes as machine instructions on the CPU.
+CPython **interprets** bytecode rather than compiling it to native machine code. The interpreter is itself a compiled C program that reads each bytecode instruction and dispatches the corresponding C routine, which in turn executes as machine instructions on the CPU.
 
 A simple Python operation becomes many machine instructions:
 
@@ -236,7 +260,7 @@ The actual computation happens in compiled C code that directly uses CPU instruc
 | Metric | Description | Typical Value |
 |--------|-------------|---------------|
 | **Clock Speed** | Cycles per second | 3-5 GHz |
-| **IPC** | Instructions per cycle; peak ~4–6 on modern CPUs, but real workloads often achieve lower | 2-6 |
+| **IPC** | Instructions per cycle; peak may reach ~4–6 on wide superscalar CPUs, but real workloads typically achieve far less | 2-6 |
 | **Core Count** | Independent processors | 4-16 |
 | **Cache Size** | Fast on-chip memory | 8-32 MB |
 | **TDP** | Power consumption | 65-125W |

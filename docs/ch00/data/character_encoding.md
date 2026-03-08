@@ -2,7 +2,20 @@
 
 ## The Problem: Characters Are Not Numbers
 
-Computers store bits. Character encoding defines how sequences of bits represent characters — it is the agreed-upon convention between character and number.
+Computers store bits. Unicode assigns characters to code points (numbers); encodings such as UTF-8 define how those code points are stored as bytes.
+
+```
+character → code point → bytes → bits
+
+Example:
+Character      'é'
+      ↓
+Code point     U+00E9
+      ↓
+UTF-8 bytes    C3 A9
+      ↓
+Bits           11000011 10101001
+```
 
 ```
 'A' → 65 → 0100 0001
@@ -12,12 +25,13 @@ char  number  bits
 This mapping is a convention agreed upon by standards bodies.
 Many assignments follow design constraints: digits are contiguous
 (48–57), uppercase letters contiguous (65–90), lowercase contiguous
-(97–122) — which is why ord('a') - ord('A') = 32 always holds.
+(97–122) — in ASCII and Unicode, basic Latin lowercase letters are
+32 code points after their uppercase equivalents.
 ```
 
 ## ASCII: The Foundation
 
-**ASCII** (American Standard Code for Information Interchange) was the original standard, defining 128 characters using 7 bits. In practice, ASCII characters are always stored in 8-bit bytes — the high bit is zero, leaving room for the extended encodings that came later:
+**ASCII** (American Standard Code for Information Interchange) was the original standard, defining 128 characters using 7 bits. In modern systems, ASCII characters are typically stored in 8-bit bytes with the high bit set to zero; later 8-bit encodings used the high bit for additional characters:
 
 ```
 ASCII Table (partial)
@@ -70,7 +84,7 @@ Latin-2 (ISO-8859-2): Central European
 Windows-1252: Microsoft's Western European
 ```
 
-**Problem**: The same byte could mean different characters in different encodings!
+**Problem**: The same byte could mean different characters in different encodings! While a few code points (like 0xE9 = é) happen to agree across several Western encodings, many other byte values differ significantly, which caused widespread compatibility problems:
 
 ```
 Byte 0xE9:
@@ -115,13 +129,16 @@ print('\U0001F600')  # 😀 (note: uppercase U for >4 hex digits)
 print(hex(ord('中')))  # '0x4e2d'
 print(hex(ord('😀')))  # '0x1f600'
 
-# Python strings are sequences of Unicode code points
+# Python strings behave as sequences of Unicode code points
+# (internally CPython uses a flexible representation: 1, 2, or 4 bytes
+# per code point depending on the widest character in the string — PEP 393)
 text = "Hello, 世界! 🌍"
 print(len(text))  # 12 (code points, not bytes)
 # Note: len() counts code points, not user-perceived characters.
 # Some visible characters are composed of multiple code points
-# (e.g. é can be e + combining accent = 2 code points but looks like 1).
-# See the full chapter for grapheme clusters.
+# (e.g. é can be U+00E9 as one code point, or U+0065 + U+0301 as two).
+# Unicode normalization (NFC/NFD) converts between these forms.
+# See the full chapter for grapheme clusters and normalization.
 ```
 
 ## UTF-8: The Dominant Encoding
@@ -225,7 +242,7 @@ print(locale.getpreferredencoding())  # e.g., 'UTF-8'
 |----------|---------------------|----------|
 | ASCII | 1 | English only, legacy |
 | UTF-8 | 1-4 | Web, Linux, general |
-| UTF-16 | 2-4 | Windows internal, Java |
+| UTF-16 | 2-4 | Windows internal, Java (usually 2 bytes; 4 for characters outside the BMP via surrogate pairs) |
 | UTF-32 | 4 | Fixed width, processing |
 | Latin-1 | 1 | Western European legacy |
 
@@ -308,9 +325,9 @@ Key points:
 - Always know your encoding (especially for files)
 - UTF-8 is the default choice for most purposes
 - Unicode is a character set; UTF-8/16/32 are encodings of that character set
-- Code point length ≠ byte length for non-ASCII text
-- `len()` counts Unicode code points, not user-perceived characters (grapheme clusters)
+- Code point ≠ encoded bytes: a single code point can be 1–4 bytes in UTF-8
+- `len()` counts Unicode code points, not user-perceived characters — a grapheme cluster (what a user sees as one character) may consist of multiple code points
 - Use `encoding='utf-8'` explicitly in file operations
-- Python 3 strings are sequences of Unicode code points; bytes are raw data
+- Python 3 strings behave as sequences of Unicode code points (with flexible internal storage); bytes are raw data
 
 This is a preview—see Chapter 2 (str ASCII and Unicode, str UTF-8 Encoding) for complete details.

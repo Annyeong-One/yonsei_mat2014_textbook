@@ -30,10 +30,10 @@
 | Property | Value |
 |----------|-------|
 | **Size** | 8 bytes each (64-bit CPU) |
-| **Count** | 16 general-purpose (x86-64) |
-| **Total Capacity** | ~128 bytes general-purpose |
-| **Access Time** | 0 cycles (immediate) |
-| **Managed By** | Compiler |
+| **Count** | 16 architectural general-purpose (x86-64) |
+| **Total Capacity** | ~128 bytes (architectural); CPUs internally have hundreds of physical registers via register renaming |
+| **Access Time** | ~1 cycle (effectively immediate compared to memory) |
+| **Managed By** | Compiler + CPU hardware (register renaming) |
 
 ### Types of Registers
 
@@ -55,15 +55,26 @@ Python code doesn't directly use registers—the CPython interpreter does:
 x = a + b
 ```
 
-At the machine level, this becomes (conceptually):
+CPython compiles this to **bytecode**, not machine code directly:
+
+```
+LOAD_FAST   a
+LOAD_FAST   b
+BINARY_ADD
+STORE_FAST  x
+```
+
+The `BINARY_ADD` bytecode triggers a C function (`PyNumber_Add`) that performs type dispatch, calls the appropriate addition routine, and may allocate a new Python object for the result. This is **orders of magnitude** slower than a single machine `ADD` instruction.
+
+For comparison, in compiled C code, `x = a + b` for integers becomes something like:
 
 ```assembly
-; Simplified - actual CPython is more complex
 MOV RAX, [a_address]    ; Load 'a' into register
-MOV RBX, [b_address]    ; Load 'b' into register
-ADD RAX, RBX            ; Add in register
+ADD RAX, [b_address]    ; Add 'b'
 MOV [x_address], RAX    ; Store result
 ```
+
+This distinction explains why Python arithmetic is slow and why NumPy (which executes compiled C loops internally) is so much faster.
 
 NumPy operations are far more register-efficient than pure Python — but the reason is more nuanced than "it uses registers."
 
@@ -113,12 +124,14 @@ This is possible because SIMD registers are **wider** than normal registers:
 
 ```
 Normal register:  64 bits  → holds 1 float64
-XMM register:    128 bits  → holds 2 float64s
-YMM register:    256 bits  → holds 4 float64s
-ZMM register:    512 bits  → holds 8 float64s
+XMM register:    128 bits  → holds 2 float64s  (SSE)
+YMM register:    256 bits  → holds 4 float64s  (AVX/AVX2)
+ZMM register:    512 bits  → holds 8 float64s  (AVX-512, not on all CPUs)
 ```
 
-NumPy uses both — its compiled C code exploits SIMD instructions where possible. This is one of the core reasons NumPy is so fast: not just "compiled C" but "compiled C that uses SIMD vectorization." Your Python code never sees any of this — it just calls `c = a + b` and NumPy handles the rest invisibly.
+These SIMD registers are **overlays** of the same physical registers — YMM0 contains XMM0 as its lower half, and ZMM0 contains YMM0 as its lower half.
+
+NumPy's compiled C code exploits SIMD instructions where the build and CPU support them. The exact SIMD level used depends on the compiler, CPU features detected at runtime, and the specific operation — some operations may still run as scalar loops. Your Python code never sees any of this — it just calls `c = a + b` and NumPy handles the rest invisibly.
 
 ## CPU Cache
 
@@ -154,7 +167,7 @@ NumPy uses both — its compiled C code exploits SIMD instructions where possibl
 
 | Level | Size | Latency | Shared? | Purpose |
 |-------|------|---------|---------|---------|
-| **L1** | 32-64 KB | 1 ns (~4 cycles) | Per-core | Immediate data needs |
+| **L1** | ~32 KB data + ~32 KB instruction | ~1 ns (~4 cycles) | Per-core | Immediate data needs |
 | **L2** | 256-512 KB | 3 ns (~12 cycles) | Per-core | Recent data |
 | **L3** | 8-32 MB | 10 ns (~40 cycles) | All cores | Working set |
 
@@ -180,7 +193,8 @@ Cache Line (64 bytes)
 │ byte0 │ byte1 │ byte2 │ ... │ byte62 │ byte63 │
 └────────────────────────────────────────────────────────────┘
 
-When you access byte0, bytes 1-63 come along for free!
+When you access byte0, the entire line is loaded — bytes 1-63
+are available at no extra cost if accessed before the line is evicted
 ```
 
 This is why sequential access is fast:
@@ -214,11 +228,18 @@ Caches use **sets** to organize data. **N-way associativity** means N cache line
 
 Memory address determines which SET
 Any of 8 LINES within set can hold the data
+
+Address bits:  | tag | set index | offset (6 bits for 64-byte line) |
+               used to    selects     selects byte
+               check if   which set   within line
+               it's a hit
 ```
+
+**Conflict misses** occur when many addresses map to the same set, evicting useful data even though other sets have free space.
 
 ### Cache Replacement
 
-When a cache set is full, which line gets evicted? Usually **LRU (Least Recently Used)**:
+When a cache set is full, which line gets evicted? CPUs approximate **LRU (Least Recently Used)** using hardware heuristics like pseudo-LRU or tree-PLRU, since true LRU tracking is too expensive for highly associative caches:
 
 ```
 Set with 4 lines, LRU replacement:
@@ -238,10 +259,9 @@ Access F: [E, B, F, D]  ← C evicted
 
 ```
 Hit Rate = Cache Hits / Total Accesses
-
-Good code: 95-99% hit rate
-Poor code: 50-80% hit rate
 ```
+
+Hit rates vary greatly by workload — dense linear algebra may achieve 95%+ while streaming large arrays or graph traversal may be much lower. There is no single "good" or "bad" number; it depends entirely on data size, access pattern, and working set relative to cache size.
 
 ### Miss Types
 
@@ -294,35 +314,43 @@ L3 (8MB)       :   70.0 GB/s
 RAM (64MB)     :   35.0 GB/s
 ```
 
+Exact boundaries between cache levels are fuzzy in practice — hardware prefetchers, memory-level parallelism (CPUs can issue multiple memory requests simultaneously), vectorization, and OS scheduling all affect measured bandwidth.
+
 ## Cache-Friendly Python Code
 
-### Good: Sequential Access
+### Good: Sequential Access (Conceptual)
 
 ```python
 import numpy as np
 
-# Sequential access - cache friendly
 arr = np.random.rand(10000, 10000)
+
+# Sequential access - cache friendly pattern
+# (but Python loop overhead dominates; use NumPy instead)
 total = 0
 for row in arr:
     for val in row:
         total += val
 ```
 
-### Bad: Strided Access
+### Bad: Strided Access (Conceptual)
 
 ```python
-# Column-major access in row-major array - cache hostile
+# Column-major access in row-major array - cache hostile pattern
+# (Python loop overhead dominates here too)
 total = 0
 for col in range(arr.shape[1]):
     for row in range(arr.shape[0]):
         total += arr[row, col]  # Jumps 80KB between accesses!
 ```
 
+!!! warning "Python Loop Overhead"
+    Both examples above are dominated by Python interpreter overhead (~50-100 ns per iteration), which dwarfs cache effects (~1-100 ns). These loops illustrate the **conceptual access patterns** but should not be used for real performance measurement. Use NumPy vectorized operations to observe actual cache effects.
+
 ### Best: Let NumPy Handle It
 
 ```python
-# NumPy's sum is cache-optimized
+# NumPy's compiled C code uses cache-optimized access patterns
 total = np.sum(arr)  # 100x+ faster than Python loops
 ```
 
@@ -330,8 +358,8 @@ total = np.sum(arr)  # 100x+ faster than Python loops
 
 | Component | Size | Latency | Key Point |
 |-----------|------|---------|-----------|
-| **Registers** | ~128 B | 0 cycles | Managed by compiler |
-| **L1 Cache** | 32-64 KB | 4 cycles | Split I/D, per-core |
+| **Registers** | ~128 B | ~1 cycle | Compiler + register renaming hardware |
+| **L1 Cache** | ~32 KB data + ~32 KB instr | ~4 cycles | Split I/D, per-core |
 | **L2 Cache** | 256-512 KB | 12 cycles | Per-core |
 | **L3 Cache** | 8-32 MB | 40 cycles | Shared across cores |
 

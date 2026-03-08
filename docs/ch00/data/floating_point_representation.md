@@ -2,13 +2,15 @@
 
 ## The Problem with Real Numbers
 
-Computers work with finite bits, but real numbers can have infinite decimal places. Floating-point representation is a compromise—trading exactness for range.
+Computers work with finite bits, but real numbers can have infinite decimal places. Floating-point representation is a compromise—trading exactness for range. Many decimal fractions (like 0.1) have infinite binary expansions, so they cannot be represented exactly in binary floating-point.
 
 ```
 π = 3.14159265358979323846...  (infinite digits)
 
 Stored as float32: 3.1415927   (7 significant digits)
 Stored as float64: 3.141592653589793  (15 significant digits)
+
+0.1 in binary: 0.0001100110011...  (repeating — like 1/3 in decimal)
 ```
 
 ## IEEE 754 Format
@@ -28,9 +30,13 @@ The standard representation for floating-point numbers:
 │ 1 │   11 bits   │               52 bits                      │
 └───┴─────────────┴────────────────────────────────────────────┘
 
-Value = (-1)^S × 1.Significand × 2^(Exponent - Bias)
+Value = (-1)^S × 1.Significand × 2^(Exponent - Bias)    [normalized numbers]
 
-> **Why Bias instead of two's complement for the exponent?** The exponent needs to represent both negative and positive powers, so a signed representation is needed. The exponent is stored using a bias so that both positive and negative exponents can be represented while keeping the stored exponent as a plain unsigned integer — simplifying hardware exponent arithmetic and allowing exponent comparisons to use unsigned comparators. The bias value is chosen as `2^(k-1) - 1` where `k` is the number of exponent bits: **127** for float32 (8 bits), **1023** for float64 (11 bits).
+Note: This formula applies to normalized numbers. Subnormal numbers
+(exponent field all zeros) use a leading 0 instead of the implicit 1,
+providing gradual underflow at the cost of reduced precision.
+
+> **Why Bias instead of two's complement for the exponent?** The exponent needs to represent both negative and positive powers, so a signed representation is needed. The exponent is stored using a bias so that both positive and negative exponents can be represented while keeping the stored exponent as a plain unsigned integer. The primary benefit is **ordering**: comparing exponent fields as unsigned integers corresponds to comparing their true exponents, which simplifies hardware comparisons. (Note that exponent arithmetic itself still requires bias correction.) The bias value is chosen as `2^(k-1) - 1` where `k` is the number of exponent bits: **127** for float32 (8 bits), **1023** for float64 (11 bits).
 ```
 
 ### Components
@@ -39,7 +45,7 @@ Value = (-1)^S × 1.Significand × 2^(Exponent - Bias)
 |-----------|---------|---------|---------|
 | **Sign (S)** | 1 bit | 1 bit | 0 = positive, 1 = negative |
 | **Exponent** | 8 bits | 11 bits | Scale (power of 2) |
-| **Significand** | 23 bits | 52 bits | Precision digits (historically called mantissa) |
+| **Significand** | 23 bits (24 effective) | 52 bits (53 effective) | Precision digits (historically called mantissa); effective precision includes the implicit leading 1 |
 
 ### Example: Representing 6.5
 
@@ -53,7 +59,8 @@ Exponent: 2 + 127 (bias) = 129 = 10000001
 Significand: 101 (the .101 part; the leading 1 is implicit — normalized
              numbers in binary always start with 1.xxx, so storing it
              would waste a bit. IEEE 754 omits it, gaining 1 free bit of
-             precision.)
+             precision. Subnormal numbers are the exception: they have
+             no implicit leading 1, which is why they have less precision.)
 
 32-bit representation:
 0 10000001 10100000000000000000000
@@ -73,13 +80,13 @@ print(0.1 + 0.2)  # 0.30000000000000004
 print(format(0.1, '.20f'))  # 0.10000000000000000555
 ```
 
-When a value falls between two representable numbers, IEEE 754 rounds to the nearest representable value (using **round-to-nearest-even** by default, which breaks ties by rounding to the value with an even last bit).
+When a value falls between two representable numbers, IEEE 754 rounds to the nearest representable value (using **round-to-nearest-even** by default, which breaks ties by rounding to the value whose last significand bit is even). For example, in decimal analogy: 2.5 rounds to 2, but 3.5 rounds to 4.
 
 ### Precision by Type
 
 | Type | Decimal Digits | Example Use |
 |------|---------------|-------------|
-| float16 | ~3-4 | ML inference, memory-constrained |
+| float16 | ~3-4 | ML inference, memory-constrained (very limited range and precision) |
 | float32 | ~7 | Graphics, ML training |
 | float64 | ~15-16 | Scientific computing, default |
 
@@ -95,7 +102,10 @@ print(np.float32(1.0) + np.float32(1e-6))   # 1.000001 — just visible
 print(np.float64(1.0) + np.float64(1e-15))  # 1.000000000000001
 print(np.float64(1.0) + np.float64(1e-17))  # 1.0 — below epsilon, lost
 
-# Machine epsilon - smallest distinguishable difference from 1
+# Machine epsilon: difference between 1.0 and the next representable float
+# Precision is NOT uniform — spacing between representable numbers scales
+# with magnitude. Near value v, the gap is roughly v × epsilon.
+# Epsilon itself only describes precision near 1.0.
 print(np.finfo(np.float32).eps)  # ~1.19e-07
 print(np.finfo(np.float64).eps)  # ~2.22e-16
 ```
@@ -108,8 +118,8 @@ IEEE 754 defines special values:
 ┌─────────────┬─────────────────────────────┐
 │    Value    │      Representation          │
 ├─────────────┼─────────────────────────────┤
-│ +0          │ 0 00000000 00000...          │
-│ -0          │ 1 00000000 00000...          │
+│ +0          │ 0 00000000 00000...          │  +0 and -0 compare equal
+│ -0          │ 1 00000000 00000...          │  but: 1/+0 → +∞, 1/-0 → -∞
 │ +∞          │ 0 11111111 00000...          │
 │ -∞          │ 1 11111111 00000...          │
 │ NaN         │ X 11111111 XXXXX... (non-0)  │
@@ -147,7 +157,9 @@ print(np.isfinite(1.0))  # True
 import numpy as np
 
 # NaN is not equal to anything, including itself!
+# IEEE-754 defines NaN as unordered: all comparisons return False except !=
 print(np.nan == np.nan)  # False
+print(np.nan != np.nan)  # True
 
 # Use isnan() instead
 x = np.nan
@@ -187,8 +199,10 @@ huge = np.float64(1e308)
 print(huge * 10)  # inf
 
 # Underflow: very small numbers first become subnormal (losing precision
-# gradually), then underflow to zero. IEEE 754 supports subnormal numbers
-# to avoid an abrupt jump to zero.
+# gradually because the implicit leading 1 disappears), then underflow
+# to zero. IEEE 754 supports subnormal numbers to avoid an abrupt jump
+# to zero. Note: subnormal arithmetic can be significantly slower on
+# some CPUs due to microcode assist rather than hardware fast-path.
 tiny = np.float64(1e-308)
 print(tiny / 1e10)   # subnormal (very small but nonzero)
 print(tiny / 1e200)  # 0.0 (true underflow to zero)
@@ -229,7 +243,7 @@ for _ in range(n):
     total += small
 print(f"Loop sum: {total}")  # May not be exactly 1e-4
 
-# Better: use NumPy (uses pairwise summation)
+# Better: use NumPy (often uses pairwise summation, depending on size and BLAS)
 arr = np.full(n, small)
 print(f"NumPy sum: {np.sum(arr)}")  # More accurate
 
@@ -243,16 +257,24 @@ print(f"fsum: {math.fsum([small] * n)}")
 ```python
 import numpy as np
 
-# Catastrophic cancellation: subtracting nearly equal numbers
-# destroys most significant digits
+# Loss of precision during addition: the small value is absorbed
 print((1e16 + 1) - 1e16)  # 0.0 — the 1 is completely lost!
 print(1e16 + 1 == 1e16)   # True — 1 is below float64 precision at this scale
 
-# Subtler example: small difference between close values
+# Catastrophic cancellation: subtracting nearly equal numbers
+# destroys most significant digits
 a = 1.0000000001
 b = 1.0000000000
 # Expected: 1e-10, but precision is lost in the last digits
 print(a - b)  # 1.000000082740371e-10 (error in last digits)
+
+# Classic example: sqrt(x+1) - sqrt(x) for large x
+import math
+x = 1e15
+direct = math.sqrt(x + 1) - math.sqrt(x)       # cancellation!
+stable = 1.0 / (math.sqrt(x + 1) + math.sqrt(x))  # algebraically equivalent
+print(f"Direct: {direct}")   # less accurate
+print(f"Stable: {stable}")   # more accurate
 ```
 
 ## Practical Guidelines
@@ -264,7 +286,7 @@ print(a - b)  # 1.000000082740371e-10 (error in last digits)
 | Scientific computing | float64 (default) |
 | Deep learning training | float32 or float16 |
 | Graphics | float32 |
-| Financial (exact) | Decimal or integers |
+| Financial (exact) | `Decimal`, or integers in smallest unit (e.g. cents) |
 
 ### Memory Considerations
 
@@ -290,7 +312,7 @@ print(f"float16: {arr16.nbytes / 1e6:.0f} MB")  # 20 MB
 | **Sign/Exponent/Mantissa** | Three components of a float |
 | **Precision** | float32 ~7 digits, float64 ~15 digits |
 | **Special Values** | ±0, ±∞, NaN |
-| **Machine Epsilon** | Smallest distinguishable difference from 1 |
+| **Machine Epsilon** | Difference between 1.0 and the next representable float |
 
 Key points:
 

@@ -2,13 +2,14 @@
 
 ## Unsigned Integers
 
-The simplest integer representation—just the binary value:
+The simplest integer representation—numbers in base-2 positional notation:
 
 ```
 8-bit unsigned integer (uint8)
 
 Binary:    0 1 1 0 0 1 0 1
-Weights: 128 64 32 16 8 4 2 1
+Weights: 2⁷  2⁶ 2⁵ 2⁴ 2³ 2² 2¹ 2⁰
+       = 128 64 32 16  8  4  2  1
 Value:     0 + 64 + 32 + 0 + 0 + 4 + 0 + 1 = 101
 ```
 
@@ -57,7 +58,7 @@ Value:   -128 + 0 + 32 + 16 + 0 + 4 + 0 + 1 = -75
 | int32 | 32 | -2,147,483,648 | 2,147,483,647 |
 | int64 | 64 | -9.2 × 10¹⁸ | 9.2 × 10¹⁸ |
 
-Note: There's one more negative value than positive (no "negative zero").
+Note: There's one more negative value than positive because zero occupies one slot in the non-negative range (no "negative zero"). General formula: −2^(n−1) to 2^(n−1) − 1.
 
 ### Converting to Two's Complement
 
@@ -97,7 +98,7 @@ Addition works without special cases:
 
 ### Overflow in Two's Complement
 
-When a result exceeds the representable range, the bit pattern wraps around. This is the most important property of fixed-width integers:
+When a result exceeds the representable range, the bit pattern wraps around. This happens because fixed-width integer arithmetic is performed **modulo 2ⁿ** — results beyond n bits simply lose the overflow bit:
 
 ```
   0111 1111  (127, max int8)
@@ -149,7 +150,7 @@ Python int object in memory:
 ```
 
 - `ob_size` is negative if the number is negative, positive if positive
-- `ob_digit[]` stores the magnitude as an array of **base-2³⁰ chunks** (not decimal digits or single bits) — each element holds up to 30 bits of the integer's magnitude
+- `ob_digit[]` stores the magnitude as an array of **base-2³⁰ chunks** on 64-bit systems (base-2¹⁵ on 32-bit) — each element holds up to 30 bits of the integer's magnitude
 - The sign is carried separately — more like how humans write `−5`
 
 So `-5` is stored as: sign = negative, magnitude = 5. Not two's complement.
@@ -223,10 +224,12 @@ print(127 + 1)  # 128 (correct)
 
 ### Extracting Bits
 
+Bit indexing starts at 0 for the **least significant bit (LSB)**.
+
 ```python
 x = 0b11010110
 
-# Get nth bit
+# Get nth bit (bit 0 = LSB)
 def get_bit(x, n):
     return (x >> n) & 1
 
@@ -269,11 +272,12 @@ print(bin(toggle_bit(x, 4)))  # 0b11000110
 ### Choosing the Right Size
 
 ```python
+import sys
 import numpy as np
 
-# Memory considerations
 # Memory considerations (rough estimates — sys.getsizeof counts
-# the integer object only, not list pointers or list array overhead)
+# the integer object only; this excludes the list's internal pointer
+# array and list object overhead, so actual list memory is higher)
 data = list(range(1_000_000))
 
 # Python list of ints: ~28 MB
@@ -307,7 +311,7 @@ print(prices)  # [30000 35000 40000] - Correct
 
 ## Summary
 
-> **Two ways Python handles negative integers**: Python actually has two different representations depending on context. Native Python integers use **sign + magnitude** (the sign and absolute value stored separately) — this enables arbitrary precision and no overflow. NumPy integers use **C-style two's complement** — because under the hood, NumPy runs C code operating directly on fixed-width bit patterns. Same Python environment, two fundamentally different internal representations depending on whether you're using `int` or `np.int8/int32/int64`.
+> **Two integer representations in one environment**: Python's built-in `int` uses arbitrary-precision **sign + magnitude** storage (the sign and absolute value stored separately) — this enables unlimited size and no overflow. NumPy integers are separate fixed-width C types exposed through NumPy, using **C-style two's complement** — because under the hood, NumPy runs C code operating directly on fixed-width bit patterns. Same Python environment, two fundamentally different representations depending on whether you're using `int` or `np.int8/int32/int64`.
 
 | Representation | Description | Example |
 |----------------|-------------|---------|

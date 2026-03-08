@@ -9,12 +9,13 @@ The Speed Gap
 
 CPU Speed:     ████████████████████████████████  (4 GHz = 0.25 ns/cycle)
 L1 Cache:      ████████████                      (~1 ns)
-L2 Cache:      ██████████████                    (~3 ns)
-L3 Cache:      ████████████████████              (~10 ns)
-RAM:           ████████████████████████████████████████████████  (~60 ns)
+L2 Cache:      ██████████████                    (~4 ns)
+L3 Cache:      ████████████████████              (~12 ns)
+RAM:           ████████████████████████████████████████████████  (~80-120 ns)
 SSD:           ████████████████████████████████████████████████████  (~100,000 ns)
 
-CPU waits 240 cycles for RAM, 400,000 cycles for SSD!
+A RAM access takes ~200-300 cycles, 400,000 cycles for SSD!
+(Modern CPUs use out-of-order execution to do other work while waiting)
 ```
 
 ## The Memory Hierarchy
@@ -29,7 +30,7 @@ To bridge this gap, computers use a **hierarchy** of memory types—each level t
                            │
                     ┌──────┴──────┐
                     │  L1 Cache   │
-                    │  (~64 KB)   │
+                    │  (~32 KB)   │
                     └──────┬──────┘
                            │
                     ┌──────┴──────┐
@@ -59,26 +60,26 @@ The best way to understand why the memory hierarchy exists is to watch it come a
 
 ### Who Is in Charge of Booting?
 
-The **BIOS** (Basic Input/Output System) or its modern successor **UEFI** (Unified Extensible Firmware Interface) is in charge of booting. It lives on a **Flash ROM chip** soldered directly onto the motherboard — completely separate from your RAM and SSD.
+The **BIOS** (Basic Input/Output System) or its modern successor **UEFI** (Unified Extensible Firmware Interface) is in charge of booting. It lives on a **flash memory chip** (typically SPI flash) soldered directly onto the motherboard — completely separate from your RAM and SSD.
 
 | Component | Type | Role at Boot |
 |-----------|------|--------------|
-| **BIOS/UEFI chip** | Flash ROM (on motherboard) | First code to run |
+| **BIOS/UEFI chip** | Flash memory (on motherboard) | First code to run |
 | **RAM** | Volatile DRAM | Where the OS gets loaded into |
 | **SSD** | Non-volatile Flash | Where OS files are stored |
 
 ### The Hardwired Start Address
 
-The moment power hits the CPU, it always begins executing from one specific memory address — `0xFFFFFFF0` on x86 processors. This behavior is not software, not configurable, not stored in a file. It is literally baked into the CPU's circuit logic — a reflex.
+The moment power hits the CPU, it begins executing from a fixed **reset vector** — a hardwired address mapped to the system firmware. This behavior is not software, not configurable, not stored in a file. It is literally baked into the CPU's circuit logic — a reflex.
 
 But RAM is empty at boot. So what is at that address?
 
-The motherboard is wired so that `0xFFFFFFF0` is **mapped to the BIOS/UEFI chip**, not RAM. When the CPU "goes to" that address, it is transparently reading from the ROM chip:
+The motherboard is wired so that the reset vector is **mapped to the BIOS/UEFI chip**, not RAM. When the CPU "goes to" that address, it is transparently reading from the flash chip:
 
 ```
 Address Space (what the CPU sees):
 ┌─────────────────────┐ 0xFFFFFFFF  (top)
-│   BIOS/UEFI chip    │ ← 0xFFFFFFF0  CPU always starts here
+│   BIOS/UEFI chip    │ ← Reset vector: CPU always starts here
 ├─────────────────────┤
 │        ...          │
 ├─────────────────────┤
@@ -95,8 +96,8 @@ Power On
     │
     ▼
 ┌─────────────────────────┐
-│ CPU jumps to 0xFFFFFFF0 │  ← hardwired reflex
-│ (mapped to BIOS/UEFI)   │
+│ CPU jumps to reset      │  ← hardwired reflex
+│ vector (→ BIOS/UEFI)    │
 └────────────┬────────────┘
              │
              ▼
@@ -126,31 +127,33 @@ Power On
 └─────────────────────────┘
 ```
 
-The boot sequence touches nearly every tier of the memory hierarchy in order — ROM → RAM → SSD → RAM — making it a perfect map of why each tier exists.
+The boot sequence touches nearly every tier of the memory hierarchy in order — firmware flash → RAM → SSD → RAM — making it a perfect map of why each tier exists.
 
-### Why ROM Specifically?
+### Why Flash Memory for Firmware?
 
-ROM stores the BIOS/UEFI firmware — a small program whose sole job is to get the computer to the point where the OS can take over. But why ROM and not any other storage?
+The firmware chip stores the BIOS/UEFI — a small program whose sole job is to get the computer to the point where the OS can take over. But why flash memory and not any other storage?
 
 - **Non-volatile** — retains its contents without power. The instructions are always there the instant power arrives, before anything else has been initialized.
-- **Immediately readable by the CPU** — unlike an SSD, which requires a whole driver stack to be set up before you can read from it. ROM just sits in the address space, ready to go.
-- **Read-only (historically)** — the instructions cannot be accidentally overwritten by a crashed OS or malicious software. Modern Flash ROM can be updated (that is what a "BIOS update" is), but it requires deliberate effort.
+- **Immediately readable by the CPU** — unlike an SSD, which requires a whole driver stack to be set up before you can read from it. The flash chip just sits in the address space, ready to go.
+- **Updatable but protected** — modern flash memory can be updated (that is what a "BIOS update" is), but requires deliberate effort and typically hardware-level write protection. Historically, true ROM (read-only memory) was used and could not be modified at all.
 
-Think of ROM as the **"always-on, always-ready" first responder**. At the moment of power-on, nothing else is ready yet — RAM is empty, the SSD needs initialization, the OS does not exist yet. ROM is the only thing the CPU can trust to be there unconditionally.
+Think of the firmware chip as the **"always-on, always-ready" first responder**. At the moment of power-on, nothing else is ready yet — RAM is empty, the SSD needs initialization, the OS does not exist yet. The firmware chip is the only thing the CPU can trust to be there unconditionally.
 
 ## Hierarchy Properties
 
 Each level has distinct characteristics:
 
-| Level | Size | Latency | Bandwidth | Managed By |
-|-------|------|---------|-----------|------------|
-| **Registers** | ~1 KB | 0.25 ns | N/A | Compiler |
-| **L1 Cache** | 32-64 KB | 1 ns | ~1 TB/s | Hardware |
-| **L2 Cache** | 256-512 KB | 3 ns | ~500 GB/s | Hardware |
-| **L3 Cache** | 4-32 MB | 10 ns | ~200 GB/s | Hardware |
-| **RAM** | 8-128 GB | 60 ns | ~50 GB/s | OS |
-| **SSD** | 256 GB-4 TB | 100 μs | ~5 GB/s | OS |
-| **HDD** | 1-20 TB | 10 ms | ~200 MB/s | OS |
+| Level | Size | Latency | Managed By |
+|-------|------|---------|------------|
+| **Registers** | ~1 KB | 0.25 ns | Compiler |
+| **L1 Cache** | ~32 KB (data) | ~1 ns | Hardware |
+| **L2 Cache** | 256-512 KB | ~4 ns | Hardware |
+| **L3 Cache** | 4-32 MB | ~12 ns | Hardware |
+| **RAM** | 8-128 GB | ~80-120 ns | OS |
+| **SSD** | 256 GB-4 TB | ~100 μs | OS |
+| **HDD** | 1-20 TB | ~10 ms | OS |
+
+Latencies are approximate and vary by CPU model and generation. L1 caches are typically split into separate instruction and data caches (e.g., 32 KB each).
 
 ## Why Hierarchy Works: Locality
 
@@ -202,36 +205,33 @@ CPU requests address X
         │ Miss
         ▼
 ┌───────────────────┐
-│ Fetch from RAM    │──────────→ Return data (60 ns)
+│ Fetch from RAM    │──────────→ Return data (~100 ns)
 └───────────────────┘
         │
         ▼
-  Also load into L1, L2, L3 (for next access)
+  Load into cache hierarchy (for next access)
 ```
 
-### Why Load into All Three Levels?
+### How Data Fills the Cache
 
-When data is fetched from RAM after a full cache miss, the hardware loads it into **all three cache levels simultaneously** as it passes through on its way up to the CPU:
+When data is fetched from RAM after a full cache miss, it is installed in L1 (where the CPU needs it). Whether lower levels (L2, L3) also keep a copy depends on the CPU's **cache inclusion policy**:
+
+- **Inclusive caches** — L1 data is always also present in L2 and L3. Used in some older Intel designs.
+- **Non-inclusive / exclusive caches** — data may exist in only one level at a time. Used in modern AMD Zen and recent Intel designs.
 
 ```
-RAM → L3 → L2 → L1 → CPU
-       ↑     ↑     ↑
-    stored stored stored
+RAM → cache hierarchy → L1 → CPU
+      (exact behavior depends on inclusion policy)
 ```
 
-The reasoning is straightforward. You just made an expensive 60 ns trip to RAM — so you leave copies at every level as a safety net:
-
-- **L1** gets it because the CPU just asked for it and will likely need it again soon
-- **L2 and L3** act as fallbacks — if L1 evicts it (L1 is tiny, ~64 KB), the data is still in L2; if L2 evicts it, still in L3; only then is another RAM fetch required
-
-Think of it like going to the library basement for a book. Since you made that expensive trip, you leave a copy on your desk (L1), the floor bookshelf (L2), and the hallway shelf (L3) — so next time you never need to go back down.
+The result is the same from a programmer's perspective: after a cache miss, the data is available in L1 for fast subsequent access, and the cache hierarchy as a whole retains recently used data so that eviction from L1 does not always require a full trip back to RAM.
 
 ### Cache Eviction
 
-Each cache level has a fixed size, so when it is full and new data arrives, something must be **evicted**. The most common policy is **LRU (Least Recently Used)**:
+Each cache level has a fixed size, so when it is full and new data arrives, something must be **evicted**. Most CPUs approximate **LRU (Least Recently Used)** using simpler hardware heuristics (pseudo-LRU, tree-PLRU), because true LRU tracking is too expensive to implement in hardware for highly associative caches:
 
 ```
-L1 Cache (tiny, ~64 KB) — example with 4 slots:
+L1 Cache (tiny, ~32 KB) — example with 4 slots:
 
 Initial state:
 ┌─────┬─────┬─────┬─────┐
@@ -244,55 +244,51 @@ New data E arrives → L1 is full → evict A (least recently used)
 └─────┴─────┴─────┴─────┘
 ```
 
-Importantly, **eviction does not mean the data is gone** — it just falls down to the next level:
+When data is evicted from a cache level, it is **discarded** — unless the data has been modified (is "dirty"), in which case it is **written back** to the next level of memory. Caches at each level operate independently; eviction from L1 does not automatically place the data into L2.
 
 ```
-L1 full → evict to L2
-               │
-          L2 full → evict to L3
-                        │
-                   L3 full → evicted from cache entirely
-                                    │
-                               (still exists in RAM or SSD)
+L1 evicts data → discarded (or written back if dirty)
+L2 evicts data → discarded (or written back if dirty)
+L3 evicts data → discarded (or written back to RAM if dirty)
 ```
 
-Caches only hold **copies** of data that permanently lives lower in the hierarchy. Programs never need to worry about eviction — the hardware manages it invisibly.
+Caches only hold **copies** of data that permanently lives lower in the hierarchy. If evicted clean data is needed again, it is simply re-fetched. Programs never need to worry about eviction — the hardware manages it invisibly.
 
-### Data Survival: Multiple Chances to Stay in Cache
+### Data Survival: Temporal Locality in Action
 
-Every time data gets accessed again, it gets **promoted back up** and its eviction clock resets. LRU rewards frequently used data by keeping it close to the CPU:
+Every time data is accessed again and found in cache, the hardware marks it as recently used, making it less likely to be evicted. Frequently used data naturally stays close to the CPU:
 
 ```
 Timeline of data A being accessed repeatedly:
 
-Access 1: A fetched from RAM → loaded into L3, L2, L1
-                                                    ↑
-                                              eviction clock starts
+Access 1: A fetched from RAM → loaded into L1
+                                           ↑
+                                     marked as recent
 
-Access 2: A found in L1 (hit!) → clock resets, A stays in L1
-Access 3: A found in L1 (hit!) → clock resets, A stays in L1
+Access 2: A found in L1 (hit!) → still marked recent, stays in L1
+Access 3: A found in L1 (hit!) → still marked recent, stays in L1
 
 ... time passes, other data fills L1 ...
 
-A gets evicted from L1 → falls to L2 (still safe)
+A gets evicted from L1 (no longer recent enough)
 
-Access 4: A found in L2 (hit!) → promoted back to L1, clock resets
+Access 4: A re-fetched from lower level → back in L1, marked recent
 ```
 
-The survival of data in cache depends entirely on how frequently it is used relative to competing data — the cache is a scoreboard where frequently accessed data naturally floats to the top:
+The survival of data in cache depends entirely on how frequently it is used relative to competing data:
 
 | Data behavior | Cache fate |
 |---|---|
 | Accessed repeatedly | Stays in L1 indefinitely |
-| Accessed occasionally | Bounces between L1 and L2 |
-| Accessed rarely | Drifts down to L3 or evicted entirely |
+| Accessed occasionally | May be evicted and re-fetched |
+| Accessed rarely | Evicted, requires longer re-fetch |
 | Accessed once and never again | Evicted quickly |
 
 This is temporal locality in action — and exactly why NumPy arrays accessed in tight loops are so much faster than scattered Python objects. The array keeps hitting L1; the Python objects keep missing and triggering fresh RAM fetches.
 
 ### Who Is in Charge of Promotion and Eviction?
 
-The **CPU hardware itself** — specifically the **cache controller**, a dedicated circuit built into the CPU chip — manages all promotion, eviction, and LRU tracking. Not the OS, not software, not you.
+The **CPU hardware itself** — specifically the **cache controller**, a dedicated circuit built into the CPU chip — manages eviction, replacement, and cache line fills. Not the OS, not software, not you.
 
 ```
 Who manages each level:
@@ -301,8 +297,10 @@ Registers        ← Compiler
                       (decides which values go in registers)
                          │
 L1 / L2 / L3    ← Cache Controller (built into CPU)
-    Cache              - promotion, eviction, LRU tracking
+    Cache              - eviction and replacement decisions
                        - cache line fills
+                       - hardware prefetchers
+                       - coherence protocols (multicore)
                        - all automatic, all in hardware
                          │
 RAM              ← OS
@@ -313,7 +311,7 @@ SSD              ← OS
                       (swap / page file when RAM is full)
 ```
 
-The cache controller operates at CPU speed — it has to, because the whole point of L1 is to return data in 1 ns. There is simply no time to consult the OS or any software. Every promotion and eviction decision is made in hardware, in nanoseconds, completely invisibly to any program running on the machine.
+The cache controller operates at CPU speed — it has to, because the whole point of L1 is to return data in ~1 ns. There is simply no time to consult the OS or any software. Every eviction and replacement decision is made in hardware, in nanoseconds, completely invisibly to any program running on the machine.
 
 This is why caches are called **transparent** — no program ever asks "please put this in L1." The hardware watches all memory accesses and silently decides what to keep, promote, and evict. Your Python code has no idea the cache even exists.
 
@@ -333,9 +331,9 @@ Access a0 → entire cache line loaded
 Access a1, a2, ... a7 → already in cache (free!)
 ```
 
-### The Cache Line Is Always the Atomic Unit
+### The Cache Line as Transfer Unit
 
-The "whole house moves together" rule applies consistently at **every level** of the hierarchy — including the initial fetch from RAM.
+The "whole house moves together" rule is the primary mechanism for CPU cache transfers.
 
 When you ask for a single byte, the hardware never fetches just that byte. It finds the aligned 64-byte block containing it and moves the entire block:
 
@@ -348,24 +346,31 @@ data:      a0   a1   a2   a3   a4  ... a63
            └─────────────────────────────┘
                   one cache line (64 bytes)
 
-→ entire line (a0 through a63) moves from RAM into L3, L2, L1
+→ entire line (a0 through a63) is fetched into cache
 → not just a2
 ```
 
-The same rule holds at every transition:
+Cache lines are the **primary unit of transfer** for CPU caches. Some hardware mechanisms (prefetchers, memory controllers) may fetch larger units, but from the programmer's perspective, the 64-byte cache line is the fundamental granularity.
+
+This is exactly why spatial locality is so powerful. When you access `a2` and pay the expensive RAM fetch cost (~100 ns), you automatically get `a0` through `a63` for free in cache. If your next accesses are `a3`, `a4`, `a5` — they are already there. You paid once for the whole house, and everyone benefits.
+
+### Latency vs Throughput: Memory-Level Parallelism
+
+The latency numbers above (~100 ns for RAM) might suggest that every cache miss completely stalls the CPU. In practice, modern CPUs can issue **multiple memory requests simultaneously** while continuing to execute other instructions out of order:
 
 ```
-RAM → L3 → L2 → L1      always in 64-byte houses
-       ↑     ↑     ↑
-  whole     whole  whole
-  line      line   line
+Simple model:       request → wait 100 ns → request → wait 100 ns
+                    (serial, slow)
+
+Reality (MLP):      request ─────────────────→ data arrives
+                    request ─────────────────→ data arrives
+                    request ─────────────────→ data arrives
+                    (overlapped, much higher throughput)
 ```
 
-The hardware has one simple rule throughout: **the cache line is the atomic unit of transfer, always, everywhere.** No level ever breaks the house apart — not on the way up (promotion), not on the way down (eviction).
+This is why **latency and throughput are different**: a single access costs ~100 ns, but the CPU can have many in flight at once. Sequential access patterns benefit most from this because the prefetcher can issue requests far ahead of the CPU's current position.
 
-This is exactly why spatial locality is so powerful. When you access `a2` and pay the expensive RAM fetch cost (60 ns), you automatically get `a0` through `a63` for free in cache. If your next accesses are `a3`, `a4`, `a5` — they are already there. You paid once for the whole house, and everyone benefits.
-
-
+## Python Memory Layout
 
 Python objects live in RAM, managed by the interpreter:
 
@@ -405,6 +410,8 @@ Python List Memory Layout:
 │ Object  │     │ Ref[1]  │────▶ [PyObject: 2] (somewhere else)
 └─────────┘     │ Ref[2]  │────▶ [PyObject: 3] (somewhere else)
                 └─────────┘
+                 ↑ contiguous pointers (some spatial locality)
+                   but objects themselves are scattered (pointer chasing)
 
 NumPy Array Memory Layout:
 ┌─────────┐     ┌───────────────────────┐
@@ -445,12 +452,14 @@ for size in [0.01, 0.1, 1, 10, 100]:
 Expected pattern:
 
 ```
-  0.01 MB: 150.0 GB/s  ← Fits in L2, very fast
-  0.10 MB: 120.0 GB/s  ← Fits in L3
+  0.01 MB: 150.0 GB/s  ← Roughly fits in L2
+  0.10 MB: 120.0 GB/s  ← Roughly fits in L3
   1.00 MB: 80.0 GB/s   ← Mostly L3
  10.00 MB: 45.0 GB/s   ← Spills to RAM
 100.00 MB: 35.0 GB/s   ← RAM-limited
 ```
+
+Exact boundaries between cache levels are fuzzy in practice due to hardware prefetchers, cache sharing between cores, and OS background activity.
 
 ## Key Concepts Summary
 

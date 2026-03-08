@@ -2,7 +2,7 @@
 
 ## Number Systems Overview
 
-Computers store data in binary, but programmers often use other bases (decimal, hexadecimal, octal) to represent or interpret that data:
+Computers store data in binary; other bases are simply human-friendly ways to represent the same values. Programmers often use hexadecimal and octal to read or write data more compactly:
 
 | Base | Name | Digits | Use Case |
 |------|------|--------|----------|
@@ -19,9 +19,10 @@ Binary is a positional number system like decimal — each digit's value depends
 ```
 Binary number: 1 0 1 1 0 1
                │ │ │ │ │ │
-Position:      5 4 3 2 1 0
-               │ │ │ │ │ │
-Power of 2:   32 16 8 4 2 1
+Position:      5  4  3 2 1 0
+               │  │  │ │ │ │
+Power of 2:   2⁵ 2⁴ 2³ 2² 2¹ 2⁰
+            = 32 16  8  4  2  1
 
 Value = 1×32 + 0×16 + 1×8 + 1×4 + 0×2 + 1×1
       = 32 + 8 + 4 + 1
@@ -94,9 +95,10 @@ Hex to Binary: expand each hex digit to 4 bits
 ```
 Hex number: 2 A F
             │ │ │
-Position:   2 1 0
-            │ │ │
-Power of 16: 256 16 1
+Position:    2   1   0
+             │   │   │
+Power of 16: 16² 16¹ 16⁰
+           = 256  16   1
 
 Value = 2×256 + 10×16 + 15×1
       = 512 + 160 + 15
@@ -148,7 +150,7 @@ os.chmod('file.txt', 0o755)
 
 ### Quick Reference Table
 
-(Binary values use leading zeros for 4-bit alignment where applicable.)
+(Binary values use leading zeros for 4-bit alignment, matching hexadecimal grouping.)
 
 | Decimal | Binary | Hex | Octal |
 |---------|--------|-----|-------|
@@ -180,12 +182,12 @@ print(int('1010', 2))    # 10 (binary)
 print(int('FF', 16))     # 255 (hex)
 print(int('77', 8))      # 63 (octal)
 
-# Decimal to any base
+# Decimal to any base (bin/hex/oct include prefixes; format() does not)
 print(bin(255))  # '0b11111111'
 print(hex(255))  # '0xff'
 print(oct(255))  # '0o377'
 
-# General format specification
+# General format specification (no prefix)
 print(format(255, 'b'))  # '11111111'
 print(format(255, 'x'))  # 'ff'
 print(format(255, 'o'))  # '377'
@@ -207,9 +209,10 @@ print(hex(255))       # 0xff (max uint8)
 print(hex(65535))     # 0xffff (max uint16)
 print(hex(2**32 - 1)) # 0xffffffff (max uint32)
 
-# Common addresses/values
+# Common addresses/values (recognizable patterns used as debug markers
+# and magic numbers — they stand out in memory dumps)
 print(0xDEADBEEF)     # 3735928559 (debug marker)
-print(0xCAFEBABE)     # 3405691582 (Java class magic)
+print(0xCAFEBABE)     # 3405691582 (Java class file magic number)
 print(0x7FFFFFFF)     # 2147483647 (max int32)
 ```
 
@@ -270,7 +273,7 @@ print(hex_strings)  # ['0a', 'ff', '3f']
 
 # Binary representation of floats
 x = np.float32(1.5)
-# Reinterpret the float's memory as a 32-bit integer to inspect raw bits
+# .view() reinterprets the same memory as a different type without copying data
 print(format(x.view(np.uint32), '032b'))
 # 00111111110000000000000000000000
 ```
@@ -281,7 +284,7 @@ print(format(x.view(np.uint32), '032b'))
 
 ```python
 x = [1, 2, 3]
-print(hex(id(x)))  # '0x7f8b8c0a5a00' (memory address)
+print(hex(id(x)))  # '0x7f8b8c0a5a00' (object id; memory address in CPython)
 ```
 
 ### Viewing Binary Data
@@ -322,6 +325,8 @@ hex(x)           # int → hex string
 format(x, '08b') # int → binary, fixed width
 format(x, '02x') # int → hex, fixed width
 ```
+
+> **Note**: This chapter covers unsigned (non-negative) binary numbers. Negative integers are typically represented using two's complement — see [Integer Representation](integer_representation.md).
 
 Understanding these number systems helps when:
 

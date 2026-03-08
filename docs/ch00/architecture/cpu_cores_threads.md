@@ -2,20 +2,20 @@
 
 ## What Is a Core?
 
-A **core** is a complete, independent processing unit on the CPU die. Each core has its own:
+A **core** is an independent execution engine capable of running its own instruction stream. Each core has its own:
 
 - **Execution units** — arithmetic/logic units (ALUs), branch units, load/store units
 - **Registers** — fast on-chip storage holding the current thread's state
 - **L1 cache** — private, fastest cache (~4 cycles latency, typically 32–64 KB)
-- **L2 cache** — usually private, slightly larger and slower (~12 cycles)
+- **L2 cache** — often private to each core, though some architectures share it across clusters (~12 cycles)
 
-**L3 cache** is shared across all cores on the same chip, acting as a common pool (~40 cycles latency, typically 8–64 MB).
+**L3 cache** is shared across all cores on the same chip, acting as a common pool (~40 cycles latency, typically 8–64 MB on desktops; server CPUs may exceed 100 MB). Cores also share **memory controllers** and the **on-chip interconnect**.
 
-Multiple cores can execute entirely different instructions at the same instant — this is **true parallelism**.
+Multiple cores can execute entirely different instructions at the same instant — this is **true parallelism**, though cores still compete for shared resources such as memory bandwidth, cache coherence traffic, and last-level cache capacity, which can limit scaling before Amdahl's Law alone would predict.
 
 ## From Single-Core to Multi-Core
 
-Early CPUs had a single core. Clock frequency scaling delivered consistent performance gains through the 1990s, but by the mid-2000s this hit hard physical limits: power consumption and heat scale roughly as the cube of clock frequency. Doubling the clock speed would require eight times the cooling. The industry pivoted to putting **multiple cores on one chip** instead.
+Early CPUs had a single core. Clock frequency scaling delivered consistent performance gains through the 1990s, but by the mid-2000s this hit hard physical limits: higher frequencies require higher voltage, and power scales with $V^2 \times f$, so increasing clock speed rapidly increases power consumption. In practice this relationship often produces a near-cubic increase in power, which made further clock scaling impractical. The industry pivoted to putting **multiple cores on one chip** instead.
 
 ```
 Single-Core CPU (early 2000s)        Quad-Core CPU (today)
@@ -71,9 +71,9 @@ Physical Core with SMT (Hyperthreading)
   └───────────────────────────────────────────────┘
 ```
 
-> **Important**: L1 cache is *partitioned* between the two threads (not fully shared); each thread's private registers are truly separate. The execution units — ALUs, branch units — are shared and scheduled between threads in hardware.
+> **Important**: L1 cache is shared between the two threads, though the CPU may dynamically balance cache usage between them. Each thread's private registers are truly separate. The execution units — ALUs, branch units — are shared and scheduled between threads in hardware.
 
-When Thread 0 stalls on a cache miss, the core switches to executing Thread 1 in that cycle, keeping execution units busy. In practice, SMT yields **15–30% more throughput** for mixed workloads, not a full 2×. For some workloads (where both threads compete heavily for cache), SMT can even reduce performance.
+Both threads' instructions enter the pipeline, and the scheduler can issue instructions from either thread depending on which has ready instructions — when Thread 0 stalls on a cache miss, the core fills those slots with Thread 1's instructions, keeping execution units busy. In practice, SMT yields **15–30% more throughput** for mixed workloads, not a full 2×. Threads also compete for internal resources such as reorder buffer entries, instruction fetch bandwidth, and execution ports. For some workloads (where both threads compete heavily for these resources or for cache), SMT can even reduce performance.
 
 ```python
 import psutil
@@ -130,7 +130,7 @@ Concurrency and parallelism are orthogonal concepts:
 
 | | Concurrent structure | Sequential structure |
 |---|---|---|
-| **Multiple cores** | Concurrent + parallel | Single-threaded parallel (unusual) |
+| **Multiple cores** | Concurrent + parallel | Sequential (only one core used) |
 | **Single core** | Concurrent (interleaved) | Purely sequential |
 
 A useful framing: **concurrency is about dealing with many things at once; parallelism is about doing many things at once** (Rob Pike). You can have concurrency without parallelism (a single-core server juggling many connections), and you need concurrent program structure to exploit parallelism (you cannot parallelize an inherently sequential program).
@@ -287,7 +287,7 @@ OS Scheduler (run queue → cores)
       └──────┴──────┴──────┘
 ```
 
-The scheduler also handles **context switches**: saving the register state of a running thread and restoring another's. Context switches are cheap within the same process (shared address space, no TLB flush) but more expensive across processes.
+The scheduler also handles **context switches**: saving the register state of a running thread and restoring another's. Context switches are cheap within the same process (shared address space, no TLB flush). Process switches are more expensive, though modern CPUs use **PCID/ASID tagging** to reduce TLB flushing costs. In both cases, the indirect costs — cache pollution and branch predictor disruption — often matter more than the direct register save/restore.
 
 **CPU affinity** pins a process or thread to a specific set of cores. This is rarely needed but can reduce **cache thrashing** when a critical thread keeps migrating between cores and losing its warm cache:
 
