@@ -18,17 +18,19 @@ The standard representation for floating-point numbers:
 ```
 32-bit float (float32 / single precision)
 ┌───┬──────────┬───────────────────────────┐
-│ S │ Exponent │        Mantissa           │
+│ S │ Exponent │       Significand         │
 │ 1 │  8 bits  │        23 bits            │
 └───┴──────────┴───────────────────────────┘
 
 64-bit float (float64 / double precision)
 ┌───┬─────────────┬────────────────────────────────────────────┐
-│ S │  Exponent   │               Mantissa                     │
+│ S │  Exponent   │             Significand                    │
 │ 1 │   11 bits   │               52 bits                      │
 └───┴─────────────┴────────────────────────────────────────────┘
 
-Value = (-1)^S × 1.Mantissa × 2^(Exponent - Bias)
+Value = (-1)^S × 1.Significand × 2^(Exponent - Bias)
+
+> **Why Bias instead of two's complement for the exponent?** The exponent needs to represent both negative and positive powers, so a signed representation is needed. The exponent is stored using a bias so that both positive and negative exponents can be represented while keeping the stored exponent as a plain unsigned integer — simplifying hardware exponent arithmetic and allowing exponent comparisons to use unsigned comparators. The bias value is chosen as `2^(k-1) - 1` where `k` is the number of exponent bits: **127** for float32 (8 bits), **1023** for float64 (11 bits).
 ```
 
 ### Components
@@ -37,7 +39,7 @@ Value = (-1)^S × 1.Mantissa × 2^(Exponent - Bias)
 |-----------|---------|---------|---------|
 | **Sign (S)** | 1 bit | 1 bit | 0 = positive, 1 = negative |
 | **Exponent** | 8 bits | 11 bits | Scale (power of 2) |
-| **Mantissa** | 23 bits | 52 bits | Precision digits |
+| **Significand** | 23 bits | 52 bits | Precision digits (historically called mantissa) |
 
 ### Example: Representing 6.5
 
@@ -48,11 +50,14 @@ Scientific notation: 1.101 × 2²
 
 Sign:     0 (positive)
 Exponent: 2 + 127 (bias) = 129 = 10000001
-Mantissa: 101 (the .101 part, leading 1 is implicit)
+Significand: 101 (the .101 part; the leading 1 is implicit — normalized
+             numbers in binary always start with 1.xxx, so storing it
+             would waste a bit. IEEE 754 omits it, gaining 1 free bit of
+             precision.)
 
 32-bit representation:
 0 10000001 10100000000000000000000
-S Exponent Mantissa
+S Exponent Significand
 ```
 
 ## Precision Limitations
@@ -68,6 +73,8 @@ print(0.1 + 0.2)  # 0.30000000000000004
 print(format(0.1, '.20f'))  # 0.10000000000000000555
 ```
 
+When a value falls between two representable numbers, IEEE 754 rounds to the nearest representable value (using **round-to-nearest-even** by default, which breaks ties by rounding to the value with an even last bit).
+
 ### Precision by Type
 
 | Type | Decimal Digits | Example Use |
@@ -79,16 +86,14 @@ print(format(0.1, '.20f'))  # 0.10000000000000000555
 ```python
 import numpy as np
 
-# Demonstrating precision limits
-f32 = np.float32(1.0)
-f64 = np.float64(1.0)
+# Demonstrating precision limits — add values near machine epsilon
+# float32 epsilon ~1.19e-7: adding 1e-8 has no effect
+print(np.float32(1.0) + np.float32(1e-8))   # 1.0 — unchanged!
+print(np.float32(1.0) + np.float32(1e-6))   # 1.000001 — just visible
 
-# Add tiny values
-tiny32 = np.float32(1e-8)
-tiny64 = np.float64(1e-8)
-
-print(f32 + tiny32)  # 1.00000001 (some precision)
-print(f64 + tiny64)  # 1.00000001 (full precision)
+# float64 epsilon ~2.22e-16: much finer resolution
+print(np.float64(1.0) + np.float64(1e-15))  # 1.000000000000001
+print(np.float64(1.0) + np.float64(1e-17))  # 1.0 — below epsilon, lost
 
 # Machine epsilon - smallest distinguishable difference from 1
 print(np.finfo(np.float32).eps)  # ~1.19e-07
@@ -117,17 +122,18 @@ IEEE 754 defines special values:
 import numpy as np
 
 # Infinity
-print(np.inf)           # inf
-print(1.0 / 0.0)        # Warning, but returns inf
-print(np.float64('inf')) # inf
+print(np.inf)                        # inf
+print(np.float64(1.0) / 0.0)        # inf (NumPy, not plain Python)
+print(np.float64('inf'))             # inf
+# Note: plain Python raises ZeroDivisionError for 1.0 / 0.0
 
 # Negative infinity
 print(-np.inf)          # -inf
 
 # NaN (Not a Number)
-print(np.nan)           # nan
-print(0.0 / 0.0)        # nan (with warning)
-print(np.inf - np.inf)  # nan
+print(np.nan)                         # nan
+print(np.divide(0.0, 0.0))           # nan (NumPy; plain 0.0/0.0 raises ZeroDivisionError)
+print(np.inf - np.inf)               # nan
 
 # Checking for special values
 print(np.isinf(np.inf))  # True
@@ -180,9 +186,12 @@ import numpy as np
 huge = np.float64(1e308)
 print(huge * 10)  # inf
 
-# Underflow → zero
+# Underflow: very small numbers first become subnormal (losing precision
+# gradually), then underflow to zero. IEEE 754 supports subnormal numbers
+# to avoid an abrupt jump to zero.
 tiny = np.float64(1e-308)
-print(tiny / 1e10)  # 0.0 (underflow)
+print(tiny / 1e10)   # subnormal (very small but nonzero)
+print(tiny / 1e200)  # 0.0 (true underflow to zero)
 ```
 
 ## Common Pitfalls
@@ -234,12 +243,16 @@ print(f"fsum: {math.fsum([small] * n)}")
 ```python
 import numpy as np
 
-# Subtracting nearly equal numbers loses precision
+# Catastrophic cancellation: subtracting nearly equal numbers
+# destroys most significant digits
+print((1e16 + 1) - 1e16)  # 0.0 — the 1 is completely lost!
+print(1e16 + 1 == 1e16)   # True — 1 is below float64 precision at this scale
+
+# Subtler example: small difference between close values
 a = 1.0000000001
 b = 1.0000000000
-
-# Expected: 1e-10, but...
-print(a - b)  # 1.000000082740371e-10 (error in last digits!)
+# Expected: 1e-10, but precision is lost in the last digits
+print(a - b)  # 1.000000082740371e-10 (error in last digits)
 ```
 
 ## Practical Guidelines

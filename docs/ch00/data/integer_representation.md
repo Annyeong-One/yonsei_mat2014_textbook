@@ -38,7 +38,7 @@ Most computers use **two's complement** to represent negative numbers.
 
 ### How Two's Complement Works
 
-The most significant bit (MSB) has negative weight:
+In two's complement interpretation, the most significant bit (MSB) contributes −2^(n−1) to the value. This is a mathematical interpretation of the bit pattern — the hardware still performs ordinary binary addition on all bits; the "negative weight" is how we interpret the result:
 
 ```
 8-bit signed integer (int8)
@@ -73,6 +73,8 @@ Add 1:      1111 1011  (-5)
 Verify: -128 + 64 + 32 + 16 + 8 + 0 + 2 + 1 = -5 ✓
 ```
 
+**Why does this work?** Two's complement represents −x as 2ⁿ − x (where n is the bit width). For 8-bit: −5 = 256 − 5 = 251 = `11111011`. Inverting all bits of x gives (2ⁿ − 1 − x), and adding 1 gives exactly 2ⁿ − x. This is why the "invert and add 1" trick works — it's not arbitrary, it follows directly from the definition.
+
 ### Why Two's Complement?
 
 1. **Single zero**: No separate +0 and -0
@@ -91,6 +93,26 @@ Addition works without special cases:
   + 0000 0001  (1)
   ──────────────
   1 0000 0000  (0, carry discarded)
+```
+
+### Overflow in Two's Complement
+
+When a result exceeds the representable range, the bit pattern wraps around. This is the most important property of fixed-width integers:
+
+```
+  0111 1111  (127, max int8)
++ 0000 0001  (1)
+───────────
+  1000 0000  (-128!)
+
+The carry into the MSB flips the sign bit — the result wraps
+from the maximum positive value to the minimum negative value.
+```
+
+```python
+import numpy as np
+x = np.int8(127)
+print(x + 1)  # -128 (wrapped!)
 ```
 
 ## Python's Integers
@@ -114,16 +136,43 @@ print(sys.getsizeof(2**100)) # 44 bytes
 print(sys.getsizeof(2**1000)) # 160 bytes
 ```
 
+### How Python Actually Stores Integers
+
+Unlike C/NumPy which use two's complement, Python stores integers as **sign + magnitude** — the sign and the absolute value are kept separately:
+
+```
+Python int object in memory:
+┌─────────────┬───────────┬──────────────────┐
+│  ob_refcnt  │  ob_size  │   ob_digit[]     │
+│ (ref count) │ (+ or -)  │ (magnitude only) │
+└─────────────┴───────────┴──────────────────┘
+```
+
+- `ob_size` is negative if the number is negative, positive if positive
+- `ob_digit[]` stores the magnitude as an array of **base-2³⁰ chunks** (not decimal digits or single bits) — each element holds up to 30 bits of the integer's magnitude
+- The sign is carried separately — more like how humans write `−5`
+
+So `-5` is stored as: sign = negative, magnitude = 5. Not two's complement.
+
+| | Storage | Sign | Overflow |
+|---|---|---|---|
+| **Two's complement** (C/NumPy) | Single bit pattern, sign baked in | MSB has negative weight | Possible |
+| **Python int** | Sign field + magnitude separately | `ob_size` positive/negative | Never |
+
+In two's complement, `-5` and `5` look completely different in bits (`1111 1011` vs `0000 0101`). In Python, they have the **same magnitude** (`ob_digit = [5]`), just opposite `ob_size` signs.
+
 ### Python's Two's Complement Convention
 
-Python conceptually uses infinite-width two's complement:
+`bin(-5)` returns `'-0b101'` — the `'-'` prefix is just a **display convention**, not the internal storage. Python's `bin()` reads the sign field and prepends `'-'` to the magnitude.
+
+However, Python *simulates* infinite-width two's complement when doing bitwise operations — it computes results *as if* the number were stored in two's complement with infinite width. A key mental model: **negative numbers behave as if they have infinitely many leading 1 bits** (e.g. −1 is conceptually `...11111111`, −5 is `...11111011`):
 
 ```python
-# Negative numbers have infinite leading 1s
+# bin() shows sign-magnitude display, not internal storage
 print(bin(-1))   # '-0b1' but conceptually ...1111111
 print(bin(-5))   # '-0b101' but conceptually ...1111011
 
-# Bitwise operations work as expected
+# Bitwise ops simulate infinite two's complement
 print(-1 & 0xFF)  # 255 (mask to 8 bits)
 print(-5 & 0xFF)  # 251 (0b11111011)
 ```
@@ -157,7 +206,7 @@ print(np.iinfo(np.uint8))  # min=0, max=255
 ```python
 import numpy as np
 
-# NumPy wraps on overflow (like C)
+# NumPy wraps on overflow (like C) — silently, with no warning
 x = np.int8(127)
 print(x + 1)  # -128 (wrapped!)
 
@@ -168,24 +217,7 @@ print(y + 1)  # 0 (wrapped!)
 print(127 + 1)  # 128 (correct)
 ```
 
-### Overflow Detection
-
-```python
-import numpy as np
-import warnings
-
-# Enable overflow warnings
-old_settings = np.seterr(over='warn')
-
-x = np.int8(127)
-with warnings.catch_warnings(record=True) as w:
-    warnings.simplefilter("always")
-    result = x + np.int8(1)
-    if w:
-        print("Overflow occurred!")
-
-np.seterr(**old_settings)
-```
+> **Note**: NumPy integer overflow is silent — there is no built-in warning mechanism for integer wraparound (unlike floating-point). Always validate your data range before choosing a dtype.
 
 ## Bit Manipulation with Integers
 
@@ -240,6 +272,8 @@ print(bin(toggle_bit(x, 4)))  # 0b11000110
 import numpy as np
 
 # Memory considerations
+# Memory considerations (rough estimates — sys.getsizeof counts
+# the integer object only, not list pointers or list array overhead)
 data = list(range(1_000_000))
 
 # Python list of ints: ~28 MB
@@ -273,6 +307,8 @@ print(prices)  # [30000 35000 40000] - Correct
 
 ## Summary
 
+> **Two ways Python handles negative integers**: Python actually has two different representations depending on context. Native Python integers use **sign + magnitude** (the sign and absolute value stored separately) — this enables arbitrary precision and no overflow. NumPy integers use **C-style two's complement** — because under the hood, NumPy runs C code operating directly on fixed-width bit patterns. Same Python environment, two fundamentally different internal representations depending on whether you're using `int` or `np.int8/int32/int64`.
+
 | Representation | Description | Example |
 |----------------|-------------|---------|
 | **Unsigned** | Non-negative only, full range | uint8: 0 to 255 |
@@ -282,7 +318,7 @@ print(prices)  # [30000 35000 40000] - Correct
 
 Key points:
 
-- Two's complement is universal for signed integers
+- Two's complement is the dominant representation for signed integers in modern hardware
 - Python ints never overflow (but use more memory)
 - NumPy ints overflow silently—choose appropriate dtype
 - Bit width determines range and memory usage

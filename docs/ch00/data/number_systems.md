@@ -2,7 +2,7 @@
 
 ## Number Systems Overview
 
-Computers use different bases for different purposes:
+Computers store data in binary, but programmers often use other bases (decimal, hexadecimal, octal) to represent or interpret that data:
 
 | Base | Name | Digits | Use Case |
 |------|------|--------|----------|
@@ -14,7 +14,7 @@ Computers use different bases for different purposes:
 
 ### Place Values
 
-Each position represents a power of 2:
+Binary is a positional number system like decimal — each digit's value depends on its position. Each position represents a power of 2:
 
 ```
 Binary number: 1 0 1 1 0 1
@@ -139,6 +139,7 @@ print(oct(493))  # '0o755'
 
 # File permissions example
 # rwxr-xr-x = 111 101 101 = 7 5 5
+# r=4, w=2, x=1 → owner: 4+2+1=7, group: 4+0+1=5, others: 4+0+1=5
 import os
 os.chmod('file.txt', 0o755)
 ```
@@ -146,6 +147,8 @@ os.chmod('file.txt', 0o755)
 ## Conversion Between Bases
 
 ### Quick Reference Table
+
+(Binary values use leading zeros for 4-bit alignment where applicable.)
 
 | Decimal | Binary | Hex | Octal |
 |---------|--------|-----|-------|
@@ -267,6 +270,7 @@ print(hex_strings)  # ['0a', 'ff', '3f']
 
 # Binary representation of floats
 x = np.float32(1.5)
+# Reinterpret the float's memory as a 32-bit integer to inspect raw bits
 print(format(x.view(np.uint32), '032b'))
 # 00111111110000000000000000000000
 ```

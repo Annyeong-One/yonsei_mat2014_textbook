@@ -11,7 +11,99 @@ Without virtual memory:
 
 Virtual memory solves all of these.
 
-## What is Virtual Memory?
+## Who Controls Virtual Memory: OS or CPU?
+
+Both — they play different roles and neither can do it alone.
+
+```
+Virtual Memory = OS (policy) + CPU/MMU (mechanism)
+```
+
+The **CPU/MMU** handles the mechanical part — actual address translation at hardware speed:
+
+```
+Every single memory access:
+
+Virtual address
+      │
+      ▼
+   MMU (hardware)
+      │  looks up page table
+      ▼
+Physical address → RAM
+
+This happens billions of times per second
+→ must be hardware, no time for OS involvement
+```
+
+The **OS** handles the policy part — decisions and setup:
+
+```
+OS is responsible for:
+
+- Creating page tables when a process starts
+- Deciding which pages to swap out when RAM is full
+- Handling page faults (loading pages back from disk)
+- Setting permissions (R/W/X) on each page
+- Destroying page tables when process exits
+```
+
+| Responsibility | Who |
+|---|---|
+| Building and maintaining page tables | OS |
+| Actually translating addresses | MMU (CPU) |
+| Deciding what to swap out | OS |
+| Catching invalid accesses | MMU raises exception → OS handles it |
+| TLB caching of translations | MMU (CPU) |
+| Loading swapped pages back | OS |
+
+Neither works without the other — the MMU needs the OS to set up the page tables it reads from, and the OS needs the MMU to enforce the isolation it designed.
+
+### The Broader Pattern: OS as Stage, CPU as Performer
+
+This division generalizes to the entire relationship between OS and CPU:
+
+```
+Virtual Memory:
+  OS  → builds page tables, sets permissions
+  MMU → does every address translation
+
+Cache:
+  OS  → allocates memory regions
+  Cache Controller → does every promotion/eviction
+
+Interrupts:
+  OS  → registers interrupt handlers
+  CPU → detects the interrupt, jumps to handler
+
+Process Scheduling:
+  OS  → decides which process runs next
+  CPU → actually executes the instructions
+
+Boot:
+  BIOS/UEFI → sets up the working environment
+  CPU        → executes every instruction
+```
+
+The OS is a **configuration and coordination layer** — it makes decisions, sets up tables, registers handlers, and manages resources, but only runs when something needs to be decided or handled. The vast majority of actual work — billions of operations per second — is done by the CPU running autonomously within the environment the OS prepared.
+
+```
+OS  = rulebook + referee
+      (runs occasionally, when decisions needed)
+
+CPU = player
+      (runs constantly, does the actual work)
+```
+
+The OS is in control in the sense that it *defines the rules*. The CPU is in control in the sense that it *does everything*. They are complementary, not competing.
+
+### Every Modern OS Uses Virtual Memory
+
+Virtual memory is considered a fundamental requirement of any modern OS — Windows, Linux, macOS, iOS, Android all use it without exception. It became standard in the 1980s–90s as multitasking OSes took over, and today the MMU is built directly into CPU silicon because the hardware assumes virtual memory will always be in use.
+
+The only exceptions are bare-metal embedded systems and some real-time OSes (RTOS) where there is barely an "OS" in the traditional sense — programs run directly on hardware with no abstraction layer.
+
+
 
 **Virtual memory** creates an abstraction where each process thinks it has its own private, contiguous address space.
 

@@ -2,19 +2,22 @@
 
 ## The Problem: Characters Are Not Numbers
 
-Computers store numbers, but humans communicate with text. **Character encoding** is the mapping between characters and numbers.
+Computers store bits. Character encoding defines how sequences of bits represent characters — it is the agreed-upon convention between character and number.
 
 ```
 'A' → 65 → 0100 0001
  ↑     ↑       ↑
 char  number  bits
 
-This mapping is arbitrary—just an agreed-upon convention.
+This mapping is a convention agreed upon by standards bodies.
+Many assignments follow design constraints: digits are contiguous
+(48–57), uppercase letters contiguous (65–90), lowercase contiguous
+(97–122) — which is why ord('a') - ord('A') = 32 always holds.
 ```
 
 ## ASCII: The Foundation
 
-**ASCII** (American Standard Code for Information Interchange) was the original standard, using 7 bits for 128 characters:
+**ASCII** (American Standard Code for Information Interchange) was the original standard, defining 128 characters using 7 bits. In practice, ASCII characters are always stored in 8-bit bytes — the high bit is zero, leaving room for the extended encodings that came later:
 
 ```
 ASCII Table (partial)
@@ -57,9 +60,9 @@ ASCII only covers English:
 - No emoji (😀)
 - Only 128 characters total
 
-## Extended ASCII and Code Pages
+## Incompatible 8-bit Encodings
 
-Various 8-bit extensions added 128 more characters:
+Many incompatible 8-bit encodings extended ASCII by using the high bit (values 128–255) for additional characters. There is no single "Extended ASCII" standard — each encoding made different choices:
 
 ```
 Latin-1 (ISO-8859-1): Western European
@@ -67,7 +70,7 @@ Latin-2 (ISO-8859-2): Central European
 Windows-1252: Microsoft's Western European
 ```
 
-**Problem**: Same byte could mean different characters in different encodings!
+**Problem**: The same byte could mean different characters in different encodings!
 
 ```
 Byte 0xE9:
@@ -79,7 +82,12 @@ Byte 0xE9:
 
 ## Unicode: Universal Character Set
 
-**Unicode** assigns a unique number (code point) to every character in every language:
+**Unicode** assigns a unique number (code point) to every character in every language. It is important to distinguish:
+
+- **Unicode** — a *character set*: defines which characters exist and their code points
+- **UTF-8 / UTF-16 / UTF-32** — *encodings*: define how those code points are stored as bytes
+
+This distinction matters: you can have a Unicode code point without knowing how it is encoded into bytes.
 
 ```
 Unicode Code Points (examples)
@@ -107,9 +115,13 @@ print('\U0001F600')  # 😀 (note: uppercase U for >4 hex digits)
 print(hex(ord('中')))  # '0x4e2d'
 print(hex(ord('😀')))  # '0x1f600'
 
-# Python strings are Unicode
+# Python strings are sequences of Unicode code points
 text = "Hello, 世界! 🌍"
-print(len(text))  # 12 (characters, not bytes)
+print(len(text))  # 12 (code points, not bytes)
+# Note: len() counts code points, not user-perceived characters.
+# Some visible characters are composed of multiple code points
+# (e.g. é can be e + combining accent = 2 code points but looks like 1).
+# See the full chapter for grapheme clusters.
 ```
 
 ## UTF-8: The Dominant Encoding
@@ -128,20 +140,22 @@ UTF-8 Encoding Scheme
 └──────────────────┴───────────────────────────────────────┘
 ```
 
+The leading bits of the first byte tell you how many bytes follow: `0` means 1 byte, `110` means 2, `1110` means 3, `11110` means 4. All **continuation bytes** start with `10xxxxxx` — this pattern never appears as a leading byte, which is what makes UTF-8 **self-synchronizing**: given any byte in a stream, you can immediately tell whether it is a leading byte or a continuation byte, so you can find character boundaries without scanning from the start.
+
 ### UTF-8 Examples
 
 ```python
-# ASCII characters: 1 byte
-'A'.encode('utf-8')  # b'A' (1 byte: 0x41)
+# ASCII characters: 1 byte (UTF-8 is backward-compatible with ASCII)
+'A'.encode('utf-8')   # b'A'           — 1 byte: 0x41 = 65
 
-# Accented: 2 bytes
-'é'.encode('utf-8')  # b'\xc3\xa9' (2 bytes)
+# Accented Latin: 2 bytes
+'é'.encode('utf-8')   # b'\xc3\xa9'   — 2 bytes: U+00E9
 
-# CJK: 3 bytes
-'中'.encode('utf-8')  # b'\xe4\xb8\xad' (3 bytes)
+# CJK (Chinese/Japanese/Korean): 3 bytes
+'中'.encode('utf-8')  # b'\xe4\xb8\xad' — 3 bytes: U+4E2D
 
-# Emoji: 4 bytes
-'😀'.encode('utf-8')  # b'\xf0\x9f\x98\x80' (4 bytes)
+# Emoji: 4 bytes (outside the Basic Multilingual Plane)
+'😀'.encode('utf-8')  # b'\xf0\x9f\x98\x80' — 4 bytes: U+1F600
 ```
 
 ### Why UTF-8 Dominates
@@ -157,14 +171,19 @@ UTF-8 Encoding Scheme
 
 ```python
 # Encode: str → bytes
+# .encode() converts Unicode characters into raw bytes using the given encoding rule
 text = "Hello, 世界!"
 encoded = text.encode('utf-8')
-print(encoded)  # b'Hello, \xe4\xb8\x96\xe7\x95\x8c!'
-print(len(text), len(encoded))  # 10, 14 (characters vs bytes)
+print(encoded)        # b'Hello, \xe4\xb8\x96\xe7\x95\x8c!'
+                      # b'...' prefix: this is a bytes object (sequence of 8-bit bytes)
+                      # ASCII chars shown as-is; non-ASCII shown as hex escapes (\xNN)
+print(len(text))      # 10  — number of Unicode characters
+print(len(encoded))   # 14  — number of bytes (世 = 3 bytes, 界 = 3 bytes in UTF-8)
 
 # Decode: bytes → str
+# .decode() reverses the process: raw bytes → Unicode string using the same encoding rule
 decoded = encoded.decode('utf-8')
-print(decoded)  # Hello, 世界!
+print(decoded)        # Hello, 世界!
 ```
 
 ### Handling Encoding Errors
@@ -202,30 +221,30 @@ print(locale.getpreferredencoding())  # e.g., 'UTF-8'
 
 ## Common Encodings
 
-| Encoding | Bytes per Char | Use Case |
-|----------|---------------|----------|
+| Encoding | Bytes per Code Point | Use Case |
+|----------|---------------------|----------|
 | ASCII | 1 | English only, legacy |
 | UTF-8 | 1-4 | Web, Linux, general |
 | UTF-16 | 2-4 | Windows internal, Java |
 | UTF-32 | 4 | Fixed width, processing |
 | Latin-1 | 1 | Western European legacy |
 
-## Character vs Byte Length
+## Code Point vs Byte Length
 
 ```python
 import sys
 
 text = "Hello"
-print(len(text))  # 5 characters
-print(len(text.encode('utf-8')))  # 5 bytes (ASCII)
+print(len(text))               # 5  — 5 code points
+print(len(text.encode('utf-8')))  # 5  — 5 bytes (ASCII: 1 byte per code point)
 
 text = "世界"
-print(len(text))  # 2 characters
-print(len(text.encode('utf-8')))  # 6 bytes (3 each)
+print(len(text))               # 2  — 2 code points
+print(len(text.encode('utf-8')))  # 6  — 6 bytes (CJK: 3 bytes per code point)
 
 text = "😀😀"
-print(len(text))  # 2 characters
-print(len(text.encode('utf-8')))  # 8 bytes (4 each)
+print(len(text))               # 2  — 2 code points
+print(len(text.encode('utf-8')))  # 8  — 8 bytes (emoji: 4 bytes per code point)
 ```
 
 ## NumPy and Strings
@@ -233,17 +252,18 @@ print(len(text.encode('utf-8')))  # 8 bytes (4 each)
 ```python
 import numpy as np
 
-# Fixed-width Unicode strings
+# NumPy stores Unicode strings as fixed-width UTF-32 internally
+# (4 bytes per code point), regardless of the actual characters used
 arr = np.array(['hello', 'world', '世界'])
-print(arr.dtype)  # '<U5' (Unicode, max 5 chars)
+print(arr.dtype)  # '<U5' (Unicode, max 5 code points, 4 bytes each = 20 bytes per element)
 
 # Bytes
 arr_bytes = np.array([b'hello', b'world'])
 print(arr_bytes.dtype)  # '|S5' (byte string, 5 bytes)
 
 # Memory usage differs significantly
-unicode_arr = np.array(['a'] * 1000)  # 4 bytes per char (UTF-32 internally)
-byte_arr = np.array([b'a'] * 1000)    # 1 byte per char
+unicode_arr = np.array(['a'] * 1000)  # 4 bytes per code point (UTF-32 internally)
+byte_arr = np.array([b'a'] * 1000)    # 1 byte per element
 ```
 
 ## Common Pitfalls
@@ -287,8 +307,10 @@ Key points:
 
 - Always know your encoding (especially for files)
 - UTF-8 is the default choice for most purposes
-- String length ≠ byte length for non-ASCII text
+- Unicode is a character set; UTF-8/16/32 are encodings of that character set
+- Code point length ≠ byte length for non-ASCII text
+- `len()` counts Unicode code points, not user-perceived characters (grapheme clusters)
 - Use `encoding='utf-8'` explicitly in file operations
-- Python 3 strings are Unicode; bytes are raw data
+- Python 3 strings are sequences of Unicode code points; bytes are raw data
 
 This is a preview—see Chapter 2 (str ASCII and Unicode, str UTF-8 Encoding) for complete details.

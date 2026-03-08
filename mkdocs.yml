@@ -40,8 +40,8 @@ nav:
             - Bits and Bytes: ch00/data/bits_bytes.md
             - Binary and Hexadecimal: ch00/data/number_systems.md
             - Integer Representation: ch00/data/integer_representation.md
-            - Floating Point (IEEE 754 Preview): ch00/data/floating_point_preview.md
-            - Character Encoding Preview: ch00/data/character_encoding_preview.md
+            - Floating Point: ch00/data/floating_point_representation.md
+            - Character Encoding: ch00/data/character_encoding.md
 
     - 1 Python Basics:
         - Chapter Overview: ch01/index.md

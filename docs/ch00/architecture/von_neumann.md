@@ -40,9 +40,11 @@ The communication pathway connecting CPU and memory:
 
 - **Address Bus**: Specifies which memory location to access
 - **Data Bus**: Transfers actual data between CPU and memory
-- **Control Bus**: Carries signals like "read" or "write"
+- **Control Bus**: Carries coordination signals including read, write, interrupt request, bus grant, clock, and reset — "read" and "write" are the most commonly cited examples, but the control bus is a collection of many dedicated signaling lines
 
 > **Note**: The control bus signals "read" and "write" are sometimes compared to Unix `rwx` permissions, but the analogy breaks down at **execute** (`x`). Execute is a software/OS abstraction — at the hardware level, the CPU doesn't receive an "execute" signal over the bus. Instead, it simply *fetches* an instruction (a read), and the CPU's internal logic decodes and runs it. There is no separate "execute" bus signal.
+>
+> The control bus also carries many other signals beyond read/write, including: **clock** (synchronizes all components), **interrupt request/acknowledge** (peripherals signal the CPU and receive confirmation), **bus request/grant** (arbitrates access in multi-master scenarios such as DMA), **reset** (forces the system to its initial state), and **bus ready/wait** (lets slow devices stall the CPU). "Read" and "write" are the entry-point examples — not an exhaustive list.
 
 ### Input/Output
 
@@ -61,12 +63,12 @@ The CPU operates in a continuous loop:
 ```
 
 1. **Fetch**: Read the next instruction from memory (address stored in Program Counter)
-
-   > **What "fetch" means**: The CPU retrieves the instruction stored at the memory address pointed to by the Program Counter (PC), loads it into the Instruction Register (IR), then increments the PC. Think of the PC as a bookmark — fetch is literally fetching the next instruction from that bookmark location.
 2. **Decode**: Control Unit interprets what the instruction means
 3. **Execute**: ALU or other components perform the operation
 4. **Writeback**: Results are written back to registers or memory
 5. **Repeat**: Program Counter increments, cycle continues
+
+> **What "fetch" means**: The CPU retrieves the instruction stored at the memory address pointed to by the Program Counter (PC), loads it into the Instruction Register (IR), then increments the PC. Think of the PC as a bookmark — fetch is literally fetching the next instruction from that bookmark location.
 
 Conceptually, instructions execute one at a time in sequence. In practice, modern CPUs use **pipelining**, **superscalar execution**, and **out-of-order execution** to process multiple instructions simultaneously — but the programmer-visible model remains sequential.
 
@@ -83,7 +85,7 @@ This creates a bottleneck because the CPU must wait for memory transfers, and in
 
 ### Harvard Architecture: The Contrast
 
-The **Harvard architecture** separates instruction memory from data memory, eliminating the competition between the two. Most microcontrollers use a pure Harvard design. Modern desktop CPUs use a **modified Harvard architecture**: physically they follow Von Neumann (unified RAM), but the L1 cache is split into separate instruction and data caches, recovering much of Harvard's benefit.
+The **Harvard architecture** separates instruction memory from data memory, eliminating the competition between the two. Most microcontrollers — small, independent computers dedicated to a single specific task — use a pure Harvard design. Modern desktop CPUs use a **modified Harvard architecture**: physically they follow Von Neumann (unified RAM), but the L1 cache is split into separate instruction and data caches, recovering much of Harvard's benefit.
 
 The three designs can be compared as a spectrum:
 

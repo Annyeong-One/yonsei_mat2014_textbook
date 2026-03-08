@@ -65,12 +65,60 @@ ADD RAX, RBX            ; Add in register
 MOV [x_address], RAX    ; Store result
 ```
 
-NumPy operations spend more time in registers:
+NumPy operations are far more register-efficient than pure Python — but the reason is more nuanced than "it uses registers."
 
-```python
-# NumPy: inner loop keeps values in registers
-c = a + b  # Compiled C code uses registers efficiently
+### How NumPy Handles Variable Array Sizes
+
+NumPy's internals are pre-compiled C code (already compiled when you `pip install numpy`, sitting as a `.so` / `.dll` binary). This C code uses loops with `n` passed at runtime:
+
+```c
+// Simplified NumPy internals (pre-compiled, size n varies at runtime)
+void add_arrays(double* a, double* b, double* c, int n) {
+    for (int i = 0; i < n; i++) {
+        c[i] = a[i] + b[i];
+    }
+}
 ```
+
+When you write `c = a + b` in Python, NumPy hands off to this compiled function immediately, passing the current array size as `n`. The compiled binary never changes — only `n` does.
+
+### Scalar Loop vs Vectorization
+
+The plain C loop above processes **one element at a time** — this is a **scalar loop**:
+
+```
+Scalar loop (one element per iteration):
+
+iteration 1: a[0] + b[0] → c[0]
+iteration 2: a[1] + b[1] → c[1]
+iteration 3: a[2] + b[2] → c[2]
+...
+```
+
+**Vectorization** goes further — it uses special CPU instructions called **SIMD (Single Instruction, Multiple Data)** that process multiple elements simultaneously in one instruction:
+
+```
+Vectorization (multiple elements per instruction):
+
+instruction 1: a[0], a[1], a[2], a[3]
+             + b[0], b[1], b[2], b[3]
+             = c[0], c[1], c[2], c[3]   ← all 4 in ONE instruction
+
+instruction 2: a[4], a[5], a[6], a[7]
+             + b[4], b[5], b[6], b[7]
+             = c[4], c[5], c[6], c[7]   ← all 4 in ONE instruction
+```
+
+This is possible because SIMD registers are **wider** than normal registers:
+
+```
+Normal register:  64 bits  → holds 1 float64
+XMM register:    128 bits  → holds 2 float64s
+YMM register:    256 bits  → holds 4 float64s
+ZMM register:    512 bits  → holds 8 float64s
+```
+
+NumPy uses both — its compiled C code exploits SIMD instructions where possible. This is one of the core reasons NumPy is so fast: not just "compiled C" but "compiled C that uses SIMD vectorization." Your Python code never sees any of this — it just calls `c = a + b` and NumPy handles the rest invisibly.
 
 ## CPU Cache
 
