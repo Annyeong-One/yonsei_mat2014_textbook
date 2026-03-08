@@ -74,19 +74,19 @@ This works, but `enumerate()` is often cleaner.
 xs = [10, 20, 30]
 for i, x in enumerate(xs):
     print(i, x)
-# Overview
-# Overview
-# Overview
+# 0 10
+# 1 20
+# 2 30
 ```
 
-### 1. Starting from a
+### 1. Starting from a Different Index
 
 ```python
 for i, x in enumerate(xs, start=1):
     print(i, x)
-# Overview
-# Overview
-# Overview
+# 1 10
+# 2 20
+# 3 30
 ```
 
 ### 1. Common pattern:

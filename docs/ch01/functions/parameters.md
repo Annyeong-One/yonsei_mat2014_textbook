@@ -202,11 +202,11 @@ def create_user(name, age, *, email, phone):
 # Correct
 create_user("Alice", 25, email="alice@example.com", phone="123-456")
 
-# Error - email and
-# create_user("Alice",
+# Error - email and phone must be keyword arguments
+# create_user("Alice", 25, "alice@example.com", "123-456")  # TypeError
 ```
 
-### 1. Keyword-Only with
+### 1. Keyword-Only with *args
 
 ```python
 def process_data(*data, sort=False, reverse=False):
@@ -217,13 +217,13 @@ def process_data(*data, sort=False, reverse=False):
     return result
 
 print(process_data(3, 1, 4, 1, 5, sort=True))
-# Overview
+# [1, 1, 3, 4, 5]
 
 print(process_data(3, 1, 4, 1, 5, sort=True, reverse=True))
-# Overview
+# [5, 4, 3, 1, 1]
 ```
 
-## Positional-Only
+## Positional-Only Parameters
 
 Force parameters to be positional using `/`:
 
