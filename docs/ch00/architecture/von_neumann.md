@@ -132,10 +132,11 @@ Pure Von Neumann          Modified Harvard           Pure Harvard
 (unified everything)      (modern CPUs)              (separate everything)
 
 CPU                       CPU chip                   CPU
- └── one bus               ├── L1i (separate)         ├── instr bus
-      └── RAM              ├── L1d (separate)         │    └── instr RAM
-    (instr + data)         ├── L2  (unified)          └── data bus
-                           └── L3  (unified)               └── data RAM
+ └── one bus               ├── registers              ├── instr bus
+      └── RAM              ├── L1i (separate)         │    └── instr RAM
+    (instr + data)         ├── L1d (separate)         └── data bus
+                           ├── L2  (unified)               └── data RAM
+                           └── L3  (unified)
                           Outside CPU chip
                            └── RAM (unified)
 ```
