@@ -1,8 +1,7 @@
 # Chapter 0: Computer Fundamentals
 
-
 !!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+    This is an index/landing page and does not follow the five-section structure.
 
 This chapter covers the foundational hardware and data representation concepts that underpin all of computing and programming.
 
