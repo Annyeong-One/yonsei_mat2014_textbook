@@ -68,9 +68,9 @@ Most modern CPUs use a **modified Harvard architecture**: main memory remains un
 
 Python lists store an array of pointers, each pointing to a heap-allocated object at an arbitrary memory address. Iterating over a list means chasing pointers to scattered locations — poor spatial locality, frequent cache misses.
 
-NumPy arrays store values contiguously in a single memory block. Iterating over an array walks through consecutive addresses — excellent spatial locality, efficient cache prefetching.
+NumPy arrays store values contiguously in a single memory block. Walking through an array touches consecutive addresses — excellent spatial locality, efficient cache prefetching. But memory layout is only half the advantage. NumPy operations also run in compiled C loops that process raw values directly, bypassing the per-element cost of Python's interpreter: no boxing/unboxing, no dynamic type dispatch, no reference-count updates. The combination of cache-friendly layout and compiled execution is what makes NumPy dramatically faster.
 
-## Diagram
+## Examples
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -94,8 +94,6 @@ NumPy arrays store values contiguously in a single memory block. Iterating over 
           │  └───────────────┘  │  └──────────────┘
           └─────────────────────┘
 ```
-
-## Examples
 
 ### Object Size: Python int vs. Raw Value
 
@@ -121,13 +119,13 @@ arr = np.zeros(1_000_000, dtype=np.float64)
 lst = [float(i) for i in range(1_000_000)]  # distinct float objects
 
 arr_bytes = arr.nbytes
-lst_bytes = sys.getsizeof(lst) + sum(sys.getsizeof(v) for v in lst[:10]) // 10 * len(lst)
+lst_bytes = sys.getsizeof(lst) + sys.getsizeof(lst[0]) * len(lst)
 
 print(f"NumPy array: {arr_bytes / 1e6:.1f} MB (contiguous raw data)")
 print(f"Python list: ~{lst_bytes / 1e6:.1f} MB (pointers + scattered objects)")
 ```
 
-### Performance: Cache Locality in Action
+### Performance: Contiguous Memory and Compiled Loops
 
 ```python
 import numpy as np
@@ -135,7 +133,7 @@ import time
 
 n = 1_000_000
 arr = np.arange(n, dtype=np.float64)
-lst = list(range(n))
+lst = [float(i) for i in range(n)]  # same type (floats) for fair comparison
 
 start = time.perf_counter()
 _ = np.sum(arr)
@@ -148,4 +146,6 @@ list_time = time.perf_counter() - start
 print(f"NumPy sum: {numpy_time:.4f}s")
 print(f"List sum:  {list_time:.4f}s")
 print(f"Ratio:     {list_time / numpy_time:.0f}x slower")
+# Both cache locality (contiguous vs scattered) and compiled C execution
+# (no per-element Python overhead) contribute to the difference.
 ```
