@@ -1,5 +1,9 @@
 # \_\_init_subclass\_\_
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 `__init_subclass__` (Python 3.6+) is a hook that's called whenever a class is subclassed. It provides a simpler alternative to metaclasses for many common use cases.
 
 ```python

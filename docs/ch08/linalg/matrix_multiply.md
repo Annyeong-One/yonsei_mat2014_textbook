@@ -1,5 +1,9 @@
 # Matrix Multiplication
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 NumPy provides multiple ways to perform matrix multiplication.
 
 ## The @ Operator

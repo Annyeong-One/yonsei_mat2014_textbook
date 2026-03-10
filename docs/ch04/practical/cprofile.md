@@ -1,5 +1,9 @@
 # cProfile Module
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Python's built-in `cProfile` module provides a deterministic profiler that measures CPU time spent in each function. It's essential for identifying performance bottlenecks in your code.
 
 ---

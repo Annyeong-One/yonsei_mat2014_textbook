@@ -1,5 +1,9 @@
 # Case Methods
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 String case methods return new strings with modified letter casing. The original string remains unchanged due to immutability.
 
 ## Basic Transforms

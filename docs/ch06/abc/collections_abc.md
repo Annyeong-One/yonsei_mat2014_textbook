@@ -1,5 +1,9 @@
 # collections.abc
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 The `collections.abc` module provides abstract base classes for container types. These help you create classes that work with Python's built-in operations.
 
 ---

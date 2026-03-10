@@ -1,5 +1,9 @@
 # Installing Python
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Python is the primary language used throughout this book. This section explains common ways to install Python reliably on different systems.
 
 ---

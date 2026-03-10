@@ -1,5 +1,9 @@
 # String Comparison
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Python strings support comparison using standard operators. Comparisons follow lexicographic ordering based on Unicode code points.
 
 ## Equality Testing

@@ -1,5 +1,9 @@
 # nonlocal and Mutation
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 클로저에서 외부 변수를 수정하는 방법입니다.
 
 ## Rebinding vs Mutation

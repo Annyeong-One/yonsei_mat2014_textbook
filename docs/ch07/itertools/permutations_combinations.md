@@ -1,5 +1,9 @@
 # permutations and combinations
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 These functions generate all permutations (order matters) and combinations (order doesn't matter) from an iterable.
 
 ## permutations() - Order Matters

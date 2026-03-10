@@ -1,5 +1,9 @@
 # Closure Fundamentals
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 클로저는 자신이 정의된 스코프의 변수를 캡처하는 함수입니다.
 
 ## What is a Closure?

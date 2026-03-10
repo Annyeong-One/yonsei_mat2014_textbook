@@ -1,5 +1,9 @@
 # Reference Counting
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 CPython의 기본 메모리 관리 메커니즘입니다.
 
 ## CPython Mechanism

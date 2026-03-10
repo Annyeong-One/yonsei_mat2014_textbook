@@ -1,5 +1,9 @@
 # Complex Fundamentals
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Python has built-in support for complex numbers, representing values with real and imaginary parts. Complex numbers are essential for scientific computing, signal processing, and mathematical applications.
 
 ## Creating Complex

@@ -298,6 +298,7 @@ nav:
         - 2.15 Performance Basics:
             - Time vs Space Trade-offs: ch02/performance/tradeoffs.md
             - Big-O Notation: ch02/performance/big_o.md
+            - CPU Microarchitecture: ch02/performance/cpu_microarchitecture.md
             - Python Operation Costs: ch02/performance/operation_costs.md
             - timeit Module: ch02/performance/timeit.md
             - Reducing Operations (Python): ch02/performance/reducing_operations.py
@@ -311,6 +312,7 @@ nav:
             - Everything is an Object: ch03/foundations/everything_is_object.md
             - Methods and Attributes: ch03/foundations/methods_and_attributes.md
             - Python Execution Model: ch03/foundations/python_execution.md
+            - CPU Execution Model: ch03/foundations/cpu_execution_model.md
             - Code Object Anatomy (Python): ch03/foundations/code_object_anatomy.py
 
         - 3.2 Python's Object Model:
@@ -390,6 +392,9 @@ nav:
             - Caching Strategies: ch04/advanced_memory/caching_strategies.md
             - Memory Management: ch04/advanced_memory/memory_management.md
             - Memory Optimization: ch04/advanced_memory/memory_optimization.md
+            - Cache Lines: ch04/advanced_memory/cache_lines.md
+            - Cache Eviction: ch04/advanced_memory/cache_eviction.md
+            - Memory Locality: ch04/advanced_memory/memory_locality.md
             - __slots__: ch04/advanced_memory/slots.md
             - sys.getsizeof(): ch04/advanced_memory/getsizeof.md
             - tracemalloc: ch04/advanced_memory/tracemalloc.md
@@ -1480,6 +1485,7 @@ nav:
             - Threads vs Processes: ch14/concepts/threads_vs_processes.md
             - Deadlocks: ch14/concepts/deadlocks.md
             - Race Conditions: ch14/concepts/race_conditions.md
+            - Cache Coherency: ch14/concepts/cache_coherency.md
             - Global Interpreter Lock Tutorial (Python): ch14/concepts/gil_tutorial.py
 
         - 14.2 concurrent.futures:
@@ -1534,6 +1540,7 @@ nav:
             - System Bus: ch15/communication/system_bus.md
             - CPU-Memory Communication: ch15/communication/cpu_memory.md
             - CPU-GPU Communication: ch15/communication/cpu_gpu.md
+            - CPU Interconnects: ch15/communication/cpu_interconnects.md
             - I/O and Peripherals: ch15/communication/io_peripherals.md
 
         - 15.2 Networking Fundamentals:

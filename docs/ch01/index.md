@@ -1,5 +1,9 @@
 # Chapter 1: Python Basics
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 This chapter introduces Python from the ground up, covering installation, basic syntax, control flow, built-in functions, core data types, error handling, file I/O, and modules.
 
 ## 1.1 Getting Started

@@ -1,5 +1,9 @@
 # `len()`, `range()`,
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 These built-in functions appear everywhere in Python code:
 - `len()` tells you *how many* items are in a container.
 - `range()` generates integer sequences (commonly for loops).

@@ -1,5 +1,9 @@
 # Comments
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Comments are notes in your code that Python ignores. They explain what the code does, why it exists, or provide context for future readers.
 
 ---

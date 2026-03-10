@@ -1,5 +1,9 @@
 # Anti-Patterns and Pitfalls
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Common mistakes and gotchas to avoid in Python.
 
 ## Scope Pitfalls

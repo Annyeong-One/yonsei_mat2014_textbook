@@ -1,5 +1,9 @@
 # for...else and while...else
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Python's loop-else construct allows execution of a code block when a loop completes normally (without hitting a break statement). This unique feature is powerful for search patterns and validation logic.
 
 ---

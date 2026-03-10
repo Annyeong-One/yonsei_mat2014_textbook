@@ -1,5 +1,9 @@
 # Garbage Collection
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 순환 참조를 처리하는 Python의 가비지 컬렉터입니다.
 
 ## Generational GC

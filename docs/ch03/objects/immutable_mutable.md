@@ -1,5 +1,9 @@
 # Immutable vs Mutable
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Immutable Objects
 
 ### 1. Cannot Change

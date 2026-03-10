@@ -1,5 +1,9 @@
 # Type Conversions
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Python allows explicit conversion between built-in types. Understanding these conversions is essential for correct programs.
 
 ---

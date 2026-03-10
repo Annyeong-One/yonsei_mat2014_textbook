@@ -1,5 +1,9 @@
 # GPU Architecture
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## What is a GPU?
 
 A **Graphics Processing Unit (GPU)** is a specialized processor designed for parallel computation. Originally built for rendering graphics, GPUs now power machine learning, scientific computing, and data processing.

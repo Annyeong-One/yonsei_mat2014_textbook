@@ -1,5 +1,9 @@
 # Basic Annotations (int, str, list)
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Basic type annotations include primitive types and built-in collection types, forming the foundation of type hinting.
 
 ## Primitive Type Annotations

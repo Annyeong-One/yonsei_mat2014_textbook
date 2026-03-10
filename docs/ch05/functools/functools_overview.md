@@ -1,5 +1,9 @@
 # functools Module Overview
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 The `functools` module provides higher-order functions and operations on callable objects. It's essential for functional programming patterns in Python.
 
 ```python

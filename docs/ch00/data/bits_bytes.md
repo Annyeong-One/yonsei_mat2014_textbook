@@ -1,5 +1,9 @@
 # Bits and Bytes
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## The Bit: Foundation of Digital Computing
 
 A **bit** (binary digit) is the smallest unit of information in digital systems—it can be either 0 or 1.

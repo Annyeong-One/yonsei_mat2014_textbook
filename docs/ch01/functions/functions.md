@@ -1,5 +1,9 @@
 # Function Definition
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Introduction
 
 Functions are reusable blocks of code that perform specific tasks. They are fundamental to writing organized, maintainable, and efficient Python programs. Understanding how functions work, including the call stack mechanism, is essential for becoming a proficient Python programmer.

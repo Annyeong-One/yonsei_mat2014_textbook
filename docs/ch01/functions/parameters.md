@@ -1,5 +1,9 @@
 # Parameters and
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Introduction
 
 Parameters and return values are the primary mechanisms for data flow in and out of functions. Understanding how to effectively use different types of parameters and return values is crucial for writing flexible, reusable functions.

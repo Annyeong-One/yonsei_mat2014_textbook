@@ -1,5 +1,9 @@
 # Lazy Evaluation Patterns
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Lazy evaluation defers computation until values are actually needed. Generators and iterators enable lazy evaluation, reducing memory usage and enabling infinite sequences.
 
 ---

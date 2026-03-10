@@ -1,5 +1,9 @@
 # __post_init__ Method
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 The `__post_init__()` method is called after the generated `__init__()` completes, allowing you to perform additional initialization or validation.
 
 ---

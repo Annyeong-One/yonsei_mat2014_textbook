@@ -1,5 +1,9 @@
 # `__name__ == "__main__"`
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 The `__name__` variable distinguishes between running a file as a script and importing it as a module. The "main guard" pattern prevents code from running on import.
 
 ---

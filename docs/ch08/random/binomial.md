@@ -1,5 +1,9 @@
 # Binomial Distribution
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 The binomial distribution models the number of successes in a fixed number of independent trials.
 
 ## np.random.binomial

@@ -1,5 +1,9 @@
 # abs() and round()
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 The abs() function returns absolute values, while round() rounds numbers to a specified precision. Both are fundamental for numeric operations and data processing.
 
 ---

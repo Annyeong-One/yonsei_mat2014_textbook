@@ -1,5 +1,9 @@
 # Import Mechanics
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Python's `import` system allows code to be organized into reusable **modules**. Understanding how imports work is essential for structuring larger projects.
 
 ---

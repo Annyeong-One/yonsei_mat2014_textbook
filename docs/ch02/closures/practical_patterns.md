@@ -1,5 +1,9 @@
 # Practical Patterns
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 클로저의 실용적인 활용 패턴과 디버깅 방법입니다.
 
 ## Factory Functions

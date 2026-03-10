@@ -1,5 +1,9 @@
 # Indentation and Blocks
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Introduction
 
 Unlike most programming languages that use braces `{}` or keywords like `begin`/`end` to define code blocks, Python uses **indentation**. This is one of Python's most distinctive features and enforces readable code formatting.

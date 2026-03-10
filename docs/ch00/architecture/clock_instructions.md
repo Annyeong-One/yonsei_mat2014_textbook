@@ -1,5 +1,9 @@
 # Clock Speed and Instructions
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## The CPU Clock
 
 Every CPU's timing originates from a crystal oscillator that provides a stable base frequency (often 100 MHz). PLL (phase-locked loop) circuits multiply this base frequency to generate the CPU's operating frequency, synchronizing all CPU operations.

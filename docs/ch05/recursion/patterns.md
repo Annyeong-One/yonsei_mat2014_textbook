@@ -1,5 +1,9 @@
 # Recursion Patterns
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Types of Recursion
 
 ### 1. Direct Recursion

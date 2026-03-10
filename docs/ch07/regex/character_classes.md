@@ -1,5 +1,9 @@
 # Character Classes
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## What Is a Character Class?
 
 A **character class** (also called a character set) matches **one character** from a defined set. Character classes are enclosed in square brackets `[...]`.

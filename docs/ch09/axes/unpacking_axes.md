@@ -1,5 +1,9 @@
 # Unpacking Axes
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Python's tuple unpacking provides a clean way to name individual axes when creating subplots.
 
 ---

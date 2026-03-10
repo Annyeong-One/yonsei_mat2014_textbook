@@ -1,5 +1,9 @@
 # StopIteration Mechanics
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 StopIteration is the protocol-level signal that an iterator has no more values. Understanding StopIteration is fundamental to Python's iteration protocol and generator behavior.
 
 ---

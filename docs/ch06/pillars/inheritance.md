@@ -1,5 +1,9 @@
 # Inheritance Basics
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Inheritance allows classes to reuse and extend behavior. `super()` enables cooperative method calls.
 
 ---

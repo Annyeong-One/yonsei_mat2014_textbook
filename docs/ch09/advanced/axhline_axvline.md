@@ -1,5 +1,9 @@
 # Axhline and Axvline
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Add horizontal and vertical reference lines that span the entire axes.
 
 ---

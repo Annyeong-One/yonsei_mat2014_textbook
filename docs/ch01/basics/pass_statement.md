@@ -1,5 +1,9 @@
 # The pass Statement
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 The `pass` statement is Python's **null operation**—it does nothing when executed. While this might seem useless at first, `pass` is essential for creating syntactically valid code structures that you'll implement later.
 
 ---

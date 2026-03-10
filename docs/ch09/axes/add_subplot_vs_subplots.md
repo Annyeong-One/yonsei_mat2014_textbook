@@ -1,5 +1,9 @@
 # add_subplot vs subplots
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 Matplotlib provides two main ways to create axes within a figure:

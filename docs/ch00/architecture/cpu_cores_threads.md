@@ -1,21 +1,58 @@
 # CPU Cores and Threads
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
+Think of a modern CPU as a **factory with multiple assembly lines**. Each **core** is an independent assembly line capable of executing instructions. Multiple cores allow the processor to work on several tasks simultaneously. Within each core, the processor contains specialized machinery — execution units, caches, and pipelines — that transform instructions into completed work.
+
+However, these assembly lines do not operate in isolation. They share critical infrastructure such as memory bandwidth and last-level cache. Operating systems schedule **threads** onto these cores, and in Python, an additional constraint — the **Global Interpreter Lock (GIL)** — restricts how threads can run in parallel. This chapter explains the hardware and software layers that determine how your code actually runs on a modern CPU.
+
+```
+Layers of Execution
+
+┌───────────────────────────────┐
+│        Python Program         │
+│   (threads, asyncio, tasks)   │
+└───────────────▲───────────────┘
+                │
+┌───────────────┴───────────────┐
+│        Python Runtime         │
+│      (GIL, interpreter)       │
+└───────────────▲───────────────┘
+                │
+┌───────────────┴───────────────┐
+│        Operating System       │
+│   (threads, processes,        │
+│    scheduler, context switch) │
+└───────────────▲───────────────┘
+                │
+┌───────────────┴───────────────┐
+│            Hardware           │
+│   (cores, caches, pipelines)  │
+└───────────────────────────────┘
+```
+
 ## What Is a Core?
 
-A **core** is an independent execution engine capable of running its own instruction stream. Each core has its own:
+A modern CPU is not a single processor but a collection of independent execution engines called **cores**. Understanding what a core contains is essential for reasoning about parallel performance.
+
+A **core** is an independent execution engine capable of running its own instruction stream. Each core typically includes its own:
 
 - **Execution units** — arithmetic/logic units (ALUs), branch units, load/store units
 - **Registers** — fast on-chip storage holding the current thread's state
 - **L1 cache** — private, fastest cache (~4 cycles latency, typically 32–64 KB)
-- **L2 cache** — often private to each core, though some architectures share it across clusters (~12 cycles)
+- **L2 cache** — often private to each core, though some architectures share it among small groups of cores (~12 cycles)
 
 **L3 cache** is shared across all cores on the same chip, acting as a common pool (~40 cycles latency, typically 8–64 MB on desktops; server CPUs may exceed 100 MB). Cores also share **memory controllers** and the **on-chip interconnect**.
 
-Multiple cores can execute entirely different instructions at the same instant — this is **true parallelism**, though cores still compete for shared resources such as memory bandwidth, cache coherence traffic, and last-level cache capacity, which can limit scaling before Amdahl's Law alone would predict.
+Multiple cores can execute different instructions simultaneously — this is **true parallelism**.
+
+However, cores still compete for shared resources such as memory bandwidth and cache capacity. This contention can limit scaling before Amdahl's Law alone would predict.
 
 ## From Single-Core to Multi-Core
 
-Early CPUs had a single core. Clock frequency scaling delivered consistent performance gains through the 1990s, but by the mid-2000s this hit hard physical limits: higher frequencies require higher voltage, and power scales with $V^2 \times f$, so increasing clock speed rapidly increases power consumption. In practice this relationship often produces a near-cubic increase in power, which made further clock scaling impractical. The industry pivoted to putting **multiple cores on one chip** instead.
+Early CPUs had a single core. Clock frequency scaling delivered consistent performance gains through the 1990s, but by the mid-2000s this hit hard physical limits: dynamic power roughly scales with $V^2 \times f$. Increasing frequency typically requires higher voltage, which makes the practical power increase steeper than linear. This made further clock scaling impractical. The industry pivoted to putting **multiple cores on one chip** instead.
 
 ```
 Single-Core CPU (early 2000s)        Quad-Core CPU (today)
@@ -37,6 +74,8 @@ Single-Core CPU (early 2000s)        Quad-Core CPU (today)
 
 ## Physical vs Logical Cores
 
+Modern CPUs expose more "cores" to the operating system than actually exist in hardware. This happens because of a technique called simultaneous multithreading.
+
 ### Physical Cores
 
 Physical cores are the actual distinct hardware execution units. A quad-core CPU has four independent pipelines that can each execute a separate stream of instructions.
@@ -45,7 +84,7 @@ Physical cores are the actual distinct hardware execution units. A quad-core CPU
 
 **Simultaneous Multithreading (SMT)** — Intel's marketing name is **Hyperthreading** — allows one physical core to present itself to the operating system as two logical cores.
 
-The key insight: a single core's execution units are rarely 100% utilized. A thread often stalls waiting for data from memory (a cache miss can cost 200+ cycles). SMT exploits these idle cycles by maintaining two separate **architectural states** (register files, program counters, stack pointers) and switching between them in hardware:
+The key insight is that a single core's execution units are rarely fully utilized. A thread often stalls waiting for data from memory (a cache miss can cost 200+ cycles). SMT exploits these idle cycles by maintaining two separate **architectural states** (register files, program counters, stack pointers) and switching between them in hardware:
 
 ```
 Physical Core with SMT (Hyperthreading)
@@ -62,38 +101,39 @@ Physical Core with SMT (Hyperthreading)
   │           └──────────┬──────────┘             │
   │                      ▼                        │
   │  ┌─────────────────────────────────────────┐  │
+  │  │         Shared Issue Queue              │  │
+  │  └──────────────────┬──────────────────────┘  │
+  │  ┌──────────────────┴──────────────────────┐  │
   │  │       Shared Execution Units            │  │
   │  │  (ALUs, branch unit, load/store unit)   │  │
   │  └─────────────────────────────────────────┘  │
   │  ┌─────────────────────────────────────────┐  │
-  │  │       Shared L2 Cache                   │  │
+  │  │          Shared L1 Cache                │  │
+  │  └─────────────────────────────────────────┘  │
+  │  ┌─────────────────────────────────────────┐  │
+  │  │          Shared L2 Cache                │  │
   │  └─────────────────────────────────────────┘  │
   └───────────────────────────────────────────────┘
 ```
 
-> **Important**: L1 cache is shared between the two threads, though the CPU may dynamically balance cache usage between them. Each thread's private registers are truly separate. The execution units — ALUs, branch units — are shared and scheduled between threads in hardware.
+> **Important**: Both SMT threads run on the same physical core and therefore share the core's private resources, including the L1 cache, execution units, instruction pipeline, and reorder buffer. Each thread's private registers (including program counter and stack pointer) are truly separate. The shared execution units — ALUs, branch units, load/store units — are scheduled between threads in hardware.
 
 Both threads' instructions enter the pipeline, and the scheduler can issue instructions from either thread depending on which has ready instructions — when Thread 0 stalls on a cache miss, the core fills those slots with Thread 1's instructions, keeping execution units busy. In practice, SMT yields **15–30% more throughput** for mixed workloads, not a full 2×. Threads also compete for internal resources such as reorder buffer entries, instruction fetch bandwidth, and execution ports. For some workloads (where both threads compete heavily for these resources or for cache), SMT can even reduce performance.
 
 ```python
-import psutil
-
-# Distinguish physical from logical cores
-print(f"Physical cores: {psutil.cpu_count(logical=False)}")
-print(f"Logical cores:  {psutil.cpu_count(logical=True)}")
-
-# On a 4-core/8-thread CPU (e.g., Intel Core i7):
-# Physical cores: 4
-# Logical cores:  8
-
-# Note: os.cpu_count() returns logical cores, same as psutil.cpu_count(logical=True)
 import os
-print(os.cpu_count())  # 8  ← logical, not physical
+
+# os.cpu_count() returns the number of logical cores (including hyperthreads)
+print(f"Logical cores: {os.cpu_count()}")  # e.g., 8 on a 4-core/8-thread CPU
+
+# There is no standard-library function that returns only physical cores.
+# The distinction is conceptual: a 4-core/8-thread CPU has 4 physical cores,
+# each presenting 2 logical cores via SMT.
 ```
 
 ## Concurrency vs Parallelism
 
-These terms are frequently conflated but describe fundamentally different things.
+These terms are frequently conflated but describe fundamentally different things. Understanding the distinction is essential for reasoning about multi-threaded programs.
 
 ### Concurrency
 
@@ -137,6 +177,8 @@ A useful framing: **concurrency is about dealing with many things at once; paral
 
 ## Threads vs Processes
 
+Operating systems provide two primary ways to run multiple streams of execution: processes and threads. They differ in how memory and resources are shared.
+
 ### Process
 
 A **process** is an independent execution environment with its own:
@@ -176,15 +218,17 @@ Process (shared address space)
 └──────────────────────────────────────────────────┘
 ```
 
-**Trade-off**: threads are cheap to create and communicate easily through shared memory, but that shared memory requires careful synchronization (locks, semaphores) to avoid **race conditions**. Processes are safer (isolated by default) but inter-process communication has higher overhead.
+**Trade-off**: threads are cheaper to create and communicate easily through shared memory, but that shared memory requires careful synchronization (locks, semaphores) to avoid **race conditions**. Processes are safer (isolated by default) but inter-process communication has higher overhead.
 
 ## Python and the GIL
 
+Python's execution model adds an additional constraint on parallelism. Even on a multi-core machine, Python threads cannot normally execute CPU-bound code in parallel.
+
 ### The Global Interpreter Lock
 
-CPython (the standard Python implementation) uses a **Global Interpreter Lock (GIL)**: a mutex that ensures only one thread executes Python bytecode at any moment, even on a multi-core machine.
+CPython (the standard Python implementation) uses a **Global Interpreter Lock (GIL)**: a mutex that ensures only one thread executes Python bytecode at a time, even on a multi-core machine. Native extensions that release the GIL can run in parallel across cores.
 
-The GIL exists because CPython's memory management (reference counting) is not thread-safe. Rather than making every reference count update atomic — which would be expensive — CPython serializes all execution through one lock.
+The GIL exists primarily because CPython's reference-counting memory management would otherwise require atomic updates on every object access.
 
 The consequence for CPU-bound workloads is stark:
 
@@ -208,7 +252,7 @@ The GIL is **automatically released** in two situations:
 
 ### Python 3.13+: The Free-Threaded Build
 
-Python 3.13 introduced an **experimental no-GIL build** (`python3.13t`), and Python 3.12 added per-subinterpreter GILs. These changes are opt-in and the ecosystem is still adapting, but they signal the direction: the GIL is on its way out for CPU-bound parallelism.
+Python 3.13 introduced an **experimental no-GIL build** (`python3.13t`), and Python 3.12 added per-subinterpreter GILs. These changes are opt-in and the ecosystem is still adapting, but they suggest a long-term direction toward removing the GIL for CPU-bound parallelism.
 
 ### Workarounds (Current Practice)
 
@@ -254,12 +298,12 @@ async def main(urls):
 ```python
 import multiprocessing
 
-def compute(data_chunk):
-    return heavy_calculation(data_chunk)
+def compute(x):
+    return x * x
 
 if __name__ == "__main__":
     with multiprocessing.Pool(processes=4) as pool:
-        results = pool.map(compute, data_chunks)
+        results = pool.map(compute, range(100))
 ```
 
 **For CPU-bound numerical work**: NumPy releases the GIL around its C-level kernels and links against multi-threaded BLAS (e.g., OpenBLAS, MKL), so operations like matrix multiplication use multiple cores automatically.
@@ -287,16 +331,15 @@ OS Scheduler (run queue → cores)
       └──────┴──────┴──────┘
 ```
 
-The scheduler also handles **context switches**: saving the register state of a running thread and restoring another's. Context switches are cheap within the same process (shared address space, no TLB flush). Process switches are more expensive, though modern CPUs use **PCID/ASID tagging** to reduce TLB flushing costs. In both cases, the indirect costs — cache pollution and branch predictor disruption — often matter more than the direct register save/restore.
+The scheduler also handles **context switches**: saving the register state of a running thread and restoring another's. Thread context switches avoid switching address spaces, so they are typically cheaper than process switches, though they still incur cache and pipeline disruption. Process switches are more expensive, though modern CPUs use **PCID/ASID tagging** to reduce TLB flushing costs. In both cases, the indirect costs — cache pollution and branch predictor disruption — often matter more than the direct register save/restore.
 
 **CPU affinity** pins a process or thread to a specific set of cores. This is rarely needed but can reduce **cache thrashing** when a critical thread keeps migrating between cores and losing its warm cache:
 
 ```python
 import os
-import psutil
+import psutil  # third-party: pip install psutil
 
 p = psutil.Process(os.getpid())
-
 p.cpu_affinity([0, 1])   # restrict this process to cores 0 and 1
 print(p.cpu_affinity())  # [0, 1]
 ```
@@ -344,14 +387,14 @@ With 10% serial code, you can never exceed a 10× speedup no matter how many cor
 
 ```python
 import os
-import psutil
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 
-# CPU-bound: match physical cores — hyperthreads rarely help for pure compute
-cpu_workers = psutil.cpu_count(logical=False)  # e.g., 4
+# CPU-bound: start with the number of available CPU cores
+cpu_workers = os.cpu_count() or 1
 
-# I/O-bound: can safely exceed core count since threads mostly wait
-io_workers = (os.cpu_count() or 1) * 4  # e.g., 16–32; tune empirically
+# I/O-bound: can safely exceed core count since threads mostly wait.
+# Optimal values depend heavily on latency and workload characteristics; tune empirically.
+io_workers = (os.cpu_count() or 1) * 4  # starting point; adjust based on profiling
 
 # CPU-bound example
 with ProcessPoolExecutor(max_workers=cpu_workers) as executor:
@@ -362,7 +405,7 @@ with ThreadPoolExecutor(max_workers=io_workers) as executor:
     results = list(executor.map(io_task, urls))
 ```
 
-For CPU-bound tasks, using logical (hyperthread) count instead of physical count often gives no benefit and can hurt performance due to resource contention within each physical core.
+For CPU-bound tasks, profiling may reveal that fewer workers than `os.cpu_count()` perform better, since hyperthreads share physical core resources.
 
 ## Summary
 

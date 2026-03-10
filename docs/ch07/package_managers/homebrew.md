@@ -1,5 +1,9 @@
 # Homebrew
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 **Homebrew** is a package manager for **macOS** (and Linux). It installs system-level software, including Python itself.
 
 ---

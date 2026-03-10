@@ -1,5 +1,9 @@
 # Reductions with axis
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Concept
 
 Reduction operations collapse one or more dimensions of an array by applying an aggregation function. The `axis` parameter specifies which dimension to reduce.

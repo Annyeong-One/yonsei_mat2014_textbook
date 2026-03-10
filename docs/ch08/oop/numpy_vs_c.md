@@ -1,5 +1,9 @@
 # NumPy vs C Arrays
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 NumPy arrays and C arrays share memory layout but differ significantly in functionality.
 
 

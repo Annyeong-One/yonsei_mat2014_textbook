@@ -1,5 +1,9 @@
 # Time Complexity of Operations
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Python data structures have different time complexity characteristics for common operations. Understanding these complexities is crucial for writing efficient code and choosing the right data structure.
 
 ---

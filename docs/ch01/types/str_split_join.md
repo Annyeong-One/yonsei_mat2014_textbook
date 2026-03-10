@@ -1,5 +1,9 @@
 # Split and Join
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 The `split()` and `join()` methods convert between strings and lists, enabling powerful text processing.
 
 ## Basic Split

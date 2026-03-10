@@ -1,5 +1,9 @@
 # Memory Overview
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## The Memory Problem
 
 Modern CPUs can execute billions of instructions per second, but memory cannot deliver data that fast. This fundamental mismatch shapes all of computing.

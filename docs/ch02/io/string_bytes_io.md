@@ -1,5 +1,9 @@
 # io.StringIO and io.BytesIO
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 StringIO and BytesIO create in-memory file-like objects for text and binary data respectively. They are useful for testing, temporary buffers, and situations where file system I/O should be avoided.
 
 ---

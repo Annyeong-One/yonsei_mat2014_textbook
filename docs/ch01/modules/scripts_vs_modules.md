@@ -1,5 +1,9 @@
 # Scripts vs Modules
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Python files can act as **scripts**, **modules**, or both. Understanding the difference is essential for organizing code properly.
 
 ---

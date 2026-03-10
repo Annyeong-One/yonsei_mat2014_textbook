@@ -1,5 +1,9 @@
 # dict Merge Operators
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Python 3.9+ introduced the | and |= operators for merging dictionaries, providing a cleaner syntax than update() and providing merge semantics. This is part of PEP 584 and improves dict manipulation.
 
 ---

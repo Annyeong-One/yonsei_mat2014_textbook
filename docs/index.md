@@ -1,5 +1,9 @@
 # Python
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Welcome! This book is written in Markdown and published using MkDocs with the Material theme.
 
 The foundational content of this book originates from my conversations with AI assistants. 

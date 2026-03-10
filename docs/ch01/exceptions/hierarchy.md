@@ -1,5 +1,9 @@
 # Exception Hierarchy
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Python exceptions are organized in a hierarchy. Understanding this hierarchy helps you write precise and robust error handling code.
 
 ---

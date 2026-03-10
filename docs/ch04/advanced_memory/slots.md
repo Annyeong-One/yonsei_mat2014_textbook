@@ -1,5 +1,9 @@
 # \_\_slots\_\_
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 By default, Python stores instance attributes in a dictionary (`__dict__`). The `__slots__` declaration lets you explicitly define which attributes an instance can have, resulting in significant memory savings and faster attribute access.
 
 ---

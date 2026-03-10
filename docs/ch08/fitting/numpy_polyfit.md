@@ -1,5 +1,9 @@
 # Polynomial Fitting: polyfit and poly1d
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 NumPy provides tools for fitting polynomials to data and working with polynomial objects.
 
 ```python

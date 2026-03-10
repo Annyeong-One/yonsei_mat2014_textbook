@@ -1,5 +1,9 @@
 # Final Project: Object-Oriented Task Management System
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Project Overview
 Build a complete task management application using object-oriented programming principles. This project will test your understanding of classes, objects, inheritance, encapsulation, and composition.
 

@@ -1,5 +1,9 @@
 # Frozen Dataclasses
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 The `frozen=True` parameter makes a dataclass immutable, preventing modifications after creation. Frozen dataclasses can be hashed and used in sets/dicts.
 
 ---

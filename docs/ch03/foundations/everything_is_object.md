@@ -1,5 +1,9 @@
 # Everything is an Object
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Python is an object-oriented language where **everything is an object** — integers, floats, strings, lists, functions, and even classes themselves.
 
 ---

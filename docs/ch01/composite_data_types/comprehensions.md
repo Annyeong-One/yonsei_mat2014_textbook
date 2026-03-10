@@ -1,5 +1,9 @@
 # Comprehensions
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Comprehensions provide concise syntax for creating lists, dictionaries, and sets from iterables. They combine iteration and optional filtering into a single expression.
 
 ## List Comprehensions

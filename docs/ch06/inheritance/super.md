@@ -1,5 +1,9 @@
 # `super()` Mechanics
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 The `super()` function enables cooperative multiple inheritance by following the Method Resolution Order (MRO).
 
 ---

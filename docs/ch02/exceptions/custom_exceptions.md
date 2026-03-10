@@ -1,5 +1,9 @@
 # Custom Exceptions
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Python allows creating custom exception classes by subclassing the built-in `Exception` class. Custom exceptions improve code clarity and enable specific error handling.
 
 

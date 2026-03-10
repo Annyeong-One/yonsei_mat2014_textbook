@@ -1,5 +1,9 @@
 # Divide and Conquer
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Divide and Conquer is a recursive algorithm pattern that solves problems by breaking them into smaller subproblems, solving each independently, then combining results.
 
 ---

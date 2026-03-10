@@ -1,5 +1,9 @@
 # itertools Recipes
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Common utility functions built from itertools primitives, providing elegant solutions to frequent programming tasks.
 
 ## flatten() - Flatten Nested Iterables

@@ -1,5 +1,9 @@
 # functools.cache (Python 3.9+)
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 The `@cache` decorator provides simple, unbounded memoization. It's a simpler alternative to `@lru_cache` when you don't need cache size limits.
 
 ```python

@@ -1,5 +1,9 @@
 # Fill and Fill Between
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Fill regions in your plots to highlight areas of interest.
 
 ---

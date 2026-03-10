@@ -1,5 +1,9 @@
 # `int`: Python vs C
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Python integers (`int`) differ fundamentally from integers in low-level languages like C. Understanding this difference prevents many bugs and misconceptions.
 
 ---

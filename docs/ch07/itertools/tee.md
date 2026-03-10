@@ -1,5 +1,9 @@
 # tee
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 `tee()` creates multiple independent iterators from a single iterable, useful when you need to iterate over the same data multiple times.
 
 ## Creating Independent Iterators

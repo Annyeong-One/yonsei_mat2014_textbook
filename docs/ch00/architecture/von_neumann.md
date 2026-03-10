@@ -1,304 +1,373 @@
+
 # Von Neumann Architecture
+
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
 
 ## Overview
 
-The **Von Neumann architecture** is the foundational design for nearly all modern computers. It describes a computer that stores both program instructions and data in the same memory space — a concept known as the **stored-program model**.
+The **Von Neumann architecture** is the foundational design for nearly all modern computers.  
+It describes a system where **program instructions and data share the same memory space**.
 
-> **Scope note**: This document describes a simplified conceptual model. Real CPUs include many additional components (branch predictors, reorder buffers, multiple execution units) not shown here.
+This idea is called the **stored-program model**.
 
+In this model, a computer consists of:
 
-![von_neumann](./image/von_neumann.png)
+- a **Central Processing Unit (CPU)**
+- **memory**
+- **input/output devices**
+- a **communication system (bus)** connecting them
 
+![Von Neumann architecture](image/von_neumann.png)
 
+*Figure: Simplified Von Neumann architecture showing the CPU, memory,
+system bus, and I/O devices.*
 
-## Key Components
+The key innovation was that **program instructions are stored in the same memory as data and encoded as binary numbers** representing operations defined by the processor's **instruction set architecture (ISA)**, allowing programs to be loaded, modified, and executed dynamically.
 
-### Central Processing Unit (CPU)
+---
 
-In the simplified model, the CPU consists of three main parts:
+# Key Components
+
+## Central Processing Unit (CPU)
+
+The CPU executes program instructions.
+
+In simplified models, the CPU is often described as consisting of three main parts.
+Modern CPUs contain many additional components (such as pipelines, caches, and branch predictors), but the CU–ALU–register model captures the essential structure.
 
 | Component | Function |
-|-----------|----------|
-| **Control Unit (CU)** | Fetches instructions from memory, decodes them, coordinates execution |
-| **Arithmetic Logic Unit (ALU)** | Performs mathematical and logical operations |
-| **Registers** | Small, fast storage locations inside the CPU — includes the **Program Counter (PC)** (address of the next instruction) and the **Instruction Register (IR)** (the instruction currently being decoded) |
+|----------|----------|
+| **Control Unit (CU)** | Fetches, decodes, and coordinates the execution of instructions |
+| **Arithmetic Logic Unit (ALU)** | Performs basic integer arithmetic and logical operations |
+| **Registers** | Small, fast storage inside the CPU |
 
-### Memory (RAM)
+Two important registers are:
 
-A single memory space that stores both:
+| Register | Purpose |
+|--------|--------|
+| **Program Counter (PC)** | Address of the next instruction; normally increments sequentially but changes on jumps, branches, or function calls |
+| **Instruction Register (IR)** | The instruction currently being executed |
 
-- **Instructions** (the program code)
-- **Data** (variables, arrays, objects)
+Registers are the **fastest storage accessible to the CPU**.
 
-This "stored-program" concept was transformative — it made general-purpose computing viable and enabled software to become a commercial product separate from hardware. Earlier computers like ENIAC had programs hardwired or entered via physical switches; changing a program required days of manual rewiring.
+---
 
-### Bus System
+## Memory (RAM)
 
-The communication pathway connecting CPU and memory, conceptually described as buses (though modern CPUs use complex on-chip interconnect networks rather than literal shared buses):
+Main memory stores both:
 
-- **Address Bus**: Specifies which memory location to access
-- **Data Bus**: Transfers actual data between CPU and memory
-- **Control Bus**: Carries coordination signals including read, write, interrupt request, bus grant, clock, and reset — "read" and "write" are the most commonly cited examples, but the control bus is a collection of many dedicated signaling lines
+- **program instructions**
+- **program data**
 
-> **Note**: The control bus signals "read" and "write" are sometimes compared to Unix `rwx` permissions, but the analogy breaks down at **execute** (`x`). Execute is a software/OS abstraction — at the hardware level, the CPU doesn't receive an "execute" signal over the bus. Instead, it simply *fetches* an instruction (a read), and the CPU's internal logic decodes and runs it. There is no separate "execute" bus signal.
->
-> The control bus also carries many other signals beyond read/write:
->
-> - **Clock** — synchronizes all components
-> - **Interrupt request/acknowledge** — peripherals signal the CPU
-> - **Bus request/grant** — arbitrates access when multiple devices need the bus (e.g., DMA)
-> - **Reset** — forces the system to its initial state
-> - **Bus ready/wait** — lets slow devices stall the CPU
->
-> "Read" and "write" are the entry-point examples — not an exhaustive list.
+Each memory location has a unique **numeric address**.
 
-Every byte in memory has a numeric **address** — the address bus carries this number so the memory system knows which location to read or write. A 64-bit architecture allows a theoretical address space of $2^{64}$ bytes, though real CPUs implement smaller physical and virtual address ranges (x86-64 currently uses 48–57 bits of virtual address). Instructions themselves contain address references: a `LOAD` instruction includes the address to read from, and a `STORE` includes the address to write to.
-
-### Input/Output
-
-CPUs also communicate with peripherals (keyboard, disk, GPU, network) through I/O controllers connected to the bus system. I/O is not shown in the simplified diagram above but is an essential part of any real system.
-
-## The Fetch-Decode-Execute Cycle
-
-The CPU operates in a continuous loop:
+For example, assuming 4-byte instructions:
 
 ```
-┌─────────┐     ┌─────────┐     ┌───────────┐     ┌───────────┐
-│  FETCH  │ ──▶ │ DECODE  │ ──▶ │  EXECUTE  │ ──▶ │ WRITEBACK │
-└─────────┘     └─────────┘     └───────────┘     └─────────┬─┘
-     ▲                                                        │
-     └────────────────────────────────────────────────────────┘
+Address      Content
+0x1000       LOAD A
+0x1004       ADD B
+0x1008       STORE C
 ```
 
-1. **Fetch**: Read the next instruction from memory (address stored in Program Counter)
-2. **Decode**: Control Unit interprets what the instruction means
-3. **Execute**: ALU or other components perform the operation
-4. **Writeback**: Results are written back to registers or memory
-5. **Repeat**: Program Counter increments, cycle continues
+The CPU reads instructions from memory and executes them sequentially.
 
-> **What "fetch" means**: The CPU retrieves the instruction stored at the memory address pointed to by the Program Counter (PC), loads it into the Instruction Register (IR), then advances the PC to the next instruction. Normally the PC advances sequentially, though branches and jumps can change it. Think of the PC as a bookmark — fetch is literally fetching the next instruction from that bookmark location.
+Early machines such as **ENIAC initially required manual rewiring or plugboard configuration**, which made reprogramming slow and cumbersome.
+The stored-program concept allowed software to be loaded directly into memory.
 
-Conceptually, instructions execute one at a time in sequence. In practice, modern CPUs use **pipelining** to overlap stages of different instructions:
+---
+
+## Bus System
+
+In simplified models, the connection between components is called the **system bus**.
+
+A bus consists of multiple signal lines grouped into three categories.
+
+### Address Bus
+
+Specifies **which memory location** is accessed. The address bus is **unidirectional** (CPU to memory).
 
 ```
-Cycle:          1        2        3        4        5
-Instruction A:  Fetch    Decode   Execute  Write
-Instruction B:           Fetch    Decode   Execute  Write
-Instruction C:                    Fetch    Decode   Execute ...
+CPU ───── Address Bus ─────▶ Memory
 ```
 
-Combined with **superscalar execution** (issuing multiple instructions per cycle through parallel execution units, typically 2–6) and **out-of-order execution** (reordering instructions to avoid stalls), modern CPUs process many instructions simultaneously — but the programmer-visible model remains sequential.
+### Data Bus
 
-## The Von Neumann Bottleneck
+Transfers **actual data**. The data bus is **bidirectional** (CPU can read from or write to memory).
 
-The defining limitation of the architecture: instructions and data ultimately compete for access to the same memory system.
+```
+CPU ◀──── Data Bus ────▶ Memory
+```
+
+### Control Bus
+
+Carries **timing and control signals** that coordinate memory reads, writes, and other operations.
+
+Examples:
+
+- read
+- write
+- interrupt
+- clock
+
+Together these buses allow the CPU, memory, and I/O devices to communicate.
+
+---
+
+# The Fetch–Decode–Execute Cycle
+
+Programs execute through a repeating loop called the **instruction cycle**.
+
+```
+Fetch → Decode → Execute → Writeback
+```
+
+### 1. Fetch
+
+The CPU **fetches** the instruction at the address stored in the **Program Counter**.
+During the fetch stage, the CPU places the instruction address on the address bus and reads the instruction through the data bus.
+
+### 2. Decode
+
+The Control Unit **decodes** the instruction.
+
+### 3. Execute
+
+The ALU or other hardware performs the operation.
+
+### 4. Writeback
+
+The result is stored in registers or memory.
+
+### 5. Repeat
+
+The Program Counter moves to the next instruction.
+
+This process continues until the program terminates.
+
+---
+
+# The Von Neumann Bottleneck
+
+The Von Neumann bottleneck arises because both instructions and data must travel between the CPU and memory over the same communication channel.
 
 ```
 CPU  ◀════════════════════▶  Memory
-     (instructions AND data
-      share the same path)
+(instructions and data
+share the same path)
 ```
 
-This creates a bottleneck because the CPU must wait for memory transfers, and instruction fetches compete with data loads for the same bus. In early designs the bottleneck was literally a single shared bus. In modern systems the physical interconnect is far more complex (crossbar switches, mesh networks, multiple memory channels), but the fundamental constraint remains: CPU speed has grown far faster than memory speed (the "memory wall"), and the bottleneck manifests as memory latency and bandwidth limits rather than a single wire.
+As CPUs became faster than memory systems, the processor **often stalls waiting for data from memory** rather than performing computations.
 
-## Memory Hierarchy
+The CPU stalls because:
 
-To bridge this speed gap, systems use a hierarchy of progressively smaller, faster storage between the CPU and main memory. The following are approximate orders of magnitude — exact values vary by CPU model and workload:
+- **memory bandwidth** is limited relative to CPU speed
+- **memory latency** adds delay to every access
+- instruction fetches **compete** with data accesses for the same channel
 
-```
-CPU Memory Hierarchy (approximate)
-Registers       ~1 cycle
-L1 cache        ~3–5 cycles
-L2 cache        ~12 cycles
-L3 cache        ~40 cycles
-RAM             ~100+ cycles
+Early computers used a single memory interface for both instructions and data, forcing them to compete for the same bandwidth.
+This growing gap between processor speed and memory speed is called the **memory wall**.
 
-Storage
-SSD / Disk      ~100,000+ cycles
-```
+Modern processors mitigate the bottleneck using techniques such as caching, prefetching, and pipelining.
 
-Each level acts as a buffer, keeping frequently used data close to the CPU. Data moves between levels in **cache lines** — fixed-size blocks, typically 64 bytes. When the CPU requests a single byte, the entire cache line containing it is fetched. This is why sequential array access is fast (nearby data arrives for free) and why pointer chasing through scattered objects is slow (each pointer may trigger a new cache line fetch).
+---
 
-Other techniques include **prefetching** (predicting what data will be needed next) and **speculative execution** (executing instructions before knowing if they're needed).
+# Memory Hierarchy
 
-### Harvard Architecture: The Contrast
-
-The **Harvard architecture** separates instruction memory from data memory, eliminating the competition between the two. Most microcontrollers — small, independent computers dedicated to a single specific task — use a pure Harvard design. Modern desktop CPUs use a **modified Harvard architecture**: physically they follow Von Neumann (unified RAM), but the L1 cache is split into separate instruction and data caches, recovering much of Harvard's benefit.
-
-The three designs can be compared as a spectrum:
+To reduce memory delays, modern computers use a **hierarchy of storage layers**.
+The memory hierarchy forms a pyramid: smaller, faster memories are closer to the CPU, while larger, slower memories are farther away.
 
 ```
-Pure Von Neumann          Modified Harvard           Pure Harvard
-(unified everything)      (modern CPUs)              (separate everything)
+            ┌─────────────┐
+            │  Registers  │
+            │  ~1 cycle   │
+            └─────────────┘
+                   ▲
+            ┌─────────────┐
+            │   L1 Cache  │
+            │   3–5 cyc   │
+            └─────────────┘
+                   ▲
+            ┌─────────────┐
+            │   L2 Cache  │
+            │  10–15 cyc  │
+            └─────────────┘
+                   ▲
+            ┌─────────────┐
+            │   L3 Cache  │
+            │  30–50 cyc  │
+            └─────────────┘
+                   ▲
+            ┌─────────────┐
+            │     RAM     │
+            │ 100–300 cyc │
+            └─────────────┘
+                   ▲
+            ┌─────────────┐
+            │  SSD / Disk │
+            └─────────────┘
 
-CPU                       CPU chip                   CPU
- └── one bus               ├── registers              ├── instr bus
-      └── RAM              ├── L1i (separate)         │    └── instr RAM
-    (instr + data)         ├── L1d (separate)         └── data bus
-                           ├── L2  (unified)               └── data RAM
-                           └── L3  (unified)
-                          Outside CPU chip
-                           └── RAM (unified)
+   ↑ Faster, smaller
+   ↓ Larger, slower
 ```
 
-> **Important**: L1, L2, and L3 caches are all **inside the CPU chip**. Only RAM sits outside. The distinction between levels is not inside vs outside the CPU, but rather:
-> - **L1** — split (Harvard-style), per-core, directly feeds the decoder and ALU
-> - **L2** — unified, per-core, slightly further from execution units
-> - **L3** — unified, shared across all cores
+### Typical Memory Latencies
 
-**Why the L1 split is enough**: The benefit of separate L1 caches goes beyond parallelism:
+The difference between storage layers is dramatic.
+The following approximate values illustrate the gap between CPU and memory speeds.
 
-- **Simultaneous access** — the decoder reads from L1i while the ALU reads from L1d, recovering Harvard's parallelism
-- **Different access patterns** — instruction streams are highly sequential with strong locality; data access is less predictable
-- **No cache pollution** — data loads cannot evict hot instructions, and vice versa
+| Operation | Approximate Latency |
+|---|---|
+| CPU register access | ~1 cycle |
+| L1 cache access | ~1 ns |
+| L2 cache access | ~3–5 ns |
+| L3 cache access | ~10–20 ns |
+| Main memory (RAM) | ~100 ns |
+| SSD access | ~100 µs |
+| Disk seek (HDD) | ~5–10 ms |
 
-L2 and L3 remain unified because the CPU has already captured the key benefits at L1, and unifying the deeper levels simplifies design without meaningful cost. Since the CPU spends the vast majority of its time talking to cache rather than RAM, the L1 split is sufficient — RAM remains shared; only the "desk drawers" (L1 instruction and data caches) are separate.
+These differences explain why caches and memory locality are critical for performance.
 
-### Data Flow: The Train Model
+Each layer stores a **temporary copy of frequently used data**.
+Upper levels are smaller but faster; lower levels are larger but slower.
 
-The following is a **conceptual model**, not a literal description of hardware data flow. In practice, caches refill in 64-byte cache lines, hardware prefetchers may bypass levels, and out-of-order cores request data long before execution reaches that instruction. The hierarchy behaves *as if* data moves forward through these layers — like a train pulling cargo forward, carriage by carriage:
+The memory hierarchy works because programs exhibit two key patterns:
 
-```
-RAM          L3       L2       L1       Registers    CPU
-(original) → (copy) → (copy) → (copy) → (copy)    → execute
-```
+- **Temporal locality**: programs tend to reuse recently accessed data
+- **Spatial locality**: programs tend to access nearby memory locations
 
-> **Fetch = Copy**: At every stage, "fetching" means copying forward — the original always stays in RAM. Nothing is moved or destroyed.
+Caches exploit these patterns to keep the most relevant data close to the CPU.
 
-> **Registers are the last stop**: The ALU can only operate on data sitting in registers — not directly from L1 cache. Registers are the smallest and fastest storage, holding only what the ALU needs right now. The programmer sees ~16 **architectural** general-purpose registers (in x86-64), but internally the CPU maintains ~150–200 **physical** registers and uses **register renaming** to map architectural names to physical locations, enabling out-of-order execution.
+Disk and SSD are included in the hierarchy because operating systems use **virtual memory**, allowing programs to access storage as if it were memory.
 
-Each cache level holds a **copy**, pulled forward from the level behind it. When the CPU needs data:
+---
 
-1. Checks **Registers** first — if found, ~1 cycle (already loaded)
-2. Not there? Checks **L1** — ~3–5 cycles (cache hit)
-3. Not there? Checks **L2** — ~12 cycles
-4. Not there? Checks **L3** — ~40 cycles
-5. Not there? Goes to **RAM** — ~100+ cycles (cache miss cascade)
+# Harvard Architecture: A Contrast
 
-When a cache miss occurs, data is copied up the chain and cached at each level for future reuse. If the same data is needed again soon (**temporal locality**), it's already waiting in L1.
-
-Refilling also works level by level:
+The **Harvard architecture** separates instruction memory from data memory.
 
 ```
-RAM ←————————————————————————————————————
-          L3 ←——————————————————————————   (refills from RAM)
-                   L2 ←—————————————————  (refills from L3)
-                            L1 ←—————————  (refills from L2)
-                            Registers ←——  (refills from L1)
-                                 CPU executes here
+Harvard Architecture
+
+Instruction Memory ──▶ CPU ◀── Data Memory
 ```
 
-### CPU Package and Internal Buses
+This removes the competition between instruction fetches and data accesses.
 
-On most modern CPUs, L3 is on the same die as the CPU cores. In chiplet-based designs (e.g., AMD Zen), L3 may reside on the same chiplet as a group of cores. Either way, all cache levels are packaged together as one unit you install on the motherboard:
+Most modern CPUs use a **modified Harvard architecture**:
 
-```
-CPU Package (what you buy & install)
-┌─────────────────────────────────────┐
-│  Core 0          Core 1             │
-│  ┌──────────┐  ┌──────────┐         │
-│  │ L1, L2   │  │ L1, L2   │         │
-│  └────┬─────┘  └─────┬────┘         │
-│       └──────┬────────┘             │
-│         ┌────▼─────┐                │
-│         │    L3    │ (shared,        │
-│         │ same die │  on-chip)      │
-│         └──────────┘                │
-└─────────────────────────────────────┘
-                ↕
-              RAM (separate sticks on motherboard)
-```
+- instructions and data share main memory
+- but the CPU uses **separate instruction and data caches**
 
-Each connection is a bus — different names and speeds depending on what is connected:
+This provides many of Harvard's advantages while keeping a unified memory model.
 
-| Connection | Interconnect | Speed |
-|---|---|---|
-| L1 ↔ L2 | internal core bus | fastest |
-| L2 ↔ L3 | vendor-specific on-chip interconnect (ring bus, mesh, Infinity Fabric, etc.) | fast |
-| L3 ↔ RAM | memory bus (DDR5 etc.) | slower |
-| RAM ↔ GPU | PCIe | slower still |
+### Harvard Architecture in Practice
 
-### Cache Behavior
+Some systems implement a true Harvard architecture. Many microcontrollers
+(such as AVR and PIC devices) use separate instruction and data memories,
+allowing instructions and data to be accessed simultaneously.
 
-#### Eviction
-
-Each cache level has a **fixed size** — copies accumulate until the cache is full, at which point an **eviction policy** decides what to discard to make room for new data:
+Modern desktop and server CPUs typically use a **modified Harvard architecture**.
+Main memory remains unified, but the processor uses separate instruction and
+data caches, often called **L1I (instruction cache)** and **L1D (data cache)**.
+L2 and L3 caches are usually unified.
 
 ```
-Typical ranges (modern CPUs):
-L1  32–64 KB    per core
-L2  512 KB–2 MB per core
-L3  tens of MB  shared across cores
+        CPU
+       /   \
+   L1I      L1D
+    |        |
+      L2 (Unified)
+         |
+      L3 Cache
+         |
+      RAM
 ```
 
-Common eviction policies:
+This design allows the CPU to fetch instructions and access data in parallel,
+reducing the effects of the Von Neumann bottleneck while preserving a unified
+memory model for software.
 
-| Policy | Description |
-|--------|-------------|
-| **LRU** (Least Recently Used) | Evict whatever was used longest ago |
-| **LFU** (Least Frequently Used) | Evict whatever was used least often |
-| **Random** | Evict a random entry (simpler hardware) |
+---
 
-Hardware caches typically use approximations of LRU (pseudo-LRU) because exact LRU is too expensive to implement in hardware at high associativity.
+# Why Architecture Matters for Python
 
-The cache is effectively a **fixed-size sliding window** of the most recently used data — constantly filling up and discarding stale copies to stay relevant to what the CPU needs next.
+Understanding Von Neumann architecture explains key Python performance behaviors.
 
-#### Coherency
+## Memory Locality
 
-In a multi-core system, each core has its own L1 and L2 caches, so the same memory address may exist as copies in multiple caches simultaneously. If one core modifies its copy, the other cores' copies become stale. Hardware **cache coherency protocols** (such as MESI) ensure that all cores see a consistent view of memory by tracking which caches hold copies of each line and invalidating or updating them when a write occurs. This happens automatically in hardware — the programmer does not manage it directly — but it has performance implications: frequent writes to shared data force cross-core invalidation traffic, which is one reason why concurrent programming benefits from minimizing shared mutable state.
+Python lists store **contiguous pointers**, but the objects those pointers reference are scattered across memory.
+Each access requires an additional level of **indirection**, following a pointer to a different memory location. This pattern, called **pointer chasing**, defeats spatial locality and causes frequent cache misses, which slows down sequential iteration.
 
-## Python Connection
+NumPy arrays store values in **contiguous memory**, which aligns with how caches work.
 
-Understanding Von Neumann architecture explains several Python behaviors.
+```python
+import numpy as np
 
-### Why Python Objects Have Overhead
+arr = np.zeros(1_000_000)     # contiguous memory block
+lst = [0.0] * 1_000_000       # many separate objects scattered in memory
+```
 
-Every Python object lives in memory with metadata:
+NumPy arrays are faster because:
+
+- data is contiguous, exploiting **spatial locality**
+- fewer objects means less memory overhead
+- the CPU cache can prefetch sequential data efficiently
+
+---
+
+## Object Memory Overhead
+
+Every Python object carries metadata beyond its value.
 
 ```python
 import sys
 
 x = 42
-print(sys.getsizeof(x))  # 28 bytes, not 4!
+print(sys.getsizeof(x))
 ```
 
-The 28 bytes include a reference count, type pointer, and the integer value — all stored in the same memory space. Note that `sys.getsizeof()` reports the object's own size; objects that reference other objects (like lists) consume additional memory not counted here.
+The memory size includes:
 
-### Why Memory Access Patterns Matter
+- reference count
+- type information
+- stored value
 
-NumPy arrays are faster than Python lists for several compounding reasons:
+This larger memory footprint increases cache pressure and memory bandwidth usage.
+A Python list of integers uses far more memory than a NumPy array of the same numbers, because each integer is a full object stored separately in memory.
 
-```python
-import numpy as np
+---
 
-# Contiguous memory - CPU cache can work efficiently
-arr = np.zeros(1_000_000)  # One block in memory
+# Historical Context
 
-# Scattered objects - unpredictable access patterns
-lst = [0.0] * 1_000_000    # Million separate objects
-```
+The architecture is named after **John von Neumann**, who formally documented the stored-program concept in the 1945 *First Draft of a Report on the EDVAC*.
 
-NumPy's speed comes from: contiguous memory layout (cache-friendly), vectorized C loops (no Python interpreter overhead per element), and SIMD instructions that process multiple values in a single CPU operation. Memory locality is one contributing factor, but not the whole story.
+The ideas were developed with contributions from:
 
-## Historical Context
+* J. Presper Eckert
+* John Mauchly
+* other early computer scientists
 
-The architecture is named after mathematician John von Neumann, who described the stored-program concept in the 1945 "First Draft of a Report on the EDVAC." The ideas were developed collaboratively with J. Presper Eckert and John Mauchly, among others — the attribution to Von Neumann alone is a historical simplification.
+Early machines such as **EDSAC (1949)** implemented the stored-program model in practice.
 
-| Era | Approach |
-|-----|----------|
-| **Before (e.g. ENIAC, 1945)** | Programs hardwired via physical switches and cables; changing a program took days |
-| **EDVAC report (1945)** | Von Neumann's "First Draft" described the stored-program concept |
-| **EDSAC (1949)** | One of the first machines to run a stored program in practice |
-| **Modern CPUs** | Still fundamentally Von Neumann, with Harvard-style caches mitigating the bottleneck |
+Modern processors still follow the same fundamental architecture.
 
-## Summary
+---
 
-| Concept | Description |
-|---------|-------------|
-| **Stored Program** | Instructions and data share the same memory |
-| **Sequential Model** | Programmer-visible execution is sequential; hardware optimizations happen underneath |
-| **Shared Memory Path** | CPU and memory communicate through a shared pathway |
-| **Bottleneck** | Shared instruction/data path limits throughput; mitigated by caches and Harvard-style L1 split |
-| **Memory Hierarchy** | Registers → L1/L2/L3 cache → RAM → Disk bridges the speed gap |
+# Summary
 
-The Von Neumann architecture remains the dominant model for CPUs today. Understanding it — and its bottleneck — explains why cache-friendly programming patterns (like vectorization and contiguous array access) matter, and why the gap between CPU speed and memory speed is a fundamental constraint in computing.
+| Concept                | Description                        |
+| ---------------------- | ---------------------------------- |
+| Stored Program         | Instructions and data share memory |
+| CPU Components         | Control unit, ALU, registers       |
+| Bus System             | Connects CPU, memory, and devices  |
+| Instruction Cycle      | Fetch → Decode → Execute → Writeback |
+| Von Neumann Bottleneck | Shared memory path limits speed    |
+| Memory Hierarchy       | Registers → Cache → RAM → Storage  |
+| Modified Harvard       | Split instruction and data caches  |
+
+The Von Neumann architecture remains the dominant model for general-purpose computers.
+Understanding it provides the foundation for reasoning about performance, memory behavior, and program execution.
+

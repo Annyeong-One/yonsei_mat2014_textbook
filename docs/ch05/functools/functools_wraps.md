@@ -1,5 +1,9 @@
 # functools.wraps
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 When writing decorators, `functools.wraps` preserves the original function's metadata. Without it, decorated functions lose their name, docstring, and other attributes.
 
 ```python

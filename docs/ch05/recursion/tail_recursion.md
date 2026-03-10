@@ -1,5 +1,9 @@
 # Tail Recursion
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Tail recursion is an optimization where the recursive call is the last operation in a function. Some languages optimize tail calls, but Python doesn't support tail call optimization (TCO) by design.
 
 ---

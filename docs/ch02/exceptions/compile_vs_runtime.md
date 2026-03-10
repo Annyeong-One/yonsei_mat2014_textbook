@@ -1,5 +1,9 @@
 # Compile vs Runtime Errors
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Programming errors fall into three main categories based on when they occur: compile-time errors (caught before execution), runtime errors (caught during execution), and logical errors (never caught by Python).
 
 

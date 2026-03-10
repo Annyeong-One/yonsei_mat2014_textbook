@@ -1,5 +1,9 @@
 # Python Execution Model
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Is Python compiled or interpreted? The answer is **both** — Python compiles source code to bytecode, then interprets the bytecode. Understanding this model explains why some operations are fast and others are slow.
 
 ---

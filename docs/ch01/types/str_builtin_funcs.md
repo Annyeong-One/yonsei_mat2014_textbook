@@ -1,5 +1,9 @@
 # String Built-ins
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Python provides built-in functions that work with strings for measuring, converting, sorting, and character encoding operations.
 
 ## Length and Type

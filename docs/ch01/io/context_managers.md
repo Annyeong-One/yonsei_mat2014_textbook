@@ -1,5 +1,9 @@
 # Context Managers
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Context managers ensure that resources are properly acquired and released. For file I/O, they guarantee files are closed even when errors occur.
 
 ---

@@ -1,5 +1,9 @@
 # pip and PyPI
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 `pip` is Python's default package manager. It installs packages from the **Python Package Index (PyPI)**.
 
 ---

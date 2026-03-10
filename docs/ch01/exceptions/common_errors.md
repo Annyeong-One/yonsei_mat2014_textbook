@@ -1,5 +1,9 @@
 # Common Runtime
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Python raises exceptions when something goes wrong at runtime. Recognizing common errors helps you debug quickly.
 
 ---

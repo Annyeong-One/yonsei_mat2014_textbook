@@ -1,5 +1,9 @@
 # Complex Function Visualization
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 This document covers techniques for visualizing complex-valued functions in 3D, with emphasis on characteristic functions from probability theory and Euler's formula.
 
 ## Complex Numbers Review

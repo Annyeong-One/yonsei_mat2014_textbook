@@ -1,5 +1,9 @@
 # any() and all()
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 The any() and all() functions perform logical aggregation on iterables. any() returns True if at least one element is truthy, while all() returns True only if all elements are truthy. Both short-circuit, stopping evaluation early when the result is determined.
 
 ---

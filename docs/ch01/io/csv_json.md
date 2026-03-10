@@ -1,5 +1,9 @@
 # CSV and JSON
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 CSV and JSON are standard formats for data exchange. Python's standard library provides dedicated modules for parsing and generating both formats.
 
 ## CSV Reading

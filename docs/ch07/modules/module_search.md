@@ -1,5 +1,9 @@
 # sys.path and Module Search
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Python searches for modules in a well-defined order stored in `sys.path`. Understanding this is crucial for managing imports in larger projects.
 
 ---

@@ -1,5 +1,9 @@
 # Raising Exceptions
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 You can raise exceptions explicitly to signal error conditions in your own code.
 
 ---

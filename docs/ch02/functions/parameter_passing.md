@@ -1,5 +1,9 @@
 # Parameter Passing
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 This document provides practical guidance on how arguments flow from caller to function in Python, building on the concepts from call-by-object-reference.
 
 

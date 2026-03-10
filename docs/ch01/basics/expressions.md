@@ -1,5 +1,9 @@
 # Expressions and
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Introduction
 
 Understanding the difference between expressions and statements is fundamental to Python programming. While they may seem similar, they serve distinct purposes in your code. This chapter explores both concepts in depth, covering operators, evaluation, and how Python processes your code.

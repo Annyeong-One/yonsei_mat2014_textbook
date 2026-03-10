@@ -1,5 +1,9 @@
 # Is-a vs Has-a
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Relationship Types
 
 ### 1. Fundamental Concepts

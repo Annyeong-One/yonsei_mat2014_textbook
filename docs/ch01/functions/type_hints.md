@@ -1,5 +1,9 @@
 # Type Hints
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Type hints (or type annotations) provide optional static typing information for function parameters and return values. They improve code readability and enable static analysis tools.
 
 

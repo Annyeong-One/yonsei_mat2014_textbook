@@ -1,5 +1,9 @@
 # line_profiler
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 The `line_profiler` tool profiles code at the line level, showing exactly which lines consume the most time. It requires installation via pip.
 
 ---

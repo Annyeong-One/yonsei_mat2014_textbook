@@ -1,3 +1,4 @@
+
 # CPU-Memory Communication
 
 ## The Memory Controller
@@ -5,82 +6,186 @@
 Modern CPUs have an integrated **memory controller** that manages communication with RAM:
 
 ```
+
 ┌─────────────────────────────────────────────────────────────┐
-│                          CPU                                │
-│  ┌─────────────────────────────────────────────────────┐   │
-│  │                   CPU Cores                          │   │
-│  │   ┌──────┐ ┌──────┐ ┌──────┐ ┌──────┐              │   │
-│  │   │Core 0│ │Core 1│ │Core 2│ │Core 3│              │   │
-│  │   └──┬───┘ └──┬───┘ └──┬───┘ └──┬───┘              │   │
-│  │      └────────┼────────┼────────┘                   │   │
-│  │               ▼                                      │   │
-│  │        ┌─────────────┐                              │   │
-│  │        │  L3 Cache   │                              │   │
-│  │        └──────┬──────┘                              │   │
-│  └───────────────┼──────────────────────────────────────┘   │
-│                  ▼                                          │
-│  ┌───────────────────────────────────┐                     │
-│  │      Integrated Memory Controller │                     │
-│  │  ┌─────────┐       ┌─────────┐   │                     │
-│  │  │Channel A│       │Channel B│   │                     │
-│  │  └────┬────┘       └────┬────┘   │                     │
-│  └───────┼─────────────────┼────────┘                     │
+│ CPU │
+│ ┌─────────────────────────────────────────────────────┐ │
+│ │ CPU Cores │ │
+│ │ ┌──────┐ ┌──────┐ ┌──────┐ ┌──────┐ │ │
+│ │ │Core 0│ │Core 1│ │Core 2│ │Core 3│ │ │
+│ │ └──┬───┘ └──┬───┘ └──┬───┘ └──┬───┘ │ │
+│ │ └────────┼────────┼────────┘ │ │
+│ │ ▼ │ │
+│ │ ┌─────────────┐ │ │
+│ │ │ L3 Cache │ │ │
+│ │ └──────┬──────┘ │ │
+│ └───────────────┼──────────────────────────────────────┘ │
+│ ▼ │
+│ ┌───────────────────────────────────┐ │
+│ │ Integrated Memory Controller │ │
+│ │ ┌─────────┐ ┌─────────┐ │ │
+│ │ │Channel A│ │Channel B│ │ │
+│ │ └────┬────┘ └────┬────┘ │ │
+│ └───────┼─────────────────┼────────┘ │
 └──────────┼─────────────────┼────────────────────────────────┘
-           │                 │
-           ▼                 ▼
-      ┌────────┐        ┌────────┐
-      │ DIMM 1 │        │ DIMM 2 │
-      └────────┘        └────────┘
+│ │
+▼ ▼
+┌────────┐ ┌────────┐
+│ DIMM 1 │ │ DIMM 2 │
+└────────┘ └────────┘
+
 ```
 
-## Memory Access Flow
+---
+
+# CPU Interconnect Fabric
+
+Inside the processor, cores, caches, and memory controllers must communicate through an **internal interconnect network**.
+
+This on-chip network is sometimes called the **CPU fabric** or **core interconnect**.
+
+```
+
+CPU Package
+
+┌───────────────────────────────────────────────┐
+│ Core │ Core │ Core │ Core │
+│ │ │ │ │
+│ └───────┬──────────┬──────────┬──────────┘
+│ │
+│ ▼
+│ Shared Cache (L3)
+│ │
+│ ▼
+│ On-Chip Interconnect Fabric
+│ │
+│ ▼
+│ Memory Controller
+└───────────────────────────────────────────────┘
+
+```
+
+The interconnect fabric allows communication between:
+
+- CPU cores
+- shared caches
+- memory controllers
+- I/O controllers
+
+Modern processors no longer use a single shared bus internally because many cores must communicate simultaneously.
+
+---
+
+## Types of Interconnect Designs
+
+Different processors use different internal topologies.
+
+| Topology | Description |
+|--------|-------------|
+| **Ring** | Components connected in a circular loop |
+| **Mesh** | Grid network allowing multiple simultaneous paths |
+| **Crossbar** | Direct connections between many components |
+
+Examples:
+
+| CPU Vendor | Interconnect |
+|-----------|--------------|
+| Intel | Ring Bus or Mesh |
+| AMD | Infinity Fabric |
+| Apple | High-bandwidth on-chip fabric |
+
+These interconnects move data between cores, caches, and memory controllers.
+
+---
+
+## Chiplet-Based Processors
+
+Many modern CPUs are built from **chiplets** rather than one large chip.
+
+Example architecture:
+
+```
+
+CPU Package
+
+┌─────────────┐ ┌─────────────┐
+│ Core Chiplet│ │ Core Chiplet│
+│ (Cores + L3)│ │ (Cores + L3)│
+└──────┬──────┘ └──────┬──────┘
+│ │
+└───────┬──────────┬──────────┘
+▼
+I/O Chiplet
+(Memory controllers, PCIe, etc.)
+│
+▼
+RAM
+
+```
+
+Chiplet designs allow:
+
+- better manufacturing yield
+- more cores per processor
+- scalable multi-core designs
+
+The chiplets communicate through the **interconnect fabric**.
+
+---
+
+# Memory Access Flow
 
 ### Read Request
 
 ```
+
 1. CPU Core needs data at address X
-        │
-        ▼
+   │
+   ▼
 2. Check L1 Cache ──── Hit? ──→ Return data (1 ns)
-        │ Miss
-        ▼
+   │ Miss
+   ▼
 3. Check L2 Cache ──── Hit? ──→ Return data (3 ns)
-        │ Miss
-        ▼
+   │ Miss
+   ▼
 4. Check L3 Cache ──── Hit? ──→ Return data (10 ns)
-        │ Miss
-        ▼
+   │ Miss
+   ▼
 5. Memory Controller receives request
-        │
-        ▼
+   │
+   ▼
 6. Controller sends address to RAM via memory bus
-        │
-        ▼
+   │
+   ▼
 7. RAM retrieves data (Row → Column activation)
-        │
-        ▼
+   │
+   ▼
 8. Data returns to CPU (~60 ns total from request)
-        │
-        ▼
+   │
+   ▼
 9. Data cached in L1/L2/L3 for future access
+
 ```
 
-## Memory Channels
+---
+
+# Memory Channels
 
 Multiple channels allow parallel access:
 
 ```
+
 Single Channel:
 ┌─────────────────┐
 │ Memory Controller│
-│    ┌──────┐     │
-│    │Chan A│     │
-│    └──┬───┘     │
+│ ┌──────┐ │
+│ │Chan A│ │
+│ └──┬───┘ │
 └───────┼─────────┘
-        │
-   ┌────┴────┐
-   │  DIMM   │     Bandwidth: ~25 GB/s
-   └─────────┘
+│
+┌────┴────┐
+│ DIMM │ Bandwidth: ~25 GB/s
+└─────────┘
 
 Dual Channel:
 ┌─────────────────┐
@@ -89,237 +194,121 @@ Dual Channel:
 │ │Chan A│ │Chan B││
 │ └──┬───┘ └──┬───┘│
 └────┼────────┼────┘
-     │        │
+│ │
 ┌────┴────┐┌────┴────┐
-│  DIMM   ││  DIMM   │  Bandwidth: ~50 GB/s (2×)
+│ DIMM ││ DIMM │ Bandwidth: ~50 GB/s
 └─────────┘└─────────┘
+
 ```
 
-### Channel Interleaving
+---
+
+# Channel Interleaving
 
 Data is striped across channels for parallelism:
 
 ```
-Memory Address Interleaving:
 
-Address 0x0000: Channel A, DIMM 0
-Address 0x0040: Channel B, DIMM 0  (64-byte offset)
-Address 0x0080: Channel A, DIMM 0
-Address 0x00C0: Channel B, DIMM 0
-...
-
-Sequential access automatically uses both channels!
-```
-
-## Memory Timing
-
-### DDR SDRAM Timing Parameters
+Address 0x0000 → Channel A
+Address 0x0040 → Channel B
+Address 0x0080 → Channel A
+Address 0x00C0 → Channel B
 
 ```
-Memory Access Timeline:
 
-tCL (CAS Latency):    Column access time
-tRCD:                 Row to Column Delay
-tRP:                  Row Precharge time
-tRAS:                 Row Active time
+Sequential access automatically uses both channels.
 
-Example DDR4-3200 CL16:
-Timings: 16-18-18-36
+---
 
-         tRCD        tCL
-          │           │
-    ┌─────┴─────┐ ┌───┴───┐
-    │           │ │       │
-────[Row Cmd]───[Col Cmd]─[Data]────
-    │                     │
-    └─────────────────────┘
-           Total: ~20 ns
-```
+# Memory Timing
 
-### Timing Impact
+### DDR SDRAM Timing
 
-```python
-import numpy as np
-import time
-
-def measure_memory_latency():
-    """Measure effective memory access latency."""
-    # Create array larger than cache
-    size = 100 * 1024 * 1024  # 100 MB
-    arr = np.zeros(size // 8, dtype=np.float64)
-    
-    # Random access pattern defeats prefetching
-    indices = np.random.permutation(len(arr))
-    
-    # Pointer chasing to measure latency
-    n_accesses = 1_000_000
-    start = time.perf_counter()
-    total = 0.0
-    for i in range(n_accesses):
-        total += arr[indices[i % len(indices)]]
-    elapsed = time.perf_counter() - start
-    
-    latency_ns = elapsed / n_accesses * 1e9
-    print(f"Effective latency: {latency_ns:.0f} ns")
-
-measure_memory_latency()  # Typically 60-100 ns
-```
-
-## Cache Coherency
-
-When multiple cores access the same memory, coherency must be maintained:
+Important parameters:
 
 ```
-MESI Protocol States:
 
-M (Modified):  This cache has the only valid copy (dirty)
-E (Exclusive): This cache has the only copy (clean)
-S (Shared):    Multiple caches have copies (clean)
-I (Invalid):   Cache line is not valid
-
-State Transitions:
-┌───────────┐  Read by      ┌───────────┐
-│ Invalid   │ ────────────▶ │  Shared   │
-└───────────┘    this core  └───────────┘
-      ▲                           │
-      │ Other core                │ Write by
-      │ writes                    │ this core
-      │                           ▼
-┌───────────┐               ┌───────────┐
-│ Modified  │ ◀──────────── │ Exclusive │
-└───────────┘  Write by     └───────────┘
-               this core
-```
-
-### False Sharing
-
-When cores modify different data in the same cache line:
-
-```python
-import numpy as np
-from concurrent.futures import ThreadPoolExecutor
-import time
-
-def false_sharing_demo():
-    # Bad: Adjacent data (same cache line)
-    shared_array = np.zeros(2, dtype=np.int64)
-    
-    def increment_0():
-        for _ in range(10_000_000):
-            shared_array[0] += 1
-    
-    def increment_1():
-        for _ in range(10_000_000):
-            shared_array[1] += 1
-    
-    # Both threads fight over same cache line!
-    start = time.perf_counter()
-    with ThreadPoolExecutor(max_workers=2) as ex:
-        ex.submit(increment_0)
-        ex.submit(increment_1)
-    bad_time = time.perf_counter() - start
-    
-    # Better: Pad to separate cache lines (64 bytes apart)
-    padded = np.zeros(16, dtype=np.int64)  # 128 bytes
-    # Thread 0 uses padded[0], Thread 1 uses padded[8]
-    
-    print(f"Adjacent (false sharing): {bad_time:.2f}s")
-```
-
-## Memory Bandwidth Measurement
-
-```python
-import numpy as np
-import time
-
-def measure_bandwidth():
-    """Measure achievable memory bandwidth."""
-    sizes_mb = [1, 10, 100, 1000]
-    
-    for size_mb in sizes_mb:
-        n = size_mb * 1024 * 1024 // 8
-        arr = np.random.rand(n)
-        
-        # Read bandwidth (sum reads all elements)
-        start = time.perf_counter()
-        for _ in range(10):
-            _ = np.sum(arr)
-        elapsed = time.perf_counter() - start
-        
-        bytes_read = n * 8 * 10
-        bandwidth = bytes_read / elapsed / 1e9
-        
-        print(f"{size_mb:4d} MB: {bandwidth:.1f} GB/s")
-
-measure_bandwidth()
-```
-
-Expected output:
+tCL – CAS Latency
+tRCD – Row to Column Delay
+tRP – Row Precharge
+tRAS – Row Active Time
 
 ```
-   1 MB: 80.0 GB/s   (fits in L3 cache)
-  10 MB: 50.0 GB/s   (partially cached)
- 100 MB: 35.0 GB/s   (RAM limited)
-1000 MB: 32.0 GB/s   (RAM limited)
+
+Example DDR4-3200 CL16 memory.
+
+Total latency for a DRAM access is typically **~60–100 ns**.
+
+---
+
+# Cache Coherency
+
+When multiple cores access the same memory location, caches must remain consistent.
+
+The **MESI protocol** tracks cache states:
+
+| State | Meaning |
+|------|--------|
+| Modified | Only copy, changed |
+| Exclusive | Only copy, clean |
+| Shared | Multiple copies |
+| Invalid | Not valid |
+
+---
+
+# False Sharing
+
+False sharing occurs when two threads modify data in the **same cache line**.
+
+Even if the variables are unrelated, the cache line must bounce between cores.
+
+This creates unnecessary coherency traffic and reduces performance.
+
+---
+
+# NUMA: Non-Uniform Memory Access
+
+Multi-socket systems have local and remote memory.
+
 ```
 
-## NUMA: Non-Uniform Memory Access
-
-Multi-socket systems have local and remote memory:
+Socket 0 ─── RAM 0
+│
+Inter-CPU Link
+│
+Socket 1 ─── RAM 1
 
 ```
-NUMA Architecture (2 sockets)
 
-┌──────────────────────┐     ┌──────────────────────┐
-│       Socket 0       │     │       Socket 1       │
-│  ┌────────────────┐  │     │  ┌────────────────┐  │
-│  │   CPU Cores    │  │     │  │   CPU Cores    │  │
-│  └───────┬────────┘  │     │  └───────┬────────┘  │
-│          │           │     │          │           │
-│  ┌───────┴────────┐  │     │  ┌───────┴────────┐  │
-│  │ Memory Ctrl    │  │◀═══▶│  │ Memory Ctrl    │  │
-│  └───────┬────────┘  │ QPI │  └───────┬────────┘  │
-│          │           │     │          │           │
-│      ┌───┴───┐       │     │      ┌───┴───┐       │
-│      │ RAM   │       │     │      │ RAM   │       │
-│      │(Local)│       │     │      │(Local)│       │
-│      └───────┘       │     │      └───────┘       │
-└──────────────────────┘     └──────────────────────┘
+Access times:
 
-Local access:  ~60 ns
-Remote access: ~100 ns (must cross QPI link)
 ```
 
-### NUMA-Aware Allocation
+Local memory ~60 ns
+Remote memory ~100 ns
 
-```python
-import numpy as np
-
-# NumPy doesn't directly control NUMA
-# But OS may place memory on local node
-
-# For NUMA-aware code, use:
-# - numactl command-line tool
-# - numa library bindings
-# - Process pinning to specific nodes
 ```
 
-## Summary
+Operating systems try to allocate memory close to the CPU that uses it.
+
+---
+
+# Summary
 
 | Concept | Description |
-|---------|-------------|
-| **Memory Controller** | Manages CPU-RAM communication |
-| **Channels** | Parallel paths to memory (dual/quad) |
-| **Interleaving** | Striping data across channels |
-| **CAS Latency** | Cycles from column command to data |
-| **Cache Coherency** | Keeping caches consistent (MESI) |
-| **False Sharing** | Performance loss from shared cache lines |
-| **NUMA** | Non-uniform memory access in multi-socket |
+|--------|-------------|
+| Memory Controller | Manages CPU-RAM communication |
+| CPU Interconnect | Internal network linking cores and memory |
+| Channels | Parallel memory paths |
+| Interleaving | Distributing addresses across channels |
+| Cache Coherency | Maintaining consistent cache data |
+| False Sharing | Performance loss from shared cache lines |
+| NUMA | Different access times to local vs remote memory |
 
 Key insights for Python:
 
-- Memory bandwidth (~30-50 GB/s) limits large array operations
-- Sequential access enables prefetching and channel interleaving
-- Random access suffers full memory latency (~60 ns)
-- False sharing can hurt multi-threaded code
-- NumPy operations are often memory-bound, not compute-bound
+- Large array operations are often **memory-bandwidth limited**
+- Sequential access enables **prefetching and channel interleaving**
+- Random access incurs **full DRAM latency**
+- False sharing can hurt multi-threaded programs
+

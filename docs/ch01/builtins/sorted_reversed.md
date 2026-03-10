@@ -1,5 +1,9 @@
 # sorted() and reversed()
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 The sorted() function returns a new sorted list from any iterable, while reversed() returns an iterator over elements in reverse order. Both are essential for data organization and iteration.
 
 ---

@@ -1,5 +1,9 @@
 # functools.reduce
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 `reduce` applies a two-argument function cumulatively to the items of a sequence, reducing it to a single value. It was a built-in in Python 2 and moved to `functools` in Python 3.
 
 ```python

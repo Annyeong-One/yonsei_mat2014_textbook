@@ -1,5 +1,9 @@
 # Axes Method - plot_surface
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 The `plot_surface` method creates a 3D surface plot from grid data. It requires 2D arrays for X, Y coordinates and corresponding Z values.
 
 ## Understanding meshgrid

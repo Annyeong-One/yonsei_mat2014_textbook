@@ -1,5 +1,9 @@
 # `str`: Slicing
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Slicing extracts substrings using a flexible `[start:end:step]` syntax.
 
 ---

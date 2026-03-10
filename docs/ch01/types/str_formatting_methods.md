@@ -1,5 +1,9 @@
 # Formatting Methods
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Python provides three distinct string formatting approaches. Understanding all three is essential for reading legacy code and writing modern Python.
 
 ## Percent Formatting

@@ -1,5 +1,9 @@
 # match / case (Structural Pattern Matching)
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Python 3.10+ introduced match/case statements for structural pattern matching, providing a more powerful alternative to if/elif chains. Match statements enable pattern-based dispatch and destructuring of complex data structures.
 
 ---

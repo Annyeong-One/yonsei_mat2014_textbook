@@ -1,5 +1,9 @@
 # chain and chain.from_iterable
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 The `chain()` function concatenates multiple iterables into a single iterator, while `chain.from_iterable()` accepts an iterable of iterables.
 
 ## chain() - Concatenate Iterables

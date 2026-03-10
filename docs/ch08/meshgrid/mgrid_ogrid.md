@@ -1,5 +1,9 @@
 # np.mgrid and np.ogrid
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## np.mgrid Basics
 
 `np.mgrid` is an index trick that creates dense multi-dimensional mesh grids using slice notation. Unlike `np.meshgrid`, which takes arrays as arguments, `np.mgrid` uses Python's slice syntax directly.

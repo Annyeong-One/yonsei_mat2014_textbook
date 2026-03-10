@@ -1,5 +1,9 @@
 # Chapter 4: Memory and Performance
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 This chapter covers Python's memory architecture, reference counting, garbage collection, weak references, advanced memory topics, and performance profiling tools.
 
 ## 4.1 Memory Architecture

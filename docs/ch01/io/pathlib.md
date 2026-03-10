@@ -1,5 +1,9 @@
 # Path Handling
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 The `pathlib` module provides object-oriented filesystem path operations. It offers cleaner syntax than `os.path` and works consistently across operating systems.
 
 ## Creating Paths

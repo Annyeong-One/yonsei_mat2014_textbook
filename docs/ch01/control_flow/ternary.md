@@ -1,5 +1,9 @@
 # Ternary Expressions
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Ternary expressions (conditional expressions) provide a concise way to assign one of two values based on a condition. The syntax is `value_if_true if condition else value_if_false`, making code more readable than nested if/else statements.
 
 ---

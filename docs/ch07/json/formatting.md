@@ -1,5 +1,9 @@
 # Formatting and Pretty Printing
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Control JSON output formatting with indentation, sorting, and separators.
 
 ## Pretty Printing with Indentation

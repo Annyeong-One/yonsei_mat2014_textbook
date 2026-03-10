@@ -1,5 +1,9 @@
 # First-Class Functions
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 In Python, functions are **first-class objects**. This means functions can be treated like any other value—assigned to variables, passed as arguments, returned from other functions, and stored in data structures.
 
 ---

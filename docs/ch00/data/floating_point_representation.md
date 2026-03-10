@@ -1,5 +1,9 @@
 # Floating Point (IEEE 754 Preview)
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## The Problem with Real Numbers
 
 Computers work with finite bits, but real numbers can have infinite decimal places. Floating-point representation is a compromise—trading exactness for range. Many decimal fractions (like 0.1) have infinite binary expansions, so they cannot be represented exactly in binary floating-point.

@@ -1,5 +1,9 @@
 # Magic Methods Practice Exercises
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Exercise 1: Temperature Class
 Create a `Temperature` class that:
 - Stores temperature in Celsius

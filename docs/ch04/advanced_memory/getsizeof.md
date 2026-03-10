@@ -1,5 +1,9 @@
 # sys.getsizeof()
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 The `sys.getsizeof()` function returns the size of an object in bytes. It's essential for understanding Python's memory usage and optimizing memory-critical applications.
 
 ```python

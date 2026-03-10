@@ -1,5 +1,9 @@
 # Short-Circuit Evaluation
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Python's and and or operators use short-circuit evaluation, stopping evaluation as soon as the result is determined. This behavior is crucial for writing efficient code and preventing errors from evaluating unnecessary expressions.
 
 ---

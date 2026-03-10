@@ -1,5 +1,9 @@
 # min(), max(), sum()
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 These fundamental aggregate functions compute the minimum, maximum, and sum of iterables. They're essential for data analysis and provide convenient alternatives to loops or sorting.
 
 ---

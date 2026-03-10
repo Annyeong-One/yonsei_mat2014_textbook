@@ -1,5 +1,9 @@
 # Weak References
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Weak references allow referencing objects without preventing garbage collection.
 
 ## Basic Weak References

@@ -1,5 +1,9 @@
 # Surface Plotting
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## 3D Surface Basics
 
 Mesh grids are essential for creating 3D surface plots with Matplotlib. The `plot_surface` method requires X, Y, and Z arrays of the same shape.

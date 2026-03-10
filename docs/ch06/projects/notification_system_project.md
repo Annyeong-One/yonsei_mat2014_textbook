@@ -1,5 +1,9 @@
 # Notification System Project
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Build a multi-channel notification system using abstraction.
 
 ## Requirements

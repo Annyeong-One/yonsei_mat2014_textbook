@@ -1,5 +1,9 @@
 # `str`: Raw Strings
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Raw strings ignore escape character interpretation, treating backslashes as literal characters.
 
 ---

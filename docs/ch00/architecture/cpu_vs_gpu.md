@@ -1,5 +1,9 @@
 # CPU vs GPU
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Fundamental Design Differences
 
 CPUs and GPUs are optimized for different types of workloads:

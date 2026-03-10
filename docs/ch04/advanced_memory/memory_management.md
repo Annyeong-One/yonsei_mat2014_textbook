@@ -1,5 +1,9 @@
 # Memory Management
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Understanding copy semantics, memory views, and `__slots__` for efficient memory usage.
 
 ## Copy vs Deepcopy

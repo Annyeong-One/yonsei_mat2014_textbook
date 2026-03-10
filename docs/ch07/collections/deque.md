@@ -1,5 +1,9 @@
 # deque
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 A `deque` (double-ended queue, pronounced "deck") supports O(1) appends and pops from both ends. It's the go-to data structure for queues and sliding windows.
 
 ---

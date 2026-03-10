@@ -1,5 +1,9 @@
 # json.dumps and json.loads
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 `dumps()` converts Python objects to JSON strings, while `loads()` parses JSON strings into Python objects.
 
 ## dumps - Python to JSON String

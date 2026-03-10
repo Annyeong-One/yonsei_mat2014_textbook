@@ -1,5 +1,9 @@
 # String Unpacking
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Strings are iterable sequences, allowing their characters to be unpacked into individual variables using Python's assignment syntax.
 
 ## Basic Unpacking

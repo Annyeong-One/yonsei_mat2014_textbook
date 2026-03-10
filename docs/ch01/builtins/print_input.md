@@ -1,5 +1,9 @@
 # `print()` and
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Two of the most commonly used built-in functions in Python are `print()` (for output) and `input()` (for interactive user input). You’ll use them constantly when learning and when building small tools.
 
 ---

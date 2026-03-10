@@ -1,5 +1,9 @@
 # Chapter 6: OOP
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 This chapter provides a comprehensive guide to object-oriented programming in Python, from foundational concepts through advanced topics like descriptors, metaclasses, dataclasses, and design patterns.
 
 ## 6.1 OOP Foundations

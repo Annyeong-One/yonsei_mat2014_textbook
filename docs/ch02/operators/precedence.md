@@ -1,5 +1,9 @@
 # Precedence and Associativity
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Operator precedence determines which operations are performed first. Associativity determines the order when operators have the same precedence.
 
 

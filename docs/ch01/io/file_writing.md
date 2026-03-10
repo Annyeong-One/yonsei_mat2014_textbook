@@ -1,5 +1,9 @@
 # Writing Files
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Writing files allows programs to persist results, logs, configurations, and data for later use.
 
 ---

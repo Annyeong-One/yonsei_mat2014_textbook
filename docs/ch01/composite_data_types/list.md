@@ -1,5 +1,9 @@
 # `list` and Dynamic Arrays
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 A **list** is an ordered, mutable collection backed by a dynamic array. Lists are the most commonly used data structure in Python.
 
 ---

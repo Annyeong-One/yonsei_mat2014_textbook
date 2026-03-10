@@ -1,5 +1,9 @@
 # Static vs Dynamic Typing
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Python is **dynamically typed**, while languages like C are **statically typed**. This fundamental difference affects how you write and think about code.
 
 ---

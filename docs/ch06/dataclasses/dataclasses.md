@@ -1,5 +1,9 @@
 # dataclasses
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 The `dataclasses` module (Python 3.7+) automatically generates boilerplate code for classes that primarily store data. It reduces repetitive `__init__`, `__repr__`, `__eq__`, and other methods.
 
 ```python

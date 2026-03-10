@@ -1,5 +1,9 @@
 # Broadcasting Rules
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Broadcasting allows NumPy to perform elementwise operations on arrays of different shapes without explicit loops.
 
 

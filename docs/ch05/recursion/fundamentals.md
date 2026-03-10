@@ -1,5 +1,9 @@
 # Recursion and Stack
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Introduction
 
 **Recursion** is a programming technique where a function calls itself to solve a problem by breaking it down into smaller, similar subproblems. While recursion can provide elegant solutions to certain problems, it requires careful management to avoid stack overflow errors.

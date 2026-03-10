@@ -1,5 +1,9 @@
 # Creating 3D Axes
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Create 3D plotting axes in Matplotlib using projection parameter.
 
 ## Method 1: plt.subplots with subplot_kw

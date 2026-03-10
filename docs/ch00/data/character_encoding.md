@@ -1,5 +1,9 @@
 # Character Encoding Preview
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## The Problem: Characters Are Not Numbers
 
 Computers store bits. Unicode assigns characters to code points (numbers); encodings such as UTF-8 define how those code points are stored as bytes.

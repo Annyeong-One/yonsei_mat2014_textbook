@@ -1,5 +1,9 @@
 # Reshaping Arrays
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Reshaping changes an array's dimensions while preserving its data.
 
 

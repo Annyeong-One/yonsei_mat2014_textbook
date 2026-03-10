@@ -1,5 +1,9 @@
 # Chapter 5: Functions
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 This chapter covers advanced function topics including first-class functions, lambda expressions, parameter handling, recursion, functional programming patterns, the functools module, and decorators.
 
 ## 5.1 First-Class Functions

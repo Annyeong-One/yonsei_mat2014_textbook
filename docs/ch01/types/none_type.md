@@ -1,5 +1,9 @@
 # None Type
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Python's `None` represents the absence of a value. It is the sole instance of `NoneType` and serves as Python's null value.
 
 ## None Basics

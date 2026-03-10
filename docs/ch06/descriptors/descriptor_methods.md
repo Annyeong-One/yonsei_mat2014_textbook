@@ -1,5 +1,9 @@
 # __get__ __set__ __delete__
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## The Three Methods
 
 ### 1. Method Signatures

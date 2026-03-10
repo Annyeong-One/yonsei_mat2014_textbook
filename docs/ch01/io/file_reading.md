@@ -1,5 +1,9 @@
 # Opening and Reading Files
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 File input/output (I/O) allows Python programs to read data from and write data to files on disk. Reading files is fundamental for data processing and analysis.
 
 ---

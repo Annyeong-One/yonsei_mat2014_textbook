@@ -1,5 +1,9 @@
 # break and continue
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 The `break` and `continue` statements give you precise control over loop execution. They let you exit loops early or skip iterations based on conditions.
 
 ---

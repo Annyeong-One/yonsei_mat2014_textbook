@@ -1,5 +1,9 @@
 # Lambda Expressions
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Introduction
 
 **Lambda expressions** (or lambda functions) are small, anonymous functions defined using the `lambda` keyword. They provide a concise way to create simple functions without the formal `def` statement.

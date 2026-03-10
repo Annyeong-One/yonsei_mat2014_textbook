@@ -1,5 +1,9 @@
 # Properties as Descriptors
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## The Connection
 
 ### 1. Property IS a Descriptor

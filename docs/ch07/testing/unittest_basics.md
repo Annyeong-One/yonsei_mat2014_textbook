@@ -1,5 +1,9 @@
 # unittest Basics
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Introduction to Python's built-in unittest framework.
 
 ## Creating Test Cases

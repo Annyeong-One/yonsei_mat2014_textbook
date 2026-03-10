@@ -1,5 +1,9 @@
 # Procedural vs OOP
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Understanding the fundamental differences between procedural and object-oriented programming paradigms.
 
 ---

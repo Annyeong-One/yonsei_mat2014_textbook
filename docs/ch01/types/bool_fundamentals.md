@@ -1,5 +1,9 @@
 # Boolean Basics
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 The `bool` type in Python represents binary logic values and is fundamental to conditional evaluation and control flow.
 
 ---

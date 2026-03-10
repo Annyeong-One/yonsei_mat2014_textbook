@@ -1,5 +1,9 @@
 # and/or Return Values
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 The and and or operators don't return boolean values—they return one of their operands. This behavior is powerful for default value patterns and conditional value selection, but differs from other languages' boolean operators.
 
 ---

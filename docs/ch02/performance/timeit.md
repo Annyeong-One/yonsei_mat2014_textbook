@@ -1,5 +1,9 @@
 # timeit Module
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 The timeit module measures execution time of code snippets, useful for benchmarking and performance comparison. It handles timing overhead and runs code multiple times for accurate results.
 
 ---

@@ -1,5 +1,9 @@
 # Binary Files
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Binary files store raw bytes rather than human-readable text. Working with binary mode is essential for images, audio, executables, and custom data formats.
 
 ## Opening Binary Files

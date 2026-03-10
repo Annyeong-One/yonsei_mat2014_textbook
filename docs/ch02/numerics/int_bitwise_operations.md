@@ -1,5 +1,9 @@
 # Bitwise Operations
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Since integers are stored in binary, Python allows bitwise operations to manipulate individual bits.
 
 ---

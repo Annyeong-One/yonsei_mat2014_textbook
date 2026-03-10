@@ -1,5 +1,9 @@
 # os Module Overview
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 The `os` module provides a portable way to interact with the operating system, including file operations, environment variables, and process management.
 
 ## os Module Basics

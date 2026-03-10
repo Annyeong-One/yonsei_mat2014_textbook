@@ -1,5 +1,9 @@
 # Class Decorators
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Decorators can be applied to classes, and classes can be used as decorators.
 
 ## Decorating Classes

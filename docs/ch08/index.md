@@ -1,5 +1,9 @@
 # Chapter 8: NumPy
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 This chapter covers NumPy, the foundational library for numerical computing in Python, including array creation, indexing, broadcasting, vectorization, linear algebra, random number generation, and Fourier transforms.
 
 ## 8.1 Getting Started

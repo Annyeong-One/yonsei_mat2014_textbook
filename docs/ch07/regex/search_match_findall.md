@@ -1,5 +1,9 @@
 # search, match, findall
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 Python's `re` module provides several functions for finding patterns in text. The three most commonly used are `search()`, `match()`, and `findall()`, each with distinct behavior.

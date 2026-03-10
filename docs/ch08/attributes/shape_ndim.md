@@ -1,5 +1,9 @@
 # Shape and ndim
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Every NumPy array has `shape` and `ndim` attributes that describe its structure.
 
 

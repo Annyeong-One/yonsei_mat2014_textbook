@@ -1,5 +1,9 @@
 # Chapter 2: Python Intermediate
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 This chapter deepens your understanding of Python with topics like dynamic typing, numeric and string internals, iteration protocols, closures, scope rules, and performance fundamentals.
 
 ## 2.1 Variables and Naming

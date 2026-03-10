@@ -1,5 +1,9 @@
 # namedtuple
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 A **namedtuple** is a tuple subclass with named fields. It combines the immutability of tuples with the readability of classes.
 
 ---

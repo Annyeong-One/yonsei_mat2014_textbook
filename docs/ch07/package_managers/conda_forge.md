@@ -1,5 +1,9 @@
 # conda-forge and Miniforge
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 **conda-forge** is a community-driven collection of conda packages. **Miniforge** is a minimal installer that uses conda-forge by default — free for all uses, including commercial.
 
 ---
