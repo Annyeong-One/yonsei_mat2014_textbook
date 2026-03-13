@@ -1,9 +1,5 @@
 # np.array Basics
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 The `np.array` function converts Python sequences into NumPy arrays. Understanding array dimensions is fundamental to working with NumPy.
 
 

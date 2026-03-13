@@ -1,9 +1,5 @@
 # Universal Functions
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 Universal functions (ufuncs) operate element-wise on arrays with broadcasting support.
 
 ## What are Ufuncs

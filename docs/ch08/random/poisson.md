@@ -1,9 +1,5 @@
 # Poisson Distribution
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 The Poisson distribution models the number of events occurring in a fixed interval of time or space.
 
 ## np.random.poisson

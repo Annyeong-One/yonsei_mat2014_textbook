@@ -1,9 +1,5 @@
 # Binary Structures, Morphology, and Labeling
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 Binary structures define connectivity patterns for segmentation and morphological operations. They answer the question: "Which neighboring pixels are considered connected?"
 
 ## Connectivity Definitions

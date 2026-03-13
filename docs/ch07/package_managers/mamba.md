@@ -1,9 +1,5 @@
 # mamba
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 **mamba** is a fast, drop-in replacement for conda. It uses the same commands but resolves dependencies much faster.
 
 ---

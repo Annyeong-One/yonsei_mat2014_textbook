@@ -1,9 +1,5 @@
 # Dataclass vs NamedTuple vs attrs
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 Python offers multiple ways to create simple classes. Understanding differences helps you choose the right tool.
 
 ---

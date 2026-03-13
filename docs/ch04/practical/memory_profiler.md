@@ -1,9 +1,5 @@
 # memory_profiler
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 The `memory_profiler` module tracks memory usage at the line level, helping identify memory leaks and inefficient memory access patterns.
 
 ---

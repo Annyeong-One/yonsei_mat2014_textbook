@@ -1,9 +1,5 @@
 # scipy.interpolate — Spline Interpolation
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 While NumPy's `polyfit` fits a single polynomial to data, `scipy.interpolate` provides piecewise spline interpolation that avoids the oscillation problems of high-degree polynomials. Spline interpolation is essential in financial mathematics for constructing smooth yield curves, volatility surfaces, and forward rate curves from discrete market data.
 
 ---

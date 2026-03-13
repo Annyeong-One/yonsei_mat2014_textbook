@@ -1,9 +1,5 @@
 # set Internals
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 Sets are implemented similarly to dictionaries—as hash tables—enabling O(1) average membership testing and set operations. Understanding set internals explains their performance characteristics and implementation constraints.
 
 ---

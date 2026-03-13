@@ -1,384 +1,246 @@
-# Complex Fundamentals
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+# complex Fundamentals
 
-Python has built-in support for complex numbers, representing values with real and imaginary parts. Complex numbers are essential for scientific computing, signal processing, and mathematical applications.
+The `complex` type represents **complex numbers**, which include both a real part and an imaginary part.
 
-## Creating Complex
+A complex number has the form:
 
-Multiple ways to create complex numbers in Python.
+\[
+a + bj
+\]
 
-### 1. Literal Syntax
+where:
 
-Use `j` or `J` suffix for the imaginary part.
+- \(a\) is the real part
+- \(b\) is the imaginary part
+- `j` is Python’s symbol for the imaginary unit
 
-```python
-a = 1 + 2j
-print(a)         # (1+2j)
-print(type(a))   # <class 'complex'>
-
-# Uppercase J also works
-b = 1 + 2J
-print(b)         # (1+2j)
-
-# No space before j allowed
-# c = 1 + 2 j   # SyntaxError: invalid syntax
-```
-
-### 2. The complex() Function
-
-Use the constructor for explicit creation.
+Examples:
 
 ```python
-# Two arguments: real, imaginary
-a = complex(1, 2)
-print(a)         # (1+2j)
+1 + 2j
+3 - 4j
+0 + 1j
+````
 
-# Single argument: real only
-b = complex(3)
-print(b)         # (3+0j)
-
-# From string
-c = complex("1+2j")
-print(c)         # (1+2j)
+```mermaid2
+flowchart LR
+    A[complex number]
+    A --> B[real part]
+    A --> C[imaginary part]
 ```
 
-### 3. Pure Imaginary
+---
 
-Create numbers with only imaginary part.
+## 1. Creating Complex Numbers
+
+Complex numbers can be written directly.
 
 ```python
-# Pure imaginary
-i = 1j
-print(i)         # 1j
-
-# Using complex()
-i = complex(0, 1)
-print(i)         # 1j
-
-# Zero
-zero = 0j
-print(zero)      # 0j
+z = 2 + 3j
+print(z)
 ```
 
-## Accessing Parts
+Output:
 
-Extract real and imaginary components.
+```text
+(2+3j)
+```
 
-### 1. Attributes
-
-Use `.real` and `.imag` attributes.
+They can also be created with `complex()`.
 
 ```python
-a = 3 + 4j
-
-print(a.real)    # 3.0
-print(a.imag)    # 4.0
-
-# Both are floats
-print(type(a.real))  # <class 'float'>
-print(type(a.imag))  # <class 'float'>
+z = complex(2, 3)
+print(z)
 ```
 
-### 2. NumPy Functions
+Output:
 
-Use `np.real()` and `np.imag()` for arrays.
+```text
+(2+3j)
+```
+
+---
+
+## 2. Real and Imaginary Parts
+
+Python complex numbers expose `.real` and `.imag` attributes.
 
 ```python
-import numpy as np
+z = 4 + 5j
 
-a = 1 + 2j
-
-print(np.real(a))        # 1.0
-print(np.imag(a))        # 2.0
-print(type(np.real(a)))  # <class 'numpy.float64'>
+print(z.real)
+print(z.imag)
 ```
 
-### 3. Conjugate
+Output:
 
-Get the complex conjugate with `.conjugate()`.
-
-```python
-a = 3 + 4j
-
-conj = a.conjugate()
-print(conj)      # (3-4j)
-
-# Product with conjugate gives real number
-print(a * conj)  # (25+0j)
+```text
+4.0
+5.0
 ```
 
-## Internal Storage
+---
 
-Complex numbers store both parts as floats.
+## 3. Complex Arithmetic
 
-### 1. Float Components
-
-Integer literals become floats internally.
-
-```python
-import numpy as np
-
-a = 1 + 2j
-print(type(a.real))  # <class 'float'>
-print(type(a.imag))  # <class 'float'>
-
-# These are all equivalent
-b = 1. + 2j
-c = 1. + 2.j
-d = 1.0 + 2.0j
-
-print(a == b == c == d)  # True
-```
-
-### 2. Memory Layout
-
-A complex is two floats (16 bytes total).
-
-```python
-import sys
-
-a = 1 + 2j
-print(sys.getsizeof(a))  # 32 (includes object overhead)
-
-# Compare with float
-f = 1.0
-print(sys.getsizeof(f))  # 24
-```
-
-### 3. Precision Limits
-
-Subject to same float precision issues.
-
-```python
-a = 0.1 + 0.2j
-print(a)  # (0.1+0.2j)
-
-b = (0.1 + 0.1 + 0.1) + 0j
-print(b)  # (0.30000000000000004+0j)
-```
-
-## Arithmetic
-
-Standard arithmetic operations on complex numbers.
-
-### 1. Basic Operations
-
-Addition, subtraction, multiplication, division.
+Complex numbers support arithmetic operations.
 
 ```python
 a = 1 + 2j
 b = 3 + 4j
 
-print(a + b)    # (4+6j)
-print(a - b)    # (-2-2j)
-print(a * b)    # (-5+10j)
-print(a / b)    # (0.44+0.08j)
+print(a + b)
+print(a - b)
+print(a * b)
 ```
 
-### 2. Imaginary Unit
+Output:
 
-Verify that i² = -1.
+```text
+(4+6j)
+(-2-2j)
+(-5+10j)
+```
+
+---
+
+## 4. Conjugates
+
+The conjugate of a complex number changes the sign of the imaginary part.
 
 ```python
-i = 1j
-
-result = i * i
-print(result)        # (-1+0j)
-print(result.real)   # -1.0
-
-# Using complex()
-i = complex(0, 1)
-print(i * i)         # (-1+0j)
+z = 2 + 3j
+print(z.conjugate())
 ```
 
-### 3. Power Operations
+Output:
 
-Exponentiation with complex numbers.
+```text
+(2-3j)
+```
+
+Conjugates are useful in algebra and engineering.
+
+---
+
+## 5. Complex Numbers and Magnitude
+
+The magnitude of a complex number behaves like its distance from the origin in the complex plane.
 
 ```python
-import numpy as np
-
-a = 1 + 1j
-
-# Square
-print(a ** 2)        # 2j
-
-# Square root
-print(a ** 0.5)      # (1.0986...+0.4550...j)
-
-# e^(i*pi) = -1 (Euler's identity)
-result = np.exp(1j * np.pi)
-print(result)        # (-1+0j) approximately
+z = 3 + 4j
+print(abs(z))
 ```
 
-## Magnitude and Phase
+Output:
 
-Polar representation of complex numbers.
+```text
+5.0
+```
 
-### 1. Absolute Value
+This follows the Pythagorean relationship:
 
-Get magnitude with `abs()`.
+[
+|a + bj| = \sqrt{a^2 + b^2}
+]
+
+```mermaid2
+flowchart TD
+    A[origin]
+    A --> B[real axis]
+    A --> C[imaginary axis]
+    B --> D[point a + bj]
+    C --> D
+```
+
+---
+
+## 6. Equality and Comparison
+
+Complex numbers support equality comparison:
 
 ```python
-a = 3 + 4j
-
-magnitude = abs(a)
-print(magnitude)     # 5.0
-
-# Same as sqrt(real² + imag²)
-import math
-manual = math.sqrt(a.real**2 + a.imag**2)
-print(manual)        # 5.0
+print((1 + 2j) == (1 + 2j))
 ```
 
-### 2. Phase Angle
-
-Get angle with `cmath.phase()`.
+But they do not support ordering comparisons such as `<` or `>`.
 
 ```python
-import cmath
-
-a = 1 + 1j
-
-phase = cmath.phase(a)
-print(phase)             # 0.7853... (π/4 radians)
-print(math.degrees(phase))  # 45.0 degrees
+# (1+2j) < (2+3j)   # TypeError
 ```
 
-### 3. Polar Conversion
+This is because complex numbers are not ordered like real numbers.
 
-Convert between rectangular and polar forms.
+---
+
+## 7. Worked Examples
+
+### Example 1: addition
 
 ```python
-import cmath
+z1 = 1 + 1j
+z2 = 2 + 3j
 
-a = 1 + 1j
-
-# To polar (magnitude, phase)
-r, phi = cmath.polar(a)
-print(f"r={r:.4f}, φ={phi:.4f}")  # r=1.4142, φ=0.7854
-
-# From polar back to rectangular
-b = cmath.rect(r, phi)
-print(b)  # (1+1j) approximately
+print(z1 + z2)
 ```
 
-## Math Functions
+Output:
 
-Complex-aware mathematical functions.
+```text
+(3+4j)
+```
 
-### 1. The cmath Module
-
-Use `cmath` for complex math functions.
+### Example 2: magnitude
 
 ```python
-import cmath
-
-a = 1 + 2j
-
-print(cmath.sqrt(a))    # (1.272...+0.786...j)
-print(cmath.exp(a))     # (-1.131...+2.471...j)
-print(cmath.log(a))     # (0.804...+1.107...j)
+z = 6 + 8j
+print(abs(z))
 ```
 
-### 2. Trigonometric Functions
+Output:
 
-Complex trigonometry with `cmath`.
+```text
+10.0
+```
+
+### Example 3: conjugate
 
 ```python
-import cmath
-
-a = 1 + 1j
-
-print(cmath.sin(a))     # (1.298...+0.634...j)
-print(cmath.cos(a))     # (0.833...-0.988...j)
-print(cmath.tan(a))     # (0.271...+1.083...j)
+z = 5 - 2j
+print(z.conjugate())
 ```
 
-### 3. NumPy Integration
+Output:
 
-NumPy functions work with complex arrays.
-
-```python
-import numpy as np
-
-# Array of complex numbers
-arr = np.array([1+2j, 3+4j, 5+6j])
-
-print(np.abs(arr))      # [2.236 5.    7.81 ]
-print(np.angle(arr))    # [1.107 0.927 0.876]
-print(np.real(arr))     # [1. 3. 5.]
-print(np.imag(arr))     # [2. 4. 6.]
+```text
+(5+2j)
 ```
 
-## Practical Examples
+---
 
-Common applications of complex numbers.
+## 8. Common Uses
 
-### 1. Unit Circle
+Complex numbers appear in:
 
-Plot unit circle using Euler's formula.
+* signal processing
+* electrical engineering
+* physics
+* mathematics
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
+They are less common in beginner Python programming, but Python includes them as a built-in numeric type.
 
-i = complex(0, 1)
-theta = np.linspace(0, 2*np.pi, 100)
+---
 
-# e^(iθ) = cos(θ) + i·sin(θ)
-z = np.exp(i * theta)
+## 9. Summary
 
-x = np.real(z)
-y = np.imag(z)
+Key ideas:
 
-fig, ax = plt.subplots(figsize=(4, 4))
-ax.plot(x, y)
-ax.set_aspect('equal')
-ax.set_title('Unit Circle')
-plt.show()
-```
+* `complex` represents numbers with real and imaginary parts
+* complex numbers use `j` for the imaginary unit
+* Python supports complex arithmetic directly
+* `.real`, `.imag`, and `.conjugate()` expose useful properties
+* `abs()` gives the magnitude
 
-### 2. Roots of Unity
-
-Calculate nth roots of unity.
-
-```python
-import numpy as np
-
-def roots_of_unity(n):
-    """Calculate n-th roots of unity."""
-    k = np.arange(n)
-    return np.exp(2j * np.pi * k / n)
-
-# 4th roots of unity
-roots = roots_of_unity(4)
-print(roots)
-# [ 1.+0.j  0.+1.j -1.+0.j -0.-1.j]
-```
-
-### 3. Quadratic Solutions
-
-Solve quadratics with complex roots.
-
-```python
-import cmath
-
-def solve_quadratic(a, b, c):
-    """Solve ax² + bx + c = 0."""
-    discriminant = b**2 - 4*a*c
-    x1 = (-b + cmath.sqrt(discriminant)) / (2*a)
-    x2 = (-b - cmath.sqrt(discriminant)) / (2*a)
-    return x1, x2
-
-# x² + 1 = 0 (no real solutions)
-roots = solve_quadratic(1, 0, 1)
-print(roots)  # (1j, -1j)
-
-# x² - 2x + 1 = 0 (real solutions)
-roots = solve_quadratic(1, -2, 1)
-print(roots)  # ((1+0j), (1+0j))
-```
+The `complex` type extends Python’s numeric model beyond ordinary real-number arithmetic.

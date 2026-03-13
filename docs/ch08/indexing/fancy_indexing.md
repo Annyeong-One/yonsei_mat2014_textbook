@@ -1,9 +1,5 @@
 # Fancy Indexing
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 Fancy indexing selects elements using arrays of indices instead of scalars or slices.
 
 

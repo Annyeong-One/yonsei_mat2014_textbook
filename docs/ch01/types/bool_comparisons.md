@@ -1,185 +1,235 @@
-# Comparisons
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+# bool Comparisons
 
-Python provides relational operators that return boolean values for comparing objects.
+Comparisons test relationships between values and produce Boolean results.
 
----
+These results are central to decision making in Python.
 
-## Relational Operators
+Common comparison operators include:
 
-Basic comparison operators return boolean results.
+| Operator | Meaning |
+|---|---|
+| `==` | equal to |
+| `!=` | not equal to |
+| `<` | less than |
+| `>` | greater than |
+| `<=` | less than or equal to |
+| `>=` | greater than or equal to |
 
-### 1. Greater Than
-
-```python
-print(10 > 5)    # Output: True
-```
-
-### 2. Equality
-
-```python
-print(10 == 10)  # Output: True
-```
-
-### 3. Inequality
-
-```python
-print(10 != 5)   # Output: True
-```
-
-### 4. Less Than
-
-```python
-print(10 < 5)    # Output: False
-```
+```mermaid2
+flowchart TD
+    A[Two values] --> B[comparison operator]
+    B --> C[Boolean result]
+````
 
 ---
 
-## Chained Comparisons
+## 1. Equality and Inequality
 
-Python allows chained comparisons for improved readability.
-
-### 1. Basic Chaining
+Equality checks whether two values are the same.
 
 ```python
-print(1 < 2 < 3)  # Equivalent to: (1 < 2) and (2 < 3) → True
+print(5 == 5)
+print(5 != 3)
 ```
 
-### 2. Mixed Operators
+Output:
 
-```python
-print(1 < 2 > 3)  # Equivalent to: (1 < 2) and (2 > 3) → False
+```text
+True
+True
 ```
 
-### 3. Readability
-
-Chained comparisons reduce verbosity and improve code clarity.
-
----
-
-## Equality vs Identity
-
-Understanding the difference between `==` and `is`.
-
-### 1. == Operator
-
-The `==` operator checks whether values are equal.
+These comparisons work across many types.
 
 ```python
-a = [1, 2, 3]
-b = [1, 2, 3]
-
-print(a == b)  # Output: True (content is the same)
-```
-
-### 2. is Operator
-
-The `is` operator checks if two variables refer to the same object in memory.
-
-```python
-x = [1, 2, 3]
-y = [1, 2, 3]
-
-print(x is y)  # Output: False (different objects)
-```
-
-### 3. Basic Example
-
-```python
-def main():
-    a = [1, 2, 3]
-    b = [1, 2, 3]
-    print(a == b)  # Output: True (content is the same)
-
-    x = [1, 2, 3]
-    y = [1, 2, 3]
-    print(x is y)  # Output: False (different objects)
-
-if __name__ == "__main__":
-    main()
-```
-
-### 4. Key Difference
-
-- `==`: Compares **values** (content)
-- `is`: Compares **identity** (memory address)
-
-### 5. When to Use
-
-Use `==` for value comparison. Use `is` for:
-- Checking for `None`
-- Checking if two variables refer to the exact same object
-
----
-
-## Integer Caching
-
-Python caches small integers for optimization.
-
-### 1. Small Integer
-
-```python
-def main():
-    a = 256
-    b = 256
-    print(a is b)  # Output: True (cached)
-
-if __name__ == "__main__":
-    main()
-```
-
-### 2. List Container
-
-```python
-def main():
-    a = [256]
-    b = [256]
-    print(a is b)  # Output: False (different list objects)
-
-if __name__ == "__main__":
-    main()
-```
-
-[Reel from instagram](https://www.instagram.com/reel/C3aULcRNa5G/?igsh=MWdidnA2NGF3bGoyMA==)
-
----
-
-## Best Practices
-
-Guidelines for comparison operations.
-
-### 1. Value Comparison
-
-Use `==` when comparing values or content.
-
-### 2. Identity Check
-
-Use `is` specifically for `None` checks:
-
-```python
-if x is None:
-    print("x is None")
-```
-
-### 3. Avoid with None
-
-Never use `==` for `None` comparison:
-
-```python
-# Bad
-if x == None:
-    pass
-
-# Good
-if x is None:
-    pass
+print("a" == "a")
+print([1, 2] == [1, 2])
 ```
 
 ---
 
-## Conclusion
+## 2. Ordering Comparisons
 
-Understanding the distinction between `==` (value equality) and `is` (identity) is crucial for writing correct Python code. Chained comparisons provide elegant syntax for range checking and multiple condition evaluation.
+Ordering operators compare relative size.
+
+```python
+print(3 < 5)
+print(10 > 7)
+print(4 <= 4)
+print(8 >= 10)
+```
+
+Output:
+
+```text
+True
+True
+True
+False
+```
+
+These are especially common in loops and conditions.
+
+---
+
+## 3. Chained Comparisons
+
+Python supports chained comparisons.
+
+```python
+x = 7
+print(0 < x < 10)
+```
+
+Output:
+
+```text
+True
+```
+
+This is equivalent to:
+
+```python
+print(0 < x and x < 10)
+```
+
+but is often more readable.
+
+---
+
+## 4. Comparing Different Types
+
+Some comparisons between unlike types are allowed, while others are not.
+
+```python
+print(3 == 3.0)
+```
+
+Output:
+
+```text
+True
+```
+
+But ordering unrelated types may fail.
+
+```python
+# "3" < 4   # TypeError
+```
+
+Python does not impose arbitrary ordering across unrelated types.
+
+---
+
+## 5. Identity vs Equality
+
+Python distinguishes equality from identity.
+
+```python
+a = [1, 2]
+b = [1, 2]
+
+print(a == b)
+print(a is b)
+```
+
+Output:
+
+```text
+True
+False
+```
+
+* `==` checks whether values are equal
+* `is` checks whether two names refer to the same object
+
+This distinction is especially important with `None`.
+
+---
+
+## 6. Membership Comparisons
+
+Python also provides membership tests.
+
+| Operator | Meaning          |
+| -------- | ---------------- |
+| `in`     | value is present |
+| `not in` | value is absent  |
+
+Example:
+
+```python
+print("a" in "cat")
+print(5 in [1, 2, 5])
+```
+
+Output:
+
+```text
+True
+True
+```
+
+---
+
+## 7. Worked Examples
+
+### Example 1: password check
+
+```python
+password = "secret"
+
+print(password == "secret")
+```
+
+Output:
+
+```text
+True
+```
+
+### Example 2: numeric range
+
+```python
+score = 82
+
+if 80 <= score < 90:
+    print("B range")
+```
+
+### Example 3: membership
+
+```python
+colors = ["red", "green", "blue"]
+
+if "green" in colors:
+    print("found")
+```
+
+---
+
+## 8. Common Pitfalls
+
+### Using `is` instead of `==`
+
+For value comparison, use `==`, not `is`.
+
+### Comparing unrelated types with ordering operators
+
+Expressions like `"10" < 20` are invalid.
+
+---
+
+## 9. Summary
+
+Key ideas:
+
+* comparisons produce Boolean results
+* equality and ordering comparisons are fundamental to control flow
+* chained comparisons improve readability
+* `==` and `is` have different meanings
+* membership tests also produce Boolean values
+
+Comparison operators allow Python programs to reason about relationships between values.

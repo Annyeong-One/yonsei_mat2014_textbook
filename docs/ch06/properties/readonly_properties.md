@@ -1,9 +1,5 @@
 # Read-Only Properties
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Creating Read-Only
 
 ### 1. Property Without Setter

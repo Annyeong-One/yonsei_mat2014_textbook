@@ -1,9 +1,5 @@
 # Relative Imports
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 Relative imports allow modules within a package to import each other using dot notation, without specifying the full package path.
 
 ---

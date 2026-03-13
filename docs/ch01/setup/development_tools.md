@@ -1,307 +1,171 @@
+
+
 # Development Tools
 
+Writing Python programs becomes much easier with the help of appropriate development tools.
+These tools provide environments for editing code, running programs, debugging errors, and managing projects.
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+Common categories of Python development tools include:
 
-A good development environment improves productivity. This page covers IDEs, online notebooks, version control, and virtual environments.
+* **code editors**
+* **integrated development environments (IDEs)**
+* **terminal or command-line interfaces**
+
+```mermaid2
+flowchart TD
+    A[Python Development Tools]
+    A --> B[Code Editors]
+    A --> C[IDEs]
+    A --> D[Terminal / Shell]
+```
+
+Each tool plays a different role in the Python development workflow.
 
 ---
 
-## IDEs and Editors
+## 1. Code Editors
 
-### VS Code (Recommended)
+A **code editor** is a lightweight program used to write and edit source code.
 
-Free, extensible, excellent Python support.
+Unlike simple text editors, modern code editors provide features designed specifically for programming.
 
-**Setup:**
-1. Install VS Code from https://code.visualstudio.com
-2. Install Python extension
-3. Select Python interpreter: `Cmd/Ctrl + Shift + P` → "Python: Select Interpreter"
+Examples of popular editors include:
 
-**Key features:**
-- IntelliSense (autocomplete)
-- Integrated terminal
-- Debugger
-- Git integration
-- Jupyter notebook support
+| Editor       | Description                               |
+| ------------ | ----------------------------------------- |
+| VS Code      | widely used modern editor with extensions |
+| Sublime Text | fast and minimal editor                   |
+| Notepad++    | simple and lightweight Windows editor     |
 
-### PyCharm
+Most editors provide features such as:
 
-Full-featured Python IDE by JetBrains.
+* syntax highlighting
+* automatic indentation
+* auto-completion
+* plugin and extension support
 
-| Edition | Cost | Features |
-|---------|------|----------|
-| Community | Free | Core Python development |
-| Professional | Paid | Web, database, scientific tools |
+Example of Python code inside an editor:
 
-### Jupyter Notebook / Lab
-
-Interactive notebook for data science and exploration.
-
-```bash
-pip install notebook
-jupyter notebook
-
-# Or JupyterLab (newer interface)
-pip install jupyterlab
-jupyter lab
+```python
+for i in range(3):
+    print(i)
 ```
 
-**Best for:**
-- Data exploration
-- Visualization
-- Teaching and documentation
-- Prototyping
-
-### Other Editors
-
-| Editor | Description |
-|--------|-------------|
-| Sublime Text | Fast, lightweight text editor |
-| Vim/Neovim | Terminal-based, highly customizable |
-| Atom | GitHub's editor (discontinued) |
-| Spyder | Scientific Python IDE |
+These tools help programmers write and read code more efficiently.
 
 ---
 
-## Online Notebooks
+## 2. Integrated Development Environments (IDEs)
 
-No installation required — run Python in browser.
+An **Integrated Development Environment (IDE)** provides a more comprehensive programming environment than a simple editor.
 
-### Google Colab
+IDEs typically combine:
 
-Free Jupyter notebooks with GPU/TPU access.
+* code editing
+* debugging tools
+* project management
+* testing utilities
 
-**Setup:**
-1. Go to https://colab.research.google.com
-2. Sign in with Google account
-3. Create new notebook or upload existing
+Examples of Python IDEs include:
 
-**Features:**
-- Free GPU/TPU runtime
-- Pre-installed ML libraries (TensorFlow, PyTorch)
-- Google Drive integration
-- Easy sharing
+| IDE     | Description                                            |
+| ------- | ------------------------------------------------------ |
+| PyCharm | full-featured professional Python IDE                  |
+| Spyder  | scientific computing IDE commonly used in data science |
+| Thonny  | beginner-friendly IDE designed for learning Python     |
 
-### Kaggle Notebooks
+Typical IDE capabilities include:
 
-Free notebooks with datasets and competitions.
+* code navigation
+* integrated debugging tools
+* variable inspection
+* project organization
 
-**Setup:**
-1. Go to https://www.kaggle.com
-2. Create account
-3. Go to "Code" → "New Notebook"
-
-**Features:**
-- Free GPU (30 hours/week)
-- Access to Kaggle datasets
-- Version control built-in
-
-### Other Online Options
-
-| Platform | Description |
-|----------|-------------|
-| Binder | Turn GitHub repos into notebooks |
-| Replit | Online IDE for many languages |
-| GitHub Codespaces | VS Code in browser |
+Because IDEs integrate many tools into one interface, they are often preferred for large or complex projects.
 
 ---
 
-## Version Control: Git and GitHub
+## 3. Running Python from the Terminal
 
-### Git Basics
+Python programs can also be executed directly from the command line.
 
-Git tracks changes to your code.
-
-```bash
-# Install Git
-# macOS: brew install git
-# Ubuntu: sudo apt install git
-# Windows: Download from git-scm.com
-
-# Configure
-git config --global user.name "Your Name"
-git config --global user.email "your@email.com"
-
-# Basic workflow
-git init                    # Initialize repository
-git add .                   # Stage changes
-git commit -m "message"     # Commit changes
-git status                  # Check status
-git log                     # View history
-```
-
-### GitHub
-
-Remote hosting for Git repositories.
+Example command:
 
 ```bash
-# Clone repository
-git clone https://github.com/user/repo.git
-
-# Push changes
-git push origin main
-
-# Pull changes
-git pull origin main
+python hello.py
 ```
 
-### Essential Commands
+This command tells the Python interpreter to execute the script `hello.py`.
 
-| Command | Description |
-|---------|-------------|
-| `git init` | Initialize new repository |
-| `git clone <url>` | Copy remote repository |
-| `git add <file>` | Stage file for commit |
-| `git commit -m "msg"` | Commit staged changes |
-| `git push` | Upload to remote |
-| `git pull` | Download from remote |
-| `git branch` | List/create branches |
-| `git checkout <branch>` | Switch branches |
-| `git merge <branch>` | Merge branches |
+Running programs from the terminal is useful for:
+
+* testing scripts quickly
+* running automation tools
+* executing programs on remote systems
+
+Many developers regularly switch between an editor and the terminal while developing software.
 
 ---
 
-## Virtual Environments
+## 4. Creating and Running a Python Script
 
-Isolate project dependencies to avoid conflicts.
+A **Python script** is simply a file containing Python code.
 
-### Why Use Virtual Environments?
+Example file `hello.py`:
 
-```
-Project A needs: numpy 1.21, pandas 1.3
-Project B needs: numpy 1.24, pandas 2.0
-
-Without venv: Conflict!
-With venv: Each project has its own packages
+```python
+print("Hello Python")
 ```
 
-### Using `venv` (Built-in)
+Run the script from the terminal:
 
 ```bash
-# Create virtual environment
-python -m venv myenv
-
-# Activate
-# macOS/Linux:
-source myenv/bin/activate
-
-# Windows:
-myenv\Scripts\activate
-
-# Install packages (isolated)
-pip install numpy pandas
-
-# Deactivate
-deactivate
+python hello.py
 ```
 
-### Using Conda
-
-```bash
-# Create environment
-conda create -n myenv python=3.11
-
-# Activate
-conda activate myenv
-
-# Install packages
-conda install numpy pandas
-
-# Deactivate
-conda deactivate
-
-# List environments
-conda env list
-```
-
-### Project Structure
+Output:
 
 ```
-my_project/
-├── venv/               # Virtual environment (don't commit)
-├── src/
-│   └── main.py
-├── requirements.txt    # Dependencies
-├── .gitignore          # Ignore venv/
-└── README.md
+Hello Python
 ```
 
-### requirements.txt
-
-```bash
-# Generate
-pip freeze > requirements.txt
-
-# Install from file
-pip install -r requirements.txt
-```
-
-Example `requirements.txt`:
-```
-numpy==1.24.0
-pandas==2.0.0
-matplotlib==3.7.0
-```
+Scripts allow Python programs to be stored and reused.
 
 ---
 
-## Code Quality Tools
+## 5. Version Control Tools
 
-### Linting: Pylint / Flake8
+Most professional software projects use **version control systems**.
 
-```bash
-pip install pylint flake8
+Version control tools track changes in code over time and allow developers to collaborate effectively.
 
-pylint my_script.py
-flake8 my_script.py
-```
+The most widely used system is **Git**.
 
-### Formatting: Black
+Benefits of version control include:
 
-```bash
-pip install black
+* tracking changes to files
+* collaborating with other developers
+* maintaining a history of project versions
+* reverting to previous versions if needed
 
-black my_script.py      # Auto-format
-```
+Git is commonly used together with platforms such as:
 
-### Type Checking: mypy
+* GitHub
+* GitLab
+* Bitbucket
 
-```bash
-pip install mypy
-
-mypy my_script.py       # Check type hints
-```
+These platforms host code repositories and support collaborative development.
 
 ---
 
-## Recommended Setup
+## 6. Summary
 
-| Tool | Purpose |
-|------|---------|
-| VS Code | Editor/IDE |
-| Git + GitHub | Version control |
-| venv or Conda | Virtual environments |
-| Black | Code formatting |
-| Pylint | Linting |
+Key ideas from this section:
 
-```bash
-# Quick project setup
-mkdir my_project && cd my_project
-python -m venv venv
-source venv/bin/activate    # or venv\Scripts\activate on Windows
-pip install black pylint
-git init
-echo "venv/" > .gitignore
-```
+* development tools help programmers write, run, and manage code
+* **code editors** provide lightweight environments for writing programs
+* **IDEs** offer integrated tools for debugging and project management
+* Python programs can be run from the **terminal**
+* **version control systems** such as Git help manage software projects
 
----
-
-## Key Takeaways
-
-- **VS Code** or **PyCharm** for local development
-- **Google Colab** or **Kaggle** for quick experiments with GPU
-- **Git/GitHub** for version control — learn the basics early
-- **Virtual environments** isolate dependencies — always use them
-- **Black + Pylint** for clean, consistent code
+Choosing the right development tools can significantly improve productivity and code organization when working with Python programs.

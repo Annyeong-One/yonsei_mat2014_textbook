@@ -1,9 +1,5 @@
 # functools.partial
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 `partial` freezes some arguments of a function, creating a new callable with fewer parameters. It's the standard way to do **partial function application** in Python.
 
 ```python

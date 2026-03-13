@@ -1,9 +1,5 @@
 # Filtering with where
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## np.where Basics
 
 ### 1. Find Indices

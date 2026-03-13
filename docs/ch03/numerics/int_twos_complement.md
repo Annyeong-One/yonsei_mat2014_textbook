@@ -1,9 +1,5 @@
 # Storage & Two's Complement
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 Understanding how integers are stored in memory and how negative numbers are represented.
 
 ---

@@ -1,9 +1,5 @@
 # List[int] vs list[int] - Generic Types
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 Generic types can be specified using either typing module classes (List[int]) or built-in types (list[int], available in Python 3.9+).
 
 ## Legacy Typing Module Syntax

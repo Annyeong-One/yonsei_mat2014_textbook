@@ -1,9 +1,5 @@
 # np.vectorize — Vectorizing Python Functions
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 `np.vectorize` converts a scalar function into a function that works element-wise on arrays. While convenient, it's **not** a performance optimization—it's primarily a convenience wrapper.
 
 ```python

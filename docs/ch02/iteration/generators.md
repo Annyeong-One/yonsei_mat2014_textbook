@@ -1,9 +1,5 @@
 # Generators and `yield`
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 Generators provide a concise way to create iterators using the `yield` keyword. They are central to Python's lazy evaluation model.
 
 ---

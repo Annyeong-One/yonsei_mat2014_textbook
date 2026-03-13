@@ -1,9 +1,5 @@
 # Secondary Axes
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 Secondary axes display an alternative scale or transformation of the same data, useful for showing different units or transformations.
 
 ## secondary_xaxis / secondary_yaxis

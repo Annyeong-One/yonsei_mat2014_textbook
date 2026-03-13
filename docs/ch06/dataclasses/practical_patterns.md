@@ -1,9 +1,5 @@
 # Practical Patterns
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 Real-world dataclass patterns that solve common problems: configuration objects, API models, and domain entities.
 
 ---

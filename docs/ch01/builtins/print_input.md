@@ -1,155 +1,119 @@
-# `print()` and
 
+# print() and input()
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+Python provides two fundamental built-in functions for interacting with users:
 
-Two of the most commonly used built-in functions in Python are `print()` (for output) and `input()` (for interactive user input). You’ll use them constantly when learning and when building small tools.
+| Function | Purpose |
+|---|---|
+| `print()` | display output |
+| `input()` | receive user input |
+
+These functions enable simple **input/output interaction** in programs.
+
+```mermaid2
+flowchart LR
+    A[Program] --> B[input()]
+    B --> C[User]
+    C --> D[print()]
+    D --> A
+````
 
 ---
 
-## `print()`
+## print()
 
-### 1. Basic usage
+`print()` displays information to the console.
+
+### Example
 
 ```python
-print("Hello, world!")
-print(123)
-print(3.14)
+print("Hello Python")
 ```
 
-`print()` converts its arguments to strings and writes them to standard output.
+Output
 
-### 2. Printing multiple
+```
+Hello Python
+```
+
+---
+
+## Multiple Values
 
 ```python
 name = "Alice"
-age = 30
-print(name, age)          # Alice 30
-print(name, "is", age)    # Alice is 30
+age = 25
+
+print(name, age)
 ```
 
-By default, values are separated by a single space.
+Output
 
-### 3. `sep` and `end`
-
-- `sep` controls the separator between values.
-- `end` controls what is printed at the end (newline by default).
-
-```python
-print("A", "B", "C", sep=",")      # A,B,C
-print("no newline", end="")        # stays on same line
-print(" -> next print continues")  # appended after end=""
 ```
-
-### 4. `file` parameter
-
-By default, `print()` writes to `sys.stdout`. You can redirect output:
-
-```python
-import sys
-
-# Print to standard error
-print("Warning!", file=sys.stderr)
-
-# Print to a file
-with open("output.txt", "w") as f:
-    print("Hello, file!", file=f)
-```
-
-### 5. Standard Streams
-
-Python has three standard streams:
-
-| Stream | Description | Default |
-|--------|-------------|---------|
-| `sys.stdin` | Standard input | Keyboard |
-| `sys.stdout` | Standard output | Console |
-| `sys.stderr` | Standard error | Console |
-
-```python
-import sys
-
-print("Normal output", file=sys.stdout)
-print("Error message", file=sys.stderr)
-```
-
-**Shell redirection:**
-
-```bash
-python script.py > output.txt      # stdout to file
-python script.py 2> error.txt      # stderr to file
-python script.py > out.txt 2>&1    # both to same file
-```
-
-### 6. f-strings
-
-Use f-strings to format text cleanly:
-
-```python
-pi = 3.14159
-print(f"pi ≈ {pi:.2f}")  # pi ≈ 3.14
+Alice 25
 ```
 
 ---
 
-## `input()`
-
-### 1. Basic usage
-
-`input()` reads a line of text from the user and **returns a string**:
+## Separator and End
 
 ```python
-name = input("Your name? ")
-print(f"Hi, {name}!")
+print("A","B","C",sep="-")
 ```
 
-### 2. Converting types
+Output
 
-Because `input()` returns a string, you often need to convert to `int` or `float`:
-
-```python
-age_str = input("Your age? ")
-age = int(age_str)
-print(f"Next year you’ll be {age + 1}.")
+```
+A-B-C
 ```
 
-Or in one line:
+Example
 
 ```python
-x = float(input("Enter a number: "))
-print(x * 2)
+print("Hello", end=" ")
+print("World")
 ```
 
-### 3. Handling invalid
+Output
 
-Users can type anything, so conversions can fail:
-
-```python
-s = input("Enter an integer: ")
-try:
-    n = int(s)
-    print("ok:", n)
-except ValueError:
-    print("That was not an integer.")
+```
+Hello World
 ```
 
 ---
 
-## Mini example
+## input()
+
+`input()` reads user input from the keyboard.
+
+Example
 
 ```python
-price = float(input("Price: "))
-qty = int(input("Quantity: "))
-total = price * qty
-print(f"Total cost: {total:.2f}")
+name = input("Enter your name: ")
+print("Hello", name)
 ```
 
 ---
 
-## Key takeaways
+## Important Note
 
-- `print()` displays values; customize it with `sep` and `end`.
-- `input()` reads user input **as a string**.
-- Convert input to numeric types with `int()` / `float()`.
-- Use `try/except` for robust interactive programs.
+`input()` always returns a **string**.
+
+Example
+
+```python
+age = input("Enter age: ")
+print(type(age))
+```
+
+Output
+
+```
+<class 'str'>
+```
+
+Convert values if needed:
+
+```python
+age = int(input("Enter age: "))
+```

@@ -1,9 +1,5 @@
 # 2D FFT for Image Processing
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Why 2D FFT for Images?
 
 A digital image is a 2D signal: a matrix of pixel intensities. Just as 1D FFT decomposes signals into frequency components, **2D FFT** decomposes images into frequency components in both spatial dimensions.

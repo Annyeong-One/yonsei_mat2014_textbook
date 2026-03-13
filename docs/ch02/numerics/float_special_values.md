@@ -1,9 +1,5 @@
 # Float Special Values
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 Python floats include special values for infinity and undefined results. Understanding these values is essential for robust numerical code.
 
 ## Infinity

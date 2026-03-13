@@ -1,9 +1,5 @@
 # Solving Linear Systems
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 Solve systems of linear equations $Ax = b$ using `np.linalg`.
 
 ## np.linalg.solve

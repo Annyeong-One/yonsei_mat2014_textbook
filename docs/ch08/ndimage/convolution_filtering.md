@@ -1,9 +1,5 @@
 # Convolution and Filtering with scipy.ndimage
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 Convolution is one of the most fundamental operations in image processing and scientific computing. It allows us to compute weighted sums over neighborhoods in arrays, enabling edge detection, smoothing, and feature extraction.
 
 ## What is Convolution?

@@ -82,6 +82,55 @@ YAML quoting rules for nav titles:
 - **Math**: Use MathJax with `$...$` (inline) and `$$...$$` (display). Display math blocks must be surrounded by empty lines (blank line, then `$$...$$`, then blank line) for proper rendering
 - **Python files**: Educational style with docstrings, section dividers (`# ===`), and `if __name__ == "__main__":` pattern
 - **Markdown extensions available**: admonition, details, attr_list, md_in_html, superfences, arithmatex
+- **Diagrams**: Use `mermaid2` (via `mkdocs-mermaid2-plugin`) for all box-and-line diagrams (flowcharts, sequence diagrams, architecture overviews). Never use ASCII/text art for diagrams.
+
+## Mermaid2 Diagrams
+
+Use `mermaid2` for any simple box-and-line diagram. Prefer Mermaid over ASCII art or SVG hand-drawing.
+
+### Setup (mkdocs.yml)
+
+```yaml
+plugins:
+  - mermaid2
+
+markdown_extensions:
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:mermaid2.fence_mermaid_custom
+```
+
+### Usage in Markdown
+
+````markdown
+```mermaid
+graph TD
+    A[Start] --> B{Decision}
+    B -->|Yes| C[Do Something]
+    B -->|No| D[Do Nothing]
+    C --> E[End]
+    D --> E
+```
+````
+
+### Common Diagram Types
+
+| Use case | Mermaid type |
+|---|---|
+| Flowchart / architecture | `graph TD` (top-down) or `graph LR` (left-right) |
+| Sequence diagram | `sequenceDiagram` |
+| State machine | `stateDiagram-v2` |
+| Class diagram | `classDiagram` |
+| Timeline / Gantt | `gantt` |
+
+### Mermaid Pitfalls
+
+- **No MathJax inside Mermaid**: Do not use `$...$` or `$$...$$` inside Mermaid blocks — MathJax and Mermaid do not interoperate. Use plain text labels instead.
+- **Special characters in labels**: Wrap node labels containing `(`, `)`, `:`, or quotes in double quotes: `A["f(x) → output"]`
+- **Avoid very long labels**: Long text in nodes wraps unpredictably; keep labels short and move details to surrounding prose.
+- **Dark/light theme**: Mermaid picks up the MkDocs Material theme. Use `%%{init: {'theme': 'neutral'}}%%` at the top of a diagram if you need a fixed appearance.
 
 ## MathJax Conventions and Pitfalls
 
@@ -128,3 +177,9 @@ Standard admonition types: `note`, `tip`, `warning`, `danger`, `info`, `example`
 1. Create the `.py` script inside the relevant `section_name/` directory
 2. Use the educational style: module docstring, `# ===` section dividers, `if __name__ == "__main__":` guard
 3. If the script is a reusable module, create a proper package with `__init__.py`
+
+### Adding a diagram
+1. Use a `mermaid` fenced code block — never ASCII art
+2. Choose the appropriate diagram type (see Mermaid2 Diagrams section above)
+3. Keep node labels short; put detailed explanations in surrounding prose
+4. Ensure `mermaid2` plugin and `superfences` custom fence are configured in `mkdocs.yml`

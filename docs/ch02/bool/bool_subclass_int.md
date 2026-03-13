@@ -1,9 +1,5 @@
 # Bool as Subclass
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 In Python, `bool` is a subclass of `int`, giving boolean values numeric properties.
 
 ---

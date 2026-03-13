@@ -1,9 +1,5 @@
 # auto() Function
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 The `auto()` function automatically assigns values to enum members, eliminating tedious manual assignment.
 
 ---

@@ -1,9 +1,5 @@
 # typing.Protocol — Structural Subtyping
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 `Protocol` (Python 3.8+) enables structural subtyping (static duck typing). Classes don't need to inherit from a Protocol—they just need to implement the required methods.
 
 ```python

@@ -1,9 +1,5 @@
 # Exponential Distribution
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 The exponential distribution models waiting times between events in a Poisson process.
 
 ## np.random.exponential

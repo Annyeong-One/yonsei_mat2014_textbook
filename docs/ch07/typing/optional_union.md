@@ -1,9 +1,5 @@
 # Optional and Union
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 `Optional` represents values that can be None, while `Union` represents a value that can be one of several types.
 
 ## Optional - Nullable Types

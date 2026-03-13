@@ -1,9 +1,5 @@
 # functools.singledispatch
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 `singledispatch` transforms a function into a **single-dispatch generic function**. It dispatches to different implementations based on the type of the **first argument**, providing a clean alternative to `if/elif isinstance()` chains.
 
 ```python

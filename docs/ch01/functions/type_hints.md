@@ -1,180 +1,188 @@
+
+
 # Type Hints
 
+Python allows functions to include **type hints**, which are annotations describing the expected types of parameters and return values.
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+Type hints improve:
 
-Type hints (or type annotations) provide optional static typing information for function parameters and return values. They improve code readability and enable static analysis tools.
+- readability
+- documentation
+- editor support
+- static analysis
 
+They do **not** enforce types at runtime by themselves.
 
-## Basic Syntax
+```mermaid2
+flowchart LR
+    A[Function definition] --> B[Type hints]
+    B --> C[Clearer intent]
+````
 
-```python
-def add_this(a: int, b: int) -> int:
-    return a + b
+---
 
-result = add_this(2, 3)
-print(result)  # 5
-```
+## 1. Basic Syntax
 
-- `a: int` — parameter `a` should be an `int`
-- `b: int` — parameter `b` should be an `int`
-- `-> int` — function returns an `int`
-
-
-## Type Hints Are Not Enforced
-
-Python does **not** enforce type hints at runtime. They are for documentation and static analysis only.
+Type hints are written after parameter names and after `->` for return types.
 
 ```python
-def add_this(a: int, b: int) -> int:
+def add(a: int, b: int) -> int:
     return a + b
-
-# Works despite wrong types
-result = add_this("2", "3")
-print(result)  # "23" (string concatenation)
 ```
 
-The code runs without error, but a type checker like `mypy` would flag this.
+This suggests:
 
+* `a` should be an `int`
+* `b` should be an `int`
+* the function should return an `int`
 
-## Without Type Hints
+---
 
-```python
-def add_this(a, b):
-    return a + b
+## 2. Hints Improve Readability
 
-print(add_this(2, 3))      # 5
-print(add_this("2", "3"))  # "23"
-```
-
-Without hints, readers can't tell what types are expected.
-
-
-## Common Type Hints
-
-### Basic Types
+Even without any external tool, type hints make code easier to understand.
 
 ```python
 def greet(name: str) -> str:
-    return f"Hello, {name}!"
-
-def is_adult(age: int) -> bool:
-    return age >= 18
-
-def calculate_area(radius: float) -> float:
-    return 3.14159 * radius ** 2
+    return f"Hello, {name}"
 ```
 
-### None Return
+A reader immediately sees that the function expects a string and returns a string.
 
-```python
-def print_message(msg: str) -> None:
-    print(msg)
-```
+---
 
-### Optional Parameters
+## 3. Type Hints Are Not Runtime Enforcement
 
-```python
-from typing import Optional
-
-def greet(name: str, greeting: Optional[str] = None) -> str:
-    if greeting is None:
-        greeting = "Hello"
-    return f"{greeting}, {name}!"
-```
-
-### Collections
-
-```python
-from typing import List, Dict, Tuple, Set
-
-def sum_numbers(numbers: List[int]) -> int:
-    return sum(numbers)
-
-def get_user(users: Dict[str, int]) -> int:
-    return users.get("age", 0)
-
-def get_point() -> Tuple[int, int]:
-    return (10, 20)
-
-def unique_items(items: Set[str]) -> int:
-    return len(items)
-```
-
-### Python 3.9+ Simplified Syntax
-
-```python
-# Python 3.9+
-def sum_numbers(numbers: list[int]) -> int:
-    return sum(numbers)
-
-def get_ages(users: dict[str, int]) -> list[int]:
-    return list(users.values())
-```
-
-
-## Function Type Hints
-
-```python
-from typing import Callable
-
-def apply_twice(func: Callable[[int], int], value: int) -> int:
-    return func(func(value))
-
-def double(x: int) -> int:
-    return x * 2
-
-result = apply_twice(double, 5)  # 20
-```
-
-
-## Type Checking with mypy
-
-Install and run mypy to check types:
-
-```bash
-pip install mypy
-mypy script.py
-```
-
-Example error:
+Python does not automatically reject wrong argument types just because hints are present.
 
 ```python
 def add(a: int, b: int) -> int:
     return a + b
 
-add("hello", "world")  # mypy error: Argument 1 has incompatible type "str"
+print(add("3", "4"))
 ```
 
+This may still run, because Python itself does not enforce the hint.
 
-## Benefits of Type Hints
+Type hints are mainly guidance for humans and tools such as static type checkers.
 
-1. **Documentation** — Clear function signatures
-2. **IDE Support** — Better autocomplete and error detection
-3. **Static Analysis** — Catch bugs before runtime
-4. **Refactoring** — Safer code changes
-5. **Team Communication** — Explicit contracts
+---
 
+## 4. Common Built-in Hints
 
-## When to Use Type Hints
+Some common type hints:
 
-**Use type hints for:**
-- Public APIs and library functions
-- Complex functions with multiple parameters
-- Functions where types aren't obvious
-- Team projects and production code
+| Hint             | Meaning                             |
+| ---------------- | ----------------------------------- |
+| `int`            | integer                             |
+| `float`          | floating-point number               |
+| `str`            | string                              |
+| `bool`           | Boolean                             |
+| `None`           | no return value or absence          |
+| `list[int]`      | list of integers                    |
+| `dict[str, int]` | dictionary from strings to integers |
 
-**Optional for:**
-- Simple scripts
-- Obvious functions like `def add(a, b): return a + b`
-- Rapid prototyping
+Example:
 
+```python
+def total(values: list[int]) -> int:
+    return sum(values)
+```
 
-## Summary
+---
 
-- Type hints use `: type` for parameters and `-> type` for returns
-- Python does **not enforce** type hints at runtime
-- Use `mypy` or similar tools for static checking
-- Import from `typing` module for complex types
-- Python 3.9+ allows `list[int]` instead of `List[int]`
+## 5. Hints for Functions That Return Nothing
+
+A function that is intended only for side effects can use `-> None`.
+
+```python
+def show_message(text: str) -> None:
+    print(text)
+```
+
+This signals that the function does not return a useful value.
+
+---
+
+## 6. Optional-Like Patterns
+
+A function may sometimes return a real value and sometimes return `None`.
+
+At an introductory level, this can be described conceptually even before introducing more advanced type constructs.
+
+```python
+def reciprocal(x: float) -> float | None:
+    if x == 0:
+        return None
+    return 1 / x
+```
+
+This says the result may be either a float or `None`.
+
+---
+
+## 7. Type Hints and Documentation
+
+Type hints complement docstrings.
+
+```python
+def square(x: int) -> int:
+    """Return x squared."""
+    return x * x
+```
+
+Together, hints and docstrings make functions much easier to read and maintain.
+
+---
+
+## 8. Worked Examples
+
+### Example 1: typed add function
+
+```python
+def add(a: int, b: int) -> int:
+    return a + b
+```
+
+### Example 2: typed greeting
+
+```python
+def greet(name: str) -> str:
+    return f"Hello, {name}"
+```
+
+### Example 3: no useful return
+
+```python
+def show_total(n: int) -> None:
+    print(n)
+```
+
+---
+
+## 9. Common Pitfalls
+
+### Assuming type hints enforce behavior
+
+They do not automatically check argument correctness at runtime.
+
+### Overcomplicating hints too early
+
+Hints should clarify, not overwhelm.
+
+### Ignoring return hints
+
+Return annotations are often just as important as parameter annotations.
+
+---
+
+## 10. Summary
+
+Key ideas:
+
+* type hints annotate expected parameter and return types
+* they improve readability and tooling
+* they do not automatically enforce types at runtime
+* type hints work well together with docstrings
+
+Type hints make function definitions more explicit and easier to understand.

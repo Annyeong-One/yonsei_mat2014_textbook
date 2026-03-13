@@ -1,9 +1,5 @@
 # IntEnum and StrEnum
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 IntEnum and StrEnum are specialized enum types that behave like their base types, enabling easier comparisons and operations.
 
 ---

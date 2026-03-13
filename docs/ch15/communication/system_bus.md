@@ -1,4 +1,3 @@
-
 # System Bus
 
 ## What is a Bus?
@@ -6,16 +5,14 @@
 A **bus** is a communication pathway that transfers data between computer components. Think of it as a highway system connecting different parts of the computer.
 
 ```
-
 ┌─────────────────────────────────────────────────────────────┐
-│ System Bus │
-│ ═══════════════════════════════════════════════════════ │
-│ │ │ │ │ │
-│ ┌───┴───┐ ┌───┴───┐ ┌───┴───┐ ┌───┴───┐ │
-│ │ CPU │ │ RAM │ │ GPU │ │ I/O │ │
-│ └───────┘ └───────┘ └───────┘ └───────┘ │
+│                        System Bus                           │
+│  ═══════════════════════════════════════════════════════   │
+│       │           │           │           │                 │
+│   ┌───┴───┐   ┌───┴───┐   ┌───┴───┐   ┌───┴───┐           │
+│   │  CPU  │   │  RAM  │   │  GPU  │   │  I/O  │           │
+│   └───────┘   └───────┘   └───────┘   └───────┘           │
 └─────────────────────────────────────────────────────────────┘
-
 ```
 
 ## Bus Components
@@ -24,256 +21,243 @@ A bus consists of three types of lines:
 
 ### 1. Address Bus
 
-Specifies **where** to read/write data.
+Specifies **where** to read/write data:
+
+```
+Address Bus (unidirectional: CPU → Memory)
+┌─────┐                              ┌─────────┐
+│ CPU │ ══════ Address Lines ══════▶ │ Memory  │
+└─────┘    (e.g., 0x7FFF0000)        └─────────┘
+
+Width determines addressable memory:
+  32-bit address bus → 2³² = 4 GB addressable
+  64-bit address bus → 2⁶⁴ = 16 EB addressable (theoretical)
+```
 
 ### 2. Data Bus
 
-Transfers **actual data** between components.
+Transfers **actual data** between components:
+
+```
+Data Bus (bidirectional)
+┌─────┐                              ┌─────────┐
+│ CPU │ ◀══════ Data Lines ═══════▶ │ Memory  │
+└─────┘     (e.g., 64 bits wide)    └─────────┘
+
+Width determines transfer size per cycle:
+  32-bit data bus → 4 bytes per transfer
+  64-bit data bus → 8 bytes per transfer
+```
 
 ### 3. Control Bus
 
-Carries **command signals** such as:
+Carries **command signals**:
 
-- Read / Write
-- Clock
-- Interrupt
-- Bus Request / Grant
+```
+Control Bus (various directions)
+┌─────┐                              ┌─────────┐
+│ CPU │ ◀═══ Control Signals ══════▶ │ Memory  │
+└─────┘                              └─────────┘
 
----
+Signals include:
+  - Read/Write
+  - Clock
+  - Interrupt
+  - Bus Request/Grant
+```
 
-# Bus Operation
+## Bus Operation
 
 ### Read Operation
 
 ```
-
 CPU wants to read from address 0x1000:
 
-1. CPU places 0x1000 on Address Bus
-2. CPU sets Read signal
-3. Memory retrieves data
-4. Memory places data on Data Bus
-5. CPU reads data
-
+1. CPU places 0x1000 on Address Bus      ────▶
+2. CPU sets Read signal on Control Bus   ────▶
+3. Memory reads data at 0x1000
+4. Memory places data on Data Bus        ◀────
+5. CPU reads data from Data Bus
 ```
 
 ### Write Operation
 
 ```
+CPU wants to write 42 to address 0x1000:
 
-CPU writes value to memory:
-
-1. Address placed on Address Bus
-2. Data placed on Data Bus
-3. Write signal asserted
-4. Memory stores value
-
+1. CPU places 0x1000 on Address Bus      ────▶
+2. CPU places 42 on Data Bus             ────▶
+3. CPU sets Write signal on Control Bus  ────▶
+4. Memory stores 42 at address 0x1000
 ```
 
----
+## Bus Hierarchy
 
-# Bus Hierarchy
-
-Modern computers use **multiple buses at different speeds**.
+Modern computers have multiple buses at different speeds:
 
 ```
+┌─────────────────────────────────────────────────────────────┐
+│                          CPU                                │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │                Internal Bus (fastest)                │   │
+│  │         Registers ←→ ALU ←→ Cache                   │   │
+│  └─────────────────────────────────────────────────────┘   │
+└────────────────────────────┬────────────────────────────────┘
+                             │
+              ┌──────────────┴──────────────┐
+              │     Front-Side Bus / QPI     │  (~25 GB/s)
+              │     (CPU ↔ Memory Controller)│
+              └──────────────┬──────────────┘
+                             │
+              ┌──────────────┴──────────────┐
+              │        Memory Bus            │  (~50 GB/s)
+              │       (DDR4/DDR5)            │
+              └──────────────┬──────────────┘
+                             │
+                         ┌───┴───┐
+                         │  RAM  │
+                         └───────┘
 
-CPU Internal Bus (registers ↔ ALU ↔ cache)
-
-↓
-CPU Interconnect / Fabric
-
-↓
-Memory Bus (DDR4 / DDR5)
-
-↓
-PCIe Bus (GPU, SSD, devices)
-
+              ┌──────────────────────────────┐
+              │         PCIe Bus             │  (~32 GB/s per x16)
+              │   (CPU ↔ GPU, NVMe, etc.)    │
+              └──────────────────────────────┘
 ```
 
-The closer the bus is to the CPU, the **higher the bandwidth and lower the latency**.
+## Bus Speed and Bandwidth
 
----
-
-# Bus Speed and Bandwidth
-
-Bandwidth depends on bus width and clock speed.
-
-Example:
+### Calculating Bus Bandwidth
 
 ```
-
 Bandwidth = Bus Width × Clock Speed × Transfers per Clock
 
 Example DDR4-3200:
-Width = 64 bits = 8 bytes
-Clock = 1600 MHz
-DDR transfers = 2 per clock
-
-Bandwidth ≈ 25 GB/s per channel
-
+  Width: 64 bits = 8 bytes
+  Speed: 1600 MHz (base clock)
+  Transfers: 2 per clock (DDR = Double Data Rate)
+  
+  Bandwidth = 8 × 1600 × 2 = 25,600 MB/s ≈ 25 GB/s per channel
 ```
 
----
+### Common Bus Bandwidths
 
-# PCIe: Modern Expansion Bus
+| Bus Type | Bandwidth | Use |
+|----------|-----------|-----|
+| CPU Internal | ~1 TB/s | Register ↔ ALU |
+| L1 Cache | ~500 GB/s | L1 ↔ CPU |
+| L3 Cache | ~200 GB/s | L3 ↔ L2 |
+| Memory (DDR4) | ~25 GB/s | RAM ↔ CPU |
+| PCIe 4.0 x16 | ~32 GB/s | GPU ↔ CPU |
+| SATA III | ~600 MB/s | SSD ↔ CPU |
+| USB 3.0 | ~625 MB/s | Peripherals |
 
-PCIe is the main **device communication bus** used for GPUs, SSDs, and high-speed peripherals.
+## PCIe: Modern Expansion Bus
 
-Example lane configurations:
-
-```
-
-x1  ≈ 2 GB/s
-x4  ≈ 8 GB/s
-x8  ≈ 16 GB/s
-x16 ≈ 32 GB/s
-
-```
-
----
-
-# Bus Contention
-
-Only **one device can use a shared bus at a time**.
-
-If multiple devices request the bus simultaneously:
+**PCIe (Peripheral Component Interconnect Express)** is the primary expansion bus:
 
 ```
+PCIe Lane Configuration
 
-Device A: request → transfer
-Device B: request → wait
-Device C: request → wait
-
+x1:  [──────]           ~2 GB/s (PCIe 4.0)
+x4:  [──────────────]   ~8 GB/s
+x8:  [──────────────────────────]  ~16 GB/s
+x16: [──────────────────────────────────────────]  ~32 GB/s
 ```
 
-This situation is called **bus contention**.
+### PCIe Generations
 
----
+| Generation | Per-Lane Bandwidth | x16 Total |
+|------------|-------------------|-----------|
+| PCIe 3.0 | ~1 GB/s | ~16 GB/s |
+| PCIe 4.0 | ~2 GB/s | ~32 GB/s |
+| PCIe 5.0 | ~4 GB/s | ~64 GB/s |
+| PCIe 6.0 | ~8 GB/s | ~128 GB/s |
 
-# Bus Arbitration
+## Bus Contention
 
-To resolve contention, hardware uses **bus arbitration**.
-
-A **bus arbiter** decides which device gains control of the bus.
-
-Common strategies include:
-
-| Method | Description |
-|------|-------------|
-| Priority-based | Higher priority devices win |
-| Round-robin | Devices take turns |
-| First-come-first-served | Queue-based |
-
-Arbitration ensures orderly communication between components.
-
----
-
-# Bus Mastering
-
-In early computers, **only the CPU controlled the bus**.
-
-Modern systems allow other devices to temporarily become **bus masters**.
-
-A bus master can initiate transfers directly.
-
-Examples:
-
-- GPUs
-- network cards
-- disk controllers
-- DMA controllers
-
-These devices can move data without CPU involvement.
-
----
-
-# Direct Memory Access (DMA)
-
-**Direct Memory Access (DMA)** allows devices to transfer data **directly to or from RAM** without continuous CPU intervention.
-
-Without DMA:
+When multiple components need the bus simultaneously:
 
 ```
+Problem: Bus Contention
 
-Device → CPU → RAM
+Time →
+Device A: [Request]────[Wait]────[Wait]────[Transfer]
+Device B: ─────────[Request]────[Wait]────[Wait]────[Transfer]
+Device C: ─────────────────[Request]────[Wait]────[Wait]────[Transfer]
 
+Only one device can use the bus at a time!
 ```
 
-With DMA:
+### Bus Arbitration
+
+A **bus arbiter** decides who gets access:
 
 ```
+Arbitration Methods:
 
-Device → RAM
-
+1. Priority-based: Higher priority devices go first
+2. Round-robin: Fair rotation among devices
+3. First-come-first-served: Queue-based
 ```
 
-Example disk read operation with DMA:
+## Python Perspective
 
-```
-
-1. CPU configures DMA controller
-2. Disk reads data
-3. DMA transfers data directly into RAM
-4. CPU receives interrupt when transfer completes
-
-````
-
-Advantages:
-
-- reduces CPU workload
-- allows parallel CPU computation
-- improves overall system throughput
-
-DMA is heavily used by:
-
-- disk controllers
-- network cards
-- GPUs
-- high-speed storage devices
-
----
-
-# Python Perspective
-
-### Memory Bandwidth Limits
-
-Large array operations are often limited by **memory bus bandwidth**, not CPU speed.
+### Why Bus Speed Matters
 
 ```python
 import numpy as np
 import time
 
-arr = np.random.rand(125_000_000)
+# Memory bandwidth limits computation
+def memory_bound_operation():
+    # 1 GB array
+    arr = np.random.rand(125_000_000)  # 1 GB of float64
+    
+    start = time.perf_counter()
+    # Simple operation - limited by memory bus
+    result = np.sum(arr)
+    elapsed = time.perf_counter() - start
+    
+    bandwidth = arr.nbytes / elapsed / 1e9
+    print(f"Achieved bandwidth: {bandwidth:.1f} GB/s")
+    # Typically ~30-40 GB/s, limited by memory bus
 
+memory_bound_operation()
+```
+
+### PCIe and GPU Operations
+
+```python
+import torch
+
+# GPU data transfer goes over PCIe
+data = torch.randn(1000, 1000)
+
+# CPU → GPU (over PCIe)
 start = time.perf_counter()
-np.sum(arr)
-elapsed = time.perf_counter() - start
+data_gpu = data.to('cuda')
+torch.cuda.synchronize()
+transfer_time = time.perf_counter() - start
 
-bandwidth = arr.nbytes / elapsed / 1e9
-print(f"Bandwidth: {bandwidth:.1f} GB/s")
-````
+bytes_transferred = data.numel() * 4  # float32
+bandwidth = bytes_transferred / transfer_time / 1e9
+print(f"CPU→GPU bandwidth: {bandwidth:.1f} GB/s")
+# Typically ~12-15 GB/s (PCIe limited)
+```
 
-Typical systems achieve **30–40 GB/s**.
+## Summary
 
----
+| Component | Function | Direction |
+|-----------|----------|-----------|
+| **Address Bus** | Specifies memory location | CPU → Memory |
+| **Data Bus** | Transfers actual data | Bidirectional |
+| **Control Bus** | Command signals | Various |
 
-# Summary
+Key points:
 
-| Concept         | Description                          |
-| --------------- | ------------------------------------ |
-| Address Bus     | Specifies memory location            |
-| Data Bus        | Transfers actual data                |
-| Control Bus     | Command signals                      |
-| Bus Arbitration | Determines which device uses the bus |
-| Bus Mastering   | Devices initiating transfers         |
-| DMA             | Direct device ↔ memory transfers     |
-| PCIe            | High-speed device bus                |
-
-Key insights:
-
-* Only one device uses a bus at a time
-* Arbitration resolves competing requests
-* DMA allows devices to bypass the CPU
-* Bus bandwidth can limit system performance
-
+- Bus bandwidth often limits system performance
+- Multiple bus levels with different speeds
+- PCIe connects high-speed devices (GPU, NVMe)
+- Bus contention can create bottlenecks
+- Memory bandwidth (~50 GB/s) often limits Python/NumPy performance
+- GPU transfer bandwidth (~15 GB/s) limits data movement

@@ -1,9 +1,5 @@
 # Machine Precision
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 Machine precision (or machine epsilon) quantifies the smallest relative difference between consecutive floating-point numbers. This fundamental limit determines the accuracy achievable in numerical computations.
 
 ## Machine Epsilon

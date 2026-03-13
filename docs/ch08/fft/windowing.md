@@ -1,9 +1,5 @@
 # Window Functions and Spectral Leakage
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## The Spectral Leakage Problem
 
 The DFT (and FFT) assumes the input signal is **periodic**—it treats your signal as if it repeats infinitely. This works well when your signal truly is periodic or when you capture an integer number of cycles.

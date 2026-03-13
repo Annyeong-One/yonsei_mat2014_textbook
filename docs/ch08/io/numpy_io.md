@@ -1,9 +1,5 @@
 # Array I/O: save, load, savez
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 NumPy provides efficient binary formats for saving and loading arrays. These are faster and more compact than text formats like CSV.
 
 ```python

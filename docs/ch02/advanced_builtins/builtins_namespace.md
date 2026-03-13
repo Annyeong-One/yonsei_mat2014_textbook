@@ -1,9 +1,5 @@
 # The `builtins`
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 Python’s built-in functions, exceptions, and types live in the **`builtins` namespace**. Understanding this namespace clarifies what is always available without imports.
 
 ---

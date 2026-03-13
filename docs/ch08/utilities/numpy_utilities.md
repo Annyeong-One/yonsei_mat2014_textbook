@@ -1,9 +1,5 @@
 # Array Utilities: clip, unique, diff
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 Common NumPy utility functions for data manipulation and analysis.
 
 ```python

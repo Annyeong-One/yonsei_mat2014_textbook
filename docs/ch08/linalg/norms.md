@@ -1,9 +1,5 @@
 # Matrix Norms
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 Compute vector and matrix norms using `np.linalg.norm`.
 
 ## Vector Norms

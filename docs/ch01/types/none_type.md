@@ -1,393 +1,264 @@
+
 # None Type
 
+Python includes a special singleton object called `None`.
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+`None` represents the **absence of a value**.
 
-Python's `None` represents the absence of a value. It is the sole instance of `NoneType` and serves as Python's null value.
+It is commonly used to indicate:
 
-## None Basics
+- missing data
+- no result
+- not yet initialized
+- intentional emptiness
 
-Understanding the fundamental nature of `None`.
+```mermaid2
+flowchart TD
+    A[None]
+    A --> B[absence of value]
+    A --> C[single special object]
+````
 
-### 1. The Singleton
+---
 
-`None` is unique—only one instance exists.
+## 1. What is `None`?
+
+`None` is not the same as:
+
+* `0`
+* `False`
+* `""`
+* `[]`
+
+It is its own distinct object and type.
 
 ```python
-print(type(None))  # <class 'NoneType'>
-
-x = None
-y = None
-print(x is y)      # True (same object)
-print(id(x) == id(y))  # True
+print(type(None))
 ```
 
-### 2. Assigning None
+Output:
 
-Use `None` to indicate absence of value.
-
-```python
-result = None       # No result yet
-config = None       # Not configured
-user = None         # No user logged in
-
-# Check assignment
-print(result)       # None
+```text
+<class 'NoneType'>
 ```
 
-### 3. Identity Check
+There is only one `None` object in a Python program.
 
-Always use `is` or `is not`, never `==`.
+---
+
+## 2. Assigning `None`
+
+A variable can be assigned `None` as a placeholder.
+
+```python
+result = None
+print(result)
+```
+
+Output:
+
+```text
+None
+```
+
+This is useful when a value is not yet available.
+
+---
+
+## 3. Functions that Return `None`
+
+A function that does not explicitly return a value returns `None`.
+
+```python
+def greet():
+    print("Hello")
+
+x = greet()
+print(x)
+```
+
+Output:
+
+```text
+Hello
+None
+```
+
+This is an important part of Python’s function model.
+
+---
+
+## 4. None in Boolean Contexts
+
+`None` is falsy.
+
+```python
+print(bool(None))
+```
+
+Output:
+
+```text
+False
+```
+
+This means it behaves like false in conditions.
+
+```python
+value = None
+
+if value:
+    print("Has value")
+else:
+    print("No value")
+```
+
+Output:
+
+```text
+No value
+```
+
+---
+
+## 5. Comparing with `None`
+
+The recommended way to test for `None` is with `is`.
 
 ```python
 x = None
 
-# Correct way
 if x is None:
-    print("x is None")
-
-if x is not None:
-    print("x has a value")
-
-# Avoid this (works but discouraged)
-if x == None:
-    print("x is None")
-```
-
-## Function Returns
-
-How `None` relates to function return values.
-
-### 1. Implicit Return
-
-Functions without explicit return yield `None`.
-
-```python
-def greet(name):
-    print(f"Hello, {name}!")
-
-result = greet("Alice")
-print(result)        # None
-print(type(result))  # <class 'NoneType'>
-```
-
-### 2. Explicit None Return
-
-Return `None` explicitly for clarity.
-
-```python
-def find_user(user_id):
-    users = {1: "Alice", 2: "Bob"}
-    if user_id in users:
-        return users[user_id]
-    return None  # Explicit: user not found
-
-print(find_user(1))   # Alice
-print(find_user(99))  # None
-```
-
-### 3. Checking Return Values
-
-Always check for `None` returns.
-
-```python
-def get_config(key):
-    config = {"debug": True}
-    return config.get(key)  # Returns None if missing
-
-value = get_config("timeout")
-if value is None:
-    print("Using default timeout")
-else:
-    print(f"Timeout: {value}")
-```
-
-## Default Arguments
-
-Using `None` for safe default parameters.
-
-### 1. Mutable Default Trap
-
-Mutable defaults cause unexpected behavior.
-
-```python
-# Wrong: mutable default shared across calls
-def add_item_bad(item, lst=[]):
-    lst.append(item)
-    return lst
-
-print(add_item_bad(1))  # [1]
-print(add_item_bad(2))  # [1, 2] - unexpected!
-print(add_item_bad(3))  # [1, 2, 3] - keeps growing!
-```
-
-### 2. None Default Pattern
-
-Use `None` to avoid the mutable default trap.
-
-```python
-# Correct: None default with internal creation
-def add_item(item, lst=None):
-    if lst is None:
-        lst = []
-    lst.append(item)
-    return lst
-
-print(add_item(1))  # [1]
-print(add_item(2))  # [2] - fresh list each time
-print(add_item(3))  # [3]
-```
-
-### 3. Optional Parameters
-
-Distinguish "not provided" from other values.
-
-```python
-def divide(a, b=None):
-    if b is None:
-        return "No divisor provided"
-    if b == 0:
-        return "Cannot divide by zero"
-    return a / b
-
-print(divide(10))      # No divisor provided
-print(divide(10, 0))   # Cannot divide by zero
-print(divide(10, 2))   # 5.0
-```
-
-## Placeholder Usage
-
-Using `None` as a placeholder in code.
-
-### 1. Uninitialized State
-
-Mark variables as not yet assigned.
-
-```python
-# Initialize as None
-database_connection = None
-cached_result = None
-
-def connect():
-    global database_connection
-    database_connection = create_connection()
-
-def get_data():
-    global cached_result
-    if cached_result is None:
-        cached_result = fetch_from_db()
-    return cached_result
-```
-
-### 2. Sentinel Value
-
-Use `None` to signal special conditions.
-
-```python
-def binary_search(arr, target):
-    left, right = 0, len(arr) - 1
-    
-    while left <= right:
-        mid = (left + right) // 2
-        if arr[mid] == target:
-            return mid
-        elif arr[mid] < target:
-            left = mid + 1
-        else:
-            right = mid - 1
-    
-    return None  # Not found
-
-result = binary_search([1, 3, 5, 7, 9], 5)
-if result is not None:
-    print(f"Found at index {result}")
-```
-
-### 3. Garbage Collection
-
-Remove references to allow cleanup.
-
-```python
-# Large data structure
-my_data = [1, 2, 3] * 1000000
-
-# Process data...
-process(my_data)
-
-# Release memory
-my_data = None  # Now eligible for garbage collection
-```
-
-## None Safety
-
-Handle `None` carefully to avoid errors.
-
-### 1. Attribute Errors
-
-Accessing attributes on `None` fails.
-
-```python
-x = None
-
-# This raises AttributeError
-# print(x.upper())
-# AttributeError: 'NoneType' object has no attribute 'upper'
-
-# Check first
-if x is not None:
-    print(x.upper())
-else:
     print("No value")
 ```
 
-### 2. Guard Clauses
+Why `is`?
 
-Return early for `None` values.
+Because `None` is a singleton object, and identity is the appropriate test.
+
+Use:
 
 ```python
-def process_name(name):
-    # Guard clause
+x is None
+x is not None
+```
+
+instead of:
+
+```python
+x == None
+```
+
+```mermaid2
+flowchart LR
+    A[variable x] --> B{is None?}
+    B -->|yes| C[absence detected]
+    B -->|no| D[real value present]
+```
+
+---
+
+## 6. Common Uses of `None`
+
+### Default initialization
+
+```python
+best_score = None
+```
+
+### Missing result
+
+```python
+def find_item(items, target):
+    for item in items:
+        if item == target:
+            return item
+    return None
+```
+
+### Optional arguments
+
+```python
+def greet(name=None):
     if name is None:
-        return "Unknown"
-    
-    # Safe to use name here
-    return name.strip().title()
-
-print(process_name("  alice  "))  # Alice
-print(process_name(None))         # Unknown
+        print("Hello, guest")
+    else:
+        print("Hello,", name)
 ```
 
-### 3. Fallback Values
+---
 
-Provide defaults for `None` values.
+## 7. Worked Examples
+
+### Example 1: placeholder value
 
 ```python
-def get_username(user):
-    name = user.get("name")
-    
-    # Using or (caution: treats "" as falsy too)
-    return name or "Guest"
+data = None
 
-# Safer: explicit None check
-def get_username_safe(user):
-    name = user.get("name")
-    return "Guest" if name is None else name
-
-print(get_username({}))              # Guest
-print(get_username({"name": ""}))    # Guest (maybe unexpected)
-print(get_username_safe({"name": ""}))  # "" (empty string preserved)
+if data is None:
+    print("Not loaded yet")
 ```
 
-## None vs Falsy
-
-Distinguish `None` from other falsy values.
-
-### 1. Falsy Values List
-
-Many values are falsy but not `None`.
+### Example 2: function return
 
 ```python
-falsy_values = [None, False, 0, 0.0, "", [], {}, set()]
+def f():
+    pass
 
-for val in falsy_values:
-    print(f"{str(val):10} is None: {val is None}")
-# None       is None: True
-# False      is None: False
-# 0          is None: False
-# 0.0        is None: False
-#            is None: False
-# []         is None: False
-# {}         is None: False
-# set()      is None: False
+print(f())
 ```
 
-### 2. Truthiness vs Identity
+Output:
 
-Use `is None` for None, truthiness for emptiness.
+```text
+None
+```
+
+### Example 3: optional argument
 
 ```python
-value = 0
+def power(base, exponent=None):
+    if exponent is None:
+        return base * base
+    return base ** exponent
 
-# Wrong: treats 0 as "missing"
-if not value:
-    print("No value")  # Prints! But 0 is a valid value
-
-# Correct: check specifically for None
-if value is None:
-    print("No value")
-else:
-    print(f"Value: {value}")  # Value: 0
+print(power(3))
+print(power(3, 3))
 ```
 
-### 3. Explicit Checks
+Output:
 
-Be explicit about what you're checking.
-
-```python
-def process(data):
-    # Check for None specifically
-    if data is None:
-        return "No data provided"
-    
-    # Check for empty (but not None)
-    if not data:
-        return "Empty data"
-    
-    # Process non-empty data
-    return f"Processing {len(data)} items"
-
-print(process(None))    # No data provided
-print(process([]))      # Empty data
-print(process([1, 2]))  # Processing 2 items
+```text
+9
+27
 ```
 
-## None vs NaN
+---
 
-`None` and `NaN` serve different purposes.
+## 8. Common Pitfalls
 
-### 1. Type Difference
+### Confusing `None` with `False`
 
-`None` is `NoneType`, `NaN` is `float`.
+`None` is falsy, but it is not the same value as `False`.
 
-```python
-import math
+### Using `== None`
 
-print(type(None))          # <class 'NoneType'>
-print(type(float("nan")))  # <class 'float'>
-```
+Prefer `is None` for clarity and correctness.
 
-### 2. Comparison Behavior
+### Assuming `print()` returns a string
 
-`NaN` has unusual equality behavior.
+`print()` returns `None`; it only produces output as a side effect.
 
-```python
-import math
+---
 
-x = None
-y = float("nan")
+## 9. Summary
 
-# None: identity works
-print(x is None)       # True
+Key ideas:
 
-# NaN: doesn't equal itself!
-print(y == y)          # False
-print(math.isnan(y))   # True
-```
+* `None` represents the absence of a value
+* its type is `NoneType`
+* `None` is a singleton object
+* `None` is falsy
+* comparisons with `None` should use `is` and `is not`
 
-### 3. Operation Behavior
-
-Operations behave differently.
-
-```python
-# None: causes TypeError
-# result = 5 + None  # TypeError
-
-# NaN: propagates through operations
-result = 5 + float("nan")
-print(result)  # nan
-
-print(float("nan") * 0)   # nan
-print(float("nan") > 5)   # False
-print(float("nan") < 5)   # False
-```
+The `None` object is an essential part of Python’s way of representing missing or intentionally absent values.

@@ -1,9 +1,5 @@
 # Lookahead and Lookbehind
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## What Are Lookarounds?
 
 Lookarounds are **zero-width assertions** — they check whether a pattern exists before or after the current position without consuming any characters. The matched text is not included in the result.

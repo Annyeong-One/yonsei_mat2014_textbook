@@ -1,9 +1,5 @@
 # Backtracking
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 Backtracking is a recursive algorithm pattern that explores possible solutions, abandoning paths when they become invalid. It's used for constraint satisfaction problems.
 
 ---

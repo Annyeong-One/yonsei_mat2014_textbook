@@ -1,9 +1,5 @@
 # Axes Shape Behavior
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 Understanding how `plt.subplots` returns different shaped arrays is crucial for writing robust plotting code.
 
 ---

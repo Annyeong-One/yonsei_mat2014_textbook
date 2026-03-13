@@ -1,9 +1,5 @@
 # Memory Leaks
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 메모리 누수의 원인, 탐지, 예방 방법입니다.
 
 ## Common Causes

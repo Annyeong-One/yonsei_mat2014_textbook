@@ -1,9 +1,5 @@
 # accumulate
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 `accumulate()` applies a function cumulatively to items, computing running totals or products.
 
 ## Cumulative Sum

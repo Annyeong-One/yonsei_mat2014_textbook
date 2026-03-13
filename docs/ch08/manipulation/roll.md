@@ -1,9 +1,5 @@
 # np.roll
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 The `np.roll()` function shifts array elements along an axis with circular wrapping.
 
 ## Basic Concept

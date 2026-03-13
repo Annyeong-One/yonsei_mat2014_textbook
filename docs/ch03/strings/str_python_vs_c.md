@@ -1,9 +1,5 @@
 # `str`: Python vs C
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 Python strings differ fundamentally from C strings in storage, safety, and semantics.
 
 ---

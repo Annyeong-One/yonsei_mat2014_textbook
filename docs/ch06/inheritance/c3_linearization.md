@@ -1,9 +1,5 @@
 # C3 Linearization
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 C3 linearization is the algorithm Python uses to compute the Method Resolution Order (MRO) for classes with multiple inheritance.
 
 ---

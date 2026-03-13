@@ -1,9 +1,5 @@
 # Late Binding and Closure Capture
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 When a nested function references variables from its enclosing scope, Python creates a closure. Understanding how closures capture variables—and the "late binding" behavior—is essential for avoiding subtle bugs.
 
 ---

@@ -1,9 +1,5 @@
 # Python Operation Costs
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 Different Python operations have different performance costs. Understanding which operations are expensive helps optimize code effectively.
 
 ---

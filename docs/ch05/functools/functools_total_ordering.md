@@ -1,9 +1,5 @@
 # functools.total_ordering
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 The `@total_ordering` class decorator auto-generates missing comparison methods. Define `__eq__` and **one** of `__lt__`, `__le__`, `__gt__`, or `__gt__`, and `total_ordering` fills in the remaining four.
 
 ```python

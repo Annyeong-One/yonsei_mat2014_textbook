@@ -7,7 +7,11 @@ markdown_extensions:
     - admonition
     - toc:
         permalink: true
-    - pymdownx.superfences
+    - pymdownx.superfences:
+        custom_fences:
+          - name: mermaid
+            class: mermaid
+            format: !!python/name:mermaid2.fence_mermaid_custom
     - pymdownx.arithmatex:
         generic: true
 
@@ -26,7 +30,6 @@ nav:
             - CPU Cores and Threads: ch00/architecture/cpu_cores_threads.md
             - Clock Speed and Instructions: ch00/architecture/clock_instructions.md
             - GPU Architecture: ch00/architecture/gpu_architecture.md
-            - CPU vs GPU: ch00/architecture/cpu_vs_gpu.md
 
         - 0.2 Memory Hierarchy:
             - Memory Overview: ch00/memory/memory_overview.md
@@ -38,7 +41,7 @@ nav:
 
         - 0.3 Data Representation:
             - Bits and Bytes: ch00/data/bits_bytes.md
-            - Binary and Hexadecimal: ch00/data/number_systems.md
+            - Binary and Hexadecimal: ch00/data/binary_hexadecimal.md
             - Integer Representation: ch00/data/integer_representation.md
             - Floating Point: ch00/data/floating_point_representation.md
             - Character Encoding: ch00/data/character_encoding.md
@@ -52,39 +55,36 @@ nav:
             - Python Interpreter and Read-Eval-Print Loop: ch01/setup/python_interpreter.md
 
         - 1.2 Basic Syntax:
-            - Expressions and Statements: ch01/basics/expressions.md
-            - Operators Overview: ch01/basics/operators_overview.md
-            - Indentation and Blocks: ch01/basics/indentation.md
-            - Comments: ch01/basics/comments.md
-            - pass Statement: ch01/basics/pass_statement.md
-            - Variables Examples (Python): ch01/basics/variables_examples.py
-            - Data Types Examples (Python): ch01/basics/data_types_examples.py
-            - Operators Examples (Python): ch01/basics/operators_examples.py
+            - Running Python: ch01/basics/running_python.md
+            - Variables and Objects: ch01/basics/python_variables_and_objects.md
+            - Python Basic Data Types: ch01/basics/basic_python_data_types.md
+            - Python Operators and Expressions: ch01/basics/operators_expressions.md
+            - Code Structure and Readability: ch01/basics/code_structure_and_readability.md
+            - Putting It All Together: ch01/basics/putting_it_all_together.md
+            - Chapter Summary: ch01/basics/chapter_summary.md
 
         - 1.3 Control Flow:
-            - if / for / while: ch01/control_flow/control_flow.md
+            - Overview: ch01/control_flow/control_flow_overview.md
+            - Conditional Statements: ch01/control_flow/conditional_statements.md
             - break and continue: ch01/control_flow/break_continue.md
-            - for...else and while...else: ch01/control_flow/loop_else.md
-            - Ternary Expressions: ch01/control_flow/ternary.md
-            - match / case (Structural Pattern Matching): ch01/control_flow/match_case.md
-            - Control Flow Examples (Python): ch01/control_flow/control_flow_examples.py
-            - Loops Examples (Python): ch01/control_flow/loops_examples.py
-            - Pattern Matching with Guards (Python): ch01/control_flow/pattern_matching_with_guards.py
-            - Loop Practice Problems (Python): ch01/control_flow/loop_practice_problems.py
+            - Loop else Clause: ch01/control_flow/loop_else.md
+            - Conditional Expressions (Ternary): ch01/control_flow/ternary_expressions.md
+            - Pattern Matching (match / case): ch01/control_flow/pattern_matching.md
+            - Practice Examples: ch01/control_flow/practice_examples.md
+            - Summary: ch01/control_flow/summary.md
 
         - 1.4 Essential Built-ins:
             - print() and input(): ch01/builtins/print_input.md
             - len(), range(), enumerate(): ch01/builtins/len_range_enumerate.md
             - zip(): ch01/builtins/zip.md
+            - sorted() and reversed(): ch01/builtins/sorted_reversed.md
             - min(), max(), sum(): ch01/builtins/min_max_sum.md
             - abs() and round(): ch01/builtins/abs_round.md
             - any() and all(): ch01/builtins/any_all.md
-            - sorted() and reversed(): ch01/builtins/sorted_reversed.md
             - help() and dir(): ch01/builtins/help_dir.md
-            - I/O Functions (Python): ch01/builtins/io_functions.py
-            - Type Conversion Functions (Python): ch01/builtins/type_conversion_functions.py
-            - Numeric Functions (Python): ch01/builtins/numeric_functions.py
-            - Sequence Functions (Python): ch01/builtins/sequence_functions.py
+            - Type Conversion Functions: ch01/builtins/type_conversion_functions.md
+            - Input and Output Functions: ch01/builtins/io_functions.md
+            - Built-in Usage Examples: ch01/builtins/builtin_examples.md
 
         - 1.5 Numeric Types:
             - int Fundamentals: ch01/types/int_fundamentals.md
@@ -100,69 +100,52 @@ nav:
             - bool Comparisons: ch01/types/bool_comparisons.md
             - None Type: ch01/types/none_type.md
 
-        - 1.7 Strings:
-            - str Creating Strings: ch01/types/str_creating.md
-            - str Escape Characters: ch01/types/str_escape_characters.md
-            - str Multiline Strings: ch01/types/str_multiline.md
-            - str Raw Strings: ch01/types/str_raw_strings.md
-            - str Docstrings: ch01/types/str_docstrings.md
-            - str Indexing: ch01/types/str_indexing.md
-            - str Slicing: ch01/types/str_slicing.md
-            - str Concatenation: ch01/types/str_concatenation.md
-            - str Repetition: ch01/types/str_repetition.md
-            - str Membership: ch01/types/str_membership.md
+        - 1.7 Strings: 
+            - str Fundamentals: ch01/types/str_fundamentals.md
+            - str Literals and Escaping: ch01/types/str_literals_and_escaping.md
+            - str Indexing and Slicing: ch01/types/str_indexing_and_slicing.md
+            - str Operators and Membership: ch01/types/str_operators_and_membership.md
             - str Comparison: ch01/types/str_comparison.md
-            - str Case Methods: ch01/types/str_case_methods.md
-            - str Check Methods: ch01/types/str_check_methods.md
-            - str Split and Join: ch01/types/str_split_join.md
-            - str Modify Methods: ch01/types/str_modify_methods.md
-            - str Formatting Methods: ch01/types/str_formatting_methods.md
-            - str Built-in Functions: ch01/types/str_builtin_funcs.md
-            - Strings Examples (Python): ch01/types/strings_examples.py
+            - str Case and Checks: ch01/types/str_methods_case_and_checks.md
+            - str Split, Join, and Modify: ch01/types/str_split_join_modify.md
+            - str Formatting and Docstrings: ch01/types/str_formatting_and_docstrings.md
+            - str Built-in Functions: ch01/types/str_builtin_functions.md
+            - str Examples: ch01/types/str_examples.md
 
-        - 1.8 Functions Basics:
-            - Function and Call Stack: ch01/functions/functions.md
-            - 'Parameters & Returns': ch01/functions/parameters.md
+        - 1.8 Function Basics:
+            - Functions and Call Stack: ch01/functions/functions.md
+            - Parameters and Returns: ch01/functions/parameters_and_returns.md
             - Type Hints: ch01/functions/type_hints.md
-            - Function Practice Examples (Python): ch01/functions/function_practice_examples.py
+            - Function Examples: ch01/functions/function_examples.md
 
         - 1.9 Composite Data Types:
-            - Sequences Overview: ch01/composite_data_types/sequences.md
-            - tuple and Immutability: ch01/composite_data_types/tuple.md
-            - list and Dynamic Arrays: ch01/composite_data_types/list.md
-            - list Methods: ch01/composite_data_types/list_methods.md
-            - dict and Hash Tables: ch01/composite_data_types/dict.md
-            - dict Methods: ch01/composite_data_types/dict_methods.md
-            - set and Membership: ch01/composite_data_types/set.md
-            - Comprehensions Overview: ch01/composite_data_types/comprehensions.md
-            - Lists Tutorial (Python): ch01/composite_data_types/lists_tutorial.py
-            - Tuples Tutorial (Python): ch01/composite_data_types/tuples_tutorial.py
-            - Dictionaries Tutorial (Python): ch01/composite_data_types/dicts_tutorial.py
-            - Sets Tutorial (Python): ch01/composite_data_types/sets_tutorial.py
-            - Comprehensions Practical (Python): ch01/composite_data_types/comprehensions_practical.py
-            - Comprehensions Quick Reference: ch01/composite_data_types/comprehensions_quick_reference.md
-            - Comprehensions Exercises: ch01/composite_data_types/comprehensions_exercises.md
-            - Dict Construction Patterns (Python): ch01/composite_data_types/dict_construction_patterns.py
+            - Sequences Overview: ch01/composite_data_types/sequences_overview.md
+            - Tuples: ch01/composite_data_types/tuples.md
+            - Lists: ch01/composite_data_types/lists.md
+            - Dictionaries: ch01/composite_data_types/dictionaries.md
+            - Sets: ch01/composite_data_types/sets.md
+            - Comprehensions: ch01/composite_data_types/comprehensions.md
+            - Composite Data Type Examples: ch01/composite_data_types/composite_examples.md
 
         - 1.10 Exceptions:
-            - Exception Hierarchy: ch01/exceptions/hierarchy.md
-            - Common Runtime Errors: ch01/exceptions/common_errors.md
-            - try / except / finally: ch01/exceptions/handling.md
-            - Raising Exceptions: ch01/exceptions/raising.md
+            - Exception Hierarchy: ch01/exceptions/exception_hierarchy.md
+            - Common Runtime Errors: ch01/exceptions/common_runtime_errors.md
+            - Exception Handling: ch01/exceptions/exception_handling.md
+            - Raising Exceptions: ch01/exceptions/raising_exceptions.md
 
         - 1.11 File I/O:
             - Opening and Reading Files: ch01/io/file_reading.md
             - Writing Files: ch01/io/file_writing.md
             - Context Managers (with): ch01/io/context_managers.md
             - CSV and JSON Basics: ch01/io/csv_json.md
-            - Path Handling (pathlib): ch01/io/pathlib.md
-            - File Operations Tutorial (Python): ch01/io/file_operations_tutorial.py
+            - Path Handling (pathlib): ch01/io/pathlib_paths.md
+            - File I/O Examples: ch01/io/file_io_examples.md
 
         - 1.12 Modules and Imports:
-            - import Mechanics: ch01/modules/imports.md
+            - Import Mechanics: ch01/modules/imports_mechanics.md
             - __name__ == "__main__": ch01/modules/main_guard.md
             - Scripts vs Modules: ch01/modules/scripts_vs_modules.md
-            - pip and PyPI: ch01/package_managers/pip.md
+            - pip and PyPI: ch01/modules/pip_pypi.md
 
     - 2 Python Intermediate:
         - Chapter Overview: ch02/index.md
@@ -298,7 +281,6 @@ nav:
         - 2.15 Performance Basics:
             - Time vs Space Trade-offs: ch02/performance/tradeoffs.md
             - Big-O Notation: ch02/performance/big_o.md
-            - CPU Microarchitecture: ch02/performance/cpu_microarchitecture.md
             - Python Operation Costs: ch02/performance/operation_costs.md
             - timeit Module: ch02/performance/timeit.md
             - Reducing Operations (Python): ch02/performance/reducing_operations.py
@@ -312,7 +294,6 @@ nav:
             - Everything is an Object: ch03/foundations/everything_is_object.md
             - Methods and Attributes: ch03/foundations/methods_and_attributes.md
             - Python Execution Model: ch03/foundations/python_execution.md
-            - CPU Execution Model: ch03/foundations/cpu_execution_model.md
             - Code Object Anatomy (Python): ch03/foundations/code_object_anatomy.py
 
         - 3.2 Python's Object Model:
@@ -392,9 +373,6 @@ nav:
             - Caching Strategies: ch04/advanced_memory/caching_strategies.md
             - Memory Management: ch04/advanced_memory/memory_management.md
             - Memory Optimization: ch04/advanced_memory/memory_optimization.md
-            - Cache Lines: ch04/advanced_memory/cache_lines.md
-            - Cache Eviction: ch04/advanced_memory/cache_eviction.md
-            - Memory Locality: ch04/advanced_memory/memory_locality.md
             - __slots__: ch04/advanced_memory/slots.md
             - sys.getsizeof(): ch04/advanced_memory/getsizeof.md
             - tracemalloc: ch04/advanced_memory/tracemalloc.md
@@ -1485,7 +1463,6 @@ nav:
             - Threads vs Processes: ch14/concepts/threads_vs_processes.md
             - Deadlocks: ch14/concepts/deadlocks.md
             - Race Conditions: ch14/concepts/race_conditions.md
-            - Cache Coherency: ch14/concepts/cache_coherency.md
             - Global Interpreter Lock Tutorial (Python): ch14/concepts/gil_tutorial.py
 
         - 14.2 concurrent.futures:
@@ -1540,7 +1517,6 @@ nav:
             - System Bus: ch15/communication/system_bus.md
             - CPU-Memory Communication: ch15/communication/cpu_memory.md
             - CPU-GPU Communication: ch15/communication/cpu_gpu.md
-            - CPU Interconnects: ch15/communication/cpu_interconnects.md
             - I/O and Peripherals: ch15/communication/io_peripherals.md
 
         - 15.2 Networking Fundamentals:
@@ -1564,3 +1540,4 @@ nav:
 
 plugins:
     - search
+    - mermaid2

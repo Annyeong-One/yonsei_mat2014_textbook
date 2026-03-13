@@ -1,9 +1,5 @@
 # Pattern Syntax Basics
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Literal Characters
 
 The simplest regex patterns are literal characters that match themselves exactly:

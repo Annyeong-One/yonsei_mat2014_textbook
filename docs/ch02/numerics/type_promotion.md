@@ -1,9 +1,5 @@
 # Type Promotion
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 Type promotion is the automatic elevation of a value from a smaller or less precise data type to a larger or more precise data type during operations. Python performs this implicitly to prevent data loss.
 
 

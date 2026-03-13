@@ -1,322 +1,268 @@
-# Integer Basics
 
+# int Fundamentals
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+The `int` type represents **integers**, or whole numbers without fractional parts.
 
-Python integers are one of the fundamental numeric types for whole numbers. Unlike many languages, Python's `int` has arbitrary precision.
+Examples of integers include:
+
+```python
+0
+1
+-5
+42
+1000000
+````
+
+Integers are one of the most fundamental data types in Python. They are used for:
+
+* counting
+* indexing
+* loop control
+* exact arithmetic
+* representing discrete quantities
+
+```mermaid2
+flowchart TD
+    A[int]
+    A --> B[positive]
+    A --> C[zero]
+    A --> D[negative]
+```
 
 ---
 
-## Arbitrary Precision
+## 1. Integers as Mathematical Objects
 
-Python integers can grow as large as memory allows without overflowing.
+An integer represents a whole number on the number line.
 
-### 1. No Size Limit
+```mermaid2
+flowchart LR
+    A[-3] --> B[-2] --> C[-1] --> D[0] --> E[1] --> F[2] --> G[3]
+```
 
-Python integers are not limited to a fixed size like 32-bit or 64-bit.
+Unlike floating-point numbers, integers have **no decimal point**.
 
 ```python
-x = 10**100  # A very large integer
+a = 5
+b = -12
+c = 0
+```
+
+---
+
+## 2. Integer Arithmetic
+
+Python supports the standard arithmetic operations on integers.
+
+| Operation      | Symbol | Example  | Result |
+| -------------- | ------ | -------- | ------ |
+| addition       | `+`    | `3 + 2`  | `5`    |
+| subtraction    | `-`    | `3 - 2`  | `1`    |
+| multiplication | `*`    | `3 * 2`  | `6`    |
+| division       | `/`    | `3 / 2`  | `1.5`  |
+| floor division | `//`   | `3 // 2` | `1`    |
+| remainder      | `%`    | `3 % 2`  | `1`    |
+| exponentiation | `**`   | `3 ** 2` | `9`    |
+
+Example:
+
+```python
+a = 7
+b = 3
+
+print(a + b)
+print(a - b)
+print(a * b)
+print(a // b)
+print(a % b)
+print(a ** b)
+```
+
+---
+
+## 3. Exactness of Integers
+
+Python integers are **exact**.
+
+For example:
+
+```python
+print(10 + 20)
+print(2 * 100)
+```
+
+These results are represented precisely.
+
+This differs from floating-point numbers, which may introduce rounding error.
+
+---
+
+## 4. Arbitrary Precision
+
+Unlike many programming languages, Python integers are **arbitrary precision**.
+
+That means Python integers can grow as large as memory allows.
+
+```python
+x = 10 ** 50
 print(x)
 ```
 
-### 2. Auto Float Convert
+Output:
 
-If an operation involves an integer and a float, Python automatically converts the integer to a float.
+```text
+100000000000000000000000000000000000000000000000000
+```
 
-```python
-x = 5
-y = 2.0
-result = x / y  # result is a float (2.5)
+This is an important distinction from languages that restrict integers to fixed sizes such as 32-bit or 64-bit storage.
+
+```mermaid2
+flowchart LR
+    A[small int] --> B[larger int] --> C[very large int]
 ```
 
 ---
 
-## Basic Operations
+## 5. Integer Literals
 
-Python supports standard arithmetic operations with integers.
+Python supports several integer literal formats.
 
-### 1. Arithmetic Table
+| Base        | Example  | Meaning |
+| ----------- | -------- | ------- |
+| decimal     | `42`     | base 10 |
+| binary      | `0b1010` | base 2  |
+| octal       | `0o52`   | base 8  |
+| hexadecimal | `0x2A`   | base 16 |
 
-![Arithmetic Operations](https://cdn.codegym.cc/images/article/80cd9ae0-2a36-464e-9e63-690c1feb1c62/512.webp)
-
-[Image Source](https://codegym.cc/groups/posts/integer-division-java)
-
-```python
-a = 14
-b = 4
-print(a + b)   # Addition: 18
-print(a - b)   # Subtraction: 10
-print(a * b)   # Multiplication: 56
-print(a / b)   # Division (float result): 3.5
-print(a // b)  # Floor division: 3
-print(a % b)   # Modulus: 2
-print(a ** b)  # Exponentiation: 38416
-```
-
-### 2. Python vs C Division
-
-Integer division behaves differently in Python and C.
-
-**Python 3.x:**
+Example:
 
 ```python
-result = 10 / 3
-print(result)  # Output: 3.3333333333333335 (floating-point)
+print(42)
+print(0b101010)
+print(0o52)
+print(0x2A)
 ```
 
-For integer division in Python, use `//`:
-
-```python
-result = 10 // 3
-print(result)  # Output: 3 (integer result)
-```
-
-**C:**
-
-```c
-#include <stdio.h>
-
-int main() {
-    int result = 10 / 3;
-    printf("%d\n", result);  // Output: 3 (integer result)
-    return 0;
-}
-```
-
-For floating-point division in C:
-
-```c
-double result = 10.0 / 3;
-printf("%lf\n", result);  // Output: 3.333333
-```
-
-**Summary:**
-- Python 3.x: `/` gives float, `//` gives integer division
-- C: `/` with integers gives integer division automatically
-
-[ChatGPT](https://openai.com/blog/chatgpt)
-
-### 3. Unary Operators
-
-```python
-a = 9
-b = + a
-c = - a
-print(f"{a = }, {b = }, {c = }")
-
-a = - 9
-b = + a
-c = - a
-print(f"{a = }, {b = }, {c = }")
-```
-
-### 4. Dunder Methods
-
-Basic math operations work through special methods.
-
-```python
-def main():
-    a = 9
-    b = 2
-
-    # __add__
-    print(a + b)
-    print(a.__add__(b))
-    print(int.__add__(a,b),end="\n\n")
-
-    # __sub__
-    print(a - b)
-    print(a.__sub__(b))
-    print(int.__sub__(a,b),end="\n\n")
-
-    # __mul__
-    print(a * b)
-    print(a.__mul__(b))
-    print(int.__mul__(a,b),end="\n\n")
-
-    # __truediv__
-    print(a / b)
-    print(a.__truediv__(b))
-    print(int.__truediv__(a,b),end="\n\n")
-
-    # __floordiv__
-    print(a // b)
-    print(a.__floordiv__(b))
-    print(int.__floordiv__(a,b),end="\n\n")
-
-    # __mod__
-    print(a % b)
-    print(a.__mod__(b))
-    print(int.__mod__(a,b),end="\n\n")
-
-    # __pow__
-    print(a ** b)
-    print(a.__pow__(b))
-    print(int.__pow__(a,b),end="\n\n")
-
-if __name__ == "__main__":
-    main()
-```
-
-### 5. n * n vs n**2
-
-Both `n * n` and `n**2` square a number, but there are subtle differences.
-
-**Reasons to use `n * n`:**
-
-1. **Readability**: More immediately understandable
-2. **Performance**: Slightly faster (direct multiplication)
-3. **Historical**: Taught earlier in education
-
-**Example:**
-
-```python
-n = 5
-square_with_multiplication = n * n
-square_with_exponentiation = n**2
-
-print(square_with_multiplication)  # Output: 25
-print(square_with_exponentiation)  # Output: 25
-```
-
-**Performance Comparison:**
-
-```python
-import timeit
-
-n = 1000
-
-# Timing n * n
-multiplication_time = timeit.timeit('n * n', setup='n = 1000', number=1000000)
-
-# Timing n**2
-exponentiation_time = timeit.timeit('n**2', setup='n = 1000', number=1000000)
-
-print(f"n * n time: {multiplication_time}")
-print(f"n**2 time: {exponentiation_time}")
-```
-
-**Conclusion:** Both are correct; the choice depends on preference and context.
+All of these represent the same value.
 
 ---
 
-## Operator Precedence
+## 6. Underscores in Integer Literals
 
-Python follows standard mathematical order of operations.
-
-### 1. Precedence Rules
-
-1. Parentheses
-2. Exponents
-3. Unary + and -
-4. Multiplication and Division (*, /, //, %) from left to right
-5. Addition and Subtraction (+, -) from left to right
-
-[Order of operations](https://en.wikipedia.org/wiki/Order_of_operations)
+Python allows underscores in numeric literals to improve readability.
 
 ```python
-def main():
-    print(2 * 3 + 1)
-    print(1 + 2 * 3)
-    print(1 + 2 * 3 / 5)
-    print(1 + 2 * 3 / 5 ** 2)
-
-if __name__ == "__main__":
-    main()
+population = 1_000_000
+seconds = 86_400
 ```
 
-### 2. Practice Example
-
-What is the output of the below code?
+These underscores do not affect the value.
 
 ```python
-print(10 + 5 ** 2 // 5)
-```
-
-**Solution:**
-
-```python
-print(10 + 5 ** 2 // 5)
-```
-
-equals to:
-
-```python
-print( 10 + ( ( 5 ** 2 ) // 5) )
-```
-
-```python
-def main():
-    print(10 + 5 ** 2 // 5)
-
-if __name__ == "__main__":
-    main()
+print(population)
+print(seconds)
 ```
 
 ---
 
-## Built-in Functions
+## 7. Integers in Boolean Contexts
 
-Python provides several built-in functions for integers.
+Integers can appear in conditions.
 
-### 1. Common Functions
+* `0` behaves as `False`
+* nonzero integers behave as `True`
 
-```python
-abs_val = abs(-10) # Absolute value: 10
-abs_val = int.__abs__(-10)
-print(abs_val)
-
-power = pow(2, 3)    # Equivalent to 2 ** 3: 8
-print(power)
-
-max_val = max(10, 20, 30)  # Maximum value: 30
-print(max_val)
-
-min_val = min(10, 20, 30)  # Minimum value: 10
-print(min_val)
-
-rounded = round(5.678)  # Rounds to nearest integer: 6
-print(rounded)
-
-print(dir(int))
-```
-
-### 2. Math Module
+Example:
 
 ```python
-import math
+if 0:
+    print("This will not print")
 
-def main():
-    print( f"{math.floor(3.14) = }" )
-    print( f"{math.floor(4.99) = }" )
-    print( f"{math.ceil(3.14) = }" )
-    print( f"{math.ceil(4.99) = }" )
-    print( f"{math.sqrt(4.99) = }" )
-
-if __name__ == "__main__":
-    main()
+if 5:
+    print("This will print")
 ```
 
 ---
 
-## Integer Interning
+## 8. Worked Examples
 
-Python optimizes memory by *interning* small integers.
-
-### 1. Interning Range
-
-Small integers (typically `-5` to `256`) are preallocated and reused.
+### Example 1: counting items
 
 ```python
-a = 100
-b = 100
-print(a is b)  # True, both refer to the same object in memory
+apples = 5
+oranges = 3
+total = apples + oranges
 
-x = 300
-y = 300
-print(x is y)  # False, different objects in memory
+print(total)
 ```
 
-This optimization improves performance when working with small numbers.
+Output:
+
+```text
+8
+```
+
+### Example 2: even or odd
+
+```python
+n = 17
+
+if n % 2 == 0:
+    print("even")
+else:
+    print("odd")
+```
+
+Output:
+
+```text
+odd
+```
+
+### Example 3: power computation
+
+```python
+print(2 ** 10)
+```
+
+Output:
+
+```text
+1024
+```
+
+---
+
+## 9. Common Pitfalls
+
+### Using `/` when you want an integer result
+
+```python
+print(7 / 2)
+```
+
+This produces:
+
+```text
+3.5
+```
+
+Use `//` for floor division if an integer-style quotient is intended.
+
+### Confusing `%` with percentage
+
+The `%` operator computes the **remainder**, not a percentage.
+
+---
+
+## 10. Summary
+
+Key ideas:
+
+* `int` represents whole numbers
+* integers support exact arithmetic
+* Python integers have arbitrary precision
+* integer literals can be written in multiple bases
+* `0` is falsy and nonzero integers are truthy
+
+The `int` type is the foundation for counting, indexing, and exact numeric computation.

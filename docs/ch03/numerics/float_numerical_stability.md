@@ -1,9 +1,5 @@
 # Numerical Stability
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 Numerical stability determines whether an algorithm produces reliable results despite unavoidable floating-point errors. A stable algorithm keeps errors bounded; an unstable one amplifies them catastrophically.
 
 ## Stability vs Conditioning

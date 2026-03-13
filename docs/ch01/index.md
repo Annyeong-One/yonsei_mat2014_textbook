@@ -1,117 +1,356 @@
-# Chapter 1: Python Basics
 
-!!! warning "Incomplete page"
-    This is an index/landing page and does not follow the five-section structure.
 
-This chapter introduces Python from the ground up, covering installation, basic syntax, control flow, built-in functions, core data types, error handling, file I/O, and modules.
+# Chapter 1 — Python Basics
 
-## 1.1 Getting Started
+This chapter introduces the foundations of Python programming.
+It begins with installing Python and understanding the development environment, then moves through the core elements of the language:
 
-- [Why Python](setup/why_python.md)
-- [Installing Python](setup/installing_python.md)
-- [Development Tools](setup/development_tools.md)
-- [Python Interpreter and REPL](setup/python_interpreter.md)
+* syntax
+* control flow
+* built-in functions
+* data types
+* functions
+* collections
+* exceptions
+* file input/output
+* modules and packages
 
-## 1.2 Basic Syntax
+By the end of the chapter, you will understand how Python programs are structured and how the language organizes data and behavior.
 
-- [Expressions and Statements](basics/expressions.md)
-- [Operators Overview](basics/operators_overview.md)
-- [Indentation and Blocks](basics/indentation.md)
-- [Comments](basics/comments.md)
-- [pass Statement](basics/pass_statement.md)
+```mermaid2
+flowchart TD
+    A[Python Basics]
 
-## 1.3 Control Flow
+    A --> B[Getting Started]
+    A --> C[Basic Syntax]
+    A --> D[Control Flow]
+    A --> E[Built-in Functions]
+    A --> F[Data Types]
+    A --> G[Functions]
+    A --> H[Composite Data Types]
+    A --> I[Exceptions]
+    A --> J[File I/O]
+    A --> K[Modules and Imports]
+```
 
-- [if / for / while](control_flow/control_flow.md)
-- [break and continue](control_flow/break_continue.md)
-- [for...else and while...else](control_flow/loop_else.md)
-- [Ternary Expressions](control_flow/ternary.md)
-- [match / case (Structural Pattern Matching)](control_flow/match_case.md)
+Each section builds on the previous one, gradually introducing the tools needed to write complete Python programs.
 
-## 1.4 Essential Built-ins
+---
 
-- [print() and input()](builtins/print_input.md)
-- [len(), range(), enumerate()](builtins/len_range_enumerate.md)
-- [zip()](builtins/zip.md)
-- [min(), max(), sum()](builtins/min_max_sum.md)
-- [abs() and round()](builtins/abs_round.md)
-- [any() and all()](builtins/any_all.md)
-- [sorted() and reversed()](builtins/sorted_reversed.md)
-- [help() and dir()](builtins/help_dir.md)
+# 1.1 Getting Started
 
-## 1.5 Numeric Types
+The chapter begins by introducing Python itself and preparing the development environment.
 
-- [int Fundamentals](types/int_fundamentals.md)
-- [int Type Conversion](types/int_type_conversion.md)
-- [float Fundamentals](types/float_fundamentals.md)
-- [complex Fundamentals](types/complex_fundamentals.md)
-- [Type Conversions](types/type_conversions.md)
+Topics include:
 
-## 1.6 Boolean and None
+* the motivations for using Python
+* installing Python on different operating systems
+* development tools such as editors and IDEs
+* the Python interpreter and interactive REPL
 
-- [bool Fundamentals](types/bool_fundamentals.md)
-- [bool Truthiness](types/bool_truthiness.md)
-- [bool Operators](types/bool_operators.md)
-- [bool Comparisons](types/bool_comparisons.md)
-- [None Type](types/none_type.md)
+The REPL allows experimentation with Python expressions before writing full programs.
 
-## 1.7 Strings
+```mermaid2
+flowchart LR
+    A[Python Installation]
+    A --> B[Development Tools]
+    B --> C[Python Interpreter]
+    C --> D[Interactive REPL]
+```
 
-- [str Creating Strings](types/str_creating.md)
-- [str Escape Characters](types/str_escape_characters.md)
-- [str Multiline Strings](types/str_multiline.md)
-- [str Raw Strings](types/str_raw_strings.md)
-- [str Docstrings](types/str_docstrings.md)
-- [str Indexing](types/str_indexing.md)
-- [str Slicing](types/str_slicing.md)
-- [str Concatenation](types/str_concatenation.md)
-- [str Repetition](types/str_repetition.md)
-- [str Membership](types/str_membership.md)
-- [str Comparison](types/str_comparison.md)
-- [str Case Methods](types/str_case_methods.md)
-- [str Check Methods](types/str_check_methods.md)
-- [str Split and Join](types/str_split_join.md)
-- [str Modify Methods](types/str_modify_methods.md)
-- [str Formatting Methods](types/str_formatting_methods.md)
-- [str Built-in Funcs](types/str_builtin_funcs.md)
+These tools form the foundation of the programming workflow used throughout the rest of the book.
 
-## 1.8 Functions Basics
+---
 
-- [Function and Call Stack](functions/functions.md)
-- [Parameters and Returns](functions/parameters.md)
-- [Type Hints](functions/type_hints.md)
+# 1.2 Basic Syntax
 
-## 1.9 Composite Data Types
+This section introduces the fundamental structure of Python programs.
 
-- [Sequences Overview](composite_data_types/sequences.md)
-- [tuple and Immutability](composite_data_types/tuple.md)
-- [list and Dynamic Arrays](composite_data_types/list.md)
-- [list Methods](composite_data_types/list_methods.md)
-- [dict and Hash Tables](composite_data_types/dict.md)
-- [dict Methods](composite_data_types/dict_methods.md)
-- [set and Membership](composite_data_types/set.md)
-- [Comprehensions Overview](composite_data_types/comprehensions.md)
-- [Comprehensions Quick Reference](composite_data_types/comprehensions_quick_reference.md)
-- [Comprehensions Exercises](composite_data_types/comprehensions_exercises.md)
+Key concepts include:
 
-## 1.10 Exceptions
+* running Python scripts
+* variables and objects
+* basic built-in data types
+* operators and expressions
+* code structure and indentation
 
-- [Exception Hierarchy](exceptions/hierarchy.md)
-- [Common Runtime Errors](exceptions/common_errors.md)
-- [try / except / finally](exceptions/handling.md)
-- [Raising Exceptions](exceptions/raising.md)
+These elements form the **core syntax of the language**.
 
-## 1.11 File I/O
+```mermaid2
+flowchart TD
+    A[Basic Syntax]
+    A --> B[Variables]
+    A --> C[Expressions]
+    A --> D[Data Types]
+    A --> E[Operators]
+    A --> F[Readable Code Structure]
+```
 
-- [Opening and Reading Files](io/file_reading.md)
-- [Writing Files](io/file_writing.md)
-- [Context Managers (with)](io/context_managers.md)
-- [CSV and JSON Basics](io/csv_json.md)
-- [Path Handling (pathlib)](io/pathlib.md)
+Understanding these concepts allows you to write simple but meaningful Python programs.
 
-## 1.12 Modules and Imports
+---
 
-- [import Mechanics](modules/imports.md)
-- [\_\_name\_\_ == "\_\_main\_\_"](modules/main_guard.md)
-- [Scripts vs Modules](modules/scripts_vs_modules.md)
-- [pip and PyPI](package_managers/pip.md)
+# 1.3 Control Flow
+
+Programs often need to make decisions and repeat operations.
+
+Control flow constructs determine **how execution moves through a program**.
+
+This section covers:
+
+* conditional statements (`if`)
+* loop control (`break`, `continue`)
+* loop completion (`else`)
+* conditional expressions
+* structural pattern matching (`match`)
+
+```mermaid2
+flowchart TD
+    A[Control Flow]
+    A --> B[Conditions]
+    A --> C[Loops]
+    A --> D[Branching Logic]
+```
+
+Control flow is essential for writing programs that respond dynamically to input and changing conditions.
+
+---
+
+# 1.4 Essential Built-ins
+
+Python includes many built-in functions that simplify common programming tasks.
+
+Examples include:
+
+* input/output (`print`, `input`)
+* sequence utilities (`len`, `range`, `enumerate`)
+* aggregation (`min`, `max`, `sum`)
+* logical operations (`any`, `all`)
+* sorting and ordering (`sorted`, `reversed`)
+* inspection tools (`help`, `dir`)
+
+```mermaid2
+flowchart TD
+    A[Built-in Functions]
+    A --> B[Input / Output]
+    A --> C[Sequence Utilities]
+    A --> D[Aggregation]
+    A --> E[Inspection]
+```
+
+Built-ins provide powerful functionality without requiring external libraries.
+
+---
+
+# 1.5 Numeric Types
+
+Python supports several numeric types for representing numbers.
+
+These include:
+
+* integers (`int`)
+* floating-point numbers (`float`)
+* complex numbers (`complex`)
+
+The section also explores type conversions between numeric types.
+
+```mermaid2
+flowchart TD
+    A[Numeric Types]
+    A --> B[int]
+    A --> C[float]
+    A --> D[complex]
+```
+
+Numeric types form the basis of calculations in Python programs.
+
+---
+
+# 1.6 Boolean and None
+
+This section introduces the logical foundation of Python programs.
+
+Topics include:
+
+* Boolean values (`True`, `False`)
+* truthiness rules
+* logical operators
+* comparison expressions
+* the special value `None`
+
+```mermaid2
+flowchart TD
+    A[Logical Values]
+    A --> B[Booleans]
+    A --> C[Truthiness]
+    A --> D[Comparisons]
+    A --> E[None]
+```
+
+These concepts are central to conditions and control flow.
+
+---
+
+# 1.7 Strings
+
+Strings represent textual data and are one of the most commonly used data types.
+
+Topics include:
+
+* string creation
+* escaping and literal syntax
+* indexing and slicing
+* string operators
+* string methods
+* formatting and docstrings
+
+```mermaid2
+flowchart TD
+    A[Strings]
+    A --> B[Text Representation]
+    A --> C[Sequence Operations]
+    A --> D[String Methods]
+```
+
+Mastering strings is essential for handling text and user input.
+
+---
+
+# 1.8 Function Basics
+
+Functions organize programs into reusable units of logic.
+
+This section covers:
+
+* defining functions
+* the call stack
+* parameters and return values
+* type hints
+* practical examples
+
+```mermaid2
+flowchart TD
+    A[Functions]
+    A --> B[Definition]
+    A --> C[Call Stack]
+    A --> D[Parameters]
+    A --> E[Return Values]
+```
+
+Functions are the building blocks of structured Python programs.
+
+---
+
+# 1.9 Composite Data Types
+
+Python provides several container types that store collections of values.
+
+These include:
+
+* tuples
+* lists
+* dictionaries
+* sets
+* comprehensions
+
+```mermaid2
+flowchart TD
+    A[Composite Data Types]
+    A --> B[List]
+    A --> C[Tuple]
+    A --> D[Dictionary]
+    A --> E[Set]
+```
+
+These structures allow programs to represent complex data relationships.
+
+---
+
+# 1.10 Exceptions
+
+Errors are inevitable in programming. Python uses exceptions to detect and manage errors during execution.
+
+Topics include:
+
+* the exception hierarchy
+* common runtime errors
+* exception handling (`try`, `except`, `finally`)
+* raising exceptions explicitly
+
+```mermaid2
+flowchart TD
+    A[Program Execution]
+    A --> B{Error Occurs?}
+    B -->|Yes| C[Exception Raised]
+    C --> D[Handled by try/except]
+```
+
+Exception handling helps programs remain robust and predictable.
+
+---
+
+# 1.11 File I/O
+
+Programs frequently interact with external data stored in files.
+
+This section introduces:
+
+* reading files
+* writing files
+* context managers (`with`)
+* CSV and JSON data formats
+* filesystem paths using `pathlib`
+
+```mermaid2
+flowchart TD
+    A[Program]
+    A --> B[Read File]
+    A --> C[Write File]
+    A --> D[Structured Data Formats]
+```
+
+File I/O connects Python programs to persistent data.
+
+---
+
+# 1.12 Modules and Imports
+
+As programs grow larger, code is organized into modules and packages.
+
+Topics include:
+
+* how imports work
+* the `__name__ == "__main__"` pattern
+* scripts versus modules
+* installing external libraries with `pip` and PyPI
+
+```mermaid2
+flowchart TD
+    A[Python Program]
+    A --> B[Modules]
+    B --> C[Imports]
+    C --> D[Packages]
+```
+
+Modules make it possible to build large programs from smaller, reusable components.
+
+---
+
+# Chapter Summary
+
+This chapter established the core foundations of Python programming.
+
+You learned:
+
+* how to install and run Python
+* the syntax and structure of Python programs
+* how control flow directs execution
+* how built-in functions simplify common tasks
+* how Python represents data using different types
+* how functions structure programs
+* how composite data structures organize collections
+* how exceptions manage errors
+* how programs read and write files
+* how modules enable code reuse
+
+These concepts form the **essential toolkit for writing Python programs**, and they provide the foundation for more advanced topics explored in later chapters.

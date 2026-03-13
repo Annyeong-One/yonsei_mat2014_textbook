@@ -1,9 +1,5 @@
 # Generic Filter Operations with scipy.ndimage
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 While convolution applies a fixed kernel operation, `generic_filter()` allows you to apply arbitrary Python functions over neighborhoods. This enables complex, stateful, and custom operations on array data.
 
 ## Introduction to Generic Filters

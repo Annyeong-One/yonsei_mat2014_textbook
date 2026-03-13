@@ -1,9 +1,5 @@
 # `id()`, `type()`, `isinstance()`
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 These built-ins support **introspection**, allowing programs to examine objects at runtime.
 
 ---

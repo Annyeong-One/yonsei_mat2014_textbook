@@ -1,9 +1,5 @@
 # groupby
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 `groupby()` groups consecutive elements with the same key, making it useful for processing sorted data.
 
 ## Basic Grouping

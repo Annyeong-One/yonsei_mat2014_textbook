@@ -1,9 +1,5 @@
 # Nested Structures
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 Composite data types can contain other composite types, creating hierarchical data structures. Understanding nested structures is essential for working with real-world data.
 
 ## Nested Lists

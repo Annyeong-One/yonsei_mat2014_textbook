@@ -1,9 +1,5 @@
 # Callback Patterns
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 A callback is a function passed as an argument to another function, to be called later. Callbacks are fundamental to event-driven programming, asynchronous operations, and flexible APIs.
 
 ---

@@ -1,9 +1,5 @@
 # Quantifiers and Anchors
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Quantifiers
 
 Quantifiers specify **how many times** the preceding element must occur for a match. By default, quantifiers are **greedy** — they match as much text as possible.

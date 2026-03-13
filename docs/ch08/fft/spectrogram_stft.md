@@ -1,9 +1,5 @@
 # Short-Time Fourier Transform (STFT) and Spectrograms
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Understanding the Limitation of Standard FFT
 
 When you apply a standard FFT to a long signal, you get frequency information but **lose all time information**. You cannot tell *when* specific frequencies occur in the signal. This limitation becomes critical when analyzing signals whose frequency content changes over time—like music, speech, or radar signals.

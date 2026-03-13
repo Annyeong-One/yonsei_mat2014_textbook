@@ -1,9 +1,5 @@
 # Format Specifiers
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 The format specification mini-language provides fine-grained control over value presentation. This syntax works in f-strings, `str.format()`, and the built-in `format()` function.
 
 ## Spec Structure

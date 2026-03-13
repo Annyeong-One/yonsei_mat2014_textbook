@@ -1,9 +1,5 @@
 # Recursion vs Iteration
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 Both recursion and iteration solve repetitive problems, but they differ in clarity, efficiency, and use cases. Understanding trade-offs helps you choose correctly.
 
 ---

@@ -1,9 +1,5 @@
 # Utility Functions
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## np.round
 
 ### 1. Basic Usage
