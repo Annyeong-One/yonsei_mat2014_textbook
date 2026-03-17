@@ -10,7 +10,7 @@ Understanding the memory hierarchy is essential for writing high-performance pro
 
 ---
 
-# 1. The Memory Hierarchy
+## 1. The Memory Hierarchy
 
 The **memory hierarchy** organizes storage into layers with different characteristics.
 
@@ -28,7 +28,7 @@ Lower levels are:
 
 ---
 
-## Typical hierarchy
+### Typical hierarchy
 
 | Level      | Size        | Latency    | Managed By       |
 | ---------- | ----------- | ---------- | ---------------- |
@@ -53,7 +53,7 @@ This means RAM can be **hundreds of times slower** than CPU operations.
 
 ---
 
-## Hierarchy visualization
+### Hierarchy visualization
 
 ```mermaid
 flowchart TD
@@ -68,7 +68,7 @@ As capacity increases, speed decreases.
 
 ---
 
-# 2. How the CPU Accesses Memory
+## 2. How the CPU Accesses Memory
 
 When a program requests data, the CPU checks each level of the hierarchy in order.
 
@@ -82,7 +82,7 @@ If the data is not found in a level, the next level must be accessed.
 
 ---
 
-## Cache hit vs cache miss
+### Cache hit vs cache miss
 
 | Event      | Meaning                               |
 | ---------- | ------------------------------------- |
@@ -93,7 +93,7 @@ A cache miss is expensive because data must be copied from a slower layer.
 
 ---
 
-### Data flow visualization
+#### Data flow visualization
 
 ```mermaid
 flowchart LR
@@ -109,7 +109,7 @@ If not, the hardware fetches the data from lower levels.
 
 ---
 
-# 3. Cache Lines
+## 3. Cache Lines
 
 Caches do not load individual bytes. Instead, they load **blocks of memory** called **cache lines**.
 
@@ -123,7 +123,7 @@ When a program accesses a single byte, the entire 64-byte block containing that 
 
 ---
 
-## Example
+### Example
 
 Suppose the program accesses:
 
@@ -141,7 +141,7 @@ This means nearby data becomes available **for free**.
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid
 flowchart LR
@@ -151,7 +151,7 @@ flowchart LR
 
 ---
 
-# 4. Locality of Reference
+## 4. Locality of Reference
 
 The memory hierarchy works because programs exhibit **locality**.
 
@@ -159,7 +159,7 @@ Two important patterns appear in most programs.
 
 ---
 
-## Temporal locality
+### Temporal locality
 
 Recently accessed data is likely to be used again soon.
 
@@ -174,7 +174,7 @@ The variable `x` is reused repeatedly.
 
 ---
 
-## Spatial locality
+### Spatial locality
 
 Data near recently accessed memory is likely to be accessed soon.
 
@@ -191,7 +191,7 @@ Because cache lines load neighboring data, sequential access is very efficient.
 
 ---
 
-### Locality visualization
+#### Locality visualization
 
 ```mermaid
 flowchart LR
@@ -201,7 +201,7 @@ flowchart LR
 
 ---
 
-# 5. Why Sequential Access Is Fast
+## 5. Why Sequential Access Is Fast
 
 Consider an array of `float64` values.
 
@@ -223,7 +223,7 @@ Therefore sequential access results in many **cache hits**.
 
 ---
 
-## Example
+### Example
 
 Access pattern:
 
@@ -245,7 +245,7 @@ cache hits
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid
 flowchart LR
@@ -257,13 +257,13 @@ flowchart LR
 
 ---
 
-# 6. Python Memory Layout
+## 6. Python Memory Layout
 
 Python data structures often store objects **indirectly**, which affects memory performance.
 
 ---
 
-## Python integers
+### Python integers
 
 Each integer is a full Python object stored on the heap.
 
@@ -286,7 +286,7 @@ This is much larger than a simple 4-byte or 8-byte integer.
 
 ---
 
-## Python lists
+### Python lists
 
 A list stores **pointers to objects**, not the objects themselves.
 
@@ -306,7 +306,7 @@ This means elements are scattered throughout memory.
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid
 flowchart LR
@@ -323,7 +323,7 @@ This layout results in **poor spatial locality**.
 
 ---
 
-# 7. NumPy Arrays and Contiguous Memory
+## 7. NumPy Arrays and Contiguous Memory
 
 NumPy arrays store raw numeric values in **contiguous memory**.
 
@@ -352,7 +352,7 @@ Each element occupies exactly 8 bytes.
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid
 flowchart LR
@@ -367,7 +367,7 @@ This is one of the primary reasons **NumPy operations are dramatically faster** 
 
 ---
 
-# 8. Measuring Memory Bandwidth
+## 8. Measuring Memory Bandwidth
 
 The effect of the memory hierarchy can be observed experimentally.
 
@@ -377,7 +377,7 @@ As array size increases and exceeds cache capacity, performance drops.
 
 ---
 
-## Example experiment
+### Example experiment
 
 ```python
 import numpy as np
@@ -409,13 +409,13 @@ Typical observation:
 
 ---
 
-# 9. Memory Latency vs Bandwidth
+## 9. Memory Latency vs Bandwidth
 
 Two important performance metrics describe memory.
 
 ---
 
-## Latency
+### Latency
 
 Latency measures how long it takes to access memory.
 
@@ -429,7 +429,7 @@ This is the delay before data begins to arrive.
 
 ---
 
-## Bandwidth
+### Bandwidth
 
 Bandwidth measures how quickly large amounts of data can be transferred.
 
@@ -443,7 +443,7 @@ Bandwidth determines how quickly large arrays can be processed.
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid
 flowchart LR
@@ -453,13 +453,13 @@ flowchart LR
 
 ---
 
-# 10. Performance Implications
+## 10. Performance Implications
 
 Understanding memory behavior can dramatically improve program performance.
 
 ---
 
-## Prefer contiguous data structures
+### Prefer contiguous data structures
 
 Good:
 
@@ -475,7 +475,7 @@ lists of objects
 
 ---
 
-## Access memory sequentially
+### Access memory sequentially
 
 Sequential access benefits from spatial locality.
 
@@ -483,21 +483,21 @@ Random access defeats caching.
 
 ---
 
-## Avoid unnecessary allocations
+### Avoid unnecessary allocations
 
 Frequent memory allocation can reduce cache efficiency.
 
 ---
 
-## Vectorized operations
+### Vectorized operations
 
 NumPy operations operate on contiguous memory blocks, maximizing cache efficiency.
 
 ---
 
-# 11. Worked Examples
+## 11. Worked Examples
 
-### Example 1
+#### Example 1
 
 Explain why NumPy is faster than Python lists for numerical loops.
 
@@ -505,7 +505,7 @@ NumPy stores values contiguously, allowing efficient cache usage and vectorized 
 
 ---
 
-### Example 2
+#### Example 2
 
 If a cache line is 64 bytes and each value is 8 bytes, how many values fit in one cache line?
 
@@ -515,7 +515,7 @@ If a cache line is 64 bytes and each value is 8 bytes, how many values fit in on
 
 ---
 
-### Example 3
+#### Example 3
 
 Explain the performance drop when arrays exceed cache size.
 
@@ -523,7 +523,7 @@ When arrays no longer fit in cache, accesses must fetch data from RAM, which is 
 
 ---
 
-# 12. Exercises
+## 12. Exercises
 
 1. What is the purpose of the memory hierarchy?
 2. What is a cache hit?
@@ -536,7 +536,7 @@ When arrays no longer fit in cache, accesses must fetch data from RAM, which is 
 
 ---
 
-# 13. Short Answers
+## 13. Short Answers
 
 1. To balance speed and capacity of memory
 2. Data found in cache
@@ -549,7 +549,7 @@ When arrays no longer fit in cache, accesses must fetch data from RAM, which is 
 
 ---
 
-# 14. Summary
+## 14. Summary
 
 * The **memory hierarchy** organizes storage into layers of different speeds and capacities.
 * Registers and caches are extremely fast but small; RAM and disk are large but slower.

@@ -12,7 +12,7 @@ For many Python workloads—especially data science and machine learning—**dat
 
 ---
 
-# 1. Persistent Storage
+## 1. Persistent Storage
 
 Storage devices retain data even when power is turned off. They store:
 
@@ -26,7 +26,7 @@ When a program starts, its code and data must be **loaded from storage into RAM*
 
 ---
 
-### Data movement in a program
+#### Data movement in a program
 
 ```mermaid
 flowchart LR
@@ -38,7 +38,7 @@ The CPU cannot execute programs directly from disk; data must first be loaded in
 
 ---
 
-# 2. Hard Disk Drives (HDD)
+## 2. Hard Disk Drives (HDD)
 
 Hard disk drives store data using **magnetic recording** on spinning disks.
 
@@ -51,7 +51,7 @@ Inside an HDD are:
 
 ---
 
-## How HDDs work
+### How HDDs work
 
 Data is stored magnetically on circular tracks on each platter.
 
@@ -63,7 +63,7 @@ To read data:
 
 ---
 
-### HDD structure
+#### HDD structure
 
 ```mermaid
 flowchart TD
@@ -74,7 +74,7 @@ flowchart TD
 
 ---
 
-## HDD performance characteristics
+### HDD performance characteristics
 
 Because HDDs rely on mechanical movement, they have relatively high latency.
 
@@ -92,7 +92,7 @@ Random reads are slow because the disk head must physically move.
 
 ---
 
-# 3. Solid-State Drives (SSD)
+## 3. Solid-State Drives (SSD)
 
 Solid-state drives store data using **NAND flash memory** rather than magnetic disks.
 
@@ -100,7 +100,7 @@ Because SSDs have **no moving parts**, they are much faster than HDDs.
 
 ---
 
-## How SSDs store data
+### How SSDs store data
 
 Flash memory cells store electrical charge in floating-gate transistors.
 
@@ -117,7 +117,7 @@ Higher density increases capacity but may reduce performance and durability.
 
 ---
 
-### SSD memory structure
+#### SSD memory structure
 
 ```mermaid
 flowchart LR
@@ -130,7 +130,7 @@ Flash memory is written in **pages** but erased in **blocks**, which complicates
 
 ---
 
-# 4. Flash Translation Layer (FTL)
+## 4. Flash Translation Layer (FTL)
 
 SSDs use a software layer called the **Flash Translation Layer (FTL)**.
 
@@ -145,7 +145,7 @@ The FTL also handles:
 
 ---
 
-### FTL mapping process
+#### FTL mapping process
 
 ```mermaid
 flowchart LR
@@ -158,13 +158,13 @@ This translation layer allows SSDs to behave like traditional disks while hiding
 
 ---
 
-# 5. SATA vs NVMe
+## 5. SATA vs NVMe
 
 SSDs can connect to the system using different interfaces.
 
 ---
 
-## SATA SSD
+### SATA SSD
 
 SATA SSDs use the same interface originally designed for hard drives.
 
@@ -180,7 +180,7 @@ SATA bandwidth is limited by the SATA protocol.
 
 ---
 
-## NVMe SSD
+### NVMe SSD
 
 NVMe (Non-Volatile Memory Express) SSDs connect directly to the CPU using **PCI Express (PCIe)** lanes.
 
@@ -196,7 +196,7 @@ Typical characteristics:
 
 ---
 
-### Storage interface comparison
+#### Storage interface comparison
 
 ```mermaid
 flowchart LR
@@ -211,13 +211,13 @@ NVMe SSDs provide dramatically higher throughput and lower latency.
 
 ---
 
-# 6. Sequential vs Random Access
+## 6. Sequential vs Random Access
 
 Storage performance depends heavily on access patterns.
 
 ---
 
-## Sequential access
+### Sequential access
 
 Sequential access reads data in order.
 
@@ -231,7 +231,7 @@ This allows the device to stream data efficiently.
 
 ---
 
-## Random access
+### Random access
 
 Random access reads data from many different locations.
 
@@ -247,7 +247,7 @@ Random access is slower because it prevents efficient prefetching and caching.
 
 ---
 
-### Access pattern visualization
+#### Access pattern visualization
 
 ```mermaid
 flowchart LR
@@ -257,13 +257,13 @@ flowchart LR
 
 ---
 
-# 7. File Formats and Data Loading
+## 7. File Formats and Data Loading
 
 File format strongly affects performance when loading data.
 
 ---
 
-## CSV (text format)
+### CSV (text format)
 
 CSV files store data as plain text.
 
@@ -281,7 +281,7 @@ CSV disadvantages:
 
 ---
 
-## Parquet (binary columnar format)
+### Parquet (binary columnar format)
 
 Parquet stores data in a **binary column-oriented format**.
 
@@ -294,7 +294,7 @@ Advantages:
 
 ---
 
-### File format comparison
+#### File format comparison
 
 | Format  | Type   | Speed |
 | ------- | ------ | ----- |
@@ -303,7 +303,7 @@ Advantages:
 
 ---
 
-# 8. Python Data Loading
+## 8. Python Data Loading
 
 Example comparing CSV and Parquet loading speeds.
 
@@ -324,7 +324,7 @@ Binary formats typically load **5–10× faster** than CSV.
 
 ---
 
-# 9. OS Page Cache
+## 9. OS Page Cache
 
 Operating systems cache frequently accessed disk data in RAM.
 
@@ -337,7 +337,7 @@ When a program reads a file:
 
 ---
 
-### Page cache behavior
+#### Page cache behavior
 
 ```mermaid
 flowchart LR
@@ -351,7 +351,7 @@ Benchmarking disk I/O requires files larger than available RAM.
 
 ---
 
-# 10. Processing Data Larger Than RAM
+## 10. Processing Data Larger Than RAM
 
 Large datasets may exceed available memory.
 
@@ -359,7 +359,7 @@ Two common approaches allow programs to handle such data.
 
 ---
 
-## Chunked processing
+### Chunked processing
 
 Process the file in smaller pieces.
 
@@ -380,7 +380,7 @@ This approach loads only a portion of the data at a time.
 
 ---
 
-## Memory-mapped files
+### Memory-mapped files
 
 Memory mapping treats a file as an array stored on disk.
 
@@ -404,7 +404,7 @@ The OS automatically loads pages of the file into RAM when accessed.
 
 ---
 
-### Memory mapping visualization
+#### Memory mapping visualization
 
 ```mermaid
 flowchart LR
@@ -417,9 +417,9 @@ This technique allows programs to work with datasets larger than physical memory
 
 ---
 
-# 11. Worked Examples
+## 11. Worked Examples
 
-### Example 1
+#### Example 1
 
 Compare latency:
 
@@ -433,7 +433,7 @@ An HDD access may be **100,000× slower than RAM**.
 
 ---
 
-### Example 2
+#### Example 2
 
 How long would it take to read 10 GB sequentially from a 5 GB/s NVMe SSD?
 
@@ -443,7 +443,7 @@ How long would it take to read 10 GB sequentially from a 5 GB/s NVMe SSD?
 
 ---
 
-### Example 3
+#### Example 3
 
 Explain why Parquet loads faster than CSV.
 
@@ -451,7 +451,7 @@ Binary columnar storage reduces both file size and parsing overhead.
 
 ---
 
-# 12. Exercises
+## 12. Exercises
 
 1. What is the difference between volatile and non-volatile memory?
 2. How do HDDs store data?
@@ -464,7 +464,7 @@ Binary columnar storage reduces both file size and parsing overhead.
 
 ---
 
-# 13. Short Answers
+## 13. Short Answers
 
 1. Volatile memory loses data without power
 2. Magnetic recording on spinning platters
@@ -477,7 +477,7 @@ Binary columnar storage reduces both file size and parsing overhead.
 
 ---
 
-# 14. Summary
+## 14. Summary
 
 * Storage devices provide **persistent data storage**.
 * **HDDs** use spinning magnetic disks and have high latency.

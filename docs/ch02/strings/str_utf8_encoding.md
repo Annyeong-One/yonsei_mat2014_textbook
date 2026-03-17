@@ -1,149 +1,346 @@
 # `str`: UTF-8 Encoding
 
-UTF-8 is a variable-length encoding that efficiently represents all Unicode characters.
+UTF-8 is a **variable-length encoding** used to convert Unicode characters into bytes.
+
+In the previous section we introduced **Unicode code points**. This section explains how those code points are **encoded into bytes using UTF-8**.
+
+```mermaid
+flowchart TD
+
+A["Unicode Character"]
+B["Unicode Code Point"]
+C["UTF-8 Encoding"]
+D["Bytes"]
+
+A --> B --> C --> D
+```
 
 ---
 
 ## Why UTF-8?
 
-### 1. ASCII Limitations
+### ASCII Limitations
 
-ASCII only supports 128 characters (0-127), insufficient for non-English text:
+ASCII supports only **128 characters (0–127)**, which is insufficient for representing most languages.
 
 ```python
 # ASCII works for English
-char = 'A'  # 65 in ASCII
+char = 'A'
 
 # But not for other scripts
-char = '好'  # Requires Unicode
+char = '好'
 ```
 
-### 2. UTF-8 Advantages
+ASCII cannot represent characters from most writing systems.
+
+---
+
+### UTF-8 Advantages
+
+UTF-8 solves this problem while preserving compatibility with ASCII.
 
 UTF-8 provides:
 
-- Backward compatibility with ASCII
-- Compact storage for common characters
-- Full Unicode support (1.1M+ code points)
-- Self-synchronizing byte sequences
+* **Backward compatibility with ASCII**
+* **Compact storage for common characters**
+* **Full Unicode support**
+* **Self-synchronizing byte sequences**
+
+Because of these properties, UTF-8 has become the **dominant text encoding on the web and in modern systems**.
 
 ---
 
-## Encoding Structure
+## UTF-8 Encoding Structure
 
-### 1. Byte Patterns
+UTF-8 encodes Unicode code points using **1 to 4 bytes**.
 
-UTF-8 uses 1-4 bytes depending on the character:
-
-| Code Point Range | Byte Pattern | Bytes |
-|------------------|--------------|-------|
-| U+0000 – U+007F | `0xxxxxxx` | 1 |
-| U+0080 – U+07FF | `110xxxxx 10xxxxxx` | 2 |
-| U+0800 – U+FFFF | `1110xxxx 10xxxxxx 10xxxxxx` | 3 |
-| U+10000 – U+10FFFF | `11110xxx 10xxxxxx 10xxxxxx 10xxxxxx` | 4 |
-
-### 2. Leading Bits
-
-The first byte indicates sequence length:
-
-- `0xxxxxxx` → Single byte (ASCII)
-- `110xxxxx` → Start of 2-byte sequence
-- `1110xxxx` → Start of 3-byte sequence
-- `11110xxx` → Start of 4-byte sequence
-- `10xxxxxx` → Continuation byte
+| Code Point Range    | Byte Pattern                          | UTF-8 Bytes |
+| ------------------- | ------------------------------------- | ----------- |
+| U+0000 – U+007F    | `0xxxxxxx`                            | 1     |
+| U+0080 – U+07FF    | `110xxxxx 10xxxxxx`                   | 2     |
+| U+0800 – U+FFFF    | `1110xxxx 10xxxxxx 10xxxxxx`          | 3     |
+| U+10000 – U+10FFFF | `11110xxx 10xxxxxx 10xxxxxx 10xxxxxx` | 4     |
 
 ---
 
-## Examples
+## How UTF-8 Packs Bits
 
-### 1. ASCII Character
+UTF-8 encodes a Unicode code point by inserting its binary bits into predefined byte templates.
 
-The letter 'A' uses 1 byte:
+```mermaid
+flowchart LR
 
-```
-'A' → U+0041 → 0100 0001 (1 byte)
-```
+A["Unicode Code Point Bits"]
+B["UTF-8 Template"]
+C["Encoded Bytes"]
 
-### 2. Accented Character
-
-The letter 'ñ' uses 2 bytes:
-
-```
-'ñ' → U+00F1 → 11000011 10110001 (2 bytes)
+A --> B --> C
 ```
 
-### 3. Chinese Character
+| Bytes | UTF-8 Pattern                         | Code Point Bits |
+| ----- | ------------------------------------- | --------------- |
+| 1     | `0xxxxxxx`                            | 7 bits          |
+| 2     | `110xxxxx 10xxxxxx`                   | 11 bits         |
+| 3     | `1110xxxx 10xxxxxx 10xxxxxx`          | 16 bits         |
+| 4     | `11110xxx 10xxxxxx 10xxxxxx 10xxxxxx` | 21 bits         |
 
-The character '世' uses 3 bytes:
+The `x` positions are filled with **bits from the Unicode code point**.
+
+---
+
+### Example: Encoding '世'
+
+Unicode code point:
 
 ```
-'世' → U+4E16 → 11100100 10111000 10010110 (3 bytes)
-                   \xe4     \xb8     \x96
+U+4E16
 ```
 
-### 4. Emoji
-
-The musical symbol '𝄞' uses 4 bytes:
+Binary:
 
 ```
-'𝄞' → U+1D11E → 11110000 10010000 10000000 10111110 (4 bytes)
+0100111000010110
+```
+
+Fill into the **3-byte template**:
+
+```
+1110xxxx 10xxxxxx 10xxxxxx
+```
+
+Result:
+
+```
+11100100 10111000 10010110
+```
+
+Hex:
+
+```
+E4 B8 96
 ```
 
 ---
 
-## Binary Encoding
+## Leading Bit Patterns
 
-### 1. Full Conversion
+The **first byte** of a UTF-8 sequence indicates the number of bytes in the encoding.
+
+| Pattern     | Meaning                     |
+| ----------- | --------------------------- |
+| `0xxxxxxx`  | Single-byte ASCII character |
+| `110xxxxx`  | Start of 2-byte sequence    |
+| `1110xxxx`  | Start of 3-byte sequence    |
+| `11110xxx`  | Start of 4-byte sequence    |
+| `10xxxxxx`  | Continuation byte           |
+
+Continuation bytes always start with `10xxxxxx`.
+
+This makes UTF-8 **self-synchronizing**, meaning corrupted bytes rarely affect surrounding characters.
+
+---
+
+## Why Continuation Bytes Start with `10`
+
+A decoder can immediately determine whether a byte is:
+
+* a **single-byte ASCII character**
+* the **start of a multi-byte sequence**
+* a **continuation byte**
+
+No valid UTF-8 character **starts** with `10`. Because of this rule, a decoder can scan any byte stream and determine where characters begin.
+
+Example byte sequence:
+
+```
+11100100 10111000 10010110
+```
+
+Breakdown:
+
+```
+11100100   → start of 3-byte sequence
+10111000   → continuation
+10010110   → continuation
+```
+
+This represents the character `'世'`.
+
+If a byte is corrupted, the decoder can resynchronize quickly because valid continuation bytes must start with `10xxxxxx`.
+
+UTF-8 continuation bytes always begin with `10`, allowing decoders to reliably detect character boundaries.
+
+---
+
+## Encoding Examples
+
+### ASCII Character
+
+ASCII characters remain **identical in UTF-8**.
+
+```
+'A' → U+0041 → 01000001
+```
+
+This uses **1 byte**.
+
+---
+
+### Accented Character
+
+```
+'ñ' → U+00F1 → 11000011 10110001
+```
+
+This uses **2 bytes**.
+
+---
+
+### Chinese Character
+
+```
+'世' → U+4E16 → 11100100 10111000 10010110
+```
+
+UTF-8 bytes:
+
+```
+E4 B8 96
+```
+
+---
+
+### Musical Symbol (Supplementary Plane)
+
+```
+'𝄞' → U+1D11E → 11110000 10011101 10000100 10011110
+```
+
+This uses **4 bytes**.
+
+---
+
+## UTF-8 Encoding in Python
+
+Python provides built-in methods for converting strings into UTF-8 bytes.
 
 ```python
 def main():
-    print(f"{bin(ord('0')) = :>9}")  # '0b110000'
-    print(f"{bin(ord('1')) = :>9}")  # '0b110001'
-    print(f"{bin(ord('A')) = :>9}")  # '0b1000001'
-    print(f"{bin(ord('B')) = :>9}")  # '0b1000010'
-    print(f"{bin(ord('a')) = :>9}")  # '0b1100001'
-    print(f"{bin(ord('b')) = :>9}")  # '0b1100010'
+    text = "A ñ 世 😀"
+
+    encoded = text.encode("utf-8")
+
+    print("string:", text)
+    print("bytes:", encoded)
+    print("byte values:", list(encoded))
 
 if __name__ == "__main__":
     main()
 ```
 
-### 2. Round Trip
+Example output:
+
+```
+string: A ñ 世 😀
+bytes: b'A \xc3\xb1 \xe4\xb8\x96 \xf0\x9f\x98\x80'
+byte values: [65, 32, 195, 177, 32, 228, 184, 150, 32, 240, 159, 152, 128]
+```
+
+---
+
+## Comparison with Other Encodings
+
+| Encoding | Bytes per Character | Typical Use                |
+| -------- | ------------------- | -------------------------- |
+| UTF-8    | 1–4                 | Web, Linux, modern systems |
+| UTF-16   | 2–4                 | Windows, Java              |
+| UTF-32   | 4                   | Internal processing        |
+| ASCII    | 1                   | English text               |
+
+---
+
+## ASCII Is a Subset of UTF-8
+
+UTF-8 was designed so that **all ASCII characters remain unchanged**.
+
+The ASCII range (U+0000 – U+007F) is encoded in UTF-8 using **exactly one byte**, with the same value as ASCII.
+
+| Character | ASCII | UTF-8 |
+| --------- | ----- | ----- |
+| `A`       | `41`  | `41`  |
+| `0`       | `30`  | `30`  |
+| `!`       | `21`  | `21`  |
+
+So an ASCII file is already a valid UTF-8 file.
 
 ```python
 def main():
-    print(f"{chr(int(bin(ord('A')),2)) = }")  # 'A'
-    print(f"{chr(int(bin(ord('B')),2)) = }")  # 'B'
+    text = "Hello"
+
+    print(text.encode("ascii"))
+    print(text.encode("utf-8"))
 
 if __name__ == "__main__":
     main()
 ```
 
+Output:
+
+```
+b'Hello'
+b'Hello'
+```
+
+The byte sequences are **identical**.
+
+UTF-8 was designed so that the entire ASCII character set is encoded identically, making every ASCII file a valid UTF-8 file.
+
 ---
 
-## Comparison
+## Why Python Uses UTF-8 by Default
 
-### 1. Other Encodings
+Python 3 adopted **UTF-8 as the default source encoding** (PEP 3120).
 
-| Encoding | Bytes/Char | Use Case |
-|----------|------------|----------|
-| UTF-8 | 1-4 | Web, general |
-| UTF-16 | 2-4 | Windows, Java |
-| UTF-32 | 4 | Fast indexing |
-| ASCII | 1 | English only |
+In Python 2, source files were typically interpreted as ASCII, and non-ASCII characters required an explicit encoding declaration:
 
-### 2. Why UTF-8 Dominates
+```python
+# -*- coding: utf-8 -*-
+name = "José"
+```
 
-- No endianness issues
-- ASCII files are valid UTF-8
-- Minimal storage for English text
-- Web standard (HTML, XML)
+In Python 3, UTF-8 is the default. Unicode characters can appear directly in code:
+
+```python
+name = "José"
+greeting = "你好"
+emoji = "😀"
+
+print(name, greeting, emoji)
+```
+
+No special encoding declaration is required.
+
+In Python 3:
+
+* `str` objects represent **Unicode text**
+* `bytes` represent **encoded binary data**
+
+Typical workflow:
+
+```
+text (str) → encode → bytes
+bytes → decode → text (str)
+```
 
 ---
 
 ## Key Takeaways
 
-- UTF-8 uses 1-4 bytes per character.
-- ASCII characters remain single-byte.
-- Leading bits identify sequence length.
-- Most widely adopted encoding today.
+* UTF-8 converts Unicode code points into **bytes**.
+* UTF-8 uses **1–4 bytes per character**.
+* ASCII characters remain **single-byte in UTF-8**.
+* Leading bits identify the **length of the sequence**.
+* Continuation bytes start with `10`, enabling **self-synchronization**.
+* ASCII is a **subset of UTF-8**.
+* Python 3 uses **UTF-8 as the default source encoding**.
+* UTF-8 is the **most widely used text encoding today**.

@@ -19,7 +19,7 @@ These concepts explain **how Python interprets and evaluates code**.
 
 ---
 
-# 1. Operators and Operands
+## 1. Operators and Operands
 
 An **operator** is a symbol that performs an operation on one or more values.
 
@@ -45,7 +45,7 @@ a + b
 
 The result is a new value produced by applying the operator to the operands. 
 
-### Conceptual structure
+#### Conceptual structure
 
 ```mermaid2
 flowchart LR
@@ -63,7 +63,7 @@ Operators appear throughout Python programs, performing tasks such as:
 
 ---
 
-# 2. Operators as Method Calls
+## 2. Operators as Method Calls
 
 Python implements operators using **special methods**, often called **dunder methods** (double-underscore methods).
 
@@ -104,7 +104,7 @@ Output
 
 This means operators are essentially **syntactic sugar for method calls**. 
 
-### Operator translation
+#### Operator translation
 
 ```mermaid2
 flowchart LR
@@ -119,7 +119,7 @@ For example, lists implement `+` as concatenation rather than arithmetic.
 
 ---
 
-# 3. Common Operator Methods
+## 3. Common Operator Methods
 
 Python defines many special methods corresponding to operators.
 
@@ -170,7 +170,7 @@ Different types can therefore define **different meanings for the same operator*
 
 ---
 
-# 4. Expressions
+## 4. Expressions
 
 An **expression** is any piece of code that evaluates to a value.
 
@@ -184,7 +184,7 @@ x > 0
 
 Each expression produces a result when evaluated.
 
-### Expression evaluation
+#### Expression evaluation
 
 ```mermaid2
 flowchart LR
@@ -218,7 +218,7 @@ Expressions can appear inside larger expressions or statements.
 
 ---
 
-# 5. Statements
+## 5. Statements
 
 A **statement** is a complete instruction executed by Python.
 
@@ -236,7 +236,7 @@ Statements perform actions such as:
 * importing modules
 * controlling program flow
 
-### Expression vs statement
+#### Expression vs statement
 
 ```mermaid2
 flowchart TD
@@ -264,7 +264,7 @@ Statements themselves do **not evaluate to values**.
 
 ---
 
-# 6. Operator Precedence
+## 6. Operator Precedence
 
 When an expression contains multiple operators, Python follows **operator precedence rules**.
 
@@ -288,7 +288,7 @@ Result
 14
 ```
 
-### Example with exponentiation
+#### Example with exponentiation
 
 ```python
 2 + 3 * 4 ** 2
@@ -302,7 +302,7 @@ Evaluation order:
 2 + 48 = 50
 ```
 
-### Precedence hierarchy
+#### Precedence hierarchy
 
 | Level   | Operators         |
 | ------- | ----------------- |
@@ -313,7 +313,7 @@ Evaluation order:
 |         | comparisons       |
 | lowest  | logical operators |
 
-### Precedence diagram
+#### Precedence diagram
 
 ```mermaid2
 flowchart TD
@@ -341,7 +341,7 @@ Result
 
 ---
 
-# 7. Associativity
+## 7. Associativity
 
 When operators have the same precedence, **associativity** determines evaluation order.
 
@@ -381,7 +381,7 @@ Result
 
 ---
 
-# 8. Logical Operators and Short-Circuiting
+## 8. Logical Operators and Short-Circuiting
 
 Logical operators include:
 
@@ -393,7 +393,7 @@ Logical operators include:
 
 Python evaluates logical expressions using **short-circuit evaluation**.
 
-### AND
+#### AND
 
 Evaluation stops when the result becomes false.
 
@@ -405,7 +405,7 @@ False and print("hello")
 
 `print()` is never executed.
 
-### OR
+#### OR
 
 Evaluation stops when the result becomes true.
 
@@ -417,7 +417,7 @@ True or print("hello")
 
 Again, `print()` is not executed.
 
-### Short-circuit visualization
+#### Short-circuit visualization
 
 ```mermaid2
 flowchart LR
@@ -437,7 +437,7 @@ The method call only occurs if `x` is not `None`.
 
 ---
 
-# 9. Type Promotion
+## 9. Type Promotion
 
 When operands have different numeric types, Python **promotes the result to the wider type**.
 
@@ -475,7 +475,7 @@ because `bool` is a subclass of `int`.
 
 ---
 
-# 10. Conditional Expressions
+## 10. Conditional Expressions
 
 Python provides a compact conditional expression called the **ternary operator**.
 
@@ -498,7 +498,7 @@ Result:
 adult
 ```
 
-### Visualization
+#### Visualization
 
 ```mermaid2
 flowchart TD
@@ -509,7 +509,7 @@ flowchart TD
 
 ---
 
-# 11. Assignment Expressions (Walrus Operator)
+## 11. Assignment Expressions (Walrus Operator)
 
 Python 3.8 introduced the **assignment expression** operator `:=`.
 
@@ -526,9 +526,9 @@ This can simplify code involving repeated computations.
 
 ---
 
-# 12. Worked Examples
+## 12. Worked Examples
 
-### Example 1 — operator precedence
+#### Example 1 — operator precedence
 
 ```python
 2 + 3 * 4 ** 2
@@ -550,7 +550,7 @@ Result
 
 ---
 
-### Example 2 — logical evaluation
+#### Example 2 — logical evaluation
 
 ```python
 False and (5 / 0)
@@ -566,7 +566,7 @@ The division is never evaluated.
 
 ---
 
-### Example 3 — ternary expression
+#### Example 3 — ternary expression
 
 ```python
 temperature = 30
@@ -581,7 +581,7 @@ hot
 
 ---
 
-# 13. Concept Checks
+## 13. Concept Checks
 
 1. What is the difference between an operator and an operand?
 2. Why does `a + b` correspond to a method call in Python?
@@ -591,7 +591,7 @@ hot
 
 ---
 
-# 14. Practice Problems
+## 14. Practice Problems
 
 1. Evaluate:
 
@@ -621,7 +621,7 @@ True + True + False
 
 ---
 
-# 15. Summary
+## 15. Summary
 
 Key ideas from this chapter:
 

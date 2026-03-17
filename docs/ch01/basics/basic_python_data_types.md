@@ -23,7 +23,7 @@ These types form the foundation of nearly all Python programs.
 
 ---
 
-# 1. Objects and Types in Python
+## 1. Objects and Types in Python
 
 In Python, **everything is an object**.
 
@@ -59,7 +59,7 @@ Output
 <class 'int'>
 ```
 
-### Conceptual model
+#### Conceptual model
 
 ```mermaid2
 flowchart LR
@@ -72,7 +72,7 @@ Understanding types helps explain **why operations behave differently depending 
 
 ---
 
-# 2. Categories of Python Data Types
+## 2. Categories of Python Data Types
 
 Python’s built-in types can be grouped into several categories.
 
@@ -86,7 +86,7 @@ Python’s built-in types can be grouped into several categories.
 | Sets      | `set`                     |
 | Mappings  | `dict`                    |
 
-### Conceptual overview
+#### Conceptual overview
 
 ```mermaid2
 flowchart TD
@@ -110,7 +110,7 @@ flowchart TD
 
 ---
 
-# 3. Numeric Types
+## 3. Numeric Types
 
 Python provides three numeric types.
 
@@ -132,7 +132,7 @@ These support arithmetic operations such as:
 
 ---
 
-# 4. Integers (`int`)
+## 4. Integers (`int`)
 
 The `int` type represents **whole numbers without fractional components**.
 
@@ -147,7 +147,7 @@ Examples:
 
 Unlike many programming languages, Python integers are **arbitrary precision**, meaning they can grow as large as memory allows.
 
-### Example
+#### Example
 
 ```python
 a = 1
@@ -179,7 +179,7 @@ is internally interpreted as
 int.__add__(a, b)
 ```
 
-### Operator interpretation
+#### Operator interpretation
 
 ```mermaid2
 flowchart LR
@@ -191,7 +191,7 @@ This demonstrates that operators in Python are implemented as **methods on objec
 
 ---
 
-# 5. Floating-Point Numbers (`float`)
+## 5. Floating-Point Numbers (`float`)
 
 The `float` type represents **numbers with fractional components**.
 
@@ -205,7 +205,7 @@ Examples:
 
 Python floats are typically implemented using **64-bit IEEE-754 double precision**.
 
-### Example
+#### Example
 
 ```python
 a = 1.
@@ -225,7 +225,7 @@ Output
 2.0
 ```
 
-### Floating-point representation
+#### Floating-point representation
 
 ```mermaid2
 flowchart LR
@@ -251,7 +251,7 @@ may produce
 
 ---
 
-# 6. Complex Numbers (`complex`)
+## 6. Complex Numbers (`complex`)
 
 Python supports complex numbers of the form
 
@@ -266,7 +266,7 @@ where
 
 Python uses `j` to represent the imaginary unit.
 
-### Example
+#### Example
 
 ```python
 a = 1. + 2.j
@@ -286,7 +286,7 @@ Output
 (2+4j)
 ```
 
-### Structure of a complex number
+#### Structure of a complex number
 
 ```mermaid2
 flowchart LR
@@ -303,7 +303,7 @@ Complex numbers are commonly used in:
 
 ---
 
-# 7. Strings (`str`)
+## 7. Strings (`str`)
 
 Strings represent **textual data**.
 
@@ -317,7 +317,7 @@ Examples:
 "123"
 ```
 
-### Concatenation
+#### Concatenation
 
 ```python
 a = "1"
@@ -339,7 +339,7 @@ Output
 
 The `+` operator **joins two strings together**.
 
-### Visualization
+#### Visualization
 
 ```mermaid2
 flowchart LR
@@ -352,7 +352,7 @@ Strings are **immutable**, meaning their contents cannot be modified after creat
 
 ---
 
-# 8. Boolean Type (`bool`)
+## 8. Boolean Type (`bool`)
 
 The Boolean type represents **logical values**.
 
@@ -363,7 +363,7 @@ True
 False
 ```
 
-### Example
+#### Example
 
 ```python
 a = True
@@ -390,7 +390,7 @@ True  == 1
 False == 0
 ```
 
-### Type hierarchy
+#### Type hierarchy
 
 ```mermaid2
 flowchart LR
@@ -399,7 +399,7 @@ flowchart LR
 
 ---
 
-# 9. The `None` Object
+## 9. The `None` Object
 
 Python includes a special object called **`None`**.
 
@@ -420,7 +420,7 @@ Result
 TypeError
 ```
 
-### Visualization
+#### Visualization
 
 ```mermaid2
 flowchart LR
@@ -436,7 +436,7 @@ Common uses of `None` include:
 
 ---
 
-# 10. Lists (`list`)
+## 10. Lists (`list`)
 
 A list is an **ordered collection of elements**.
 
@@ -460,7 +460,7 @@ Output
 ["1","1"]
 ```
 
-### List concatenation
+#### List concatenation
 
 ```mermaid2
 flowchart LR
@@ -471,7 +471,7 @@ flowchart LR
 
 ---
 
-# 11. Tuples (`tuple`)
+## 11. Tuples (`tuple`)
 
 A tuple is similar to a list but **immutable**.
 
@@ -490,7 +490,7 @@ Output
 ("1","2","1","3")
 ```
 
-### Tuple properties
+#### Tuple properties
 
 ```mermaid2
 flowchart LR
@@ -501,7 +501,7 @@ flowchart LR
 
 ---
 
-# 12. Sets (`set`)
+## 12. Sets (`set`)
 
 A set stores **unique elements with no ordering**.
 
@@ -523,7 +523,7 @@ Sets use **union** instead of `+`.
 a | b
 ```
 
-### Set union
+#### Set union
 
 ```mermaid2
 flowchart LR
@@ -534,7 +534,7 @@ flowchart LR
 
 ---
 
-# 13. Dictionaries (`dict`)
+## 13. Dictionaries (`dict`)
 
 A dictionary stores **key-value pairs**.
 
@@ -546,7 +546,7 @@ a = {1:"1",2:"2",3:"1"}
 
 Keys map to values.
 
-### Structure
+#### Structure
 
 ```mermaid2
 flowchart LR
@@ -562,9 +562,9 @@ a | b
 
 ---
 
-# 14. Worked Examples
+## 14. Worked Examples
 
-### Example 1 — Integer arithmetic
+#### Example 1 — Integer arithmetic
 
 ```python
 3 + 4
@@ -584,7 +584,7 @@ int.__add__(3,4)
 
 ---
 
-### Example 2 — String concatenation
+#### Example 2 — String concatenation
 
 ```python
 "data" + "science"
@@ -598,7 +598,7 @@ Result
 
 ---
 
-### Example 3 — List concatenation
+#### Example 3 — List concatenation
 
 ```python
 [1,2] + [3,4]
@@ -612,7 +612,7 @@ Result
 
 ---
 
-# 15. Concept Checks
+## 15. Concept Checks
 
 1. What is the difference between `int` and `float`?
 2. Why does `"1" + "1"` produce `"11"` instead of `2`?
@@ -623,7 +623,7 @@ Result
 
 ---
 
-# 16. Practice Problems
+## 16. Practice Problems
 
 1. Evaluate:
 
@@ -657,7 +657,7 @@ Result
 
 ---
 
-# 17. Summary
+## 17. Summary
 
 Python provides a variety of built-in types for representing different forms of data.
 

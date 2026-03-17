@@ -23,7 +23,7 @@ Together these ideas form the conceptual model needed to understand the behavior
 
 ---
 
-# 0.1 Computer Architecture
+## 0.1 Computer Architecture
 
 Computer architecture describes how processors execute instructions and coordinate computation.
 
@@ -43,7 +43,7 @@ The goal of this section is to provide a mental model for how hardware executes 
 
 ---
 
-## Topics
+### Topics
 
 * [Von Neumann Architecture](architecture/von_neumann.md)
   Introduces the stored-program model and the fundamental structure of modern computers, including the CPU, memory, and system bus.
@@ -62,7 +62,7 @@ The goal of this section is to provide a mental model for how hardware executes 
 
 ---
 
-# 0.2 Memory Hierarchy
+## 0.2 Memory Hierarchy
 
 Memory systems determine how quickly data can move through a computer.
 
@@ -86,7 +86,7 @@ Understanding the memory hierarchy is essential for explaining:
 
 ---
 
-## Topics
+### Topics
 
 * [Memory Overview](memory/memory_overview.md)
   Introduces the layered structure of computer memory systems and the trade-offs between speed, capacity, and cost.
@@ -108,7 +108,7 @@ Understanding the memory hierarchy is essential for explaining:
 
 ---
 
-# 0.3 Data Representation
+## 0.3 Data Representation
 
 At the lowest level, computers represent all information as **binary data**.
 
@@ -127,7 +127,7 @@ These concepts form the foundation for understanding how computers process numer
 
 ---
 
-## Topics
+### Topics
 
 * [Bits and Bytes](data/bits_bytes.md)
   Introduces binary digits and the basic units used to store digital information.
@@ -146,7 +146,7 @@ These concepts form the foundation for understanding how computers process numer
 
 ---
 
-# Chapter Summary
+## Chapter Summary
 
 This chapter establishes the foundational concepts needed to understand modern computing systems.
 

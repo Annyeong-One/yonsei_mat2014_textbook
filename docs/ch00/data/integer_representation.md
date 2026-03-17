@@ -17,7 +17,7 @@ This chapter explains how integers are represented in hardware, how two’s comp
 
 ---
 
-# 1. Unsigned Integers
+## 1. Unsigned Integers
 
 The simplest integer representation is an **unsigned integer**.
 
@@ -31,7 +31,7 @@ where each (b_i) is either 0 or 1.
 
 ---
 
-## Range of unsigned integers
+### Range of unsigned integers
 
 Because each bit has two possible states, an (n)-bit value has:
 
@@ -58,7 +58,7 @@ Examples:
 
 ---
 
-## Example
+### Example
 
 Consider the 8-bit number:
 
@@ -76,7 +76,7 @@ Consider the 8-bit number:
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid
 flowchart TD
@@ -105,7 +105,7 @@ To store signed values efficiently, computers use **two’s complement represent
 
 ---
 
-# 2. Signed Integers and Two’s Complement
+## 2. Signed Integers and Two’s Complement
 
 Modern hardware almost universally uses **two’s complement** to represent signed integers.
 
@@ -116,7 +116,7 @@ Two’s complement provides two important advantages:
 
 ---
 
-## Range of two’s complement integers
+### Range of two’s complement integers
 
 For an (n)-bit signed integer:
 
@@ -134,7 +134,7 @@ Example ranges:
 
 ---
 
-## Bit weights in two’s complement
+### Bit weights in two’s complement
 
 In an 8-bit signed integer, the leftmost bit has a **negative weight**.
 
@@ -151,7 +151,7 @@ In an 8-bit signed integer, the leftmost bit has a **negative weight**.
 
 ---
 
-## Example: interpreting a value
+### Example: interpreting a value
 
 Consider:
 
@@ -177,7 +177,7 @@ So:
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid
 flowchart TD
@@ -202,7 +202,7 @@ flowchart TD
 
 ---
 
-# 3. Negating Numbers in Two’s Complement
+## 3. Negating Numbers in Two’s Complement
 
 To compute the negative of a number in fixed-width binary:
 
@@ -211,7 +211,7 @@ To compute the negative of a number in fixed-width binary:
 
 ---
 
-## Example: represent −5 in 8 bits
+### Example: represent −5 in 8 bits
 
 Start with +5:
 
@@ -239,7 +239,7 @@ Result:
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid
 flowchart TD
@@ -251,7 +251,7 @@ flowchart TD
 
 ---
 
-# 4. Why Two’s Complement Works
+## 4. Why Two’s Complement Works
 
 Two’s complement enables subtraction to be performed using **addition hardware**.
 
@@ -271,7 +271,7 @@ Because negation is easy (invert bits + add 1), subtraction becomes simple.
 
 ---
 
-## Example
+### Example
 
 Compute:
 
@@ -311,7 +311,7 @@ The carry beyond the leftmost bit is discarded.
 
 ---
 
-# 5. Overflow in Fixed-Width Integers
+## 5. Overflow in Fixed-Width Integers
 
 Hardware integers have **fixed width**.
 
@@ -321,7 +321,7 @@ Mathematically, arithmetic occurs **modulo (2^n)**.
 
 ---
 
-## Example: 8-bit overflow
+### Example: 8-bit overflow
 
 Maximum signed value:
 
@@ -348,7 +348,7 @@ So the value wraps.
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid
 flowchart LR
@@ -361,7 +361,7 @@ Overflow occurs silently in many programming environments.
 
 ---
 
-# 6. NumPy and Fixed-Width Integers
+## 6. NumPy and Fixed-Width Integers
 
 Libraries like **NumPy** use fixed-width integer types.
 
@@ -378,7 +378,7 @@ Because these types follow hardware behavior, **overflow wraps around silently**
 
 ---
 
-## Example: overflow in NumPy
+### Example: overflow in NumPy
 
 ```python
 import numpy as np
@@ -397,7 +397,7 @@ The value wraps because the maximum 8-bit signed integer is 127.
 
 ---
 
-# 7. Python Integers
+## 7. Python Integers
 
 Python integers behave differently.
 
@@ -419,7 +419,7 @@ This produces a very large integer without overflow.
 
 ---
 
-# 8. How Python Stores Integers
+## 8. How Python Stores Integers
 
 Internally, Python stores integers as:
 
@@ -442,7 +442,7 @@ However, it also means Python integers consume more memory than fixed-width inte
 
 ---
 
-# 9. Memory Comparison
+## 9. Memory Comparison
 
 Small Python integers require around **28 bytes of memory**.
 
@@ -469,7 +469,7 @@ Typical results:
 
 ---
 
-# 10. Bitwise Operations on Python Integers
+## 10. Bitwise Operations on Python Integers
 
 Python simulates **infinite-width two’s complement arithmetic** for bitwise operations.
 
@@ -495,7 +495,7 @@ But internally Python behaves as if:
 
 ---
 
-## Example: masking
+### Example: masking
 
 ```python
 -5 & 0xFF
@@ -517,7 +517,7 @@ This is the unsigned representation of −5.
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid
 flowchart LR
@@ -529,11 +529,11 @@ flowchart LR
 
 ---
 
-# 11. Choosing the Right Integer Type
+## 11. Choosing the Right Integer Type
 
 Different situations require different integer representations.
 
-### Python integers
+#### Python integers
 
 Advantages:
 
@@ -548,7 +548,7 @@ Disadvantages:
 
 ---
 
-### NumPy integers
+#### NumPy integers
 
 Advantages:
 
@@ -563,7 +563,7 @@ Disadvantages:
 
 ---
 
-## Example: incorrect dtype
+### Example: incorrect dtype
 
 ```python
 import numpy as np
@@ -588,9 +588,9 @@ prices = np.array([30000, 35000, 40000], dtype=np.int32)
 
 ---
 
-# 12. Worked Examples
+## 12. Worked Examples
 
-### Example 1
+#### Example 1
 
 Interpret `11111110` as an 8-bit signed integer.
 
@@ -600,7 +600,7 @@ Interpret `11111110` as an 8-bit signed integer.
 
 ---
 
-### Example 2
+#### Example 2
 
 Represent −12 in 8-bit two’s complement.
 
@@ -624,7 +624,7 @@ Represent −12 in 8-bit two’s complement.
 
 ---
 
-### Example 3
+#### Example 3
 
 Detect overflow.
 
@@ -649,7 +649,7 @@ This equals **−116**, showing overflow.
 
 ---
 
-# 13. Exercises
+## 13. Exercises
 
 1. What is the range of a 12-bit unsigned integer?
 2. What is the range of a 12-bit two’s complement integer?
@@ -662,7 +662,7 @@ This equals **−116**, showing overflow.
 
 ---
 
-# 14. Short Answers
+## 14. Short Answers
 
 1. (0) to (4095)
 2. −2048 to 2047
@@ -675,7 +675,7 @@ This equals **−116**, showing overflow.
 
 ---
 
-# 15. Summary
+## 15. Summary
 
 * **Unsigned integers** represent values from (0) to (2^n - 1).
 * **Two’s complement** is the standard signed representation used in hardware.

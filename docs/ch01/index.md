@@ -37,7 +37,7 @@ Each section builds on the previous one, gradually introducing the tools needed 
 
 ---
 
-# 1.1 Getting Started
+## 1.1 Getting Started
 
 The chapter begins by introducing Python itself and preparing the development environment.
 
@@ -62,7 +62,7 @@ These tools form the foundation of the programming workflow used throughout the 
 
 ---
 
-# 1.2 Basic Syntax
+## 1.2 Basic Syntax
 
 This section introduces the fundamental structure of Python programs.
 
@@ -90,7 +90,7 @@ Understanding these concepts allows you to write simple but meaningful Python pr
 
 ---
 
-# 1.3 Control Flow
+## 1.3 Control Flow
 
 Programs often need to make decisions and repeat operations.
 
@@ -116,7 +116,7 @@ Control flow is essential for writing programs that respond dynamically to input
 
 ---
 
-# 1.4 Essential Built-ins
+## 1.4 Essential Built-ins
 
 Python includes many built-in functions that simplify common programming tasks.
 
@@ -142,7 +142,7 @@ Built-ins provide powerful functionality without requiring external libraries.
 
 ---
 
-# 1.5 Numeric Types
+## 1.5 Numeric Types
 
 Python supports several numeric types for representing numbers.
 
@@ -166,7 +166,7 @@ Numeric types form the basis of calculations in Python programs.
 
 ---
 
-# 1.6 Boolean and None
+## 1.6 Boolean and None
 
 This section introduces the logical foundation of Python programs.
 
@@ -191,7 +191,7 @@ These concepts are central to conditions and control flow.
 
 ---
 
-# 1.7 Strings
+## 1.7 Strings
 
 Strings represent textual data and are one of the most commonly used data types.
 
@@ -216,7 +216,7 @@ Mastering strings is essential for handling text and user input.
 
 ---
 
-# 1.8 Function Basics
+## 1.8 Function Basics
 
 Functions organize programs into reusable units of logic.
 
@@ -241,7 +241,7 @@ Functions are the building blocks of structured Python programs.
 
 ---
 
-# 1.9 Composite Data Types
+## 1.9 Composite Data Types
 
 Python provides several container types that store collections of values.
 
@@ -266,7 +266,7 @@ These structures allow programs to represent complex data relationships.
 
 ---
 
-# 1.10 Exceptions
+## 1.10 Exceptions
 
 Errors are inevitable in programming. Python uses exceptions to detect and manage errors during execution.
 
@@ -289,7 +289,7 @@ Exception handling helps programs remain robust and predictable.
 
 ---
 
-# 1.11 File I/O
+## 1.11 File I/O
 
 Programs frequently interact with external data stored in files.
 
@@ -313,7 +313,7 @@ File I/O connects Python programs to persistent data.
 
 ---
 
-# 1.12 Modules and Imports
+## 1.12 Modules and Imports
 
 As programs grow larger, code is organized into modules and packages.
 
@@ -336,7 +336,7 @@ Modules make it possible to build large programs from smaller, reusable componen
 
 ---
 
-# Chapter Summary
+## Chapter Summary
 
 This chapter established the core foundations of Python programming.
 

@@ -1,26 +1,54 @@
-# Align Methods
+# `str`: Alignment Methods
 
-String alignment methods pad strings to a specified width with fill characters, useful for formatting text output.
+Python provides string alignment methods that **pad text to a specified width**. These methods are commonly used when formatting:
 
-## Basic Alignment
+* tables
+* reports
+* command-line output
+* logs
 
-Left, right, and center alignment methods.
+Alignment methods **do not modify the original string**. Instead, they return a **new padded string**.
 
-### 1. Left Justify
+```python
+s = "Hello"
+t = s.ljust(10)
 
-Use `ljust()` to left-align with right padding.
+print(s)  # 'Hello'
+print(t)  # 'Hello     '
+```
+
+---
+
+## Basic Alignment Methods
+
+Python provides three primary alignment methods.
+
+| Method                    | Description      |
+| ------------------------- | ---------------- |
+| `ljust(width, fillchar)`  | Left-align text  |
+| `rjust(width, fillchar)`  | Right-align text |
+| `center(width, fillchar)` | Center text      |
+
+If the width is larger than the string length, padding is added.
+
+---
+
+### Left Alignment
+
+`ljust()` pads characters on the **right side**.
 
 ```python
 s = "Hello"
 
 print(s.ljust(10))       # 'Hello     '
 print(s.ljust(10, "-"))  # 'Hello-----'
-print(len(s.ljust(10)))  # 10
 ```
 
-### 2. Right Justify
+---
 
-Use `rjust()` to right-align with left padding.
+### Right Alignment
+
+`rjust()` pads characters on the **left side**.
 
 ```python
 s = "Hello"
@@ -29,280 +57,180 @@ print(s.rjust(10))       # '     Hello'
 print(s.rjust(10, "-"))  # '-----Hello'
 ```
 
-### 3. Center Align
+---
 
-Use `center()` to center with padding on both sides.
+### Center Alignment
+
+`center()` pads characters on **both sides**.
 
 ```python
 s = "Hello"
 
 print(s.center(11))       # '   Hello   '
 print(s.center(11, "-"))  # '---Hello---'
-
-# Odd padding goes to right
-print(s.center(10))       # '  Hello   '
 ```
 
-## Width Behavior
+If padding is uneven, the extra space is placed on the **right side**.
 
-How methods handle various width values.
+```python
+print("Hello".center(10))  # '  Hello   '
+```
 
-### 1. Width Less Than Length
+---
 
-No truncation occurs; original string returned.
+## Width Rules
+
+Alignment methods **never truncate strings**.
+
+If the specified width is smaller than the string length, the original string is returned unchanged.
 
 ```python
 s = "Hello World"
 
-print(s.ljust(5))   # 'Hello World' (unchanged)
-print(s.rjust(5))   # 'Hello World' (unchanged)
-print(s.center(5))  # 'Hello World' (unchanged)
+print(s.ljust(5))   # 'Hello World'
+print(s.rjust(5))   # 'Hello World'
+print(s.center(5))  # 'Hello World'
 ```
 
-### 2. Exact Width
+---
 
-Returns string padded to exact width.
+## Zero Padding with `zfill()`
 
-```python
-s = "Hi"
-
-print(f"[{s.ljust(10)}]")   # [Hi        ]
-print(f"[{s.rjust(10)}]")   # [        Hi]
-print(f"[{s.center(10)}]")  # [    Hi    ]
-```
-
-### 3. Dynamic Width
-
-Calculate width based on content.
-
-```python
-items = ["Apple", "Banana", "Cherry"]
-max_width = max(len(item) for item in items)
-
-for item in items:
-    print(item.ljust(max_width + 2) + "|")
-# Apple   |
-# Banana  |
-# Cherry  |
-```
-
-## Zero Fill
-
-Pad numbers with leading zeros.
-
-### 1. Basic zfill()
-
-Pad string with zeros to specified width.
+`zfill()` pads a string with leading zeros. It is specialized for **numeric padding**.
 
 ```python
 s = "42"
 
-print(s.zfill(5))   # 00042
-print(s.zfill(10))  # 0000000042
-print(s.zfill(2))   # 42 (no change)
+print(s.zfill(5))   # '00042'
+print(s.zfill(10))  # '0000000042'
 ```
 
-### 2. Sign Handling
-
-Zeros are inserted after the sign.
+Unlike `rjust()`, `zfill()` handles numeric signs correctly.
 
 ```python
-pos = "42"
-neg = "-42"
-
-print(pos.zfill(5))  # 00042
-print(neg.zfill(5))  # -0042
-
-# Plus sign also handled
-plus = "+42"
-print(plus.zfill(6))  # +00042
+print("-42".zfill(5))  # '-0042'
+print("+42".zfill(6))  # '+00042'
 ```
 
-### 3. Non-Numeric Strings
+---
 
-Works on any string, not just numbers.
+## Practical Examples
+
+### Table Formatting
+
+Alignment methods are useful for formatting columns.
 
 ```python
-s = "abc"
-print(s.zfill(5))  # 00abc
+def main():
+    data = [
+        ("Alice", 95),
+        ("Bob", 87),
+        ("Carol", 100)
+    ]
 
-# Leading sign still handled
-s = "-abc"
-print(s.zfill(5))  # -0abc
+    for name, score in data:
+        print(name.ljust(10) + str(score).rjust(5))
+
+if __name__ == "__main__":
+    main()
 ```
 
-## Table Formatting
+Output:
 
-Create aligned text tables.
+```
+Alice         95
+Bob           87
+Carol        100
+```
 
-### 1. Simple Columns
+---
 
-Align data in columns.
+### File Numbering
+
+Padding ensures consistent filename ordering.
 
 ```python
-data = [
-    ("Alice", 95),
-    ("Bob", 87),
-    ("Carol", 100)
-]
+def main():
+    files = ["report", "data", "summary"]
 
-for name, score in data:
-    print(name.ljust(10) + str(score).rjust(5))
-# Alice         95
-# Bob           87
-# Carol        100
+    for i, name in enumerate(files, 1):
+        filename = f"{str(i).zfill(3)}_{name}.txt"
+        print(filename)
+
+if __name__ == "__main__":
+    main()
 ```
 
-### 2. Header with Border
+Output:
 
-Create formatted table headers.
+```
+001_report.txt
+002_data.txt
+003_summary.txt
+```
+
+---
+
+### Time Formatting
+
+Zero padding is often used when formatting time values.
 
 ```python
-headers = ["Name", "Age", "City"]
-widths = [15, 5, 12]
+def main():
+    hours, minutes, seconds = 9, 5, 3
 
-# Header row
-header_line = ""
-for h, w in zip(headers, widths):
-    header_line += h.center(w) + "|"
-print(header_line)
-print("-" * len(header_line))
+    time_str = (
+        str(hours).zfill(2) + ":" +
+        str(minutes).zfill(2) + ":" +
+        str(seconds).zfill(2)
+    )
 
-# Output:
-#      Name     | Age |    City    |
-# ---------------------------------
+    print(time_str)  # 09:05:03
+
+if __name__ == "__main__":
+    main()
 ```
 
-### 3. Receipt Style
+---
 
-Format receipt or invoice items.
+## Alignment vs Format Specifiers
 
-```python
-items = [
-    ("Coffee", 4.50),
-    ("Sandwich", 12.99),
-    ("Cookie", 2.50)
-]
-
-width = 25
-print("=" * width)
-print("RECEIPT".center(width))
-print("=" * width)
-
-for item, price in items:
-    price_str = f"${price:.2f}"
-    padding = width - len(item) - len(price_str)
-    print(item + "." * padding + price_str)
-
-total = sum(p for _, p in items)
-print("-" * width)
-print("TOTAL".ljust(width - 7) + f"${total:.2f}")
-
-# =========================
-#         RECEIPT
-# =========================
-# Coffee...............\$4.50
-# Sandwich...........\$12.99
-# Cookie..............\$2.50
-# -------------------------
-# TOTAL              \$19.99
-```
-
-## ID Formatting
-
-Format identifiers and codes.
-
-### 1. Padded IDs
-
-Create fixed-width identifiers.
-
-```python
-for i in range(1, 4):
-    print(f"ID-{str(i).zfill(4)}")
-# ID-0001
-# ID-0002
-# ID-0003
-```
-
-### 2. File Numbering
-
-Number files with consistent width.
-
-```python
-files = ["report", "data", "summary"]
-
-for i, name in enumerate(files, 1):
-    filename = f"{str(i).zfill(3)}_{name}.txt"
-    print(filename)
-# 001_report.txt
-# 002_data.txt
-# 003_summary.txt
-```
-
-### 3. Time Formatting
-
-Format time components.
-
-```python
-hours, minutes, seconds = 9, 5, 3
-
-time_str = (
-    str(hours).zfill(2) + ":" +
-    str(minutes).zfill(2) + ":" +
-    str(seconds).zfill(2)
-)
-print(time_str)  # 09:05:03
-```
-
-## Comparison Methods
-
-Compare alignment methods.
-
-### 1. Align vs Format Spec
-
-Alignment methods vs format specifiers.
+Alignment can also be performed using **format specifiers** in f-strings.
 
 ```python
 s = "Hi"
 width = 10
 
-# Using methods
 print(s.ljust(width))    # 'Hi        '
 print(s.rjust(width))    # '        Hi'
 print(s.center(width))   # '    Hi    '
 
-# Using format specifiers
 print(f"{s:<{width}}")   # 'Hi        '
 print(f"{s:>{width}}")   # '        Hi'
 print(f"{s:^{width}}")   # '    Hi    '
 ```
 
-### 2. Fill Characters
-
-Both support custom fill characters.
+Custom fill characters are also supported.
 
 ```python
-s = "Hi"
-
-# Methods
-print(s.center(10, "*"))  # ****Hi****
-
-# Format spec
-print(f"{s:*^10}")        # ****Hi****
+print("Hi".center(10, "*"))  # ****Hi****
+print(f"{'Hi':*^10}")        # ****Hi****
 ```
 
-### 3. When to Use Each
+### When to Use Each
 
-Methods for variables, format specs for literals.
+| Approach          | Best Use                            |
+| ----------------- | ----------------------------------- |
+| Alignment methods | when width is stored in variables   |
+| Format specifiers | when formatting output in f-strings |
 
-```python
-# Method: when width/fill are variables
-width = 10
-fill = "-"
-result = "test".center(width, fill)
+---
 
-# Format spec: for fixed formatting in f-strings
-name = "Alice"
-score = 95
-print(f"{name:<10} {score:>5}")  # Alice          95
-```
+## Key Takeaways
+
+* `ljust()`, `rjust()`, and `center()` align strings within a specified width.
+* Alignment methods **return new strings** and never modify the original.
+* If the width is smaller than the string length, the string is returned unchanged.
+* `zfill()` pads numbers with leading zeros while preserving signs.
+* Alignment is commonly used for **tables, filenames, and formatted output**.
+* Format specifiers provide an alternative alignment method in f-strings.

@@ -1,62 +1,22 @@
-
 # Function Examples
 
-This section gathers practical examples showing how functions, parameters, returns, and type hints work together.
+These examples reinforce the concepts from the previous sections:
+parameters, return values, reuse, and composition.
 
 ---
 
-## 1. Simple Greeting Function
+## Square Function
+
+A function with a single parameter and a return value.
 
 ```python
-def greet() -> None:
-    print("Hello")
-````
-
-Call:
-
-```python
-greet()
-```
-
-Output:
-
-```text
-Hello
-```
-
----
-
-## 2. Function with a Parameter
-
-```python
-def greet(name: str) -> None:
-    print(f"Hello, {name}")
-```
-
-Example call:
-
-```python
-greet("Alice")
-```
-
-Output:
-
-```text
-Hello, Alice
-```
-
----
-
-## 3. Function with Return Value
-
-```python
-def square(x: int) -> int:
+def square(x):
     return x * x
 
 print(square(5))
 ```
 
-Output:
+Output
 
 ```text
 25
@@ -64,159 +24,115 @@ Output:
 
 ---
 
-## 4. Function with Multiple Parameters
+## Rectangle Area Function
+
+A function with multiple parameters.
 
 ```python
-def add(a: int, b: int) -> int:
-    return a + b
-
-print(add(3, 4))
-```
-
-Output:
-
-```text
-7
-```
-
----
-
-## 5. Default Parameter Example
-
-```python
-def greet(name: str = "guest") -> str:
-    return f"Hello, {name}"
-
-print(greet())
-print(greet("Sam"))
-```
-
-Output:
-
-```text
-Hello, guest
-Hello, Sam
-```
-
----
-
-## 6. Keyword Argument Example
-
-```python
-def power(base: int, exponent: int) -> int:
-    return base ** exponent
-
-print(power(exponent=3, base=2))
-```
-
-Output:
-
-```text
-8
-```
-
----
-
-## 7. Early Return Example
-
-```python
-def safe_divide(a: float, b: float) -> float | None:
-    if b == 0:
-        return None
-    return a / b
-
-print(safe_divide(10, 2))
-print(safe_divide(10, 0))
-```
-
-Output:
-
-```text
-5.0
-None
-```
-
----
-
-## 8. Nested Function Calls
-
-```python
-def double(x: int) -> int:
-    return 2 * x
-
-def square(x: int) -> int:
-    return x * x
-
-print(square(double(3)))
-```
-
-Output:
-
-```text
-36
-```
-
-This example also illustrates the call stack:
-
-```mermaid2
-flowchart TD
-    A[square(double(3))] --> B[call double(3)]
-    B --> C[return 6]
-    C --> D[call square(6)]
-    D --> E[return 36]
-```
-
----
-
-## 9. Practical Example: Rectangle Area
-
-```python
-def area(length: float, width: float) -> float:
+def area(length, width):
     return length * width
 
-print(area(2.5, 4.0))
+print(area(3, 4))
 ```
 
-Output:
+Output
 
 ```text
-10.0
+12
 ```
 
 ---
 
-## 10. Practical Example: Grade Label
+## Greeting Function
+
+Functions work with any data type, not just numbers.
 
 ```python
-def grade_label(score: int) -> str:
-    if score >= 90:
-        return "A"
-    if score >= 80:
-        return "B"
-    if score >= 70:
-        return "C"
-    return "F"
+def greet(name):
+    return "Hello, " + name
 
-print(grade_label(85))
+print(greet("Alice"))
 ```
 
-Output:
+Output
 
 ```text
-B
+Hello, Alice
 ```
 
 ---
 
-## 11. Summary
+## Temperature Conversion Function
 
-These examples show how functions support:
+A function that performs a real calculation.
 
-* code reuse
-* clearer structure
-* parameterized behavior
-* reusable computations
-* readable interfaces through type hints
+```python
+def celsius_to_fahrenheit(c):
+    return (c * 9/5) + 32
 
-Functions are the foundation of modular Python programming.
+print(celsius_to_fahrenheit(25))
+```
 
+Output
+
+```text
+77.0
+```
+
+---
+
+## Maximum Value Function
+
+Functions can include conditional logic.
+
+```python
+def max_value(a, b):
+    if a > b:
+        return a
+    return b
+
+print(max_value(10, 4))
+```
+
+Output
+
+```text
+10
+```
+
+---
+
+## Function Composition
+
+Functions can be combined by passing the return value of one function as the argument to another.
+
+```python
+def double(x):
+    return 2 * x
+
+print(double(square(3)))
+```
+
+`square(3)` runs first and returns 9.
+That value is then passed to `double()`.
+
+Output
+
+```text
+18
+```
+
+```mermaid
+flowchart LR
+    A["3"] --> B["square()"]
+    B --> C["9"]
+    C --> D["double()"]
+    D --> E["18"]
+```
+
+---
+
+## Key Idea
+
+Functions allow complex tasks to be broken into small reusable pieces.
+Small functions can also be combined to build more complex programs.

@@ -1,287 +1,161 @@
-
-# Functions and Call Stack
+# Functions
 
 A **function** is a named block of code that performs a specific task.
 
-Functions allow programs to:
+You can think of a function as a small **machine** inside your program that performs a task.
+Later we will see how values can go into and come out of that function.
+
+Functions help programs:
 
 - organize logic
 - reuse code
 - avoid repetition
 - divide large problems into smaller parts
 
-In Python, functions are defined with the `def` keyword.
-
-```python
-def greet():
-    print("Hello")
-````
-
-A function does not run when it is defined. It runs only when it is **called**.
-
-```python
-greet()
-```
-
-```mermaid2
-flowchart TD
-    A[Function definition] --> B[Function call]
-    B --> C[Execute function body]
-    C --> D[Return to caller]
-```
-
 ---
 
-## 1. Defining a Function
+## Why Functions
 
-A basic function definition looks like this:
+Consider the following code:
+
+```python
+print("Hello")
+print("Hello")
+print("Hello")
+```
+
+The same instruction is repeated several times.
+
+Instead of repeating the same statement, we can place it inside a function and call that function whenever we need it.
 
 ```python
 def greet():
     print("Hello")
-```
 
-This creates a function named `greet`.
-
-To execute it, call it with parentheses:
-
-```python
+greet()
+greet()
 greet()
 ```
 
-Output:
+Output
 
 ```text
+Hello
+Hello
 Hello
 ```
 
 ---
 
-## 2. Functions as Reusable Units
+## Defining a Function
 
-Functions allow the same logic to be reused many times.
+In Python, functions are defined using the `def` keyword.
 
 ```python
-def show_line():
-    print("=" * 10)
-
-show_line()
-show_line()
+def greet():
+    print("Hello")
 ```
 
-Output:
+This defines a function named `greet`.
+However, defining a function does **not** execute it.
+
+To run a function, we **call** it using parentheses.
+
+```python
+greet()
+```
+
+Output
 
 ```text
-==========
-==========
+Hello
 ```
 
-Without functions, repeated code would need to be written over and over.
+Parentheses tell Python that the function should be executed.
+Without them, `greet` just refers to the function object.
 
 ---
 
-## 3. Calling Functions
+## Execution Flow
 
-A function call transfers control to the function body.
+The program always runs statements from top to bottom.
+When a function is called, execution temporarily moves into the function body,
+and then returns to where the call occurred.
 
-```python
-def say_hi():
-    print("Hi")
-
-print("Before")
-say_hi()
-print("After")
-```
-
-Output:
-
-```text
-Before
-Hi
-After
-```
-
-This shows that the program temporarily moves into the function and then returns to the original flow.
-
----
-
-## 4. Local Scope
-
-Variables created inside a function are usually **local** to that function.
-
-```python
-def demo():
-    x = 10
-    print(x)
-
-demo()
-```
-
-The variable `x` exists inside the function body and is not normally accessible outside it.
-
-This helps functions remain self-contained and reduces accidental interference between parts of a program.
-
----
-
-## 5. The Call Stack
-
-When one function calls another, Python keeps track of the sequence of calls using the **call stack**.
-
-A simplified view:
-
-```mermaid2
+```mermaid
 flowchart TD
-    A[main program] --> B[call f()]
-    B --> C[call g()]
-    C --> D[return from g()]
-    D --> E[return from f()]
+    A[Start program] --> B[call greet()]
+    B --> C[execute function body]
+    C --> D[return to main program]
+    D --> E[End program]
 ```
 
 Example:
 
 ```python
-def g():
-    print("inside g")
-
-def f():
-    print("inside f")
-    g()
-    print("back in f")
-
-f()
-```
-
-Output:
-
-```text
-inside f
-inside g
-back in f
-```
-
-The program enters `f`, then enters `g`, then returns from `g`, then finishes `f`.
-
----
-
-## 6. Why the Call Stack Matters
-
-The call stack helps explain:
-
-* nested function calls
-* recursion
-* where execution resumes after a call
-* why local variables belong to particular function calls
-
-Each function call gets its own execution context.
-
-This is why two calls to the same function do not normally interfere with each other’s local variables.
-
----
-
-## 7. Functions That Do Not Return Explicitly
-
-If a function does not explicitly use `return`, it returns `None`.
-
-```python
-def hello():
+def greet():
+    print("Inside greet()")
     print("Hello")
 
-result = hello()
-print(result)
+print("Start program")
+greet()
+print("End program")
 ```
 
-Output:
+Output
 
 ```text
+Start program
+Inside greet()
 Hello
-None
+End program
 ```
-
-This is part of Python’s function model and is important to remember.
 
 ---
 
-## 8. Worked Examples
+## Functions Calling Functions
 
-### Example 1: simple reusable function
+Functions can call other functions.
 
 ```python
-def banner():
+def say_hi():
+    print("Hi")
+
+def greet():
+    say_hi()
     print("Welcome")
 
-banner()
-banner()
+greet()
 ```
 
-Output:
+Output
 
 ```text
+Hi
 Welcome
-Welcome
 ```
 
-### Example 2: call order
+When `greet()` runs, it calls `say_hi()`.
+After `say_hi()` finishes, the program continues executing the rest of `greet()`.
 
-```python
-def first():
-    print("first")
-
-def second():
-    print("second")
-
-first()
-second()
-```
-
-### Example 3: nested call
-
-```python
-def square(x):
-    return x * x
-
-def show_square(n):
-    print(square(n))
-
-show_square(5)
-```
-
-Output:
-
-```text
-25
+```mermaid
+flowchart TD
+    A[call greet()] --> B["greet() calls say_hi()"]
+    B --> C["execute body of say_hi()"]
+    C --> D["return to greet()"]
+    D --> E["print Welcome"]
 ```
 
 ---
 
-## 9. Common Pitfalls
+## Key Ideas
 
-### Forgetting parentheses when calling
+- a **function** is a reusable block of code
+- `def` defines a function
+- functions run only when they are **called**
+- parentheses tell Python to execute the function
+- functions can call other functions
+- functions help structure programs
 
-```python
-greet
-```
-
-This refers to the function object, but does not call it.
-
-### Confusing definition with execution
-
-Defining a function does not automatically run it.
-
-### Assuming printed output is a return value
-
-A function may print something without returning that value.
-
----
-
-## 10. Summary
-
-Key ideas:
-
-* a function is a reusable named block of code
-* `def` defines a function
-* calling a function transfers control to its body
-* local variables belong to the function call
-* Python tracks nested calls with the call stack
-* functions without explicit `return` return `None`
-
-Functions are one of the most important tools for structuring Python programs.
+So far our functions do not accept parameters or return values.
+Next we will see how functions can receive input from the caller.

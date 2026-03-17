@@ -114,10 +114,12 @@ nav:
             - str Examples: ch01/types/str_examples.md
 
         - 1.8 Function Basics:
-            - Functions and Call Stack: ch01/functions/functions.md
-            - Parameters and Returns: ch01/functions/parameters_and_returns.md
+            - Functions: ch01/functions/functions.md
+            - Parameters: ch01/functions/parameters.md
+            - Return Values: ch01/functions/return_values.md
             - Type Hints: ch01/functions/type_hints.md
             - Function Examples: ch01/functions/function_examples.md
+            - Runtime Model (Call Stack): ch01/functions/call_stack.md
 
         - 1.9 Composite Data Types:
             - Sequences Overview: ch01/composite_data_types/sequences_overview.md
@@ -190,11 +192,13 @@ nav:
             - str ASCII and Unicode: ch02/strings/str_ascii_unicode.md
             - str UTF-8 Encoding: ch02/strings/str_utf8_encoding.md
             - str Encode and Decode: ch02/strings/str_encode_decode.md
+            - Unicode Normalization: ch02/strings/unicode_normalization.md   
+            - Unicode Case Folding: ch02/strings/unicode_case_folding.md   
             - str Immutability: ch02/strings/str_immutability.md
             - str Align Methods: ch02/strings/str_align_methods.md
             - str Format Specifiers: ch02/strings/str_format_specifiers.md
             - F-String Debugging: ch02/strings/fstring_debugging.md
-            - Unicode Normalization Comparison (Python): ch02/strings/unicode_normalization_comparison.py
+            - Unicode Comparison Strategies: ch02/strings/unicode_comparison.md   
 
         - 2.6 Composite Types Deep Dive:
             - Shallow and Deep Copying (copy module): ch02/composites/list_copying.md

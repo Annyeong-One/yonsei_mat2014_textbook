@@ -10,7 +10,7 @@ For many numerical and data-processing workloads, performance is limited not by 
 
 ---
 
-# 1. What Is a Memory Access Pattern?
+## 1. What Is a Memory Access Pattern?
 
 A **memory access pattern** describes the order in which a program reads or writes memory addresses.
 
@@ -26,7 +26,7 @@ These patterns determine how effectively a program uses CPU caches.
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid
 flowchart LR
@@ -39,7 +39,7 @@ Sequential access typically provides the best performance.
 
 ---
 
-# 2. Cache Lines and Memory Fetching
+## 2. Cache Lines and Memory Fetching
 
 Modern CPUs do not load memory one byte at a time. Instead, they load **cache lines**.
 
@@ -53,7 +53,7 @@ When a program accesses a memory address, the CPU loads the entire cache line co
 
 ---
 
-## Example
+### Example
 
 Suppose an array contains `float64` values.
 
@@ -81,7 +81,7 @@ into cache.
 
 ---
 
-### Cache line visualization
+#### Cache line visualization
 
 ```mermaid
 flowchart LR
@@ -99,7 +99,7 @@ Subsequent accesses to these elements result in **cache hits**.
 
 ---
 
-# 3. Sequential Access
+## 3. Sequential Access
 
 **Sequential access** occurs when a program reads memory addresses in increasing order.
 
@@ -113,7 +113,7 @@ Because each cache line contains multiple elements, sequential access produces m
 
 ---
 
-## Hardware prefetching
+### Hardware prefetching
 
 Modern CPUs include **hardware prefetchers** that detect sequential patterns and load future cache lines in advance.
 
@@ -121,7 +121,7 @@ This allows memory to be streamed efficiently.
 
 ---
 
-### Sequential access visualization
+#### Sequential access visualization
 
 ```mermaid
 flowchart LR
@@ -138,7 +138,7 @@ Sequential access maximizes:
 
 ---
 
-# 4. Strided Access
+## 4. Strided Access
 
 **Strided access** occurs when memory addresses are accessed at fixed intervals.
 
@@ -152,7 +152,7 @@ Each access may load a new cache line while using only one value.
 
 ---
 
-### Example
+#### Example
 
 If a cache line holds 8 elements but only one is used:
 
@@ -164,7 +164,7 @@ of the loaded data is wasted.
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid
 flowchart LR
@@ -178,7 +178,7 @@ Strided access reduces cache efficiency and wastes memory bandwidth.
 
 ---
 
-# 5. Random Access
+## 5. Random Access
 
 **Random access** occurs when memory addresses are accessed unpredictably.
 
@@ -192,7 +192,7 @@ Because the CPU cannot predict future accesses, prefetching fails and cache line
 
 ---
 
-### Random access visualization
+#### Random access visualization
 
 ```mermaid
 flowchart TD
@@ -209,7 +209,7 @@ Random access often results in:
 
 ---
 
-# 6. Access Patterns in NumPy Arrays
+## 6. Access Patterns in NumPy Arrays
 
 NumPy arrays store elements in **contiguous memory**.
 
@@ -219,7 +219,7 @@ This means elements of the same row are stored next to each other.
 
 ---
 
-### Example 2D array layout
+#### Example 2D array layout
 
 ```
 [[a00 a01 a02]
@@ -235,7 +235,7 @@ a00 a01 a02 a10 a11 a12 a20 a21 a22
 
 ---
 
-### Row-major visualization
+#### Row-major visualization
 
 ```mermaid
 flowchart LR
@@ -248,13 +248,13 @@ Row traversal is sequential.
 
 ---
 
-# 7. Row vs Column Traversal
+## 7. Row vs Column Traversal
 
 Consider iterating over a 2D array.
 
 ---
 
-## Row traversal (efficient)
+### Row traversal (efficient)
 
 ```
 for i in rows:
@@ -266,7 +266,7 @@ This accesses memory sequentially.
 
 ---
 
-## Column traversal (strided)
+### Column traversal (strided)
 
 ```
 for j in columns:
@@ -278,7 +278,7 @@ This jumps across rows in memory.
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid
 flowchart LR
@@ -290,7 +290,7 @@ Column traversal may require a new cache line for each access.
 
 ---
 
-# 8. Blocking and Tiling
+## 8. Blocking and Tiling
 
 Large computations may exceed cache capacity.
 
@@ -298,7 +298,7 @@ Large computations may exceed cache capacity.
 
 ---
 
-## Example: matrix multiplication
+### Example: matrix multiplication
 
 Instead of computing the entire matrix at once:
 
@@ -320,7 +320,7 @@ Each block fits in cache, reducing cache misses.
 
 ---
 
-### Blocking visualization
+#### Blocking visualization
 
 ```mermaid
 flowchart TD
@@ -333,13 +333,13 @@ Blocking improves locality and cache reuse.
 
 ---
 
-# 9. Data Layout: AoS vs SoA
+## 9. Data Layout: AoS vs SoA
 
 Data layout also affects access patterns.
 
 ---
 
-## Array of Structures (AoS)
+### Array of Structures (AoS)
 
 ```
 particle = [x,y,z,mass]
@@ -351,7 +351,7 @@ Accessing only `mass` requires skipping unrelated data.
 
 ---
 
-## Structure of Arrays (SoA)
+### Structure of Arrays (SoA)
 
 ```
 x:    [ ... ]
@@ -364,7 +364,7 @@ Now `mass` values are contiguous.
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid
 flowchart LR
@@ -376,7 +376,7 @@ SoA improves cache performance when accessing individual fields.
 
 ---
 
-# 10. NumPy Vectorization
+## 10. NumPy Vectorization
 
 NumPy operations automatically use efficient access patterns.
 
@@ -399,7 +399,7 @@ As a result, it is much faster than Python loops.
 
 ---
 
-# 11. Measuring Access Pattern Performance
+## 11. Measuring Access Pattern Performance
 
 The impact of access patterns can be measured experimentally.
 
@@ -426,9 +426,9 @@ Random access often runs **10× slower or more** than sequential access.
 
 ---
 
-# 12. Worked Examples
+## 12. Worked Examples
 
-### Example 1
+#### Example 1
 
 How many float64 values fit in a cache line?
 
@@ -438,7 +438,7 @@ How many float64 values fit in a cache line?
 
 ---
 
-### Example 2
+#### Example 2
 
 Why is sequential access faster?
 
@@ -446,7 +446,7 @@ Because it maximizes cache hits and enables hardware prefetching.
 
 ---
 
-### Example 3
+#### Example 3
 
 Why does column iteration over a row-major array slow down computation?
 
@@ -454,7 +454,7 @@ Because it produces a strided access pattern.
 
 ---
 
-# 13. Exercises
+## 13. Exercises
 
 1. What is a memory access pattern?
 2. What is the size of a typical cache line?
@@ -467,7 +467,7 @@ Because it produces a strided access pattern.
 
 ---
 
-# 14. Short Answers
+## 14. Short Answers
 
 1. Order in which memory addresses are accessed
 2. 64 bytes
@@ -480,7 +480,7 @@ Because it produces a strided access pattern.
 
 ---
 
-# 15. Summary
+## 15. Summary
 
 * **Memory access patterns** strongly influence program performance.
 * CPUs load data in **cache lines**, typically 64 bytes.

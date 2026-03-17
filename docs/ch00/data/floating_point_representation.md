@@ -16,7 +16,7 @@ Understanding floating-point representation explains many surprising behaviors i
 
 ---
 
-# 1. Scientific Notation in Binary
+## 1. Scientific Notation in Binary
 
 Floating-point numbers are essentially **binary scientific notation**.
 
@@ -52,7 +52,7 @@ Floating-point numbers store:
 
 ---
 
-# 2. IEEE 754 Floating-Point Format
+## 2. IEEE 754 Floating-Point Format
 
 IEEE 754 defines the standard binary floating-point formats used by modern hardware.
 
@@ -71,9 +71,9 @@ Where:
 
 ---
 
-## Structure of floating-point numbers
+### Structure of floating-point numbers
 
-### float32 (single precision)
+#### float32 (single precision)
 
 | Field    | Bits |
 | -------- | ---- |
@@ -89,7 +89,7 @@ Total:
 
 ---
 
-### float64 (double precision)
+#### float64 (double precision)
 
 | Field    | Bits |
 | -------- | ---- |
@@ -105,7 +105,7 @@ Total:
 
 ---
 
-## Bit layout visualization
+### Bit layout visualization
 
 ```mermaid
 flowchart LR
@@ -121,7 +121,7 @@ flowchart LR
 
 ---
 
-# 3. The Implicit Leading Bit
+## 3. The Implicit Leading Bit
 
 In normalized floating-point numbers, the leading bit of the significand is always **1**.
 
@@ -146,7 +146,7 @@ This is called the **hidden bit** or **implicit leading 1**.
 
 ---
 
-# 4. Exponent Bias
+## 4. Exponent Bias
 
 The exponent field is stored using a **bias** so that both positive and negative exponents can be represented using unsigned integers.
 
@@ -171,7 +171,7 @@ Actual exponent = 3
 
 ---
 
-# 5. Example: Interpreting a Floating-Point Number
+## 5. Example: Interpreting a Floating-Point Number
 
 Consider a simplified example:
 
@@ -212,7 +212,7 @@ Step 4: value
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid
 flowchart TD
@@ -230,7 +230,7 @@ flowchart TD
 
 ---
 
-# 6. Why Many Decimal Numbers Cannot Be Represented Exactly
+## 6. Why Many Decimal Numbers Cannot Be Represented Exactly
 
 Some decimal fractions have **infinite binary expansions**.
 
@@ -254,7 +254,7 @@ This approximation explains many floating-point surprises.
 
 ---
 
-## Famous example
+### Famous example
 
 ```python
 print(0.1 + 0.2)
@@ -270,7 +270,7 @@ This occurs because both 0.1 and 0.2 are stored as approximations.
 
 ---
 
-# 7. Machine Epsilon
+## 7. Machine Epsilon
 
 The **machine epsilon** is the smallest number that can be added to **1.0** that produces a distinct floating-point value.
 
@@ -294,7 +294,7 @@ For float32:
 
 ---
 
-### Visualization of spacing
+#### Visualization of spacing
 
 ```mermaid
 flowchart LR
@@ -306,7 +306,7 @@ Machine epsilon determines the **relative precision** of floating-point arithmet
 
 ---
 
-# 8. Non-Uniform Precision
+## 8. Non-Uniform Precision
 
 Floating-point numbers are **not evenly spaced**.
 
@@ -328,7 +328,7 @@ Examples:
 
 ---
 
-## Example: absorption
+### Example: absorption
 
 ```python
 print(1e16 + 1 == 1e16)
@@ -344,7 +344,7 @@ The `1` is smaller than the spacing between numbers near `1e16`, so it disappear
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid
 flowchart LR
@@ -355,7 +355,7 @@ flowchart LR
 
 ---
 
-# 9. Catastrophic Cancellation
+## 9. Catastrophic Cancellation
 
 When subtracting two nearly equal numbers, most significant digits cancel out.
 
@@ -376,7 +376,7 @@ This phenomenon is called **catastrophic cancellation**.
 
 ---
 
-## Example
+### Example
 
 ```python
 import numpy as np
@@ -393,13 +393,13 @@ Often the solution is **algebraic reformulation**.
 
 ---
 
-# 10. Special Floating-Point Values
+## 10. Special Floating-Point Values
 
 IEEE 754 defines special bit patterns for exceptional conditions.
 
 ---
 
-## Infinity
+### Infinity
 
 Occurs when numbers exceed representable range.
 
@@ -418,7 +418,7 @@ print(np.inf * 2)
 
 ---
 
-## NaN (Not a Number)
+### NaN (Not a Number)
 
 Represents undefined operations.
 
@@ -446,7 +446,7 @@ nan
 
 ---
 
-## NaN comparison behavior
+### NaN comparison behavior
 
 NaN is not equal to anything, including itself.
 
@@ -470,7 +470,7 @@ np.isnan(x)
 
 ---
 
-# 11. Memory and Precision Tradeoff
+## 11. Memory and Precision Tradeoff
 
 Different floating-point types balance precision and memory usage.
 
@@ -492,7 +492,7 @@ print(np.zeros(n, dtype=np.float32).nbytes)
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid
 flowchart LR
@@ -504,11 +504,11 @@ float32 uses half the memory but also half the precision.
 
 ---
 
-# 12. Practical Guidelines
+## 12. Practical Guidelines
 
 When working with floating-point numbers:
 
-### Avoid direct equality comparisons
+#### Avoid direct equality comparisons
 
 Use tolerances instead.
 
@@ -518,7 +518,7 @@ np.isclose(a, b)
 
 ---
 
-### Prefer numerically stable formulas
+#### Prefer numerically stable formulas
 
 Example:
 
@@ -536,22 +536,22 @@ np.hypot(x, y)
 
 ---
 
-### Be cautious with subtraction
+#### Be cautious with subtraction
 
 Subtracting nearly equal numbers can destroy precision.
 
 ---
 
-### Choose data types carefully
+#### Choose data types carefully
 
 * float32: memory efficient
 * float64: higher precision
 
 ---
 
-# 13. Worked Examples
+## 13. Worked Examples
 
-### Example 1
+#### Example 1
 
 Explain why:
 
@@ -563,7 +563,7 @@ Both operands are approximated in binary, so rounding errors accumulate.
 
 ---
 
-### Example 2
+#### Example 2
 
 Determine the approximate precision of float32.
 
@@ -573,7 +573,7 @@ Determine the approximate precision of float32.
 
 ---
 
-### Example 3
+#### Example 3
 
 Show absorption:
 
@@ -585,7 +585,7 @@ The difference is below floating-point resolution.
 
 ---
 
-# 14. Exercises
+## 14. Exercises
 
 1. What are the three fields of IEEE 754 floating-point numbers?
 2. What is the bias for float64?
@@ -597,7 +597,7 @@ The difference is below floating-point resolution.
 
 ---
 
-# 15. Short Answers
+## 15. Short Answers
 
 1. Sign, exponent, significand
 2. 1023
@@ -609,7 +609,7 @@ The difference is below floating-point resolution.
 
 ---
 
-# 16. Summary
+## 16. Summary
 
 * Floating-point numbers represent real values using **binary scientific notation**.
 * IEEE 754 stores numbers using **sign, exponent, and significand fields**.

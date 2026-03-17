@@ -10,7 +10,7 @@ For many numerical programs—especially those written in Python—**memory band
 
 ---
 
-# 1. What RAM Stores
+## 1. What RAM Stores
 
 RAM contains all active components of a running system.
 
@@ -26,7 +26,7 @@ When a program starts, its executable code and data are loaded from disk into RA
 
 ---
 
-### Data flow in a running program
+#### Data flow in a running program
 
 ```mermaid
 flowchart LR
@@ -39,7 +39,7 @@ Programs constantly move data between the CPU and RAM.
 
 ---
 
-# 2. Volatile Memory
+## 2. Volatile Memory
 
 RAM is **volatile memory**, meaning its contents disappear when power is lost.
 
@@ -56,7 +56,7 @@ Because RAM is volatile, programs must periodically save important data to persi
 
 ---
 
-# 3. DRAM: How RAM Stores Bits
+## 3. DRAM: How RAM Stores Bits
 
 Modern main memory uses **DRAM (Dynamic Random Access Memory)**.
 
@@ -69,7 +69,7 @@ The capacitor either:
 
 ---
 
-### DRAM cell structure
+#### DRAM cell structure
 
 A DRAM cell consists of:
 
@@ -87,7 +87,7 @@ Because capacitors slowly leak charge, DRAM must periodically **refresh** all st
 
 ---
 
-# 4. Refresh Cycles
+## 4. Refresh Cycles
 
 DRAM cells lose their stored charge over time.
 
@@ -105,7 +105,7 @@ Although refresh operations occur frequently, they are scheduled in a way that m
 
 ---
 
-# 5. DRAM Organization
+## 5. DRAM Organization
 
 DRAM chips are organized internally as large **two-dimensional arrays**.
 
@@ -118,7 +118,7 @@ To access memory, the controller:
 
 ---
 
-### DRAM structure visualization
+#### DRAM structure visualization
 
 ```mermaid
 flowchart TD
@@ -132,7 +132,7 @@ The row buffer temporarily holds an entire row of memory cells.
 
 ---
 
-# 6. Row Buffers and Memory Access
+## 6. Row Buffers and Memory Access
 
 DRAM accesses occur in two stages:
 
@@ -145,7 +145,7 @@ Subsequent accesses to the same row can be performed quickly.
 
 ---
 
-## Row hit vs row miss
+### Row hit vs row miss
 
 | Event    | Description                  | Latency    |
 | -------- | ---------------------------- | ---------- |
@@ -160,7 +160,7 @@ Row misses are slower because the controller must:
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid
 flowchart LR
@@ -173,7 +173,7 @@ Row hits reuse the data already in the row buffer.
 
 ---
 
-# 7. Memory Latency vs CPU Speed
+## 7. Memory Latency vs CPU Speed
 
 RAM access is much slower than CPU operations.
 
@@ -192,7 +192,7 @@ This gap between CPU speed and memory speed is called the **memory wall**.
 
 ---
 
-# 8. DDR Memory
+## 8. DDR Memory
 
 Modern RAM modules use **DDR (Double Data Rate)** technology.
 
@@ -205,7 +205,7 @@ This doubles effective bandwidth without increasing clock frequency.
 
 ---
 
-## DDR generations
+### DDR generations
 
 | Generation | Transfer Rate | Bandwidth (per channel) |
 | ---------- | ------------- | ----------------------- |
@@ -216,7 +216,7 @@ This doubles effective bandwidth without increasing clock frequency.
 
 ---
 
-# 9. Memory Channels
+## 9. Memory Channels
 
 Modern CPUs support multiple **memory channels**.
 
@@ -224,7 +224,7 @@ Each channel provides an independent data path between RAM and the memory contro
 
 ---
 
-## Example configurations
+### Example configurations
 
 | Configuration  | Effective bandwidth |
 | -------------- | ------------------- |
@@ -236,7 +236,7 @@ Multiple channels allow the CPU to read from several RAM modules simultaneously.
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid
 flowchart LR
@@ -249,7 +249,7 @@ More channels increase total bandwidth.
 
 ---
 
-# 10. Python Memory Layout
+## 10. Python Memory Layout
 
 In Python, most data structures allocate objects on the **heap**.
 
@@ -263,7 +263,7 @@ This overhead makes Python objects significantly larger than raw data values.
 
 ---
 
-## Example
+### Example
 
 ```python
 import sys
@@ -281,7 +281,7 @@ Even though the integer value itself requires only 4–8 bytes.
 
 ---
 
-## Python lists
+### Python lists
 
 A Python list stores **pointers to objects**, not the objects themselves.
 
@@ -299,7 +299,7 @@ list → pointer → object
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid
 flowchart LR
@@ -316,7 +316,7 @@ This layout scatters elements throughout memory, reducing cache efficiency.
 
 ---
 
-# 11. NumPy and Memory Efficiency
+## 11. NumPy and Memory Efficiency
 
 NumPy arrays store values as **raw contiguous memory blocks**.
 
@@ -344,7 +344,7 @@ or about:
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid
 flowchart LR
@@ -360,7 +360,7 @@ Because the values are stored consecutively, NumPy arrays are both:
 
 ---
 
-# 12. Memory-Mapped Files
+## 12. Memory-Mapped Files
 
 Sometimes datasets are larger than available RAM.
 
@@ -372,7 +372,7 @@ The operating system automatically loads pages of the file when needed.
 
 ---
 
-## Example
+### Example
 
 ```python
 import numpy as np
@@ -392,7 +392,7 @@ The OS transparently swaps data between disk and RAM.
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid
 flowchart LR
@@ -405,9 +405,9 @@ This allows programs to work with datasets larger than physical memory.
 
 ---
 
-# 13. Worked Examples
+## 13. Worked Examples
 
-### Example 1
+#### Example 1
 
 How many float64 values fit in 1 GB?
 
@@ -417,7 +417,7 @@ How many float64 values fit in 1 GB?
 
 ---
 
-### Example 2
+#### Example 2
 
 Why is RAM slower than cache?
 
@@ -425,7 +425,7 @@ DRAM requires row activation and capacitor refresh, while caches use fast SRAM c
 
 ---
 
-### Example 3
+#### Example 3
 
 Explain why Python lists use more memory than NumPy arrays.
 
@@ -433,7 +433,7 @@ Python lists store pointers to separate objects, while NumPy arrays store raw va
 
 ---
 
-# 14. Exercises
+## 14. Exercises
 
 1. What does RAM store?
 2. Why is RAM called volatile memory?
@@ -446,7 +446,7 @@ Python lists store pointers to separate objects, while NumPy arrays store raw va
 
 ---
 
-# 15. Short Answers
+## 15. Short Answers
 
 1. Active programs and data
 2. Data is lost when power is removed
@@ -459,7 +459,7 @@ Python lists store pointers to separate objects, while NumPy arrays store raw va
 
 ---
 
-# 16. Summary
+## 16. Summary
 
 * **RAM** is the main working memory of a computer.
 * Modern systems use **DRAM**, which stores bits as electrical charge in capacitors.

@@ -15,7 +15,7 @@ Understanding registers and caches explains why:
 
 ---
 
-# 1. Registers: The Fastest Storage
+## 1. Registers: The Fastest Storage
 
 **Registers** are small storage locations located directly inside the CPU.
 
@@ -30,7 +30,7 @@ Because registers are part of the processor itself, accessing them requires **on
 
 ---
 
-## Register characteristics
+### Register characteristics
 
 Typical properties for modern x86-64 CPUs:
 
@@ -45,7 +45,7 @@ Compared to other memory layers, registers are extremely small but extremely fas
 
 ---
 
-## Register usage example
+### Register usage example
 
 A simple arithmetic operation in machine code might look like:
 
@@ -59,7 +59,7 @@ Because both operands are already in registers, the operation completes in a sin
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid id="pso53r"
 flowchart LR
@@ -70,7 +70,7 @@ flowchart LR
 
 ---
 
-# 2. Register Allocation
+## 2. Register Allocation
 
 Registers are limited resources. Programs often require more temporary values than available registers.
 
@@ -78,7 +78,7 @@ Two mechanisms help manage this constraint:
 
 ---
 
-## Compiler allocation
+### Compiler allocation
 
 Compilers attempt to keep frequently used values in registers.
 
@@ -92,7 +92,7 @@ The compiler loads `a` and `b` into registers, performs the addition, and stores
 
 ---
 
-## Register renaming
+### Register renaming
 
 Modern CPUs dynamically map logical registers to physical registers using **register renaming**.
 
@@ -106,7 +106,7 @@ These mechanisms are invisible to software but critical for high performance.
 
 ---
 
-# 3. Cache Memory
+## 3. Cache Memory
 
 Caches store recently accessed memory values closer to the CPU.
 
@@ -114,7 +114,7 @@ They are implemented using fast **SRAM** rather than the slower **DRAM** used fo
 
 ---
 
-## Cache hierarchy
+### Cache hierarchy
 
 Most processors use multiple cache levels.
 
@@ -126,7 +126,7 @@ Most processors use multiple cache levels.
 
 ---
 
-## L1 cache split
+### L1 cache split
 
 The L1 cache is usually divided into two separate caches:
 
@@ -139,7 +139,7 @@ This separation allows instruction fetching and data access to occur simultaneou
 
 ---
 
-### Cache hierarchy visualization
+#### Cache hierarchy visualization
 
 ```mermaid id="0z48xp"
 flowchart TD
@@ -153,7 +153,7 @@ Data moves down the hierarchy when needed.
 
 ---
 
-# 4. Cache Lines
+## 4. Cache Lines
 
 Caches store memory in blocks called **cache lines**.
 
@@ -167,7 +167,7 @@ When a single byte is requested, the entire cache line containing that byte is l
 
 ---
 
-## Example
+### Example
 
 Suppose a program reads memory address:
 
@@ -189,7 +189,7 @@ This block might include addresses:
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid id="uz1ipf"
 flowchart LR
@@ -201,7 +201,7 @@ This design improves performance when nearby data is accessed.
 
 ---
 
-# 5. Sequential Access and Cache Efficiency
+## 5. Sequential Access and Cache Efficiency
 
 Cache lines make **sequential memory access** extremely efficient.
 
@@ -223,7 +223,7 @@ Thus a single cache miss loads eight elements.
 
 ---
 
-## Example access pattern
+### Example access pattern
 
 Sequential access:
 
@@ -242,7 +242,7 @@ Behavior:
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid id="k4qnh2"
 flowchart LR
@@ -254,7 +254,7 @@ flowchart LR
 
 ---
 
-# 6. Cache Associativity
+## 6. Cache Associativity
 
 Caches are organized into **sets** containing multiple cache lines.
 
@@ -262,7 +262,7 @@ The number of lines per set defines the **associativity**.
 
 ---
 
-## Types of caches
+### Types of caches
 
 | Type              | Description       |
 | ----------------- | ----------------- |
@@ -274,7 +274,7 @@ Most modern caches are **8-way or 16-way associative**.
 
 ---
 
-## Conflict misses
+### Conflict misses
 
 A **conflict miss** occurs when multiple memory addresses map to the same cache set.
 
@@ -284,7 +284,7 @@ This can degrade performance significantly.
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid id="pd1c88"
 flowchart TD
@@ -299,7 +299,7 @@ If too many addresses map to the same set, older lines are evicted.
 
 ---
 
-# 7. SIMD Registers and Vectorization
+## 7. SIMD Registers and Vectorization
 
 Modern CPUs include **SIMD (Single Instruction Multiple Data)** registers.
 
@@ -307,7 +307,7 @@ These registers allow a single instruction to operate on multiple data elements 
 
 ---
 
-## SIMD register types
+### SIMD register types
 
 | Register | Size     |
 | -------- | -------- |
@@ -324,7 +324,7 @@ Example capacities:
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid id="zj2in6"
 flowchart LR
@@ -338,7 +338,7 @@ Multiple values are processed in parallel.
 
 ---
 
-# 8. NumPy and Vectorized Computation
+## 8. NumPy and Vectorized Computation
 
 NumPy operations are fast because they:
 
@@ -361,7 +361,7 @@ Instead of performing one addition at a time, the CPU processes multiple element
 
 ---
 
-# 9. Python Interpreter Overhead
+## 9. Python Interpreter Overhead
 
 Pure Python arithmetic is much slower because each operation involves many steps.
 
@@ -382,7 +382,7 @@ Instead of a single machine instruction, Python may execute **dozens of instruct
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid id="pnjv1k"
 flowchart TD
@@ -396,7 +396,7 @@ NumPy bypasses this overhead by operating on raw memory arrays in compiled code.
 
 ---
 
-# 10. Observing Cache Effects
+## 10. Observing Cache Effects
 
 The impact of cache size can be observed experimentally.
 
@@ -406,7 +406,7 @@ When arrays exceed cache capacity, performance drops because data must be fetche
 
 ---
 
-## Example experiment
+### Example experiment
 
 ```python id="i21ylt"
 import numpy as np
@@ -435,13 +435,13 @@ Typical result:
 
 ---
 
-# 11. Strided Access and Cache Waste
+## 11. Strided Access and Cache Waste
 
 Cache lines improve sequential access but can be wasted by **strided access patterns**.
 
 ---
 
-## Example
+### Example
 
 ```python id="5j7bq1"
 arr = np.arange(1_000_000, dtype=np.float64)
@@ -454,7 +454,7 @@ The strided version accesses only one element per cache line, wasting most of th
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid id="qjot8r"
 flowchart LR
@@ -466,9 +466,9 @@ flowchart LR
 
 ---
 
-# 12. Worked Examples
+## 12. Worked Examples
 
-### Example 1
+#### Example 1
 
 How many `float64` values fit in a 256-bit SIMD register?
 
@@ -478,7 +478,7 @@ How many `float64` values fit in a 256-bit SIMD register?
 
 ---
 
-### Example 2
+#### Example 2
 
 If a cache line is 64 bytes and each value is 8 bytes:
 
@@ -490,7 +490,7 @@ So one cache miss loads 8 elements.
 
 ---
 
-### Example 3
+#### Example 3
 
 Explain why NumPy operations outperform Python loops.
 
@@ -498,7 +498,7 @@ NumPy performs operations in compiled code using SIMD registers and contiguous m
 
 ---
 
-# 13. Exercises
+## 13. Exercises
 
 1. What are CPU registers used for?
 2. How large are general-purpose registers on x86-64?
@@ -511,7 +511,7 @@ NumPy performs operations in compiled code using SIMD registers and contiguous m
 
 ---
 
-# 14. Short Answers
+## 14. Short Answers
 
 1. Temporary storage for CPU operations
 2. 64 bits
@@ -524,7 +524,7 @@ NumPy performs operations in compiled code using SIMD registers and contiguous m
 
 ---
 
-# 15. Summary
+## 15. Summary
 
 * **Registers** are the fastest storage in a computer and hold temporary computation data.
 * **Caches** store recently accessed memory to reduce RAM access latency.

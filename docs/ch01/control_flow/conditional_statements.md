@@ -7,7 +7,7 @@ The primary conditional structure in Python is the `if` statement.
 
 ---
 
-## Basic if Statement
+### Basic if Statement
 
 ```python
 age = 25
@@ -20,7 +20,7 @@ If the condition evaluates to `True`, the indented block executes.
 
 ---
 
-## if–else Statement
+### if–else Statement
 
 ```python
 temperature = 15
@@ -35,7 +35,7 @@ The `else` block executes when the condition is `False`.
 
 ---
 
-## Multiple Conditions (if–elif–else)
+### Multiple Conditions (if–elif–else)
 
 ```python
 score = 85
@@ -54,7 +54,7 @@ Python evaluates conditions **top to bottom**, executing the first match.
 
 ---
 
-## Logical Operators
+### Logical Operators
 
 Python allows combining conditions using logical operators.
 
@@ -76,7 +76,7 @@ if age >= 18 and has_license:
 
 ---
 
-## Truthy and Falsy Values
+### Truthy and Falsy Values
 
 Python treats some values as `False` automatically.
 
@@ -106,7 +106,7 @@ else:
 
 ---
 
-## Nested Conditionals
+### Nested Conditionals
 
 Conditional blocks can appear inside other conditional blocks.
 
@@ -128,7 +128,7 @@ However, excessive nesting can make programs harder to read.
 # loops.md
 
 ```md
-# Loops
+## Loops
 
 Loops allow programs to **repeat a block of code multiple times**.
 
@@ -147,7 +147,7 @@ flowchart TD
 
 ---
 
-## for Loop
+### for Loop
 
 The `for` loop iterates over an iterable object.
 
@@ -175,7 +175,7 @@ cherry
 
 ---
 
-## range()
+### range()
 
 The `range()` function generates sequences of numbers.
 
@@ -210,7 +210,7 @@ for i in range(2,10,2):
 
 ---
 
-## Nested Loops
+### Nested Loops
 
 Loops can be placed inside other loops.
 
@@ -224,7 +224,7 @@ Nested loops are often used in **matrix operations or grid computations**.
 
 ---
 
-# while Loop
+## while Loop
 
 The `while` loop continues executing while a condition remains true.
 
@@ -248,7 +248,7 @@ Output:
 
 ---
 
-# Infinite Loops
+## Infinite Loops
 
 A `while True` loop creates an infinite loop.
 

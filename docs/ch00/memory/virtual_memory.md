@@ -17,7 +17,7 @@ Virtual memory is implemented through cooperation between:
 
 ---
 
-# 1. Virtual vs Physical Memory
+## 1. Virtual vs Physical Memory
 
 Computers contain a limited amount of **physical RAM**. However, programs use **virtual addresses** instead of physical ones.
 
@@ -25,7 +25,7 @@ Each process sees its own **virtual address space**, which the operating system 
 
 ---
 
-## Example
+### Example
 
 Two processes may both use the same virtual address:
 
@@ -37,7 +37,7 @@ But this address may refer to **different physical memory locations**.
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid
 flowchart LR
@@ -51,7 +51,7 @@ The MMU translates virtual addresses into physical ones.
 
 ---
 
-# 2. Pages
+## 2. Pages
 
 Virtual memory divides memory into fixed-size blocks called **pages**.
 
@@ -65,7 +65,7 @@ Both virtual memory and physical memory are divided into pages.
 
 ---
 
-## Example
+### Example
 
 A 4 KB page contains:
 
@@ -81,7 +81,7 @@ If a program uses 100 MB of memory:
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid
 flowchart LR
@@ -94,7 +94,7 @@ Pages can be mapped to any location in physical memory.
 
 ---
 
-# 3. Page Tables
+## 3. Page Tables
 
 The mapping between virtual pages and physical pages is stored in **page tables**.
 
@@ -109,7 +109,7 @@ A page table entry contains:
 
 ---
 
-### Address translation structure
+#### Address translation structure
 
 ```mermaid
 flowchart LR
@@ -121,7 +121,7 @@ Whenever a program accesses memory, the CPU must perform this translation.
 
 ---
 
-# 4. Address Translation
+## 4. Address Translation
 
 A virtual address consists of two components:
 
@@ -140,7 +140,7 @@ The remaining bits represent the virtual page number.
 
 ---
 
-### Example translation
+#### Example translation
 
 ```text
 Virtual address:
@@ -158,7 +158,7 @@ The page number is looked up in the page table to obtain the physical page.
 
 ---
 
-### Translation process
+#### Translation process
 
 ```mermaid
 flowchart TD
@@ -171,7 +171,7 @@ flowchart TD
 
 ---
 
-# 5. Multi-Level Page Tables
+## 5. Multi-Level Page Tables
 
 Modern CPUs use **multi-level page tables** to reduce memory overhead.
 
@@ -186,7 +186,7 @@ Each lookup involves several steps:
 
 ---
 
-### Page walk visualization
+#### Page walk visualization
 
 ```mermaid
 flowchart TD
@@ -203,7 +203,7 @@ To avoid this overhead, CPUs use a cache called the **TLB**.
 
 ---
 
-# 6. Translation Lookaside Buffer (TLB)
+## 6. Translation Lookaside Buffer (TLB)
 
 The **TLB (Translation Lookaside Buffer)** is a small cache that stores recent virtual-to-physical address translations.
 
@@ -218,7 +218,7 @@ If a translation is in the TLB, the CPU avoids a page table lookup.
 
 ---
 
-## TLB hit vs TLB miss
+### TLB hit vs TLB miss
 
 | Event    | Meaning                   |
 | -------- | ------------------------- |
@@ -229,7 +229,7 @@ Frequent TLB misses can significantly slow programs.
 
 ---
 
-### TLB visualization
+#### TLB visualization
 
 ```mermaid
 flowchart LR
@@ -242,7 +242,7 @@ The TLB acts as a cache for address translations.
 
 ---
 
-# 7. Page Faults
+## 7. Page Faults
 
 A **page fault** occurs when a program accesses a page that is not currently in RAM.
 
@@ -250,7 +250,7 @@ The operating system then handles the fault.
 
 ---
 
-## Types of page faults
+### Types of page faults
 
 | Type          | Description                         |
 | ------------- | ----------------------------------- |
@@ -260,7 +260,7 @@ The operating system then handles the fault.
 
 ---
 
-### Page fault sequence
+#### Page fault sequence
 
 ```mermaid
 flowchart TD
@@ -275,7 +275,7 @@ Major page faults are expensive because they require disk access.
 
 ---
 
-# 8. Swap Space
+## 8. Swap Space
 
 When physical RAM becomes full, the OS may move inactive pages to disk.
 
@@ -285,7 +285,7 @@ Swap allows the system to support programs whose combined memory usage exceeds a
 
 ---
 
-## Thrashing
+### Thrashing
 
 If the system constantly moves pages between RAM and disk, it experiences **thrashing**.
 
@@ -299,7 +299,7 @@ Thrashing occurs when the **working set** of programs exceeds available RAM.
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid
 flowchart LR
@@ -311,7 +311,7 @@ Constant swapping severely degrades performance.
 
 ---
 
-# 9. Copy-on-Write (COW)
+## 9. Copy-on-Write (COW)
 
 Operating systems use **copy-on-write** to avoid unnecessary memory duplication.
 
@@ -324,7 +324,7 @@ If either process writes to a page, the OS creates a private copy.
 
 ---
 
-### Copy-on-write process
+#### Copy-on-write process
 
 ```mermaid
 flowchart LR
@@ -337,7 +337,7 @@ This technique saves both memory and time.
 
 ---
 
-## Python multiprocessing
+### Python multiprocessing
 
 Python's `multiprocessing` module often relies on `fork()`.
 
@@ -347,7 +347,7 @@ This can increase memory usage unexpectedly.
 
 ---
 
-# 10. Memory-Mapped Files
+## 10. Memory-Mapped Files
 
 Virtual memory enables **memory-mapped files**.
 
@@ -357,7 +357,7 @@ The OS loads pages into RAM only when accessed.
 
 ---
 
-## Example
+### Example
 
 ```python
 import numpy as np
@@ -380,7 +380,7 @@ but only the accessed pages are loaded into RAM.
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid
 flowchart LR
@@ -393,7 +393,7 @@ Memory mapping allows programs to process datasets larger than physical memory.
 
 ---
 
-# 11. Measuring Virtual vs Physical Memory
+## 11. Measuring Virtual vs Physical Memory
 
 Programs often allocate more virtual memory than physical RAM.
 
@@ -412,7 +412,7 @@ print(f"VMS: {mem.vms / 1e6:.1f} MB")
 
 ---
 
-## Definitions
+### Definitions
 
 | Metric | Meaning                     |
 | ------ | --------------------------- |
@@ -423,9 +423,9 @@ Virtual memory can exceed physical RAM.
 
 ---
 
-# 12. Worked Examples
+## 12. Worked Examples
 
-### Example 1
+#### Example 1
 
 If page size is 4 KB, how many pages are required for 1 GB of memory?
 
@@ -435,7 +435,7 @@ If page size is 4 KB, how many pages are required for 1 GB of memory?
 
 ---
 
-### Example 2
+#### Example 2
 
 Why are TLB misses expensive?
 
@@ -443,7 +443,7 @@ Because the CPU must walk the multi-level page table.
 
 ---
 
-### Example 3
+#### Example 3
 
 Explain why memory-mapped arrays allow datasets larger than RAM.
 
@@ -451,7 +451,7 @@ Pages are loaded into RAM only when accessed.
 
 ---
 
-# 13. Exercises
+## 13. Exercises
 
 1. What is virtual memory?
 2. What component translates virtual addresses?
@@ -464,7 +464,7 @@ Pages are loaded into RAM only when accessed.
 
 ---
 
-# 14. Short Answers
+## 14. Short Answers
 
 1. Abstraction that maps virtual addresses to physical memory
 2. Memory Management Unit (MMU)
@@ -477,7 +477,7 @@ Pages are loaded into RAM only when accessed.
 
 ---
 
-# 15. Summary
+## 15. Summary
 
 * **Virtual memory** gives each process its own address space.
 * The **MMU** translates virtual addresses to physical addresses using page tables.

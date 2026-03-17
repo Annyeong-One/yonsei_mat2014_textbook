@@ -18,7 +18,7 @@ Understanding character encoding is essential when working with:
 
 ---
 
-# 1. Characters, Code Points, and Encodings
+## 1. Characters, Code Points, and Encodings
 
 Text representation involves three distinct concepts.
 
@@ -30,7 +30,7 @@ Text representation involves three distinct concepts.
 
 ---
 
-## Example
+### Example
 
 Character:
 
@@ -52,7 +52,7 @@ Encoding (UTF-8):
 
 ---
 
-### Conceptual pipeline
+#### Conceptual pipeline
 
 ```mermaid
 flowchart LR
@@ -63,7 +63,7 @@ flowchart LR
 
 ---
 
-# 2. ASCII: The First Standard
+## 2. ASCII: The First Standard
 
 The earliest widely adopted character encoding was **ASCII** (American Standard Code for Information Interchange), standardized in 1963.
 
@@ -71,7 +71,7 @@ ASCII defined **128 characters** using **7 bits**.
 
 ---
 
-## ASCII table overview
+### ASCII table overview
 
 | Range  | Meaning              |
 | ------ | -------------------- |
@@ -89,7 +89,7 @@ Example characters:
 
 ---
 
-### ASCII visualization
+#### ASCII visualization
 
 ```mermaid
 flowchart LR
@@ -100,7 +100,7 @@ flowchart LR
 
 ---
 
-## Limitations of ASCII
+### Limitations of ASCII
 
 ASCII works well for English but cannot represent:
 
@@ -120,7 +120,7 @@ Unfortunately, these encodings were **incompatible**, meaning the same byte valu
 
 ---
 
-# 3. Unicode: A Universal Character Set
+## 3. Unicode: A Universal Character Set
 
 To solve encoding incompatibility, the **Unicode standard** was created.
 
@@ -139,7 +139,7 @@ Unicode supports over **1.1 million possible code points**, though only a fracti
 
 ---
 
-## Unicode architecture
+### Unicode architecture
 
 Unicode defines **characters and code points**, but not how they are stored in memory.
 
@@ -147,7 +147,7 @@ Encodings such as **UTF-8**, **UTF-16**, and **UTF-32** specify the actual byte 
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid
 flowchart LR
@@ -158,7 +158,7 @@ flowchart LR
 
 ---
 
-# 4. UTF-8 Encoding
+## 4. UTF-8 Encoding
 
 The most widely used encoding today is **UTF-8**.
 
@@ -174,7 +174,7 @@ Advantages:
 
 ---
 
-## UTF-8 byte structure
+### UTF-8 byte structure
 
 | Bytes | Bits    | Range                  |
 | ----- | ------- | ---------------------- |
@@ -185,7 +185,7 @@ Advantages:
 
 ---
 
-### Bit pattern rules
+#### Bit pattern rules
 
 UTF-8 uses specific leading bit patterns.
 
@@ -200,7 +200,7 @@ These patterns allow a decoder to identify **character boundaries automatically*
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid
 flowchart LR
@@ -211,9 +211,9 @@ flowchart LR
 
 ---
 
-# 5. Example: Encoding Characters in UTF-8
+## 5. Example: Encoding Characters in UTF-8
 
-### ASCII character
+#### ASCII character
 
 Character:
 
@@ -237,7 +237,7 @@ One byte.
 
 ---
 
-### Chinese character
+#### Chinese character
 
 Character:
 
@@ -261,7 +261,7 @@ Three bytes.
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid
 flowchart TD
@@ -272,13 +272,13 @@ flowchart TD
 
 ---
 
-# 6. UTF-16 and UTF-32
+## 6. UTF-16 and UTF-32
 
 Unicode also defines other encodings.
 
 ---
 
-## UTF-16
+### UTF-16
 
 Uses **2 or 4 bytes per character**.
 
@@ -294,7 +294,7 @@ Disadvantages:
 
 ---
 
-## UTF-32
+### UTF-32
 
 Uses **4 bytes per character**.
 
@@ -309,7 +309,7 @@ Disadvantages:
 
 ---
 
-### Comparison
+#### Comparison
 
 | Encoding | Bytes per char | Notes                           |
 | -------- | -------------- | ------------------------------- |
@@ -319,7 +319,7 @@ Disadvantages:
 
 ---
 
-# 7. Python Strings and Unicode
+## 7. Python Strings and Unicode
 
 In Python 3, **strings are sequences of Unicode code points**.
 
@@ -335,7 +335,7 @@ The length of a string counts **code points**, not bytes.
 
 ---
 
-## Example
+### Example
 
 ```python
 text = "Hello, 世界!"
@@ -365,13 +365,13 @@ because the Chinese characters require **3 bytes each**.
 
 ---
 
-# 8. Encoding and Decoding
+## 8. Encoding and Decoding
 
 Converting between text and bytes requires explicit encoding and decoding.
 
 ---
 
-## Encoding
+### Encoding
 
 ```python
 text = "Hello, 世界!"
@@ -387,7 +387,7 @@ b'Hello, \xe4\xb8\x96\xe7\x95\x8c!'
 
 ---
 
-## Decoding
+### Decoding
 
 ```python
 decoded = encoded.decode("utf-8")
@@ -402,7 +402,7 @@ Hello, 世界!
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid
 flowchart LR
@@ -414,7 +414,7 @@ flowchart LR
 
 ---
 
-# 9. File Encodings
+## 9. File Encodings
 
 Files store text as **bytes**, not characters.
 
@@ -422,7 +422,7 @@ Therefore programs must specify the encoding used when reading or writing text f
 
 ---
 
-## Writing a file
+### Writing a file
 
 ```python
 with open("data.txt", "w", encoding="utf-8") as f:
@@ -431,7 +431,7 @@ with open("data.txt", "w", encoding="utf-8") as f:
 
 ---
 
-## Reading a file
+### Reading a file
 
 ```python
 with open("data.txt", "r", encoding="utf-8") as f:
@@ -442,7 +442,7 @@ Specifying the encoding prevents platform-dependent errors.
 
 ---
 
-# 10. Handling Encoding Errors
+## 10. Handling Encoding Errors
 
 Sometimes byte sequences do not correspond to valid characters.
 
@@ -463,7 +463,7 @@ Python allows error handling strategies.
 
 ---
 
-## Replace invalid characters
+### Replace invalid characters
 
 ```python
 invalid.decode("utf-8", errors="replace")
@@ -477,7 +477,7 @@ Output:
 
 ---
 
-## Ignore errors
+### Ignore errors
 
 ```python
 invalid.decode("utf-8", errors="ignore")
@@ -487,9 +487,9 @@ Invalid bytes are skipped.
 
 ---
 
-# 11. Common Encoding Problems
+## 11. Common Encoding Problems
 
-### Mojibake
+#### Mojibake
 
 Occurs when text is decoded with the wrong encoding.
 
@@ -507,21 +507,21 @@ cafÃ©
 
 ---
 
-### Mixing encodings
+#### Mixing encodings
 
 Files created in one encoding (e.g., Windows-1252) may break when interpreted as UTF-8.
 
 ---
 
-### Forgetting to specify encoding
+#### Forgetting to specify encoding
 
 Always specify the encoding in file operations.
 
 ---
 
-# 12. Worked Examples
+## 12. Worked Examples
 
-### Example 1
+#### Example 1
 
 Find the Unicode code point of a character.
 
@@ -547,7 +547,7 @@ print(hex(ord("中")))
 
 ---
 
-### Example 2
+#### Example 2
 
 Convert a code point to a character.
 
@@ -563,7 +563,7 @@ A
 
 ---
 
-### Example 3
+#### Example 3
 
 Inspect UTF-8 bytes.
 
@@ -579,7 +579,7 @@ b'\xe4\xb8\xad'
 
 ---
 
-# 13. Exercises
+## 13. Exercises
 
 1. What is the difference between a character set and an encoding?
 2. How many characters did ASCII support?
@@ -591,7 +591,7 @@ b'\xe4\xb8\xad'
 
 ---
 
-# 14. Short Answers
+## 14. Short Answers
 
 1. Character set defines characters; encoding defines byte representation
 2. 128
@@ -603,7 +603,7 @@ b'\xe4\xb8\xad'
 
 ---
 
-# 15. Summary
+## 15. Summary
 
 * Computers store **bytes**, not characters.
 * Character encodings map characters to byte sequences.

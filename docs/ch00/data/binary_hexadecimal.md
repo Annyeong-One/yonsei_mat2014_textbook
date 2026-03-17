@@ -16,7 +16,7 @@ Understanding how to convert between these bases is an essential skill when work
 
 ---
 
-# 1. Number Systems and Bases
+## 1. Number Systems and Bases
 
 A **number system** (or **base**) defines how numbers are represented using digits and positional value.
 
@@ -32,7 +32,7 @@ where (d_i) are the digits.
 
 ---
 
-## Common bases used in computing
+### Common bases used in computing
 
 | Base | Name        | Digits   |
 | ---- | ----------- | -------- |
@@ -54,7 +54,7 @@ Hexadecimal extends decimal with six additional symbols:
 
 ---
 
-## Visualization of positional value
+### Visualization of positional value
 
 ```mermaid
 flowchart LR
@@ -68,7 +68,7 @@ Each position represents a power of the base.
 
 ---
 
-# 2. Binary Numbers
+## 2. Binary Numbers
 
 Binary uses only two digits:
 
@@ -91,7 +91,7 @@ Each position represents a power of two.
 
 ---
 
-## Example: binary to decimal
+### Example: binary to decimal
 
 Convert:
 
@@ -109,7 +109,7 @@ Convert:
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid
 flowchart TD
@@ -129,13 +129,13 @@ flowchart TD
 
 ---
 
-# 3. Decimal to Binary Conversion
+## 3. Decimal to Binary Conversion
 
 To convert a decimal number to binary, repeatedly **divide by 2** and record the remainders.
 
 ---
 
-## Example: convert 45 to binary
+### Example: convert 45 to binary
 
 | Division | Quotient | Remainder |
 | -------- | -------- | --------- |
@@ -154,7 +154,7 @@ Reading remainders **bottom to top**:
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid
 flowchart TD
@@ -169,7 +169,7 @@ flowchart TD
 
 ---
 
-# 4. Hexadecimal
+## 4. Hexadecimal
 
 Binary numbers become long quickly. For example:
 
@@ -187,7 +187,7 @@ Hexadecimal uses **base 16**, with digits:
 
 ---
 
-## Why hexadecimal is useful
+### Why hexadecimal is useful
 
 Hexadecimal aligns perfectly with binary.
 
@@ -203,7 +203,7 @@ So a **byte (8 bits)** equals:
 
 ---
 
-### Binary to hex grouping
+#### Binary to hex grouping
 
 Binary:
 
@@ -234,7 +234,7 @@ AF3C
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid
 flowchart LR
@@ -256,7 +256,7 @@ flowchart LR
 
 ---
 
-# 5. Hexadecimal to Decimal
+## 5. Hexadecimal to Decimal
 
 To convert hex to decimal, multiply each digit by the corresponding power of 16.
 
@@ -276,7 +276,7 @@ A\times16^1 + F\times16^0
 
 ---
 
-## Larger example
+### Larger example
 
 ```text
 0x3C7
@@ -292,7 +292,7 @@ A\times16^1 + F\times16^0
 
 ---
 
-# 6. Octal
+## 6. Octal
 
 Octal (base 8) uses digits:
 
@@ -342,7 +342,7 @@ rwxr-xr-x
 
 ---
 
-# 7. Binary, Hex, and Bytes
+## 7. Binary, Hex, and Bytes
 
 Because hexadecimal aligns perfectly with binary, it is widely used when inspecting raw data.
 
@@ -372,7 +372,7 @@ So:
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid
 flowchart LR
@@ -386,13 +386,13 @@ flowchart LR
 
 ---
 
-# 8. Python and Number Bases
+## 8. Python and Number Bases
 
 Python provides convenient syntax for working with different bases.
 
 ---
 
-## Literals
+### Literals
 
 Python uses prefixes to specify number bases.
 
@@ -412,7 +412,7 @@ print(0o755)      # 493
 
 ---
 
-## Converting integers to strings
+### Converting integers to strings
 
 ```python
 print(bin(45))   # '0b101101'
@@ -422,7 +422,7 @@ print(oct(493))  # '0o755'
 
 ---
 
-## Parsing numbers from strings
+### Parsing numbers from strings
 
 ```python
 print(int('101101', 2))  # 45
@@ -431,7 +431,7 @@ print(int('FF', 16))     # 255
 
 ---
 
-# 9. Practical Uses of Hexadecimal
+## 9. Practical Uses of Hexadecimal
 
 Hexadecimal appears frequently in programming because it represents binary data compactly.
 
@@ -445,7 +445,7 @@ Common uses include:
 
 ---
 
-## Example: RGB colors
+### Example: RGB colors
 
 Many graphics systems represent colors using hexadecimal.
 
@@ -465,7 +465,7 @@ Each pair represents a byte.
 
 ---
 
-### Extracting color components
+#### Extracting color components
 
 ```python
 color = 0x3498DB
@@ -485,7 +485,7 @@ Result:
 
 ---
 
-### Visualization
+#### Visualization
 
 ```mermaid
 flowchart LR
@@ -500,7 +500,7 @@ flowchart LR
 
 ---
 
-# 10. Fixed-Width Formatting
+## 10. Fixed-Width Formatting
 
 Programs often display numbers using a fixed number of digits.
 
@@ -520,7 +520,7 @@ This shows the number as **8-bit binary**.
 
 ---
 
-### Hex formatting
+#### Hex formatting
 
 ```python
 format(255, '02x')
@@ -534,7 +534,7 @@ ff
 
 ---
 
-# 11. Bytes and Hex Strings
+## 11. Bytes and Hex Strings
 
 Binary data is frequently represented as hexadecimal strings.
 
@@ -561,9 +561,9 @@ print(bytes.fromhex('deadbeef'))
 
 ---
 
-# 12. Worked Examples
+## 12. Worked Examples
 
-### Example 1
+#### Example 1
 
 Convert `11011010` to hex.
 
@@ -587,7 +587,7 @@ Result:
 
 ---
 
-### Example 2
+#### Example 2
 
 Convert `0x7B` to decimal.
 
@@ -597,7 +597,7 @@ Convert `0x7B` to decimal.
 
 ---
 
-### Example 3
+#### Example 3
 
 Convert 73 to binary.
 
@@ -615,7 +615,7 @@ Binary:
 
 ---
 
-# 13. Exercises
+## 13. Exercises
 
 1. Convert `10101101` to decimal.
 2. Convert 91 to binary.
@@ -628,7 +628,7 @@ Binary:
 
 ---
 
-# 14. Short Answers
+## 14. Short Answers
 
 1. 173
 2. `01011011`
@@ -641,7 +641,7 @@ Binary:
 
 ---
 
-# 15. Summary
+## 15. Summary
 
 * Binary (base 2) is the fundamental number system used by computers.
 * Hexadecimal (base 16) provides a compact representation of binary data.
