@@ -127,8 +127,8 @@ nav:
             - Lists: ch01/composite_data_types/lists.md
             - Dictionaries: ch01/composite_data_types/dictionaries.md
             - Sets: ch01/composite_data_types/sets.md
+            - Hashability and Hash Tables: ch01/composite_data_types/hashability.md  #← new
             - Comprehensions: ch01/composite_data_types/comprehensions.md
-            - Composite Data Type Examples: ch01/composite_data_types/composite_examples.md
 
         - 1.10 Exceptions:
             - Exception Hierarchy: ch01/exceptions/exception_hierarchy.md
