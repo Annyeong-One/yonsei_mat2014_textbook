@@ -21,7 +21,7 @@ Examples:
 ""
 ````
 
-```mermaid2
+```mermaid
 flowchart TD
     A[str]
     A --> B[text data]
@@ -41,7 +41,7 @@ word = "Python"
 
 This string contains six characters:
 
-```mermaid2
+```mermaid
 flowchart LR
     A["P"] --> B["y"] --> C["t"] --> D["h"] --> E["o"] --> F["n"]
 ```

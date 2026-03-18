@@ -14,7 +14,7 @@ REPL stands for:
 * **Print**
 * **Loop**
 
-```mermaid2
+```mermaid
 flowchart LR
     A[Read]
     B[Evaluate]
@@ -130,7 +130,7 @@ Python programs can be executed in two primary ways.
 | REPL   | interactive experimentation  |
 | Script | running a saved program file |
 
-```mermaid2
+```mermaid
 flowchart TD
     A[Python Code]
     A --> B[Interactive REPL]

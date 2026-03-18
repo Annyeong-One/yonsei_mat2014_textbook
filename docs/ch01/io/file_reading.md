@@ -13,7 +13,7 @@ Typical tasks include:
 - processing logs
 - reading user input stored in files
 
-```mermaid2
+```mermaid
 flowchart TD
     A[File on disk]
     A --> B[open()]

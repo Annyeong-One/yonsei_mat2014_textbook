@@ -12,7 +12,7 @@ Truthiness is used in:
 - logical expressions
 - built-in functions such as `any()` and `all()`
 
-```mermaid2
+```mermaid
 flowchart TD
     A[Python value] --> B{Boolean context}
     B -->|truthy| C[treated as True]

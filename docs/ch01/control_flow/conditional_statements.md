@@ -137,7 +137,7 @@ Python provides two primary looping constructs:
 - `for` loops
 - `while` loops
 
-```mermaid2
+```mermaid
 flowchart TD
     A[Start Loop] --> B[Check Condition]
     B -->|True| C[Execute Block]

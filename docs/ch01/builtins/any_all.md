@@ -3,7 +3,7 @@
 
 Logical built-ins evaluate collections of boolean values.
 
-```mermaid2
+```mermaid
 flowchart LR
     A[Iterable]
     A --> B[any()]

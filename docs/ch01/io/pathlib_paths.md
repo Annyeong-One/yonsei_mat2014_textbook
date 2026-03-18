@@ -5,7 +5,7 @@ Python provides the **pathlib** module for working with file system paths.
 
 It offers a modern and object-oriented interface for path manipulation.
 
-```mermaid2
+```mermaid
 flowchart TD
     A[pathlib.Path]
     A --> B[file path operations]

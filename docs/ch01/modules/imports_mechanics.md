@@ -7,7 +7,7 @@ A module is simply a Python file containing functions, classes, and variables th
 
 The `import` statement allows one module to access definitions from another.
 
-```mermaid2
+```mermaid
 flowchart LR
     A[Module A] -->|import| B[Module B]
     B --> C[functions]
@@ -112,7 +112,7 @@ from math import sqrt, sin, cos
 
 Python searches for modules in several locations.
 
-```mermaid2
+```mermaid
 flowchart TD
     A[import statement]
     A --> B[current directory]

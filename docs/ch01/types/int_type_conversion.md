@@ -10,7 +10,7 @@ This is one of the most common type conversions in Python, especially when worki
 - floating-point values
 - boolean values
 
-```mermaid2
+```mermaid
 flowchart TD
     A[value]
     A --> B[int()]
@@ -98,7 +98,7 @@ Output:
 
 This is not rounding. It is truncation.
 
-```mermaid2
+```mermaid
 flowchart LR
     A[3.9] --> B[int()] --> C[3]
     D[-3.9] --> E[int()] --> F[-3]

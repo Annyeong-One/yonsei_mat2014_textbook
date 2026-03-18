@@ -15,7 +15,7 @@ print("Total:", total)
 
 Steps performed by Python:
 
-```mermaid2
+```mermaid
 flowchart TD
     A[assign variables] --> B[evaluate expression]
     B --> C[store result]

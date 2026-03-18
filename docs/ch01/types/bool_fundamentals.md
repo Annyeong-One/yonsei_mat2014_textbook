@@ -17,7 +17,7 @@ These values are fundamental to:
 * comparisons
 * logical expressions
 
-```mermaid2
+```mermaid
 flowchart TD
     A[bool]
     A --> B[True]
@@ -96,7 +96,7 @@ Output:
 1
 ```
 
-```mermaid2
+```mermaid
 flowchart LR
     A[int] --> B[bool]
     B --> C[True = 1]

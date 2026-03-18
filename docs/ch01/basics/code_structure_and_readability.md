@@ -33,7 +33,7 @@ PEP 8 recommends **4 spaces per indentation level**.
 
 ### Block structure
 
-```mermaid2
+```mermaid
 flowchart TD
     A[if statement]
     A --> B[indented block]

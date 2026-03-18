@@ -17,7 +17,7 @@ It begins with installing Python and understanding the development environment, 
 
 By the end of the chapter, you will understand how Python programs are structured and how the language organizes data and behavior.
 
-```mermaid2
+```mermaid
 flowchart TD
     A[Python Basics]
 
@@ -50,7 +50,7 @@ Topics include:
 
 The REPL allows experimentation with Python expressions before writing full programs.
 
-```mermaid2
+```mermaid
 flowchart LR
     A[Python Installation]
     A --> B[Development Tools]
@@ -76,7 +76,7 @@ Key concepts include:
 
 These elements form the **core syntax of the language**.
 
-```mermaid2
+```mermaid
 flowchart TD
     A[Basic Syntax]
     A --> B[Variables]
@@ -104,7 +104,7 @@ This section covers:
 * conditional expressions
 * structural pattern matching (`match`)
 
-```mermaid2
+```mermaid
 flowchart TD
     A[Control Flow]
     A --> B[Conditions]
@@ -129,7 +129,7 @@ Examples include:
 * sorting and ordering (`sorted`, `reversed`)
 * inspection tools (`help`, `dir`)
 
-```mermaid2
+```mermaid
 flowchart TD
     A[Built-in Functions]
     A --> B[Input / Output]
@@ -154,7 +154,7 @@ These include:
 
 The section also explores type conversions between numeric types.
 
-```mermaid2
+```mermaid
 flowchart TD
     A[Numeric Types]
     A --> B[int]
@@ -178,7 +178,7 @@ Topics include:
 * comparison expressions
 * the special value `None`
 
-```mermaid2
+```mermaid
 flowchart TD
     A[Logical Values]
     A --> B[Booleans]
@@ -204,7 +204,7 @@ Topics include:
 * string methods
 * formatting and docstrings
 
-```mermaid2
+```mermaid
 flowchart TD
     A[Strings]
     A --> B[Text Representation]
@@ -228,7 +228,7 @@ This section covers:
 * type hints
 * practical examples
 
-```mermaid2
+```mermaid
 flowchart TD
     A[Functions]
     A --> B[Definition]
@@ -253,7 +253,7 @@ These include:
 * sets
 * comprehensions
 
-```mermaid2
+```mermaid
 flowchart TD
     A[Composite Data Types]
     A --> B[List]
@@ -277,7 +277,7 @@ Topics include:
 * exception handling (`try`, `except`, `finally`)
 * raising exceptions explicitly
 
-```mermaid2
+```mermaid
 flowchart TD
     A[Program Execution]
     A --> B{Error Occurs?}
@@ -301,7 +301,7 @@ This section introduces:
 * CSV and JSON data formats
 * filesystem paths using `pathlib`
 
-```mermaid2
+```mermaid
 flowchart TD
     A[Program]
     A --> B[Read File]
@@ -324,7 +324,7 @@ Topics include:
 * scripts versus modules
 * installing external libraries with `pip` and PyPI
 
-```mermaid2
+```mermaid
 flowchart TD
     A[Python Program]
     A --> B[Modules]

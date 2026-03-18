@@ -17,7 +17,7 @@ Common comparison operators include:
 | `<=` | less than or equal to |
 | `>=` | greater than or equal to |
 
-```mermaid2
+```mermaid
 flowchart TD
     A[Two values] --> B[comparison operator]
     B --> C[Boolean result]

@@ -11,7 +11,7 @@ The most common numeric conversions are:
 
 These conversions allow programs to move values between different numeric representations.
 
-```mermaid2
+```mermaid
 flowchart TD
     A[int]
     A --> B[float]
@@ -186,7 +186,7 @@ This follows the general widening order:
 int -> float -> complex
 ```
 
-```mermaid2
+```mermaid
 flowchart LR
     A[int] --> B[float] --> C[complex]
 ```

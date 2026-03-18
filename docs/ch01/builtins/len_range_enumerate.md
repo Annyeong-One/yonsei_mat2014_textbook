@@ -6,7 +6,7 @@ Python provides several built-in functions for working with sequences.
 
 These utilities allow programs to measure, generate, and iterate through data efficiently.
 
-```mermaid2
+```mermaid
 flowchart LR
     A[Sequence] --> B[len()]
     A --> C[range()]

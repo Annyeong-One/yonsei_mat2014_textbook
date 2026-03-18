@@ -9,7 +9,7 @@ This section covers:
 - `join()`
 - common modification methods
 
-```mermaid2
+```mermaid
 flowchart LR
     A[String] --> B[split()]
     C[List of strings] --> D[join()]

@@ -5,7 +5,7 @@ Programs may encounter various runtime errors during execution.
 
 Understanding the most common errors helps programmers debug code quickly.
 
-```mermaid2
+```mermaid
 flowchart TD
     A[Runtime Errors]
     A --> B[TypeError]

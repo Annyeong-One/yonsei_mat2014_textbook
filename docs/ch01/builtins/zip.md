@@ -3,7 +3,7 @@
 
 The `zip()` function combines elements from multiple sequences.
 
-```mermaid2
+```mermaid
 flowchart LR
     A[List A] --> C[zip()]
     B[List B] --> C

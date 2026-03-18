@@ -5,7 +5,7 @@ Many programs exchange data using common text formats such as **CSV** and **JSON
 
 These formats allow data to be stored and shared between systems.
 
-```mermaid2
+```mermaid
 flowchart LR
     A[Program] --> B[CSV]
     A --> C[JSON]

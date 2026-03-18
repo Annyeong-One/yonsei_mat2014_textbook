@@ -47,7 +47,7 @@ The result is a new value produced by applying the operator to the operands.
 
 #### Conceptual structure
 
-```mermaid2
+```mermaid
 flowchart LR
     A[Operand a] --> C[Operator +]
     B[Operand b] --> C
@@ -106,7 +106,7 @@ This means operators are essentially **syntactic sugar for method calls**.
 
 #### Operator translation
 
-```mermaid2
+```mermaid
 flowchart LR
     A[a + b] --> B[a.__add__(b)]
     B --> C[int.__add__(a,b)]
@@ -186,7 +186,7 @@ Each expression produces a result when evaluated.
 
 #### Expression evaluation
 
-```mermaid2
+```mermaid
 flowchart LR
     A[Expression] --> B[Evaluation]
     B --> C[Value]
@@ -238,7 +238,7 @@ Statements perform actions such as:
 
 #### Expression vs statement
 
-```mermaid2
+```mermaid
 flowchart TD
     A[Python code]
 
@@ -315,7 +315,7 @@ Evaluation order:
 
 #### Precedence diagram
 
-```mermaid2
+```mermaid
 flowchart TD
     A[Parentheses]
     B[Exponentiation]
@@ -419,7 +419,7 @@ Again, `print()` is not executed.
 
 #### Short-circuit visualization
 
-```mermaid2
+```mermaid
 flowchart LR
     A[Evaluate first operand]
     A --> B{Result known?}
@@ -500,7 +500,7 @@ adult
 
 #### Visualization
 
-```mermaid2
+```mermaid
 flowchart TD
     A[Condition]
     A -->|True| B[value_if_true]

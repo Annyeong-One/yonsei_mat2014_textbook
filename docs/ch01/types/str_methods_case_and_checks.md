@@ -9,7 +9,7 @@ Python strings provide many useful methods for:
 
 These methods help analyze and normalize text.
 
-```mermaid2
+```mermaid
 flowchart TD
     A[String methods]
     A --> B[case methods]

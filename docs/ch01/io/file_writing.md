@@ -11,7 +11,7 @@ Examples include:
 - storing logs
 - exporting processed data
 
-```mermaid2
+```mermaid
 flowchart TD
     A[Program data]
     A --> B[open file in write mode]

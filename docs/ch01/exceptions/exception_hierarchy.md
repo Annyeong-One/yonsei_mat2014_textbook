@@ -7,7 +7,7 @@ When an error occurs, Python raises an exception that interrupts normal executio
 
 Understanding how exceptions are organized helps programmers interpret error messages and handle problems correctly.
 
-```mermaid2
+```mermaid
 flowchart TD
     A[BaseException]
     A --> B[Exception]
@@ -52,7 +52,7 @@ For example:
 
 These classes inherit from a common base.
 
-```mermaid2
+```mermaid
 flowchart TD
     A[BaseException]
     A --> B[Exception]

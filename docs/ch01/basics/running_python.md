@@ -60,7 +60,7 @@ Hello, Python!
 
 When Python runs a script, it performs the following steps:
 
-```mermaid2
+```mermaid
 flowchart TD
     A[Python source code] --> B[Interpreter]
     B --> C[Bytecode compilation]

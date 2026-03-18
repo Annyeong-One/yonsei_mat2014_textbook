@@ -10,7 +10,7 @@ This section covers:
 - simple formatting ideas
 - docstrings
 
-```mermaid2
+```mermaid
 flowchart TD
     A[String formatting]
     A --> B[f-strings]

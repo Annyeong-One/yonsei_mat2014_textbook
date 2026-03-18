@@ -5,7 +5,7 @@ Python programs can **raise exceptions explicitly** using the `raise` statement.
 
 This allows functions to signal that something went wrong.
 
-```mermaid2
+```mermaid
 flowchart LR
     A[Function detects problem]
     A --> B[raise exception]

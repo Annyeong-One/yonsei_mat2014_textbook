@@ -24,7 +24,7 @@ Examples:
 0 + 1j
 ````
 
-```mermaid2
+```mermaid
 flowchart LR
     A[complex number]
     A --> B[real part]
@@ -146,7 +146,7 @@ This follows the Pythagorean relationship:
 |a + bj| = \sqrt{a^2 + b^2}
 ]
 
-```mermaid2
+```mermaid
 flowchart TD
     A[origin]
     A --> B[real axis]

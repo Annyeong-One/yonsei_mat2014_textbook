@@ -11,7 +11,7 @@ The three Boolean operators are:
 
 These operators are essential for building compound conditions.
 
-```mermaid2
+```mermaid
 flowchart TD
     A[Boolean expressions]
     A --> B[and]
@@ -155,7 +155,7 @@ True or print("hello")
 
 Again, `print()` is not executed.
 
-```mermaid2
+```mermaid
 flowchart LR
     A[left operand] --> B{result already known?}
     B -->|yes| C[stop]

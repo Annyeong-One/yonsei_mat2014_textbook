@@ -8,7 +8,7 @@ Python modules can be executed in two different ways:
 
 The variable `__name__` helps distinguish these cases.
 
-```mermaid2
+```mermaid
 flowchart TD
     A[Python file]
     A --> B{run directly?}

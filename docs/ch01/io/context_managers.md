@@ -5,7 +5,7 @@ Python provides a safer and more convenient way to manage files using **context 
 
 The `with` statement automatically handles opening and closing files.
 
-```mermaid2
+```mermaid
 flowchart TD
     A[with open()]
     A --> B[file operations]
@@ -30,7 +30,7 @@ After the block finishes, the file is automatically closed.
 
 They ensure resources are released even if errors occur.
 
-```mermaid2
+```mermaid
 flowchart TD
     A[open file]
     A --> B[process file]

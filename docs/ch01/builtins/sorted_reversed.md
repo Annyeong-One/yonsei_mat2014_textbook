@@ -3,7 +3,7 @@
 
 These built-ins manipulate sequence order.
 
-```mermaid2
+```mermaid
 flowchart TD
     A[Sequence]
     A --> B[sorted()]

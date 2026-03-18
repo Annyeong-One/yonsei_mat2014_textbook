@@ -1,21 +1,19 @@
 
-
 # Sequences Overview
 
-Python includes several data types that store **multiple values inside a single object**.
+Python includes several **composite data types** that store multiple values inside a single object. These allow programs to represent structured information such as a list of scores, a tuple of coordinates, or a dictionary of settings.
 
-These are called **composite data types**.
+Composite types fall into three categories:
 
-Some of the most important composite types are:
+- `tuple` — immutable sequence
+- `list` — mutable sequence
+- `str` — immutable sequence of characters
+- `dict` — mapping of keys to values
+- `set` — unordered collection of unique elements
 
-- `tuple`
-- `list`
-- `dict`
-- `set`
+This page focuses on **sequences**: types that store elements in a defined order. Tuples, lists, and strings are all sequences. For mappings and sets, see [Dictionaries](dictionaries.md) and [Sets](sets.md).
 
-Among these, tuples and lists are both **sequences**, meaning they store elements in order.
-
-```mermaid2
+```mermaid
 flowchart TD
     A[Composite Data Types]
     A --> B[Sequences]
@@ -24,24 +22,16 @@ flowchart TD
 
     B --> E[tuple]
     B --> F[list]
-    C --> G[dict]
-    D --> H[set]
-````
+    B --> G[str]
+    C --> H[dict]
+    D --> I[set]
+```
 
 ---
 
 ## 1. What Is a Sequence?
 
-A sequence is an ordered collection of elements.
-
-This means:
-
-* elements have positions
-* indexing is possible
-* slicing is possible
-* iteration follows a fixed order
-
-Examples:
+A sequence is an ordered collection of elements. Knowing that a type is a sequence means it supports indexing, slicing, `len()`, `in`, and iteration — the same interface across all sequence types.
 
 ```python
 numbers = [10, 20, 30]
@@ -49,21 +39,24 @@ letters = ("a", "b", "c")
 text = "Python"
 ```
 
-All three of these are sequences.
+All three of these are sequences. Python also provides `range`, a lazy sequence used primarily in loops. Like other sequences, `range` supports indexing and `len()`: `range(10)[0]` returns `0` and `len(range(10))` returns `10`.
 
 ---
 
 ## 2. Common Sequence Operations
 
-Sequences often support these operations:
+All sequences support these operations:
 
-| Operation  | Example        | Meaning            |
-| ---------- | -------------- | ------------------ |
-| indexing   | `seq[0]`       | first element      |
-| slicing    | `seq[1:3]`     | subsequence        |
-| length     | `len(seq)`     | number of elements |
-| membership | `x in seq`     | containment test   |
-| iteration  | `for x in seq` | visit elements     |
+| Operation          | Example          | Meaning                    |
+| ------------------ | ---------------- | -------------------------- |
+| indexing           | `seq[0]`         | first element              |
+| negative indexing  | `seq[-1]`        | last element               |
+| slicing            | `seq[1:3]`       | subsequence                |
+| length             | `len(seq)`       | number of elements         |
+| membership         | `x in seq`       | containment test           |
+| iteration          | `for x in seq`   | visit elements             |
+| concatenation      | `seq + seq`      | combine two sequences      |
+| repetition         | `seq * 3`        | repeat elements            |
 
 Example:
 
@@ -71,9 +64,34 @@ Example:
 data = [10, 20, 30, 40]
 
 print(data[0])
+print(data[-1])
 print(data[1:3])
 print(len(data))
 print(20 in data)
+```
+
+Output:
+
+```text
+10
+40
+[20, 30]
+4
+True
+```
+
+Concatenation and repetition create new sequences:
+
+```python
+print([1, 2] + [3, 4])
+print([0] * 3)
+```
+
+Output:
+
+```text
+[1, 2, 3, 4]
+[0, 0, 0]
 ```
 
 ---
@@ -88,79 +106,97 @@ Not all sequences behave the same way.
 | `list`  | yes     | yes     |
 | `str`   | yes     | no      |
 
-A mutable sequence can be changed after creation.
-An immutable sequence cannot.
-
-This distinction is one of the most important ideas in Python’s data model.
-
----
-
-## 4. Why Composite Types Matter
-
-Composite types allow programs to represent structured information.
-
-Examples:
-
-* a list of scores
-* a tuple of coordinates
-* a dictionary of settings
-* a set of unique tags
-
-Without composite data types, programs would struggle to organize real-world data effectively.
-
----
-
-## 5. Worked Examples
-
-### Example 1: sequence indexing
+A mutable sequence can be changed after creation. An immutable sequence cannot. This distinction is one of the most important ideas in Python's data model.
 
 ```python
-values = [5, 10, 15]
-print(values[1])
+numbers = [10, 20, 30]
+numbers[0] = 99
+print(numbers)
 ```
 
 Output:
 
 ```text
-10
+[99, 20, 30]
 ```
 
-### Example 2: membership
-
 ```python
-letters = ("a", "b", "c")
-print("b" in letters)
+values = (10, 20, 30)
+values[0] = 99
 ```
 
 Output:
 
 ```text
-True
+TypeError: 'tuple' object does not support item assignment
 ```
 
-### Example 3: slicing
+---
+
+## 4. Worked Examples
+
+### Example 1: mutable vs immutable under the same operation
 
 ```python
-numbers = [1, 2, 3, 4]
-print(numbers[1:3])
+a = [1, 2, 3]
+b = (1, 2, 3)
+
+print(a[1:3])
+print(b[1:3])
 ```
 
 Output:
 
 ```text
 [2, 3]
+(2, 3)
+```
+
+Slicing works on both, but the result type matches the source.
+
+### Example 2: string as a sequence
+
+```python
+text = "hello"
+
+print(text[0])
+print(text[-1])
+print(len(text))
+print("e" in text)
+```
+
+Output:
+
+```text
+h
+o
+5
+True
+```
+
+### Example 3: concatenation and repetition
+
+```python
+print((1, 2) + (3, 4))
+print("ab" * 3)
+```
+
+Output:
+
+```text
+(1, 2, 3, 4)
+ababab
 ```
 
 ---
 
-## 6. Summary
+## 5. Summary
 
 Key ideas:
 
-* composite data types store multiple values
-* tuples and lists are sequences
-* sequences are ordered
-* some sequences are mutable, others are immutable
-* composite types are essential for structured programming
+- composite data types store multiple values; sequences, mappings, and sets are the main categories
+- sequences are ordered and support indexing, slicing, `len()`, `in`, and iteration
+- `tuple`, `list`, and `str` are all sequences
+- mutable sequences (lists) can be modified; immutable sequences (tuples, strings) cannot
 
-Composite data types make Python programs capable of representing collections, relationships, and structured data.
+Knowing that something is a sequence tells you immediately what operations it supports. See [Tuples](tuples.md) and [Lists](lists.md) for full coverage of each type.

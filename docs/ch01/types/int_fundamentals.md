@@ -21,7 +21,7 @@ Integers are one of the most fundamental data types in Python. They are used for
 * exact arithmetic
 * representing discrete quantities
 
-```mermaid2
+```mermaid
 flowchart TD
     A[int]
     A --> B[positive]
@@ -35,7 +35,7 @@ flowchart TD
 
 An integer represents a whole number on the number line.
 
-```mermaid2
+```mermaid
 flowchart LR
     A[-3] --> B[-2] --> C[-1] --> D[0] --> E[1] --> F[2] --> G[3]
 ```
@@ -116,7 +116,7 @@ Output:
 
 This is an important distinction from languages that restrict integers to fixed sizes such as 32-bit or 64-bit storage.
 
-```mermaid2
+```mermaid
 flowchart LR
     A[small int] --> B[larger int] --> C[very large int]
 ```

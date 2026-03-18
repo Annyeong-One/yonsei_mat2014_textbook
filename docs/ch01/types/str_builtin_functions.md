@@ -16,7 +16,7 @@ Common examples include:
 - `ord()`
 - `chr()`
 
-```mermaid2
+```mermaid
 flowchart TD
     A[Built-ins for strings]
     A --> B[len]

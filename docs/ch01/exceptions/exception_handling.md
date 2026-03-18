@@ -5,7 +5,7 @@ Python allows programs to **catch and handle exceptions** using `try` and `excep
 
 This allows a program to recover from errors instead of crashing.
 
-```mermaid2
+```mermaid
 flowchart TD
     A[try block]
     A --> B{exception occurs?}
@@ -74,7 +74,7 @@ finally:
 
 This is often used for cleanup tasks.
 
-```mermaid2
+```mermaid
 flowchart TD
     A[try]
     A --> B{exception?}

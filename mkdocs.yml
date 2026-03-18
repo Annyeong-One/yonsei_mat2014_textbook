@@ -125,9 +125,8 @@ nav:
             - Sequences Overview: ch01/composite_data_types/sequences_overview.md
             - Tuples: ch01/composite_data_types/tuples.md
             - Lists: ch01/composite_data_types/lists.md
-            - Dictionaries: ch01/composite_data_types/dictionaries.md
             - Sets: ch01/composite_data_types/sets.md
-            - Hashability and Hash Tables: ch01/composite_data_types/hashability.md  #← new
+            - Dictionaries: ch01/composite_data_types/dictionaries.md
             - Comprehensions: ch01/composite_data_types/comprehensions.md
 
         - 1.10 Exceptions:
@@ -204,6 +203,7 @@ nav:
             - Shallow and Deep Copying (copy module): ch02/composites/list_copying.md
             - Nested Data Structures: ch02/composites/nested_structures.md
             - tuple Optimization: ch02/composites/tuple_optimization.md
+            - Hashing and Hash Tables: ch02/composites/hashing_deep_dive.md  
             - dict Internals (Hash Tables): ch02/composites/dict_internals.md
             - dict Ordering Guarantees: ch02/composites/dict_ordering.md
             - dict Merge Operators: ch02/composites/dict_merge_operators.md

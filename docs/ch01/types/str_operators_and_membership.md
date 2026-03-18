@@ -9,7 +9,7 @@ Strings support several important operators:
 
 These operations allow programs to combine, repeat, and inspect text.
 
-```mermaid2
+```mermaid
 flowchart TD
     A[String operations]
     A --> B[Concatenation]

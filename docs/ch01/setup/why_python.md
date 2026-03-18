@@ -14,7 +14,7 @@ Python is commonly used in areas such as:
 * automation
 * education
 
-```mermaid2
+```mermaid
 flowchart TD
     A[Python]
     A --> B[Readable Syntax]

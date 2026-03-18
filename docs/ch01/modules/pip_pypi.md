@@ -5,7 +5,7 @@ Python has a large ecosystem of third-party libraries.
 
 These libraries are distributed through **PyPI** and installed using **pip**.
 
-```mermaid2
+```mermaid
 flowchart LR
     A[Developer]
     A --> B[pip install]
@@ -88,7 +88,7 @@ pip install --upgrade numpy
 
 Projects often use **virtual environments** to isolate dependencies.
 
-```mermaid2
+```mermaid
 flowchart TD
     A[System Python]
     A --> B[Project Environment 1]

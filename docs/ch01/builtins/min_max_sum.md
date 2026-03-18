@@ -3,7 +3,7 @@
 
 These built-ins perform basic numeric aggregation.
 
-```mermaid2
+```mermaid
 flowchart LR
     A[Numbers]
     A --> B[min()]

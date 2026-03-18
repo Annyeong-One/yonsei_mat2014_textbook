@@ -20,7 +20,7 @@ Floats are used to represent:
 * real-number approximations
 * division results
 
-```mermaid2
+```mermaid
 flowchart TD
     A[float]
     A --> B[whole part]
@@ -127,7 +127,7 @@ Output may be:
 
 This happens because many decimal values cannot be represented exactly in binary floating-point form.
 
-```mermaid2
+```mermaid
 flowchart LR
     A[decimal value] --> B[binary approximation] --> C[stored float]
 ```

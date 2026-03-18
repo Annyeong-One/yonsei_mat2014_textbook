@@ -15,7 +15,7 @@ Control flow introduces mechanisms that allow programs to:
 
 These constructs are essential for building real programs.
 
-```mermaid2
+```mermaid
 flowchart TD
     A[Program Start] --> B[Sequential Execution]
     B --> C[Conditional Branching]

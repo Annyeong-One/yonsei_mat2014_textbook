@@ -10,7 +10,7 @@ This section covers:
 - slicing
 - step values
 
-```mermaid2
+```mermaid
 flowchart TD
     A[String sequence]
     A --> B[Indexing]
@@ -38,7 +38,7 @@ y
 
 Index positions start at `0`.
 
-```mermaid2
+```mermaid
 flowchart LR
     A["P(0)"] --> B["y(1)"] --> C["t(2)"] --> D["h(3)"] --> E["o(4)"] --> F["n(5)"]
 ```

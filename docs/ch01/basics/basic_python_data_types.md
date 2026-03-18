@@ -61,7 +61,7 @@ Output
 
 #### Conceptual model
 
-```mermaid2
+```mermaid
 flowchart LR
     A[Variable a] --> B[Object]
     B --> C[Value = 1]
@@ -88,7 +88,7 @@ Python’s built-in types can be grouped into several categories.
 
 #### Conceptual overview
 
-```mermaid2
+```mermaid
 flowchart TD
     A[Python Data Types]
 
@@ -181,7 +181,7 @@ int.__add__(a, b)
 
 #### Operator interpretation
 
-```mermaid2
+```mermaid
 flowchart LR
     A[a + b] --> B[int.__add__(a,b)]
     B --> C[result]
@@ -227,7 +227,7 @@ Output
 
 #### Floating-point representation
 
-```mermaid2
+```mermaid
 flowchart LR
     A[float value] --> B[64-bit representation]
     B --> C[sign]
@@ -288,7 +288,7 @@ Output
 
 #### Structure of a complex number
 
-```mermaid2
+```mermaid
 flowchart LR
     A[complex number]
     A --> B[real part]
@@ -341,7 +341,7 @@ The `+` operator **joins two strings together**.
 
 #### Visualization
 
-```mermaid2
+```mermaid
 flowchart LR
     A["'1'"] --> C[concatenate]
     B["'1'"] --> C
@@ -392,7 +392,7 @@ False == 0
 
 #### Type hierarchy
 
-```mermaid2
+```mermaid
 flowchart LR
     A[int] --> B[bool]
 ```
@@ -422,7 +422,7 @@ TypeError
 
 #### Visualization
 
-```mermaid2
+```mermaid
 flowchart LR
     A[None]
     A --> B[represents missing value]
@@ -462,7 +462,7 @@ Output
 
 #### List concatenation
 
-```mermaid2
+```mermaid
 flowchart LR
     A[List A] --> C[concatenate]
     B[List B] --> C
@@ -492,7 +492,7 @@ Output
 
 #### Tuple properties
 
-```mermaid2
+```mermaid
 flowchart LR
     A[tuple]
     A --> B[ordered]
@@ -525,7 +525,7 @@ a | b
 
 #### Set union
 
-```mermaid2
+```mermaid
 flowchart LR
     A[Set A] --> C[Union]
     B[Set B] --> C
@@ -548,7 +548,7 @@ Keys map to values.
 
 #### Structure
 
-```mermaid2
+```mermaid
 flowchart LR
     A[key] --> B[value]
     C[key] --> D[value]

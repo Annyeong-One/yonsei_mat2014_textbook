@@ -10,7 +10,7 @@ Python provides two fundamental built-in functions for interacting with users:
 
 These functions enable simple **input/output interaction** in programs.
 
-```mermaid2
+```mermaid
 flowchart LR
     A[Program] --> B[input()]
     B --> C[User]

@@ -11,7 +11,7 @@ Common categories of Python development tools include:
 * **integrated development environments (IDEs)**
 * **terminal or command-line interfaces**
 
-```mermaid2
+```mermaid
 flowchart TD
     A[Python Development Tools]
     A --> B[Code Editors]

@@ -12,7 +12,7 @@ It is commonly used to indicate:
 - not yet initialized
 - intentional emptiness
 
-```mermaid2
+```mermaid
 flowchart TD
     A[None]
     A --> B[absence of value]
@@ -149,7 +149,7 @@ instead of:
 x == None
 ```
 
-```mermaid2
+```mermaid
 flowchart LR
     A[variable x] --> B{is None?}
     B -->|yes| C[absence detected]

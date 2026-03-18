@@ -34,7 +34,7 @@ Here:
 
 ### Conceptual model
 
-```mermaid2
+```mermaid
 flowchart LR
     A[Variable name a] --> B[Object]
     B --> C[value = 10]
@@ -247,7 +247,7 @@ False
 
 ### Visualization
 
-```mermaid2
+```mermaid
 flowchart LR
     A[a] --> C[list object]
     B[b] --> D[list object]

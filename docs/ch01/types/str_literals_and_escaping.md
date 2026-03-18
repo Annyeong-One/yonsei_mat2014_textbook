@@ -11,7 +11,7 @@ This section covers:
 - multiline strings
 - raw strings
 
-```mermaid2
+```mermaid
 flowchart TD
     A[String literals]
     A --> B[single quotes]

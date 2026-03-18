@@ -5,15 +5,7 @@ A `list` is an **ordered, mutable sequence**.
 
 Lists are one of the most widely used data structures in Python because they are flexible and easy to modify.
 
-Examples:
-
-```python
-[1, 2, 3]
-["a", "b", "c"]
-[]
-````
-
-```mermaid2
+```mermaid
 flowchart TD
     A[list]
     A --> B[ordered]
@@ -55,11 +47,41 @@ Output:
 [20, 30]
 ```
 
+Negative indices count from the end of the list.
+
+```python
+values = [10, 20, 30, 40]
+
+print(values[-1])
+print(values[-2])
+print(values[::-1])
+```
+
+Output:
+
+```text
+40
+30
+[40, 30, 20, 10]
+```
+
+`len()` returns the number of elements in a list.
+
+```python
+print(len(values))
+```
+
+Output:
+
+```text
+4
+```
+
 ---
 
 ## 3. Mutability
 
-Unlike tuples, lists can be modified.
+Unlike tuples, lists can be modified. For an immutable sequence, see [Tuples](tuples.md).
 
 ```python
 values = [10, 20, 30]
@@ -82,46 +104,49 @@ This mutability is one of the defining features of lists.
 
 Lists provide many useful methods.
 
-| Method             | Purpose                       |
-| ------------------ | ----------------------------- |
-| `append(x)`        | add element at end            |
-| `extend(iterable)` | add multiple elements         |
-| `insert(i, x)`     | insert at position            |
-| `remove(x)`        | remove first matching element |
-| `pop()`            | remove and return element     |
-| `sort()`           | sort in place                 |
-| `reverse()`        | reverse in place              |
+| Method             | Purpose                                  |
+| ------------------ | ---------------------------------------- |
+| `append(x)`        | add element at end                       |
+| `extend(iterable)` | add multiple elements                    |
+| `insert(i, x)`     | insert at position                       |
+| `remove(x)`        | remove first matching element            |
+| `pop()`            | remove and return last element           |
+| `pop(i)`           | remove and return element at index `i`   |
+| `sort()`           | sort in place                            |
+| `reverse()`        | reverse in place                         |
 
-Example:
+`remove(x)` raises `ValueError` if `x` is not in the list. `pop()` raises `IndexError` on an empty list.
+
+`sort()` sorts the list in place and returns `None`. To get a new sorted list without modifying the original, use the built-in `sorted()` function.
 
 ```python
 numbers = [3, 1, 2]
-numbers.append(4)
-numbers.sort()
-
+result = numbers.sort()
+print(result)
 print(numbers)
+
+print(sorted([5, 2, 8]))
 ```
 
 Output:
 
 ```text
-[1, 2, 3, 4]
+None
+[1, 2, 3]
+[2, 5, 8]
 ```
 
 ---
 
 ## 5. Lists as Dynamic Arrays
 
-Conceptually, a Python list behaves like a dynamic array.
+Internally, a Python list is backed by a dynamic array. This has practical consequences for performance.
 
-This means:
+- `append` is amortized O(1) — fast, because the array over-allocates space
+- indexing by position is O(1) — direct access by offset
+- `insert` and `remove` are O(n) — because elements are stored contiguously in memory, inserting or removing at an arbitrary position requires all subsequent elements to move
 
-* it stores elements in order
-* it can grow and shrink
-* indexing is efficient
-* appending is common and practical
-
-At an introductory level, it is enough to understand that lists are designed to support flexible ordered collections.
+For most use cases, `append` and index access are the primary operations, and lists handle them efficiently.
 
 ---
 
@@ -134,6 +159,14 @@ fruits = ["apple", "banana", "orange"]
 
 for fruit in fruits:
     print(fruit)
+```
+
+Output:
+
+```text
+apple
+banana
+orange
 ```
 
 ---
@@ -163,6 +196,12 @@ scores[2] = 75
 print(scores)
 ```
 
+Output:
+
+```text
+[80, 90, 75]
+```
+
 ### Example 3: remove last value
 
 ```python
@@ -185,12 +224,63 @@ Output:
 
 ### Confusing `append()` with `extend()`
 
-`append()` adds one object.
-`extend()` adds multiple elements from an iterable.
+`append()` adds one object. `extend()` adds multiple elements from an iterable.
+
+```python
+a = [1, 2]
+a.append([3, 4])
+print(a)
+
+b = [1, 2]
+b.extend([3, 4])
+print(b)
+```
+
+Output:
+
+```text
+[1, 2, [3, 4]]
+[1, 2, 3, 4]
+```
+
+### Aliasing instead of copying
+
+Assigning a list to another variable does not create a copy. Both names refer to the same object.
+
+```python
+a = [1, 2, 3]
+b = a
+b[0] = 99
+print(a)
+```
+
+Output:
+
+```text
+[99, 2, 3]
+```
+
+To create an independent copy, use `a.copy()` or `a[:]`.
 
 ### Modifying a list while iterating over it
 
-This can lead to confusing behavior and should be done carefully.
+This can lead to skipped elements.
+
+```python
+nums = [1, 2, 3, 4]
+for n in nums:
+    if n % 2 == 0:
+        nums.remove(n)
+print(nums)
+```
+
+Output:
+
+```text
+[1, 3, 4]
+```
+
+`4` is silently skipped because `remove` shifts elements while the loop advances. Iterate over a copy instead.
 
 ---
 
@@ -198,9 +288,10 @@ This can lead to confusing behavior and should be done carefully.
 
 Key ideas:
 
-* lists are ordered and mutable
-* lists support indexing, slicing, and iteration
-* lists can grow and shrink dynamically
-* list methods make modification convenient
+- lists are ordered and mutable
+- lists support indexing, slicing, and negative indexing
+- lists can grow and shrink dynamically
+- `append` is fast (amortized O(1)); `insert` and `remove` are O(n)
+- aliasing is a common source of bugs with mutable types
 
-Lists are the standard tool for storing ordered collections that need to change over time.
+Lists are the standard tool for storing ordered collections that need to change over time. List comprehensions provide a concise way to build lists; see [Comprehensions](comprehensions.md).

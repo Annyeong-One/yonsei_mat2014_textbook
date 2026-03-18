@@ -16,7 +16,7 @@ The installation process typically involves three main steps:
 2. installing the interpreter
 3. verifying that the installation works
 
-```mermaid2
+```mermaid
 flowchart TD
     A[Download Python]
     A --> B[Install Interpreter]

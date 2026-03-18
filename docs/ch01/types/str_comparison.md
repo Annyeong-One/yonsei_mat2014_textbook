@@ -7,7 +7,7 @@ Python compares strings **lexicographically**, character by character.
 
 This is similar to dictionary ordering, but it is based on Unicode code points.
 
-```mermaid2
+```mermaid
 flowchart LR
     A[String A] --> C[character-by-character comparison]
     B[String B] --> C
