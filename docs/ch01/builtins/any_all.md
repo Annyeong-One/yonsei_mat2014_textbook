@@ -1,16 +1,14 @@
 
 # any() and all()
 
-Logical built-ins evaluate collections of boolean values.
+Python provides `any()` and `all()` to test whether any or all elements in an iterable satisfy a condition, which is useful for validating collections of boolean values in a single expression.
 
 ```mermaid
 flowchart LR
     A[Iterable]
     A --> B[any()]
     A --> C[all()]
-````
-
----
+```
 
 ## any()
 
@@ -22,13 +20,11 @@ values = [False, False, True]
 print(any(values))
 ```
 
-Output
+Output:
 
 ```
 True
 ```
-
----
 
 ## all()
 
@@ -40,7 +36,7 @@ values = [True, True, True]
 print(all(values))
 ```
 
-Output
+Output:
 
 ```
 True
