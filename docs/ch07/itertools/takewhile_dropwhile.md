@@ -1,10 +1,10 @@
 # takewhile and dropwhile
 
-`takewhile()` returns elements while a condition is True, while `dropwhile()` skips elements until a condition becomes True.
+`takewhile()` returns elements while a condition is True, while `dropwhile()` skips elements while a condition is True, then yields all remaining elements. These functions operate on the leading portion of a sequence based on a predicate, making them especially useful for sorted or ordered data and for lazy evaluation over potentially infinite iterators.
 
 ## takewhile() - Take While Condition is True
 
-Extract leading elements that satisfy a condition.
+`takewhile()` yields elements from the start of the iterable as long as the predicate returns `True`. It stops permanently at the first element that fails the predicate, even if later elements would pass.
 
 ```python
 from itertools import takewhile
@@ -22,7 +22,7 @@ print(result)
 
 ## dropwhile() - Drop While Condition is True
 
-Skip leading elements that satisfy a condition.
+`dropwhile()` discards elements from the start of the iterable as long as the predicate returns `True`. Once the predicate returns `False` for the first time, it yields that element and all subsequent elements unconditionally.
 
 ```python
 from itertools import dropwhile
@@ -43,4 +43,3 @@ print(content)
 [4, 5, 3, 2, 1]
 ['content', 'more']
 ```
-
