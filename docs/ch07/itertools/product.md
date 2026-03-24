@@ -1,10 +1,10 @@
 # product - Cartesian Product
 
-The `product()` function computes the Cartesian product of input iterables, generating all possible combinations.
+The `product()` function computes the Cartesian product of input iterables, generating all ordered tuples by selecting one element from each iterable. It replaces nested for-loops with a single flat iterator, producing more concise code and avoiding deep indentation when iterating over multiple dimensions.
 
 ## Basic Cartesian Product
 
-Generate all combinations of elements from multiple iterables.
+Pass two or more iterables to `product()` and it yields every possible ordered tuple containing one element from each. This is equivalent to nested for-loops but expressed as a single flat iterator.
 
 ```python
 from itertools import product
@@ -22,7 +22,7 @@ print(combinations)
 
 ## Multiple Iterables and Repeat
 
-Use the `repeat` parameter to generate products with itself.
+The `repeat` parameter specifies how many times the input iterable is repeated in the product. `product(A, repeat=3)` is equivalent to `product(A, A, A)`.
 
 ```python
 from itertools import product
@@ -40,4 +40,3 @@ print(triples)
 [(1, 1), (1, 2), (1, 3), (2, 1), (2, 2), (2, 3), (3, 1), (3, 2), (3, 3)]
 [('A', 'A', 'A'), ('A', 'A', 'B'), ('A', 'B', 'A'), ('A', 'B', 'B'), ('B', 'A', 'A'), ('B', 'A', 'B'), ('B', 'B', 'A'), ('B', 'B', 'B')]
 ```
-

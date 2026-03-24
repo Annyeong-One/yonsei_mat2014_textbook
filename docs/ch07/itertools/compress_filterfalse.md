@@ -1,10 +1,10 @@
 # compress and filterfalse
 
-`compress()` filters based on a selector iterable, while `filterfalse()` keeps elements where the predicate is False.
+`compress()` filters based on a selector iterable, while `filterfalse()` keeps elements where the predicate is False. Use `compress()` when you have a precomputed boolean mask from a separate computation, and `filterfalse()` when you need the complement of the built-in `filter()` — that is, the elements that fail a predicate test.
 
 ## compress() - Filter with Selectors
 
-Keep elements where corresponding selector is True.
+`compress()` pairs each element in a data iterable with a corresponding value in a selector iterable and yields only those elements whose selector is truthy. This is similar to applying a boolean mask to a sequence.
 
 ```python
 from itertools import compress
@@ -22,7 +22,7 @@ print(result)
 
 ## filterfalse() - Inverse Filter
 
-Keep elements where the predicate returns False.
+`filterfalse()` is the complement of the built-in `filter()`. While `filter()` keeps elements for which the predicate returns `True`, `filterfalse()` keeps elements for which it returns `False`.
 
 ```python
 from itertools import filterfalse
@@ -43,4 +43,3 @@ print("Short words:", short)
 Evens: [2, 4, 6, 8]
 Short words: ['cat', 'dog', 'bird']
 ```
-

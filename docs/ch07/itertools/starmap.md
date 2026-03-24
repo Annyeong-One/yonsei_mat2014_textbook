@@ -1,10 +1,10 @@
 # starmap
 
-`starmap()` applies a function to unpacked tuples from an iterable, similar to map but unpacks arguments.
+`starmap()` applies a function to unpacked tuples from an iterable, similar to `map()` but with automatic argument unpacking. This is useful when your data arrives as pre-packed argument tuples — for example, from `zip()`, a database query, or a CSV reader — and you want to apply a multi-argument function to each without writing an explicit loop or lambda wrapper.
 
 ## Using starmap
 
-Apply a function by unpacking tuple arguments.
+Each element in the input iterable is unpacked as positional arguments to the function. This is equivalent to calling `func(*args)` for each `args` tuple in the iterable.
 
 ```python
 from itertools import starmap
@@ -21,7 +21,7 @@ print(results)
 
 ## starmap vs map
 
-Understand the difference between starmap and regular map.
+The key difference from the built-in `map()` is that `map()` passes each element as a single argument, while `starmap()` unpacks each element into separate positional arguments.
 
 ```python
 from itertools import starmap
@@ -46,4 +46,3 @@ except TypeError as e:
 starmap: [8, 9, 25]
 map error: power() missing 1 required positional argument: 'exp'
 ```
-
