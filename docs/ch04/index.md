@@ -1,6 +1,6 @@
 # Chapter 4: Memory and Performance
 
-This chapter covers Python's memory architecture, reference counting, garbage collection, weak references, advanced memory topics, and performance profiling tools.
+Understanding how Python manages memory and how to measure performance is essential for writing efficient programs. This chapter examines Python's memory architecture, reference counting, garbage collection, and profiling tools.
 
 ## 4.1 Memory Architecture
 
