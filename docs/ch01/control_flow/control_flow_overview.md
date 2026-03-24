@@ -1,11 +1,9 @@
 
-
-
 # Control Flow in Python
 
 Control flow determines **which parts of a program execute and in what order**.
 
-So far, our programs executed sequentially — one line after another.  
+So far, our programs executed sequentially — one line after another.
 Control flow introduces mechanisms that allow programs to:
 
 - make decisions
@@ -13,7 +11,7 @@ Control flow introduces mechanisms that allow programs to:
 - terminate loops early
 - select behaviors based on patterns
 
-These constructs are essential for building real programs.
+These constructs are essential for building real programs. The following diagram shows how these control flow mechanisms branch from sequential execution:
 
 ```mermaid
 flowchart TD
@@ -22,9 +20,9 @@ flowchart TD
     B --> D[Loops]
     C --> E[Pattern Matching]
     D --> F[Loop Control]
-````
+```
 
-This chapter introduces Python’s core control flow tools:
+This chapter introduces Python's core control flow tools:
 
 | Construct          | Purpose                           |
 | ------------------ | --------------------------------- |
@@ -38,4 +36,3 @@ This chapter introduces Python’s core control flow tools:
 | `match`            | structural pattern matching       |
 
 Understanding control flow allows programs to **adapt their behavior based on data and conditions**.
-
