@@ -1,5 +1,4 @@
 
-
 # Summary
 
 Control flow allows programs to **make decisions and repeat operations**.
@@ -18,5 +17,3 @@ Key constructs include:
 | `match` | structural pattern matching |
 
 Mastering control flow is essential for writing useful Python programs.
-
-
