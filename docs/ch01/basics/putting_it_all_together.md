@@ -1,7 +1,7 @@
 
 # Putting It All Together
 
-Consider the following short program:
+The following short program ties together variables, data types, expressions, and the `print` function from the preceding sections:
 
 ```python
 # Calculate total price
@@ -13,7 +13,7 @@ total = price * quantity
 print("Total:", total)
 ```
 
-Steps performed by Python:
+When Python executes this script, it follows four sequential steps:
 
 ```mermaid
 flowchart TD
@@ -29,10 +29,4 @@ Total: 59.97
 ```
 
 This example demonstrates how variables, data types, expressions, and statements work together in a program.
-
----
-
-
-
-
 
