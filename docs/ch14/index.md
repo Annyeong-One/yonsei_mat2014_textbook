@@ -1,6 +1,8 @@
 # Chapter 14: Concurrency
 
-This chapter covers concurrent and parallel programming in Python, including the GIL, threading, multiprocessing, asyncio, and the concurrent.futures high-level interface.
+Most Python programs run one task at a time — when one operation waits for a network response or a disk read, the entire program stalls. Concurrency lets a program overlap waiting periods or distribute computation across multiple CPU cores. This chapter introduces Python's concurrency toolkit: threads for IO-bound parallelism, processes for CPU-bound work, and `asyncio` for high-throughput asynchronous IO. By the end, you will know which tool to reach for in each situation and how to avoid common pitfalls like deadlocks and race conditions.
+
+The sections build on each other — start with Concurrency Concepts (14.1) for the foundational vocabulary, then explore each execution model in order.
 
 ## 14.1 Concurrency Concepts
 
