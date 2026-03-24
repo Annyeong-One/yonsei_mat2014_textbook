@@ -1,37 +1,29 @@
 
-
-
 # help() and dir()
 
-These built-ins help explore Python objects.
-
----
+Python provides `help()` and `dir()` as introspection tools: `help()` displays an object's documentation, while `dir()` lists its available attributes and methods.
 
 ## help()
 
-Displays documentation.
+Displays the built-in documentation for any Python object, including functions, modules, and classes.
 
 ```python
 help(print)
-````
-
----
+```
 
 ## dir()
 
-Lists available attributes.
+Lists all attributes and methods available on a given object or type.
 
 ```python
 dir(str)
 ```
 
-Example output
+Example output:
 
 ```
 ['capitalize','count','encode','find','lower']
 ```
-
----
 
 ## Practical Example
 
