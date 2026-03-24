@@ -1,18 +1,113 @@
 # Non-Parametric Tests
-Non-parametric tests use ranks instead of raw values, making them robust to outliers and applicable without normality assumptions.
-## Rank Tests
-### 1. Mann-Whitney U
+
+Parametric tests such as the t-test and ANOVA assume that data follow a specific distribution, typically normal. When these assumptions are violated — due to heavy tails, skewness, or small sample sizes — non-parametric tests provide valid alternatives. These tests make minimal distributional assumptions, often relying on ranks rather than raw values, which makes them robust to outliers and applicable to ordinal data.
+
+## Mann-Whitney U Test
+
+The Mann-Whitney U test is the non-parametric counterpart of the independent two-sample t-test. It compares two independent groups to determine whether one tends to produce larger values than the other.
+
+The null and alternative hypotheses are
+
+$$
+H_0: P(X > Y) = 0.5 \quad \text{vs} \quad H_1: P(X > Y) \neq 0.5
+$$
+
+where $X$ and $Y$ are observations from the two groups. Equivalently, $H_0$ states that the two distributions are identical.
+
+To compute the test statistic, combine both samples and rank all $N = n_1 + n_2$ observations. Let $R_1$ be the sum of ranks assigned to group 1. The U-statistic for group 1 is
+
+$$
+U_1 = R_1 - \frac{n_1(n_1 + 1)}{2}
+$$
+
+$U_1$ counts the number of times an observation from group 1 precedes an observation from group 2. For large samples, $U_1$ is approximately normal under $H_0$.
+
+**Assumptions**: independent samples, at least ordinal measurement scale, and similar distribution shapes (if testing for a location shift).
+
 ```python
 from scipy import stats
-u_stat, p = stats.mannwhitneyu(group1, group2)
+
+group1 = [23, 25, 28, 30, 35]
+group2 = [18, 20, 22, 24, 27]
+u_stat, p_value = stats.mannwhitneyu(group1, group2, alternative='two-sided')
+print(f"U-statistic: {u_stat:.4f}")
+print(f"p-value: {p_value:.4f}")
 ```
-### 2. Wilcoxon Signed-Rank
+
+## Wilcoxon Signed-Rank Test
+
+The Wilcoxon signed-rank test is the non-parametric counterpart of the paired t-test. It tests whether the median of paired differences is zero.
+
+Given paired observations $(X_i, Y_i)$, compute the differences $D_i = X_i - Y_i$. The hypotheses are
+
+$$
+H_0: \text{median}(D) = 0 \quad \text{vs} \quad H_1: \text{median}(D) \neq 0
+$$
+
+The procedure ranks the absolute differences $|D_i|$ (discarding zeros), then sums the ranks of positive and negative differences separately:
+
+$$
+W^+ = \sum_{D_i > 0} R_i, \qquad W^- = \sum_{D_i < 0} R_i
+$$
+
+The test statistic is $W = \min(W^+, W^-)$. Small values of $W$ indicate that the differences are systematically positive or negative.
+
+**Assumptions**: paired samples, the distribution of differences is symmetric about the median, and at least ordinal measurement scale.
+
 ```python
-w_stat, p = stats.wilcoxon(before, after)
+from scipy import stats
+
+before = [68, 72, 65, 70, 74, 69, 71]
+after = [64, 69, 60, 66, 70, 65, 67]
+w_stat, p_value = stats.wilcoxon(before, after)
+print(f"W-statistic: {w_stat:.4f}")
+print(f"p-value: {p_value:.4f}")
 ```
-### 3. Kruskal-Wallis
+
+## Kruskal-Wallis Test
+
+The Kruskal-Wallis test extends the Mann-Whitney U test to $k \geq 2$ independent groups, serving as the non-parametric alternative to one-way ANOVA. It tests whether all groups share the same distribution.
+
+The hypotheses are
+
+$$
+H_0: F_1 = F_2 = \cdots = F_k \quad \text{vs} \quad H_1: F_i \neq F_j \text{ for some } i \neq j
+$$
+
+Rank all $N$ observations across groups. Let $\bar{R}_i$ be the mean rank for group $i$ and $\bar{R} = (N+1)/2$ the overall mean rank. The test statistic is
+
+$$
+H = \frac{12}{N(N+1)} \sum_{i=1}^{k} n_i (\bar{R}_i - \bar{R})^2
+$$
+
+Under $H_0$ and for sufficiently large group sizes, $H$ approximately follows a $\chi^2_{k-1}$ distribution.
+
+**Assumptions**: independent samples, at least ordinal measurement scale, and similar distribution shapes across groups.
+
+!!! warning "Post-Hoc Comparisons"
+    A significant Kruskal-Wallis result indicates that at least one group differs, but does not identify which pairs differ. Use Dunn's test with a multiple comparison correction (e.g., Bonferroni) for pairwise follow-up.
+
 ```python
-h_stat, p = stats.kruskal(g1, g2, g3)
+from scipy import stats
+
+g1 = [23, 25, 28, 30, 35]
+g2 = [18, 20, 22, 24, 27]
+g3 = [30, 33, 36, 39, 42]
+h_stat, p_value = stats.kruskal(g1, g2, g3)
+print(f"H-statistic: {h_stat:.4f}")
+print(f"p-value: {p_value:.4f}")
 ```
+
+## Comparison with Parametric Tests
+
+| Non-Parametric Test | Parametric Counterpart | Use Case |
+|---|---|---|
+| Mann-Whitney U | Independent two-sample t-test | Comparing two independent groups |
+| Wilcoxon signed-rank | Paired t-test | Comparing paired observations |
+| Kruskal-Wallis | One-way ANOVA | Comparing three or more groups |
+
+Non-parametric tests are less powerful than their parametric counterparts when the parametric assumptions hold, particularly for large samples from normal distributions. However, when those assumptions are violated, non-parametric tests can be more powerful because they are not distorted by the violation.
+
 ## Summary
-Non-parametric tests sacrifice power for robustness, ideal for small samples or non-normal data.
+
+Non-parametric tests provide distribution-free alternatives to common parametric tests. The Mann-Whitney U, Wilcoxon signed-rank, and Kruskal-Wallis tests handle two-sample, paired, and multi-group comparisons respectively, using ranks rather than raw values. They are the preferred choice when normality assumptions are questionable, when working with ordinal data, or when samples are too small for the central limit theorem to provide adequate approximation.
