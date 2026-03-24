@@ -1,8 +1,10 @@
 # Basic Histogram
 
-The `ax.hist()` method creates histogram visualizations from data arrays. Histograms display the distribution of numerical data by grouping values into bins and showing the frequency or density of each bin.
+A histogram groups numerical data into bins and displays the count (or density) of observations in each bin, revealing the shape of the underlying distribution. Whether the data is symmetric, skewed, or multimodal becomes immediately visible, making histograms one of the most common first steps in exploratory data analysis. The `ax.hist()` method in Matplotlib creates histogram visualizations from data arrays.
 
 ## Basic Usage
+
+The following example generates 10,000 samples from a standard normal distribution and plots the histogram with 100 bins.
 
 ```python
 import matplotlib.pyplot as plt
@@ -24,6 +26,8 @@ if __name__ == "__main__":
 
 ## Method Signature
 
+The most commonly used parameters are `bins`, `density`, and `histtype`. The full signature is shown below for reference.
+
 ```python
 ax.hist(x, bins=None, range=None, density=False, weights=None,
         cumulative=False, bottom=None, histtype='bar', align='mid',
@@ -36,11 +40,10 @@ ax.hist(x, bins=None, range=None, density=False, weights=None,
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `x` | array-like | Input data |
-| `bins` | int or sequence | Number of bins or bin edges |
-| `density` | bool | If True, normalize to form probability density |
-| `histtype` | str | Type of histogram: 'bar', 'barstacked', 'step', 'stepfilled' |
-| `alpha` | float | Transparency (0.0 to 1.0) |
+| `bins` | int or sequence | Number of bins or bin edges (default: `rcParams["hist.bins"]`, typically 10) |
+| `density` | bool | If True, normalize so that the total area equals 1. Each bin height equals count / (total count × bin width) |
+| `histtype` | str | Type of histogram: `'bar'`, `'barstacked'`, `'step'`, `'stepfilled'` |
+| `alpha` | float | Transparency (0.0 to 1.0), passed via `**kwargs` to the underlying patch artist |
 
-## Documentation
-
-- [matplotlib.axes.Axes.hist](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.hist.html)
+!!! tip "Official Documentation"
+    The full parameter descriptions, return values, and additional examples are available in the [Matplotlib API reference for `ax.hist()`](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.hist.html).
