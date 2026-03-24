@@ -1,10 +1,10 @@
 # TYPE_CHECKING and Forward References
 
-`TYPE_CHECKING` allows including type hints only during static analysis, while forward references handle circular imports.
+As projects grow, type hints sometimes create circular import chains — module A imports a type from module B, which imports a type from module A. Similarly, a class may need to reference itself in its own type annotations before the class definition is complete. Python's `TYPE_CHECKING` constant and forward references (string-quoted type names) solve both problems without sacrificing type safety.
 
 ## TYPE_CHECKING for Conditional Imports
 
-Use TYPE_CHECKING to avoid circular imports and runtime overhead.
+The `TYPE_CHECKING` constant from the `typing` module is `False` at runtime but treated as `True` by static type checkers like `mypy`. Wrapping an import in `if TYPE_CHECKING:` means the import only executes during type analysis, breaking the circular dependency at runtime. The type annotation must then use a string (forward reference) so Python does not try to evaluate it.
 
 ```python
 from typing import TYPE_CHECKING
@@ -20,13 +20,13 @@ def process(value: 'SomeType') -> str:
 print("Code runs without importing SomeType at runtime")
 ```
 
-```
+```text
 Code runs without importing SomeType at runtime
 ```
 
 ## Forward References with Quotes
 
-Use string quotes for forward references before a class is defined.
+A forward reference is a type annotation written as a string literal (e.g., `'Node'`) instead of the bare class name. Python evaluates annotations at class-definition time, so referencing a class that has not yet been fully defined raises a `NameError`. Quoting the name defers evaluation, letting the annotation resolve later.
 
 ```python
 from typing import Optional
@@ -44,7 +44,6 @@ node1.next = node2
 print(f"Node1: {node1.value}, Node2: {node1.next.value}")
 ```
 
-```
+```text
 Node1: 1, Node2: 2
 ```
-
