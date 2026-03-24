@@ -1,21 +1,357 @@
 # Common Broadcasting Patterns
 
-Common Broadcasting Patterns is an important topic in scientific computing and statistics.
+Once the broadcasting rules are understood, a small set of recurring patterns covers most practical use cases. These patterns eliminate explicit loops and temporary arrays, making numerical code both faster and more readable. This page collects the patterns that appear most frequently in data analysis and scientific computing.
 
 ---
 
-## Overview
+## Centering Data
 
-Understanding the fundamental concepts and techniques related to this topic.
+Subtract the column mean from every row to produce zero-mean columns.
 
-## Core Concepts
+### 1. Column-wise Centering
 
-Key ideas and fundamental principles.
+```python
+import numpy as np
 
-## Applications
+def main():
+    X = np.array([[1.0, 2.0, 3.0],
+                  [4.0, 5.0, 6.0],
+                  [7.0, 8.0, 9.0]])  # (3, 3)
 
-Real-world use cases and practical applications.
+    col_means = X.mean(axis=0)       # (3,)
+    X_centered = X - col_means       # (3, 3) - (3,) broadcasts
+    print("Column means:", col_means)
+    print("Centered:\n", X_centered)
+    print("New column means:", X_centered.mean(axis=0))
+
+if __name__ == "__main__":
+    main()
+```
+
+Output:
+
+```
+Column means: [4. 5. 6.]
+Centered:
+ [[-3. -3. -3.]
+ [ 0.  0.  0.]
+ [ 3.  3.  3.]]
+New column means: [0. 0. 0.]
+```
+
+### 2. Row-wise Centering
+
+```python
+import numpy as np
+
+def main():
+    X = np.array([[1.0, 2.0, 3.0],
+                  [4.0, 5.0, 6.0]])  # (2, 3)
+
+    row_means = X.mean(axis=1, keepdims=True)  # (2, 1)
+    X_centered = X - row_means                  # (2, 3) - (2, 1) broadcasts
+    print("Row means:\n", row_means)
+    print("Centered:\n", X_centered)
+
+if __name__ == "__main__":
+    main()
+```
+
+Output:
+
+```
+Row means:
+ [[2.]
+ [5.]]
+Centered:
+ [[-1.  0.  1.]
+ [-1.  0.  1.]]
+```
+
+### 3. keepdims is Essential
+
+Without `keepdims=True`, `X.mean(axis=1)` returns shape `(2,)` instead of `(2, 1)`, and the subtraction broadcasts incorrectly along the wrong axis.
+
+
+## Standardization
+
+Centering and scaling to unit variance in a single broadcasting expression.
+
+### 1. Z-score Normalization
+
+```python
+import numpy as np
+
+def main():
+    X = np.random.randn(100, 5)          # (100, 5)
+    mu = X.mean(axis=0)                   # (5,)
+    sigma = X.std(axis=0)                 # (5,)
+    Z = (X - mu) / sigma                  # each column: mean 0, std 1
+    print("Column means after:", np.round(Z.mean(axis=0), 10))
+    print("Column stds after: ", np.round(Z.std(axis=0), 10))
+
+if __name__ == "__main__":
+    main()
+```
+
+Output:
+
+```
+Column means after: [-0. -0.  0. -0.  0.]
+Column stds after:  [1. 1. 1. 1. 1.]
+```
+
+### 2. Min-Max Scaling
+
+```python
+import numpy as np
+
+def main():
+    X = np.random.randn(100, 5)
+    X_min = X.min(axis=0)                         # (5,)
+    X_max = X.max(axis=0)                         # (5,)
+    X_scaled = (X - X_min) / (X_max - X_min)      # all values in [0, 1]
+    print("Min per column:", X_scaled.min(axis=0))
+    print("Max per column:", X_scaled.max(axis=0))
+
+if __name__ == "__main__":
+    main()
+```
+
+### 3. Two Broadcasts in One Line
+
+The expression `(X - mu) / sigma` performs two broadcasts: subtraction of `mu` with shape `(5,)` from `X` with shape `(100, 5)`, then division by `sigma` with the same shapes.
+
+
+## Outer Products
+
+Combine a column vector and a row vector to produce a 2D result.
+
+### 1. Addition Table
+
+```python
+import numpy as np
+
+def main():
+    a = np.array([1, 2, 3])[:, np.newaxis]  # (3, 1)
+    b = np.array([10, 20, 30])[np.newaxis, :]  # (1, 3)
+    table = a + b                              # (3, 3)
+    print(table)
+
+if __name__ == "__main__":
+    main()
+```
+
+Output:
+
+```
+[[11 21 31]
+ [12 22 32]
+ [13 23 33]]
+```
+
+### 2. Multiplication Table
+
+```python
+import numpy as np
+
+def main():
+    a = np.arange(1, 10)[:, np.newaxis]  # (9, 1)
+    b = np.arange(1, 10)[np.newaxis, :]  # (1, 9)
+    table = a * b                         # (9, 9)
+    print(table)
+
+if __name__ == "__main__":
+    main()
+```
+
+### 3. np.newaxis vs reshape
+
+`np.newaxis` (alias for `None`) inserts a size-1 dimension. These are equivalent:
+
+```python
+a[:, np.newaxis]   # (n,) → (n, 1)
+a[:, None]         # same
+a.reshape(-1, 1)   # same
+```
+
+
+## Pairwise Distances
+
+Compute distances between all pairs of points without loops.
+
+### 1. Euclidean Distance Matrix
+
+```python
+import numpy as np
+
+def main():
+    # 4 points in 3D space
+    X = np.random.randn(4, 3)             # (4, 3)
+
+    diff = X[:, np.newaxis, :] - X[np.newaxis, :, :]  # (4, 1, 3) - (1, 4, 3) → (4, 4, 3)
+    dist = np.sqrt((diff ** 2).sum(axis=2))            # (4, 4)
+    print("Distance matrix:\n", np.round(dist, 2))
+
+if __name__ == "__main__":
+    main()
+```
+
+### 2. Shape Breakdown
+
+| Expression | Shape | Explanation |
+|---|---|---|
+| `X[:, np.newaxis, :]` | `(4, 1, 3)` | Each point as a row-block |
+| `X[np.newaxis, :, :]` | `(1, 4, 3)` | Each point as a column-block |
+| `diff` | `(4, 4, 3)` | All pairwise coordinate differences |
+| `dist` | `(4, 4)` | Euclidean distances after sum and sqrt |
+
+### 3. Symmetry Check
+
+```python
+import numpy as np
+
+def main():
+    X = np.random.randn(5, 3)
+    diff = X[:, np.newaxis, :] - X[np.newaxis, :, :]
+    dist = np.sqrt((diff ** 2).sum(axis=2))
+    print("Symmetric:", np.allclose(dist, dist.T))
+    print("Zero diagonal:", np.allclose(np.diag(dist), 0))
+
+if __name__ == "__main__":
+    main()
+```
+
+
+## Row or Column Scaling
+
+Multiply each row or column by a different weight.
+
+### 1. Scale Columns
+
+```python
+import numpy as np
+
+def main():
+    X = np.ones((3, 4))                   # (3, 4)
+    weights = np.array([1, 2, 3, 4])      # (4,)
+    result = X * weights                   # each column scaled
+    print(result)
+
+if __name__ == "__main__":
+    main()
+```
+
+Output:
+
+```
+[[1. 2. 3. 4.]
+ [1. 2. 3. 4.]
+ [1. 2. 3. 4.]]
+```
+
+### 2. Scale Rows
+
+```python
+import numpy as np
+
+def main():
+    X = np.ones((3, 4))                          # (3, 4)
+    weights = np.array([10, 20, 30])[:, np.newaxis]  # (3, 1)
+    result = X * weights                          # each row scaled
+    print(result)
+
+if __name__ == "__main__":
+    main()
+```
+
+Output:
+
+```
+[[10. 10. 10. 10.]
+ [20. 20. 20. 20.]
+ [30. 30. 30. 30.]]
+```
+
+### 3. Key Difference
+
+Column scaling uses a 1D vector with shape `(n_cols,)` that aligns with the last axis. Row scaling requires a column vector with shape `(n_rows, 1)` via `np.newaxis` or `reshape`.
+
+
+## Boolean Masking with Broadcasting
+
+Combine boolean conditions across different dimensions.
+
+### 1. Threshold per Column
+
+```python
+import numpy as np
+
+def main():
+    X = np.array([[1, 5, 3],
+                  [4, 2, 6],
+                  [7, 8, 1]])             # (3, 3)
+    thresholds = np.array([3, 4, 5])      # (3,)
+    mask = X > thresholds                  # (3, 3) > (3,) broadcasts
+    print("Mask:\n", mask)
+    print("Values above thresholds:", X[mask])
+
+if __name__ == "__main__":
+    main()
+```
+
+Output:
+
+```
+Mask:
+ [[False  True False]
+ [ True False  True]
+ [ True  True False]]
+Values above thresholds: [5 4 6 7 8]
+```
+
+### 2. Range Check
+
+```python
+import numpy as np
+
+def main():
+    X = np.random.randn(5, 3)
+    lower = np.array([-1, -0.5, 0])       # (3,)
+    upper = np.array([1, 0.5, 2])         # (3,)
+    in_range = (X >= lower) & (X <= upper)
+    print("In range:\n", in_range)
+
+if __name__ == "__main__":
+    main()
+```
+
+### 3. Combining Row and Column Conditions
+
+```python
+import numpy as np
+
+def main():
+    row_mask = np.array([True, False, True])[:, np.newaxis]  # (3, 1)
+    col_mask = np.array([True, True, False])[np.newaxis, :]  # (1, 3)
+    combined = row_mask & col_mask                            # (3, 3)
+    print(combined)
+
+if __name__ == "__main__":
+    main()
+```
+
 
 ## Summary
 
-This topic provides essential tools for data analysis and scientific computing.
+The most common broadcasting patterns share the same underlying mechanism: aligning a smaller array against a larger one along a specific axis.
+
+| Pattern | Typical Shapes | Key Technique |
+|---|---|---|
+| Column centering | `(m, n) - (n,)` | `mean(axis=0)` |
+| Row centering | `(m, n) - (m, 1)` | `mean(axis=1, keepdims=True)` |
+| Standardization | `(m, n) - (n,)` then `/ (n,)` | Two broadcasts in sequence |
+| Outer product | `(m, 1) * (1, n)` | `np.newaxis` |
+| Pairwise distance | `(m, 1, d) - (1, n, d)` | 3D broadcasting |
+| Row/column scaling | `(m, n) * (n,)` or `(m, 1)` | Weight vector alignment |
+| Boolean masking | `(m, n) > (n,)` | Threshold per column |
