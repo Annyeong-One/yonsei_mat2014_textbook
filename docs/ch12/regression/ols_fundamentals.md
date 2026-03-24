@@ -1,21 +1,173 @@
-# OLS Fundamentals
+# Ordinary Least Squares Fundamentals
 
-OLS Fundamentals is an important topic in scientific computing and statistics.
+Ordinary least squares (OLS) is the most widely used method for estimating the
+parameters of a linear regression model. The idea is intuitive: choose the
+parameter values that make the fitted line as close as possible to the observed
+data, where "closeness" is measured by the sum of squared vertical distances
+from the data points to the line. This page develops the OLS framework from the
+optimization problem through the solution, its statistical properties, and
+practical computation.
 
 ---
 
-## Overview
+## The OLS Objective
 
-Understanding the fundamental concepts and techniques related to this topic.
+Given $n$ observations $\{(x_i, y_i)\}_{i=1}^n$ and the model
+$y_i = \beta_0 + \beta_1 x_i + \varepsilon_i$, OLS seeks the values
+$\hat{\beta}_0$ and $\hat{\beta}_1$ that minimize
 
-## Core Concepts
+$$
+S(\beta_0, \beta_1) = \sum_{i=1}^{n} (y_i - \beta_0 - \beta_1 x_i)^2 = \sum_{i=1}^{n} e_i^2
+$$
 
-Key ideas and fundamental principles.
+where $e_i = y_i - \beta_0 - \beta_1 x_i$ is the residual for the $i$-th
+observation.
 
-## Applications
+The choice of squared residuals (rather than absolute residuals) is not
+arbitrary: it leads to a smooth, differentiable objective with a unique
+closed-form solution and connects directly to maximum likelihood estimation
+under Gaussian errors.
 
-Real-world use cases and practical applications.
+## Deriving the OLS Estimators
+
+Setting the partial derivatives to zero yields two equations:
+
+$$
+\frac{\partial S}{\partial \beta_0} = -2\sum_{i=1}^{n}(y_i - \beta_0 - \beta_1 x_i) = 0
+$$
+
+$$
+\frac{\partial S}{\partial \beta_1} = -2\sum_{i=1}^{n} x_i(y_i - \beta_0 - \beta_1 x_i) = 0
+$$
+
+From the first equation, $\hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x}$.
+Substituting into the second and solving for $\hat{\beta}_1$ gives
+
+$$
+\hat{\beta}_1 = \frac{\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})}{\sum_{i=1}^{n}(x_i - \bar{x})^2}
+$$
+
+$$
+\hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x}
+$$
+
+The fitted line always passes through the point $(\bar{x}, \bar{y})$.
+
+## Matrix Formulation
+
+For $p$ predictors, the model in matrix form is $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$
+and the OLS objective becomes
+
+$$
+S(\boldsymbol{\beta}) = (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})^\top(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})
+$$
+
+Taking the gradient and setting it to zero yields the normal equations
+
+$$
+\mathbf{X}^\top \mathbf{X} \hat{\boldsymbol{\beta}} = \mathbf{X}^\top \mathbf{y}
+$$
+
+with solution
+
+$$
+\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \mathbf{y}
+$$
+
+provided $\mathbf{X}^\top \mathbf{X}$ is invertible (i.e., $\mathbf{X}$ has full
+column rank).
+
+## Statistical Properties
+
+Under the Gauss-Markov conditions -- (1) linearity, (2) strict exogeneity
+$\mathbb{E}[\varepsilon_i \mid \mathbf{X}] = 0$, (3) homoscedasticity, and
+(4) no perfect multicollinearity -- the OLS estimator has the following properties.
+
+**Unbiasedness.** The OLS estimator is unbiased:
+
+$$
+\mathbb{E}[\hat{\boldsymbol{\beta}}] = \boldsymbol{\beta}
+$$
+
+**Variance.** The covariance matrix of the OLS estimator is
+
+$$
+\operatorname{Cov}(\hat{\boldsymbol{\beta}}) = \sigma^2 (\mathbf{X}^\top \mathbf{X})^{-1}
+$$
+
+**Gauss-Markov Theorem.** Among all linear unbiased estimators of $\boldsymbol{\beta}$,
+the OLS estimator has the smallest variance. That is, OLS is the Best Linear Unbiased
+Estimator (BLUE).
+
+!!! note "BLUE does not mean best overall"
+    The Gauss-Markov theorem restricts the comparison to *linear* and *unbiased*
+    estimators. Biased estimators such as Ridge regression can achieve lower
+    mean squared error by trading a small bias for a larger reduction in variance.
+
+## Residual Variance Estimator
+
+The residual variance $\sigma^2$ is estimated by
+
+$$
+\hat{\sigma}^2 = \frac{1}{n - p - 1} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 = \frac{\text{RSS}}{n - p - 1}
+$$
+
+where RSS is the residual sum of squares and $n - p - 1$ are the degrees of
+freedom ($n$ observations minus $p + 1$ estimated parameters). The divisor
+$n - p - 1$ instead of $n$ ensures unbiasedness of $\hat{\sigma}^2$.
+
+## Computing OLS in Python
+
+```python
+import numpy as np
+from scipy import stats
+
+# Simple linear regression via linregress
+x = np.array([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])
+y = np.array([2.1, 4.3, 5.8, 8.2, 9.7, 12.1, 13.8, 16.2])
+
+result = stats.linregress(x, y)
+print(f"Slope:     {result.slope:.4f}")
+print(f"Intercept: {result.intercept:.4f}")
+
+# Verify with the normal equations
+X = np.column_stack([np.ones_like(x), x])
+beta_hat = np.linalg.solve(X.T @ X, X.T @ y)
+print(f"Normal equations: intercept={beta_hat[0]:.4f}, slope={beta_hat[1]:.4f}")
+```
+
+!!! tip "Numerical stability"
+    The normal equations require inverting $\mathbf{X}^\top\mathbf{X}$, which
+    amplifies round-off errors when predictors are correlated. In practice,
+    use `numpy.linalg.lstsq` or a QR decomposition, which solve the least
+    squares problem without forming the cross-product matrix.
+
+## Geometric Interpretation
+
+The fitted values $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$ are the orthogonal
+projection of $\mathbf{y}$ onto the column space of $\mathbf{X}$. The hat matrix
+
+$$
+\mathbf{H} = \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top
+$$
+
+is an idempotent projection matrix ($\mathbf{H}^2 = \mathbf{H}$). The residual
+vector $\hat{\boldsymbol{\varepsilon}} = (\mathbf{I} - \mathbf{H})\mathbf{y}$ is
+orthogonal to the column space of $\mathbf{X}$, which means
+
+$$
+\mathbf{X}^\top \hat{\boldsymbol{\varepsilon}} = \mathbf{0}
+$$
+
+This orthogonality condition is equivalent to the normal equations and provides
+the geometric justification for OLS: the residual vector is perpendicular to
+every column of the design matrix.
 
 ## Summary
 
-This topic provides essential tools for data analysis and scientific computing.
+OLS minimizes the sum of squared residuals and produces the Best Linear Unbiased
+Estimator under the Gauss-Markov conditions. The closed-form solution via the
+normal equations generalizes to multiple predictors through the matrix formula
+$\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$.
+The geometric view reveals that OLS computes an orthogonal projection of the
+response onto the column space of the design matrix.
