@@ -7,8 +7,6 @@ The `else` block runs **only if the loop completes normally**.
 
 If a `break` statement occurs, the `else` block is skipped.
 
----
-
 ## Example
 
 ```python
@@ -22,15 +20,13 @@ for num in numbers:
 
 else:
     print("4 not found")
-````
+```
 
 Output:
 
 ```
 4 not found
 ```
-
----
 
 ## Practical Pattern: Searching
 
@@ -47,4 +43,3 @@ def find_number(nums,target):
 ```
 
 This pattern cleanly expresses **search logic**.
-
