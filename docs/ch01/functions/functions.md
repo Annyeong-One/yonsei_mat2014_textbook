@@ -2,15 +2,20 @@
 
 A **function** is a named block of code that performs a specific task.
 
-You can think of a function as a small **machine** inside your program.
-Later we will see how values can go into and come out of that machine,
-but for now our machine has no input slot and no output tray — it simply runs a fixed set of instructions when activated.
+You can think of a function as a **black box**:
 
-Functions help programs stay organized:
+- it optionally receives **inputs** (called parameters)
+- it performs some operation on those inputs
+- it optionally produces an **output** returned with the `return` keyword
 
-- reuse code across a program
-- break large problems into smaller named parts
-- make programs easier to read and maintain
+```text
+         ┌─────────────┐
+inputs ──►│   function  ├──► output
+         └─────────────┘
+```
+
+For now our examples use no inputs and no output.
+We will add those in [Parameters](parameters.md) and [Return Values](return_values.md).
 
 ## Why Functions
 
@@ -128,5 +133,4 @@ Functions let us name a block of code and reuse it throughout a program.
 The `def` keyword creates a function, and parentheses after the name call it.
 Remember that defining a function only registers it — no code runs until the function is called.
 
-So far our functions do not accept parameters or return values.
-Next we will see how functions can receive input from the caller.
+Next: [Parameters](parameters.md).
