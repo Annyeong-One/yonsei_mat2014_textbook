@@ -2,8 +2,6 @@
 
 Python allows functions to include **type hints** that describe the expected types of parameters and return values.
 
----
-
 ## The Problem
 
 Consider this function:
@@ -18,8 +16,6 @@ Are they integers, floats, or something else?
 
 Without additional context, the reader cannot tell.
 
----
-
 ## The Solution
 
 Type hints make the expected types explicit.
@@ -30,8 +26,6 @@ def area(length: float, width: float) -> float:
 ```
 
 A reader can immediately see the intended types.
-
----
 
 ## Syntax
 
@@ -48,9 +42,7 @@ Here:
 - `b: int` means `b` should be an integer
 - `-> int` means the function returns an integer
 
----
-
-## Example
+A slightly richer example:
 
 ```python
 def average(a: float, b: float) -> float:
@@ -66,31 +58,45 @@ Output
 5.0
 ```
 
----
+## Returning None
+
+Functions that do not return a value can be annotated with `-> None`.
+
+```python
+def greet(name: str) -> None:
+    print("Welcome,", name)
+```
+
+This tells the reader — and any analysis tool — that `greet` is called for its side effect (printing), not for a return value.
 
 ## Type Hints Are Optional
 
 Python does **not enforce type hints at runtime**.
 
-This means the following will still run:
+This means the following will still run without error:
 
 ```python
-add("2", "3")
+def add(a: int, b: int) -> int:
+    return a + b
+
+print(add("2", "3"))
 ```
 
-However, static analysis tools can examine the code without running it and warn about possible type errors.
+Output
 
----
+```text
+23
+```
 
-## Why Use Type Hints
+The function was annotated for `int`, but Python happily accepted two strings and concatenated them.
+The result `"23"` is valid Python but almost certainly not what the caller intended.
 
-Type hints improve code readability and help tools detect potential errors.
+Static analysis tools such as mypy or pyright can examine the code without running it and warn about mismatches like this before they cause bugs.
 
----
+## Key Ideas
 
-## Summary
+Type hints document the expected types of parameters (`: type`) and return values (`-> type`).
+Python does not enforce them at runtime, but they make code easier to read and allow static analysis tools to catch type errors early.
+For functions that only perform side effects and return nothing, use `-> None`.
 
-- type hints describe expected parameter types
-- `:` indicates the parameter type
-- `->` indicates the return type
-- type hints are optional but improve readability and tooling
+Next: [Function Examples](function_examples.md).
