@@ -60,6 +60,12 @@ Output
 The function now accepts a value that can change each time it is called.
 When we call `greet("Alice")`, Python assigns `"Alice"` to the parameter `name` inside the function body.
 
+```text
+greet("Alice")
+       │
+       └──► name = "Alice"
+```
+
 ## Parameters and Arguments
 
 A **parameter** is a variable listed in the function definition.
@@ -103,7 +109,6 @@ The order of the arguments must match the order of the parameters.
 ## Default Parameters
 
 Parameters can have **default values**.
-This is a preview — we will see more uses of default values in later pages.
 
 ```python
 def greet(name="guest"):
