@@ -4,8 +4,6 @@ When functions call other functions, Python must remember where execution should
 
 This is handled by a structure called the **call stack**.
 
----
-
 ## Nested Function Calls
 
 Functions can call other functions.
@@ -38,8 +36,6 @@ Execution order:
 4. execution returns to `f()`
 5. `f()` continues and finishes
 
----
-
 ## How the Call Stack Works
 
 The call stack keeps track of which functions are currently running.
@@ -53,34 +49,28 @@ The function at the top of the stack is the one currently running.
 Program start:
 
 ```text
-Call Stack (top)
-
-+------+
-| main |
-+------+
++--------+
+|  main  |
++--------+
 ```
 
 When `main` calls `f()`:
 
 ```text
-Call Stack (top)
-
-+------+
-|  f   |
-| main |
-+------+
++--------+
+|   f    |
+|  main  |
++--------+
 ```
 
 When `f()` calls `g()`:
 
 ```text
-Call Stack (top)
-
-+------+
-|  g   |
-|  f   |
-| main |
-+------+
++--------+
+|   g    |
+|   f    |
+|  main  |
++--------+
 ```
 
 `g()` is now running. `f()` is paused and waiting for `g()` to finish.
@@ -88,12 +78,10 @@ Call Stack (top)
 When `g()` returns:
 
 ```text
-Call Stack (top)
-
-+------+
-|  f   |
-| main |
-+------+
++--------+
+|   f    |
+|  main  |
++--------+
 ```
 
 Execution returns to `f()`.
@@ -101,22 +89,16 @@ Execution returns to `f()`.
 When `f()` returns:
 
 ```text
-Call Stack (top)
-
-+------+
-| main |
-+------+
++--------+
+|  main  |
++--------+
 ```
 
 When the program ends:
 
 ```text
-Call Stack
-
 (empty)
 ```
-
----
 
 ## Stack Frames
 
@@ -129,20 +111,30 @@ A stack frame stores:
 - where to return after the function completes
 
 Each function call creates its own separate stack frame.
+This means that local variables in one function are completely isolated from local variables in another, even if they share the same name.
 
----
+```python
+def f():
+    x = 10
+    g()
+    print("f sees x =", x)
 
-## Why the Call Stack Matters
+def g():
+    x = 99
+    print("g sees x =", x)
 
-The call stack explains:
+f()
+```
 
-- nested function calls
-- where execution resumes after a function returns
-- how local variables are isolated between function calls
+Output
 
-Understanding the call stack becomes especially important when learning **recursion**.
+```text
+g sees x = 99
+f sees x = 10
+```
 
----
+Both `f` and `g` use a variable named `x`, but each function has its own stack frame with its own `x`.
+When `g` sets `x = 99`, it does not affect the `x` inside `f`.
 
 ## Tracebacks and the Call Stack
 
@@ -174,13 +166,16 @@ ZeroDivisionError: division by zero
 ```
 
 This traceback shows the call stack at the moment of the error.
-Reading a traceback is essentially reading the call stack from the point where the error occurred.
 
----
+!!! tip
 
-## Summary
+    Reading a traceback is essentially reading the call stack from the point where the error occurred.
 
-- Python tracks function calls using the **call stack**
-- the stack follows a **last-in, first-out** rule
-- each function call creates a **stack frame**
-- tracebacks show the call stack when an error occurs
+## Key Ideas
+
+Python tracks function calls using the call stack, which follows a last-in, first-out rule.
+Each function call creates a stack frame that holds its own local variables, execution position, and return address.
+Because each call gets its own frame, local variables are fully isolated between functions.
+Tracebacks are snapshots of the call stack at the moment an error occurs — learning to read them is one of the most practical debugging skills in Python.
+
+Understanding the call stack becomes especially important when learning **recursion**.
