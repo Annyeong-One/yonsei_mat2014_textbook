@@ -5,9 +5,10 @@ Functions can compute results and send them back to the caller.
 
 This is done using the `return` statement.
 
----
-
 ## The Problem
+
+In Python, every function returns a value.
+If no `return` statement is present, Python automatically returns `None`.
 
 Consider this function:
 
@@ -27,10 +28,8 @@ Output
 Result: None
 ```
 
-The function printed the value 7, but it did not return anything.
-When a function does not return a value, Python returns `None`.
-
----
+The function printed the value `7`, but it did not return anything.
+Because there is no `return` statement, `result` receives `None`.
 
 ## The Solution
 
@@ -51,28 +50,19 @@ Output
 Result: 7
 ```
 
----
+Now `result` holds the value `7` and can be used later in the program.
 
 ## Printing vs Returning
 
 `print` displays a value on the screen.
 `return` sends a value back to the caller.
 
-Returning allows the result to be reused.
-
-```mermaid
-flowchart LR
-    A["3, 4"] --> B["add(a, b)"]
-    B --> C["7"]
-```
-
----
-
-## Using Return Values
-
-The returned value can be stored, printed, or used in expressions.
+The key difference is that a returned value can be **reused** — stored in a variable, passed to another function, or used in an expression.
 
 ```python
+def add(a, b):
+    return a + b
+
 print(add(2, 5) * 2)
 ```
 
@@ -82,58 +72,13 @@ Output
 14
 ```
 
----
+Because `add(2, 5)` returns `7`, the expression `add(2, 5) * 2` evaluates to `14`.
+If `add` had used `print` instead of `return`, this would not be possible.
 
-## Returning Multiple Values
+## Key Ideas
 
-Python functions can return multiple values separated by commas.
+The `return` statement lets a function produce a value that the caller can store, print, or use in further computation.
+Without `return`, a function always returns `None`.
+The distinction between printing and returning is one of the most important concepts for beginners to internalize — `print` is for humans to read, `return` is for the program to use.
 
-```python
-def min_max(a, b):
-    if a < b:
-        return a, b
-    return b, a
-
-small, large = min_max(10, 3)
-
-print(small, large)
-```
-
-Output
-
-```text
-3 10
-```
-
-Python actually returns a **tuple**.
-Values separated by commas are automatically grouped into a tuple.
-
----
-
-## Early Return
-
-Sometimes a function should stop immediately when an invalid input is detected.
-
-```python
-def reciprocal(x):
-    if x == 0:
-        return None
-    return 1 / x
-```
-
-This pattern is useful for **guard conditions** and validation.
-
----
-
-## Summary
-
-Key ideas:
-
-- `return` sends a value back to the caller
-- printing displays a value but does not return it
-- returned values can be stored or reused
-- functions can return multiple values
-- functions can return early based on conditions
-
-So far we have passed and returned values without specifying what kinds of values they are.
-Next we will see how **type hints** can document the expected types of parameters and return values.
+Next: [Type Hints](type_hints.md).
