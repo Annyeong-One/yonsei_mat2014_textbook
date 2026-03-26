@@ -101,6 +101,23 @@ Score: 100
 Parentheses tell Python that the function should be executed.
 Without them, `display_score` just refers to the function object.
 
+```python
+print(display_score())
+print(display_score)
+```
+
+Output
+
+```text
+Score: 100
+None
+<function display_score at 0x7f3a1c2b4d30>
+```
+
+`display_score()` calls the function, which prints `Score: 100` and returns `None` (since there is no `return` statement).
+`display_score` without parentheses prints the function object itself, showing its name and memory address.
+The address shown will differ on your machine and between runs.
+
 ## Execution Flow
 
 Statements above a `def` run first; the function body runs only at the call site.

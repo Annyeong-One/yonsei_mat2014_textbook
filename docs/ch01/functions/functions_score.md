@@ -1,7 +1,7 @@
-| | v1 | v2 | v3 | v4 | v5 |
-|---|---|---|---|---|---|
-| Math score | 7.2 / 10 | 8.8 / 10 | 8.8 / 10 | 8.8 / 10 | 9.0 / 10 |
-| Writing score | 7.2 / 10 | 9.0 / 10 | 9.5 / 10 | 9.8 / 10 | 9.8 / 10 |
+| | v1 | v2 | v3 | v4 | v5 | v6 |
+|---|---|---|---|---|---|---|
+| Math score | 7.2 / 10 | 8.8 / 10 | 8.8 / 10 | 8.8 / 10 | 9.0 / 10 | 9.0 / 10 |
+| Writing score | 7.2 / 10 | 9.0 / 10 | 9.5 / 10 | 9.8 / 10 | 9.8 / 10 | 9.9 / 10 |
 
 v1 → v2  2026-03-26
 Math fixes: 0 (🔴 0, 🟡 0, 🟢 0)
@@ -21,4 +21,9 @@ Skipped: none
 v4 → v5  2026-03-26
 Math fixes: 0 (🔴 0, 🟡 0, 🟢 0)
 Writing fixes: 2 (🔴 1, 🟢 1)
+Skipped: none
+
+v5 → v6  2026-03-26
+Math fixes: 0 (🔴 0, 🟡 0, 🟢 0)
+Writing fixes: 1 (user suggestion: print(f()) vs print(f) demo)
 Skipped: none
