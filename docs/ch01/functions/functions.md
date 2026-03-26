@@ -8,10 +8,9 @@ but for now our machine has no input slot and no output tray — it simply runs 
 
 Functions help programs stay organized:
 
-- organize logic
-- reuse code
-- avoid repetition
-- divide large problems into smaller parts
+- reuse code across a program
+- break large problems into smaller named parts
+- make programs easier to read and maintain
 
 ## Why Functions
 
@@ -101,6 +100,26 @@ Without them, `display_score` just refers to the function object.
 
 Statements above a `def` run first; the function body runs only at the call site.
 When a function is called, execution temporarily moves into the function body and then returns to where the call occurred.
+
+```python
+def greet():
+    print("Inside greet()")
+    print("Hello")
+
+print("Start program")
+greet()
+print("End program")
+```
+
+Output
+
+```text
+Start program
+Inside greet()
+Hello
+End program
+```
+
 We will explore how Python tracks these jumps in [Runtime Model (Call Stack)](call_stack.md).
 
 ## Key Ideas
