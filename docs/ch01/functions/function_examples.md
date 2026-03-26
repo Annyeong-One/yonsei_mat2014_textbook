@@ -1,16 +1,14 @@
 # Function Examples
 
 These examples reinforce the concepts from the previous sections:
-parameters, return values, reuse, and composition.
+parameters, return values, type hints, and composition.
 
----
-
-## Square Function
+## Square
 
 A function with a single parameter and a return value.
 
 ```python
-def square(x):
+def square(x: int) -> int:
     return x * x
 
 print(square(5))
@@ -22,14 +20,12 @@ Output
 25
 ```
 
----
-
-## Rectangle Area Function
+## Rectangle Area
 
 A function with multiple parameters.
 
 ```python
-def area(length, width):
+def area(length: float, width: float) -> float:
     return length * width
 
 print(area(3, 4))
@@ -41,34 +37,32 @@ Output
 12
 ```
 
----
-
-## Greeting Function
+## Format Name
 
 Functions work with any data type, not just numbers.
 
 ```python
-def greet(name):
-    return "Hello, " + name
+def format_name(first: str, last: str) -> str:
+    return last.upper() + ", " + first
 
-print(greet("Alice"))
+print(format_name("Alice", "Smith"))
+print(format_name("Bob", "Lee"))
 ```
 
 Output
 
 ```text
-Hello, Alice
+SMITH, Alice
+LEE, Bob
 ```
 
----
-
-## Temperature Conversion Function
+## Temperature Conversion
 
 A function that performs a real calculation.
 
 ```python
-def celsius_to_fahrenheit(c):
-    return (c * 9/5) + 32
+def celsius_to_fahrenheit(c: float) -> float:
+    return (c * 9 / 5) + 32
 
 print(celsius_to_fahrenheit(25))
 ```
@@ -79,14 +73,12 @@ Output
 77.0
 ```
 
----
-
-## Maximum Value Function
+## Maximum Value
 
 Functions can include conditional logic.
 
 ```python
-def max_value(a, b):
+def max_value(a: int, b: int) -> int:
     if a > b:
         return a
     return b
@@ -100,21 +92,22 @@ Output
 10
 ```
 
----
-
-## Function Composition
+## Composition
 
 Functions can be combined by passing the return value of one function as the argument to another.
 
 ```python
-def double(x):
+def square(x: int) -> int:
+    return x * x
+
+def double(x: int) -> int:
     return 2 * x
 
 print(double(square(3)))
 ```
 
-`square(3)` runs first and returns 9.
-That value is then passed to `double()`.
+`square(3)` runs first and returns `9`.
+That value is then passed to `double`, which returns `18`.
 
 Output
 
@@ -122,17 +115,12 @@ Output
 18
 ```
 
-```mermaid
-flowchart LR
-    A["3"] --> B["square()"]
-    B --> C["9"]
-    C --> D["double()"]
-    D --> E["18"]
-```
+## Key Ideas
 
----
+This page concludes the functions section.
+A function is a black box that optionally takes inputs and optionally produces an output.
+Parameters let a function accept different values each time it is called, and the `return` statement sends a result back to the caller.
+Type hints document the expected types without changing how Python runs the code.
+Small functions can be composed — the return value of one becomes the argument of another — to build larger programs from simple, reusable pieces.
 
-## Key Idea
-
-Functions allow complex tasks to be broken into small reusable pieces.
-Small functions can also be combined to build more complex programs.
+Next: [Runtime Model (Call Stack)](call_stack.md).
