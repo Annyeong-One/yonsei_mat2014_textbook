@@ -28,13 +28,13 @@ A function with multiple parameters.
 def area(length: float, width: float) -> float:
     return length * width
 
-print(area(3, 4))
+print(area(3.0, 4.0))
 ```
 
 Output
 
 ```text
-12
+12.0
 ```
 
 ## Format Name
