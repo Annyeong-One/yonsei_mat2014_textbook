@@ -6,7 +6,7 @@ You can think of a function as a small **machine** inside your program.
 Later we will see how values can go into and come out of that machine,
 but for now our machine has no input slot and no output tray — it simply runs a fixed set of instructions when activated.
 
-Functions help programs:
+Functions help programs stay organized:
 
 - organize logic
 - reuse code
@@ -68,15 +68,15 @@ An important point before we look at the syntax: **defining a function does not 
 Python reads the `def` block and stores the function for later use, but the body does not run until the function is called.
 
 ```python
-def greet():
-    print("Hello")
+def display_score():
+    print("Score: 100")
 ```
 
-This defines a function named `greet`.
+This defines a function named `display_score`.
 
 !!! warning "Defining is not executing"
 
-    Writing `def greet(): ...` only tells Python that a function named `greet` exists.
+    Writing `def display_score(): ...` only tells Python that a function named `display_score` exists.
     No code inside the function body runs at this point.
     The function runs only when it is **called**.
 
@@ -85,41 +85,23 @@ This defines a function named `greet`.
 To run a function, we **call** it using parentheses.
 
 ```python
-greet()
+display_score()
 ```
 
 Output
 
 ```text
-Hello
+Score: 100
 ```
 
 Parentheses tell Python that the function should be executed.
-Without them, `greet` just refers to the function object.
+Without them, `display_score` just refers to the function object.
 
 ## Execution Flow
 
+Statements above a `def` run first; the function body runs only at the call site.
 When a function is called, execution temporarily moves into the function body and then returns to where the call occurred.
 We will explore how Python tracks these jumps in [Runtime Model (Call Stack)](call_stack.md).
-
-```python
-def greet():
-    print("Inside greet()")
-    print("Hello")
-
-print("Start program")
-greet()
-print("End program")
-```
-
-Output
-
-```text
-Start program
-Inside greet()
-Hello
-End program
-```
 
 ## Key Ideas
 
