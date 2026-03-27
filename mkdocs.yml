@@ -20,6 +20,12 @@ extra_javascript:
     - javascripts/mathjax.js
     - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
 
+exclude_docs: |
+    *_score.md
+    *_v[0-9]*.md
+    *_review.md
+    !ch15/definition_and_setup/markov_processes_review.md
+
 nav:
     - Home: index.md
 
@@ -76,9 +82,10 @@ nav:
 
         - 1.4 Essential Built-ins:
             - print() and input(): ch01/builtins/print_input.md
-            - len(), range(), enumerate(): ch01/builtins/len_range_enumerate.md
-            - zip(): ch01/builtins/zip.md
+            - len() and range(): ch01/builtins/len_range.md
+            - enumerate() and zip(): ch01/builtins/enumerate_zip.md
             - sorted() and reversed(): ch01/builtins/sorted_reversed.md
+            - map() and filter(): ch01/builtins/map_filter.md
             - min(), max(), sum(): ch01/builtins/min_max_sum.md
             - abs() and round(): ch01/builtins/abs_round.md
             - any() and all(): ch01/builtins/any_all.md
@@ -118,6 +125,7 @@ nav:
             - Parameters: ch01/functions/parameters.md
             - Return Values: ch01/functions/return_values.md
             - Type Hints: ch01/functions/type_hints.md
+            - Docstrings: ch01/functions/docstrings.md
             - Function Examples: ch01/functions/function_examples.md
             - Runtime Model (Call Stack): ch01/functions/call_stack.md
 
@@ -128,6 +136,7 @@ nav:
             - Sets: ch01/composite_data_types/sets.md
             - Dictionaries: ch01/composite_data_types/dictionaries.md
             - Comprehensions: ch01/composite_data_types/comprehensions.md
+            - Generator Expressions: ch01/composite_data_types/generator_expressions.md  
 
         - 1.10 Exceptions:
             - Exception Hierarchy: ch01/exceptions/exception_hierarchy.md
@@ -149,7 +158,7 @@ nav:
             - Scripts vs Modules: ch01/modules/scripts_vs_modules.md
             - pip and PyPI: ch01/modules/pip_pypi.md
 
-    - 2 Python Intermediate:
+    - 2 Python Deep Dive:
         - Chapter Overview: ch02/index.md
         - 2.1 Variables and Naming:
             - Variables as Names: ch02/variables/names_not_containers.md
@@ -171,7 +180,7 @@ nav:
             - Type Conversion: ch02/typing/type_conversion.md
             - Type Introspection: ch02/typing/type_function.md
 
-        - 2.3 Numeric Types Deep Dive:
+        - 2.3 Numeric Types:
             - int Python vs C: ch02/numerics/int_python_vs_c.md
             - int Bitwise Operations: ch02/numerics/int_bitwise_operations.md
             - int Number Systems: ch02/numerics/int_number_systems.md
@@ -181,7 +190,7 @@ nav:
             - float Special Values: ch02/numerics/float_special_values.md
             - Type Promotion: ch02/numerics/type_promotion.md
 
-        - 2.4 Boolean Deep Dive:
+        - 2.4 Boolean:
             - bool Subclass of int: ch02/bool/bool_subclass_int.md
             - Short-Circuit Evaluation: ch02/bool/short_circuit.md
             - and/or Return Values: ch02/bool/and_or_return_values.md
@@ -199,7 +208,7 @@ nav:
             - F-String Debugging: ch02/strings/fstring_debugging.md
             - Unicode Comparison Strategies: ch02/strings/unicode_comparison.md   
 
-        - 2.6 Composite Types Deep Dive:
+        - 2.6 Composite Types:
             - Shallow and Deep Copying (copy module): ch02/composites/list_copying.md
             - Nested Data Structures: ch02/composites/nested_structures.md
             - tuple Optimization: ch02/composites/tuple_optimization.md
@@ -209,10 +218,6 @@ nav:
             - dict Merge Operators: ch02/composites/dict_merge_operators.md
             - set Internals: ch02/composites/set_internals.md
             - Time Complexity of Operations: ch02/composites/time_complexity.md
-            - Bisect Module Tutorial (Python): ch02/composites/bisect_module_tutorial.py
-            - Hashing Implementation (Python): ch02/composites/hashing_implementation_tutorial.py
-            - Hash Function Performance (Python): ch02/composites/hash_function_performance.py
-            - Set vs List Performance (Python): ch02/composites/set_vs_list_performance.py
 
         - 2.7 Iteration Protocol:
             - Iterables and Iterators: ch02/iteration/iterables.md
@@ -221,21 +226,13 @@ nav:
             - StopIteration Mechanics: ch02/iteration/stopiteration.md
             - Lazy Evaluation Patterns: ch02/iteration/lazy_evaluation.md
             - Iterator Chaining: ch02/iteration/iterator_chaining.md
-            - Iteration Basics (Python): ch02/iteration/iteration_basics.py
-            - Intermediate Generators (Python): ch02/iteration/intermediate_generators.py
-            - Advanced Generators (Python): ch02/iteration/advanced_generators.py
-            - Practical Applications (Python): ch02/iteration/practical_applications.py
-            - Iterator Protocol - Sentence (Python): ch02/iteration/iterator_protocol_sentence.py
-            - Generator with yield (Python): ch02/iteration/generator_with_yield.py
-            - Generator Performance - Fibonacci (Python): ch02/iteration/generator_performance_fibonacci.py
-            - Iterator Protocol - Prime and Fibonacci (Python): ch02/iteration/iterator_protocol_prime_fib.py
 
         - 2.8 Advanced Built-ins:
             - The builtins Namespace: ch02/advanced_builtins/builtins_namespace.md
             - sorted() Advanced (key, stability): ch02/advanced_builtins/sorted.md
             - id(), type(), isinstance(): ch02/advanced_builtins/introspection.md
 
-        - 2.9 Operators Deep Dive:
+        - 2.9 Operators:
             - Operators Overview: ch02/operators/operators_deep_dive_overview.md
             - Arithmetic Operators: ch02/operators/arithmetic.md
             - Comparison Operators: ch02/operators/comparison.md
@@ -245,12 +242,12 @@ nav:
             - Precedence and Associativity: ch02/operators/precedence.md
             - 'Walrus Operator (:=)': ch02/operators/walrus_operator.md
 
-        - 2.10 Exceptions Deep Dive:
+        - 2.10 Exceptions:
             - Custom Exceptions: ch02/exceptions/custom_exceptions.md
             - assert Statement: ch02/exceptions/assert.md
             - Compile vs Runtime Errors: ch02/exceptions/compile_vs_runtime.md
 
-        - 2.11 File I/O Deep Dive:
+        - 2.11 File I/O:
             - Binary Files: ch02/io/binary_files.md
             - pickle and Serialization: ch02/io/pickle.md
             - io.StringIO and io.BytesIO: ch02/io/string_bytes_io.md
@@ -262,14 +259,13 @@ nav:
             - LEGB Resolution: ch02/scope/legb_resolution.md
             - global and nonlocal: ch02/scope/global_nonlocal.md
             - Scope Lifetime: ch02/scope/scope_lifetime.md
-            - LEGB Rule Examples (Python): ch02/scope/legb_examples.py
 
         - 2.13 Function Parameters:
-            - Call-by-Object-Reference: ch02/functions/call_by_object_reference.md
-            - Parameter Mechanisms: ch02/functions/parameter_mechanisms.md
-            - Default Parameter Gotcha: ch02/functions/default_parameter_gotcha.md
-            - First Class Functions: ch02/functions/first_class_functions.md
-            - Parameter Passing: ch02/functions/parameter_passing.md
+            - Call-by-Object-Reference: ch02/functions_params/call_by_object_reference.md
+            - Parameter Mechanisms: ch02/functions_params/parameter_mechanisms.md
+            - Default Parameter Gotcha: ch02/functions_params/default_parameter_gotcha.md
+            - Parameter Passing: ch02/functions_params/parameter_passing.md
+            - Parameter Best Practices: ch02/functions_params/best_practices.md
 
         - 2.14 Closures:
             - Closure Fundamentals: ch02/closures/closure_fundamentals.md
@@ -277,19 +273,13 @@ nav:
             - nonlocal and Mutation: ch02/closures/nonlocal_mutation.md
             - Scoping Rules: ch02/closures/scoping_rules.md
             - Practical Patterns: ch02/closures/practical_patterns.md
-            - Closures Examples (Python): ch02/closures/closures_examples.py
-            - Closures Mini-Project (Python): ch02/closures/closures_mini_project.py
             - Closures Cheat Sheet: ch02/closures/closures_cheat_sheet.md
-            - Closure Mutable State (Python): ch02/closures/closure_mutable_state_example.py
-            - Closure vs Class Comparison (Python): ch02/closures/closure_vs_class_comparison.py
 
         - 2.15 Performance Basics:
             - Time vs Space Trade-offs: ch02/performance/tradeoffs.md
             - Big-O Notation: ch02/performance/big_o.md
             - Python Operation Costs: ch02/performance/operation_costs.md
             - timeit Module: ch02/performance/timeit.md
-            - Reducing Operations (Python): ch02/performance/reducing_operations.py
-            - Search Algorithms and Complexity (Python): ch02/performance/search_algorithms_complexity.py
 
     - 3 Object Model and Binding:
         - Chapter Overview: ch03/index.md
@@ -299,7 +289,6 @@ nav:
             - Everything is an Object: ch03/foundations/everything_is_object.md
             - Methods and Attributes: ch03/foundations/methods_and_attributes.md
             - Python Execution Model: ch03/foundations/python_execution.md
-            - Code Object Anatomy (Python): ch03/foundations/code_object_anatomy.py
 
         - 3.2 Python's Object Model:
             - Names vs Objects: ch03/objects/names_vs_objects.md
@@ -345,7 +334,6 @@ nav:
         - 4.1 Memory Architecture:
             - Stack vs Heap Overview: ch04/memory/stack_heap_overview.md
             - Frame Objects: ch04/memory/frame_objects.md
-            - Frame Introspection (Python): ch04/memory/frame_introspection.py
             - Heap Object Storage: ch04/memory/heap_storage.md
             - Stack-Heap Interaction: ch04/memory/stack_heap_interaction.md
             - Recursion and Stack Growth: ch04/memory/recursion_stack.md
@@ -353,22 +341,12 @@ nav:
             - Buffer Reallocation: ch04/memory/buffer_reallocation.md
             - Stack Overflow: ch04/memory/stack_overflow.md
             - Python vs C Memory: ch04/memory/python_vs_c_memory.md
-            - Stack vs Heap (Python): ch04/memory/stack_vs_heap.py
-            - Variables and Memory (Python): ch04/memory/variables_and_memory.py
-            - Immutable Types (Python): ch04/memory/immutable_types.py
-            - Mutable Types (Python): ch04/memory/mutable_types.py
-            - Aliasing and Copying (Python): ch04/memory/aliasing_and_copying.py
-            - Defensive Copying Pattern (Python): ch04/memory/defensive_copying_pattern.py
-            - Mutable Default Arguments Gotcha (Python): ch04/memory/mutable_default_arguments_gotcha.py
-            - Aliasing via Mutable Parameters (Python): ch04/memory/aliasing_via_mutable_parameters.py
 
         - 4.2 Reference Counting and Garbage Collection:
             - Memory Management Overview: ch04/gc/memory_management_overview.md
             - Reference Counting: ch04/gc/reference_counting.md
             - Garbage Collection: ch04/gc/garbage_collection.md
             - Memory Leaks: ch04/gc/memory_leaks.md
-            - Memory Management Tutorial (Python): ch04/gc/memory_management_tutorial.py
-            - Object Lifecycle (Python): ch04/gc/object_lifecycle.py
 
         - 4.3 Weak References:
             - Weak Reference Basics: ch04/gc/weak_references.md
@@ -381,8 +359,6 @@ nav:
             - __slots__: ch04/advanced_memory/slots.md
             - sys.getsizeof(): ch04/advanced_memory/getsizeof.md
             - tracemalloc: ch04/advanced_memory/tracemalloc.md
-            - List Internals (Python): ch04/advanced_memory/list_internals.py
-            - Weak Reference Practical (Python): ch04/advanced_memory/weakref_practical_example.py
 
         - 4.5 Performance and Profiling:
             - Performance and Memory: ch04/practical/performance_memory.md
@@ -392,25 +368,15 @@ nav:
             - Benchmarking Methodology: ch04/practical/benchmarking.md
             - Optimization Strategies: ch04/practical/optimization_strategies.md
             - Profiling Visualization (snakeviz): ch04/practical/profiling_visualization.md
-            - Time Complexity (Python): ch04/practical/time_complexity.py
-            - timeit Tutorial (Python): ch04/practical/timeit_tutorial.py
-            - cProfile Tutorial (Python): ch04/practical/cprofile_tutorial.py
 
     - 5 Functions:
         - Chapter Overview: ch05/index.md
         - 5.1 First-Class Functions:
-            - Lambda Expressions: ch05/functions/lambda.md
-            - Function Factories: ch05/functions/function_factories.md
-            - Function Examples (Python): ch05/functions/function_examples.py
-            - Lambda Examples (Python): ch05/functions/lambda_examples.py
+            - First-Class Functions: ch05/first_class_functions/first_class_functions.md
+            - Lambda Expressions: ch05/first_class_functions/lambda.md
+            - Function Factories: ch05/first_class_functions/function_factories.md
 
-        - 5.2 Parameters:
-            - "*args and **kwargs": ch05/params/args_kwargs.md
-            - Keyword-Only Arguments: ch05/params/keyword_only.md
-            - Positional-Only Arguments: ch05/params/positional_only.md
-            - Parameter Best Practices: ch05/params/best_practices.md
-
-        - 5.3 Recursion:
+        - 5.2 Recursion:
             - Recursion Fundamentals: ch05/recursion/fundamentals.md
             - Recursive Patterns: ch05/recursion/patterns.md
             - Tree Recursion: ch05/recursion/tree_recursion.md
@@ -420,25 +386,17 @@ nav:
             - sys.setrecursionlimit(): ch05/recursion/recursion_limit.md
             - Divide and Conquer: ch05/recursion/divide_and_conquer.md
             - Backtracking: ch05/recursion/backtracking.md
-            - Recursion Examples (Python): ch05/recursion/recursion_examples.py
-            - Sorting Algorithms (Python): ch05/recursion/sorting_algorithms_example.py
-            - Greedy Algorithm - Knapsack (Python): ch05/recursion/greedy_algorithm_example.py
-            - Backtracking - Knight's Tour (Python): ch05/recursion/backtracking_knights_tour.py
 
-        - 5.4 Functional Programming:
-            - map(), filter(), reduce(): ch05/functional/map_filter_reduce.md
-            - Comprehensions: ch05/functional/comprehensions.md
-            - Generator Expressions: ch05/functional/generator_expressions.md
+        - 5.3 Functional Programming:
+            - "map(), filter(), reduce()": ch05/functional/map_filter_reduce.md
             - Pure Functions: ch05/functional/pure_functions.md
             - Higher-Order Functions: ch05/functional/higher_order.md
             - Partial Application: ch05/functional/partial_application.md
             - Function Composition: ch05/functional/composition.md
             - operator Module: ch05/functional/operator_module.md
             - Callback Patterns: ch05/functional/callback_patterns.md
-            - map() and filter() Tutorial (Python): ch05/functional/map_filter_tutorial.py
-            - zip() and enumerate() Tutorial (Python): ch05/functional/zip_enumerate_tutorial.py
 
-        - 5.5 functools Module:
+        - 5.4 functools Module:
             - functools Overview: ch05/functools/functools_overview.md
             - functools.cache: ch05/functools/functools_cache.md
             - functools.lru_cache: ch05/functools/functools_lru_cache.md
@@ -448,23 +406,16 @@ nav:
             - functools.total_ordering: ch05/functools/functools_total_ordering.md
             - functools.singledispatch: ch05/functools/functools_singledispatch.md
 
-        - 5.6 Decorators:
+        - 5.5 Decorators:
             - Decorator Fundamentals: ch05/decorators/decorator_fundamentals.md
             - Decorator Factories: ch05/decorators/decorator_factories.md
             - Stacked Decorators: ch05/decorators/stacked_decorators.md
             - Class Decorators: ch05/decorators/class_decorators.md
             - Practical Patterns: ch05/decorators/practical_patterns.md
-            - Decorator Examples (Python): ch05/decorators/decorator_examples.py
-            - Decorator Mini-Project (Python): ch05/decorators/decorator_mini_project.py
             - Decorators Cheat Sheet: ch05/decorators/decorators_cheat_sheet.md
-            - Singledispatch Example (Python): ch05/decorators/singledispatch_example.py
-            - Function Registration Pattern (Python): ch05/decorators/function_registration_pattern.py
-            - Timing Decorator Professional (Python): ch05/decorators/timing_decorator_professional.py
-            - Decorator Factory Strategy (Python): ch05/decorators/decorator_factory_strategy_example.py
-            - Singleton Decorator (Python): ch05/decorators/singleton_decorator_example.py
 
-        - 5.7 Design Patterns:
-            - Strategy Pattern (Python): ch05/design_patterns/strategy_pattern_example.py
+        - 5.6 Design Patterns:
+            - Strategy Pattern: ch05/design_patterns/strategy_pattern.md
 
     - 6 Object-Oriented Programming:
         - Chapter Overview: ch06/index.md
@@ -473,8 +424,6 @@ nav:
             - Functions to Classes: ch06/foundations/functions_to_classes.md
             - Classes and Instances: ch06/foundations/classes_instances.md
             - Constructor and Destructor: ch06/foundations/constructor_destructor.md
-            - Basic Classes Examples (Python): ch06/foundations/classes_basic_examples.py
-            - Advanced Classes Examples (Python): ch06/foundations/classes_advanced_examples.py
 
         - 6.2 Attributes and Methods:
             - Instance Attributes: ch06/attributes/instance_attributes.md
@@ -483,33 +432,18 @@ nav:
             - Instance Methods: ch06/methods/instance_methods.md
             - Class Methods: ch06/methods/class_methods.md
             - Static Methods: ch06/methods/static_methods.md
-            - Basic Attributes Tutorial (Python): ch06/attributes/basic_attributes_tutorial.py
-            - Instance vs Class Tutorial (Python): ch06/attributes/instance_vs_class_tutorial.py
-            - Properties Tutorial (Python): ch06/attributes/properties_tutorial.py
 
         - 6.3 Four Pillars of Object-Oriented Programming:
             - Encapsulation: ch06/pillars/encapsulation.md
             - Abstraction: ch06/pillars/abstraction.md
             - Polymorphism: ch06/pillars/polymorphism.md
             - Inheritance Basics: ch06/pillars/inheritance.md
-            - Encapsulation Examples (Python): ch06/pillars/encapsulation_examples.py
-            - Inheritance Examples (Python): ch06/pillars/inheritance_examples.py
-            - Method Overriding Examples (Python): ch06/pillars/method_overriding_examples.py
-            - super() Function Examples (Python): ch06/pillars/super_function_examples.py
-            - Polymorphism Demonstration (Python): ch06/pillars/polymorphism_demo.py
-            - Abstract Base Classes Examples (Python): ch06/pillars/abstract_base_classes_examples.py
 
         - 6.4 Advanced Inheritance:
             - Initialization Patterns: ch06/inheritance/initialization_patterns.md
             - super() and Cooperation: ch06/inheritance/super.md
             - Method Resolution Order: ch06/inheritance/mro.md
             - C3 Linearization: ch06/inheritance/c3_linearization.md
-            - Diamond Problem (Python): ch06/inheritance/diamond_problem.py
-            - super() and Method Resolution Order (Python): ch06/inheritance/super_and_mro.py
-            - C3 Linearization Examples (Python): ch06/inheritance/c3_linearization_examples.py
-            - Method Resolution Order Diamond Problem (Python): ch06/inheritance/mro_diamond_problem.py
-            - Mixin Pattern (Python): ch06/inheritance/mixin_pattern.py
-            - Method Resolution Order Mixin SetOnce (Python): ch06/inheritance/mro_mixin_setonce_example.py
 
         - 6.5 Composition and Aggregation:
             - Is-a vs Has-a: ch06/composition/isa_vs_hasa.md
@@ -524,26 +458,14 @@ nav:
             - Comparison Operators: ch06/dunder/dunder_comparison.md
             - Object Lifecycle: ch06/dunder/dunder_lifecycle.md
             - String Representation: ch06/dunder/dunder_string.md
-            - __init__ and __repr__ Tutorial (Python): ch06/dunder/init_and_repr_tutorial.py
-            - Comparison Operators Tutorial (Python): ch06/dunder/comparison_operators_tutorial.py
-            - Arithmetic Operators Tutorial (Python): ch06/dunder/arithmetic_operators_tutorial.py
             - Magic Methods Quick Reference: ch06/dunder/magic_methods_quick_reference.md
             - Magic Methods Exercises: ch06/dunder/magic_methods_exercises.md
-            - Sequence Protocol Example (Python): ch06/dunder/sequence_protocol_example.py
-            - Vector Arithmetic Operators (Python): ch06/dunder/vector_arithmetic_operators.py
-            - Operator Overloading Vector (Python): ch06/dunder/operator_overloading_vector.py
-            - Hash Equality and Slots (Python): ch06/dunder/hash_eq_slots_example.py
 
         - 6.7 Dunder Advanced:
             - Container Protocol: ch06/dunder_advanced/dunder_containers.md
             - Iteration Protocol: ch06/dunder_advanced/dunder_iterables.md
             - Callable Objects: ch06/dunder_advanced/dunder_callable.md
             - Context Managers: ch06/dunder_advanced/dunder_context.md
-            - Container Methods Tutorial (Python): ch06/dunder_advanced/container_methods_tutorial.py
-            - Callable and Context Tutorial (Python): ch06/dunder_advanced/callable_and_context_tutorial.py
-            - Context Manager Protocol (Python): ch06/dunder_advanced/context_manager_protocol.py
-            - Context Manager Decorator (Python): ch06/dunder_advanced/context_manager_decorator.py
-            - Hash Digest Callable (Python): ch06/dunder_advanced/hash_digest_callable_example.py
 
         - 6.8 Properties:
             - Property Decorator: ch06/properties/property_decorator.md
@@ -551,7 +473,6 @@ nav:
             - Cached Properties: ch06/properties/cached_property.md
             - Read-Only Properties: ch06/properties/readonly_properties.md
             - Properties as Descriptors: ch06/properties/property_descriptor_connection.md
-            - Property Decorator Basic (Python): ch06/properties/property_decorator_basic.py
 
         - 6.9 Descriptor Protocol:
             - Descriptor Introduction: ch06/descriptors/descriptor_intro.md
@@ -559,8 +480,6 @@ nav:
             - Data vs Non-Data Descriptors: ch06/descriptors/descriptor_types.md
             - Descriptor Use Cases: ch06/descriptors/descriptor_applications.md
             - Attribute Access Lookup: ch06/descriptors/attribute_access_lookup.md
-            - Descriptor Kinds Demonstration (Python): ch06/descriptors/descriptor_kinds_demo.py
-            - Method as Descriptor (Python): ch06/descriptors/method_as_descriptor.py
 
         - 6.10 Dunder Attribute Hooks:
             - __getattribute__: ch06/dunder_attrs/dunder_getattribute.md
@@ -581,11 +500,6 @@ nav:
             - slots and kw_only: ch06/dataclasses/slots_kw_only.md
             - Dataclass vs NamedTuple vs attrs: ch06/dataclasses/comparison.md
             - Practical Patterns: ch06/dataclasses/practical_patterns.md
-            - Dataclass Basics Tutorial (Python): ch06/dataclasses/dataclass_basics_tutorial.py
-            - Dataclass Immutable with Methods (Python): ch06/dataclasses/dataclass_immutable_with_methods.py
-            - Dataclass Fields and Defaults (Python): ch06/dataclasses/dataclass_fields_and_defaults.py
-            - NamedTuple Basic Example (Python): ch06/dataclasses/namedtuple_basic_example.py
-            - NamedTuple Typed with Methods (Python): ch06/dataclasses/namedtuple_typed_with_methods.py
 
         - 6.13 Enumerations:
             - Enum Basics: ch06/enum/enum_basics.md
@@ -595,21 +509,16 @@ nav:
             - auto() Function: ch06/enum/auto.md
             - Enum Methods and Customization: ch06/enum/methods_customization.md
             - Enum Practical Patterns: ch06/enum/practical_patterns.md
-            - Poker Game with Enum (Python): ch06/enum/poker_game_example.py
 
         - 6.14 Abstract Base Classes:
             - Abstract Base Class and abstractmethod: ch06/abc/abstract_base_classes.md
             - typing.Protocol: ch06/abc/typing_protocol.md
             - collections.abc: ch06/abc/collections_abc.md
             - Virtual Subclasses (register): ch06/abc/virtual_subclasses.md
-            - Abstract Base Class Example (Python): ch06/abc/abstract_base_class_example.py
-            - Factory Pattern with Abstract Base Class (Python): ch06/abc/factory_pattern_with_abc_example.py
 
         - 6.15 Metaclasses:
             - Metaclasses Introduction: ch06/metaclasses/metaclasses_intro.md
             - __init_subclass__: ch06/metaclasses/init_subclass.md
-            - Class Factory with type() (Python): ch06/metaclasses/class_factory_type.py
-            - Singleton Metaclass (Python): ch06/metaclasses/singleton_metaclass_example.py
 
         - 6.16 Object-Oriented Programming Projects:
             - Task Management System: ch06/projects/task_management_project.md
@@ -654,9 +563,6 @@ nav:
             - TypeGuard and TypeNarrowing: ch07/typing/typeguard.md
             - TYPE_CHECKING and Forward References: ch07/typing/type_checking.md
             - Practical Type Hint Patterns: ch07/typing/practical_patterns.md
-            - Basic Type Hints Tutorial (Python): ch07/typing/basic_type_hints_tutorial.py
-            - Optional and Union Tutorial (Python): ch07/typing/optional_union_tutorial.py
-            - Generics Tutorial (Python): ch07/typing/generics_tutorial.py
 
         - 7.4 datetime Module:
             - datetime Overview: ch07/datetime/datetime_overview.md
@@ -684,10 +590,6 @@ nav:
             - Formatters: ch07/logging/formatters.md
             - Configuration (dictConfig, fileConfig): ch07/logging/configuration.md
             - Logging Best Practices: ch07/logging/best_practices.md
-            - Basic Logging Tutorial (Python): ch07/logging/basic_logging_tutorial.py
-            - Logging Levels Tutorial (Python): ch07/logging/logging_levels_tutorial.py
-            - Formatters Tutorial (Python): ch07/logging/formatters_tutorial.py
-            - Handlers Tutorial (Python): ch07/logging/handlers_tutorial.py
 
         - 7.7 Modules Deep Dive:
             - sys.path and Module Search: ch07/modules/module_search.md
@@ -724,13 +626,6 @@ nav:
             - Compiling Patterns: ch07/regex/compiled_patterns.md
             - Lookahead and Lookbehind: ch07/regex/lookahead_lookbehind.md
             - Practical Examples: ch07/regex/practical_examples.md
-            - Regular Expression Basics Tutorial (Python): ch07/regex/regex_basics_tutorial.py
-            - Character Classes Tutorial (Python): ch07/regex/character_classes_tutorial.py
-            - Quantifiers Tutorial (Python): ch07/regex/quantifiers_tutorial.py
-            - Groups and Capturing Tutorial (Python): ch07/regex/groups_capturing_tutorial.py
-            - Lookahead/Lookbehind Tutorial (Python): ch07/regex/lookahead_lookbehind_tutorial.py
-            - Practical Applications Tutorial (Python): ch07/regex/practical_applications_tutorial.py
-            - Regular Expression Web Scraping Tutorial (Python): ch07/regex/regex_web_scraping_tutorial.py
 
         - 7.11 Debugging:
             - breakpoint() and pdb Basics: ch07/debugging/breakpoint_pdb.md
@@ -747,13 +642,8 @@ nav:
             - pytest Parametrize: ch07/testing/pytest_parametrize.md
             - Mocking (unittest.mock): ch07/testing/mocking.md
             - Test Organization and Best Practices: ch07/testing/best_practices.md
-            - unittest Basics Tutorial (Python): ch07/testing/unittest_basics_tutorial.py
-            - pytest Basics Tutorial (Python): ch07/testing/pytest_basics_tutorial.py
-            - Mocking Basics Tutorial (Python): ch07/testing/mocking_basics_tutorial.py
-            - Search and Sort Tests (Python): ch07/testing/search_sort_test_example.py
 
     - 8 NumPy:
-        - Chapter Overview: ch08/index.md
         - 8.1 Getting Started:
             - Installation: ch08/setup/installation.md
             - Import Convention: ch08/setup/import_convention.md
@@ -762,7 +652,6 @@ nav:
         - 8.2 Overview:
             - Lists vs Arrays: ch08/overview/lists_vs_arrays.md
             - NumPy Constants: ch08/overview/numpy_constants.md
-            - Arrays vs Lists Tutorial (Python): ch08/overview/arrays_vs_lists_tutorial.py
 
         - 8.3 Array Creation:
             - np.array and Dimensions: ch08/generation/np_array.md
@@ -770,7 +659,6 @@ nav:
             - np.full and np.eye: ch08/generation/full_eye_identity.md
             - np.arange and np.linspace: ch08/generation/arange_linspace.md
             - np.diag and Diagonal Matrices: ch08/generation/diag_matrices.md
-            - Array Creation Tutorial (Python): ch08/generation/array_creation_tutorial.py
 
         - 8.4 Array Attributes:
             - Shape and ndim: ch08/attributes/shape_ndim.md
@@ -780,7 +668,6 @@ nav:
             - Squeezing Dimensions: ch08/attributes/squeeze.md
             - Dtype Basics: ch08/attributes/dtype_basics.md
             - Changing Dtype: ch08/attributes/dtype_conversion.md
-            - Shape Manipulation Tutorial (Python): ch08/attributes/shape_manipulation_tutorial.py
 
         - 8.5 Indexing and Slicing:
             - Basic Indexing: ch08/indexing/basic_indexing.md
@@ -789,7 +676,6 @@ nav:
             - Image Manipulation: ch08/indexing/image_manipulation.md
             - Fancy Indexing: ch08/indexing/fancy_indexing.md
             - Boolean Masking: ch08/indexing/boolean_masking.md
-            - Array Indexing Tutorial (Python): ch08/indexing/array_indexing_tutorial.py
 
         - 8.6 Views and Copies:
             - View vs Copy: ch08/memory/numpy_views_copies.md
@@ -805,7 +691,6 @@ nav:
             - Rounding Functions: ch08/operations/rounding.md
             - Comparison Operators: ch08/operations/comparison.md
             - Universal Functions: ch08/operations/ufuncs.md
-            - Basic Operations Tutorial (Python): ch08/operations/basic_operations_tutorial.py
 
         - 8.8 Broadcasting:
             - Broadcasting Rules: ch08/broadcasting/broadcasting.md
@@ -813,7 +698,6 @@ nav:
             - Common Broadcasting Patterns: ch08/broadcasting/common_patterns.md
             - Broadcasting Failures and Debugging: ch08/broadcasting/failures_debugging.md
             - Performance Implications: ch08/broadcasting/performance.md
-            - Broadcasting Tutorial (Python): ch08/broadcasting/broadcasting_tutorial.py
 
         - 8.9 Vectorization:
             - Performance vs Loops: ch08/vectorization/performance.md
@@ -827,10 +711,6 @@ nav:
             - Einsum Operations: ch08/vectorization/einsum.md
             - Acceleration Libraries: ch08/vectorization/acceleration_libs.md
             - np.vectorize: ch08/vectorization/numpy_vectorize.md
-            - Performance Tutorial (Python): ch08/vectorization/performance_tutorial.py
-            - scipy.integrate Tutorial (Python): ch08/vectorization/scipy_integrate_tutorial.py
-            - Norm Optimization Progression (Python): ch08/vectorization/norm_optimization_progression.py
-            - Python vs NumPy Diffusion (Python): ch08/vectorization/python_vs_numpy_diffusion.py
 
         - 8.10 Array Manipulation:
             - Transpose and Swapaxes: ch08/manipulation/transpose.md
@@ -885,11 +765,9 @@ nav:
             - Polynomial Class: ch08/fitting/polynomial_class.md
             - Least Squares Connection: ch08/fitting/least_squares.md
             - scipy.interpolate — Spline Interpolation: ch08/fitting/scipy_interpolation.md
-            - 2D Surface Interpolation (Python): ch08/fitting/scipy_interpolation_2d.py
 
         - 8.17 Fourier Transforms:
             - np.fft Module: ch08/fft/numpy_fft.md
-            - Discrete Fourier Transform Matrix (Python): ch08/fft/dft_matrix_implementation.py
             - Spectrogram and Short-Time Fourier Transform: ch08/fft/spectrogram_stft.md
             - Window Functions: ch08/fft/windowing.md
             - 2D Fast Fourier Transform for Images: ch08/fft/fft_2d_image.md
@@ -920,17 +798,12 @@ nav:
             - Three Ways of Drawing: ch09/intro/three_ways_drawing.md
             - Five Major Objects: ch09/intro/five_major_objects.md
             - Interactive Mode: ch09/intro/interactive_mode.md
-            - Introduction Tutorial (Python): ch09/intro/introduction_tutorial.py
-            - Matplotlib Cheatsheet (Python): ch09/intro/matplotlib_cheatsheet.py
-            - Seaborn Basics Tutorial (Python): ch09/intro/seaborn_basics_tutorial.py
-            - Seaborn Basic Plots (Python): ch09/intro/seaborn_basic_plots.py
 
         - 9.2 Getting Started:
             - Installation and Import: ch09/setup/installation.md
             - Object-Oriented vs Pyplot Style: ch09/fundamentals/matplotlib_oop_vs_pyplot.md
             - plt.subplot vs plt.subplots: ch09/setup/subplot_vs_subplots.md
             - Style Sheets: ch09/setup/style_sheets.md
-            - Plotting Styles Tutorial (Python): ch09/fundamentals/plotting_styles_tutorial.py
 
         - 9.3 Figure Object:
             - Creating Figures: ch09/figure/creating_figures.md
@@ -950,8 +823,6 @@ nav:
             - GridSpec: ch09/layout/gridspec.md
             - subplot_mosaic: ch09/layout/subplot_mosaic.md
             - Tight Layout: ch09/layout/tight_layout.md
-            - Subplots Tutorial (Python): ch09/layout/subplots_tutorial.py
-            - GridSpec Tutorial (Python): ch09/layout/gridspec_tutorial.py
 
         - 9.6 Line Plot:
             - Basic Line Plot: ch09/line_plot/basic_line_plot.md
@@ -960,7 +831,6 @@ nav:
             - Markers: ch09/line_plot/markers.md
             - Labels and Legends: ch09/line_plot/labels_legends.md
             - Error Bars: ch09/line_plot/errorbar.md
-            - Complete Guide to plot() (Python): ch09/line_plot/complete_guide_plot.py
 
         - 9.7 Axes Customization:
             - Title and Labels: ch09/customization/title_labels.md
@@ -968,7 +838,6 @@ nav:
             - Tick Labels: ch09/customization/tick_labels.md
             - Grid and Axis: ch09/customization/grid_axis.md
             - Logarithmic Scales: ch09/customization/log_scales.md
-            - Advanced Customization Tutorial (Python): ch09/customization/advanced_customization_tutorial.py
 
         - 9.8 Spine and Axis:
             - Spine Customization: ch09/spine_axis/spine_customization.md
@@ -994,7 +863,6 @@ nav:
             - Histogram Keywords: ch09/histogram/histogram_keywords.md
             - Return Values: ch09/histogram/return_values.md
             - Distribution Fitting: ch09/histogram/distribution_fitting.md
-            - Complete Guide to hist() (Python): ch09/histogram/complete_guide_hist.py
 
         - 9.12 Box Plot:
             - Basic Box Plot: ch09/box_plot/basic_box_plot.md
@@ -1013,7 +881,6 @@ nav:
             - Basic Bar Chart: ch09/bar_chart/basic_bar_chart.md
             - Bar Chart Keywords: ch09/bar_chart/bar_chart_keywords.md
             - Grouped and Stacked: ch09/bar_chart/grouped_stacked.md
-            - Seaborn Categorical Plots (Python): ch09/bar_chart/seaborn_categorical_plots.py
 
         - 9.15 Pie Chart:
             - Basic Pie Chart: ch09/pie_chart/basic_pie_chart.md
@@ -1025,7 +892,6 @@ nav:
             - Heatmaps with pcolormesh: ch09/heatmap/pcolormesh_heatmap.md
             - Colormap Selection: ch09/heatmap/colormap_selection.md
             - Colorbars: ch09/heatmap/colorbars.md
-            - Seaborn Matrix Plots (Python): ch09/heatmap/seaborn_matrix_plots.py
 
         - 9.17 2D Density Plots:
             - Axes Method - hist2d: ch09/density_2d/hist2d.md
@@ -1072,10 +938,6 @@ nav:
             - Index Objects: ch10/core/index_objects.md
             - Hierarchical Indexing: ch10/core/hierarchical_indexing.md
             - Indexing and Selection: ch10/core/indexing.md
-            - Series Tutorial (Python): ch10/core/series_tutorial.py
-            - DataFrame Tutorial (Python): ch10/core/dataframe_tutorial.py
-            - MultiIndex Tutorial (Python): ch10/core/multiindex_tutorial.py
-            - Python vs NumPy vs Pandas Comparison (Python): ch10/core/python_numpy_pandas_comparison.py
 
         - 10.3 Creating DataFrames:
             - DataFrame Creation: ch10/creation/dataframe_creation.md
@@ -1084,7 +946,6 @@ nav:
             - Loading Excel and JSON: ch10/creation/read_excel_json.md
             - Loading SQL and Parquet: ch10/creation/read_sql_parquet.md
             - Saving DataFrames: ch10/creation/saving.md
-            - Reading and Writing Tutorial (Python): ch10/creation/reading_writing_tutorial.py
 
         - 10.4 DataFrame Inspection:
             - Attributes: ch10/inspection/attributes.md
@@ -1122,8 +983,6 @@ nav:
             - dropna Method: ch10/missing/dropna.md
             - dropna Keywords: ch10/missing/dropna_keywords.md
             - replace Method: ch10/missing/replace.md
-            - Data Cleaning Tutorial (Python): ch10/missing/data_cleaning_tutorial.py
-            - Data Preprocessing Workflow (Python): ch10/missing/data_preprocessing_workflow.py
 
         - 10.8 Aggregations:
             - Basic Aggregations: ch10/aggregation/basic_aggregations.md
@@ -1157,7 +1016,6 @@ nav:
             - Self Merge: ch10/merge/self_merge.md
             - Cross Merge: ch10/merge/cross_merge.md
             - merge_asof Method: ch10/merge/merge_asof.md
-            - Merge and Join Tutorial (Python): ch10/merge/merge_join_tutorial.py
 
         - 10.12 Joining DataFrames:
             - join Method: ch10/join/join_method.md
@@ -1181,7 +1039,6 @@ nav:
             - unstack Method: ch10/reshape/unstack.md
             - stack vs unstack: ch10/reshape/stack_vs_unstack.md
             - explode Method: ch10/reshape/explode.md
-            - Pivot and Reshape Tutorial (Python): ch10/reshape/pivot_reshape_tutorial.py
 
         - 10.15 GroupBy:
             - GroupBy Object: ch10/groupby/groupby_object.md
@@ -1192,8 +1049,6 @@ nav:
             - rank Method: ch10/groupby/rank.md
             - filter Method: ch10/groupby/filter.md
             - Multi-Level Grouping: ch10/groupby/multi_level.md
-            - GroupBy Tutorial (Python): ch10/groupby/groupby_tutorial.py
-            - Business Analytics Example (Python): ch10/groupby/business_analytics_example.py
 
         - 10.16 Pivot Tables:
             - pivot Method: ch10/pivot/pivot_method.md
@@ -1208,7 +1063,6 @@ nav:
             - Resampling: ch10/timeseries/resampling.md
             - shift and diff: ch10/timeseries/shift_diff.md
             - pct_change Method: ch10/timeseries/pct_change.md
-            - Time Series Tutorial (Python): ch10/timeseries/time_series_tutorial.py
 
         - 10.18 Window Functions:
             - Window Functions Overview: ch10/window/overview.md
@@ -1229,8 +1083,6 @@ nav:
             - Vectorization: ch10/performance/vectorization.md
             - Chunked Processing: ch10/performance/chunked_processing.md
             - Introduction to Dask: ch10/performance/dask_intro.md
-            - Performance Tutorial (Python): ch10/performance/performance_tutorial.py
-            - Iteration Methods Comparison (Python): ch10/performance/iteration_methods_comparison.py
 
         - 10.21 Common Pitfalls:
             - View vs Copy: ch10/pitfalls/view_vs_copy.md
@@ -1302,7 +1154,6 @@ nav:
             - Iterative Solvers: ch11/sparse/iterative_solvers.md
             - Preconditioning: ch11/sparse/preconditioning.md
             - Sparse Eigenvalues: ch11/eigen/sparse_eig.md
-            - Spectral Methods (Python): ch11/eigen/spectral_methods_example.py
 
         - 11.8 Special Matrices:
             - Toeplitz and Circulant: ch11/special/toeplitz.md
@@ -1317,8 +1168,6 @@ nav:
             - Partial Differential Equation Discretization: ch11/applications/pde.md
             - Graph Algorithms: ch11/applications/graphs.md
             - Sparse Matrix Applications: ch11/sparse/applications.md
-            - Variation of Information (Python): ch11/sparse/variation_of_information.py
-            - Delaunay Triangulation (Python): ch11/applications/delaunay_triangulation.py
 
     - 12 SciPy Stats:
         - Chapter Overview: ch12/index.md
@@ -1328,7 +1177,6 @@ nav:
             - Percentiles and Quantiles: ch12/descriptive/percentiles.md
             - Outlier Detection: ch12/descriptive/outlier_detection.md
             - Robust Statistics (Median Absolute Deviation, Trimmed): ch12/descriptive/robust_statistics.md
-            - Outlier Detection Methods (Python): ch12/descriptive/outlier_detection_methods.py
 
         - 12.2 Distribution Object Model:
             - rv_continuous and rv_discrete: ch12/distributions/rv_classes.md
@@ -1340,8 +1188,6 @@ nav:
             - Moments and Stats (mean, var, moment, stats): ch12/distributions/moments_stats.md
             - Fitting Distributions to Data (fit): ch12/distributions/fit.md
             - Confidence Intervals (interval): ch12/distributions/interval.md
-            - Basics and Distributions (Python): ch12/distributions/basics_distributions.py
-            - Solutions - Basics (Python): ch12/distributions/solutions_basics.py
 
         - 12.3 Distribution Families:
             - Normal Distribution: ch12/families/normal.md
@@ -1355,9 +1201,6 @@ nav:
             - Binomial and Poisson: ch12/families/binomial_poisson.md
             - Multivariate Normal: ch12/families/multivariate_normal.md
             - Custom Distributions (rv_continuous subclass): ch12/families/custom_distributions.md
-            - Continuous Distributions (Python): ch12/families/continuous_distributions.py
-            - Discrete Distributions (Python): ch12/families/discrete_distributions.py
-            - Solutions - Distributions (Python): ch12/families/solutions_distributions.py
 
         - 12.4 Density Estimation:
             - gaussian_kde: ch12/density/gaussian_kde.md
@@ -1365,7 +1208,6 @@ nav:
             - Kernel Density Estimation vs Histogram: ch12/density/kde_vs_histogram.md
             - Multivariate Kernel Density Estimation: ch12/density/multivariate_kde.md
             - Evaluate and Resample: ch12/density/evaluate_resample.md
-            - Seaborn Distribution Plots (Python): ch12/density/seaborn_distributions.py
 
         - 12.5 Hypothesis Testing:
             - Null and Alternative Hypotheses: ch12/hypothesis/null_hypothesis.md
@@ -1376,7 +1218,6 @@ nav:
             - Multiple Testing Correction (Bonferroni, False Discovery Rate): ch12/hypothesis/multiple_testing.md
             - One-Sided vs Two-Sided Tests: ch12/hypothesis/one_vs_two_sided.md
             - Effect Size: ch12/hypothesis/effect_size.md
-            - Advanced Hypothesis Testing (Python): ch12/hypothesis/hypothesis_testing_advanced.py
 
         - 12.6 Statistical Tests:
             - t-Tests (ttest_1samp, ttest_ind, ttest_rel): ch12/tests/t_tests.md
@@ -1387,8 +1228,6 @@ nav:
             - Goodness of Fit (kstest, anderson): ch12/tests/goodness_of_fit.md
             - Variance Tests (Levene, Bartlett): ch12/tests/variance_tests.md
             - Test Selection Guide: ch12/tests/selection_guide.md
-            - Statistical Tests (Python): ch12/tests/statistical_tests.py
-            - Solutions - Tests (Python): ch12/tests/solutions_tests.py
 
         - 12.7 Correlation:
             - Pearson and Spearman: ch12/correlation/correlation.md
@@ -1397,7 +1236,6 @@ nav:
             - Autocorrelation: ch12/correlation/autocorrelation.md
             - Covariance and Covariance Matrix: ch12/correlation/covariance.md
             - Correlation Pitfalls: ch12/correlation/pitfalls.md
-            - Correlation and Regression (Python): ch12/correlation/correlation_regression.py
 
         - 12.8 Regression:
             - linregress: ch12/regression/linregress.md
@@ -1407,7 +1245,6 @@ nav:
             - Polynomial Regression: ch12/regression/polynomial_regression.md
             - Regularization Preview (Ridge, Lasso): ch12/regression/regularization_preview.md
             - Logistic Regression Preview: ch12/regression/logistic_preview.md
-            - Seaborn Regression Plots (Python): ch12/regression/seaborn_regression_plots.py
 
         - 12.9 Resampling Methods:
             - Bootstrap Basics (scipy.stats.bootstrap): ch12/resampling/bootstrap.md
@@ -1415,7 +1252,6 @@ nav:
             - Permutation Tests (permutation_test): ch12/resampling/permutation.md
             - Jackknife Method: ch12/resampling/jackknife.md
             - Monte Carlo Simulation: ch12/resampling/monte_carlo.md
-            - Seaborn Statistical Estimation (Python): ch12/resampling/seaborn_statistical_estimation.py
 
         - 12.10 Probability Plots and Diagnostics:
             - Quantile-Quantile Plots (probplot): ch12/diagnostics/qq_plots.md
@@ -1441,7 +1277,6 @@ nav:
             - Statistical Preprocessing: ch12/applications/preprocessing.md
             - Monte Carlo Methods in Finance: ch12/applications/monte_carlo_finance.md
             - Bayesian Inference Preview: ch12/applications/bayesian_preview.md
-            - Advanced Topics (Python): ch12/applications/advanced_topics.py
 
     - 13 SciPy Optimize:
         - Chapter Overview: ch13/index.md
@@ -1451,7 +1286,6 @@ nav:
             - Minimize Basics: ch13/minimization/minimize_basics.md
             - Optimization Methods: ch13/minimization/optimization_methods.md
             - Local vs Global Optimization: ch13/minimization/local_vs_global.md
-            - Optimization Methods Comparison (Python): ch13/minimization/optimization_comparison.py
         - 13.3 Constrained Optimization:
             - Constrained Optimization: ch13/constraints/constrained_optimization.md
         - 13.4 Curve Fitting:
@@ -1468,32 +1302,23 @@ nav:
             - Threads vs Processes: ch14/concepts/threads_vs_processes.md
             - Deadlocks: ch14/concepts/deadlocks.md
             - Race Conditions: ch14/concepts/race_conditions.md
-            - Global Interpreter Lock Tutorial (Python): ch14/concepts/gil_tutorial.py
 
         - 14.2 concurrent.futures:
             - Executor Interface: ch14/futures/executor_interface.md
             - ThreadPoolExecutor: ch14/futures/thread_pool.md
             - ProcessPoolExecutor: ch14/futures/process_pool.md
             - Future Objects: ch14/futures/future_objects.md
-            - ThreadPoolExecutor.map() (Python): ch14/futures/threadpool_executor_map.py
 
         - 14.3 Threading:
             - Thread Basics: ch14/threading/thread_basics.md
             - Thread Synchronization: ch14/threading/synchronization.md
             - Thread Communication: ch14/threading/communication.md
             - Thread-Local Storage: ch14/threading/thread_local.md
-            - Threading Basics Tutorial (Python): ch14/threading/threading_basics_tutorial.py
-            - Thread Safety Tutorial (Python): ch14/threading/thread_safety_tutorial.py
-            - Thread Event Pattern (Python): ch14/threading/thread_event_pattern.py
-            - Bank Account Condition (Python): ch14/threading/bank_account_condition_example.py
 
         - 14.4 Multiprocessing:
             - Process Basics: ch14/multiprocessing/process_basics.md
             - Process Pool: ch14/multiprocessing/pool.md
             - Sharing State: ch14/multiprocessing/sharing_state.md
-            - Process Basics Tutorial (Python): ch14/multiprocessing/process_basics_tutorial.py
-            - Process Pool Tutorial (Python): ch14/multiprocessing/pool_tutorial.py
-            - Prime Validation with Pool (Python): ch14/multiprocessing/prime_validation_pool.py
 
         - 14.5 Asyncio:
             - Asyncio Introduction: ch14/asyncio/introduction.md
@@ -1505,16 +1330,11 @@ nav:
             - Asyncio Patterns: ch14/asyncio/patterns.md
             - Asynchronous HTTP (aiohttp): ch14/asyncio/aiohttp_examples.md
             - Context Variables: ch14/asyncio/contextvars.md
-            - Async/Await Tutorial (Python): ch14/asyncio/async_await_tutorial.py
-            - Event Loop Tutorial (Python): ch14/asyncio/event_loop_tutorial.py
-            - Gather vs Wait Tutorial (Python): ch14/asyncio/gather_vs_wait_tutorial.py
-            - Coroutine Prime Filter (Python): ch14/asyncio/coroutine_prime_filter_example.py
 
         - 14.6 Practical Patterns:
             - When to Use What: ch14/patterns/decision_guide.md
             - Common Patterns: ch14/patterns/common_patterns.md
             - Error Handling: ch14/patterns/error_handling.md
-            - Decision Guide Tutorial (Python): ch14/patterns/decision_guide_tutorial.py
 
     - 15 Systems and Networking:
         - Chapter Overview: ch15/index.md
@@ -1530,7 +1350,6 @@ nav:
             - Protocols (TCP/IP, HTTP): ch15/networking/protocols.md
             - Latency and Bandwidth: ch15/networking/latency_bandwidth.md
             - Local vs Remote Computation: ch15/networking/local_vs_remote.md
-            - Web Scraping and API Tutorial (Python): ch15/networking/web_scraping_api_tutorial.py
 
         - 15.3 Distributed Systems Preview:
             - Single Machine vs Cluster: ch15/distributed/single_vs_cluster.md

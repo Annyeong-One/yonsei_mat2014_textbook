@@ -13,7 +13,6 @@ Python supports comprehensions for:
 
 They provide a concise alternative to loops. In each case, the pattern is the same: apply an expression to each element and optionally filter with a condition.
 
----
 
 ## 1. List Comprehensions
 
@@ -40,7 +39,6 @@ for x in range(5):
 
 Throughout this page, the loop equivalent is shown only for list comprehensions. The same expansion applies to set, dict, and generator forms.
 
----
 
 ## 2. Filtering in Comprehensions
 
@@ -74,7 +72,6 @@ Output:
 
 Note the position: `if`/`else` before `for` transforms every element; `if` after `for` selects which elements to include.
 
----
 
 ## 3. Set Comprehensions
 
@@ -93,7 +90,6 @@ Output:
 
 `"cat"`, `"dog"`, and `"ant"` all have length 3 — the set keeps only one.
 
----
 
 ## 4. Dictionary Comprehensions
 
@@ -110,7 +106,6 @@ Output:
 {0: 0, 1: 1, 2: 4, 3: 9, 4: 16}
 ```
 
----
 
 ## 5. Generator Expressions
 
@@ -153,11 +148,12 @@ distinction explicit: if you are generating a collection of uniform values, you
 probably want a list; if you happen to need a tuple for a specific API or performance
 reason, wrap a generator explicitly with `tuple()`.
 
----
 
 ## 6. Nested Comprehensions
 
-Comprehensions can iterate over multiple sequences.
+Comprehensions can iterate over multiple sequences. The order reads left to right: the outer `for` comes first, then the inner `for`.
+
+Flattening a matrix:
 
 ```python
 matrix = [[1, 2], [3, 4], [5, 6]]
@@ -171,9 +167,19 @@ Output:
 [1, 2, 3, 4, 5, 6]
 ```
 
-The order reads left to right: the outer `for` comes first, then the inner `for`.
+Cartesian product — all pairs from two ranges:
 
----
+```python
+pairs = [(x, y) for x in range(3) for y in range(3)]
+print(pairs)
+```
+
+Output:
+
+```text
+[(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2)]
+```
+
 
 ## 7. When to Use Comprehensions
 
@@ -186,7 +192,6 @@ result = [f(x, y) for x in range(10) for y in range(10) if x != y and g(x, y)]
 
 Comprehensions are generally preferred over `map()` and `filter()` in modern Python for readability.
 
----
 
 ## 8. Worked Examples
 
@@ -231,7 +236,6 @@ Output:
 {'cat': 3, 'horse': 5}
 ```
 
----
 
 ## 9. Common Pitfalls
 
@@ -267,16 +271,9 @@ squares = [x for x in range(5)]
 # x is not defined here — unlike a regular for loop
 ```
 
----
 
-## 10. Summary
+## 10. Key Ideas
 
-Key ideas:
+Comprehensions create collections concisely by combining an expression, one or more `for` clauses, and an optional `if` filter. List, set, dictionary, and generator forms all follow the same pattern — the only differences are the enclosing brackets and the presence of `:` for dictionaries. A trailing `if` selects which elements to include; an `if`/`else` before `for` transforms every element. Generator expressions are lazy and memory-efficient — prefer them when the full collection is not needed. Keep comprehensions simple: once they require nested loops with conditions, a regular loop is clearer.
 
-- comprehensions create collections concisely
-- list, set, dictionary, and generator forms all follow the same pattern
-- filtering with `if` selects elements; `if`/`else` in the expression transforms elements
-- generator expressions are lazy and memory-efficient
-- keep comprehensions simple — use a loop when they become hard to read
-
-Comprehensions are one of Python's most expressive tools for transforming data. They build on [Lists](lists.md), [Sets](sets.md), and [Dictionaries](dictionaries.md) covered earlier in this section. For deeper coverage of how these collections work internally, see [Hashing and Hash Tables](../../ch02/composites/hashing_deep_dive.md).
+Comprehensions build on [Lists](lists.md), [Sets](sets.md), and [Dictionaries](dictionaries.md) covered earlier in this section. For deeper coverage of how these collections work internally, see [Hashing and Hash Tables](../../ch02/composites/hashing_deep_dive.md).

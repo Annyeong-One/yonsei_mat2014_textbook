@@ -40,3 +40,416 @@ The `double` object carries the factor `2` as internal state. Each call to `doub
 - Defining `__call__` on a class makes its instances callable with the same syntax as a regular function.
 - Callable objects combine the convenience of function call syntax with the ability to store and update internal state.
 - Common applications include configurable operations, stateful decorators, and state machines.
+
+---
+
+## Runnable Example: `hash_digest_callable_example.py`
+
+```python
+"""
+Callable Objects: Stream Hasher with __call__
+
+Demonstrates the __call__ magic method by creating a callable class
+that computes file hash digests. The object acts like a function but
+maintains internal state (algorithm, buffer size).
+
+Topics covered:
+- __call__ to make instances callable
+- hashlib for cryptographic hash functions
+- Dynamic module/attribute loading with __import__ and getattr
+- Iterator pattern with iter(callable, sentinel)
+
+Based on concepts from Python-100-Days example07 and ch06/dunder_advanced materials.
+"""
+
+import hashlib
+import io
+
+
+# =============================================================================
+# Example 1: Stream Hasher (Callable Class)
+# =============================================================================
+
+class StreamHasher:
+    """A callable object that computes hash digests of data streams.
+
+    By implementing __call__, instances can be used like functions:
+        hasher = StreamHasher('sha256')
+        digest = hasher(file_stream)  # Calls hasher.__call__(file_stream)
+
+    This is more flexible than a plain function because the object
+    retains configuration (algorithm, buffer size) as state.
+    """
+
+    SUPPORTED = ('md5', 'sha1', 'sha256', 'sha512')
+
+    def __init__(self, algorithm: str = 'md5', buffer_size: int = 4096):
+        """Initialize with hash algorithm and buffer size.
+
+        Args:
+            algorithm: Hash algorithm name (md5, sha1, sha256, sha512).
+            buffer_size: Bytes to read per chunk.
+        """
+        if algorithm.lower() not in self.SUPPORTED:
+            raise ValueError(
+                f"Unsupported algorithm '{algorithm}'. "
+                f"Choose from: {self.SUPPORTED}"
+            )
+        self.algorithm = algorithm.lower()
+        self.buffer_size = buffer_size
+
+    def digest(self, data_stream) -> str:
+        """Compute hexadecimal hash digest from a data stream.
+
+        Uses iter(callable, sentinel) pattern to read chunks:
+        - callable: lambda that reads buffer_size bytes
+        - sentinel: b'' (empty bytes = end of stream)
+        """
+        hasher = hashlib.new(self.algorithm)
+        for chunk in iter(lambda: data_stream.read(self.buffer_size), b''):
+            hasher.update(chunk)
+        return hasher.hexdigest()
+
+    def __call__(self, data_stream) -> str:
+        """Make instances callable: hasher(stream) == hasher.digest(stream)."""
+        return self.digest(data_stream)
+
+    def __repr__(self):
+        return f"StreamHasher('{self.algorithm}', buffer_size={self.buffer_size})"
+
+
+# =============================================================================
+# Example 2: Using Callable Objects
+# =============================================================================
+
+def demo_callable():
+    """Demonstrate callable objects with hash computation."""
+    print("=== Callable Object Demo ===")
+
+    # Create hashers for different algorithms
+    md5_hasher = StreamHasher('md5')
+    sha256_hasher = StreamHasher('sha256')
+
+    # Hash some data using BytesIO as a stream
+    data = b"Hello, World! This is a test of the callable hasher."
+
+    stream1 = io.BytesIO(data)
+    stream2 = io.BytesIO(data)
+
+    # Both calling styles work:
+    md5_digest = md5_hasher(stream1)           # Using __call__
+    sha256_digest = sha256_hasher.digest(stream2)  # Using method directly
+
+    print(f"Data: {data.decode()!r}")
+    print(f"MD5:    {md5_digest}")
+    print(f"SHA256: {sha256_digest}")
+    print()
+
+    # Verify callable() built-in
+    print(f"callable(md5_hasher): {callable(md5_hasher)}")
+    print(f"callable('string'):   {callable('string')}")
+    print()
+
+
+# =============================================================================
+# Example 3: Callable vs Function
+# =============================================================================
+
+def simple_md5(data: bytes) -> str:
+    """Plain function alternative to callable class."""
+    return hashlib.md5(data).hexdigest()
+
+
+def demo_callable_vs_function():
+    """Compare callable class vs plain function."""
+    print("=== Callable Class vs Function ===")
+
+    data = b"test data"
+
+    # Function: simple but no configuration
+    result1 = simple_md5(data)
+    print(f"Function:        {result1}")
+
+    # Callable object: configurable and stateful
+    hasher = StreamHasher('md5', buffer_size=2)
+    result2 = hasher(io.BytesIO(data))
+    print(f"Callable object: {result2}")
+    print(f"Same result:     {result1 == result2}")
+
+    print()
+    print("When to use callable classes:")
+    print("  - Need configurable behavior (algorithm, buffer size)")
+    print("  - Want to maintain state between calls")
+    print("  - Implementing strategy/command patterns")
+    print("  - Need both function-call and method-call interfaces")
+    print()
+
+
+# =============================================================================
+# Example 4: iter(callable, sentinel) Pattern
+# =============================================================================
+
+def demo_iter_sentinel():
+    """Demonstrate the iter(callable, sentinel) pattern used in StreamHasher."""
+    print("=== iter(callable, sentinel) Pattern ===")
+
+    # iter() with two args: calls the callable until it returns sentinel
+    data = io.BytesIO(b"Hello World")
+
+    print("Reading 3 bytes at a time until empty:")
+    chunks = list(iter(lambda: data.read(3), b''))
+    print(f"  Chunks: {chunks}")
+    print()
+
+    print("This is equivalent to:")
+    print("  while True:")
+    print("      chunk = stream.read(3)")
+    print("      if chunk == b'':  # sentinel")
+    print("          break")
+    print("      process(chunk)")
+    print()
+
+
+# =============================================================================
+# Main
+# =============================================================================
+
+if __name__ == '__main__':
+    demo_callable()
+    demo_callable_vs_function()
+    demo_iter_sentinel()
+```
+
+
+---
+
+## Runnable Example: `callable_and_context_tutorial.py`
+
+```python
+"""
+Example 5: Callable Objects and Context Managers
+Demonstrates: __call__, __enter__, __exit__
+"""
+
+import time
+
+
+class Multiplier:
+    """A callable class that multiplies by a factor."""
+    
+    def __init__(self, factor):
+        self.factor = factor
+    
+    def __call__(self, x):
+        """Make the object callable."""
+        return x * self.factor
+    
+    def __repr__(self):
+        return f"Multiplier({self.factor})"
+
+
+class Counter:
+    """A callable counter that increments each time it's called."""
+    
+    def __init__(self, start=0):
+        self.count = start
+    
+    def __call__(self):
+        """Increment and return the count."""
+        self.count += 1
+        return self.count
+    
+    def reset(self):
+        """Reset the counter."""
+        self.count = 0
+    
+    def __repr__(self):
+        return f"Counter(current={self.count})"
+
+
+class Timer:
+    """A context manager that times code execution."""
+    
+    def __init__(self, name="Code block"):
+        self.name = name
+        self.start_time = None
+        self.elapsed_time = None
+    
+    def __enter__(self):
+        """Start the timer when entering the context."""
+        print(f"Starting timer for: {self.name}")
+        self.start_time = time.time()
+        return self
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """Stop the timer when exiting the context."""
+        self.elapsed_time = time.time() - self.start_time
+        print(f"Finished: {self.name}")
+        print(f"Time elapsed: {self.elapsed_time:.4f} seconds")
+        
+        # Return False to propagate any exceptions
+        # Return True to suppress exceptions
+        return False
+
+
+class FileWriter:
+    """A context manager for safe file writing."""
+    
+    def __init__(self, filename):
+        self.filename = filename
+        self.file = None
+    
+    def __enter__(self):
+        """Open the file when entering the context."""
+        print(f"Opening file: {self.filename}")
+        self.file = open(self.filename, 'w')
+        return self.file
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """Close the file when exiting the context."""
+        if self.file:
+            print(f"Closing file: {self.filename}")
+            self.file.close()
+        
+        # Handle exceptions
+        if exc_type is not None:
+            print(f"An error occurred: {exc_val}")
+        
+        return False  # Don't suppress exceptions
+
+
+class DatabaseConnection:
+    """A context manager simulating a database connection."""
+    
+    def __init__(self, db_name):
+        self.db_name = db_name
+        self.connected = False
+    
+    def __enter__(self):
+        """Establish connection when entering context."""
+        print(f"Connecting to database: {self.db_name}")
+        self.connected = True
+        return self
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """Close connection when exiting context."""
+        print(f"Disconnecting from database: {self.db_name}")
+        self.connected = False
+        return False
+    
+    def execute(self, query):
+        """Simulate executing a query."""
+        if not self.connected:
+            raise RuntimeError("Not connected to database")
+        print(f"Executing query: {query}")
+        return f"Result of: {query}"
+
+
+# Examples
+if __name__ == "__main__":
+
+    # ============================================================================
+    print("=== Callable Objects: Multiplier ===")
+    double = Multiplier(2)
+    triple = Multiplier(3)
+    
+    print(f"double: {double}")
+    print(f"double(5) = {double(5)}")
+    print(f"double(10) = {double(10)}")
+    
+    print(f"\ntriple: {triple}")
+    print(f"triple(5) = {triple(5)}")
+    print(f"triple(10) = {triple(10)}")
+    
+    # Use in map
+    numbers = [1, 2, 3, 4, 5]
+    doubled = list(map(double, numbers))
+    print(f"\nOriginal: {numbers}")
+    print(f"Doubled: {doubled}")
+    
+    print("\n\n=== Callable Objects: Counter ===")
+    counter = Counter()
+    print(f"Counter: {counter}")
+    
+    print(f"Call 1: {counter()}")
+    print(f"Call 2: {counter()}")
+    print(f"Call 3: {counter()}")
+    print(f"Current state: {counter}")
+    
+    counter.reset()
+    print(f"After reset: {counter}")
+    print(f"Next call: {counter()}")
+    
+    print("\n\n=== Context Manager: Timer ===")
+    with Timer("Example computation"):
+        # Simulate some work
+        total = 0
+        for i in range(1000000):
+            total += i
+        print(f"Sum calculated: {total}")
+    
+    print("\n=== Context Manager: Timer with Variable ===")
+    with Timer("Another task") as timer:
+        time.sleep(0.1)  # Sleep for 100ms
+    print(f"Recorded time: {timer.elapsed_time:.4f} seconds")
+    
+    print("\n\n=== Context Manager: FileWriter ===")
+    # Note: In this example, we won't actually create a file
+    # but show how it would work
+    print("Example of file writing (demonstration):")
+    print("with FileWriter('output.txt') as f:")
+    print("    f.write('Hello, World!')")
+    print("    f.write('This is a test.')")
+    
+    print("\n\n=== Context Manager: DatabaseConnection ===")
+    with DatabaseConnection("mydb") as db:
+        result1 = db.execute("SELECT * FROM users")
+        print(f"Result: {result1}")
+        
+        result2 = db.execute("INSERT INTO users VALUES (1, 'Alice')")
+        print(f"Result: {result2}")
+    
+    print("\n=== Multiple Context Managers ===")
+    with Timer("Database operations"), DatabaseConnection("testdb") as db:
+        db.execute("SELECT * FROM products")
+        db.execute("UPDATE products SET price = 99.99")
+    
+    print("\n=== Combining Callable and Context Manager ===")
+    
+    class CallableTimer:
+        """A class that's both callable and a context manager."""
+        
+        def __init__(self):
+            self.times = []
+        
+        def __call__(self, duration):
+            """Record a time when called."""
+            self.times.append(duration)
+            print(f"Recorded time: {duration:.4f}s")
+        
+        def __enter__(self):
+            """Start timing."""
+            self.start = time.time()
+            return self
+        
+        def __exit__(self, exc_type, exc_val, exc_tb):
+            """Calculate and record elapsed time."""
+            elapsed = time.time() - self.start
+            self(elapsed)  # Use __call__ to record
+            return False
+        
+        def average(self):
+            """Calculate average time."""
+            return sum(self.times) / len(self.times) if self.times else 0
+    
+    timer_recorder = CallableTimer()
+    
+    # Use as context manager
+    with timer_recorder:
+        time.sleep(0.05)
+    
+    with timer_recorder:
+        time.sleep(0.08)
+    
+    print(f"\nAverage time: {timer_recorder.average():.4f}s")
+```

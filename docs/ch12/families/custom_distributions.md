@@ -124,3 +124,50 @@ print(f"CDF from method:   {cdf_from_method:.6f}")
 ## Summary
 
 The `rv_continuous` subclass pattern allows you to define any continuous distribution by specifying its PDF. Once defined, the distribution inherits the full `scipy.stats` interface including CDF, PPF, moment computation, and random sampling. For production use, override `_cdf`, `_ppf`, and `_stats` with closed-form expressions to avoid numerical overhead.
+
+---
+
+## Runnable Example: `solutions_distributions.py`
+
+```python
+"""
+Solutions 02: Continuous and Discrete Distributions
+===================================================
+Detailed solutions with full explanations.
+"""
+
+import numpy as np
+from scipy import stats
+import matplotlib.pyplot as plt
+
+# =============================================================================
+# Main
+# =============================================================================
+
+if __name__ == "__main__":
+
+    print("="*80)
+    print("SOLUTIONS: PROBABILITY DISTRIBUTIONS")
+    print("="*80)
+    print()
+
+    # Solution 1
+    print("Solution 1: Exponential Distribution")
+    print("-" * 40)
+
+    mean_time = 5  # minutes
+    expo_dist = stats.expon(scale=mean_time)
+
+    # Part a
+    prob_within_3 = expo_dist.cdf(3)
+    print(f"a) P(X ≤ 3) = {prob_within_3:.4f}")
+    print()
+
+    # Part b - Memoryless property
+    prob_within_2 = expo_dist.cdf(2)
+    print(f"b) P(X ≤ 6 | X > 4) = P(X ≤ 2) = {prob_within_2:.4f}")
+    print(f"   This equals P(X ≤ 2) due to memoryless property\n")
+
+    # Detailed solutions continue...
+    print("="*80)
+```

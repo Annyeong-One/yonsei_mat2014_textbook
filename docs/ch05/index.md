@@ -4,17 +4,11 @@ This chapter covers advanced function topics including first-class functions, la
 
 ## 5.1 First-Class Functions
 
-- [Lambda Expressions](functions/lambda.md)
-- [Function Factories](functions/function_factories.md)
+- [First-Class Functions](first_class_functions/first_class_functions.md)
+- [Lambda Expressions](first_class_functions/lambda.md)
+- [Function Factories](first_class_functions/function_factories.md)
 
-## 5.2 Parameters
-
-- [\*args and \*\*kwargs](params/args_kwargs.md)
-- [Keyword-Only Arguments](params/keyword_only.md)
-- [Positional-Only Arguments](params/positional_only.md)
-- [Parameter Best Practices](params/best_practices.md)
-
-## 5.3 Recursion
+## 5.2 Recursion
 
 - [Recursion Fundamentals](recursion/fundamentals.md)
 - [Recursive Patterns](recursion/patterns.md)
@@ -26,11 +20,9 @@ This chapter covers advanced function topics including first-class functions, la
 - [Divide and Conquer](recursion/divide_and_conquer.md)
 - [Backtracking](recursion/backtracking.md)
 
-## 5.4 Functional Programming
+## 5.3 Functional Programming
 
 - [map(), filter(), reduce()](functional/map_filter_reduce.md)
-- [Comprehensions](functional/comprehensions.md)
-- [Generator Expressions](functional/generator_expressions.md)
 - [Pure Functions](functional/pure_functions.md)
 - [Higher-Order Functions](functional/higher_order.md)
 - [Partial Application](functional/partial_application.md)
@@ -38,7 +30,7 @@ This chapter covers advanced function topics including first-class functions, la
 - [operator Module](functional/operator_module.md)
 - [Callback Patterns](functional/callback_patterns.md)
 
-## 5.5 functools Module
+## 5.4 functools Module
 
 - [functools Overview](functools/functools_overview.md)
 - [functools.cache](functools/functools_cache.md)
@@ -49,7 +41,7 @@ This chapter covers advanced function topics including first-class functions, la
 - [functools.total_ordering](functools/functools_total_ordering.md)
 - [functools.singledispatch](functools/functools_singledispatch.md)
 
-## 5.6 Decorators
+## 5.5 Decorators
 
 - [Decorator Fundamentals](decorators/decorator_fundamentals.md)
 - [Decorator Factories](decorators/decorator_factories.md)
@@ -58,6 +50,6 @@ This chapter covers advanced function topics including first-class functions, la
 - [Practical Patterns](decorators/practical_patterns.md)
 - [Decorators Cheat Sheet](decorators/decorators_cheat_sheet.md)
 
-## 5.7 Design Patterns
+## 5.6 Design Patterns
 
 - Strategy Pattern

@@ -112,11 +112,11 @@ This chapter deepens your understanding of Python with topics like dynamic typin
 
 ## 2.13 Function Parameters
 
-- [Call-by-Object-Reference](functions/call_by_object_reference.md)
-- [Parameter Mechanisms](functions/parameter_mechanisms.md)
-- [Default Parameter Gotcha](functions/default_parameter_gotcha.md)
-- [First Class Functions](functions/first_class_functions.md)
-- [Parameter Passing](functions/parameter_passing.md)
+- [Call-by-Object-Reference](functions_params/call_by_object_reference.md)
+- [Parameter Mechanisms](functions_params/parameter_mechanisms.md)
+- [Default Parameter Gotcha](functions_params/default_parameter_gotcha.md)
+- [Parameter Passing](functions_params/parameter_passing.md)
+- [Parameter Best Practices](functions_params/best_practices.md)
 
 ## 2.14 Closures
 
