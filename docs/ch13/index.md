@@ -1,6 +1,6 @@
 # Chapter 13: SciPy Optimize
 
-Many scientific and engineering problems reduce to finding optimal values — minimizing cost, fitting a model to data, or locating where a function crosses zero. This chapter introduces SciPy's `optimize` module for function minimization, constrained optimization, curve fitting, and root finding.
+Many scientific and engineering problems reduce to finding optimal values---minimizing cost, fitting a model to data, or locating where a function crosses zero. This chapter introduces SciPy's `optimize` module for function minimization, constrained optimization, curve fitting, and root finding.
 
 ## 13.1 Overview
 
