@@ -8,9 +8,9 @@ Key ideas:
 * Python programs run through an **interpreter**
 * Variables are **names bound to objects**
 * Python provides **built-in data types**
-* expressions combine values using **operators**
-* indentation defines **program structure**
-* comments and docstrings improve readability
+* Expressions combine values using **operators**
+* Indentation defines **program structure**
+* Comments and docstrings improve readability
 * `pass` creates empty blocks when needed
 
 Together, these elements form the **basic syntax of Python**.
