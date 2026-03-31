@@ -1,7 +1,7 @@
 
 # Global and Nonlocal
 
-By default, assignment inside a function creates a local variable. The `global` and `nonlocal` keywords let a function explicitly modify a variable defined in an outer scope — `global` targets the module-level scope, while `nonlocal` targets the nearest enclosing function scope.
+By default, assignment inside a function creates a local variable. The `global` and `nonlocal` keywords let a function explicitly modify a variable defined in an outer scope---`global` targets the module-level scope, while `nonlocal` targets the nearest enclosing function scope.
 
 ## global Keyword
 
