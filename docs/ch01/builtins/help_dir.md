@@ -19,10 +19,10 @@ Lists all attributes and methods available on a given object or type.
 dir(str)
 ```
 
-Example output:
+This returns a list of all string methods and attributes:
 
 ```
-['capitalize','count','encode','find','lower']
+['capitalize', 'count', 'encode', 'find', 'lower', ...]
 ```
 
 ## Practical Example
