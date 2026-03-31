@@ -3,7 +3,7 @@
 
 Control flow determines **which parts of a program execute and in what order**.
 
-So far, our programs executed sequentially — one line after another.
+So far, our programs executed sequentially---one line after another.
 Control flow introduces mechanisms that allow programs to:
 
 - make decisions
