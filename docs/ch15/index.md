@@ -1,6 +1,6 @@
 # Chapter 15: Systems and Networking
 
-Python abstracts away the hardware — you write `x = 42` without thinking about how the CPU stores that integer in memory or how data travels between devices. Yet understanding these layers explains why some Python code is fast and some is slow, why `NumPy` outperforms pure Python loops, and why distributed computing requires different patterns than single-machine code. This chapter pulls back the curtain on hardware communication, networking, and distributed systems, then reconnects each concept to Python's execution model.
+Python abstracts away the hardware---you write `x = 42` without thinking about how the CPU stores that integer in memory or how data travels between devices. Yet understanding these layers explains why some Python code is fast and some is slow, why `NumPy` outperforms pure Python loops, and why distributed computing requires different patterns than single-machine code. This chapter pulls back the curtain on hardware communication, networking, and distributed systems, then reconnects each concept to Python's execution model.
 
 The chapter moves from the lowest level (how the CPU talks to memory and peripherals) through networking and distributed systems, and ends by connecting everything back to Python's runtime behavior.
 
