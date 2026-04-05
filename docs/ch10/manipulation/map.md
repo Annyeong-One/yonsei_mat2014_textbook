@@ -198,3 +198,54 @@ df['mapped'] = df['col'].map(
 # Skip NaN values during mapping
 df['col'].map(func, na_action='ignore')
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a Series of country codes like `['US', 'UK', 'JP', 'DE']`. Use `.map()` with a dictionary to convert them to full country names (e.g., `{'US': 'United States', 'UK': 'United Kingdom', ...}`).
+
+??? success "Solution to Exercise 1"
+    Map codes to names using a dictionary.
+
+        import pandas as pd
+
+        codes = pd.Series(['US', 'UK', 'JP', 'DE'])
+        mapping = {'US': 'United States', 'UK': 'United Kingdom', 'JP': 'Japan', 'DE': 'Germany'}
+        names = codes.map(mapping)
+        print(names)
+
+---
+
+**Exercise 2.**
+Create a numeric Series. Use `.map()` with a lambda to classify each value as `'positive'`, `'negative'`, or `'zero'`. Compare the result with using `.apply()` -- both should be identical.
+
+??? success "Solution to Exercise 2"
+    Compare map and apply with a lambda.
+
+        import pandas as pd
+
+        s = pd.Series([-3, 0, 5, -1, 0, 8])
+        result_map = s.map(lambda x: 'positive' if x > 0 else ('negative' if x < 0 else 'zero'))
+        result_apply = s.apply(lambda x: 'positive' if x > 0 else ('negative' if x < 0 else 'zero'))
+        print(result_map)
+        assert (result_map == result_apply).all()
+        print("map and apply produce identical results.")
+
+---
+
+**Exercise 3.**
+Create a Series with values that partially match a mapping dictionary (some values have no mapping). Use `.map()` and observe which values become `NaN`. Then use `.map()` followed by `.fillna()` to provide a default for unmapped values.
+
+??? success "Solution to Exercise 3"
+    Handle unmapped values with fillna.
+
+        import pandas as pd
+
+        s = pd.Series(['a', 'b', 'c', 'd'])
+        mapping = {'a': 'alpha', 'b': 'beta'}
+        mapped = s.map(mapping)
+        print("With NaN:\n", mapped)
+        filled = mapped.fillna('unknown')
+        print("With default:\n", filled)

@@ -143,3 +143,58 @@ df.fillna(method='ffill')
 # Preferred
 df.ffill()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a Series with multiple consecutive `NaN` values. Use `fillna(method='ffill', limit=1)` to forward-fill only one step. Verify that the second consecutive `NaN` remains unfilled.
+
+??? success "Solution to Exercise 1"
+    Forward fill with a limit of 1.
+
+        import pandas as pd
+        import numpy as np
+
+        s = pd.Series([1, np.nan, np.nan, np.nan, 5])
+        result = s.fillna(method='ffill', limit=1)
+        print(result)
+        # Index 1 gets filled (1.0), index 2 and 3 stay NaN
+
+---
+
+**Exercise 2.**
+Create a DataFrame and use `fillna()` with a dictionary to apply different fill strategies per column (e.g., column A gets 0, column B gets the column mean).
+
+??? success "Solution to Exercise 2"
+    Per-column fill strategies using a dictionary.
+
+        import pandas as pd
+        import numpy as np
+
+        df = pd.DataFrame({
+            'A': [1, np.nan, 3],
+            'B': [np.nan, 5, np.nan]
+        })
+        fill_values = {'A': 0, 'B': df['B'].mean()}
+        result = df.fillna(fill_values)
+        print(result)
+
+---
+
+**Exercise 3.**
+Create a DataFrame with `NaN` values. Compare the results of `fillna(method='ffill')` and `fillna(method='bfill')` when the first or last row has `NaN`. Identify which positions remain unfilled by each method.
+
+??? success "Solution to Exercise 3"
+    Compare ffill and bfill at edges.
+
+        import pandas as pd
+        import numpy as np
+
+        df = pd.DataFrame({'val': [np.nan, 2, np.nan, 4, np.nan]})
+        ffilled = df.fillna(method='ffill')
+        bfilled = df.fillna(method='bfill')
+        print("ffill:\n", ffilled)
+        print("\nbfill:\n", bfilled)
+        # ffill cannot fill the first row; bfill cannot fill the last row

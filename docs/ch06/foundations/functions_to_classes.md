@@ -266,3 +266,130 @@ Encapsulate simple state with single behavior.
 - Classes provide explicit attributes.
 - Classes offer more features (methods, inheritance).
 - Choose based on complexity needs.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Start with a function `make_counter()` that returns a closure tracking a count. Then refactor it into a `Counter` class with `increment()`, `decrement()`, and `value()` methods. Show both implementations and discuss when the class version is preferable.
+
+??? success "Solution to Exercise 1"
+
+        # Closure version
+        def make_counter():
+            count = 0
+            def increment():
+                nonlocal count
+                count += 1
+                return count
+            def decrement():
+                nonlocal count
+                count -= 1
+                return count
+            def value():
+                return count
+            return increment, decrement, value
+
+        inc, dec, val = make_counter()
+        print(inc())  # 1
+        print(inc())  # 2
+        print(dec())  # 1
+
+        # Class version
+        class Counter:
+            def __init__(self):
+                self._count = 0
+
+            def increment(self):
+                self._count += 1
+                return self._count
+
+            def decrement(self):
+                self._count -= 1
+                return self._count
+
+            def value(self):
+                return self._count
+
+        c = Counter()
+        print(c.increment())  # 1
+        print(c.increment())  # 2
+        print(c.decrement())  # 1
+        # Class is better: easier to extend, inspect, and test
+
+---
+
+**Exercise 2.**
+Write a function `create_greeter(greeting)` that returns a closure: a function accepting `name` and returning `f"{greeting}, {name}!"`. Then convert this into a `Greeter` class with `__init__` (accepts greeting) and `__call__` (accepts name). Show both produce the same results.
+
+??? success "Solution to Exercise 2"
+
+        # Closure version
+        def create_greeter(greeting):
+            def greet(name):
+                return f"{greeting}, {name}!"
+            return greet
+
+        hello = create_greeter("Hello")
+        print(hello("Alice"))  # Hello, Alice!
+
+        # Class version
+        class Greeter:
+            def __init__(self, greeting):
+                self.greeting = greeting
+
+            def __call__(self, name):
+                return f"{self.greeting}, {name}!"
+
+        hi = Greeter("Hi")
+        print(hi("Bob"))  # Hi, Bob!
+
+        # Both produce same results
+        assert hello("Alice") == create_greeter("Hello")("Alice")
+
+---
+
+**Exercise 3.**
+Create three implementations of a simple accumulator (stores and sums numbers): (1) a function using a global variable, (2) a closure with `nonlocal`, and (3) a class with `add(n)` and `total()` methods. Compare the three approaches and explain why the class version is most maintainable.
+
+??? success "Solution to Exercise 3"
+
+        # 1. Global variable (worst)
+        _total = 0
+        def add_global(n):
+            global _total
+            _total += n
+        def get_total():
+            return _total
+
+        # 2. Closure (better)
+        def make_accumulator():
+            total = 0
+            def add(n):
+                nonlocal total
+                total += n
+                return total
+            return add
+
+        acc = make_accumulator()
+        print(acc(10))  # 10
+        print(acc(20))  # 30
+
+        # 3. Class (best)
+        class Accumulator:
+            def __init__(self):
+                self._total = 0
+
+            def add(self, n):
+                self._total += n
+                return self._total
+
+            def total(self):
+                return self._total
+
+        a = Accumulator()
+        print(a.add(10))  # 10
+        print(a.add(20))  # 30
+        print(a.total())  # 30
+        # Class: inspectable, testable, extensible, multiple instances

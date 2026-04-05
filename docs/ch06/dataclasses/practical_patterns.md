@@ -192,3 +192,127 @@ class EmailList:
 email_list = EmailList(["Alice@Example.com", "Bob@Test.com"])
 print(email_list.emails)  # ['alice@example.com', 'bob@test.com']
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a `DatabaseConfig` dataclass with fields `host` (str), `port` (int, default `5432`), `database` (str), `user` (str), and `password` (str). Add a `connection_string` property that returns a formatted connection URL. Add a class method `from_env()` that creates a config from environment variables (simulate with a dictionary). Use `field(repr=False)` on `password`.
+
+??? success "Solution to Exercise 1"
+
+        from dataclasses import dataclass, field
+
+        @dataclass
+        class DatabaseConfig:
+            host: str
+            database: str
+            user: str
+            password: str = field(repr=False)
+            port: int = 5432
+
+            @property
+            def connection_string(self):
+                return f"postgresql://{self.user}:{self.password}@{self.host}:{self.port}/{self.database}"
+
+            @classmethod
+            def from_env(cls, env: dict):
+                return cls(
+                    host=env.get("DB_HOST", "localhost"),
+                    port=int(env.get("DB_PORT", "5432")),
+                    database=env.get("DB_NAME", "mydb"),
+                    user=env.get("DB_USER", "admin"),
+                    password=env.get("DB_PASS", "secret"),
+                )
+
+        env = {"DB_HOST": "prod-server", "DB_NAME": "app", "DB_USER": "root", "DB_PASS": "s3cret"}
+        config = DatabaseConfig.from_env(env)
+        print(config)  # password hidden in repr
+        print(config.connection_string)
+
+---
+
+**Exercise 2.**
+Design an `APIResponse` dataclass with fields `status_code` (int), `body` (dict), `headers` (dict with `default_factory`), and `timestamp` (auto-set in `__post_init__`). Add a `is_success` property and a `json()` method that returns the body as a JSON string. Create responses for success (200) and error (404) cases.
+
+??? success "Solution to Exercise 2"
+
+        from dataclasses import dataclass, field
+        from datetime import datetime
+        import json
+
+        @dataclass
+        class APIResponse:
+            status_code: int
+            body: dict
+            headers: dict = field(default_factory=dict)
+            timestamp: str = field(init=False)
+
+            def __post_init__(self):
+                self.timestamp = datetime.now().isoformat()
+
+            @property
+            def is_success(self):
+                return 200 <= self.status_code < 300
+
+            def json(self):
+                return json.dumps(self.body, indent=2)
+
+        ok = APIResponse(200, {"data": [1, 2, 3]})
+        err = APIResponse(404, {"error": "Not found"})
+
+        print(ok.is_success)   # True
+        print(err.is_success)  # False
+        print(ok.json())
+
+---
+
+**Exercise 3.**
+Build a `TaskList` dataclass that manages a list of `Task` dataclasses. `Task` has `title`, `done` (bool, default `False`), and `priority` (int, default `0`). `TaskList` has a `tasks` field using `default_factory`. Add methods `add(title, priority)`, `complete(title)`, `pending()` (returns incomplete tasks sorted by priority), and `summary()`. Demonstrate the full workflow.
+
+??? success "Solution to Exercise 3"
+
+        from dataclasses import dataclass, field
+
+        @dataclass
+        class Task:
+            title: str
+            done: bool = False
+            priority: int = 0
+
+        @dataclass
+        class TaskList:
+            tasks: list = field(default_factory=list)
+
+            def add(self, title, priority=0):
+                self.tasks.append(Task(title, priority=priority))
+
+            def complete(self, title):
+                for task in self.tasks:
+                    if task.title == title:
+                        task.done = True
+                        return
+                raise ValueError(f"Task not found: {title}")
+
+            def pending(self):
+                return sorted(
+                    [t for t in self.tasks if not t.done],
+                    key=lambda t: t.priority,
+                    reverse=True,
+                )
+
+            def summary(self):
+                total = len(self.tasks)
+                done = sum(1 for t in self.tasks if t.done)
+                return f"{done}/{total} tasks completed"
+
+        tl = TaskList()
+        tl.add("Write tests", priority=3)
+        tl.add("Fix bug", priority=5)
+        tl.add("Update docs", priority=1)
+        tl.complete("Fix bug")
+
+        print(tl.summary())  # 1/3 tasks completed
+        for t in tl.pending():
+            print(f"  [{t.priority}] {t.title}")

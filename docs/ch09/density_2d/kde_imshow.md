@@ -578,3 +578,128 @@ plt.show()
 | Compute KDE | `kernel = stats.gaussian_kde(np.vstack([x, y]))` |
 | Evaluate | `density = kernel(positions).reshape(xx.shape)` |
 | Display | `ax.imshow(density.T, extent=[...], origin='lower')` |
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that generates 500 points from a bivariate normal distribution, computes a 2D KDE using `scipy.stats.gaussian_kde`, and visualizes it with `ax.imshow()`. Include `origin='lower'`, an appropriate `extent`, and a colorbar.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.multivariate_normal([0, 0], [[1, 0.5], [0.5, 1]], 500)
+    x, y = data[:, 0], data[:, 1]
+
+    xmin, xmax = x.min() - 1, x.max() + 1
+    ymin, ymax = y.min() - 1, y.max() + 1
+    xx, yy = np.mgrid[xmin:xmax:100j, ymin:ymax:100j]
+    positions = np.vstack([xx.ravel(), yy.ravel()])
+
+    kernel = stats.gaussian_kde(np.vstack([x, y]))
+    density = kernel(positions).reshape(xx.shape)
+
+    fig, ax = plt.subplots(figsize=(8, 6))
+    im = ax.imshow(density.T, extent=[xmin, xmax, ymin, ymax],
+                   origin='lower', cmap='viridis', aspect='auto')
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set_title('2D KDE Visualization')
+    plt.colorbar(im, ax=ax, label='Density')
+    plt.show()
+    ```
+
+---
+
+**Exercise 2.** Explain the role of the `bw_method` parameter in `scipy.stats.gaussian_kde`. What happens visually when you use a very small bandwidth (e.g., 0.05) versus a very large bandwidth (e.g., 1.0)?
+
+??? success "Solution to Exercise 2"
+    The `bw_method` parameter controls the bandwidth (smoothing) of the kernel density estimate. It determines how wide each Gaussian kernel is around each data point.
+
+    - **Very small bandwidth (e.g., 0.05)**: Each data point contributes a very narrow Gaussian. The result is a spiky, noisy density estimate that closely follows individual data points. This is called **underfitting** (high variance, low bias).
+    - **Very large bandwidth (e.g., 1.0)**: Each data point contributes a very wide Gaussian. The result is an overly smooth density estimate that blurs out important features like clusters or modes. This is called **oversmoothing** (low variance, high bias).
+
+    The default methods (`'scott'` and `'silverman'`) attempt to find a balanced bandwidth that captures the true density structure without excessive noise.
+
+---
+
+**Exercise 3.** Create a figure that overlays scatter points on top of a KDE heatmap. Use `alpha=0.3` for the scatter points and the `'Blues'` colormap for the KDE. Demonstrate this with bimodal data (two clusters).
+
+??? success "Solution to Exercise 3"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    c1 = np.random.multivariate_normal([2, 2], [[0.5, 0], [0, 0.5]], 300)
+    c2 = np.random.multivariate_normal([-1, -1], [[0.3, 0.2], [0.2, 0.3]], 200)
+    data = np.vstack([c1, c2])
+    x, y = data[:, 0], data[:, 1]
+
+    xmin, xmax = x.min() - 1, x.max() + 1
+    ymin, ymax = y.min() - 1, y.max() + 1
+    xx, yy = np.mgrid[xmin:xmax:100j, ymin:ymax:100j]
+    positions = np.vstack([xx.ravel(), yy.ravel()])
+
+    kernel = stats.gaussian_kde(np.vstack([x, y]))
+    density = kernel(positions).reshape(xx.shape)
+
+    fig, ax = plt.subplots(figsize=(8, 6))
+    im = ax.imshow(density.T, extent=[xmin, xmax, ymin, ymax],
+                   origin='lower', cmap='Blues', aspect='auto')
+    ax.scatter(x, y, c='red', s=10, alpha=0.3)
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set_title('KDE with Scatter Overlay (Bimodal Data)')
+    plt.colorbar(im, ax=ax, label='Density')
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Write code that creates a 1x3 subplot figure comparing `hist2d`, `hexbin`, and KDE (via `imshow`) side by side for the same dataset of 2000 points. Add a colorbar and title to each subplot.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.multivariate_normal([0, 0], [[1, 0.5], [0.5, 1]], 2000)
+    x, y = data[:, 0], data[:, 1]
+
+    fig, axes = plt.subplots(1, 3, figsize=(15, 4))
+
+    # hist2d
+    _, _, _, im1 = axes[0].hist2d(x, y, bins=30, cmap='viridis')
+    axes[0].set_title('hist2d')
+    fig.colorbar(im1, ax=axes[0])
+
+    # hexbin
+    hb = axes[1].hexbin(x, y, gridsize=20, cmap='viridis')
+    axes[1].set_title('hexbin')
+    fig.colorbar(hb, ax=axes[1])
+
+    # KDE
+    xmin, xmax = x.min() - 1, x.max() + 1
+    ymin, ymax = y.min() - 1, y.max() + 1
+    xx, yy = np.mgrid[xmin:xmax:100j, ymin:ymax:100j]
+    positions = np.vstack([xx.ravel(), yy.ravel()])
+    kernel = stats.gaussian_kde(np.vstack([x, y]))
+    density = kernel(positions).reshape(xx.shape)
+
+    im3 = axes[2].imshow(density.T, extent=[xmin, xmax, ymin, ymax],
+                         origin='lower', cmap='viridis', aspect='auto')
+    axes[2].set_title('KDE (imshow)')
+    fig.colorbar(im3, ax=axes[2])
+
+    plt.tight_layout()
+    plt.show()
+    ```

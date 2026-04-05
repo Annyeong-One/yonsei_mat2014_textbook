@@ -158,6 +158,7 @@ print(ord("z"))
 
 ---
 
+
 ## 8. Summary
 
 Key ideas:
@@ -169,3 +170,99 @@ Key ideas:
 * `ord()` and `chr()` connect characters to Unicode integers
 
 Built-in functions complement string methods and expand what can be done with text.
+
+
+## Exercises
+
+**Exercise 1.**
+`ord()` and `chr()` convert between characters and Unicode code points. Using these functions, explain why `"A" < "a"` is `True` and predict the output:
+
+```python
+print(ord("A"), ord("Z"), ord("a"), ord("z"))
+print(chr(ord("a") + 3))
+print(chr(ord("A") + 32))
+```
+
+What is the relationship between uppercase and lowercase ASCII letters in terms of their code points?
+
+??? success "Solution to Exercise 1"
+    Output:
+
+    ```text
+    65 90 97 122
+    d
+    a
+    ```
+
+    - `ord("A")` = 65, `ord("Z")` = 90: uppercase letters occupy code points 65-90.
+    - `ord("a")` = 97, `ord("z")` = 122: lowercase letters occupy code points 97-122.
+    - `chr(ord("a") + 3)` = `chr(100)` = `"d"`: shifting by 3 gives the letter 3 positions later.
+    - `chr(ord("A") + 32)` = `chr(97)` = `"a"`: the difference between any uppercase and its corresponding lowercase is always 32.
+
+    The relationship: lowercase letters have code points exactly 32 higher than their uppercase counterparts. This is a deliberate ASCII design. `"A" < "a"` is `True` because 65 < 97.
+
+---
+
+**Exercise 2.**
+`len()` counts Unicode code points, not visual characters or bytes. Predict the output:
+
+```python
+print(len("hello"))
+print(len("café"))
+print(len("cafe\u0301"))
+print(len("hello".encode("utf-8")))
+print(len("café".encode("utf-8")))
+```
+
+Why do `"café"` and `"cafe\u0301"` display identically but have different lengths? What does `len()` actually count in each context (string vs bytes)?
+
+??? success "Solution to Exercise 2"
+    Output:
+
+    ```text
+    5
+    4
+    5
+    5
+    5
+    ```
+
+    `len("hello")` = 5: five ASCII characters, five code points.
+
+    `len("café")` = 4: four code points. The `é` is a single code point (U+00E9, precomposed form).
+
+    `len("cafe\u0301")` = 5: five code points. `\u0301` is a combining acute accent, a separate code point that displays combined with the preceding `e`. Visually identical to `"café"` but one more code point.
+
+    `len("hello".encode("utf-8"))` = 5: five bytes (ASCII characters are one byte each in UTF-8).
+
+    `len("café".encode("utf-8"))` = 5: five bytes. `c`, `a`, `f` are one byte each, but `é` (U+00E9) encodes as two bytes in UTF-8.
+
+    `len()` counts **code points** for `str` objects and **bytes** for `bytes` objects. Neither necessarily corresponds to the number of visual characters (grapheme clusters).
+
+---
+
+**Exercise 3.**
+`sorted()` applied to a string returns a list of characters. Explain why `sorted("Banana")` does not produce alphabetical order and predict the output:
+
+```python
+print(sorted("Banana"))
+print(sorted("Banana", key=str.lower))
+print("".join(sorted("Banana", key=str.lower)))
+```
+
+Why does `sorted()` return a list instead of a string? How does `"".join(sorted(...))` convert the result back to a string?
+
+??? success "Solution to Exercise 3"
+    Output:
+
+    ```text
+    ['B', 'a', 'a', 'a', 'n', 'n']
+    ['a', 'a', 'a', 'B', 'n', 'n']
+    aaaBnn
+    ```
+
+    `sorted("Banana")` puts `"B"` first because `ord("B")` = 66 is less than `ord("a")` = 97. Uppercase letters sort before all lowercase letters.
+
+    `sorted("Banana", key=str.lower)` compares `"b"`, `"a"`, `"a"`, `"a"`, `"n"`, `"n"` (lowercase versions), giving alphabetical order. The original characters (including the uppercase `"B"`) are preserved in the output.
+
+    `sorted()` returns a list because strings are immutable -- `sorted()` works on any iterable and always returns a list. `"".join(sorted(...))` converts the list of characters back into a single string by joining them with an empty separator.

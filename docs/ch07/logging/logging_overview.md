@@ -395,3 +395,96 @@ if __name__ == "__main__":
     print("✓ Practical application of logging")
     print("\nNext: Study 02_logging_levels.py for deeper understanding!")
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Replace the `print()` statements in the following code with appropriate logging calls. Use DEBUG for detailed info, INFO for normal operations, and ERROR for failures: `print("Starting process")`, `print(f"Processing item {i}")`, `print("Failed to connect")`.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    import logging
+
+    logging.basicConfig(level=logging.DEBUG, format="%(levelname)s: %(message)s")
+    logger = logging.getLogger(__name__)
+
+    # Instead of print("Starting process")
+    logger.info("Starting process")
+
+    # Instead of print(f"Processing item {i}")
+    for i in range(3):
+        logger.debug(f"Processing item {i}")
+
+    # Instead of print("Failed to connect")
+    logger.error("Failed to connect")
+    ```
+
+---
+
+**Exercise 2.**
+Write a function `setup_basic_logging` that configures `basicConfig` with a custom format showing timestamp, level, and message, and sets the level to DEBUG. Log one message at each of the five standard levels and verify the output.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    import logging
+
+    def setup_basic_logging():
+        logging.basicConfig(
+            level=logging.DEBUG,
+            format="%(asctime)s - %(levelname)s - %(message)s",
+        )
+
+    setup_basic_logging()
+
+    logging.debug("Debug message")
+    logging.info("Info message")
+    logging.warning("Warning message")
+    logging.error("Error message")
+    logging.critical("Critical message")
+    ```
+
+---
+
+**Exercise 3.**
+Write a simple logging-based calculator that logs each operation at INFO level (e.g., `"Adding 5 + 3 = 8"`) and logs errors (like division by zero) at ERROR level. The calculator should have `add`, `subtract`, `multiply`, and `divide` methods.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    import logging
+
+    logging.basicConfig(level=logging.DEBUG, format="%(levelname)s: %(message)s")
+    logger = logging.getLogger("calculator")
+
+    class Calculator:
+        def add(self, a, b):
+            result = a + b
+            logger.info(f"Adding {a} + {b} = {result}")
+            return result
+
+        def subtract(self, a, b):
+            result = a - b
+            logger.info(f"Subtracting {a} - {b} = {result}")
+            return result
+
+        def multiply(self, a, b):
+            result = a * b
+            logger.info(f"Multiplying {a} * {b} = {result}")
+            return result
+
+        def divide(self, a, b):
+            if b == 0:
+                logger.error(f"Division by zero: {a} / {b}")
+                return None
+            result = a / b
+            logger.info(f"Dividing {a} / {b} = {result}")
+            return result
+
+    calc = Calculator()
+    calc.add(5, 3)
+    calc.divide(10, 0)
+    ```

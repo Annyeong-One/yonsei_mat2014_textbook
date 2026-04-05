@@ -100,3 +100,64 @@ s = pd.Series(['hello', 'world', 'pandas'])
 print(s.str.upper())
 print(s.str.len())
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Create a Pandas Series from a list and from a dictionary. Print the values, index, and dtype of each.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+
+    df = pd.DataFrame({
+        'name': ['Alice', 'Bob', 'Charlie', 'David', 'Eve'],
+        'age': [25, 30, 35, 40, 28],
+        'score': [85, 92, 78, 95, 88]
+    })
+    print(f'Shape: {df.shape}')
+    print(f'Columns: {df.columns.tolist()}')
+    print(f'Dtypes:\n{df.dtypes}')
+    ```
+
+---
+
+**Exercise 2.** Explain the difference between a Pandas Series and a NumPy array. What does the index add?
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the Pandas data structures and their relationships.
+
+---
+
+**Exercise 3.** Write code that performs element-wise arithmetic between two Series with different indices. What happens with non-matching indices?
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+
+    df = pd.DataFrame({
+        'name': ['Alice', 'Bob', 'Charlie'],
+        'age': [25, 30, 35],
+        'score': [85, 92, 78]
+    })
+    # Label-based
+    print(df.loc[0])
+    # Position-based
+    print(df.iloc[-1])
+    ```
+
+---
+
+**Exercise 4.** Create a Series and demonstrate three different ways to select elements: by label (`.loc`), by position (`.iloc`), and by boolean mask.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+
+    df = pd.DataFrame({'a': [1, 2, 3], 'b': [4, 5, 6]})
+    df['c'] = df['a'] + df['b']
+    df = df.drop(columns=['b'])
+    print(df)
+    ```

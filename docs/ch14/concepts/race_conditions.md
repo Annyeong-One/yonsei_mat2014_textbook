@@ -492,3 +492,141 @@ def worker():
 - Test with many threads and random delays to expose races
 - Python's GIL doesn't prevent all race conditions
 - When in doubt, use locks or thread-safe data structures
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a shared counter and spawn 10 threads that each increment it 50,000 times without any lock. Run the program, print the final counter, and verify it is less than 500,000. Then add a `threading.Lock` to make the increment atomic and confirm the result is exactly 500,000.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import threading
+
+        counter = 0
+
+        def increment_unsafe():
+            global counter
+            for _ in range(50_000):
+                counter += 1
+
+        threads = [threading.Thread(target=increment_unsafe) for _ in range(10)]
+        for t in threads:
+            t.start()
+        for t in threads:
+            t.join()
+        print(f"Without lock: {counter} (expected 500000)")
+
+        counter = 0
+        lock = threading.Lock()
+
+        def increment_safe():
+            global counter
+            for _ in range(50_000):
+                with lock:
+                    counter += 1
+
+        threads = [threading.Thread(target=increment_safe) for _ in range(10)]
+        for t in threads:
+            t.start()
+        for t in threads:
+            t.join()
+        print(f"With lock: {counter} (expected 500000)")
+        ```
+
+---
+
+**Exercise 2.**
+Implement a thread-safe `BankAccount` class with `deposit(amount)` and `withdraw(amount)` methods that use a lock. Write a stress test that spawns 5 deposit threads (each depositing 1,000 times) and 5 withdrawal threads (each withdrawing 1,000 times) for the same amount. Verify that the final balance equals the initial balance.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import threading
+
+        class BankAccount:
+            def __init__(self, balance):
+                self.balance = balance
+                self.lock = threading.Lock()
+
+            def deposit(self, amount):
+                with self.lock:
+                    self.balance += amount
+
+            def withdraw(self, amount):
+                with self.lock:
+                    self.balance -= amount
+
+        account = BankAccount(10_000)
+        amount = 10
+
+        def deposit_loop():
+            for _ in range(1_000):
+                account.deposit(amount)
+
+        def withdraw_loop():
+            for _ in range(1_000):
+                account.withdraw(amount)
+
+        threads = []
+        for _ in range(5):
+            threads.append(threading.Thread(target=deposit_loop))
+            threads.append(threading.Thread(target=withdraw_loop))
+
+        for t in threads:
+            t.start()
+        for t in threads:
+            t.join()
+
+        print(f"Final balance: {account.balance}")
+        assert account.balance == 10_000, "Balance mismatch!"
+        ```
+
+---
+
+**Exercise 3.**
+Write a thread-safe lazy-initialized cache using double-checked locking. The `CachedComputation` class should have a method `get(key)` that computes and stores the result of a slow function on first access and returns the cached value thereafter. Verify with multiple threads that each key's function is computed exactly once by counting invocations with a `threading.Lock`-protected counter.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import threading
+        import time
+
+        class CachedComputation:
+            def __init__(self, func):
+                self._func = func
+                self._cache = {}
+                self._lock = threading.Lock()
+                self.call_count = 0
+                self._count_lock = threading.Lock()
+
+            def get(self, key):
+                if key in self._cache:
+                    return self._cache[key]
+                with self._lock:
+                    if key not in self._cache:
+                        with self._count_lock:
+                            self.call_count += 1
+                        self._cache[key] = self._func(key)
+                return self._cache[key]
+
+        def slow_square(x):
+            time.sleep(0.01)
+            return x * x
+
+        cache = CachedComputation(slow_square)
+
+        def worker(keys):
+            for k in keys:
+                cache.get(k)
+
+        keys = list(range(10)) * 5  # each key requested 5 times
+        threads = [threading.Thread(target=worker, args=(keys,)) for _ in range(4)]
+        for t in threads:
+            t.start()
+        for t in threads:
+            t.join()
+
+        print(f"Total computations: {cache.call_count} (expected 10)")
+        assert cache.call_count == 10
+        ```

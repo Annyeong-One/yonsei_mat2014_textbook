@@ -377,3 +377,113 @@ ax.text(0.02, 0.98, f'Total points: {total_points}',
 plt.tight_layout()
 plt.show()
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that creates a 2D histogram of 8000 points drawn from a bivariate normal distribution. Use `bins=40`, the `'plasma'` colormap, and add a colorbar. Print the shape of the returned count array `h`.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    mean = [0, 0]
+    cov = [[1, 0.5], [0.5, 1]]
+    data = np.random.multivariate_normal(mean, cov, 8000)
+
+    fig, ax = plt.subplots(figsize=(8, 6))
+    h, xedges, yedges, im = ax.hist2d(
+        data[:, 0], data[:, 1], bins=40, cmap='plasma'
+    )
+    fig.colorbar(im, ax=ax, label='Counts')
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set_title('2D Histogram')
+    print(f"h.shape = {h.shape}")  # (40, 40)
+    plt.show()
+    ```
+
+---
+
+**Exercise 2.** Predict the output of the following code:
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+
+x = np.random.randn(1000)
+y = np.random.randn(1000)
+
+fig, ax = plt.subplots()
+h, xedges, yedges, im = ax.hist2d(x, y, bins=20)
+print(h.shape)
+print(xedges.shape)
+print(yedges.shape)
+```
+
+??? success "Solution to Exercise 2"
+    The output is:
+
+    ```
+    (20, 20)
+    (21,)
+    (21,)
+    ```
+
+    The count array `h` has shape `(bins, bins)` = `(20, 20)`. The edge arrays have shape `(bins + 1,)` = `(21,)` because they define the boundaries of each bin (one more edge than the number of bins).
+
+---
+
+**Exercise 3.** Create a 1x2 subplot figure comparing `hist2d` with `density=False` (left) and `density=True` (right) for the same dataset. Add colorbars with labels `'Counts'` and `'Density'` respectively.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    data = np.random.multivariate_normal([0, 0], [[1, 0.5], [0.5, 1]], 5000)
+
+    fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+
+    _, _, _, im1 = axes[0].hist2d(data[:, 0], data[:, 1], bins=30, cmap='Blues')
+    axes[0].set_title('density=False (default)')
+    fig.colorbar(im1, ax=axes[0], label='Counts')
+
+    _, _, _, im2 = axes[1].hist2d(data[:, 0], data[:, 1], bins=30, cmap='Blues',
+                                   density=True)
+    axes[1].set_title('density=True')
+    fig.colorbar(im2, ax=axes[1], label='Density')
+
+    plt.tight_layout()
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Write code that uses the `cmin` parameter to hide bins with fewer than 10 counts. Generate bimodal data by combining two clusters, use `bins=30`, and add a colorbar.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    c1 = np.random.multivariate_normal([-2, -2], [[0.5, 0], [0, 0.5]], 3000)
+    c2 = np.random.multivariate_normal([2, 2], [[0.5, 0], [0, 0.5]], 3000)
+    data = np.vstack([c1, c2])
+
+    fig, ax = plt.subplots(figsize=(8, 6))
+    _, _, _, im = ax.hist2d(data[:, 0], data[:, 1], bins=30, cmap='YlOrRd',
+                            cmin=10)
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set_title('2D Histogram with cmin=10')
+    fig.colorbar(im, ax=ax, label='Counts (bins < 10 hidden)')
+    plt.tight_layout()
+    plt.show()
+    ```

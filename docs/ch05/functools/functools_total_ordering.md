@@ -429,3 +429,116 @@ class Item:
 - Define `__hash__` if instances need to go in sets or dict keys
 - For performance-critical sorting of millions of objects, define all methods manually
 - If you only need `sorted()` support, `__lt__` alone suffices without `@total_ordering`
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a `Temperature` class with a `celsius` attribute. Use `@total_ordering` and define only `__eq__` and `__lt__`. Verify that all six comparison operators (`==`, `!=`, `<`, `<=`, `>`, `>=`) work between two `Temperature` instances.
+
+??? success "Solution to Exercise 1"
+
+        from functools import total_ordering
+
+        @total_ordering
+        class Temperature:
+            def __init__(self, celsius):
+                self.celsius = celsius
+
+            def __eq__(self, other):
+                if not isinstance(other, Temperature):
+                    return NotImplemented
+                return self.celsius == other.celsius
+
+            def __lt__(self, other):
+                if not isinstance(other, Temperature):
+                    return NotImplemented
+                return self.celsius < other.celsius
+
+            def __repr__(self):
+                return f"Temperature({self.celsius})"
+
+        t1 = Temperature(20)
+        t2 = Temperature(30)
+
+        print(t1 == t2)   # False
+        print(t1 != t2)   # True
+        print(t1 < t2)    # True
+        print(t1 <= t2)   # True
+        print(t1 > t2)    # False
+        print(t1 >= t2)   # False
+
+---
+
+**Exercise 2.**
+Build a `Version` class that represents semantic versions (e.g., `Version(1, 2, 3)` for `1.2.3`). Use `@total_ordering` with `__eq__` and `__lt__` comparing `(major, minor, patch)` tuples. Sort a list of versions and verify the order.
+
+??? success "Solution to Exercise 2"
+
+        from functools import total_ordering
+
+        @total_ordering
+        class Version:
+            def __init__(self, major, minor, patch):
+                self.major = major
+                self.minor = minor
+                self.patch = patch
+
+            def _key(self):
+                return (self.major, self.minor, self.patch)
+
+            def __eq__(self, other):
+                if not isinstance(other, Version):
+                    return NotImplemented
+                return self._key() == other._key()
+
+            def __lt__(self, other):
+                if not isinstance(other, Version):
+                    return NotImplemented
+                return self._key() < other._key()
+
+            def __repr__(self):
+                return f"{self.major}.{self.minor}.{self.patch}"
+
+        versions = [Version(2, 0, 0), Version(1, 9, 1), Version(1, 10, 0), Version(1, 9, 0)]
+        print(sorted(versions))
+        # [1.9.0, 1.9.1, 1.10.0, 2.0.0]
+
+---
+
+**Exercise 3.**
+Create a `Student` class with `name` and `gpa` attributes. Use `@total_ordering`, comparing by `gpa`. Define `__hash__` based on `name` so students can be stored in a set. Demonstrate sorting a list of students and adding them to a set.
+
+??? success "Solution to Exercise 3"
+
+        from functools import total_ordering
+
+        @total_ordering
+        class Student:
+            def __init__(self, name, gpa):
+                self.name = name
+                self.gpa = gpa
+
+            def __eq__(self, other):
+                if not isinstance(other, Student):
+                    return NotImplemented
+                return self.gpa == other.gpa
+
+            def __lt__(self, other):
+                if not isinstance(other, Student):
+                    return NotImplemented
+                return self.gpa < other.gpa
+
+            def __hash__(self):
+                return hash(self.name)
+
+            def __repr__(self):
+                return f"Student({self.name!r}, {self.gpa})"
+
+        students = [Student("Alice", 3.8), Student("Bob", 3.5), Student("Charlie", 3.9)]
+        print(sorted(students))
+        # [Student('Bob', 3.5), Student('Alice', 3.8), Student('Charlie', 3.9)]
+
+        student_set = set(students)
+        print(student_set)  # All three (unique names)

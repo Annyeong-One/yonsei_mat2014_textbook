@@ -295,3 +295,81 @@ age = safe_get(person, 'age', 0)
 - Writing generic utilities or frameworks
 - Need to iterate over arbitrary attributes
 - Implementing serialization/deserialization
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a function `copy_attributes(source, target, names)` that uses `getattr` and `setattr` to copy the named attributes from `source` to `target`. If an attribute does not exist on `source`, skip it using `hasattr`. Demonstrate with two simple objects.
+
+??? success "Solution to Exercise 1"
+
+        class Source:
+            def __init__(self):
+                self.name = "Alice"
+                self.age = 30
+                self.email = "alice@example.com"
+
+        class Target:
+            pass
+
+        def copy_attributes(source, target, names):
+            for name in names:
+                if hasattr(source, name):
+                    setattr(target, name, getattr(source, name))
+
+        src = Source()
+        tgt = Target()
+        copy_attributes(src, tgt, ["name", "age", "phone"])  # phone skipped
+        print(vars(tgt))  # {'name': 'Alice', 'age': 30}
+
+---
+
+**Exercise 2.**
+Create a `DynamicConfig` class with a `from_dict(data)` class method that uses `setattr` to set attributes from dictionary keys. Also add a `to_dict()` method that uses `vars()` to return the instance attributes as a dictionary. Demonstrate round-tripping: create from dict, modify, convert back.
+
+??? success "Solution to Exercise 2"
+
+        class DynamicConfig:
+            @classmethod
+            def from_dict(cls, data):
+                obj = cls()
+                for key, value in data.items():
+                    setattr(obj, key, value)
+                return obj
+
+            def to_dict(self):
+                return vars(self).copy()
+
+        config = DynamicConfig.from_dict({"host": "localhost", "port": 8080, "debug": True})
+        print(config.host)       # localhost
+        config.port = 9090       # Modify
+        print(config.to_dict())  # {'host': 'localhost', 'port': 9090, 'debug': True}
+
+---
+
+**Exercise 3.**
+Build a function `reset_attributes(obj, defaults)` where `defaults` is a dictionary of attribute names to default values. For each key, use `delattr` to remove the attribute if it exists, then use `setattr` to set it to the default value. Show before and after states using `vars()`.
+
+??? success "Solution to Exercise 3"
+
+        def reset_attributes(obj, defaults):
+            for name, default in defaults.items():
+                if hasattr(obj, name):
+                    delattr(obj, name)
+                setattr(obj, name, default)
+
+        class Settings:
+            def __init__(self):
+                self.theme = "dark"
+                self.font_size = 14
+                self.language = "en"
+
+        s = Settings()
+        s.theme = "custom"
+        s.font_size = 20
+        print("Before:", vars(s))
+
+        reset_attributes(s, {"theme": "light", "font_size": 12, "language": "en"})
+        print("After:", vars(s))

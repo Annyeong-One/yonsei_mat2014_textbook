@@ -178,6 +178,7 @@ def show_attributes():
 
 ---
 
+
 ## Runnable Example: `frame_introspection.py`
 
 ```python
@@ -448,3 +449,108 @@ if __name__ == '__main__':
     demo_block_stack()
     demo_current_frames()
 ```
+
+
+## Exercises
+
+**Exercise 1.**
+Write a function `caller_info()` that uses `inspect.currentframe()` to return a dictionary containing the caller's function name, filename, and line number. Test it by calling `caller_info()` from two different functions and printing the results.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import inspect
+
+        def caller_info():
+            frame = inspect.currentframe()
+            caller = frame.f_back
+            return {
+                "function": caller.f_code.co_name,
+                "filename": caller.f_code.co_filename,
+                "lineno": caller.f_lineno,
+            }
+
+        def func_a():
+            return caller_info()
+
+        def func_b():
+            return caller_info()
+
+        print(func_a())
+        print(func_b())
+        ```
+
+---
+
+**Exercise 2.**
+Write a recursive function `sum_to(n)` that computes 1 + 2 + ... + n. At the base case (n == 0), use `inspect.stack()` to print the full call chain showing each frame's function name and the value of `n` at that level.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import inspect
+
+        def sum_to(n):
+            if n == 0:
+                print("Call chain at base case:")
+                for info in inspect.stack():
+                    if info.function == "sum_to":
+                        local_n = info.frame.f_locals.get("n", "?")
+                        print(f"  sum_to(n={local_n})")
+                return 0
+            return n + sum_to(n - 1)
+
+        result = sum_to(5)
+        print(f"\nsum_to(5) = {result}")
+        ```
+
+---
+
+**Exercise 3.**
+Write a decorator `@trace_locals` that, after the decorated function returns, prints all local variables that were in the function's frame (using `inspect.currentframe().f_back.f_locals`). Apply it to a function that computes and stores intermediate results, and verify the output includes all local variable names and values.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import functools
+        import inspect
+
+        def trace_locals(func):
+            @functools.wraps(func)
+            def wrapper(*args, **kwargs):
+                result = func(*args, **kwargs)
+                # Get the frame of the wrapper to access locals
+                # captured after the call; use a different approach:
+                return result
+            return wrapper
+
+        # Alternative approach using sys.settrace:
+        def trace_locals(func):
+            @functools.wraps(func)
+            def wrapper(*args, **kwargs):
+                local_vars = {}
+                def tracer(frame, event, arg):
+                    if event == 'return' and frame.f_code == func.__code__:
+                        local_vars.update(frame.f_locals)
+                    return tracer
+                import sys
+                old_trace = sys.gettrace()
+                sys.settrace(tracer)
+                try:
+                    result = func(*args, **kwargs)
+                finally:
+                    sys.settrace(old_trace)
+                print(f"Locals in {func.__name__}:")
+                for k, v in local_vars.items():
+                    print(f"  {k} = {v}")
+                return result
+            return wrapper
+
+        @trace_locals
+        def compute(x, y):
+            total = x + y
+            product = x * y
+            average = total / 2
+            return average
+
+        compute(10, 20)
+        ```
+
+---

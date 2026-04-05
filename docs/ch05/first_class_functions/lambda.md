@@ -252,3 +252,58 @@ Lambda is a convenience, not a necessity — anything a lambda can do, `def` can
 PEP 8 discourages assigning a lambda to a variable (`square = lambda x: x ** 2`); if you need a name, use `def`. The one place lambda shines is inline, right where it is consumed.
 
 For more on returning functions from functions — a pattern closely related to lambda — see [Function Factories](function_factories.md).
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Given a list of strings `["banana", "apple", "cherry", "date"]`, use `sorted()` with a lambda to sort them by their last character. Print the sorted result.
+
+??? success "Solution to Exercise 1"
+
+        fruits = ["banana", "apple", "cherry", "date"]
+        sorted_fruits = sorted(fruits, key=lambda s: s[-1])
+        print(sorted_fruits)  # ['banana', 'apple', 'date', 'cherry']
+
+---
+
+**Exercise 2.**
+Use `map()` with a lambda to convert a list of Celsius temperatures `[0, 20, 37, 100]` to Fahrenheit (formula: `F = C * 9/5 + 32`). Then use `filter()` with a lambda to keep only temperatures above 80 F. Print both results.
+
+??? success "Solution to Exercise 2"
+
+        celsius = [0, 20, 37, 100]
+
+        fahrenheit = list(map(lambda c: c * 9 / 5 + 32, celsius))
+        print(fahrenheit)  # [32.0, 68.0, 98.6, 212.0]
+
+        hot = list(filter(lambda f: f > 80, fahrenheit))
+        print(hot)  # [98.6, 212.0]
+
+---
+
+**Exercise 3.**
+Write a function `make_adder` that takes a number `n` and returns a lambda that adds `n` to its argument. Create `add5` and `add10` using `make_adder`, and verify they work correctly. Then rewrite `make_adder` using `def` instead of `lambda` for the inner function and explain why PEP 8 recommends the `def` version.
+
+??? success "Solution to Exercise 3"
+
+        # Lambda version
+        make_adder = lambda n: lambda x: x + n
+
+        add5 = make_adder(5)
+        add10 = make_adder(10)
+
+        print(add5(3))    # 8
+        print(add10(3))   # 13
+
+        # PEP 8 preferred version using def
+        def make_adder_def(n):
+            def adder(x):
+                return x + n
+            return adder
+
+        add5 = make_adder_def(5)
+        print(add5(3))    # 8
+        # PEP 8 discourages assigning a lambda to a name;
+        # if you need a name, use def.

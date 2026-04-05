@@ -346,3 +346,80 @@ if __name__ == "__main__":
 - Factorization: $O(n^3)$
 - Each solve: $O(n^2)$
 - Pre-factor when solving multiple systems with same $A$
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Use `linalg.lu` to decompose the matrix $A = \begin{pmatrix} 0 & 2 & 1 \\ 1 & 1 & 0 \\ 2 & 0 & 3 \end{pmatrix}$ into $P$, $L$, $U$. Verify the decomposition by checking that $\|PLU - A\|_F < 10^{-12}$. Also confirm that $L$ has ones on the diagonal and $U$ is upper triangular.
+
+??? success "Solution to Exercise 1"
+        import numpy as np
+        from scipy import linalg
+
+        A = np.array([[0, 2, 1],
+                       [1, 1, 0],
+                       [2, 0, 3]])
+        P, L, U = linalg.lu(A)
+
+        recon_error = np.linalg.norm(P @ L @ U - A)
+        print(f"Reconstruction error: {recon_error:.2e}")
+        print(f"L diagonal all ones: {np.allclose(np.diag(L), 1)}")
+        print(f"U is upper triangular: {np.allclose(U, np.triu(U))}")
+
+---
+
+**Exercise 2.**
+Factor a random $100 \times 100$ matrix (using `np.random.seed(5)`) with `lu_factor`, then solve the system $Ax = b$ for 20 different random right-hand sides using `lu_solve`. Measure and print the total time for the 20 solves. Then repeat without pre-factoring (calling `linalg.solve` each time) and compare the total times.
+
+??? success "Solution to Exercise 2"
+        import numpy as np
+        from scipy import linalg
+        import time
+
+        np.random.seed(5)
+        n = 100
+        A = np.random.randn(n, n)
+
+        # With pre-factoring
+        start = time.perf_counter()
+        lu, piv = linalg.lu_factor(A)
+        for _ in range(20):
+            b = np.random.randn(n)
+            x = linalg.lu_solve((lu, piv), b)
+        time_prefactor = time.perf_counter() - start
+
+        # Without pre-factoring
+        start = time.perf_counter()
+        for _ in range(20):
+            b = np.random.randn(n)
+            x = linalg.solve(A, b)
+        time_nofactor = time.perf_counter() - start
+
+        print(f"With pre-factoring:    {time_prefactor:.4f} sec")
+        print(f"Without pre-factoring: {time_nofactor:.4f} sec")
+
+---
+
+**Exercise 3.**
+Compute the determinant of $A = \begin{pmatrix} 3 & 1 & 4 \\ 1 & 5 & 9 \\ 2 & 6 & 5 \end{pmatrix}$ using the LU decomposition: $\det(A) = \det(P) \cdot \prod_i U_{ii}$. Compare with `np.linalg.det(A)` and verify they agree to within $10^{-10}$.
+
+??? success "Solution to Exercise 3"
+        import numpy as np
+        from scipy import linalg
+
+        A = np.array([[3, 1, 4],
+                       [1, 5, 9],
+                       [2, 6, 5]])
+        P, L, U = linalg.lu(A)
+
+        det_P = np.linalg.det(P)
+        det_U = np.prod(np.diag(U))
+        det_lu = det_P * det_U
+
+        det_direct = np.linalg.det(A)
+        print(f"det(A) via LU:     {det_lu:.10f}")
+        print(f"det(A) via np:     {det_direct:.10f}")
+        print(f"Difference:        {abs(det_lu - det_direct):.2e}")
+        assert abs(det_lu - det_direct) < 1e-10

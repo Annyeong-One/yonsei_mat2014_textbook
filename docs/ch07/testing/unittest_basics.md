@@ -499,3 +499,134 @@ if __name__ == "__main__":
     # Run all tests in this module
     unittest.main(verbosity=2)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.** Write a function `is_palindrome(s)` that returns `True` if the string reads the same forwards and backwards (case-insensitive). Then write a `unittest.TestCase` class with at least four test methods covering normal palindromes, non-palindromes, empty strings, and single characters.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import unittest
+
+    def is_palindrome(s):
+        s = s.lower()
+        return s == s[::-1]
+
+    class TestPalindrome(unittest.TestCase):
+        def test_palindrome(self):
+            self.assertTrue(is_palindrome("racecar"))
+
+        def test_not_palindrome(self):
+            self.assertFalse(is_palindrome("hello"))
+
+        def test_empty_string(self):
+            self.assertTrue(is_palindrome(""))
+
+        def test_single_char(self):
+            self.assertTrue(is_palindrome("a"))
+
+        def test_case_insensitive(self):
+            self.assertTrue(is_palindrome("Madam"))
+
+    if __name__ == "__main__":
+        unittest.main()
+    ```
+
+---
+
+**Exercise 2.** Predict what happens when you run this test class. Will the test pass or fail, and why?
+
+```python
+import unittest
+
+class TestListMethods(unittest.TestCase):
+    def test_append(self):
+        lst = [1, 2, 3]
+        lst.append(4)
+        self.assertEqual(lst, [1, 2, 3, 4])
+        self.assertIn(4, lst)
+
+    def test_remove_nonexistent(self):
+        lst = [1, 2, 3]
+        lst.remove(5)
+```
+
+??? success "Solution to Exercise 2"
+    The first test (`test_append`) passes. The second test (`test_remove_nonexistent`) fails with a `ValueError` because `5` is not in the list. Since the test does not use `assertRaises`, the unhandled `ValueError` causes the test to fail.
+
+---
+
+**Exercise 3.** Write a `Calculator` class with methods `add`, `subtract`, `multiply`, and `divide`. The `divide` method should raise `ZeroDivisionError` for division by zero. Write a `unittest.TestCase` that tests all four operations and uses `assertRaises` for the error case.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import unittest
+
+    class Calculator:
+        def add(self, a, b):
+            return a + b
+        def subtract(self, a, b):
+            return a - b
+        def multiply(self, a, b):
+            return a * b
+        def divide(self, a, b):
+            if b == 0:
+                raise ZeroDivisionError("Cannot divide by zero")
+            return a / b
+
+    class TestCalculator(unittest.TestCase):
+        def setUp(self):
+            self.calc = Calculator()
+
+        def test_add(self):
+            self.assertEqual(self.calc.add(2, 3), 5)
+
+        def test_subtract(self):
+            self.assertEqual(self.calc.subtract(10, 4), 6)
+
+        def test_multiply(self):
+            self.assertEqual(self.calc.multiply(3, 7), 21)
+
+        def test_divide(self):
+            self.assertAlmostEqual(self.calc.divide(10, 3), 3.3333, places=3)
+
+        def test_divide_by_zero(self):
+            with self.assertRaises(ZeroDivisionError):
+                self.calc.divide(10, 0)
+
+    if __name__ == "__main__":
+        unittest.main()
+    ```
+
+---
+
+**Exercise 4.** Write a test class that uses `setUp` and `tearDown` to create and clean up a temporary list. In `setUp`, create a list `[1, 2, 3]`. Write two tests: one that appends an element and checks the length, and another that pops an element and checks the result. Verify that each test starts with a fresh list.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import unittest
+
+    class TestWithSetUp(unittest.TestCase):
+        def setUp(self):
+            self.data = [1, 2, 3]
+
+        def tearDown(self):
+            self.data = None
+
+        def test_append(self):
+            self.data.append(4)
+            self.assertEqual(len(self.data), 4)
+            self.assertIn(4, self.data)
+
+        def test_pop(self):
+            result = self.data.pop()
+            self.assertEqual(result, 3)
+            self.assertEqual(len(self.data), 2)
+            # data still has [1, 2, 3] at the start of each test
+            # because setUp creates a fresh list
+
+    if __name__ == "__main__":
+        unittest.main()
+    ```

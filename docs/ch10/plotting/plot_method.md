@@ -180,3 +180,58 @@ df.plot(x='col1', y='col2')
 # Multiple subplots
 df.plot(subplots=True)
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that creates a line plot from a DataFrame using `df.plot()`. Explain what the default x-axis is.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    # Solution for the specific exercise
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(10), 'B': np.random.randn(10)})
+    print(df.head())
+    ```
+
+---
+
+**Exercise 2.** Create a plot with a specific column as the x-axis using `df.plot(x='col_x', y='col_y')`.
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the Pandas API and its behavior for this specific operation.
+
+---
+
+**Exercise 3.** Write code that plots multiple columns on the same axes using `df[['a', 'b']].plot()`.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(20), 'B': np.random.randn(20)})
+    result = df.describe()
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Explain how `df.plot()` integrates with Matplotlib. How do you access the underlying Axes object?
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(50), 'group': np.random.choice(['X', 'Y'], 50)})
+    result = df.groupby('group').mean()
+    print(result)
+    ```

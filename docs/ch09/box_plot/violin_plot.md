@@ -403,3 +403,94 @@ ax.set_xticklabels(['A', 'B', 'C', 'D'])
 # Use same axis limits for fair comparison
 ax.set_ylim(-5, 5)  # Consistent scale across subplots
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create violin plots for three datasets: a normal distribution, a bimodal distribution (mix of two normals), and a uniform distribution. Use 500 samples each and set `showmedians=True` and `showextrema=True`. Add custom labels below each violin.
+
+??? success "Solution to Exercise 1"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        np.random.seed(42)
+        normal = np.random.randn(500)
+        bimodal = np.concatenate([np.random.normal(-2, 0.5, 250),
+                                   np.random.normal(2, 0.5, 250)])
+        uniform = np.random.uniform(-3, 3, 500)
+
+        fig, ax = plt.subplots(figsize=(8, 5))
+        vp = ax.violinplot([normal, bimodal, uniform],
+                            showmedians=True, showextrema=True)
+        ax.set_xticks([1, 2, 3])
+        ax.set_xticklabels(['Normal', 'Bimodal', 'Uniform'])
+        ax.set_title('Violin Plot Comparison')
+        plt.show()
+
+---
+
+**Exercise 2.**
+Create a split violin plot comparing two groups. Generate "before" data from `N(5, 1)` and "after" data from `N(7, 1.5)` (200 samples each). Plot them as a single violin with the left half showing "before" and the right half showing "after" using `ax.violinplot` with custom polygon manipulation or by plotting two half-violins.
+
+??? success "Solution to Exercise 2"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        np.random.seed(42)
+        before = np.random.normal(5, 1, 200)
+        after = np.random.normal(7, 1.5, 200)
+
+        fig, ax = plt.subplots(figsize=(6, 6))
+
+        vp1 = ax.violinplot([before], positions=[1], showmedians=True)
+        for body in vp1['bodies']:
+            m = np.mean(body.get_paths()[0].vertices[:, 0])
+            body.get_paths()[0].vertices[:, 0] = np.clip(
+                body.get_paths()[0].vertices[:, 0], -np.inf, m)
+            body.set_color('steelblue')
+
+        vp2 = ax.violinplot([after], positions=[1], showmedians=True)
+        for body in vp2['bodies']:
+            m = np.mean(body.get_paths()[0].vertices[:, 0])
+            body.get_paths()[0].vertices[:, 0] = np.clip(
+                body.get_paths()[0].vertices[:, 0], m, np.inf)
+            body.set_color('coral')
+
+        ax.set_xticks([1])
+        ax.set_xticklabels(['Before / After'])
+        ax.set_title('Split Violin Plot')
+        ax.legend(['Before', 'After'])
+        plt.show()
+
+---
+
+**Exercise 3.**
+Create a combined violin and box plot where the violin shows the full distribution shape and a thin box plot is overlaid inside. Use `ax.violinplot` with `showextrema=False`, then overlay `ax.boxplot` with `widths=0.1` and `patch_artist=True` on the same axes. Use 4 groups of 300 samples.
+
+??? success "Solution to Exercise 3"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        np.random.seed(42)
+        data = [np.random.randn(300) + i * 2 for i in range(4)]
+
+        fig, ax = plt.subplots(figsize=(8, 5))
+
+        vp = ax.violinplot(data, showextrema=False, showmedians=False)
+        for body in vp['bodies']:
+            body.set_alpha(0.3)
+            body.set_color('steelblue')
+
+        ax.boxplot(data, widths=0.1, patch_artist=True,
+                    boxprops=dict(facecolor='orange', alpha=0.8),
+                    medianprops=dict(color='red', linewidth=2),
+                    showfliers=False)
+
+        ax.set_xticklabels(['A', 'B', 'C', 'D'])
+        ax.set_title('Violin + Box Plot Overlay')
+        plt.show()

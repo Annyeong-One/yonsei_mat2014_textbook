@@ -297,3 +297,96 @@ This chapter covers:
 - **concurrent.futures** provides the cleanest API for most use cases
 - Match your concurrency strategy to your task type
 - Always consider synchronization when sharing state
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a program that creates two threads: one prints "Hello" 5 times with a 0.1s delay, and the other prints "World" 5 times with a 0.15s delay. Use `threading.Thread` to run them concurrently and `join()` to wait for both. Observe the interleaved output.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import threading
+        import time
+
+        def say_hello():
+            for _ in range(5):
+                print("Hello")
+                time.sleep(0.1)
+
+        def say_world():
+            for _ in range(5):
+                print("World")
+                time.sleep(0.15)
+
+        t1 = threading.Thread(target=say_hello)
+        t2 = threading.Thread(target=say_world)
+        t1.start()
+        t2.start()
+        t1.join()
+        t2.join()
+        print("Both threads finished.")
+        ```
+
+---
+
+**Exercise 2.**
+Write a function that runs a simulated I/O task (`time.sleep(0.5)`) both sequentially (4 times) and concurrently using `ThreadPoolExecutor` with 4 workers. Measure and print the elapsed time for each approach and compute the speedup.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import time
+        from concurrent.futures import ThreadPoolExecutor
+
+        def io_task(n):
+            time.sleep(0.5)
+            return n
+
+        # Sequential
+        start = time.perf_counter()
+        for i in range(4):
+            io_task(i)
+        seq_time = time.perf_counter() - start
+
+        # Concurrent
+        start = time.perf_counter()
+        with ThreadPoolExecutor(max_workers=4) as executor:
+            list(executor.map(io_task, range(4)))
+        conc_time = time.perf_counter() - start
+
+        print(f"Sequential: {seq_time:.2f}s")
+        print(f"Concurrent: {conc_time:.2f}s")
+        print(f"Speedup: {seq_time / conc_time:.2f}x")
+        ```
+
+---
+
+**Exercise 3.**
+Demonstrate the difference between threads and processes by running a CPU-bound function (sum of squares up to 5,000,000) four times using `ThreadPoolExecutor` and four times using `ProcessPoolExecutor`. Compare the elapsed times and explain which is faster and why.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import time
+        from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+
+        def cpu_task(n):
+            return sum(i * i for i in range(n))
+
+        if __name__ == "__main__":
+            args = [5_000_000] * 4
+
+            start = time.perf_counter()
+            with ThreadPoolExecutor(max_workers=4) as ex:
+                list(ex.map(cpu_task, args))
+            thread_time = time.perf_counter() - start
+
+            start = time.perf_counter()
+            with ProcessPoolExecutor(max_workers=4) as ex:
+                list(ex.map(cpu_task, args))
+            proc_time = time.perf_counter() - start
+
+            print(f"Threads: {thread_time:.2f}s")
+            print(f"Processes: {proc_time:.2f}s")
+            print(f"Processes are faster because they bypass the GIL.")
+        ```

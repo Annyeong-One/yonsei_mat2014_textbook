@@ -378,3 +378,62 @@ df.sort_values(by='Name', key=lambda x: x.str.len())
 ```python
 df.sort_values(by='Value', key=lambda x: abs(x))
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a DataFrame with columns `'name'`, `'age'`, and `'score'`. Sort by `'score'` in descending order using `sort_values()`. Then sort by `'age'` ascending and `'score'` descending simultaneously.
+
+??? success "Solution to Exercise 1"
+    Sort by one or multiple columns.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'name': ['Alice', 'Bob', 'Carol', 'Dave'],
+            'age': [30, 25, 30, 25],
+            'score': [85, 90, 78, 92]
+        })
+        print(df.sort_values('score', ascending=False))
+        print(df.sort_values(['age', 'score'], ascending=[True, False]))
+
+---
+
+**Exercise 2.**
+Create a DataFrame with a non-sequential index (e.g., `[5, 2, 8, 1, 3]`). Use `sort_index()` to sort rows by the index. Then sort the columns alphabetically using `sort_index(axis=1)`.
+
+??? success "Solution to Exercise 2"
+    Sort by index and by columns.
+
+        import pandas as pd
+
+        df = pd.DataFrame(
+            {'C': [1, 2, 3, 4, 5], 'A': [6, 7, 8, 9, 10], 'B': [11, 12, 13, 14, 15]},
+            index=[5, 2, 8, 1, 3]
+        )
+        print("Sort by index:")
+        print(df.sort_index())
+        print("\nSort columns:")
+        print(df.sort_index(axis=1))
+
+---
+
+**Exercise 3.**
+Create a DataFrame with some `NaN` values in a column. Use `sort_values()` with `na_position='first'` to place `NaN` rows at the top, then with `na_position='last'` to place them at the bottom. Compare the two results.
+
+??? success "Solution to Exercise 3"
+    Control NaN position in sorted output.
+
+        import pandas as pd
+        import numpy as np
+
+        df = pd.DataFrame({
+            'name': ['Alice', 'Bob', 'Carol', 'Dave'],
+            'score': [85, np.nan, 78, np.nan]
+        })
+        print("NaN first:")
+        print(df.sort_values('score', na_position='first'))
+        print("\nNaN last:")
+        print(df.sort_values('score', na_position='last'))

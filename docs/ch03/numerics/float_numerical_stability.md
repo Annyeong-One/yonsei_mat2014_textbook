@@ -652,3 +652,112 @@ for name, solver in methods:
     be = backward_error_test(A, b, x)
     print(f"{name:20s}: backward error = {be:.2e}")
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Summation order affects numerical accuracy. Predict which method gives a result closer to the true sum:
+
+```python
+import random
+random.seed(42)
+
+numbers = [random.uniform(-1e10, 1e10) for _ in range(100000)]
+numbers.extend([random.uniform(-1e-5, 1e-5) for _ in range(100000)])
+
+sum_naive = sum(numbers)
+sum_sorted = sum(sorted(numbers, key=abs))
+
+import math
+sum_accurate = math.fsum(numbers)
+
+print(f"Naive - accurate:  {abs(sum_naive - sum_accurate):.2e}")
+print(f"Sorted - accurate: {abs(sum_sorted - sum_accurate):.2e}")
+```
+
+Why does sorting by magnitude before summing improve accuracy? What does `math.fsum` do differently from both approaches?
+
+??? success "Solution to Exercise 1"
+    The sorted sum produces a smaller error than the naive sum (though both may differ from `math.fsum`).
+
+    When adding numbers of vastly different magnitudes, small values get rounded away when added to large partial sums. Sorting by magnitude and adding small values first keeps the partial sum small, preserving more bits of the small values.
+
+    `math.fsum` uses a completely different approach: it maintains a list of partial sums with no rounding error (using Shewchuk's algorithm). It tracks all intermediate rounding errors exactly and compensates for them, producing a correctly-rounded result. This is O(n) in time but uses O(n) auxiliary space in the worst case.
+
+---
+
+**Exercise 2.**
+Computing variance can be numerically unstable. Predict which method is more accurate:
+
+```python
+import math
+
+data = [1e9 + x for x in [1, 2, 3, 4, 5]]
+
+# Method A: naive formula var = E[x^2] - E[x]^2
+mean_sq = sum(x**2 for x in data) / len(data)
+sq_mean = (sum(data) / len(data)) ** 2
+var_naive = mean_sq - sq_mean
+
+# Method B: two-pass
+mean = sum(data) / len(data)
+var_twopass = sum((x - mean)**2 for x in data) / len(data)
+
+print(f"Naive variance:    {var_naive}")
+print(f"Two-pass variance: {var_twopass}")
+print(f"True variance:     {2.0}")
+```
+
+Why does the naive formula `E[x^2] - E[x]^2` fail catastrophically here? What is the root cause?
+
+??? success "Solution to Exercise 2"
+    Output (approximately):
+
+    ```text
+    Naive variance:    0.0
+    Two-pass variance: 2.0
+    True variance:     2.0
+    ```
+
+    The naive formula computes `E[x^2] - E[x]^2`, which requires subtracting two nearly equal enormous numbers: `E[x^2]` is approximately `1e18` and `E[x]^2` is also approximately `1e18`. The true difference is `2.0`, but both terms have only ~15 digits of precision, so the meaningful digits are completely lost to catastrophic cancellation.
+
+    The two-pass method first computes the mean, then computes deviations `(x - mean)`. These deviations are small numbers (1, 2, 3, 4, 5 offset from the mean), so no cancellation occurs. The root cause is always the same: subtracting nearly equal large numbers destroys significant digits.
+
+---
+
+**Exercise 3.**
+Comparing floats for equality is unreliable. Predict the output:
+
+```python
+import math
+
+a = 0.1 + 0.2
+b = 0.3
+
+print(a == b)
+print(math.isclose(a, b))
+print(math.isclose(a, b, rel_tol=1e-16))
+print(math.isclose(1e-300, 0.0))
+print(math.isclose(1e-300, 0.0, abs_tol=1e-299))
+```
+
+Why does `math.isclose(1e-300, 0.0)` return `False`? When comparing values near zero, why is `rel_tol` insufficient and `abs_tol` necessary?
+
+??? success "Solution to Exercise 3"
+    Output:
+
+    ```text
+    False
+    True
+    False
+    False
+    True
+    ```
+
+    `math.isclose` uses the formula: `abs(a - b) <= max(rel_tol * max(abs(a), abs(b)), abs_tol)`. The default is `rel_tol=1e-9` and `abs_tol=0.0`.
+
+    `math.isclose(1e-300, 0.0)` returns `False` because with `abs_tol=0.0`, the only tolerance is relative: `rel_tol * max(1e-300, 0.0) = 1e-9 * 1e-300 = 1e-309`, which is smaller than `1e-300`. Relative tolerance breaks down near zero because any nonzero value is infinitely far from zero in relative terms.
+
+    When comparing values that might be near zero, you must specify `abs_tol` to define what "close to zero" means for your application.

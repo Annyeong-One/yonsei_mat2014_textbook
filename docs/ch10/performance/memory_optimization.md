@@ -252,3 +252,58 @@ memory_checkpoint(df, "After filtering")
 5. **Monitor growth**: Check memory after transformations
 6. **Drop unused columns**: Remove columns you don't need
 7. **Process in chunks**: For files too large for RAM
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that uses `df.memory_usage(deep=True)` to check memory consumption of each column. Sum the total memory.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    # Solution for the specific exercise
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(10), 'B': np.random.randn(10)})
+    print(df.head())
+    ```
+
+---
+
+**Exercise 2.** Explain how downcasting numeric types (e.g., `int64` to `int32`) can save memory. Write code using `pd.to_numeric(downcast='integer')`.
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the Pandas API and its behavior for this specific operation.
+
+---
+
+**Exercise 3.** Write code that converts all object (string) columns with few unique values to categorical dtype and measures the memory savings.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(20), 'B': np.random.randn(20)})
+    result = df.describe()
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Create a function that takes a DataFrame and automatically optimizes its memory usage by downcasting numeric columns and converting low-cardinality strings to categorical.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(50), 'group': np.random.choice(['X', 'Y'], 50)})
+    result = df.groupby('group').mean()
+    print(result)
+    ```

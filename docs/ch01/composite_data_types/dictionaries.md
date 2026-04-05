@@ -344,6 +344,7 @@ KeyError: 0
 
 ---
 
+
 ## 9. Summary
 
 Key ideas:
@@ -355,3 +356,73 @@ Key ideas:
 - dictionaries are designed for O(1) lookup
 
 Dictionaries are one of Python's most powerful tools for representing structured information. Dictionary values can themselves be dictionaries — nested structures are covered in [Nested Data Structures](../../ch02/composites/nested_structures.md). Dictionaries can also be built concisely using comprehensions — see [Comprehensions](comprehensions.md). This page follows [Sets](sets.md) in the composite data types section.
+
+
+## Exercises
+
+**Exercise 1.**
+Lists cannot be used as dictionary keys, but tuples can. Explain *why* in terms of mutability and hashability. What would go wrong if Python allowed mutable objects as dictionary keys? Give a concrete scenario showing how a mutable key could "break" a dictionary.
+
+??? success "Solution to Exercise 1"
+    Dictionary keys must be **hashable** -- they must have a hash value that never changes during their lifetime. This is because dictionaries use a **hash table** internally: the key's hash determines where the key-value pair is stored.
+
+    Mutable objects like lists cannot be hashable because their contents (and therefore their hash) could change after being used as a key. Consider:
+
+    ```python
+    # Hypothetical -- this would fail in Python
+    key = [1, 2]
+    d = {key: "value"}  # hash computed from [1, 2], stored at some position
+    key.append(3)       # key is now [1, 2, 3] -- different hash!
+    d[key]              # Python looks at the NEW hash position -- key not found!
+    ```
+
+    The key-value pair would be stored at a position determined by the hash of `[1, 2]`, but after mutation, looking up `[1, 2, 3]` computes a different hash, pointing to a different position. The entry becomes unreachable -- it is in the dictionary but can never be found. This would silently corrupt the dictionary.
+
+    Tuples are immutable, so their hash never changes, making them safe keys.
+
+---
+
+**Exercise 2.**
+Predict the output:
+
+```python
+d = {"a": 1, "b": 2, "c": 3}
+print(d["a"])
+print(d.get("z", 0))
+print(d["z"])
+```
+
+What is the fundamental difference between bracket access and `.get()`? When should you use each?
+
+??? success "Solution to Exercise 2"
+    Output:
+
+    ```text
+    1
+    0
+    ```
+
+    Then `d["z"]` raises a `KeyError` because `"z"` is not a key in `d`.
+
+    - `d["a"]` uses **bracket access**: returns the value if the key exists, raises `KeyError` if it does not.
+    - `d.get("z", 0)` uses **`.get()`**: returns the value if the key exists, returns the default value (`0`) if it does not. Never raises `KeyError`.
+
+    Use bracket access when you are certain the key exists (or when a missing key indicates a bug that should raise an error). Use `.get()` when a missing key is a normal possibility and you want a default value. The choice communicates intent: bracket access says "this key must exist"; `.get()` says "this key might be absent."
+
+---
+
+**Exercise 3.**
+Dictionaries provide O(1) average-case lookup. Explain *why* dictionaries are so much faster than searching a list for a value. What data structure does a dictionary use internally? Why does this require keys to be hashable?
+
+??? success "Solution to Exercise 3"
+    Searching a list for a value requires checking each element one by one -- **O(n)** time on average, where n is the length.
+
+    A dictionary uses a **hash table**. When you access `d[key]`, Python:
+
+    1. Computes `hash(key)` -- a constant-time operation
+    2. Uses the hash to compute an index into an internal array
+    3. Looks at that array position -- if the key matches, returns the value
+
+    This is **O(1)** average time because the hash directly tells Python *where* to look, rather than scanning every entry.
+
+    Keys must be hashable because the entire mechanism depends on computing a stable hash value. The hash must be deterministic (same key always gives the same hash) and consistent with equality (objects that are `==` must have the same hash). Mutable objects cannot guarantee this because their state (and thus their hash) could change.

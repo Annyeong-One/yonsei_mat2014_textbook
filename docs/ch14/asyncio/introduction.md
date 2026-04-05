@@ -240,3 +240,103 @@ Finished at 2.00
 - `async`/`await` makes async code readable
 - Not a replacement for multiprocessing (CPU-bound work)
 - Modern Python async ecosystem is mature and widely adopted
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write an async program that simulates fetching data from 5 URLs concurrently using `asyncio.gather()`. Each "fetch" should sleep for a random duration (0.2-1.0s) and return the URL with its simulated response time. Print all results and the total elapsed wall-clock time, demonstrating that it is significantly less than the sum of individual times.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import asyncio
+        import random
+        import time
+
+        async def fetch(url):
+            delay = random.uniform(0.2, 1.0)
+            await asyncio.sleep(delay)
+            return (url, delay)
+
+        async def main():
+            urls = [f"https://example.com/page{i}" for i in range(5)]
+            start = time.perf_counter()
+            results = await asyncio.gather(*[fetch(u) for u in urls])
+            elapsed = time.perf_counter() - start
+
+            total_individual = 0
+            for url, delay in results:
+                print(f"{url}: {delay:.2f}s")
+                total_individual += delay
+
+            print(f"\nTotal wall-clock time: {elapsed:.2f}s")
+            print(f"Sum of individual times: {total_individual:.2f}s")
+            print(f"Concurrency saved: {total_individual - elapsed:.2f}s")
+
+        asyncio.run(main())
+        ```
+
+---
+
+**Exercise 2.**
+Write two versions of a function that processes 10 items: one sequential (using a regular `for` loop with `await asyncio.sleep(0.1)` per item) and one concurrent (using `asyncio.gather()`). Run both, print the elapsed time for each, and compute the speedup ratio.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import asyncio
+        import time
+
+        async def process_item(item):
+            await asyncio.sleep(0.1)
+            return item * 2
+
+        async def sequential():
+            results = []
+            for i in range(10):
+                results.append(await process_item(i))
+            return results
+
+        async def concurrent():
+            return await asyncio.gather(*[process_item(i) for i in range(10)])
+
+        async def main():
+            start = time.perf_counter()
+            seq_results = await sequential()
+            seq_time = time.perf_counter() - start
+
+            start = time.perf_counter()
+            con_results = await concurrent()
+            con_time = time.perf_counter() - start
+
+            print(f"Sequential: {seq_time:.2f}s, results={seq_results}")
+            print(f"Concurrent: {con_time:.2f}s, results={con_results}")
+            print(f"Speedup: {seq_time / con_time:.1f}x")
+
+        asyncio.run(main())
+        ```
+
+---
+
+**Exercise 3.**
+Create an async function `countdown(name, n)` that prints `"{name}: {i}"` for `i` from `n` down to 1, with an `await asyncio.sleep(0.1)` between each. Run three countdowns concurrently ("A" from 3, "B" from 5, "C" from 2) using `asyncio.gather()`, and observe the interleaved output.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import asyncio
+
+        async def countdown(name, n):
+            for i in range(n, 0, -1):
+                print(f"{name}: {i}")
+                await asyncio.sleep(0.1)
+            print(f"{name}: done!")
+
+        async def main():
+            await asyncio.gather(
+                countdown("A", 3),
+                countdown("B", 5),
+                countdown("C", 2),
+            )
+
+        asyncio.run(main())
+        ```

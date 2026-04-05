@@ -47,4 +47,149 @@ Choose inheritance when there is a genuine "is-a" relationship and the subclass 
 - Favor composition when you need flexibility, runtime configurability, or when combining unrelated behaviors.
 - Use inheritance sparingly and only for genuine is-a relationships with shallow, stable hierarchies.
 - Consider the flexibility trade-off: inheritance is simpler for small hierarchies, but composition scales better as requirements grow.
-- Think about the relationship first — if "has-a" describes it more accurately than "is-a," composition is almost always the better choice.
+- Think about the relationship first --- if "has-a" describes it more accurately than "is-a," composition is almost always the better choice.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Given a scenario where you need to model `Logger` functionality for different output targets (console, file, network), explain whether inheritance or composition is more appropriate. Implement your chosen approach with a `Logger` class and interchangeable `Output` objects.
+
+??? success "Solution to Exercise 1"
+
+        # Composition is more appropriate: Logger "has-a" Output target
+        class ConsoleOutput:
+            def write(self, message):
+                print(f"[CONSOLE] {message}")
+
+        class FileOutput:
+            def __init__(self, filename):
+                self.filename = filename
+
+            def write(self, message):
+                print(f"[FILE:{self.filename}] {message}")
+
+        class NetworkOutput:
+            def __init__(self, url):
+                self.url = url
+
+            def write(self, message):
+                print(f"[NETWORK:{self.url}] {message}")
+
+        class Logger:
+            def __init__(self, output):
+                self._output = output
+
+            def log(self, message):
+                self._output.write(message)
+
+            def set_output(self, output):
+                self._output = output
+
+        logger = Logger(ConsoleOutput())
+        logger.log("Application started")
+        logger.set_output(FileOutput("app.log"))
+        logger.log("Switched to file output")
+
+---
+
+**Exercise 2.**
+You have a `Vehicle` class with `start()` and `stop()` methods. You want to add `GPS`, `AirConditioning`, and `MusicPlayer` features. Implement this using composition, creating separate feature classes. Show how a `Vehicle` can have any combination of features without creating subclasses for each combination.
+
+??? success "Solution to Exercise 2"
+
+        class GPS:
+            def status(self):
+                return "GPS: Active"
+
+        class AirConditioning:
+            def __init__(self, temp=22):
+                self.temp = temp
+
+            def status(self):
+                return f"AC: {self.temp}C"
+
+        class MusicPlayer:
+            def status(self):
+                return "Music: Playing"
+
+        class Vehicle:
+            def __init__(self, name, features=None):
+                self.name = name
+                self.features = features or []
+
+            def start(self):
+                print(f"{self.name} started")
+
+            def stop(self):
+                print(f"{self.name} stopped")
+
+            def show_features(self):
+                for f in self.features:
+                    print(f"  {f.status()}")
+
+        basic = Vehicle("Sedan", [GPS()])
+        luxury = Vehicle("Luxury", [GPS(), AirConditioning(18), MusicPlayer()])
+
+        basic.start()
+        basic.show_features()   # GPS: Active
+
+        luxury.start()
+        luxury.show_features()  # GPS, AC, Music — no subclasses needed
+
+---
+
+**Exercise 3.**
+Identify a case where inheritance IS the right choice: model a `Shape` hierarchy with `Circle`, `Rectangle`, and `Triangle`. Each shape must implement `area()` and `perimeter()`. Justify why inheritance is appropriate here (is-a relationship, shared interface, stable hierarchy) and implement it.
+
+??? success "Solution to Exercise 3"
+
+        import math
+
+        # Inheritance IS appropriate: Circle is-a Shape, stable hierarchy
+        class Shape:
+            def area(self):
+                raise NotImplementedError
+
+            def perimeter(self):
+                raise NotImplementedError
+
+            def describe(self):
+                return f"{self.__class__.__name__}: area={self.area():.2f}, perimeter={self.perimeter():.2f}"
+
+        class Circle(Shape):
+            def __init__(self, radius):
+                self.radius = radius
+
+            def area(self):
+                return math.pi * self.radius ** 2
+
+            def perimeter(self):
+                return 2 * math.pi * self.radius
+
+        class Rectangle(Shape):
+            def __init__(self, width, height):
+                self.width = width
+                self.height = height
+
+            def area(self):
+                return self.width * self.height
+
+            def perimeter(self):
+                return 2 * (self.width + self.height)
+
+        class Triangle(Shape):
+            def __init__(self, a, b, c):
+                self.a, self.b, self.c = a, b, c
+
+            def area(self):
+                s = (self.a + self.b + self.c) / 2
+                return math.sqrt(s * (s - self.a) * (s - self.b) * (s - self.c))
+
+            def perimeter(self):
+                return self.a + self.b + self.c
+
+        shapes = [Circle(5), Rectangle(4, 6), Triangle(3, 4, 5)]
+        for s in shapes:
+            print(s.describe())

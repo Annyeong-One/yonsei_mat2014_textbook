@@ -425,3 +425,58 @@ if __name__ == "__main__":
     print("7. Use eval() for complex expressions")
     print("8. Avoid apply() when vectorization is possible")
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that computes a new column using vectorized operations (e.g., `df['c'] = df['a'] + df['b']`) and compare the timing with a for-loop approach using `%%timeit` or `time`.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    # Solution for the specific exercise
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(10), 'B': np.random.randn(10)})
+    print(df.head())
+    ```
+
+---
+
+**Exercise 2.** Explain why vectorized operations are faster than iterating with `iterrows()` in Pandas.
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the Pandas API and its behavior for this specific operation.
+
+---
+
+**Exercise 3.** Write code that replaces a `for` loop that applies a conditional transformation with a vectorized `np.where()` call.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(20), 'B': np.random.randn(20)})
+    result = df.describe()
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Demonstrate the performance difference between `df.apply(func)` and a vectorized alternative for a simple mathematical operation.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(50), 'group': np.random.choice(['X', 'Y'], 50)})
+    result = df.groupby('group').mean()
+    print(result)
+    ```

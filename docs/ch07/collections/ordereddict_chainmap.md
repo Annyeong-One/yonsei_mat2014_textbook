@@ -226,3 +226,96 @@ print(merged['a'])  # 100 (snapshot, not live)
 | `OrderedDict` | Need `move_to_end()`, order-aware equality, or LRU cache |
 | `ChainMap` | Layered config, scoped lookups, non-copying dict merge |
 | Regular `dict` | Most other cases (ordered since 3.7) |
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a simplified `LRUCache` class using `OrderedDict` that supports `get(key)` and `put(key, value)` with a given capacity. When the cache exceeds capacity, evict the least recently used item. Demonstrate by inserting keys `"a"`, `"b"`, `"c"` into a cache of capacity 2, then verify that `"a"` was evicted.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    from collections import OrderedDict
+
+    class LRUCache:
+        def __init__(self, capacity):
+            self.cache = OrderedDict()
+            self.capacity = capacity
+
+        def get(self, key):
+            if key not in self.cache:
+                return -1
+            self.cache.move_to_end(key)
+            return self.cache[key]
+
+        def put(self, key, value):
+            if key in self.cache:
+                self.cache.move_to_end(key)
+            self.cache[key] = value
+            if len(self.cache) > self.capacity:
+                self.cache.popitem(last=False)
+
+    # Test
+    cache = LRUCache(2)
+    cache.put("a", 1)
+    cache.put("b", 2)
+    cache.put("c", 3)  # Evicts "a"
+    print(cache.get("a"))  # -1 (evicted)
+    print(cache.get("b"))  # 2
+    print(cache.get("c"))  # 3
+    ```
+
+---
+
+**Exercise 2.**
+Write a function `merge_configs` that takes any number of dictionaries (from lowest to highest priority) and returns a `ChainMap`. Then write a function `get_config_value` that takes the `ChainMap` and a key, returning the value or a default string `"NOT_SET"` if the key is not found.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    from collections import ChainMap
+
+    def merge_configs(*dicts):
+        # Reverse so last dict has highest priority
+        return ChainMap(*reversed(dicts))
+
+    def get_config_value(config, key):
+        return config.get(key, "NOT_SET")
+
+    # Test
+    defaults = {"host": "localhost", "port": 80, "debug": False}
+    user = {"port": 8080}
+    cli = {"debug": True}
+
+    config = merge_configs(defaults, user, cli)
+    print(get_config_value(config, "debug"))  # True (from cli)
+    print(get_config_value(config, "port"))   # 8080 (from user)
+    print(get_config_value(config, "host"))   # localhost (from defaults)
+    print(get_config_value(config, "ssl"))    # NOT_SET
+    ```
+
+---
+
+**Exercise 3.**
+Write a function `ordered_unique` that takes a list of `(key, value)` pairs and returns an `OrderedDict` containing only the first occurrence of each key, preserving insertion order. For example, `ordered_unique([("a", 1), ("b", 2), ("a", 3), ("c", 4)])` should return `OrderedDict([("a", 1), ("b", 2), ("c", 4)])`.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    from collections import OrderedDict
+
+    def ordered_unique(pairs):
+        result = OrderedDict()
+        for key, value in pairs:
+            if key not in result:
+                result[key] = value
+        return result
+
+    # Test
+    data = [("a", 1), ("b", 2), ("a", 3), ("c", 4)]
+    result = ordered_unique(data)
+    print(result)
+    # OrderedDict([('a', 1), ('b', 2), ('c', 4)])
+    ```

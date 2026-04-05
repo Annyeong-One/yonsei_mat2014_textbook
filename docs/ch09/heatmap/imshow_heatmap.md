@@ -302,3 +302,80 @@ if __name__ == "__main__":
     print("Tutorial 06 demonstrates matrix visualizations")
     print("Key functions: heatmap(), clustermap()")
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that creates a 5x5 NumPy array of random values and displays it as a heatmap using `ax.imshow()`. Add a colorbar and set the colormap to `'viridis'`.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    data = np.random.rand(5, 5)
+
+    fig, ax = plt.subplots()
+    im = ax.imshow(data, cmap='viridis')
+    fig.colorbar(im, ax=ax)
+    ax.set_title('5x5 Random Heatmap')
+    plt.show()
+    ```
+
+---
+
+**Exercise 2.** Explain the role of `origin='lower'` vs `origin='upper'` in `ax.imshow()`. When should you use each?
+
+??? success "Solution to Exercise 2"
+    `origin='upper'` (default) places row 0 at the **top** of the image, matching how matrices and digital images are conventionally displayed. `origin='lower'` places row 0 at the **bottom**, matching mathematical coordinate systems where the y-axis increases upward.
+
+    Use `'upper'` for actual image data and matrices. Use `'lower'` for scientific data like KDE, contour-like heatmaps, or any data where the y-axis should increase upward.
+
+---
+
+**Exercise 3.** Write code that creates a heatmap of a 10x10 array and adds text annotations showing the value in each cell using a loop with `ax.text()`.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    data = np.random.rand(10, 10)
+
+    fig, ax = plt.subplots(figsize=(8, 6))
+    im = ax.imshow(data, cmap='Blues')
+    fig.colorbar(im, ax=ax)
+
+    for i in range(10):
+        for j in range(10):
+            ax.text(j, i, f'{data[i, j]:.2f}', ha='center', va='center', fontsize=7)
+
+    ax.set_title('Annotated Heatmap')
+    plt.tight_layout()
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Create a heatmap with a custom `extent` parameter to set meaningful x and y axis ranges instead of pixel indices.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    data = np.random.rand(20, 30)
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    im = ax.imshow(data, cmap='hot', extent=[0, 6, 0, 4], aspect='auto')
+    ax.set_xlabel('X (meters)')
+    ax.set_ylabel('Y (meters)')
+    ax.set_title('Heatmap with Custom Extent')
+    fig.colorbar(im, ax=ax, label='Intensity')
+    plt.show()
+    ```

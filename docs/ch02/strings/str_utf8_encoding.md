@@ -344,3 +344,64 @@ bytes → decode → text (str)
 * ASCII is a **subset of UTF-8**.
 * Python 3 uses **UTF-8 as the default source encoding**.
 * UTF-8 is the **most widely used text encoding today**.
+
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Encode the string `"A \u00f1 \u4e16 \U0001F600"` in UTF-8 and print the list of byte values. Identify which bytes belong to each character.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    text = "A \u00f1 \u4e16 \U0001F600"
+    encoded = text.encode("utf-8")
+
+    print(f"String: {text}")
+    print(f"Bytes: {list(encoded)}")
+    # A: [65], space: [32], ñ: [195, 177], space: [32],
+    # 世: [228, 184, 150], space: [32], 😀: [240, 159, 152, 128]
+    ```
+
+    ASCII characters use 1 byte, `\u00f1` uses 2 bytes, `\u4e16` uses 3 bytes, and the emoji uses 4 bytes.
+
+---
+
+**Exercise 2.**
+Write a function `utf8_byte_count(s)` that returns a dictionary mapping each character in the string to the number of UTF-8 bytes it uses. Test with a string containing ASCII, European, Asian, and emoji characters.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    def utf8_byte_count(s):
+        return {c: len(c.encode("utf-8")) for c in s}
+
+    result = utf8_byte_count("A\u00f1\u4e16\U0001F600")
+    for char, count in result.items():
+        print(f"'{char}' (U+{ord(char):04X}): {count} bytes")
+    ```
+
+    Each character is encoded individually, and the length of the resulting bytes object gives the UTF-8 byte count.
+
+---
+
+**Exercise 3.**
+Demonstrate that an ASCII-encoded file is also valid UTF-8 by encoding `"Hello"` with both `"ascii"` and `"utf-8"` codecs and showing the byte sequences are identical.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    text = "Hello"
+
+    ascii_bytes = text.encode("ascii")
+    utf8_bytes = text.encode("utf-8")
+
+    print(f"ASCII: {ascii_bytes}")
+    print(f"UTF-8: {utf8_bytes}")
+    print(f"Identical: {ascii_bytes == utf8_bytes}")  # True
+    ```
+
+    UTF-8 was designed so that all ASCII characters (U+0000 to U+007F) are encoded using the exact same single-byte values as ASCII.

@@ -686,3 +686,75 @@ if __name__ == "__main__":
     avg = calculate_average([1, 2.5, 3, 4.5])
     print(f"  Average: {avg}")
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.** Write a function `find_user(user_id: int) -> Optional[str]` that returns a name if the user exists or `None` otherwise. Simulate with a dictionary lookup.
+
+??? success "Solution to Exercise 1"
+    ```python
+    from typing import Optional
+
+    USERS = {1: "Alice", 2: "Bob"}
+
+    def find_user(user_id: int) -> Optional[str]:
+        return USERS.get(user_id)
+
+    print(find_user(1))  # Alice
+    print(find_user(99)) # None
+    ```
+
+---
+
+**Exercise 2.** Rewrite `Union[int, float, str]` using the modern `|` syntax (Python 3.10+). Then write a function `stringify(value: int | float | str) -> str` that converts any of those types to a string.
+
+??? success "Solution to Exercise 2"
+    ```python
+    def stringify(value: int | float | str) -> str:
+        return str(value)
+
+    print(stringify(42))      # "42"
+    print(stringify(3.14))    # "3.14"
+    print(stringify("hello")) # "hello"
+    ```
+
+---
+
+**Exercise 3.** Predict whether `mypy` reports an error:
+
+```python
+from typing import Optional
+
+def greet(name: Optional[str]) -> str:
+    return "Hello, " + name
+```
+
+??? success "Solution to Exercise 3"
+    Yes, `mypy` reports an error. `name` has type `Optional[str]` (i.e., `str | None`), so concatenating with `+` could fail if `name` is `None`. The fix is to check for `None` first:
+
+    ```python
+    def greet(name: Optional[str]) -> str:
+        if name is None:
+            return "Hello, stranger"
+        return "Hello, " + name
+    ```
+
+---
+
+**Exercise 4.** Write a function `safe_divide(a: float, b: float) -> float | None` that returns `None` instead of raising `ZeroDivisionError`. Annotate it properly and write a caller that handles the `None` case.
+
+??? success "Solution to Exercise 4"
+    ```python
+    def safe_divide(a: float, b: float) -> float | None:
+        if b == 0:
+            return None
+        return a / b
+
+    result = safe_divide(10, 3)
+    if result is not None:
+        print(f"Result: {result:.2f}")
+    else:
+        print("Cannot divide by zero")
+    ```

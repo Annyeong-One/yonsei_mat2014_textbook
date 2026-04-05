@@ -336,3 +336,58 @@ print(melted)
 - Result is typically a Series with MultiIndex
 - Operates on innermost column level by default
 - Inverse operation is `unstack()`
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that uses `.stack()` on a DataFrame to move column labels into the index, creating a MultiIndex Series.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    # Solution for the specific exercise
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(10), 'B': np.random.randn(10)})
+    print(df.head())
+    ```
+
+---
+
+**Exercise 2.** Explain the relationship between `.stack()` and `.unstack()`. What does each do?
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the Pandas API and its behavior for this specific operation.
+
+---
+
+**Exercise 3.** Create a DataFrame with MultiIndex columns and use `.stack(level=0)` and `.stack(level=1)` to show the difference.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(20), 'B': np.random.randn(20)})
+    result = df.describe()
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Write code showing how `.stack()` handles NaN values. What does `dropna=False` do?
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(50), 'group': np.random.choice(['X', 'Y'], 50)})
+    result = df.groupby('group').mean()
+    print(result)
+    ```

@@ -342,3 +342,58 @@ Memory reduction: 57.0x
 | `cat.reorder_categories()` | Reorder categories |
 | `cat.as_ordered()` | Make ordered |
 | `cat.as_unordered()` | Make unordered |
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a Series with values `['small', 'medium', 'large', 'medium', 'small']` and convert it to a categorical type. Use `.cat.codes` to print the integer codes and `.cat.categories` to print the category labels.
+
+??? success "Solution to Exercise 1"
+    Convert to categorical and inspect codes and categories.
+
+        import pandas as pd
+
+        s = pd.Series(['small', 'medium', 'large', 'medium', 'small'], dtype='category')
+        print("Codes:", s.cat.codes.tolist())
+        print("Categories:", s.cat.categories.tolist())
+
+---
+
+**Exercise 2.**
+Create an ordered categorical Series with the custom order `['bronze', 'silver', 'gold']`. Add a new category `'platinum'` using `.cat.add_categories()`. Then verify that `'platinum'` appears in the categories even though no element has that value.
+
+??? success "Solution to Exercise 2"
+    Create ordered categorical and add a new category.
+
+        import pandas as pd
+        from pandas.api.types import CategoricalDtype
+
+        cat_type = CategoricalDtype(
+            categories=['bronze', 'silver', 'gold'],
+            ordered=True
+        )
+        s = pd.Series(['bronze', 'silver', 'gold', 'silver'], dtype=cat_type)
+        s = s.cat.add_categories('platinum')
+        print(s.cat.categories)  # ['bronze', 'silver', 'gold', 'platinum']
+        print('platinum' in s.cat.categories)  # True
+
+---
+
+**Exercise 3.**
+Given a categorical Series with categories `['A', 'B', 'C', 'D']` where category `'D'` is never used, use `.cat.remove_unused_categories()` to clean it up. Then rename the remaining categories to `['Alpha', 'Beta', 'Gamma']` using `.cat.rename_categories()`.
+
+??? success "Solution to Exercise 3"
+    Remove unused categories and rename the rest.
+
+        import pandas as pd
+
+        s = pd.Series(
+            pd.Categorical(['A', 'B', 'C', 'A', 'B'],
+                           categories=['A', 'B', 'C', 'D'])
+        )
+        s = s.cat.remove_unused_categories()
+        print("After removing unused:", s.cat.categories.tolist())  # ['A', 'B', 'C']
+        s = s.cat.rename_categories({'A': 'Alpha', 'B': 'Beta', 'C': 'Gamma'})
+        print(s)

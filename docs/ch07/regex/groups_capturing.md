@@ -641,3 +641,65 @@ if __name__ == "__main__":
     print("Next: Tutorial 06 - Lookahead and Lookbehind")
     print("="*70)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a regex with named groups to parse a log entry in the format `"[2024-12-25 14:30:00] ERROR: Connection timeout"`. Capture the date, time, level, and message as named groups. Test with `re.search` and access each group by name.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    import re
+
+    pattern = r'\[(?P<date>\d{4}-\d{2}-\d{2}) (?P<time>\d{2}:\d{2}:\d{2})\] (?P<level>\w+): (?P<message>.+)'
+    log = "[2024-12-25 14:30:00] ERROR: Connection timeout"
+    match = re.search(pattern, log)
+
+    if match:
+        print(f"Date: {match.group('date')}")     # 2024-12-25
+        print(f"Time: {match.group('time')}")     # 14:30:00
+        print(f"Level: {match.group('level')}")   # ERROR
+        print(f"Message: {match.group('message')}")  # Connection timeout
+    ```
+
+---
+
+**Exercise 2.**
+Write a regex that uses a non-capturing group to match URLs that start with either `http` or `https`, and a capturing group to extract the domain name. For example, from `"https://www.example.com/path"`, capture `"www.example.com"`.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    import re
+
+    pattern = r'(?:https?)://([^/]+)'
+    urls = [
+        "https://www.example.com/path",
+        "http://api.test.org/data",
+    ]
+    for url in urls:
+        match = re.search(pattern, url)
+        if match:
+            print(f"Domain: {match.group(1)}")
+    # Domain: www.example.com
+    # Domain: api.test.org
+    ```
+
+---
+
+**Exercise 3.**
+Write a regex that uses backreferences to find repeated words in a text (e.g., `"the the"` or `"is is"`). The pattern should match a word followed by whitespace and then the same word again. Test with `"The the cat sat on on the mat"`.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    import re
+
+    pattern = r'\b(\w+)\s+\1\b'
+    text = "The the cat sat on on the mat"
+    matches = re.findall(pattern, text, re.IGNORECASE)
+    print(matches)  # ['The', 'on']
+    ```

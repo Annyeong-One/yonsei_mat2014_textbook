@@ -464,6 +464,67 @@ Pages are loaded into RAM only when accessed.
 
 ---
 
+**Exercise 9.**
+Two Python processes each import NumPy and load the same 1 GB dataset using `np.load()`. A naive analysis suggests the system needs 2 GB of RAM for the data alone. Explain how **copy-on-write (COW)** combined with **virtual memory** can allow both processes to share the same physical memory pages for the data, using only ~1 GB. Under what conditions does the sharing break, and what happens to memory usage when one process modifies the data?
+
+??? success "Solution to Exercise 9"
+    When both processes load the same file using `np.load()`, the OS can use **memory-mapped file I/O** underneath. The virtual memory system maps the file's contents into each process's virtual address space. Both processes' page tables point to the **same physical pages** in RAM, so the data exists only once in physical memory (~1 GB).
+
+    This works because of copy-on-write: the pages are marked as read-only in both processes' page tables. As long as both processes only read the data, they share the same physical pages transparently.
+
+    **When sharing breaks:** If one process modifies the data (e.g., `data[0] = 999`), the modification triggers a **page fault**. The OS intercepts it, copies the affected 4 KB page to a new physical page, updates the modifying process's page table to point to the copy, and marks it as writable. Only the modified page is duplicated -- all other pages remain shared.
+
+    If Process A modifies 100 MB of the 1 GB dataset, total physical memory usage grows from ~1 GB to ~1.1 GB (the shared 900 MB plus two copies of the modified 100 MB), not 2 GB.
+
+---
+
+**Exercise 10.**
+A programmer runs `htop` and sees a Python process using 4 GB of "virtual memory" (VIRT) but only 500 MB of "resident memory" (RES). They panic, thinking their program has a memory leak. Explain why VIRT and RES differ, and why a high VIRT value is not necessarily a problem. What does each metric actually measure, and which one better reflects the program's actual impact on the system?
+
+??? success "Solution to Exercise 10"
+    **VIRT (virtual memory)** is the total size of the process's virtual address space -- it includes all memory the process has *mapped*, regardless of whether it is actually using it. This includes:
+
+    - Memory-mapped files (which may not be loaded into RAM yet)
+    - Shared libraries (mapped but shared with other processes)
+    - Memory allocated but not yet touched (not backed by physical pages)
+    - Reserved address space from `mmap` calls
+
+    **RES (resident memory)** is the amount of physical RAM currently used by the process -- pages that are actually in RAM right now.
+
+    A high VIRT with low RES is normal and not a problem. It means the process has mapped large regions of virtual address space but is only actively using a small portion. Virtual address space is essentially free (it is just entries in a page table); physical RAM is the scarce resource.
+
+    **RES** better reflects the program's actual impact on the system. A 4 GB VIRT with 500 MB RES means the program is using 500 MB of actual RAM. The 3.5 GB difference is virtual space that has been reserved but not (yet) backed by physical memory.
+
+---
+
+**Exercise 11.**
+Pages are typically 4 KB, but modern CPUs also support "huge pages" of 2 MB or 1 GB. Explain *why* larger page sizes can improve performance for programs that allocate very large blocks of memory (e.g., a 10 GB NumPy array). Consider the role of the TLB (Translation Lookaside Buffer) and the number of page table entries required. What is the trade-off -- when would huge pages hurt performance?
+
+??? success "Solution to Exercise 11"
+    A 10 GB NumPy array with 4 KB pages requires $10 \times 1024 \times 1024 / 4 \approx 2{,}621{,}440$ page table entries and the same number of virtual-to-physical mappings.
+
+    The TLB caches recent translations and typically holds 512--4096 entries. With 4 KB pages, the TLB can cover at most $4096 \times 4\text{ KB} = 16\text{ MB}$. Iterating through a 10 GB array causes constant TLB misses, each requiring a page table walk (4--5 memory accesses for a 4-level page table). These TLB misses can add ~10--20% overhead for memory-intensive workloads.
+
+    With 2 MB huge pages, the same 10 GB array requires only $10 \times 1024 / 2 = 5{,}120$ entries. The TLB can cover $4096 \times 2\text{ MB} = 8\text{ GB}$ -- nearly the entire array. TLB misses become rare, eliminating the page-table-walk overhead.
+
+    **Trade-off:** Huge pages waste memory through **internal fragmentation**. If a program allocates a small amount (e.g., 100 KB), a 2 MB huge page wastes 1.9 MB. For programs with many small allocations (typical in Python due to many small objects), huge pages can increase total memory consumption significantly. Huge pages also make memory management less flexible -- the OS must find contiguous 2 MB blocks of physical memory, which becomes harder as memory fragments over time.
+
+---
+
+**Exercise 12.**
+Process isolation through virtual memory means that one process cannot directly read another process's memory. Explain the mechanism that enforces this: what happens at the hardware level when Process A tries to access a virtual address that belongs to Process B? Trace the path from virtual address, through page table lookup, to the resulting hardware exception. Why can't a program simply guess another process's physical addresses and access them?
+
+??? success "Solution to Exercise 12"
+    Each process has its own **page table**, and the CPU's Memory Management Unit (MMU) uses the currently active page table (set by the OS during context switches) for all address translations.
+
+    When Process A generates a virtual address, the MMU translates it using Process A's page table. Process A's page table only contains mappings for pages that the OS has allocated to Process A. It does not contain entries for Process B's pages.
+
+    If Process A tries to access a virtual address that is not in its page table (or is marked as "not present"), the MMU generates a **page fault exception**. The CPU traps to the OS kernel, which examines the fault. Since the address was never mapped to Process A, the OS sends a **segmentation fault** (SIGSEGV) signal, terminating the process.
+
+    A program cannot "guess physical addresses" because **user-mode programs never see physical addresses**. All memory accesses go through the MMU, which enforces the virtual-to-physical mapping. There is no instruction available to user-mode code that bypasses the MMU. Even if a program knew the physical address of Process B's data, it has no way to access that physical address -- the MMU only accepts virtual addresses and translates them through the current process's page table.
+
+---
+
 ## 14. Short Answers
 
 1. Abstraction that maps virtual addresses to physical memory
@@ -474,8 +535,6 @@ Pages are loaded into RAM only when accessed.
 6. Access to a page not currently mapped in RAM
 7. Continuous swapping between RAM and disk
 8. Pages shared until modified
-
----
 
 ## 15. Summary
 

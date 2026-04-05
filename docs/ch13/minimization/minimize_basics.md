@@ -414,3 +414,77 @@ Key points about `scipy.optimize.minimize()`:
 6. **Be aware** of local minima and use global methods if needed
 
 The next section explores different algorithms and when to use each one.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Use `scipy.optimize.minimize` to find the minimum of the Booth function $f(x, y) = (x + 2y - 7)^2 + (2x + y - 5)^2$, starting from `x0 = [0, 0]`. Print the optimal point, the function value, and verify that the result is close to the known minimum at $(1, 3)$.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import numpy as np
+        from scipy import optimize
+
+        def booth(x):
+            return (x[0] + 2*x[1] - 7)**2 + (2*x[0] + x[1] - 5)**2
+
+        result = optimize.minimize(booth, x0=[0, 0])
+
+        print(f"Optimal point: {result.x}")
+        print(f"Function value: {result.fun:.6e}")
+        print(f"Success: {result.success}")
+        print(f"Close to (1, 3): {np.allclose(result.x, [1, 3], atol=1e-4)}")
+        ```
+
+---
+
+**Exercise 2.**
+Write a cost function that computes the sum of squared errors between a quadratic model $y = ax^2 + bx + c$ and the data `x = [0, 1, 2, 3, 4]`, `y = [1.0, 2.9, 9.1, 18.8, 33.2]`. Use `minimize` with the `args` parameter to pass the data to the cost function. Print the fitted coefficients.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import numpy as np
+        from scipy import optimize
+
+        def quadratic_sse(params, xdata, ydata):
+            a, b, c = params
+            predicted = a * xdata**2 + b * xdata + c
+            return np.sum((ydata - predicted)**2)
+
+        xdata = np.array([0, 1, 2, 3, 4])
+        ydata = np.array([1.0, 2.9, 9.1, 18.8, 33.2])
+
+        result = optimize.minimize(quadratic_sse, x0=[1, 1, 1], args=(xdata, ydata))
+
+        a, b, c = result.x
+        print(f"Fitted coefficients: a={a:.4f}, b={b:.4f}, c={c:.4f}")
+        print(f"SSE: {result.fun:.6f}")
+        print(f"Success: {result.success}")
+        ```
+
+---
+
+**Exercise 3.**
+Minimize the function $f(x) = e^x + e^{-2x}$ using `minimize` with bounds restricting $x$ to the interval $[-2, 2]$. Compare the result with and without bounds. Check `result.success` in both cases and print the optimal values.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import numpy as np
+        from scipy import optimize
+
+        def f(x):
+            return np.exp(x) + np.exp(-2 * x)
+
+        # Without bounds
+        result_unbounded = optimize.minimize(f, x0=0)
+        print(f"Unbounded: x = {result_unbounded.x[0]:.6f}, f(x) = {result_unbounded.fun:.6f}")
+        print(f"  Success: {result_unbounded.success}")
+
+        # With bounds
+        bounds = [(-2, 2)]
+        result_bounded = optimize.minimize(f, x0=0, bounds=bounds, method='L-BFGS-B')
+        print(f"Bounded [-2, 2]: x = {result_bounded.x[0]:.6f}, f(x) = {result_bounded.fun:.6f}")
+        print(f"  Success: {result_bounded.success}")
+        ```

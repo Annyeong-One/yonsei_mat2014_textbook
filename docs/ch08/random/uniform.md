@@ -121,3 +121,59 @@ Uniform samples over $[0, 1)$ are the basis for many simulation methods.
 ### 3. Initialization
 
 Neural network weights are often initialized from uniform distributions.
+
+---
+
+## Exercises
+
+**Exercise 1.** Generate 1,000 uniform random numbers between 5 and 15 using `rng.uniform(5, 15, 1000)`. Verify the mean is approximately 10.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(42)
+    samples = rng.uniform(5, 15, 1000)
+    print(f"Mean: {samples.mean():.2f}")  # ~10.0
+    ```
+
+---
+
+**Exercise 2.** Simulate rolling a fair die 10,000 times using `rng.integers(1, 7, size=10000)`. Count the frequency of each outcome and verify they are approximately equal.
+
+??? success "Solution to Exercise 2"
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(42)
+    rolls = rng.integers(1, 7, size=10000)
+    for i in range(1, 7):
+        print(f"{i}: {np.sum(rolls == i)}")  # ~1667 each
+    ```
+
+---
+
+**Exercise 3.** Generate a 3x4 matrix of uniform random numbers in [0, 1). Print the shape and the min/max values.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(42)
+    matrix = rng.random((3, 4))
+    print(f"Shape: {matrix.shape}")
+    print(f"Min: {matrix.min():.4f}, Max: {matrix.max():.4f}")
+    ```
+
+---
+
+**Exercise 4.** Use uniform random numbers to estimate the area of a circle with radius 1 (Monte Carlo method). Generate points in the unit square and count how many fall inside the circle.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(42)
+    n = 1_000_000
+    x = rng.uniform(-1, 1, n)
+    y = rng.uniform(-1, 1, n)
+    inside = np.sum(x**2 + y**2 <= 1)
+    pi_estimate = 4 * inside / n
+    print(f"Pi estimate: {pi_estimate:.4f}")  # ~3.1416
+    ```

@@ -93,3 +93,70 @@ Results are typically organized in an ANOVA table:
 ## Summary
 
 ANOVA tests whether the means of multiple groups are equal by comparing between-group and within-group variability through the F-statistic. The key requirements are independence, normality, and equal variances across groups. In SciPy, `scipy.stats.f_oneway` provides a direct implementation for the one-way case.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Three fertilizers are tested on plant growth (cm): A = [20, 22, 19, 24, 21], B = [28, 30, 27, 29, 31], C = [25, 23, 26, 24, 27]. Perform a one-way ANOVA and compute eta-squared as the effect size.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        from scipy import stats
+
+        a = [20, 22, 19, 24, 21]
+        b = [28, 30, 27, 29, 31]
+        c = [25, 23, 26, 24, 27]
+
+        f_stat, p_val = stats.f_oneway(a, b, c)
+        all_data = np.concatenate([a, b, c])
+        grand_mean = np.mean(all_data)
+        ss_b = sum(len(g)*(np.mean(g)-grand_mean)**2 for g in [a,b,c])
+        ss_t = np.sum((all_data - grand_mean)**2)
+        eta_sq = ss_b / ss_t
+
+        print(f"F={f_stat:.4f}, p={p_val:.6f}")
+        print(f"Eta-squared: {eta_sq:.4f}")
+
+---
+
+**Exercise 2.**
+Verify the equal-variance assumption for the three groups in Exercise 1 using Levene's test before running ANOVA. If the assumption fails, suggest an alternative.
+
+??? success "Solution to Exercise 2"
+
+        from scipy import stats
+
+        a = [20, 22, 19, 24, 21]
+        b = [28, 30, 27, 29, 31]
+        c = [25, 23, 26, 24, 27]
+
+        w_stat, p_val = stats.levene(a, b, c)
+        print(f"Levene's test: W={w_stat:.4f}, p={p_val:.4f}")
+        if p_val < 0.05:
+            print("Unequal variances — use Kruskal-Wallis instead")
+        else:
+            print("Equal variances — ANOVA is appropriate")
+
+---
+
+**Exercise 3.**
+Generate three groups from $N(50, 10^2)$ with $n = 30$ each (all null hypotheses true). Run ANOVA 1000 times and verify the false positive rate is approximately 5% at $\alpha = 0.05$.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        rejections = 0
+        for _ in range(1000):
+            g1 = np.random.normal(50, 10, 30)
+            g2 = np.random.normal(50, 10, 30)
+            g3 = np.random.normal(50, 10, 30)
+            _, p = stats.f_oneway(g1, g2, g3)
+            if p < 0.05:
+                rejections += 1
+        print(f"False positive rate: {rejections/1000:.3f} (expected ~0.05)")

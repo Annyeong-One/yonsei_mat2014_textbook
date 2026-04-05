@@ -155,3 +155,89 @@ print(ContentType.JSON_DATA.value)    # 'json-data'
 - Avoiding manual typos in value assignment
 - Natural progression (1, 2, 3, ...)
 - Combined with custom `_generate_next_value_` for domain-specific values
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a `Direction` enum using `auto()` for values. Then create a `LogLevel` enum that uses a custom `_generate_next_value_` to set values as the lowercase member name (e.g., `DEBUG` gets value `"debug"`). Print all members and their values for both enums.
+
+??? success "Solution to Exercise 1"
+
+        from enum import Enum, auto
+
+        class Direction(Enum):
+            NORTH = auto()
+            SOUTH = auto()
+            EAST = auto()
+            WEST = auto()
+
+        for d in Direction:
+            print(f"{d.name} = {d.value}")
+        # NORTH = 1, SOUTH = 2, EAST = 3, WEST = 4
+
+        class LogLevel(Enum):
+            def _generate_next_value_(name, start, count, last_values):
+                return name.lower()
+
+            DEBUG = auto()
+            INFO = auto()
+            WARNING = auto()
+            ERROR = auto()
+
+        for level in LogLevel:
+            print(f"{level.name} = {level.value!r}")
+        # DEBUG = 'debug', INFO = 'info', etc.
+
+---
+
+**Exercise 2.**
+Define a `Permission` Flag enum using `auto()`. Members should be `READ`, `WRITE`, `EXECUTE`, and `ADMIN`. Demonstrate combining permissions with `|`, checking with `in`, and removing a permission with `& ~`. Show that `auto()` assigns powers of 2 for Flag.
+
+??? success "Solution to Exercise 2"
+
+        from enum import Flag, auto
+
+        class Permission(Flag):
+            READ = auto()      # 1
+            WRITE = auto()     # 2
+            EXECUTE = auto()   # 4
+            ADMIN = auto()     # 8
+
+        # Combine
+        user_perms = Permission.READ | Permission.WRITE
+        print(user_perms)  # Permission.READ|WRITE
+
+        # Check
+        print(Permission.READ in user_perms)     # True
+        print(Permission.ADMIN in user_perms)    # False
+
+        # Remove
+        user_perms = user_perms & ~Permission.WRITE
+        print(user_perms)  # Permission.READ
+
+---
+
+**Exercise 3.**
+Create a `APIEndpoint` enum with a custom `_generate_next_value_` that converts member names to URL-style slugs (e.g., `USER_PROFILE` becomes `"/user-profile"`). Add members `HOME`, `USER_PROFILE`, `SETTINGS_PAGE`, and `API_DOCS`. Print each member's value to verify the slug conversion.
+
+??? success "Solution to Exercise 3"
+
+        from enum import Enum, auto
+
+        class APIEndpoint(Enum):
+            def _generate_next_value_(name, start, count, last_values):
+                return "/" + name.lower().replace("_", "-")
+
+            HOME = auto()
+            USER_PROFILE = auto()
+            SETTINGS_PAGE = auto()
+            API_DOCS = auto()
+
+        for endpoint in APIEndpoint:
+            print(f"{endpoint.name}: {endpoint.value}")
+        # HOME: /home
+        # USER_PROFILE: /user-profile
+        # SETTINGS_PAGE: /settings-page
+        # API_DOCS: /api-docs

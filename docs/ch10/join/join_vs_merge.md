@@ -202,3 +202,70 @@ Use the following decision guide.
 - `join` is more concise for index joins; `merge` is more flexible for column joins
 - Use `lsuffix`/`rsuffix` with `join` and `suffixes` with `merge` to handle overlapping column names
 - `join` accepts a list of DataFrames; `merge` only works with two at a time
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create two DataFrames with a shared column `'key'`. Combine them using `pd.merge()` (the default inner join). Then achieve the same result using `.join()` by first setting `'key'` as the index of both DataFrames.
+
+??? success "Solution to Exercise 1"
+    Achieve the same result with merge and join.
+
+        import pandas as pd
+
+        df1 = pd.DataFrame({'key': ['a', 'b', 'c'], 'val1': [1, 2, 3]})
+        df2 = pd.DataFrame({'key': ['a', 'b', 'd'], 'val2': [4, 5, 6]})
+
+        # Using merge (default inner join on shared column)
+        result_merge = pd.merge(df1, df2, on='key')
+        print("merge:\n", result_merge)
+
+        # Using join (set key as index first)
+        result_join = df1.set_index('key').join(df2.set_index('key'), how='inner')
+        print("join:\n", result_join)
+
+---
+
+**Exercise 2.**
+Create two DataFrames with overlapping column names. Demonstrate how `.join()` uses `lsuffix`/`rsuffix` while `pd.merge()` uses the `suffixes` parameter. Verify both approaches produce the same result.
+
+??? success "Solution to Exercise 2"
+    Compare suffix handling between join and merge.
+
+        import pandas as pd
+
+        df1 = pd.DataFrame({'val': [1, 2]}, index=['a', 'b'])
+        df2 = pd.DataFrame({'val': [3, 4]}, index=['a', 'b'])
+
+        result_join = df1.join(df2, lsuffix='_L', rsuffix='_R')
+        result_merge = pd.merge(df1, df2, left_index=True, right_index=True, suffixes=('_L', '_R'))
+        print("join:\n", result_join)
+        print("merge:\n", result_merge)
+        assert result_join.equals(result_merge)
+        print("Results are identical.")
+
+---
+
+**Exercise 3.**
+Create three DataFrames with a common index. Use `.join()` with a list to combine all three in one call. Then replicate the same result using sequential `pd.merge()` calls with `left_index=True` and `right_index=True`. Compare the outputs.
+
+??? success "Solution to Exercise 3"
+    Join three DataFrames using join list vs sequential merge.
+
+        import pandas as pd
+
+        df1 = pd.DataFrame({'A': [1, 2, 3]}, index=['x', 'y', 'z'])
+        df2 = pd.DataFrame({'B': [4, 5, 6]}, index=['x', 'y', 'z'])
+        df3 = pd.DataFrame({'C': [7, 8, 9]}, index=['x', 'y', 'z'])
+
+        result_join = df1.join([df2, df3])
+        result_merge = pd.merge(
+            pd.merge(df1, df2, left_index=True, right_index=True),
+            df3, left_index=True, right_index=True
+        )
+        print("join:\n", result_join)
+        print("merge:\n", result_merge)
+        assert result_join.equals(result_merge)
+        print("Results are identical.")

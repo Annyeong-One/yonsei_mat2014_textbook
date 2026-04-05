@@ -137,3 +137,71 @@ print(sorted(records))  # [('Alice', 30), ('Bob', 20), ('Bob', 25)]
 - Comparison stops at first difference
 - Shorter sequence is "less than" if prefixes match
 - Case matters: `'A' < 'a'` (ASCII order)
+
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Without running the code, predict the result of each comparison and explain why:
+
+```python
+print([1, 2, 3] < [1, 2, 4])
+print("banana" < "cherry")
+print((1, 2) < (1, 2, 0))
+```
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    print([1, 2, 3] < [1, 2, 4])   # True  (3 < 4 at index 2)
+    print("banana" < "cherry")      # True  ('b' < 'c')
+    print((1, 2) < (1, 2, 0))      # True  (prefix match, shorter is less)
+    ```
+
+    Lexicographic comparison proceeds element by element. If all compared elements are equal, the shorter sequence is considered less than the longer one.
+
+---
+
+**Exercise 2.**
+Write a function `sort_names_case_insensitive(names)` that sorts a list of names lexicographically, ignoring case. For example, `["charlie", "Alice", "Bob"]` should become `["Alice", "Bob", "charlie"]`.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    def sort_names_case_insensitive(names):
+        return sorted(names, key=str.lower)
+
+    result = sort_names_case_insensitive(["charlie", "Alice", "Bob"])
+    print(result)  # ['Alice', 'Bob', 'charlie']
+    ```
+
+    Using `str.lower` as the key function ensures that comparison ignores case while preserving the original casing in the output.
+
+---
+
+**Exercise 3.**
+Given a list of `(last_name, first_name)` tuples, sort them by last name first, then by first name. Demonstrate with at least 4 entries where some share the same last name.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    people = [
+        ("Smith", "Alice"),
+        ("Jones", "Bob"),
+        ("Smith", "Charlie"),
+        ("Jones", "Alice"),
+    ]
+
+    sorted_people = sorted(people)
+    for last, first in sorted_people:
+        print(f"{last}, {first}")
+    # Jones, Alice
+    # Jones, Bob
+    # Smith, Alice
+    # Smith, Charlie
+    ```
+
+    Tuples are compared lexicographically, so sorting by the tuple itself sorts by last name first, then by first name when last names are equal.

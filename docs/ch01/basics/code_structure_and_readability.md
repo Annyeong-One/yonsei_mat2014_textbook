@@ -229,6 +229,7 @@ Unlike `return`, `pass` does not stop execution.
 
 ---
 
+
 ## 10. Summary
 
 Key ideas:
@@ -242,3 +243,79 @@ Key ideas:
 These conventions help Python code remain **clear and readable**.
 
 
+## Exercises
+
+**Exercise 1.**
+Python uses indentation to define blocks, whereas most other languages use braces `{}`. A programmer writes:
+
+```python
+if True:
+    x = 1
+    if True:
+        y = 2
+    z = 3
+```
+
+Which variables are set inside the inner `if` block, and which belong to the outer `if` block? Then explain what happens if you accidentally mix tabs and spaces for indentation. Why did Python's designers choose significant whitespace over braces?
+
+??? success "Solution to Exercise 1"
+    `y = 2` is inside the inner `if` block (indented 8 spaces). `x = 1` and `z = 3` are inside the outer `if` block (indented 4 spaces). `z = 3` is NOT inside the inner block -- it "de-dents" back to the outer block level.
+
+    If you mix tabs and spaces, Python 3 raises a `TabError`. Python 3 does not allow mixing tabs and spaces for indentation (Python 2 was more permissive, which caused subtle bugs where code appeared aligned but was actually in different blocks).
+
+    Python chose significant whitespace because it enforces the visual structure that programmers already use for readability. In brace-based languages, indentation is optional, so code can be correctly indented for the compiler but misleading to the human reader. Python eliminates this class of bugs by making the visual structure the actual structure.
+
+---
+
+**Exercise 2.**
+A programmer writes `pass` and `return` in similar contexts:
+
+```python
+def version_a():
+    pass
+    print("after pass")
+
+def version_b():
+    return
+    print("after return")
+```
+
+Predict the output of calling each function. Why does `pass` exist as a keyword if it does nothing? Give two realistic situations where `pass` is the correct choice.
+
+??? success "Solution to Exercise 2"
+    `version_a()` prints `"after pass"` and returns `None`. `version_b()` prints nothing and returns `None`.
+
+    `pass` is a no-op -- it does nothing and execution continues to the next line. `return` exits the function immediately, so `print("after return")` is unreachable dead code.
+
+    `pass` exists because Python's syntax requires at least one statement in every block. Without `pass`, you could not write:
+
+    1. **Placeholder functions during development**: `def process_data(): pass` -- you plan to implement it later but need the function to exist now so other code can reference it.
+    2. **Empty exception handlers**: `except KeyboardInterrupt: pass` -- you intentionally want to ignore an exception.
+
+    The ellipsis `...` can also serve as a placeholder and is increasingly preferred in type stubs and abstract methods.
+
+---
+
+**Exercise 3.**
+The Python style guide (PEP 8) says "comment why, not what." Evaluate each comment below and explain which are useful and which are not:
+
+```python
+x = x + 1                  # increment x
+x = x + 1                  # compensate for border pixel
+results = []               # create empty list
+results = []               # accumulator for valid responses
+if not user.is_active:     # check if user is not active
+    send_reminder(user)    # inactive users get a weekly reminder
+```
+
+Why does commenting "what" become harmful as code evolves?
+
+??? success "Solution to Exercise 3"
+    - `# increment x` -- **not useful**. It restates the code. Anyone who reads `x = x + 1` already knows it increments `x`.
+    - `# compensate for border pixel` -- **useful**. It explains *why* the increment is needed -- a domain-specific reason that is not obvious from the code alone.
+    - `# create empty list` -- **not useful**. `results = []` is self-evident.
+    - `# accumulator for valid responses` -- **useful**. It explains the *purpose* of the list, which helps readers understand the algorithm.
+    - `# check if user is not active` -- **not useful**. It restates the condition.
+    - `# inactive users get a weekly reminder` -- **useful**. It explains the business rule behind the code.
+
+    "What" comments become harmful as code evolves because the code changes but comments often do not get updated. A stale comment that says "increment x" when the line now says `x = x + 2` is worse than no comment -- it actively misleads. "Why" comments are more durable because the reason for doing something changes less frequently than the specific implementation.

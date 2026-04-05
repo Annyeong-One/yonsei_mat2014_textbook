@@ -110,3 +110,56 @@ Record seed values in logs or comments for future reproduction.
 ### 3. Avoid Resetting
 
 Resetting seeds mid-experiment can cause subtle statistical biases.
+
+---
+
+## Exercises
+
+**Exercise 1.** Create two random number generators with the same seed. Verify they produce identical sequences.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+    rng1 = np.random.default_rng(42)
+    rng2 = np.random.default_rng(42)
+    print(rng1.random(5))
+    print(rng2.random(5))
+    # Both produce identical arrays
+    ```
+
+---
+
+**Exercise 2.** Explain why `np.random.seed(42)` is considered legacy. What is the modern alternative?
+
+??? success "Solution to Exercise 2"
+    `np.random.seed()` sets global state, which can cause subtle bugs in multithreaded code or when different parts of a program need independent random streams. The modern alternative is `np.random.default_rng(seed)`, which creates an independent generator instance.
+
+---
+
+**Exercise 3.** Generate 5 random floats using a seeded `default_rng`, save the seed, then reproduce the exact same sequence.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+    seed = 12345
+    rng = np.random.default_rng(seed)
+    first_run = rng.random(5)
+    rng = np.random.default_rng(seed)
+    second_run = rng.random(5)
+    print(np.array_equal(first_run, second_run))  # True
+    ```
+
+---
+
+**Exercise 4.** Write a function `reproducible_sample(seed, n)` that always returns the same `n` random numbers for a given seed.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    def reproducible_sample(seed, n):
+        rng = np.random.default_rng(seed)
+        return rng.random(n)
+
+    print(reproducible_sample(42, 5))
+    print(reproducible_sample(42, 5))  # same output
+    ```

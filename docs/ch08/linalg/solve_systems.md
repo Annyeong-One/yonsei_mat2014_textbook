@@ -550,3 +550,57 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Solve the system `2x + y = 5` and `x + 3y = 7` using `np.linalg.solve`. Verify the solution by substituting back into both equations.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        A = np.array([[2, 1], [1, 3]], dtype=float)
+        b = np.array([5, 7], dtype=float)
+        x = np.linalg.solve(A, b)
+        print(f"Solution: x={x[0]:.4f}, y={x[1]:.4f}")
+        print(f"Verify: {np.allclose(A @ x, b)}")
+
+---
+
+**Exercise 2.**
+Create a 4x4 random matrix `A` and a random vector `b` of length 4. Solve `A @ x = b` using both `np.linalg.solve` and `np.linalg.inv(A) @ b`. Verify both give the same answer, and explain why `solve` is preferred over computing the inverse.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        np.random.seed(42)
+        A = np.random.randn(4, 4)
+        b = np.random.randn(4)
+
+        x_solve = np.linalg.solve(A, b)
+        x_inv = np.linalg.inv(A) @ b
+
+        print(f"solve:  {x_solve}")
+        print(f"inv@b:  {x_inv}")
+        print(f"Match: {np.allclose(x_solve, x_inv)}")
+        # solve is preferred because it is faster and more
+        # numerically stable than computing the full inverse.
+
+---
+
+**Exercise 3.**
+Solve a system with multiple right-hand sides: `A @ X = B` where `A` is 3x3 and `B` is 3x2 (two right-hand side vectors). Use `np.linalg.solve(A, B)` and verify the result shape is `(3, 2)`.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        A = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 10]], dtype=float)
+        B = np.array([[1, 2], [3, 4], [5, 6]], dtype=float)
+        X = np.linalg.solve(A, B)
+        print(f"X shape: {X.shape}")  # (3, 2)
+        print(f"Verify: {np.allclose(A @ X, B)}")

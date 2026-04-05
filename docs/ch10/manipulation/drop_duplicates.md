@@ -286,3 +286,60 @@ result = df.drop_duplicates(ignore_index=True)
 ```python
 result = df.drop_duplicates().reset_index(drop=True)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a DataFrame with duplicate rows. Use `drop_duplicates()` to remove them. Then use `drop_duplicates(keep='last')` and compare which rows are retained versus the default `keep='first'`.
+
+??? success "Solution to Exercise 1"
+    Compare keep='first' vs keep='last'.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'A': [1, 2, 1, 2, 3],
+            'B': ['x', 'y', 'x', 'y', 'z']
+        })
+        print("keep='first':")
+        print(df.drop_duplicates())
+        print("\nkeep='last':")
+        print(df.drop_duplicates(keep='last'))
+
+---
+
+**Exercise 2.**
+Create a DataFrame where some rows have the same value in one column but different values in another. Use `drop_duplicates(subset=['column_name'])` to remove duplicates based on a single column. Observe which rows are kept.
+
+??? success "Solution to Exercise 2"
+    Drop duplicates based on a subset of columns.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'name': ['Alice', 'Bob', 'Alice', 'Carol'],
+            'score': [85, 90, 92, 88]
+        })
+        result = df.drop_duplicates(subset=['name'])
+        print(result)
+        # Only first occurrence of each name is kept
+
+---
+
+**Exercise 3.**
+Create a DataFrame with email addresses where some are duplicates. Use `drop_duplicates(subset=['email'], keep=False)` to remove all rows that have any duplicate email (keeping none of them). Count how many rows remain.
+
+??? success "Solution to Exercise 3"
+    Remove all rows with duplicate emails.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'user': ['Alice', 'Bob', 'Carol', 'Dave', 'Eve'],
+            'email': ['a@x.com', 'b@x.com', 'a@x.com', 'c@x.com', 'b@x.com']
+        })
+        result = df.drop_duplicates(subset=['email'], keep=False)
+        print(result)
+        print(f"Rows remaining: {len(result)}")

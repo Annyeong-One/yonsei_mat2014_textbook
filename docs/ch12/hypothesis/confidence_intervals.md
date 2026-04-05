@@ -190,3 +190,70 @@ The `method` parameter controls which bootstrap interval is computed:
 ## Summary
 
 Confidence intervals quantify the precision of point estimates by providing a range of plausible values for the population parameter. The key formulas are the z-interval (known variance) and t-interval (unknown variance) for means, and the Wald or Wilson interval for proportions. The interval width shrinks with larger sample sizes and lower confidence levels. A $(1 - \alpha)$ confidence interval is equivalent to the set of parameter values not rejected by a two-sided test at level $\alpha$. When analytical formulas are unavailable, bootstrap methods provide a flexible nonparametric alternative.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Generate 40 samples from $N(75, 8^2)$. Compute both the z-interval (assuming $\sigma = 8$ is known) and the t-interval for a 95% confidence interval. Compare the widths and explain why the t-interval is wider.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        data = np.random.normal(75, 8, 40)
+        xbar = np.mean(data)
+        n = len(data)
+
+        z_margin = stats.norm.ppf(0.975) * 8 / np.sqrt(n)
+        ci_z = (xbar - z_margin, xbar + z_margin)
+
+        se = stats.sem(data)
+        ci_t = stats.t.interval(0.95, df=n-1, loc=xbar, scale=se)
+
+        print(f"z-interval: ({ci_z[0]:.2f}, {ci_z[1]:.2f}), width={2*z_margin:.2f}")
+        print(f"t-interval: ({ci_t[0]:.2f}, {ci_t[1]:.2f}), width={ci_t[1]-ci_t[0]:.2f}")
+
+---
+
+**Exercise 2.**
+In a survey, 180 out of 300 respondents favor a policy. Compute the 95% Wald confidence interval and the Wilson confidence interval (using `statsmodels.stats.proportion.proportion_confint`) for the population proportion.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy import stats
+        from statsmodels.stats.proportion import proportion_confint
+
+        n, x = 300, 180
+        p_hat = x / n
+        z = stats.norm.ppf(0.975)
+        margin = z * np.sqrt(p_hat * (1 - p_hat) / n)
+        ci_wald = (p_hat - margin, p_hat + margin)
+        ci_wilson = proportion_confint(x, n, method='wilson')
+
+        print(f"Wald CI:   ({ci_wald[0]:.4f}, {ci_wald[1]:.4f})")
+        print(f"Wilson CI: ({ci_wilson[0]:.4f}, {ci_wilson[1]:.4f})")
+
+---
+
+**Exercise 3.**
+Use `scipy.stats.bootstrap` to compute a 95% bootstrap confidence interval for the median of 50 samples drawn from an exponential distribution with $\lambda = 1$. Compare the bootstrap CI with the theoretical median $\ln 2 \approx 0.693$.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy.stats import bootstrap
+
+        np.random.seed(42)
+        data = np.random.exponential(1, size=50)
+        result = bootstrap((data,), statistic=np.median,
+                           n_resamples=9999, confidence_level=0.95,
+                           random_state=42)
+        print(f"Bootstrap 95% CI for median: "
+              f"({result.confidence_interval.low:.3f}, "
+              f"{result.confidence_interval.high:.3f})")
+        print(f"Theoretical median: {np.log(2):.3f}")

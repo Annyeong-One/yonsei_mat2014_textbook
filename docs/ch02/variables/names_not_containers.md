@@ -181,3 +181,70 @@ del y  # Remove "y" note
 # Move label
 x = [4, 5, 6]  # Move "x" to new object
 ```
+
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Create a list and bind three names to it. Delete one name using `del`. Show that the other two names still work and the list still exists.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    lst = [1, 2, 3]
+    a = lst
+    b = lst
+    c = lst
+
+    del a
+    print(b)  # [1, 2, 3] (still works)
+    print(c)  # [1, 2, 3] (still works)
+    # print(a)  # NameError: name 'a' is not defined
+    ```
+
+    `del a` removes the name `a` but does not delete the object. The object remains alive as long as at least one name references it.
+
+---
+
+**Exercise 2.**
+Write a function that takes a list, reassigns the parameter to a new list inside the function, and returns nothing. Show that the caller's list is unchanged, demonstrating that reassignment rebinds the local name only.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    def try_reassign(lst):
+        lst = [10, 20, 30]  # Rebinds local name only
+        print(f"Inside function: {lst}")
+
+    data = [1, 2, 3]
+    try_reassign(data)
+    print(f"Outside function: {data}")  # [1, 2, 3] (unchanged)
+    ```
+
+    Reassignment inside the function creates a new local binding. It does not affect the caller's variable because only the local name is rebound.
+
+---
+
+**Exercise 3.**
+Demonstrate the difference between mutation (modifying through a name) and reassignment (rebinding a name) by starting with `x = y = [1, 2, 3]`. First mutate through `x`, then reassign `x`, and show the effect on `y` in each case.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    x = y = [1, 2, 3]
+
+    # Mutation: affects both names
+    x.append(4)
+    print(f"After mutation: {x=}, {y=}")
+    # x=[1, 2, 3, 4], y=[1, 2, 3, 4]
+
+    # Reassignment: only affects x
+    x = [10, 20]
+    print(f"After reassignment: {x=}, {y=}")
+    # x=[10, 20], y=[1, 2, 3, 4]
+    ```
+
+    Mutation modifies the shared object, so both names see the change. Reassignment makes `x` point to a new object, leaving `y` pointing to the original.

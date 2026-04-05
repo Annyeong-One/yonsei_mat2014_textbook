@@ -136,3 +136,64 @@ df.groupby('city')['temperature'].mean()
 # Built-in aggregations are much faster
 # Iteration is slower but more flexible
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Iterate over a GroupBy object and print each group name and the number of rows in that group. Use tuple unpacking in the for loop.
+
+??? success "Solution to Exercise 1"
+    Unpack group name and DataFrame in the for loop.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'city': ['NY', 'NY', 'LA', 'SF', 'SF', 'SF'],
+            'value': [10, 20, 30, 40, 50, 60]
+        })
+        for city, group in df.groupby('city'):
+            print(f"{city}: {len(group)} rows")
+
+---
+
+**Exercise 2.**
+Group a sales DataFrame by `'region'` and iterate to build a list of dictionaries, each containing the region name, total sales, and average order value. Convert the list to a DataFrame.
+
+??? success "Solution to Exercise 2"
+    Build summary statistics via iteration.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'region': ['East', 'East', 'West', 'West', 'North'],
+            'sales': [100, 200, 150, 250, 300]
+        })
+        results = []
+        for region, group in df.groupby('region'):
+            results.append({
+                'region': region,
+                'total_sales': group['sales'].sum(),
+                'avg_order': group['sales'].mean()
+            })
+        summary = pd.DataFrame(results)
+        print(summary)
+
+---
+
+**Exercise 3.**
+Group by `['year', 'quarter']` and iterate using tuple unpacking for the composite key. Print each (year, quarter) combination along with the group's row count.
+
+??? success "Solution to Exercise 3"
+    Unpack composite keys from multi-column groupby.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'year': [2023, 2023, 2023, 2024, 2024],
+            'quarter': ['Q1', 'Q2', 'Q1', 'Q1', 'Q2'],
+            'revenue': [100, 200, 150, 180, 220]
+        })
+        for (year, quarter), group in df.groupby(['year', 'quarter']):
+            print(f"{year}-{quarter}: {len(group)} rows")

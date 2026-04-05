@@ -500,3 +500,84 @@ print(f"\nRoot-finding is faster and more reliable for this problem.")
 - Have derivative? → Newton's method
 - No derivative, single eq? → Brent or Secant
 - Guaranteed convergence needed? → Bisection or Brent
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Use `root_scalar` with Newton's method to find the root of $f(x) = e^x - 3x$ near $x = 1$. Provide both the function and its derivative $f'(x) = e^x - 3$. Print the root, number of iterations, and verify by evaluating $f$ at the root.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import numpy as np
+        from scipy.optimize import root_scalar
+
+        def f(x):
+            return np.exp(x) - 3 * x
+
+        def df(x):
+            return np.exp(x) - 3
+
+        result = root_scalar(f, x0=1, fprime=df, method='newton')
+
+        print(f"Root: {result.root:.10f}")
+        print(f"f(root) = {f(result.root):.2e}")
+        print(f"Iterations: {result.iterations}")
+        print(f"Converged: {result.converged}")
+        ```
+
+---
+
+**Exercise 2.**
+Use `scipy.optimize.root` to solve the nonlinear system $x^2 + y^2 = 4$ and $xy = 1$ starting from `x0 = [1.5, 0.5]`. Provide the Jacobian matrix. Print both solutions (there are multiple; try different starting points) and verify each.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import numpy as np
+        from scipy.optimize import root
+
+        def system(vars):
+            x, y = vars
+            return [x**2 + y**2 - 4, x * y - 1]
+
+        def jacobian(vars):
+            x, y = vars
+            return [[2*x, 2*y], [y, x]]
+
+        # First solution
+        result1 = root(system, x0=[1.5, 0.5], jac=jacobian)
+        print(f"Solution 1: x={result1.x[0]:.6f}, y={result1.x[1]:.6f}")
+        print(f"  Verify: x^2+y^2={result1.x[0]**2+result1.x[1]**2:.6f}, xy={result1.x[0]*result1.x[1]:.6f}")
+
+        # Second solution (different starting point)
+        result2 = root(system, x0=[0.5, 1.5], jac=jacobian)
+        print(f"Solution 2: x={result2.x[0]:.6f}, y={result2.x[1]:.6f}")
+        print(f"  Verify: x^2+y^2={result2.x[0]**2+result2.x[1]**2:.6f}, xy={result2.x[0]*result2.x[1]:.6f}")
+        ```
+
+---
+
+**Exercise 3.**
+The equation $x = \cos(x)$ has a fixed point near $x \approx 0.739$. Rewrite this as $f(x) = x - \cos(x) = 0$ and find the root using three methods: bisection on $[0, 1]$, Brent on $[0, 1]$, and secant with `x0=0, x1=1`. Compare the number of function evaluations for each method.
+
+??? success "Solution to Exercise 3"
+        ```python
+        from scipy.optimize import root_scalar
+        import numpy as np
+
+        def f(x):
+            return x - np.cos(x)
+
+        # Bisection
+        res_bisect = root_scalar(f, bracket=[0, 1], method='bisect')
+        print(f"Bisection: root={res_bisect.root:.10f}, f_evals={res_bisect.function_calls}")
+
+        # Brent
+        res_brent = root_scalar(f, bracket=[0, 1], method='brentq')
+        print(f"Brent:     root={res_brent.root:.10f}, f_evals={res_brent.function_calls}")
+
+        # Secant
+        res_secant = root_scalar(f, x0=0, x1=1, method='secant')
+        print(f"Secant:    root={res_secant.root:.10f}, f_evals={res_secant.function_calls}")
+        ```

@@ -188,3 +188,63 @@ Common operations returning views.
 ### 2. General Rule
 
 Operations that reinterpret existing data return views.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+List three NumPy operations that return views and three that return copies. Create an array and test each, verifying with `np.shares_memory`.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        a = np.arange(12).reshape(3, 4)
+
+        # Views: reshape, slice, transpose
+        print(f"Reshape is view: {np.shares_memory(a, a.reshape(4, 3))}")
+        print(f"Slice is view: {np.shares_memory(a, a[1:3])}")
+        print(f"Transpose is view: {np.shares_memory(a, a.T)}")
+
+        # Copies: copy, fancy indexing, boolean indexing
+        print(f"Copy shares: {np.shares_memory(a, a.copy())}")
+        print(f"Fancy shares: {np.shares_memory(a, a[[0, 2]])}")
+        print(f"Bool shares: {np.shares_memory(a, a[a > 5])}")
+
+---
+
+**Exercise 2.**
+Create `a = np.arange(12)`. Reshape it to `(3, 4)` and verify the reshape is a view. Then transpose it and check if the transpose is a view. Finally, flatten the transpose and check if the result is a view or copy.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        a = np.arange(12)
+        b = a.reshape(3, 4)
+        print(f"Reshape is view: {np.shares_memory(a, b)}")  # True
+
+        c = b.T
+        print(f"Transpose is view: {np.shares_memory(a, c)}")  # True
+
+        d = c.flatten()
+        print(f"Flatten is view: {np.shares_memory(a, d)}")  # False
+
+---
+
+**Exercise 3.**
+Create a 2D array and extract a column using `a[:, 0]`. Determine whether this is a view or a copy. Then modify the extracted column and observe whether the original changes. Repeat with a row `a[0, :]` and compare the behavior.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        a = np.arange(12).reshape(3, 4)
+        col = a[:, 0]
+        print(f"Column is view: {np.shares_memory(a, col)}")  # True
+        col[0] = 99
+        print(f"a[0, 0] after col mod: {a[0, 0]}")  # 99
+
+        row = a[0, :]
+        print(f"Row is view: {np.shares_memory(a, row)}")  # True

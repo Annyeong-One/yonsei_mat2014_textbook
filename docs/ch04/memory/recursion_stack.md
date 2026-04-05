@@ -204,6 +204,7 @@ except ValueError:
 
 ---
 
+
 ## Runnable Example: `aliasing_and_copying.py`
 
 ```python
@@ -736,3 +737,138 @@ if __name__ == "__main__":
     See exercises_02_intermediate.py for complete practice problems!
     """)
 ```
+
+
+## Exercises
+
+**Exercise 1.**
+Write both a recursive and an iterative version of a function that computes the sum 1 + 2 + ... + n. Test both with n = 500 and n = 5000. Show that the recursive version fails with a `RecursionError` for large n (if the limit is 1000) while the iterative version succeeds.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import sys
+
+        def sum_recursive(n):
+            if n <= 0:
+                return 0
+            return n + sum_recursive(n - 1)
+
+        def sum_iterative(n):
+            total = 0
+            for i in range(1, n + 1):
+                total += i
+            return total
+
+        # Test with n = 500 (within default limit)
+        print(f"Recursive sum(500): {sum_recursive(500)}")
+        print(f"Iterative sum(500): {sum_iterative(500)}")
+
+        # Test with n = 5000 (exceeds default limit)
+        print(f"Iterative sum(5000): {sum_iterative(5000)}")
+
+        try:
+            sum_recursive(5000)
+        except RecursionError:
+            print("Recursive sum(5000): RecursionError!")
+        ```
+
+---
+
+**Exercise 2.**
+Write a recursive Fibonacci function that prints the current recursion depth (pass it as a parameter). Call it with n = 10 and observe the maximum depth reached. Then rewrite it using an explicit stack (a list) to avoid recursion, and show it produces the same result.
+
+??? success "Solution to Exercise 2"
+        ```python
+        max_depth = 0
+
+        def fib_recursive(n, depth=0):
+            global max_depth
+            max_depth = max(max_depth, depth)
+            if n <= 1:
+                return n
+            return (fib_recursive(n - 1, depth + 1)
+                    + fib_recursive(n - 2, depth + 1))
+
+        def fib_stack(n):
+            if n <= 1:
+                return n
+            stack = [(n, False, 0, 0)]
+            result = 0
+            while stack:
+                num, has_left, left_val, right_val = stack[-1]
+                if num <= 1:
+                    stack.pop()
+                    result = num
+                    if stack:
+                        top = stack[-1]
+                        if not top[1]:
+                            stack[-1] = (top[0], True, num, 0)
+                        else:
+                            stack.pop()
+                            result = top[2] + num
+                            if stack:
+                                top2 = stack[-1]
+                                if not top2[1]:
+                                    stack[-1] = (top2[0], True, result, 0)
+                                else:
+                                    stack.pop()
+                                    result = top2[2] + result
+                elif not has_left:
+                    stack.append((num - 1, False, 0, 0))
+                else:
+                    stack.pop()
+                    stack.append((num, True, left_val, 0))
+                    stack.append((num - 2, False, 0, 0))
+            return result
+
+        # Simpler iterative approach:
+        def fib_iterative(n):
+            if n <= 1:
+                return n
+            a, b = 0, 1
+            for _ in range(2, n + 1):
+                a, b = b, a + b
+            return b
+
+        r1 = fib_recursive(10)
+        print(f"Recursive fib(10) = {r1}, max depth = {max_depth}")
+
+        r2 = fib_iterative(10)
+        print(f"Iterative fib(10) = {r2}")
+        print(f"Results match: {r1 == r2}")
+        ```
+
+---
+
+**Exercise 3.**
+Write a script that measures the memory cost of deep recursion using `tracemalloc`. Create a recursive function that descends to depth 500, taking a snapshot at the deepest level and at the top level. Compare the two snapshots and print the memory consumed by the stack frames.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import tracemalloc
+
+        tracemalloc.start()
+
+        top_snapshot = None
+        deep_snapshot = None
+
+        def recurse(depth, target):
+            global deep_snapshot
+            if depth == target:
+                deep_snapshot = tracemalloc.take_snapshot()
+                return
+            recurse(depth + 1, target)
+
+        top_snapshot = tracemalloc.take_snapshot()
+        recurse(0, 500)
+
+        diff = deep_snapshot.compare_to(top_snapshot, 'filename')
+        total_growth = sum(s.size_diff for s in diff if s.size_diff > 0)
+
+        print(f"Memory used by 500 stack frames: "
+              f"{total_growth / 1024:.1f} KB")
+
+        tracemalloc.stop()
+        ```
+
+---

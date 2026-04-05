@@ -67,3 +67,85 @@ print("Fixture scopes control resource lifecycle")
 Fixture scopes control resource lifecycle
 ```
 
+
+---
+
+## Exercises
+
+**Exercise 1.** Write a pytest fixture `sample_dict` that returns `{"name": "Alice", "age": 30}`. Use it in two tests: one that checks the `name` key and one that checks the `age` key.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pytest
+
+    @pytest.fixture
+    def sample_dict():
+        return {"name": "Alice", "age": 30}
+
+    def test_name(sample_dict):
+        assert sample_dict["name"] == "Alice"
+
+    def test_age(sample_dict):
+        assert sample_dict["age"] == 30
+    ```
+
+---
+
+**Exercise 2.** Create a fixture `temp_file` that creates a temporary file with some content, yields its path, and deletes it in teardown. Write a test that reads the file and verifies the content.
+
+??? success "Solution to Exercise 2"
+    ```python
+    import pytest
+    import tempfile
+    import os
+
+    @pytest.fixture
+    def temp_file():
+        fd, path = tempfile.mkstemp()
+        with os.fdopen(fd, 'w') as f:
+            f.write("test content")
+        yield path
+        os.unlink(path)
+
+    def test_read_temp_file(temp_file):
+        with open(temp_file) as f:
+            assert f.read() == "test content"
+    ```
+
+---
+
+**Exercise 3.** Explain the difference between `scope="function"` and `scope="module"` for a pytest fixture. Give an example where module scope would be more appropriate.
+
+??? success "Solution to Exercise 3"
+    With `scope="function"` (the default), the fixture is created and destroyed for every test function. With `scope="module"`, the fixture is created once for the entire module and shared across all tests in that module.
+
+    Module scope is appropriate for expensive resources like database connections:
+
+    ```python
+    @pytest.fixture(scope="module")
+    def db_connection():
+        conn = create_connection()  # expensive
+        yield conn
+        conn.close()
+    ```
+
+---
+
+**Exercise 4.** Write a fixture `db_connection` that prints `"Connecting..."` on setup and `"Disconnecting..."` on teardown. Write two tests that use this fixture and verify the setup/teardown messages appear in the correct order.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pytest
+
+    @pytest.fixture
+    def db_connection(capsys):
+        print("Connecting...")
+        yield "connection_object"
+        print("Disconnecting...")
+
+    def test_query(db_connection):
+        assert db_connection == "connection_object"
+
+    def test_insert(db_connection):
+        assert db_connection is not None
+    ```

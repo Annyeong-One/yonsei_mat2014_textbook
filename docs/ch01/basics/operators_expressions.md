@@ -621,6 +621,7 @@ True + True + False
 
 ---
 
+
 ## 15. Summary
 
 Key ideas from this chapter:
@@ -635,3 +636,108 @@ Key ideas from this chapter:
 
 These rules determine how Python **interprets and executes code**.
 
+
+## Exercises
+
+**Exercise 1.**
+Python's `and` and `or` operators do not return `True` or `False` -- they return one of their operands. Predict the output of each line and explain *why* Python returns that specific value:
+
+```python
+print(0 or "hello")
+print("hello" or "world")
+print("" and "world")
+print("hello" and "world")
+print(0 or "" or [] or "found it")
+```
+
+How does short-circuit evaluation determine which operand is returned?
+
+??? success "Solution to Exercise 1"
+    Output:
+
+    ```text
+    hello
+    hello
+
+    world
+    found it
+    ```
+
+    Python's `or` returns the **first truthy operand**, or the last operand if all are falsy. Python's `and` returns the **first falsy operand**, or the last operand if all are truthy.
+
+    - `0 or "hello"`: `0` is falsy, so `or` continues to `"hello"` (truthy) and returns it.
+    - `"hello" or "world"`: `"hello"` is truthy, so `or` short-circuits and returns `"hello"` without evaluating `"world"`.
+    - `"" and "world"`: `""` is falsy, so `and` short-circuits and returns `""` without evaluating `"world"`.
+    - `"hello" and "world"`: `"hello"` is truthy, so `and` continues to `"world"` (truthy) and returns it (the last operand).
+    - `0 or "" or [] or "found it"`: `0`, `""`, `[]` are all falsy, so `or` keeps going until it finds `"found it"` (truthy) and returns it.
+
+---
+
+**Exercise 2.**
+Python operators like `+` are actually method calls in disguise: `a + b` calls `a.__add__(b)`. Explain why this design is powerful. What does it mean for user-defined classes? If you create a `Vector` class, how would `v1 + v2` work? What happens if `a.__add__(b)` returns `NotImplemented` -- and why is that mechanism necessary?
+
+??? success "Solution to Exercise 2"
+    Python's operator-as-method design means operators are **polymorphic** -- the same `+` symbol can mean different things for different types. Integers add numerically, strings concatenate, lists concatenate. This is because each type defines its own `__add__` method.
+
+    For a `Vector` class, you would define `__add__`:
+
+    ```python
+    class Vector:
+        def __init__(self, x, y):
+            self.x, self.y = x, y
+        def __add__(self, other):
+            return Vector(self.x + other.x, self.y + other.y)
+    ```
+
+    Now `v1 + v2` calls `v1.__add__(v2)` and produces a new `Vector`.
+
+    If `a.__add__(b)` returns `NotImplemented`, Python tries `b.__radd__(a)` (the reflected version). This is necessary for mixed-type operations. For example, `my_vector + 5` calls `my_vector.__add__(5)`, which might return `NotImplemented` if it does not know how to handle integers. Python then tries `(5).__radd__(my_vector)`. If neither works, Python raises `TypeError`. This two-step protocol allows types to cooperate on operations without requiring either type to know about the other in advance.
+
+---
+
+**Exercise 3.**
+Consider this expression:
+
+```python
+result = 2 ** 3 ** 2
+```
+
+What is the value of `result`? The `**` operator is **right-associative**, meaning `2 ** 3 ** 2` is evaluated as `2 ** (3 ** 2)`, not `(2 ** 3) ** 2`. Compute both groupings and show that they give different results. Then explain *why* right-associativity is the mathematically correct choice for exponentiation.
+
+??? success "Solution to Exercise 3"
+    `result = 2 ** 3 ** 2`
+
+    Right-associative: `2 ** (3 ** 2) = 2 ** 9 = 512`
+    Left-associative: `(2 ** 3) ** 2 = 8 ** 2 = 64`
+
+    The value is `512`.
+
+    Right-associativity is mathematically correct because exponentiation towers are conventionally evaluated top-down. In mathematics, $2^{3^2}$ means $2^{(3^2)} = 2^9 = 512$, not $(2^3)^2 = 64$.
+
+    The reason: left-associative exponentiation would be redundant. $(2^3)^2 = 2^{3 \times 2} = 2^6$ -- it collapses to a single exponentiation with a multiplied exponent. Right-associative evaluation produces genuinely new values (towers of exponents) that cannot be simplified this way. If `**` were left-associative, `a ** b ** c` would just equal `a ** (b * c)`, making the chained notation pointless.
+
+---
+
+**Exercise 4.**
+The walrus operator (`:=`) was added in Python 3.8. Consider:
+
+```python
+data = [1, 2, 3, 4, 5, 6, 7, 8]
+filtered = [y for x in data if (y := x ** 2) > 10]
+print(filtered)
+```
+
+Predict the output. Then explain the key difference between `:=` (assignment expression) and `=` (assignment statement). Why can `:=` appear inside a list comprehension's `if` clause while `=` cannot? What conceptual distinction between "expressions" and "statements" does this illustrate?
+
+??? success "Solution to Exercise 4"
+    Output:
+
+    ```text
+    [16, 25, 36, 49, 64]
+    ```
+
+    The comprehension iterates over `data`. For each `x`, it computes `y := x ** 2` (assigns the square to `y`), then checks if `y > 10`. If true, `y` is included in the result. The squares are: 1, 4, 9, 16, 25, 36, 49, 64. Those greater than 10 are: 16, 25, 36, 49, 64.
+
+    The key difference: `=` is a **statement** -- it performs an action but does not produce a value. It cannot appear where an expression is expected. `:=` is an **expression** -- it both assigns a value AND evaluates to that value. Inside `if (y := x ** 2) > 10`, the `:=` assigns to `y` and simultaneously provides the value for the `> 10` comparison.
+
+    This illustrates the expression/statement distinction: expressions produce values and can be composed (nested inside other expressions); statements are standalone actions. A list comprehension's `if` clause requires an expression, so `=` is syntactically illegal there, but `:=` works because it is an expression that happens to have a side effect (assignment).

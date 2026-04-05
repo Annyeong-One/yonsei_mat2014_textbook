@@ -950,3 +950,144 @@ if __name__ == "__main__":
 
     print(f"\n" + "=" * 70)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Define an abstract base class `Exporter` with two abstract methods: `export(data)` and `file_extension()` (as an abstract property). Then create two concrete subclasses, `CSVExporter` and `JSONExporter`, each implementing both abstract methods. Demonstrate that `Exporter` cannot be instantiated directly, but both concrete subclasses can.
+
+??? success "Solution to Exercise 1"
+
+        from abc import ABC, abstractmethod
+
+        class Exporter(ABC):
+            @abstractmethod
+            def export(self, data):
+                """Export data in a specific format."""
+                pass
+
+            @property
+            @abstractmethod
+            def file_extension(self):
+                """Return the file extension for this format."""
+                pass
+
+        class CSVExporter(Exporter):
+            @property
+            def file_extension(self):
+                return ".csv"
+
+            def export(self, data):
+                header = ",".join(data[0].keys())
+                rows = [",".join(str(v) for v in row.values()) for row in data]
+                return header + "\n" + "\n".join(rows)
+
+        class JSONExporter(Exporter):
+            @property
+            def file_extension(self):
+                return ".json"
+
+            def export(self, data):
+                import json
+                return json.dumps(data, indent=2)
+
+        # Exporter cannot be instantiated
+        try:
+            e = Exporter()
+        except TypeError as err:
+            print(f"Cannot instantiate Exporter: {err}")
+
+        # Concrete subclasses work
+        data = [{"name": "Alice", "age": 30}, {"name": "Bob", "age": 25}]
+        csv_exp = CSVExporter()
+        print(csv_exp.file_extension)  # .csv
+        print(csv_exp.export(data))
+
+        json_exp = JSONExporter()
+        print(json_exp.file_extension)  # .json
+        print(json_exp.export(data))
+
+---
+
+**Exercise 2.**
+Create an ABC called `Validator` with an abstract method `validate(value)` that returns `True` or `False`, and a concrete method `validate_many(values)` that applies `validate` to each item in a list and returns a list of booleans. Implement `EmailValidator` (checks for `@` in the string) and `PositiveNumberValidator` (checks that a number is greater than zero). Show that the concrete method works correctly for both subclasses without being overridden.
+
+??? success "Solution to Exercise 2"
+
+        from abc import ABC, abstractmethod
+
+        class Validator(ABC):
+            @abstractmethod
+            def validate(self, value):
+                """Return True if value is valid, False otherwise."""
+                pass
+
+            def validate_many(self, values):
+                """Apply validate to each item and return list of booleans."""
+                return [self.validate(v) for v in values]
+
+        class EmailValidator(Validator):
+            def validate(self, value):
+                return isinstance(value, str) and "@" in value
+
+        class PositiveNumberValidator(Validator):
+            def validate(self, value):
+                return isinstance(value, (int, float)) and value > 0
+
+        email_v = EmailValidator()
+        print(email_v.validate_many(["a@b.com", "invalid", "x@y"]))
+        # [True, False, True]
+
+        num_v = PositiveNumberValidator()
+        print(num_v.validate_many([10, -3, 0, 5.5]))
+        # [True, False, False, True]
+
+---
+
+**Exercise 3.**
+Write an ABC `NotificationSender` with abstract methods `send(recipient, message)` and `validate_recipient(recipient)`. Create a concrete subclass `EmailSender` that validates email format and simulates sending. Then create a separate class `SMSSender` (without inheriting from `NotificationSender`) that has the same methods, and use `NotificationSender.register(SMSSender)` to make it a virtual subclass. Verify that `isinstance` checks pass for both classes.
+
+??? success "Solution to Exercise 3"
+
+        from abc import ABC, abstractmethod
+
+        class NotificationSender(ABC):
+            @abstractmethod
+            def send(self, recipient, message):
+                pass
+
+            @abstractmethod
+            def validate_recipient(self, recipient):
+                pass
+
+        class EmailSender(NotificationSender):
+            def validate_recipient(self, recipient):
+                return isinstance(recipient, str) and "@" in recipient
+
+            def send(self, recipient, message):
+                if not self.validate_recipient(recipient):
+                    raise ValueError(f"Invalid email: {recipient}")
+                print(f"Email sent to {recipient}: {message}")
+
+        class SMSSender:
+            def validate_recipient(self, recipient):
+                return isinstance(recipient, str) and recipient.isdigit() and len(recipient) >= 10
+
+            def send(self, recipient, message):
+                if not self.validate_recipient(recipient):
+                    raise ValueError(f"Invalid phone: {recipient}")
+                print(f"SMS sent to {recipient}: {message}")
+
+        # Register SMSSender as virtual subclass
+        NotificationSender.register(SMSSender)
+
+        email = EmailSender()
+        sms = SMSSender()
+
+        print(isinstance(email, NotificationSender))  # True
+        print(isinstance(sms, NotificationSender))    # True
+
+        email.send("alice@example.com", "Hello!")
+        sms.send("1234567890", "Hi there!")

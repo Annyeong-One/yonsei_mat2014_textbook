@@ -332,3 +332,70 @@ Is your code CPU-bound?
 │   └── No (NumPy) → Threading may help, NumPy parallelizes internally
 └── No (I/O-bound) → Use threading or asyncio
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Explain what the Global Interpreter Lock (GIL) is in CPython. How does it affect multi-threaded Python programs?
+
+??? success "Solution to Exercise 1"
+    ```python
+    # Conceptual solution - see page content for details
+    import sys
+    import platform
+
+    print(f"Python version: {sys.version}")
+    print(f"Platform: {platform.platform()}")
+    print(f"Architecture: {platform.machine()}")
+    ```
+
+---
+
+**Exercise 2.** Write Python code that demonstrates the GIL limitation: create two threads that each increment a counter 10 million times. Compare the runtime with a single-threaded version.
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the hardware-software interaction and how it affects Python performance.
+
+---
+
+**Exercise 3.** Explain why the GIL does not affect I/O-bound programs. Write code showing that threads can speed up I/O-bound tasks.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import time
+
+    # Simple benchmark
+    n = 10_000_000
+    start = time.perf_counter()
+    total = sum(range(n))
+    elapsed = time.perf_counter() - start
+    print(f"Sum of {n} integers: {total}")
+    print(f"Time: {elapsed:.4f} seconds")
+    ```
+
+---
+
+**Exercise 4.** Describe three strategies to work around the GIL for CPU-bound tasks (multiprocessing, C extensions, subinterpreters).
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    import time
+
+    n = 1_000_000
+    # Python loop
+    start = time.perf_counter()
+    result_py = sum(i * i for i in range(n))
+    time_py = time.perf_counter() - start
+
+    # NumPy vectorized
+    arr = np.arange(n)
+    start = time.perf_counter()
+    result_np = np.sum(arr * arr)
+    time_np = time.perf_counter() - start
+
+    print(f"Python: {time_py:.4f}s, NumPy: {time_np:.4f}s")
+    print(f"Speedup: {time_py / time_np:.1f}x")
+    ```

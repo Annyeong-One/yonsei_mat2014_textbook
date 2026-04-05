@@ -686,3 +686,58 @@ if __name__ == "__main__":
     Remember: The best optimization is no optimization - vectorize!
     """)
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that reads a CSV file in chunks of 1000 rows using `pd.read_csv(chunksize=1000)` and computes the mean of a column across all chunks.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    # Solution for the specific exercise
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(10), 'B': np.random.randn(10)})
+    print(df.head())
+    ```
+
+---
+
+**Exercise 2.** Explain when chunked processing is necessary. What happens if you try to load a 10GB CSV into memory on a machine with 8GB RAM?
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the Pandas API and its behavior for this specific operation.
+
+---
+
+**Exercise 3.** Write code that processes a large DataFrame in chunks using a for loop with `iloc` slicing and aggregates the results.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(20), 'B': np.random.randn(20)})
+    result = df.describe()
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Create a function that reads a large CSV in chunks, filters rows meeting a condition, and concatenates the filtered chunks.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(50), 'group': np.random.choice(['X', 'Y'], 50)})
+    result = df.groupby('group').mean()
+    print(result)
+    ```

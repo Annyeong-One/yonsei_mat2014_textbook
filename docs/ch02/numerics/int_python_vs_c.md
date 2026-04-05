@@ -68,3 +68,58 @@ For heavy numerical work, libraries like NumPy use fixed-size types internally.
 - Python `int` has arbitrary precision.
 - No overflow, but higher memory and CPU cost.
 - Safer semantics than C for finance and math.
+
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Compute `2 ** 1000` in Python and print the number of digits. Explain why this works in Python but would overflow in C.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    result = 2 ** 1000
+    num_digits = len(str(result))
+    print(f"2^1000 has {num_digits} digits")  # 302 digits
+    ```
+
+    Python integers have arbitrary precision -- they grow as needed. In C, a 64-bit `long` can hold at most about 19 digits before overflowing.
+
+---
+
+**Exercise 2.**
+Use `sys.getsizeof()` to compare the memory usage of the integers `0`, `1`, `2**30`, and `2**1000`. Explain the pattern.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    import sys
+
+    for val in [0, 1, 2**30, 2**1000]:
+        size = sys.getsizeof(val)
+        print(f"getsizeof({str(val)[:20]:>20s}...) = {size} bytes")
+    ```
+
+    Small integers use a fixed base size. As the value grows, Python allocates additional machine words to store the extra digits, so `2**1000` uses significantly more memory than `1`.
+
+---
+
+**Exercise 3.**
+Write a function `factorial_digits(n)` that computes `n!` and returns the number of decimal digits in the result. Test with `n = 100`. Explain why Python can handle this while C `int` or `long` cannot.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    import math
+
+    def factorial_digits(n):
+        result = math.factorial(n)
+        return len(str(result))
+
+    print(f"100! has {factorial_digits(100)} digits")  # 158 digits
+    ```
+
+    `100!` is a 158-digit number. Python handles this naturally because `int` has arbitrary precision. A C `unsigned long long` (64 bits) overflows at about `20!`.

@@ -797,3 +797,98 @@ if __name__ == '__main__':
     demo_container()
     demo_hash_eq_relationship()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a `Version` class with `major`, `minor`, and `patch` fields. Implement `__eq__`, `__lt__`, and use `functools.total_ordering` to get the remaining comparison operators. Show that versions can be sorted: `Version(2, 0, 0) > Version(1, 9, 9)`.
+
+??? success "Solution to Exercise 1"
+
+        from functools import total_ordering
+
+        @total_ordering
+        class Version:
+            def __init__(self, major, minor, patch):
+                self.major = major
+                self.minor = minor
+                self.patch = patch
+
+            def __eq__(self, other):
+                return (self.major, self.minor, self.patch) == (other.major, other.minor, other.patch)
+
+            def __lt__(self, other):
+                return (self.major, self.minor, self.patch) < (other.major, other.minor, other.patch)
+
+            def __repr__(self):
+                return f"Version({self.major}, {self.minor}, {self.patch})"
+
+        versions = [Version(2, 0, 0), Version(1, 9, 9), Version(1, 10, 0), Version(2, 0, 1)]
+        print(sorted(versions))
+        # [Version(1, 9, 9), Version(1, 10, 0), Version(2, 0, 0), Version(2, 0, 1)]
+        print(Version(2, 0, 0) > Version(1, 9, 9))  # True
+
+---
+
+**Exercise 2.**
+Write a `Student` class with `name` and `gpa`. Implement `__eq__` (comparing by name and gpa) and `__hash__` (so students can be stored in sets). Also implement `__lt__` based on gpa for sorting. Show students in a sorted list and a set with duplicates removed.
+
+??? success "Solution to Exercise 2"
+
+        class Student:
+            def __init__(self, name, gpa):
+                self.name = name
+                self.gpa = gpa
+
+            def __eq__(self, other):
+                return self.name == other.name and self.gpa == other.gpa
+
+            def __hash__(self):
+                return hash((self.name, self.gpa))
+
+            def __lt__(self, other):
+                return self.gpa < other.gpa
+
+            def __repr__(self):
+                return f"Student('{self.name}', {self.gpa})"
+
+        students = [Student("Alice", 3.8), Student("Bob", 3.5),
+                     Student("Alice", 3.8), Student("Charlie", 3.9)]
+        print(sorted(students))
+        unique = set(students)
+        print(len(unique))  # 3 — duplicate Alice removed
+
+---
+
+**Exercise 3.**
+Build a `Temperature` class with a `value` and `scale` ("C" or "F"). Implement comparison operators that convert to a common scale before comparing. For example, `Temperature(32, "F") == Temperature(0, "C")` should be `True`. Use `functools.total_ordering`.
+
+??? success "Solution to Exercise 3"
+
+        from functools import total_ordering
+
+        @total_ordering
+        class Temperature:
+            def __init__(self, value, scale="C"):
+                self.value = value
+                self.scale = scale
+
+            def _to_celsius(self):
+                if self.scale == "C":
+                    return self.value
+                return (self.value - 32) * 5 / 9
+
+            def __eq__(self, other):
+                return abs(self._to_celsius() - other._to_celsius()) < 1e-9
+
+            def __lt__(self, other):
+                return self._to_celsius() < other._to_celsius()
+
+            def __repr__(self):
+                return f"Temperature({self.value}, '{self.scale}')"
+
+        print(Temperature(32, "F") == Temperature(0, "C"))   # True
+        print(Temperature(212, "F") == Temperature(100, "C")) # True
+        print(Temperature(100, "C") > Temperature(200, "F"))  # True

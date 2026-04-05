@@ -1867,3 +1867,110 @@ if __name__ == "__main__":
        feel like they're using a special library type.
     """)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a `Fraction` class with `numerator` and `denominator`. Implement `__add__`, `__sub__`, `__mul__`, and `__repr__`. Use the formula for fraction arithmetic (e.g., `a/b + c/d = (a*d + b*c) / (b*d)`). Simplify results using `math.gcd`. Show that `Fraction(1, 2) + Fraction(1, 3)` produces `Fraction(5, 6)`.
+
+??? success "Solution to Exercise 1"
+
+        from math import gcd
+
+        class Fraction:
+            def __init__(self, num, den):
+                if den == 0:
+                    raise ValueError("Denominator cannot be zero")
+                g = gcd(abs(num), abs(den))
+                self.num = num // g
+                self.den = den // g
+
+            def __add__(self, other):
+                return Fraction(self.num * other.den + other.num * self.den,
+                                self.den * other.den)
+
+            def __sub__(self, other):
+                return Fraction(self.num * other.den - other.num * self.den,
+                                self.den * other.den)
+
+            def __mul__(self, other):
+                return Fraction(self.num * other.num, self.den * other.den)
+
+            def __repr__(self):
+                return f"Fraction({self.num}, {self.den})"
+
+        print(Fraction(1, 2) + Fraction(1, 3))  # Fraction(5, 6)
+        print(Fraction(3, 4) - Fraction(1, 4))  # Fraction(1, 2)
+        print(Fraction(2, 3) * Fraction(3, 4))  # Fraction(1, 2)
+
+---
+
+**Exercise 2.**
+Write a `Money` class with `amount` and `currency`. Implement `__add__` that only allows adding money of the same currency (raise `ValueError` otherwise). Implement `__mul__` for scalar multiplication (e.g., `Money(10, "USD") * 3`), and `__rmul__` so `3 * Money(10, "USD")` also works. Include `__repr__`.
+
+??? success "Solution to Exercise 2"
+
+        class Money:
+            def __init__(self, amount, currency):
+                self.amount = amount
+                self.currency = currency
+
+            def __add__(self, other):
+                if self.currency != other.currency:
+                    raise ValueError(f"Cannot add {self.currency} and {other.currency}")
+                return Money(self.amount + other.amount, self.currency)
+
+            def __mul__(self, scalar):
+                return Money(self.amount * scalar, self.currency)
+
+            def __rmul__(self, scalar):
+                return self.__mul__(scalar)
+
+            def __repr__(self):
+                return f"Money({self.amount}, '{self.currency}')"
+
+        a = Money(10, "USD") + Money(20, "USD")
+        print(a)  # Money(30, 'USD')
+
+        b = Money(10, "USD") * 3
+        print(b)  # Money(30, 'USD')
+
+        c = 3 * Money(10, "USD")
+        print(c)  # Money(30, 'USD')
+
+---
+
+**Exercise 3.**
+Build a `Matrix2x2` class representing a 2x2 matrix. Implement `__add__` (element-wise addition), `__mul__` (matrix multiplication), and `__repr__`. Show that matrix multiplication is not commutative: `A * B` may differ from `B * A`.
+
+??? success "Solution to Exercise 3"
+
+        class Matrix2x2:
+            def __init__(self, a, b, c, d):
+                self.data = [[a, b], [c, d]]
+
+            def __add__(self, other):
+                return Matrix2x2(
+                    self.data[0][0] + other.data[0][0],
+                    self.data[0][1] + other.data[0][1],
+                    self.data[1][0] + other.data[1][0],
+                    self.data[1][1] + other.data[1][1],
+                )
+
+            def __mul__(self, other):
+                a, b = self.data
+                c, d = other.data
+                return Matrix2x2(
+                    a[0]*c[0][0] + a[1]*c[1][0], a[0]*c[0][1] + a[1]*c[1][1],
+                    b[0]*c[0][0] + b[1]*c[1][0], b[0]*c[0][1] + b[1]*c[1][1],
+                )
+
+            def __repr__(self):
+                return f"Matrix2x2({self.data[0]}, {self.data[1]})"
+
+        A = Matrix2x2(1, 2, 3, 4)
+        B = Matrix2x2(5, 6, 7, 8)
+        print(A * B)  # Matrix2x2([19, 22], [43, 50])
+        print(B * A)  # Matrix2x2([23, 34], [31, 46]) — different!

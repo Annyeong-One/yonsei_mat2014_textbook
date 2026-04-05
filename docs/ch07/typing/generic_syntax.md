@@ -63,3 +63,54 @@ print(callback(42))
 42
 ```
 
+
+---
+
+## Exercises
+
+**Exercise 1.** Rewrite the following annotation using the modern `list[int]` syntax instead of `List[int]`:
+
+```python
+from typing import List, Dict, Tuple
+def process(data: List[int]) -> Dict[str, Tuple[int, ...]]:
+    pass
+```
+
+??? success "Solution to Exercise 1"
+    ```python
+    def process(data: list[int]) -> dict[str, tuple[int, ...]]:
+        pass
+    ```
+
+---
+
+**Exercise 2.** Write a function `first_element(items: list[str]) -> str` that returns the first element. What Python version is required to use `list[str]` instead of `List[str]`?
+
+??? success "Solution to Exercise 2"
+    ```python
+    def first_element(items: list[str]) -> str:
+        return items[0]
+
+    print(first_element(["a", "b", "c"]))  # "a"
+    ```
+
+    Python 3.9+ is required. In 3.8 and earlier, you must use `from typing import List` and write `List[str]`.
+
+---
+
+**Exercise 3.** Predict whether the following code works in Python 3.9+ and in Python 3.8:
+
+```python
+def keys_and_values(d: dict[str, int]) -> tuple[list[str], list[int]]:
+    return list(d.keys()), list(d.values())
+```
+
+??? success "Solution to Exercise 3"
+    In Python 3.9+, this works perfectly. In Python 3.8, it raises a `TypeError` at runtime because built-in types like `dict` and `tuple` do not support subscript syntax for type hints. To make it work in 3.8, use `from __future__ import annotations` or import from `typing`.
+
+---
+
+**Exercise 4.** Explain the purpose of `from __future__ import annotations` and how it allows using modern syntax in older Python versions.
+
+??? success "Solution to Exercise 4"
+    `from __future__ import annotations` (PEP 563) makes all annotations lazy — they are stored as strings and not evaluated at runtime. This means you can use `list[int]`, `dict[str, int]`, etc., even in Python 3.7+, because the subscript expression is never actually executed. The annotations are only evaluated when a tool like `mypy` or `typing.get_type_hints()` processes them.

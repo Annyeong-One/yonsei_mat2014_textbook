@@ -122,6 +122,7 @@ Raising exceptions is appropriate when:
 
 ---
 
+
 ## 8. Summary
 
 Key ideas:
@@ -133,3 +134,117 @@ Key ideas:
 
 Raising exceptions allows programs to enforce correctness and communicate errors clearly.
 
+
+## Exercises
+
+**Exercise 1.**
+A programmer raises `ValueError` for invalid input but is unsure when to use `TypeError` instead. For each scenario, state which exception is more appropriate and why:
+
+```python
+def set_age(age):
+    # age is "hello" -- should this raise TypeError or ValueError?
+    # age is -5 -- should this raise TypeError or ValueError?
+    # age is [25] -- should this raise TypeError or ValueError?
+    pass
+```
+
+??? success "Solution to Exercise 1"
+    - `age = "hello"`: **`TypeError`**. The type is wrong -- `set_age` expects a number, not a string. No string value could be a valid age.
+    - `age = -5`: **`ValueError`**. The type is correct (integer), but the specific value is invalid (ages cannot be negative).
+    - `age = [25]`: **`TypeError`**. A list is the wrong type for an age parameter, regardless of its contents.
+
+    The rule: `TypeError` means "this type of object is fundamentally incompatible with this operation." `ValueError` means "this type is correct, but this particular value is outside the valid range."
+
+    In practice:
+
+    ```python
+    def set_age(age):
+        if not isinstance(age, (int, float)):
+            raise TypeError(f"Expected number, got {type(age).__name__}")
+        if age < 0 or age > 150:
+            raise ValueError(f"Age must be 0-150, got {age}")
+    ```
+
+---
+
+**Exercise 2.**
+The bare `raise` re-raises the current exception. Predict the output:
+
+```python
+def process():
+    try:
+        return int("hello")
+    except ValueError:
+        print("Logging error...")
+        raise
+
+try:
+    process()
+except ValueError as e:
+    print(f"Caught: {e}")
+```
+
+Why is `raise` (without arguments) preferable to `raise ValueError(...)` in the `except` block? What information would be lost if you raised a new exception instead?
+
+??? success "Solution to Exercise 2"
+    Output:
+
+    ```text
+    Logging error...
+    Caught: invalid literal for int() with base 10: 'hello'
+    ```
+
+    Bare `raise` re-raises the **exact same exception object**, preserving the original traceback. If you instead wrote `raise ValueError("conversion failed")`, you would create a new exception object with a new traceback -- the original location of the error (inside `int()`) would be lost.
+
+    Bare `raise` is preferable in "catch, log, re-raise" patterns because:
+    1. The original traceback is preserved, showing where the error actually occurred.
+    2. The original error message is preserved.
+    3. Any custom attributes on the original exception are preserved.
+
+    Python 3 also supports `raise NewError() from original_error` for exception chaining, which preserves the original exception as the `__cause__` of the new one.
+
+---
+
+**Exercise 3.**
+Custom exceptions help organize error handling. Explain why this pattern is useful:
+
+```python
+class AppError(Exception):
+    pass
+
+class DatabaseError(AppError):
+    pass
+
+class AuthError(AppError):
+    pass
+```
+
+How does this hierarchy let a caller handle all application errors with one `except` clause while still being able to handle specific errors differently? What advantage does this have over raising built-in exceptions like `RuntimeError`?
+
+??? success "Solution to Exercise 3"
+    The hierarchy lets callers choose their level of specificity:
+
+    ```python
+    # Handle all application errors the same way
+    try:
+        do_something()
+    except AppError:
+        print("Application error occurred")
+
+    # Handle specific errors differently
+    try:
+        do_something()
+    except DatabaseError:
+        print("Database problem -- retry")
+    except AuthError:
+        print("Authentication failed -- re-login")
+    except AppError:
+        print("Other application error")
+    ```
+
+    `except AppError` catches `DatabaseError` and `AuthError` (because they inherit from `AppError`), but the more specific `except` clauses handle them individually when listed first.
+
+    Advantages over using built-in exceptions like `RuntimeError`:
+    1. **Clarity**: `except DatabaseError` is self-documenting; `except RuntimeError` could mean anything.
+    2. **Specificity**: you can catch only your application's errors without accidentally catching unrelated `RuntimeError`s from libraries.
+    3. **Organization**: the hierarchy mirrors your application's error categories, making error handling logic match your domain model.

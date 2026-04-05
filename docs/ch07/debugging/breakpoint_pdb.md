@@ -55,3 +55,74 @@ print(f"Result: {result}")
 Result: 19
 ```
 
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a function `find_first_negative` that takes a list of numbers and returns the index of the first negative number. Insert a `breakpoint()` call just before the return statement so you can inspect the variables when debugging. Remove the breakpoint after testing. For example, `find_first_negative([3, 7, -2, 5])` should return `2`.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    def find_first_negative(numbers):
+        for i, num in enumerate(numbers):
+            if num < 0:
+                # breakpoint()  # Uncomment to debug
+                return i
+        return -1
+
+    # Test
+    print(find_first_negative([3, 7, -2, 5]))  # 2
+    print(find_first_negative([1, 2, 3]))       # -1
+    ```
+
+---
+
+**Exercise 2.**
+Write a function `debug_dict_merge` that takes two dictionaries and merges them. If there are duplicate keys, the function should keep the higher value. Add a conditional `pdb.set_trace()` that only triggers when a duplicate key is found. For example, `debug_dict_merge({"a": 1, "b": 5}, {"b": 3, "c": 4})` should return `{"a": 1, "b": 5, "c": 4}`.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    import pdb
+
+    def debug_dict_merge(d1, d2):
+        result = d1.copy()
+        for key, value in d2.items():
+            if key in result:
+                # pdb.set_trace()  # Uncomment to debug duplicates
+                result[key] = max(result[key], value)
+            else:
+                result[key] = value
+        return result
+
+    # Test
+    merged = debug_dict_merge({"a": 1, "b": 5}, {"b": 3, "c": 4})
+    print(merged)  # {'a': 1, 'b': 5, 'c': 4}
+    ```
+
+---
+
+**Exercise 3.**
+Write a function `trace_recursive_sum` that recursively sums a list of numbers. Use `breakpoint()` with a condition to only pause when the list has exactly 2 elements remaining. This demonstrates conditional breakpoint placement for debugging recursion.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    def trace_recursive_sum(numbers):
+        if len(numbers) == 0:
+            return 0
+        if len(numbers) == 1:
+            return numbers[0]
+        # if len(numbers) == 2:
+        #     breakpoint()  # Uncomment to debug
+        mid = len(numbers) // 2
+        left = trace_recursive_sum(numbers[:mid])
+        right = trace_recursive_sum(numbers[mid:])
+        return left + right
+
+    # Test
+    print(trace_recursive_sum([1, 2, 3, 4, 5]))  # 15
+    print(trace_recursive_sum([10]))               # 10
+    ```

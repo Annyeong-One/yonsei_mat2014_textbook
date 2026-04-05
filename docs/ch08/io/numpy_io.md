@@ -330,3 +330,70 @@ print(np.__version__)
 - Use context manager (`with`) when loading `.npz` files
 - Set `allow_pickle=False` for untrusted files
 - Use memory mapping for arrays too large for RAM
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a 2D array `a = np.random.randn(100, 50)`. Save it with `np.save` to a file, load it back, and verify the loaded array matches the original exactly using `np.array_equal`. Print the file size in KB.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        import os
+
+        a = np.random.randn(100, 50)
+        np.save('/tmp/test_array.npy', a)
+        loaded = np.load('/tmp/test_array.npy')
+
+        print(f"Match: {np.array_equal(a, loaded)}")
+        size_kb = os.path.getsize('/tmp/test_array.npy') / 1024
+        print(f"File size: {size_kb:.1f} KB")
+        os.remove('/tmp/test_array.npy')
+
+---
+
+**Exercise 2.**
+Save three arrays (`x = np.arange(10)`, `y = np.linspace(0, 1, 10)`, and `z = np.eye(3)`) into a single `.npz` file with custom names. Load the file using a context manager, print the list of stored array names, and verify each loaded array matches the original.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        import os
+
+        x = np.arange(10)
+        y = np.linspace(0, 1, 10)
+        z = np.eye(3)
+        np.savez('/tmp/test_arrays.npz', x_data=x, y_data=y, z_data=z)
+
+        with np.load('/tmp/test_arrays.npz') as data:
+            print(f"Stored arrays: {data.files}")
+            print(f"x match: {np.array_equal(data['x_data'], x)}")
+            print(f"y match: {np.allclose(data['y_data'], y)}")
+            print(f"z match: {np.array_equal(data['z_data'], z)}")
+        os.remove('/tmp/test_arrays.npz')
+
+---
+
+**Exercise 3.**
+Create a large array `a = np.random.randn(1000, 1000)`. Save it using both `np.savez` (uncompressed) and `np.savez_compressed`. Compare the file sizes and print the compression ratio.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        import os
+
+        a = np.random.randn(1000, 1000)
+        np.savez('/tmp/uncompressed.npz', data=a)
+        np.savez_compressed('/tmp/compressed.npz', data=a)
+
+        size_un = os.path.getsize('/tmp/uncompressed.npz')
+        size_co = os.path.getsize('/tmp/compressed.npz')
+        ratio = size_un / size_co
+
+        print(f"Uncompressed: {size_un / 1e6:.2f} MB")
+        print(f"Compressed:   {size_co / 1e6:.2f} MB")
+        print(f"Compression ratio: {ratio:.2f}x")
+        os.remove('/tmp/uncompressed.npz')
+        os.remove('/tmp/compressed.npz')

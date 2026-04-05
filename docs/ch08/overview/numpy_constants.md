@@ -206,3 +206,68 @@ import numpy as np
 data = np.array([1, 2, np.nan, 4])
 mean = np.nanmean(data)  # Ignores NaN
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.** Print the values of `np.pi`, `np.e`, `np.inf`, and `np.nan`. Then check which of these are finite using `np.isfinite()`.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+
+    constants = [np.pi, np.e, np.inf, np.nan]
+    names = ["pi", "e", "inf", "nan"]
+
+    for name, val in zip(names, constants):
+        print(f"np.{name} = {val}, finite: {np.isfinite(val)}")
+    ```
+
+---
+
+**Exercise 2.** Predict the output:
+
+```python
+import numpy as np
+print(np.inf > 1e308)
+print(np.nan == np.nan)
+print(np.isnan(np.nan))
+```
+
+??? success "Solution to Exercise 2"
+    ```
+    True
+    False
+    True
+    ```
+
+    `np.inf` is greater than any finite number. `np.nan` is not equal to anything, including itself (IEEE 754 standard). `np.isnan()` is the correct way to check for NaN.
+
+---
+
+**Exercise 3.** Create an array `[1.0, np.nan, 3.0, np.nan, 5.0]` and compute the mean using both `np.mean()` and `np.nanmean()`. Explain the difference.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+
+    arr = np.array([1.0, np.nan, 3.0, np.nan, 5.0])
+    print(np.mean(arr))     # nan (any NaN contaminates the result)
+    print(np.nanmean(arr))  # 3.0 (ignores NaN values)
+    ```
+
+---
+
+**Exercise 4.** Use `np.pi` and `np.e` to verify Euler's identity: $e^{i\pi} + 1 \approx 0$. Print the result and explain why it is not exactly zero.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+
+    result = np.exp(1j * np.pi) + 1
+    print(result)           # approximately 0+1.2246e-16j
+    print(abs(result))      # approximately 1.2e-16
+
+    # Not exactly zero due to floating-point precision limits
+    ```

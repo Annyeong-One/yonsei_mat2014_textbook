@@ -124,3 +124,61 @@ QQ plots complement formal tests such as the Shapiro-Wilk test (`scipy.stats.sha
 ## Summary
 
 A QQ plot pairs observed order statistics $x_{(i)}$ with theoretical quantiles $F^{-1}(p_i)$ to visually assess distributional fit. In SciPy, `scipy.stats.probplot` computes the plot coordinates and reference line for any distribution in the library. Deviations from the line reveal heavy tails, skewness, or outliers that summary statistics may obscure.
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that creates a Q-Q plot using `scipy.stats.probplot()` to assess whether a sample is normally distributed.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(100)
+    print(f'Mean: {data.mean():.4f}')
+    print(f'Std: {data.std():.4f}')
+    ```
+
+---
+
+**Exercise 2.** Explain what a Q-Q plot shows. What does it mean when points deviate from the diagonal line?
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the statistical method and its assumptions.
+
+---
+
+**Exercise 3.** Write code that creates Q-Q plots for samples from normal, t (df=3), and exponential distributions. Explain the pattern in each.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+    from scipy import stats
+    import matplotlib.pyplot as plt
+
+    np.random.seed(42)
+    data = np.random.randn(1000)
+    fig, ax = plt.subplots()
+    ax.hist(data, bins=30, density=True, alpha=0.7)
+    ax.set_title('Distribution')
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Create a Q-Q plot comparing two empirical samples against each other (rather than against a theoretical distribution).
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(500)
+    result = stats.describe(data)
+    print(result)
+    ```

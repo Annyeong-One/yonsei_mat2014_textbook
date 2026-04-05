@@ -157,3 +157,69 @@ df[df['group'].isin(valid)]
 ### 3. Use Built-in Methods
 
 Built-in aggregations are faster than custom lambdas.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Group a DataFrame by `'city'` and use `.filter()` to keep only cities that have more than 3 records in the dataset.
+
+??? success "Solution to Exercise 1"
+    Filter groups by size using `len(x)`.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'city': ['NY', 'NY', 'NY', 'NY', 'LA', 'LA', 'SF'],
+            'value': [10, 20, 30, 40, 50, 60, 70]
+        })
+        result = df.groupby('city').filter(lambda x: len(x) > 3)
+        print(result)
+
+---
+
+**Exercise 2.**
+Use `.filter()` to keep groups where the mean of the `'score'` column exceeds 80. Print the entire filtered DataFrame (not just the group summaries).
+
+??? success "Solution to Exercise 2"
+    Filter groups by mean score threshold.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'class': ['A', 'A', 'B', 'B', 'C', 'C'],
+            'score': [85, 90, 70, 75, 95, 88]
+        })
+        result = df.groupby('class').filter(lambda x: x['score'].mean() > 80)
+        print(result)
+
+---
+
+**Exercise 3.**
+Compare the performance of using `.filter(lambda x: len(x) >= 5)` versus the manual approach of computing group sizes, finding valid groups, and using `.isin()`. Time both approaches on a larger DataFrame.
+
+??? success "Solution to Exercise 3"
+    Compare filter with manual isin approach.
+
+        import pandas as pd
+        import numpy as np
+        import time
+
+        np.random.seed(42)
+        df = pd.DataFrame({
+            'group': np.random.choice(list('ABCDEFGHIJ'), 10000),
+            'value': np.random.randn(10000)
+        })
+
+        start = time.time()
+        r1 = df.groupby('group').filter(lambda x: len(x) >= 900)
+        t1 = time.time() - start
+
+        start = time.time()
+        sizes = df.groupby('group').size()
+        valid = sizes[sizes >= 900].index
+        r2 = df[df['group'].isin(valid)]
+        t2 = time.time() - start
+
+        print(f"filter(): {t1:.4f}s, isin(): {t2:.4f}s")

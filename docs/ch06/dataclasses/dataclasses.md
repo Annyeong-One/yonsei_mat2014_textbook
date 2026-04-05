@@ -607,3 +607,85 @@ if __name__ == "__main__":
 
     print(f"\n" + "=" * 70)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a `Book` dataclass with fields `title` (str), `author` (str), `pages` (int), and `price` (float with default `9.99`). Create several instances, print them (using the auto-generated `__repr__`), and test equality between two books with identical fields.
+
+??? success "Solution to Exercise 1"
+
+        from dataclasses import dataclass
+
+        @dataclass
+        class Book:
+            title: str
+            author: str
+            pages: int
+            price: float = 9.99
+
+        b1 = Book("Python 101", "Author A", 300)
+        b2 = Book("Python 101", "Author A", 300)
+        b3 = Book("Data Science", "Author B", 450, 29.99)
+
+        print(b1)  # Book(title='Python 101', author='Author A', pages=300, price=9.99)
+        print(b1 == b2)  # True — auto-generated __eq__
+        print(b1 == b3)  # False
+
+---
+
+**Exercise 2.**
+Define a `Temperature` dataclass with a single field `celsius` (float). Add a method `to_fahrenheit()` that returns the converted value. Use `order=True` so temperatures can be sorted. Create a list of temperatures and sort them.
+
+??? success "Solution to Exercise 2"
+
+        from dataclasses import dataclass
+
+        @dataclass(order=True)
+        class Temperature:
+            celsius: float
+
+            def to_fahrenheit(self):
+                return self.celsius * 9 / 5 + 32
+
+        temps = [Temperature(100), Temperature(0), Temperature(37), Temperature(-40)]
+        print(sorted(temps))
+        # [Temperature(celsius=-40), Temperature(celsius=0),
+        #  Temperature(celsius=37), Temperature(celsius=100)]
+
+        for t in sorted(temps):
+            print(f"{t.celsius}C = {t.to_fahrenheit()}F")
+
+---
+
+**Exercise 3.**
+Build an `Inventory` dataclass with fields `item_name` (str), `quantity` (int, default `0`), and `unit_price` (float, default `0.0`). Add a `total_value` property that returns `quantity * unit_price`. Create several inventory items, calculate total values, and find the most valuable item using `max()` with a key function.
+
+??? success "Solution to Exercise 3"
+
+        from dataclasses import dataclass
+
+        @dataclass
+        class Inventory:
+            item_name: str
+            quantity: int = 0
+            unit_price: float = 0.0
+
+            @property
+            def total_value(self):
+                return self.quantity * self.unit_price
+
+        items = [
+            Inventory("Widget", 100, 2.50),
+            Inventory("Gadget", 50, 15.00),
+            Inventory("Doohickey", 200, 1.25),
+        ]
+
+        for item in items:
+            print(f"{item.item_name}: ${item.total_value:.2f}")
+        # Widget: $250.00, Gadget: $750.00, Doohickey: $250.00
+
+        most_valuable = max(items, key=lambda i: i.total_value)
+        print(f"Most valuable: {most_valuable.item_name}")

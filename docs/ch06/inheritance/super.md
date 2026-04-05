@@ -772,3 +772,99 @@ if __name__ == "__main__":
     print("="*70)
     print("\nNext: Learn MRO inspection tools and techniques!")
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create `Shape` with an `area()` method returning `0`. Create `Rectangle(Shape)` that overrides `area()`. Then create `ColoredRectangle(Rectangle)` that adds a `color` attribute but reuses `Rectangle.area()` via `super()`. Show that `super()` skips to the correct parent.
+
+??? success "Solution to Exercise 1"
+
+        class Shape:
+            def area(self):
+                return 0
+
+        class Rectangle(Shape):
+            def __init__(self, width, height):
+                self.width = width
+                self.height = height
+
+            def area(self):
+                return self.width * self.height
+
+        class ColoredRectangle(Rectangle):
+            def __init__(self, width, height, color):
+                super().__init__(width, height)
+                self.color = color
+
+            # area() not overridden — uses Rectangle's via super()
+
+        cr = ColoredRectangle(5, 3, "red")
+        print(cr.area())   # 15 — from Rectangle
+        print(cr.color)    # red
+
+---
+
+**Exercise 2.**
+Build a cooperative diamond: `Base` has `setup()` that prints "Base". `Mixin1(Base)` and `Mixin2(Base)` each override `setup()`, print their name, and call `super().setup()`. `Combined(Mixin1, Mixin2)` overrides `setup()` and calls `super().setup()`. Show that each `setup()` is called exactly once in MRO order.
+
+??? success "Solution to Exercise 2"
+
+        class Base:
+            def setup(self):
+                print("Base.setup")
+
+        class Mixin1(Base):
+            def setup(self):
+                print("Mixin1.setup")
+                super().setup()
+
+        class Mixin2(Base):
+            def setup(self):
+                print("Mixin2.setup")
+                super().setup()
+
+        class Combined(Mixin1, Mixin2):
+            def setup(self):
+                print("Combined.setup")
+                super().setup()
+
+        Combined().setup()
+        # Combined.setup -> Mixin1.setup -> Mixin2.setup -> Base.setup
+        # Each called exactly once
+
+---
+
+**Exercise 3.**
+Demonstrate a `super()` pitfall: create `Parent` with `__init__(self, x)` and `Child(Parent)` with `__init__(self, x, y)`. Show that `super().__init__(x)` works, but calling `super().__init__(x, y)` fails because `Parent.__init__` does not accept `y`. Then fix it using `**kwargs` for forward compatibility.
+
+??? success "Solution to Exercise 3"
+
+        # Broken version
+        class Parent:
+            def __init__(self, x):
+                self.x = x
+
+        class Child(Parent):
+            def __init__(self, x, y):
+                super().__init__(x)  # Works
+                self.y = y
+
+        c = Child(1, 2)
+        print(c.x, c.y)  # 1 2
+
+        # Fixed version with **kwargs
+        class ParentFixed:
+            def __init__(self, x, **kwargs):
+                super().__init__(**kwargs)
+                self.x = x
+
+        class ChildFixed(ParentFixed):
+            def __init__(self, x, y, **kwargs):
+                super().__init__(x=x, **kwargs)
+                self.y = y
+
+        cf = ChildFixed(x=1, y=2)
+        print(cf.x, cf.y)  # 1 2

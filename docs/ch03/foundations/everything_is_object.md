@@ -192,6 +192,7 @@ Python supports key OOP principles:
 
 ---
 
+
 ## Key Takeaways
 
 - **Everything in Python is an object** — int, str, list, function, class
@@ -200,3 +201,89 @@ Python supports key OOP principles:
 - **Polymorphism**: Same operator behaves differently based on type
 - **Type introspection**: Use `type()` to see any object's class
 - Understanding Python's object model is fundamental to mastering the language
+
+
+## Exercises
+
+**Exercise 1.**
+Python says "everything is an object." Verify this by predicting the output:
+
+```python
+print(type(42))
+print(type(type(42)))
+print(type(print))
+print(type(lambda x: x))
+```
+
+What does it mean that even `type` itself is an object? What is `type(type)`?
+
+??? success "Solution to Exercise 1"
+    Output:
+
+    ```text
+    <class 'int'>
+    <class 'type'>
+    <class 'builtin_function_or_method'>
+    <class 'function'>
+    ```
+
+    - `type(42)` is `int` -- integers are objects of type `int`.
+    - `type(type(42))` is `type(int)` which is `type` -- classes themselves are objects of type `type`.
+    - `type(print)` is `builtin_function_or_method` -- built-in functions are objects.
+    - `type(lambda x: x)` is `function` -- lambdas are function objects.
+
+    `type(type)` is `type` -- the `type` class is its own metaclass. This is the foundation of Python's object model: `type` is both a class (it creates other classes) and an instance of itself. Everything in Python is an object, and every object has a type, and types are themselves objects.
+
+---
+
+**Exercise 2.**
+If `a + b` really calls `a.__add__(b)`, then what happens when Python evaluates `"hello" + " world"`? What method is being called, on which object? Verify by running:
+
+```python
+print("hello".__add__(" world"))
+print(str.__add__("hello", " world"))
+```
+
+Why are these two calls equivalent?
+
+??? success "Solution to Exercise 2"
+    Both produce `"hello world"`.
+
+    `"hello" + " world"` calls `"hello".__add__(" world")` -- the `__add__` method of the `str` object `"hello"`, with `" world"` as the argument.
+
+    `str.__add__("hello", " world")` calls the same method through the class, passing both the instance (`"hello"`) and the argument (`" world"`) explicitly.
+
+    These are equivalent because `"hello".__add__(" world")` is syntactic sugar: Python looks up `__add__` on the type of `"hello"` (which is `str`), then calls `str.__add__("hello", " world")`. The instance method call automatically passes the object as the first argument.
+
+    This is the mechanism behind all operator overloading: operators are dispatched to methods on the operand's type, and the operand itself is passed as the first argument (`self`).
+
+---
+
+**Exercise 3.**
+Functions are objects in Python. Explain what each of the following demonstrates:
+
+```python
+def greet(name):
+    return f"Hello, {name}"
+
+print(type(greet))
+print(greet.__name__)
+print(id(greet))
+```
+
+If functions are objects, they have identity, type, and value. What is the "value" of a function object?
+
+??? success "Solution to Exercise 3"
+    Output:
+
+    ```text
+    <class 'function'>
+    greet
+    140234567890  (some memory address)
+    ```
+
+    - `type(greet)` is `function` -- the function is an instance of the `function` class.
+    - `greet.__name__` is `"greet"` -- function objects have attributes, including their name.
+    - `id(greet)` returns the function object's identity (memory address).
+
+    A function object's "value" is its compiled bytecode, default arguments, closure variables, and other metadata. The function's code is stored in `greet.__code__`, defaults in `greet.__defaults__`, etc. Functions are objects because they have all three properties: identity (`id`), type (`function`), and value (the callable behavior and associated data). Being objects means functions can be passed as arguments, stored in data structures, and have attributes -- enabling functional programming patterns.

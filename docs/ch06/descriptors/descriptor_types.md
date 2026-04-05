@@ -1060,3 +1060,130 @@ if __name__ == "__main__":
     can be used in advanced patterns like ORMs and data validation frameworks.
     """)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a data descriptor `Validated` (implements both `__get__` and `__set__`) and a non-data descriptor `DefaultValue` (implements only `__get__`). Apply both to a class. Show that the data descriptor takes priority over instance `__dict__`, while the non-data descriptor can be overridden by an instance attribute.
+
+??? success "Solution to Exercise 1"
+
+        class Validated:  # Data descriptor
+            def __set_name__(self, owner, name):
+                self.name = name
+
+            def __get__(self, obj, objtype=None):
+                if obj is None:
+                    return self
+                return obj.__dict__.get(self.name, 0)
+
+            def __set__(self, obj, value):
+                if value < 0:
+                    raise ValueError("Must be non-negative")
+                obj.__dict__[self.name] = value
+
+        class DefaultValue:  # Non-data descriptor
+            def __init__(self, default):
+                self.default = default
+
+            def __set_name__(self, owner, name):
+                self.name = name
+
+            def __get__(self, obj, objtype=None):
+                if obj is None:
+                    return self
+                return obj.__dict__.get(self.name, self.default)
+
+        class Demo:
+            score = Validated()
+            label = DefaultValue("unknown")
+
+        d = Demo()
+        d.score = 10
+        print(d.score)  # 10 — data descriptor intercepts
+
+        d.__dict__['score'] = -5  # Bypass descriptor
+        print(d.score)  # -5? No: data descriptor __get__ reads from __dict__
+        # Actually returns -5 since our __get__ reads __dict__
+
+        d.__dict__['label'] = "custom"
+        print(d.label)  # "custom" — instance overrides non-data descriptor
+
+---
+
+**Exercise 2.**
+Write a non-data descriptor `LazyProperty` that computes a value on first access and stores it in the instance `__dict__` so subsequent accesses bypass the descriptor. Compare this behavior with a data descriptor that always intercepts access. Show the difference in access counts.
+
+??? success "Solution to Exercise 2"
+
+        class LazyProperty:
+            """Non-data descriptor that caches on first access."""
+            def __init__(self, func):
+                self.func = func
+
+            def __set_name__(self, owner, name):
+                self.name = name
+
+            def __get__(self, obj, objtype=None):
+                if obj is None:
+                    return self
+                print(f"Computing {self.name}...")
+                value = self.func(obj)
+                obj.__dict__[self.name] = value  # Cache in instance
+                return value
+
+        class Circle:
+            def __init__(self, radius):
+                self.radius = radius
+
+            @LazyProperty
+            def area(self):
+                import math
+                return math.pi * self.radius ** 2
+
+        c = Circle(5)
+        print(c.area)  # "Computing area..." then 78.54
+        print(c.area)  # 78.54 — cached, no "Computing" message
+
+---
+
+**Exercise 3.**
+Demonstrate the lookup priority by creating a class with: (a) a data descriptor `x`, (b) an instance attribute `x` (set via `__dict__`), and (c) a non-data descriptor `y` and instance attribute `y`. Show that `obj.x` returns the data descriptor's value (not the instance attribute) while `obj.y` returns the instance attribute (not the non-data descriptor's value).
+
+??? success "Solution to Exercise 3"
+
+        class DataDesc:
+            """Data descriptor — has __get__ and __set__."""
+            def __set_name__(self, owner, name):
+                self.name = name
+
+            def __get__(self, obj, objtype=None):
+                if obj is None:
+                    return self
+                return f"data_descriptor({self.name})"
+
+            def __set__(self, obj, value):
+                pass  # Intercepts but does nothing
+
+        class NonDataDesc:
+            """Non-data descriptor — has only __get__."""
+            def __set_name__(self, owner, name):
+                self.name = name
+
+            def __get__(self, obj, objtype=None):
+                if obj is None:
+                    return self
+                return f"non_data_descriptor({self.name})"
+
+        class Demo:
+            x = DataDesc()
+            y = NonDataDesc()
+
+        d = Demo()
+        d.__dict__['x'] = "instance_x"
+        d.__dict__['y'] = "instance_y"
+
+        print(d.x)  # "data_descriptor(x)" — data descriptor wins
+        print(d.y)  # "instance_y" — instance wins over non-data descriptor

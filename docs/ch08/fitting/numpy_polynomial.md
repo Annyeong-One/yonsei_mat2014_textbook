@@ -274,3 +274,72 @@ print(leg_fit(0.5))   # Close to np.exp(0.5)
 - Multiple polynomial bases (Chebyshev, Legendre, etc.) share the same interface
 - Use `p.convert()` to get standard power-basis coefficients from a fitted polynomial
 - The legacy `np.polyfit` / `np.poly1d` functions still work but the modern API is preferred for new code
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Using `Polynomial.fit`, fit a degree-3 polynomial to `x = np.linspace(0, 10, 50)` and `y = np.sin(x)`. Convert the fitted polynomial to standard form with `.convert()` and print the ascending-order coefficients. Evaluate the fit at `x = 5.0` and compare with `np.sin(5.0)`.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        from numpy.polynomial import Polynomial
+
+        x = np.linspace(0, 10, 50)
+        y = np.sin(x)
+        p = Polynomial.fit(x, y, deg=3)
+
+        p_std = p.convert()
+        print(f"Coefficients (ascending): {p_std.coef}")
+        print(f"Fit at x=5:    {p(5.0):.6f}")
+        print(f"sin(5):        {np.sin(5.0):.6f}")
+        print(f"Error:         {abs(p(5.0) - np.sin(5.0)):.6f}")
+
+---
+
+**Exercise 2.**
+Create two `Polynomial` objects: `p1 = 1 + 2x` and `p2 = 3 - x + x^2`. Compute their product, the derivative of the product, and the roots of the derivative. Verify by hand that the roots are correct critical points.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from numpy.polynomial import Polynomial
+
+        p1 = Polynomial([1, 2])       # 1 + 2x
+        p2 = Polynomial([3, -1, 1])   # 3 - x + x^2
+
+        product = p1 * p2
+        print(f"Product: {product}")
+
+        dp = product.deriv()
+        print(f"Derivative: {dp}")
+
+        roots = dp.roots()
+        print(f"Critical points: {roots}")
+
+---
+
+**Exercise 3.**
+Fit `y = exp(x)` on `[-1, 1]` using both `Polynomial.fit` (power basis, degree 5) and `Chebyshev.fit` (Chebyshev basis, degree 5). Evaluate both fits at 50 equally spaced points and print the maximum absolute error for each. Explain which basis gives a better approximation and why.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from numpy.polynomial import Polynomial, Chebyshev
+
+        x = np.linspace(-1, 1, 50)
+        y = np.exp(x)
+
+        p_fit = Polynomial.fit(x, y, deg=5)
+        c_fit = Chebyshev.fit(x, y, deg=5)
+
+        err_poly = np.max(np.abs(p_fit(x) - y))
+        err_cheb = np.max(np.abs(c_fit(x) - y))
+
+        print(f"Polynomial max error: {err_poly:.2e}")
+        print(f"Chebyshev max error:  {err_cheb:.2e}")
+        # Chebyshev typically gives a better approximation on [-1, 1]
+        # because Chebyshev polynomials minimize the maximum error
+        # (near-optimal minimax approximation).

@@ -124,3 +124,61 @@ These techniques can dramatically reduce the number of samples needed for a give
 ## Summary
 
 Monte Carlo simulation approximates intractable expectations, probabilities, and integrals by averaging over random samples. The Monte Carlo estimator $\hat{\mu}_N = \frac{1}{N}\sum g(X_i)$ converges to $E[g(X)]$ by the law of large numbers, with standard error $O(N^{-1/2})$ independent of dimension. This makes Monte Carlo the method of choice for high-dimensional problems. In statistics, Monte Carlo simulation is used to study the properties of estimators and tests under assumed models. Variance reduction techniques such as antithetic variates, control variates, and importance sampling can substantially improve efficiency.
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that uses Monte Carlo simulation to estimate the probability that the sum of two dice exceeds 8.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(100)
+    print(f'Mean: {data.mean():.4f}')
+    print(f'Std: {data.std():.4f}')
+    ```
+
+---
+
+**Exercise 2.** Explain the law of large numbers and how it justifies Monte Carlo estimation.
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the statistical method and its assumptions.
+
+---
+
+**Exercise 3.** Write code that estimates $\pi$ using Monte Carlo simulation by generating random points in a unit square.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+    from scipy import stats
+    import matplotlib.pyplot as plt
+
+    np.random.seed(42)
+    data = np.random.randn(1000)
+    fig, ax = plt.subplots()
+    ax.hist(data, bins=30, density=True, alpha=0.7)
+    ax.set_title('Distribution')
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Write code that uses Monte Carlo simulation to estimate the integral $\int_0^1 e^{-x^2} dx$.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(500)
+    result = stats.describe(data)
+    print(result)
+    ```

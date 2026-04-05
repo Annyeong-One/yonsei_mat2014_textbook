@@ -121,3 +121,67 @@ so OLS applies directly. The key challenge is choosing the polynomial degree:
 too low produces underfitting, too high produces overfitting and numerical
 instability. Centering, scaling, and orthogonal polynomial bases help manage
 conditioning issues.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Fit polynomials of degree 1, 2, and 3 to the data $x = [1,...,10]$, $y = [1, 4, 9, 16, 25, 36, 49, 64, 81, 100]$ (which is $x^2$). Compare the coefficients and identify which degree recovers the true relationship.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        x = np.arange(1, 11, dtype=float)
+        y = x ** 2
+
+        for deg in [1, 2, 3]:
+            coeffs = np.polyfit(x, y, deg)
+            print(f"Degree {deg}: {np.round(coeffs, 4)}")
+
+---
+
+**Exercise 2.**
+Demonstrate overfitting: generate 10 noisy samples from $y = \sin(x)$ and fit polynomials of degree 2, 5, and 9. Plot each fit and show how the degree-9 polynomial passes through all points but oscillates wildly.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+
+        np.random.seed(42)
+        x = np.linspace(0, 2*np.pi, 10)
+        y = np.sin(x) + np.random.normal(0, 0.2, 10)
+        x_fine = np.linspace(0, 2*np.pi, 200)
+
+        for deg in [2, 5, 9]:
+            p = np.polyfit(x, y, deg)
+            plt.plot(x_fine, np.polyval(p, x_fine), label=f'deg {deg}')
+        plt.scatter(x, y, c='black', zorder=5)
+        plt.legend()
+        plt.title('Polynomial Overfitting')
+        plt.show()
+
+---
+
+**Exercise 3.**
+Fit a degree-3 polynomial to 50 samples from $y = 2x - 0.5x^2 + 0.1x^3 + \varepsilon$ with $\varepsilon \sim N(0, 3)$. Compare fitted coefficients with true values. Compute $R^2$ for degree 1, 2, 3, and 4 fits.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        np.random.seed(42)
+        x = np.random.uniform(0, 5, 50)
+        y = 2*x - 0.5*x**2 + 0.1*x**3 + np.random.normal(0, 3, 50)
+
+        coeffs = np.polyfit(x, y, 3)
+        print(f"Fitted: {np.round(coeffs, 4)}")
+        print(f"True:   [0.1, -0.5, 2.0, 0.0]")
+
+        for deg in [1, 2, 3, 4]:
+            p = np.polyfit(x, y, deg)
+            yhat = np.polyval(p, x)
+            r2 = 1 - np.sum((y - yhat)**2) / np.sum((y - y.mean())**2)
+            print(f"Degree {deg}: R2 = {r2:.4f}")

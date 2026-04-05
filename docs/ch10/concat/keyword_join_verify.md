@@ -180,3 +180,55 @@ Here `join="inner"` keeps only column `B`, and `verify_integrity=True` confirms 
 - `verify_integrity=True` is a safety net that raises `ValueError` on duplicate indices
 - Use `ignore_index=True` or `keys` to resolve duplicate indices before they cause problems
 - These parameters apply to `pd.concat` only, not to `pd.merge` (which has its own join logic)
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that concatenates two DataFrames with different columns using `join='inner'` and `join='outer'`. Compare the results.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+
+    df1 = pd.DataFrame({'A': [1, 2], 'B': [3, 4]})
+    df2 = pd.DataFrame({'A': [5, 6], 'B': [7, 8]})
+    result = pd.concat([df1, df2], ignore_index=True)
+    print(result)
+    ```
+
+---
+
+**Exercise 2.** Explain what the `verify_integrity` parameter does in `pd.concat()`. What happens if there are duplicate index values?
+
+??? success "Solution to Exercise 2"
+    See the explanation in the main content. The key concept involves understanding how `pd.concat()` aligns data along the specified axis and handles mismatched indices or columns.
+
+---
+
+**Exercise 3.** Create two DataFrames with partially overlapping columns. Concatenate with `join='inner'` and show that only common columns are kept.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+
+    df1 = pd.DataFrame({'A': [1, 2], 'B': [3, 4]})
+    df2 = pd.DataFrame({'A': [5, 6], 'C': [7, 8]})
+    result = pd.concat([df1, df2], axis=0)
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Write code demonstrating that `pd.concat([df1, df2], verify_integrity=True)` raises an error when index values are duplicated.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+
+    df1 = pd.DataFrame({'A': [1, 2]}, index=[0, 1])
+    df2 = pd.DataFrame({'A': [3, 4]}, index=[2, 3])
+    result = pd.concat([df1, df2])
+    print(result)
+    ```

@@ -948,3 +948,60 @@ if __name__ == "__main__":
 
     print(summary)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a DataFrame from a dictionary with 3 columns and 5 rows. Select a single column (returns a Series) and then select two columns (returns a DataFrame). Print the type of each result.
+
+??? success "Solution to Exercise 1"
+    Select single and multiple columns and check types.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'name': ['Alice', 'Bob', 'Carol', 'Dave', 'Eve'],
+            'age': [25, 30, 35, 40, 45],
+            'score': [85, 90, 78, 92, 88]
+        })
+        single = df['name']
+        multi = df[['name', 'age']]
+        print(type(single))   # Series
+        print(type(multi))    # DataFrame
+
+---
+
+**Exercise 2.**
+Create a DataFrame and add a new column computed from existing columns (e.g., `'total' = 'price' * 'quantity'`). Then delete a column using `del df['column']` or `df.drop(columns=...)`.
+
+??? success "Solution to Exercise 2"
+    Add and remove columns.
+
+        import pandas as pd
+
+        df = pd.DataFrame({'price': [10, 20, 30], 'quantity': [2, 3, 1]})
+        df['total'] = df['price'] * df['quantity']
+        print(df)
+        df = df.drop(columns=['quantity'])
+        print(df)
+
+---
+
+**Exercise 3.**
+Create a DataFrame with a custom index (not the default RangeIndex). Use `.loc[]` to select a row by label and `.iloc[]` to select a row by position. Verify both return the same row.
+
+??? success "Solution to Exercise 3"
+    Compare loc and iloc access.
+
+        import pandas as pd
+
+        df = pd.DataFrame(
+            {'val': [100, 200, 300]},
+            index=['first', 'second', 'third']
+        )
+        by_label = df.loc['second']
+        by_position = df.iloc[1]
+        print(by_label)
+        assert (by_label == by_position).all()

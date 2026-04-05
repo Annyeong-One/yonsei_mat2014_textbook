@@ -381,3 +381,83 @@ ax.set_aspect('equal')
 plt.tight_layout()
 plt.show()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a contour plot of $z = x^2 + y^2$ over $[-3, 3] \times [-3, 3]$ with 10 levels. Add contour labels using `ax.clabel` with `inline=True` and `fontsize=10`. Format the labels to show one decimal place using `fmt='%.1f'`.
+
+??? success "Solution to Exercise 1"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(-3, 3, 100)
+        y = np.linspace(-3, 3, 100)
+        X, Y = np.meshgrid(x, y)
+        Z = X**2 + Y**2
+
+        fig, ax = plt.subplots(figsize=(8, 6))
+        cs = ax.contour(X, Y, Z, levels=10)
+        ax.clabel(cs, inline=True, fontsize=10, fmt='%.1f')
+        ax.set_xlabel('x')
+        ax.set_ylabel('y')
+        ax.set_title(r'Contour Plot of $z = x^2 + y^2$')
+        ax.set_aspect('equal')
+        plt.show()
+
+---
+
+**Exercise 2.**
+Plot contour lines for $z = \sin(x) \cdot \cos(y)$ and add labels only to specific levels $[-0.5, 0, 0.5]$ by passing the `levels` parameter to `contour` and then labeling. Style the labels with `fontsize=12`, a white background (`colors='white'`), and `inline_spacing=5`.
+
+??? success "Solution to Exercise 2"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(-np.pi, np.pi, 200)
+        y = np.linspace(-np.pi, np.pi, 200)
+        X, Y = np.meshgrid(x, y)
+        Z = np.sin(X) * np.cos(Y)
+
+        fig, ax = plt.subplots(figsize=(8, 6))
+        cs = ax.contour(X, Y, Z, levels=[-0.5, 0, 0.5])
+        ax.clabel(cs, inline=True, fontsize=12, inline_spacing=5)
+        ax.set_xlabel('x')
+        ax.set_ylabel('y')
+        ax.set_title(r'Contour Labels at Selected Levels')
+        ax.set_aspect('equal')
+        plt.show()
+
+---
+
+**Exercise 3.**
+Create a contour plot of the 2D Gaussian $z = e^{-(x^2 + y^2)/2}$ with manually chosen levels `[0.1, 0.3, 0.5, 0.7, 0.9]`. Add labels with a custom format function that displays each level as a percentage (e.g., "10%", "30%"). Use `manual` label placement by specifying explicit (x, y) positions for each label.
+
+??? success "Solution to Exercise 3"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(-3, 3, 200)
+        y = np.linspace(-3, 3, 200)
+        X, Y = np.meshgrid(x, y)
+        Z = np.exp(-(X**2 + Y**2) / 2)
+
+        levels = [0.1, 0.3, 0.5, 0.7, 0.9]
+
+        fig, ax = plt.subplots(figsize=(8, 6))
+        cs = ax.contour(X, Y, Z, levels=levels)
+
+        fmt = {lev: f'{lev*100:.0f}%' for lev in levels}
+        manual_positions = [(2.0, 0), (1.3, 0), (0.9, 0), (0.5, 0), (0.2, 0)]
+        ax.clabel(cs, inline=True, fontsize=11, fmt=fmt, manual=manual_positions)
+
+        ax.set_xlabel('x')
+        ax.set_ylabel('y')
+        ax.set_title('2D Gaussian with Percentage Labels')
+        ax.set_aspect('equal')
+        plt.show()

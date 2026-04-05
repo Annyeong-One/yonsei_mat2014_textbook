@@ -1385,3 +1385,66 @@ if __name__ == "__main__":
     print("Next: Learn about ADVANCED generator techniques!")
     print("=" * 70)
 ```
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Write a generator function `fibonacci(n)` that yields the first `n` Fibonacci numbers. Test it by printing the first 10.
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        def fibonacci(n):
+            a, b = 0, 1
+            for _ in range(n):
+                yield a
+                a, b = b, a + b
+
+        print(list(fibonacci(10)))
+        # [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
+        ```
+
+    The generator yields one value at a time, keeping only `a` and `b` in memory regardless of `n`.
+
+---
+
+**Exercise 2.**
+Write a generator function `chunks(lst, size)` that yields successive chunks of `size` elements from `lst`. For example, `list(chunks([1,2,3,4,5], 2))` should return `[[1,2], [3,4], [5]]`.
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        def chunks(lst, size):
+            for i in range(0, len(lst), size):
+                yield lst[i:i + size]
+
+        print(list(chunks([1, 2, 3, 4, 5], 2)))
+        # [[1, 2], [3, 4], [5]]
+        ```
+
+    `range(0, len(lst), size)` steps through the list in increments of `size`.
+
+---
+
+**Exercise 3.**
+Explain the memory advantage of generators over lists. Write a comparison that shows `sum(range(10_000_000))` uses much less memory than `sum(list(range(10_000_000)))` using `sys.getsizeof`.
+
+??? success "Solution to Exercise 3"
+
+        ```python
+        import sys
+
+        r = range(10_000_000)
+        l = list(range(10_000_000))
+
+        print(f"range size: {sys.getsizeof(r)} bytes")     # ~48 bytes
+        print(f"list size: {sys.getsizeof(l)} bytes")       # ~80,000,000 bytes
+
+        # Both produce the same sum
+        print(sum(range(10_000_000)) == sum(list(range(10_000_000))))  # True
+        ```
+
+    `range` (like a generator) produces values on demand, using constant memory. The list materializes all 10 million integers in memory.

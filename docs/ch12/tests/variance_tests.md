@@ -102,3 +102,67 @@ print(f"Levene (mean):   W = {w_stat:.4f}, p = {p_value:.4f}")
 ## Summary
 
 Variance tests check the equal-variance assumption required by parametric procedures like the pooled t-test and ANOVA. Bartlett's test offers the highest power under normality but is unreliable when the normality assumption itself is violated. Levene's test provides a robust alternative that works well regardless of the underlying distribution shape. In SciPy, these are available through `scipy.stats.bartlett` and `scipy.stats.levene` respectively.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Three groups of measurements: A = [10.2, 10.5, 9.8, 10.1], B = [10.0, 11.5, 8.5, 12.0], C = [10.1, 10.0, 10.3, 9.9]. Apply both Bartlett's and Levene's tests. Which group has noticeably different variance?
+
+??? success "Solution to Exercise 1"
+
+        from scipy import stats
+
+        a = [10.2, 10.5, 9.8, 10.1]
+        b = [10.0, 11.5, 8.5, 12.0]
+        c = [10.1, 10.0, 10.3, 9.9]
+
+        b_stat, p_bart = stats.bartlett(a, b, c)
+        w_stat, p_lev = stats.levene(a, b, c)
+
+        print(f"Bartlett: stat={b_stat:.4f}, p={p_bart:.4f}")
+        print(f"Levene:   stat={w_stat:.4f}, p={p_lev:.4f}")
+        import numpy as np
+        for name, g in [("A", a), ("B", b), ("C", c)]:
+            print(f"  Group {name} variance: {np.var(g, ddof=1):.4f}")
+
+---
+
+**Exercise 2.**
+Generate two groups from $N(0, 1)$ and $N(0, 3)$ (50 samples each). Apply Levene's test with `center='median'` and `center='mean'`. Compare the p-values.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        g1 = np.random.normal(0, 1, 50)
+        g2 = np.random.normal(0, 3, 50)
+
+        _, p_median = stats.levene(g1, g2, center='median')
+        _, p_mean = stats.levene(g1, g2, center='mean')
+        print(f"Levene (median): p={p_median:.6f}")
+        print(f"Levene (mean):   p={p_mean:.6f}")
+
+---
+
+**Exercise 3.**
+Simulate 1000 Levene's tests on groups from the same distribution ($N(0, 1)$, three groups of 30). Compute the false positive rate at $\alpha = 0.05$ and verify it is close to the nominal level.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        rejections = 0
+        for _ in range(1000):
+            g1 = np.random.normal(0, 1, 30)
+            g2 = np.random.normal(0, 1, 30)
+            g3 = np.random.normal(0, 1, 30)
+            _, p = stats.levene(g1, g2, g3)
+            if p < 0.05:
+                rejections += 1
+        print(f"False positive rate: {rejections/1000:.3f} (expected ~0.05)")

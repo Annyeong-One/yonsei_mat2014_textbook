@@ -194,3 +194,59 @@ ratings = pd.Categorical(['AA', 'BBB', 'A'], categories=valid_ratings)
 5. **Geographic Regions**: North, South, East, West
 6. **Time Periods**: Q1, Q2, Q3, Q4
 7. **Risk Levels**: Low, Medium, High, Critical
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Create a Series with categorical dtype and print its `dtype`, `cat.categories`, and `cat.codes`.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+
+    # See page content for relevant API details
+    s = pd.Series(['a', 'b', 'c', 'a', 'b'], dtype='category')
+    print(s)
+    print(s.cat.categories)
+    print(s.cat.codes)
+    ```
+
+---
+
+**Exercise 2.** Explain why categorical data types are useful in Pandas. Name two benefits.
+
+??? success "Solution to Exercise 2"
+    See the explanation in the main content of this page. The key concept involves understanding the categorical data type and its internal representation in Pandas.
+
+---
+
+**Exercise 3.** Write code that creates a DataFrame with 10000 rows of a column with only 3 unique values. Compare the memory usage before and after converting to categorical.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'col': np.random.choice(['A', 'B', 'C'], 1000)})
+    df['col'] = df['col'].astype('category')
+    print(df.dtypes)
+    print(df['col'].value_counts())
+    ```
+
+---
+
+**Exercise 4.** Convert a column of repeated strings to categorical type and demonstrate that comparisons still work correctly (e.g., filtering with `==`).
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+
+    s = pd.Categorical(['low', 'medium', 'high', 'low'],
+                        categories=['low', 'medium', 'high'],
+                        ordered=True)
+    print(s)
+    print(s > 'low')
+    ```

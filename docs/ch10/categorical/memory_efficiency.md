@@ -310,3 +310,59 @@ print(f"String groupby: {string_groupby:.3f}s")
 print(f"Categorical groupby: {cat_groupby:.3f}s")
 print(f"Speedup: {string_groupby/cat_groupby:.1f}x")
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Create a DataFrame with a string column containing 100000 rows but only 5 unique values. Compare memory usage before and after converting to categorical.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+
+    # See page content for relevant API details
+    s = pd.Series(['a', 'b', 'c', 'a', 'b'], dtype='category')
+    print(s)
+    print(s.cat.categories)
+    print(s.cat.codes)
+    ```
+
+---
+
+**Exercise 2.** Explain how categorical data is stored internally (codes + categories). Why is this more memory-efficient than storing repeated strings?
+
+??? success "Solution to Exercise 2"
+    See the explanation in the main content of this page. The key concept involves understanding the categorical data type and its internal representation in Pandas.
+
+---
+
+**Exercise 3.** Write code that reads memory usage of each column in a DataFrame using `df.memory_usage(deep=True)` and identifies which columns would benefit from categorical conversion.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'col': np.random.choice(['A', 'B', 'C'], 1000)})
+    df['col'] = df['col'].astype('category')
+    print(df.dtypes)
+    print(df['col'].value_counts())
+    ```
+
+---
+
+**Exercise 4.** Create a function that takes a DataFrame and automatically converts all string columns with fewer than 50 unique values to categorical type. Return the total memory saved.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+
+    s = pd.Categorical(['low', 'medium', 'high', 'low'],
+                        categories=['low', 'medium', 'high'],
+                        ordered=True)
+    print(s)
+    print(s > 'low')
+    ```

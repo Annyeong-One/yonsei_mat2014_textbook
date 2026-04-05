@@ -456,3 +456,171 @@ if __name__ == '__main__':
     process_payroll(employees)
     demo_extensibility()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create an ABC `Storage` with abstract methods `save(key, value)` and `load(key)`. Then create two classes---`DictStorage` and `ListStorage`---that do NOT inherit from `Storage`. Register both as virtual subclasses using `Storage.register()`. Demonstrate that `isinstance()` and `issubclass()` checks pass for both, and call their methods through a function typed to accept `Storage`.
+
+??? success "Solution to Exercise 1"
+
+        from abc import ABC, abstractmethod
+
+        class Storage(ABC):
+            @abstractmethod
+            def save(self, key, value):
+                pass
+
+            @abstractmethod
+            def load(self, key):
+                pass
+
+        class DictStorage:
+            def __init__(self):
+                self._data = {}
+
+            def save(self, key, value):
+                self._data[key] = value
+
+            def load(self, key):
+                return self._data.get(key)
+
+        class ListStorage:
+            def __init__(self):
+                self._entries = []
+
+            def save(self, key, value):
+                self._entries.append((key, value))
+
+            def load(self, key):
+                for k, v in reversed(self._entries):
+                    if k == key:
+                        return v
+                return None
+
+        Storage.register(DictStorage)
+        Storage.register(ListStorage)
+
+        print(isinstance(DictStorage(), Storage))   # True
+        print(isinstance(ListStorage(), Storage))   # True
+        print(issubclass(DictStorage, Storage))     # True
+        print(issubclass(ListStorage, Storage))     # True
+
+        def use_storage(store: Storage):
+            store.save("color", "blue")
+            return store.load("color")
+
+        print(use_storage(DictStorage()))   # blue
+        print(use_storage(ListStorage()))   # blue
+
+---
+
+**Exercise 2.**
+Define an ABC `Formatter` with an abstract method `format(text)`. Create a concrete subclass `UpperFormatter` that inherits from `Formatter`. Then create a third-party class `HTMLFormatter` (no inheritance) and register it as a virtual subclass. Show the key limitation: create a `BrokenFormatter` class with no `format` method, register it, and demonstrate that `isinstance()` still returns `True` even though calling `format()` raises `AttributeError`.
+
+??? success "Solution to Exercise 2"
+
+        from abc import ABC, abstractmethod
+
+        class Formatter(ABC):
+            @abstractmethod
+            def format(self, text):
+                pass
+
+        class UpperFormatter(Formatter):
+            def format(self, text):
+                return text.upper()
+
+        class HTMLFormatter:
+            def format(self, text):
+                return f"<p>{text}</p>"
+
+        Formatter.register(HTMLFormatter)
+
+        print(isinstance(UpperFormatter(), Formatter))  # True
+        print(isinstance(HTMLFormatter(), Formatter))   # True
+
+        # Limitation: BrokenFormatter has no format method
+        class BrokenFormatter:
+            pass
+
+        Formatter.register(BrokenFormatter)
+        print(isinstance(BrokenFormatter(), Formatter))  # True!
+
+        try:
+            BrokenFormatter().format("hello")
+        except AttributeError as e:
+            print(f"Error: {e}")
+            # Error: 'BrokenFormatter' object has no attribute 'format'
+
+---
+
+**Exercise 3.**
+Build a plugin system using virtual subclasses. Define an ABC `Plugin` with abstract methods `name()` (as a property) and `execute(data)`. Write a `PluginRegistry` class that keeps a list of registered plugin classes. Add a `register_plugin(cls)` method that calls `Plugin.register(cls)` and stores the class. Then create three plugin classes without inheritance, register them, and iterate through the registry to run `execute` on each.
+
+??? success "Solution to Exercise 3"
+
+        from abc import ABC, abstractmethod
+
+        class Plugin(ABC):
+            @property
+            @abstractmethod
+            def name(self):
+                pass
+
+            @abstractmethod
+            def execute(self, data):
+                pass
+
+        class PluginRegistry:
+            def __init__(self):
+                self._plugins = []
+
+            def register_plugin(self, cls):
+                Plugin.register(cls)
+                self._plugins.append(cls)
+
+            def run_all(self, data):
+                results = {}
+                for cls in self._plugins:
+                    instance = cls()
+                    results[instance.name] = instance.execute(data)
+                return results
+
+        class UpperPlugin:
+            @property
+            def name(self):
+                return "upper"
+
+            def execute(self, data):
+                return data.upper()
+
+        class ReversePlugin:
+            @property
+            def name(self):
+                return "reverse"
+
+            def execute(self, data):
+                return data[::-1]
+
+        class LengthPlugin:
+            @property
+            def name(self):
+                return "length"
+
+            def execute(self, data):
+                return len(data)
+
+        registry = PluginRegistry()
+        registry.register_plugin(UpperPlugin)
+        registry.register_plugin(ReversePlugin)
+        registry.register_plugin(LengthPlugin)
+
+        results = registry.run_all("hello world")
+        for name, result in results.items():
+            print(f"{name}: {result}")
+        # upper: HELLO WORLD
+        # reverse: dlrow olleh
+        # length: 11

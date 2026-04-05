@@ -125,3 +125,54 @@ For a detailed discussion of the quantile function, see the [Quantile Function (
 ## Summary
 
 The `.interval()` method computes the equal-tails probability interval $[F^{-1}((1-\alpha)/2),\; F^{-1}((1+\alpha)/2)]$ for any `scipy.stats` distribution. Combined with sample statistics for `loc` and `scale`, it provides a direct route to confidence intervals for population parameters. For non-symmetric distributions, the equal-tails interval differs from the shortest-length interval.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Use `stats.norm.interval(0.95, loc=0, scale=1)` to compute the 95% equal-tails interval for the standard normal. Verify that the endpoints match $\pm z_{0.025}$ from `.ppf()`.
+
+??? success "Solution to Exercise 1"
+
+        from scipy import stats
+
+        lo, hi = stats.norm.interval(0.95, loc=0, scale=1)
+        z_low = stats.norm.ppf(0.025)
+        z_high = stats.norm.ppf(0.975)
+
+        print(f"interval(): [{lo:.4f}, {hi:.4f}]")
+        print(f"ppf():      [{z_low:.4f}, {z_high:.4f}]")
+
+---
+
+**Exercise 2.**
+A sample of 25 observations has mean 80 and standard deviation 12. Use `stats.t.interval()` to construct a 95% confidence interval for the population mean. Compare the width with the corresponding z-interval.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy import stats
+
+        n, xbar, s = 25, 80, 12
+        se = s / np.sqrt(n)
+
+        ci_t = stats.t.interval(0.95, df=n-1, loc=xbar, scale=se)
+        ci_z = stats.norm.interval(0.95, loc=xbar, scale=se)
+
+        print(f"t-interval:  [{ci_t[0]:.2f}, {ci_t[1]:.2f}], width={ci_t[1]-ci_t[0]:.2f}")
+        print(f"z-interval:  [{ci_z[0]:.2f}, {ci_z[1]:.2f}], width={ci_z[1]-ci_z[0]:.2f}")
+
+---
+
+**Exercise 3.**
+Compute the 90%, 95%, and 99% equal-tails intervals for a chi-square distribution with 10 degrees of freedom. Print each interval and show how the interval width increases with confidence level.
+
+??? success "Solution to Exercise 3"
+
+        from scipy import stats
+
+        rv = stats.chi2(df=10)
+        for conf in [0.90, 0.95, 0.99]:
+            lo, hi = rv.interval(conf)
+            print(f"{conf*100:.0f}% CI: [{lo:.4f}, {hi:.4f}], width={hi-lo:.4f}")

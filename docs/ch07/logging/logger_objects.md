@@ -61,3 +61,85 @@ myapp - INFO - Starting application
 myapp - DEBUG - Debug info
 ```
 
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a logger hierarchy with `"app"`, `"app.db"`, and `"app.api"`. Set the `"app"` logger to INFO level and add a handler. Log messages from each child logger and verify they propagate to the parent handler.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    import logging
+
+    # Parent logger
+    app_logger = logging.getLogger("app")
+    app_logger.setLevel(logging.INFO)
+    handler = logging.StreamHandler()
+    handler.setFormatter(logging.Formatter("%(name)s - %(levelname)s - %(message)s"))
+    app_logger.addHandler(handler)
+
+    # Child loggers (no handlers needed — propagation)
+    db_logger = logging.getLogger("app.db")
+    api_logger = logging.getLogger("app.api")
+
+    db_logger.info("Connected to database")
+    api_logger.warning("Rate limit approaching")
+    # app.db - INFO - Connected to database
+    # app.api - WARNING - Rate limit approaching
+    ```
+
+---
+
+**Exercise 2.**
+Write a function `get_or_create_logger` that takes a name and level, and returns a logger. If the logger already has handlers, return it as-is; otherwise, add a `StreamHandler` with a standard format. This prevents duplicate handler accumulation.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    import logging
+
+    def get_or_create_logger(name, level=logging.INFO):
+        logger = logging.getLogger(name)
+        if not logger.handlers:
+            logger.setLevel(level)
+            handler = logging.StreamHandler()
+            handler.setFormatter(
+                logging.Formatter("%(name)s - %(levelname)s - %(message)s")
+            )
+            logger.addHandler(handler)
+        return logger
+
+    # Test
+    log1 = get_or_create_logger("myservice")
+    log2 = get_or_create_logger("myservice")  # Returns same, no new handler
+    print(len(log1.handlers))  # 1
+    ```
+
+---
+
+**Exercise 3.**
+Write a function `logger_info` that takes a logger name and returns a dictionary with `"name"`, `"level"`, `"handler_count"`, and `"effective_level"` (the level inherited from parents if not set explicitly). Test with both configured and unconfigured loggers.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    import logging
+
+    def logger_info(name):
+        logger = logging.getLogger(name)
+        return {
+            "name": logger.name,
+            "level": logging.getLevelName(logger.level),
+            "handler_count": len(logger.handlers),
+            "effective_level": logging.getLevelName(logger.getEffectiveLevel()),
+        }
+
+    # Test
+    logging.basicConfig(level=logging.WARNING)
+    print(logger_info("root"))
+    # {'name': 'root', 'level': 'WARNING', ...}
+    print(logger_info("unset.child"))
+    # effective_level inherits from root: WARNING
+    ```

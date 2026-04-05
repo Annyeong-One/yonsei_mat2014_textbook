@@ -240,3 +240,79 @@ print(dict(freq))  # {85: 3, 90: 3, 78: 1}
 - Cleaner than `setdefault()` for grouping/counting
 - Use `dict(d)` to convert to regular dict
 - Accessing missing key creates it (unlike regular dict)
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a function `invert_dict` that takes a regular dictionary and returns a `defaultdict(list)` where each value from the original dict becomes a key, and each key from the original dict is appended to the corresponding list. For example, `invert_dict({"a": 1, "b": 2, "c": 1})` should return `{1: ["a", "c"], 2: ["b"]}`.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    from collections import defaultdict
+
+    def invert_dict(d):
+        result = defaultdict(list)
+        for key, value in d.items():
+            result[value].append(key)
+        return result
+
+    # Test
+    original = {"a": 1, "b": 2, "c": 1}
+    inverted = invert_dict(original)
+    print(dict(inverted))
+    # {1: ['a', 'c'], 2: ['b']}
+    ```
+
+---
+
+**Exercise 2.**
+Write a function `nested_group` that takes a list of `(department, team, employee)` tuples and returns a nested `defaultdict` structure where you can access employees as `result[department][team]` (a list). For example, given `[("eng", "backend", "Alice"), ("eng", "backend", "Bob"), ("eng", "frontend", "Carol")]`, `result["eng"]["backend"]` should return `["Alice", "Bob"]`.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    from collections import defaultdict
+
+    def nested_group(records):
+        result = defaultdict(lambda: defaultdict(list))
+        for department, team, employee in records:
+            result[department][team].append(employee)
+        return result
+
+    # Test
+    data = [
+        ("eng", "backend", "Alice"),
+        ("eng", "backend", "Bob"),
+        ("eng", "frontend", "Carol"),
+        ("sales", "west", "Dave"),
+    ]
+    groups = nested_group(data)
+    print(groups["eng"]["backend"])   # ['Alice', 'Bob']
+    print(groups["eng"]["frontend"])  # ['Carol']
+    print(groups["sales"]["west"])    # ['Dave']
+    ```
+
+---
+
+**Exercise 3.**
+Write a function `word_positions` that takes a sentence string and returns a `defaultdict(list)` mapping each lowercase word to a list of its 0-based positions in the sentence. For example, `word_positions("the cat and the dog")` should return `{"the": [0, 3], "cat": [1], "and": [2], "dog": [4]}`.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    from collections import defaultdict
+
+    def word_positions(sentence):
+        result = defaultdict(list)
+        for pos, word in enumerate(sentence.lower().split()):
+            result[word].append(pos)
+        return result
+
+    # Test
+    positions = word_positions("the cat and the dog")
+    print(dict(positions))
+    # {'the': [0, 3], 'cat': [1], 'and': [2], 'dog': [4]}
+    ```

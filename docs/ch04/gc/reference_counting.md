@@ -113,6 +113,7 @@ del a, b  # Now freed
 
 ---
 
+
 ## Runnable Example: `object_lifecycle.py`
 
 ```python
@@ -704,3 +705,114 @@ if __name__ == "__main__":
     See exercises_03_advanced.py for complete practice problems!
     """)
 ```
+
+
+## Exercises
+
+**Exercise 1.**
+Write a script that creates a list object, then creates three additional references to it (by assigning it to new variables). After each assignment, print the reference count using `sys.getrefcount()`. Then delete the references one by one, printing the count each time. Explain in a comment why the count never reaches the value you might naively expect.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import sys
+
+        obj = [1, 2, 3]
+        print(f"Initial: {sys.getrefcount(obj)}")  # 2 (obj + getrefcount arg)
+
+        a = obj
+        print(f"After a = obj: {sys.getrefcount(obj)}")  # 3
+
+        b = obj
+        print(f"After b = obj: {sys.getrefcount(obj)}")  # 4
+
+        c = obj
+        print(f"After c = obj: {sys.getrefcount(obj)}")  # 5
+
+        del c
+        print(f"After del c: {sys.getrefcount(obj)}")  # 4
+
+        del b
+        print(f"After del b: {sys.getrefcount(obj)}")  # 3
+
+        del a
+        print(f"After del a: {sys.getrefcount(obj)}")  # 2
+
+        # getrefcount() always adds 1 because passing the object
+        # as an argument creates a temporary reference
+        ```
+
+---
+
+**Exercise 2.**
+Create two classes `A` and `B` where each instance stores a reference to an instance of the other (circular reference). After deleting both variables, show that `gc.get_objects()` still contains the instances. Then call `gc.collect()` and verify the objects have been collected by checking the count again.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import gc
+
+        class A:
+            def __init__(self):
+                self.ref = None
+
+        class B:
+            def __init__(self):
+                self.ref = None
+
+        a = A()
+        b = B()
+        a.ref = b
+        b.ref = a
+
+        del a, b
+
+        # Count A and B instances still alive
+        before = sum(1 for obj in gc.get_objects()
+                     if isinstance(obj, (A, B)))
+        print(f"Before gc.collect(): {before} objects")  # 2
+
+        collected = gc.collect()
+        print(f"Collected: {collected}")
+
+        after = sum(1 for obj in gc.get_objects()
+                    if isinstance(obj, (A, B)))
+        print(f"After gc.collect(): {after} objects")  # 0
+        ```
+
+---
+
+**Exercise 3.**
+Write a function `break_cycle_demo()` that (a) creates a circular reference between two objects, (b) manually breaks the cycle by setting the cross-references to `None`, and (c) deletes the objects. Use `weakref.ref` to verify that the objects are freed immediately upon `del` (without needing `gc.collect()`).
+
+??? success "Solution to Exercise 3"
+        ```python
+        import weakref
+        import gc
+
+        def break_cycle_demo():
+            class Node:
+                def __init__(self, name):
+                    self.name = name
+                    self.ref = None
+
+            a = Node("A")
+            b = Node("B")
+            a.ref = b
+            b.ref = a
+
+            weak_a = weakref.ref(a)
+            weak_b = weakref.ref(b)
+
+            # Break cycle manually
+            a.ref = None
+            b.ref = None
+
+            del a, b
+
+            # No gc.collect() needed — freed by refcount
+            print(f"a alive: {weak_a() is not None}")  # False
+            print(f"b alive: {weak_b() is not None}")  # False
+
+        break_cycle_demo()
+        ```
+
+---

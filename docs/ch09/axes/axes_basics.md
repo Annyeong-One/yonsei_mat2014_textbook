@@ -158,3 +158,75 @@ plt.show()
 - Use NumPy indexing to access individual Axes
 - OOP style with explicit Axes provides more control
 - Each Axes contains its own coordinate system
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a single Axes and plot both `y = x^2` and `y = x^3` for `x` in $[-2, 2]$. Customize the axes by setting x and y labels, a title, grid lines, and a legend. Also set the y-axis limits to $[-10, 10]$.
+
+??? success "Solution to Exercise 1"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(-2, 2, 200)
+
+        fig, ax = plt.subplots()
+        ax.plot(x, x**2, label=r'$y = x^2$')
+        ax.plot(x, x**3, label=r'$y = x^3$')
+        ax.set_xlabel('x')
+        ax.set_ylabel('y')
+        ax.set_title('Polynomial Functions')
+        ax.set_ylim(-10, 10)
+        ax.grid(True)
+        ax.legend()
+        plt.show()
+
+---
+
+**Exercise 2.**
+Create a figure with one Axes. Plot random data (50 points) as a scatter plot. Then use the axes object to access and print: the x-axis limits (`get_xlim`), the y-axis limits (`get_ylim`), and the number of lines/collections in the axes (`len(ax.collections)`).
+
+??? success "Solution to Exercise 2"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        np.random.seed(42)
+        x = np.random.rand(50) * 10
+        y = np.random.rand(50) * 10
+
+        fig, ax = plt.subplots()
+        ax.scatter(x, y, color='steelblue')
+
+        print(f"X limits: {ax.get_xlim()}")
+        print(f"Y limits: {ax.get_ylim()}")
+        print(f"Number of collections: {len(ax.collections)}")
+
+        plt.show()
+
+---
+
+**Exercise 3.**
+Create an Axes and plot `y = sin(x)`. Then use the Axes methods to: set the background color to light gray (`set_facecolor`), remove the top and right spines, and set major grid lines with `alpha=0.3`. Show that the Axes is the central object controlling all visual elements.
+
+??? success "Solution to Exercise 3"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(0, 2 * np.pi, 200)
+
+        fig, ax = plt.subplots()
+        ax.plot(x, np.sin(x), color='navy')
+
+        ax.set_facecolor('#f0f0f0')
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        ax.grid(True, alpha=0.3)
+        ax.set_xlabel('x')
+        ax.set_ylabel('sin(x)')
+        ax.set_title('Customized Axes')
+        plt.show()

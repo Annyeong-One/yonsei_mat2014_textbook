@@ -212,3 +212,53 @@ result = pd.merge(
 ```python
 result['score'] = result['score'].fillna(0)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a `colors` DataFrame (`['red', 'blue']`) and a `sizes` DataFrame (`['S', 'M', 'L']`). Use a cross merge to generate all 6 possible color-size combinations.
+
+??? success "Solution to Exercise 1"
+    Generate all color-size combinations.
+
+        import pandas as pd
+
+        colors = pd.DataFrame({'color': ['red', 'blue']})
+        sizes = pd.DataFrame({'size': ['S', 'M', 'L']})
+        result = pd.merge(colors, sizes, how='cross')
+        print(result)
+        assert len(result) == 6
+
+---
+
+**Exercise 2.**
+Create a `students` DataFrame and an `exams` DataFrame. Use a cross merge to create a row for every student-exam combination, then verify the result has `len(students) * len(exams)` rows.
+
+??? success "Solution to Exercise 2"
+    Create all student-exam combinations.
+
+        import pandas as pd
+
+        students = pd.DataFrame({'student': ['Alice', 'Bob', 'Carol']})
+        exams = pd.DataFrame({'exam': ['Midterm', 'Final']})
+        result = pd.merge(students, exams, how='cross')
+        print(result)
+        assert len(result) == len(students) * len(exams)
+
+---
+
+**Exercise 3.**
+Use a cross merge to create a multiplication table: merge a DataFrame of numbers 1-5 with itself to get all 25 pairs, then compute the product for each pair.
+
+??? success "Solution to Exercise 3"
+    Build a multiplication table using cross merge.
+
+        import pandas as pd
+
+        nums = pd.DataFrame({'a': range(1, 6)})
+        result = pd.merge(nums, nums.rename(columns={'a': 'b'}), how='cross')
+        result['product'] = result['a'] * result['b']
+        print(result)
+        assert len(result) == 25

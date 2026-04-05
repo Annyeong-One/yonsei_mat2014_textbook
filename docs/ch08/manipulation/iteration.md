@@ -383,3 +383,49 @@ For performance, always prefer vectorized operations.
 | `'external_loop'` | Yield chunks |
 | `order='C'` | Row-major order |
 | `order='F'` | Column-major order |
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a 3x4 matrix and iterate over its rows using a `for` loop. Print each row and its sum. Then iterate over all elements using `np.nditer` and count how many are greater than 0.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        M = np.random.randn(3, 4)
+        for i, row in enumerate(M):
+            print(f"Row {i}: sum = {row.sum():.4f}")
+
+        count = sum(1 for x in np.nditer(M) if x > 0)
+        print(f"Elements > 0: {count}")
+
+---
+
+**Exercise 2.**
+Use `np.ndenumerate` to iterate over a 2x3 array and print each index-value pair in the format `(i, j): value`.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        a = np.array([[10, 20, 30], [40, 50, 60]])
+        for idx, val in np.ndenumerate(a):
+            print(f"{idx}: {val}")
+
+---
+
+**Exercise 3.**
+Create a 2x3x4 array and use `a.flat` to iterate over all 24 elements. Compute the sum and verify it matches `np.sum(a)`.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        a = np.arange(24).reshape(2, 3, 4)
+        total = sum(x for x in a.flat)
+        print(f"Sum via flat: {total}")
+        print(f"np.sum: {np.sum(a)}")
+        print(f"Match: {total == np.sum(a)}")

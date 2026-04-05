@@ -93,3 +93,70 @@ This feature necessitates caution in contexts where strict type differentiation 
 ## Conclusion
 
 While `bool` is distinct semantically (representing truth, not numbers), its inheritance from `int` enables powerful numeric operations and optimizations in Python code.
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Without running the code, predict the output. Then verify.
+
+```python
+print(True + True + True)
+print(True * 10)
+print(False * 100)
+print(isinstance(True, int))
+```
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        print(True + True + True)    # 3
+        print(True * 10)             # 10
+        print(False * 100)           # 0
+        print(isinstance(True, int)) # True
+        ```
+
+    Since `bool` is a subclass of `int`, `True` behaves as `1` and `False` as `0` in arithmetic operations. `isinstance(True, int)` returns `True` because of the inheritance relationship.
+
+---
+
+**Exercise 2.**
+Write a function `count_true(values)` that takes a list of booleans and returns the count of `True` values. Do this in two ways: once using `sum()`, and once without using `sum()`.
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        def count_true_sum(values):
+            return sum(values)
+
+        def count_true_loop(values):
+            count = 0
+            for v in values:
+                if v:
+                    count += 1
+            return count
+
+        data = [True, False, True, True, False]
+        print(count_true_sum(data))   # 3
+        print(count_true_loop(data))  # 3
+        ```
+
+    `sum()` works because `True` is `1` and `False` is `0`. The loop version explicitly checks each value.
+
+---
+
+**Exercise 3.**
+Explain why `True == 1` and `True is not 1` can both be true at the same time. Write code demonstrating both.
+
+??? success "Solution to Exercise 3"
+
+        ```python
+        print(True == 1)       # True  (value equality)
+        print(True is 1)       # False (different objects in CPython 3.12+)
+        print(type(True))      # <class 'bool'>
+        print(type(1))         # <class 'int'>
+        ```
+
+    `==` compares values: `True` and `1` have the same value. `is` compares object identity: `True` is a `bool` singleton and `1` is an `int` object. They are equal in value but may be different objects in memory. Note that in some CPython versions, `True is 1` may return `True` due to integer caching, but this behavior should not be relied upon.

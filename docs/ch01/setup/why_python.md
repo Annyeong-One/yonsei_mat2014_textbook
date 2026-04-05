@@ -164,3 +164,128 @@ Key ideas from this section:
 * the language is widely used in both **education and industry**
 
 Because of its clarity and flexibility, Python is an excellent language for beginners while remaining powerful enough for professional software development.
+
+## Exercises
+
+**Exercise 1.**
+Write a Python program that imports the `math` module and prints the value of $\pi$ and $e$ to 10 decimal places. Use f-string formatting.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import math
+
+    print(f"pi = {math.pi:.10f}")
+    print(f"e  = {math.e:.10f}")
+    ```
+
+    Output:
+
+    ```
+    pi = 3.1415926536
+    e  = 2.7182818285
+    ```
+
+    The `:.10f` format specifier displays the float with exactly 10 decimal places. This demonstrates Python's standard library providing mathematical constants without any external package.
+
+---
+
+**Exercise 2.**
+Python is described as a "high-level" language. Explain what "high-level" means in the context of programming languages and give one advantage and one disadvantage compared to a "low-level" language like C.
+
+??? success "Solution to Exercise 2"
+    A **high-level language** provides abstractions that hide the details of the computer's hardware. Programmers work with concepts like lists, strings, and objects rather than memory addresses and CPU registers.
+
+    **Advantage:** High-level languages are easier to read, write, and maintain. For example, creating a list in Python (`nums = [1, 2, 3]`) requires one line, while the equivalent in C requires manual memory allocation, pointer management, and size tracking.
+
+    **Disadvantage:** High-level languages are generally slower than low-level languages. The abstractions add overhead. C programs can directly manipulate memory and compile to optimized machine code, making them significantly faster for performance-critical tasks like operating system kernels or embedded systems.
+
+    Python's approach is to prioritize programmer productivity and readability, relying on optimized libraries (like NumPy, written in C) when performance is critical.
+
+---
+
+**Exercise 3.**
+Compare the following Python code with its C equivalent. Identify three specific ways in which the Python version is simpler or more readable.
+
+Python:
+```python
+for i in range(5):
+    print(i)
+```
+
+C:
+```c
+#include <stdio.h>
+int main() {
+    for (int i = 0; i < 5; i++) {
+        printf("%d\n", i);
+    }
+    return 0;
+}
+```
+
+??? success "Solution to Exercise 3"
+    Three ways the Python version is simpler:
+
+    1. **No boilerplate** -- Python requires no `#include` directives, no `main` function declaration, and no `return 0`. The code expresses only the logic, not the scaffolding.
+
+    2. **Simpler loop syntax** -- `for i in range(5)` reads almost like English. The C version requires initializing `i`, specifying the condition `i < 5`, and writing the increment `i++` separately.
+
+    3. **No type declarations or format specifiers** -- Python's `print(i)` automatically handles the type. C requires declaring `int i` and using the format specifier `"%d\n"` in `printf` to specify integer formatting.
+
+    The Python version is 2 lines; the C version is 7 lines (excluding blank lines). This difference in verbosity scales with program complexity.
+
+---
+
+**Exercise 4.**
+Name three Python third-party packages and describe a practical task each one is used for. For each, write the `pip install` command needed to install it.
+
+??? success "Solution to Exercise 4"
+    1. **`numpy`** -- used for numerical computing with arrays and matrices. Essential for scientific calculations and data processing.
+
+        ```bash
+        pip install numpy
+        ```
+
+    2. **`requests`** -- used for making HTTP requests (downloading web pages, calling APIs). Simplifies network communication.
+
+        ```bash
+        pip install requests
+        ```
+
+    3. **`matplotlib`** -- used for creating plots and visualizations (line charts, histograms, scatter plots). Widely used in data analysis and scientific research.
+
+        ```bash
+        pip install matplotlib
+        ```
+
+    These packages extend Python's capabilities beyond the standard library and are installed from the Python Package Index (PyPI).
+
+---
+
+**Exercise 5.**
+Python is described as "cross-platform." Write a short program that detects and prints the current operating system. Then explain what "cross-platform" means and why it is valuable for software development.
+
+??? success "Solution to Exercise 5"
+    ```python
+    import platform
+
+    print(f"OS: {platform.system()}")
+    print(f"Version: {platform.version()}")
+    print(f"Machine: {platform.machine()}")
+    ```
+
+    Example output on macOS:
+
+    ```
+    OS: Darwin
+    Version: 23.5.0
+    Machine: arm64
+    ```
+
+    **Cross-platform** means that the same Python program can run on different operating systems (Windows, macOS, Linux) without modification. This is possible because:
+
+    - The Python interpreter is available for all major operating systems.
+    - Python code is executed by the interpreter, not compiled to platform-specific machine code.
+    - The standard library provides platform-independent abstractions (e.g., `os.path` for file paths, `pathlib` for filesystem operations).
+
+    This is valuable because developers can write code once and deploy it across multiple environments, reducing development effort and ensuring consistent behavior.

@@ -278,3 +278,58 @@ Comparison of approaches.
 - Readability needs
 - Condition complexity
 - Personal preference
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a DataFrame with columns `'product'`, `'price'`, and `'quantity'`. Use `.query()` to find products where `price > 20` and `quantity < 100`. Compare the readability with equivalent boolean indexing.
+
+??? success "Solution to Exercise 1"
+    Use `.query()` with a readable string expression.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'product': ['Widget', 'Gadget', 'Gizmo', 'Tool'],
+            'price': [15, 25, 30, 10],
+            'quantity': [200, 50, 80, 150]
+        })
+        result = df.query('price > 20 and quantity < 100')
+        print(result)
+
+---
+
+**Exercise 2.**
+Use `.query()` with the `@` syntax to reference a Python variable. Given a variable `min_salary = 60000`, write a query that filters employees with `salary >= @min_salary`.
+
+??? success "Solution to Exercise 2"
+    Reference external variables with `@` inside query strings.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'name': ['Alice', 'Bob', 'Carol'],
+            'salary': [55000, 65000, 72000]
+        })
+        min_salary = 60000
+        result = df.query('salary >= @min_salary')
+        print(result)
+
+---
+
+**Exercise 3.**
+Use `.query()` with string methods by filtering a DataFrame where the `'name'` column starts with the letter `'A'`. Use the backtick syntax if the column name contains spaces.
+
+??? success "Solution to Exercise 3"
+    Use string methods inside `.query()`.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'name': ['Alice', 'Bob', 'Anna', 'Charlie'],
+            'score': [85, 90, 78, 92]
+        })
+        result = df.query('name.str.startswith("A")', engine='python')
+        print(result)

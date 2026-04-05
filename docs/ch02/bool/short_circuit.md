@@ -126,3 +126,81 @@ Checking A
 Checking B
 Result: False
 ```
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Without running the code, predict which functions get called and what the final output is.
+
+```python
+def a():
+    print("a called")
+    return True
+
+def b():
+    print("b called")
+    return False
+
+def c():
+    print("c called")
+    return True
+
+result = a() or b() or c()
+print(f"Result: {result}")
+```
+
+??? success "Solution to Exercise 1"
+
+        ```
+        a called
+        Result: True
+        ```
+
+    `a()` returns `True`. Since `or` short-circuits on the first truthy value, `b()` and `c()` are never called. The result is `True` (the return value of `a()`).
+
+---
+
+**Exercise 2.**
+Write a function `safe_divide(a, b)` that returns `a / b` if `b` is not zero, or `"undefined"` otherwise. Use short-circuit evaluation with `and`/`or` in a single expression (no `if` statement).
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        def safe_divide(a, b):
+            return b and a / b or "undefined"
+
+        # Caution: this fails if a/b is 0 (falsy). A safer version:
+        def safe_divide(a, b):
+            return a / b if b else "undefined"
+
+        print(safe_divide(10, 2))   # 5.0
+        print(safe_divide(10, 0))   # "undefined"
+        ```
+
+    The `and`/`or` approach works for most cases but has an edge case: if `a / b` evaluates to `0` or `0.0` (falsy), it would incorrectly return `"undefined"`. The conditional expression version is safer and more readable.
+
+---
+
+**Exercise 3.**
+Explain why the following code does not raise a `ZeroDivisionError` even though `b` is 0.
+
+```python
+b = 0
+result = b != 0 and 10 / b > 2
+print(result)
+```
+
+??? success "Solution to Exercise 3"
+
+    Short-circuit evaluation prevents the division from executing. `b != 0` evaluates to `False`, so `and` immediately returns `False` without evaluating the right operand `10 / b > 2`.
+
+        ```python
+        b = 0
+        result = b != 0 and 10 / b > 2
+        print(result)  # False
+        ```
+
+    `and` stops at the first falsy operand. Since `b != 0` is `False`, Python never evaluates `10 / b`, avoiding the `ZeroDivisionError`.

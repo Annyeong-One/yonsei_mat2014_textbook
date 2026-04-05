@@ -382,3 +382,67 @@ if __name__ == "__main__":
 - $R$ is upper triangular
 - Numerically stable for least squares
 - Column pivoting reveals rank
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Generate a random $8 \times 4$ matrix with `np.random.seed(3)`. Compute its economic QR decomposition, then verify that $Q^TQ = I_4$ (up to tolerance $10^{-12}$) and that $\|QR - A\|_F < 10^{-12}$.
+
+??? success "Solution to Exercise 1"
+        import numpy as np
+        from scipy import linalg
+
+        np.random.seed(3)
+        A = np.random.randn(8, 4)
+
+        Q, R = linalg.qr(A, mode='economic')
+
+        orth_error = np.linalg.norm(Q.T @ Q - np.eye(4))
+        recon_error = np.linalg.norm(Q @ R - A)
+        print(f"Q shape: {Q.shape}, R shape: {R.shape}")
+        print(f"Orthogonality error: {orth_error:.2e}")
+        print(f"Reconstruction error: {recon_error:.2e}")
+
+---
+
+**Exercise 2.**
+Fit a degree-3 polynomial $y = c_0 + c_1 x + c_2 x^2 + c_3 x^3$ to the data points $x = [0, 1, 2, 3, 4, 5]$, $y = [1.0, 2.7, 5.8, 6.6, 7.5, 9.9]$ using QR decomposition. Build the Vandermonde design matrix, solve via `linalg.qr` (economic) and `linalg.solve_triangular`, and print the four coefficients.
+
+??? success "Solution to Exercise 2"
+        import numpy as np
+        from scipy import linalg
+
+        x = np.array([0, 1, 2, 3, 4, 5], dtype=float)
+        y = np.array([1.0, 2.7, 5.8, 6.6, 7.5, 9.9])
+
+        # Vandermonde design matrix
+        A = np.column_stack([x**k for k in range(4)])
+
+        Q, R = linalg.qr(A, mode='economic')
+        coeffs = linalg.solve_triangular(R, Q.T @ y)
+
+        print("Polynomial coefficients (c0, c1, c2, c3):")
+        print(coeffs)
+
+---
+
+**Exercise 3.**
+Create a $6 \times 6$ rank-4 matrix by computing `A = U @ V` where $U$ is $6 \times 4$ and $V$ is $4 \times 6$ (use `np.random.seed(1)`). Use QR decomposition with column pivoting to estimate the rank of $A$. Print the diagonal of $R$ and the estimated rank (count of diagonal entries with absolute value above $10^{-10}$).
+
+??? success "Solution to Exercise 3"
+        import numpy as np
+        from scipy import linalg
+
+        np.random.seed(1)
+        U = np.random.randn(6, 4)
+        V = np.random.randn(4, 6)
+        A = U @ V  # rank at most 4
+
+        Q, R, P = linalg.qr(A, pivoting=True)
+
+        diag_R = np.abs(np.diag(R))
+        rank = np.sum(diag_R > 1e-10)
+        print(f"Diagonal of R: {diag_R}")
+        print(f"Estimated rank: {rank}")

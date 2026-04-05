@@ -153,3 +153,63 @@ if __name__ == "__main__":
 | c * A | `c * A` | Yes |
 | A @ x | `A @ x` | N/A (returns dense) |
 | A ⊙ B | `A.multiply(B)` | Yes |
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create two sparse CSR matrices: $A = \begin{pmatrix} 1 & 0 & 2 \\ 0 & 3 & 0 \end{pmatrix}$ and $B = \begin{pmatrix} 0 & 4 & 0 \\ 5 & 0 & 6 \end{pmatrix}$. Compute $C = 3A + 2B$ and verify the result by converting to dense. Check that $C$ is still sparse and print its number of nonzeros.
+
+??? success "Solution to Exercise 1"
+        from scipy import sparse
+
+        A = sparse.csr_matrix([[1, 0, 2], [0, 3, 0]])
+        B = sparse.csr_matrix([[0, 4, 0], [5, 0, 6]])
+
+        C = 3 * A + 2 * B
+        print("C = 3A + 2B:")
+        print(C.toarray())
+        print(f"C is sparse: {sparse.issparse(C)}")
+        print(f"Nonzeros: {C.nnz}")
+
+---
+
+**Exercise 2.**
+Create a $1000 \times 1000$ sparse random matrix with density 0.005 in CSR format (use `np.random.seed(2)`). Compute the matrix-vector product $y = Ax$ where $x$ is a vector of ones. Print the first 5 entries of $y$ and verify they match the row sums of $A$.
+
+??? success "Solution to Exercise 2"
+        import numpy as np
+        from scipy import sparse
+
+        np.random.seed(2)
+        A = sparse.random(1000, 1000, density=0.005, format='csr')
+        x = np.ones(1000)
+
+        y = A @ x
+        row_sums = np.array(A.sum(axis=1)).flatten()
+
+        print(f"First 5 entries of A @ ones: {y[:5]}")
+        print(f"First 5 row sums:            {row_sums[:5]}")
+        print(f"Match: {np.allclose(y, row_sums)}")
+
+---
+
+**Exercise 3.**
+Given $A = \text{sparse.csr\_matrix}([[1, 2, 3], [4, 5, 6]])$ and $B = \text{sparse.csr\_matrix}([[1, 0, 1], [0, 1, 0]])$, compute the element-wise (Hadamard) product using `.multiply()`, the element-wise square using `.power(2)`, and print both results as dense arrays. Verify that the Hadamard product preserves the sparsity pattern of $B$.
+
+??? success "Solution to Exercise 3"
+        from scipy import sparse
+
+        A = sparse.csr_matrix([[1, 2, 3], [4, 5, 6]])
+        B = sparse.csr_matrix([[1, 0, 1], [0, 1, 0]])
+
+        hadamard = A.multiply(B)
+        squared = A.power(2)
+
+        print("Hadamard product A*B:")
+        print(hadamard.toarray())
+        print(f"Hadamard nnz: {hadamard.nnz}, B nnz: {B.nnz}")
+
+        print("\nElement-wise square A.^2:")
+        print(squared.toarray())

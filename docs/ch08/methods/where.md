@@ -337,3 +337,48 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Use `np.where(condition)` (single argument) to find the indices of all elements greater than 0 in `a = np.array([-2, 3, -1, 5, 0, -4, 7])`.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        a = np.array([-2, 3, -1, 5, 0, -4, 7])
+        indices = np.where(a > 0)
+        print(f"Indices where > 0: {indices[0]}")
+        print(f"Values: {a[indices]}")
+
+---
+
+**Exercise 2.**
+Use `np.where(condition, x, y)` (three arguments) to replace all negative values in `a = np.array([-3, 2, -1, 5, -4])` with 0 while keeping positive values unchanged.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        a = np.array([-3, 2, -1, 5, -4])
+        result = np.where(a < 0, 0, a)
+        print(f"Original: {a}")
+        print(f"Replaced: {result}")
+
+---
+
+**Exercise 3.**
+Create a 4x4 matrix of random integers from 0 to 9. Use `np.where` to create a new matrix where even values are replaced by -1 and odd values remain. Print both the original and result.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        np.random.seed(42)
+        M = np.random.randint(0, 10, size=(4, 4))
+        result = np.where(M % 2 == 0, -1, M)
+        print(f"Original:\n{M}")
+        print(f"Evens replaced:\n{result}")

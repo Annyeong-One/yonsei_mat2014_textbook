@@ -841,3 +841,57 @@ if __name__ == "__main__":
     print("7. Report both statistical significance (p-value) and effect size")
     print("8. Power analysis should be conducted before data collection")
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+A manufacturer claims the average battery life is 500 hours. You collect a sample of 36 batteries with mean 485 hours and standard deviation 40. Perform a one-sample t-test at $\alpha = 0.05$ using `scipy.stats.ttest_1samp()`. State the hypotheses, compute the test statistic, and make a decision.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        from scipy import stats
+
+        data = np.random.normal(loc=485, scale=40, size=36)
+        data = data - data.mean() + 485  # force exact mean for demo
+        t_stat, p_val = stats.ttest_1samp(data, 500)
+        print(f"t = {t_stat:.4f}, p = {p_val:.4f}")
+        print(f"Decision: {'Reject H0' if p_val < 0.05 else 'Fail to reject H0'}")
+
+---
+
+**Exercise 2.**
+Generate two samples of size 50 each from $N(10, 4)$ and $N(12, 4)$. Perform an independent two-sample t-test. Print the test statistic, p-value, and decision at $\alpha = 0.05$.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        a = np.random.normal(10, 2, 50)
+        b = np.random.normal(12, 2, 50)
+        t_stat, p_val = stats.ttest_ind(a, b)
+        print(f"t = {t_stat:.4f}, p = {p_val:.4f}")
+        print(f"Decision: {'Reject H0' if p_val < 0.05 else 'Fail to reject H0'}")
+
+---
+
+**Exercise 3.**
+Perform a one-sample t-test on 30 samples drawn from $N(0, 1)$ testing $H_0: \mu = 0$. Repeat this 1000 times and count how many times $H_0$ is rejected at $\alpha = 0.05$. Verify the rejection rate is close to 5%.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        rejections = 0
+        for _ in range(1000):
+            data = np.random.normal(0, 1, 30)
+            _, p = stats.ttest_1samp(data, 0)
+            if p < 0.05:
+                rejections += 1
+        print(f"Rejection rate: {rejections/1000:.3f} (expected ~0.05)")

@@ -208,3 +208,66 @@ if __name__ == "__main__":
     print("Tutorial 06 Complete!")
     print("="*80)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Generate 150 samples where $Y = X^2 + \varepsilon$ with $X \sim \text{Uniform}(-2, 2)$ and $\varepsilon \sim N(0, 0.5^2)$. Compute Pearson and Spearman correlations. Explain why Spearman may be higher for this nonlinear relationship.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        x = np.random.uniform(-2, 2, 150)
+        y = x**2 + np.random.normal(0, 0.5, 150)
+
+        r_pearson, _ = stats.pearsonr(x, y)
+        r_spearman, _ = stats.spearmanr(x, y)
+        print(f"Pearson:  {r_pearson:.4f}")
+        print(f"Spearman: {r_spearman:.4f}")
+        print("Pearson is near 0 (symmetric U-shape); Spearman may capture monotonic segments")
+
+---
+
+**Exercise 2.**
+Compute Pearson's $r$ for 100 bivariate normal samples with true $\rho = 0.5$. Also compute the p-value from `stats.pearsonr()`. Repeat 1000 times and verify the p-value is below 0.05 approximately $(1 - \beta)$ of the time.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        significant = 0
+        for _ in range(1000):
+            data = stats.multivariate_normal.rvs(mean=[0,0], cov=[[1,0.5],[0.5,1]], size=100)
+            _, p = stats.pearsonr(data[:, 0], data[:, 1])
+            if p < 0.05:
+                significant += 1
+        print(f"Power (fraction significant): {significant/1000:.3f}")
+
+---
+
+**Exercise 3.**
+Create data with an outlier: 50 samples from $N(0, 1)$ for both $X$ and $Y$ (independent), then add one point at $(10, 10)$. Compute Pearson's $r$ with and without the outlier to demonstrate outlier sensitivity.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        x = np.random.normal(0, 1, 50)
+        y = np.random.normal(0, 1, 50)
+
+        r_no_outlier, _ = stats.pearsonr(x, y)
+        x_out = np.append(x, 10)
+        y_out = np.append(y, 10)
+        r_outlier, _ = stats.pearsonr(x_out, y_out)
+
+        print(f"Pearson r (no outlier): {r_no_outlier:.4f}")
+        print(f"Pearson r (with outlier): {r_outlier:.4f}")

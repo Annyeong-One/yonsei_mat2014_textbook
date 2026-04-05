@@ -141,3 +141,100 @@ print(f"Slotted: {time_slotted:.4f}s")
 - **slots=True**: Large number of instances, memory matters
 - **kw_only=True**: Prevent positional argument confusion, improve code clarity
 - **Both**: Performance-critical code with many objects
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a dataclass `Point3D` with `slots=True` and fields `x`, `y`, `z` (all floats). Show that accessing attributes works normally but adding a new attribute (e.g., `p.w = 1.0`) raises `AttributeError`. Compare memory usage by creating 10,000 instances with and without slots using `sys.getsizeof`.
+
+??? success "Solution to Exercise 1"
+
+        from dataclasses import dataclass
+        import sys
+
+        @dataclass(slots=True)
+        class Point3DSlots:
+            x: float
+            y: float
+            z: float
+
+        @dataclass
+        class Point3DNoSlots:
+            x: float
+            y: float
+            z: float
+
+        p = Point3DSlots(1.0, 2.0, 3.0)
+        print(p.x, p.y, p.z)  # 1.0 2.0 3.0
+
+        try:
+            p.w = 4.0  # Cannot add dynamic attributes
+        except AttributeError as e:
+            print(f"Error: {e}")
+
+        # Memory comparison
+        with_slots = [Point3DSlots(1.0, 2.0, 3.0) for _ in range(10000)]
+        without_slots = [Point3DNoSlots(1.0, 2.0, 3.0) for _ in range(10000)]
+        print(f"With slots: {sys.getsizeof(with_slots[0])} bytes per instance")
+        print(f"Without slots: {sys.getsizeof(without_slots[0])} bytes per instance")
+
+---
+
+**Exercise 2.**
+Define a dataclass `UserRecord` with `kw_only=True` and fields `name` (str), `age` (int), and `email` (str). Show that you MUST use keyword arguments to create an instance (`UserRecord(name="Alice", age=30, email="a@b.com")`). Demonstrate that positional arguments raise a `TypeError`.
+
+??? success "Solution to Exercise 2"
+
+        from dataclasses import dataclass
+
+        @dataclass(kw_only=True)
+        class UserRecord:
+            name: str
+            age: int
+            email: str
+
+        # Must use keyword arguments
+        user = UserRecord(name="Alice", age=30, email="alice@example.com")
+        print(user)
+
+        try:
+            bad = UserRecord("Alice", 30, "alice@example.com")
+        except TypeError as e:
+            print(f"Error: {e}")
+            # TypeError: UserRecord.__init__() takes 1 positional argument but 4 were given
+
+---
+
+**Exercise 3.**
+Create a dataclass `SensorReading` with `slots=True` and `kw_only=True`, containing fields `sensor_id` (str), `value` (float), `unit` (str, default `"celsius"`), and `timestamp` (str, default computed via `field(default_factory=...)`). Create multiple readings and show that both slot restrictions (no dynamic attributes) and keyword-only construction are enforced simultaneously.
+
+??? success "Solution to Exercise 3"
+
+        from dataclasses import dataclass, field
+        from datetime import datetime
+
+        @dataclass(slots=True, kw_only=True)
+        class SensorReading:
+            sensor_id: str
+            value: float
+            unit: str = "celsius"
+            timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
+
+        r1 = SensorReading(sensor_id="T-001", value=23.5)
+        r2 = SensorReading(sensor_id="T-002", value=98.6, unit="fahrenheit")
+        print(r1)
+        print(r2)
+
+        # No dynamic attributes (slots)
+        try:
+            r1.location = "Lab A"
+        except AttributeError as e:
+            print(f"Slots error: {e}")
+
+        # Must use keywords (kw_only)
+        try:
+            bad = SensorReading("T-003", 50.0)
+        except TypeError as e:
+            print(f"kw_only error: {e}")

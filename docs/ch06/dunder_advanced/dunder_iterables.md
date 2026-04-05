@@ -480,3 +480,88 @@ print(list(it))  # [1, 2, 3]
 - Iterators are typically single-use; iterables can be reused
 - Use `collections.abc` base classes for compliance
 - `yield from` enables clean recursive iteration
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a `Range` class that mimics Python's `range()` for integers. Implement `__iter__` (returns a new iterator each time) and `__len__`. Demonstrate that the same `Range` object can be iterated multiple times. Use a separate iterator class or a generator in `__iter__`.
+
+??? success "Solution to Exercise 1"
+
+        class Range:
+            def __init__(self, start, stop=None, step=1):
+                if stop is None:
+                    self.start, self.stop = 0, start
+                else:
+                    self.start, self.stop = start, stop
+                self.step = step
+
+            def __iter__(self):
+                current = self.start
+                while current < self.stop:
+                    yield current
+                    current += self.step
+
+            def __len__(self):
+                return max(0, (self.stop - self.start + self.step - 1) // self.step)
+
+        r = Range(1, 6)
+        print(list(r))  # [1, 2, 3, 4, 5]
+        print(list(r))  # [1, 2, 3, 4, 5] — can iterate again
+        print(len(r))   # 5
+
+---
+
+**Exercise 2.**
+Write a `FileLines` iterator class that takes a filename and yields lines one at a time (simulate with a list of strings). Implement `__iter__` (returns self) and `__next__` (returns next line, raises `StopIteration` when done). Show it works in a `for` loop.
+
+??? success "Solution to Exercise 2"
+
+        class FileLines:
+            def __init__(self, lines):
+                self.lines = lines
+                self.index = 0
+
+            def __iter__(self):
+                return self
+
+            def __next__(self):
+                if self.index >= len(self.lines):
+                    raise StopIteration
+                line = self.lines[self.index]
+                self.index += 1
+                return line
+
+        lines = ["First line", "Second line", "Third line"]
+        reader = FileLines(lines)
+        for line in reader:
+            print(line)
+        # First line
+        # Second line
+        # Third line
+
+---
+
+**Exercise 3.**
+Build a `FibonacciSequence` class where `__iter__` returns a generator that yields Fibonacci numbers up to a maximum value. For example, `FibonacciSequence(100)` yields `1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89`. Show it works with `list()` and `for` loops, and can be iterated multiple times.
+
+??? success "Solution to Exercise 3"
+
+        class FibonacciSequence:
+            def __init__(self, max_value):
+                self.max_value = max_value
+
+            def __iter__(self):
+                a, b = 0, 1
+                while b <= self.max_value:
+                    yield b
+                    a, b = b, a + b
+
+        fib = FibonacciSequence(100)
+        print(list(fib))  # [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89]
+        print(list(fib))  # [1, 1, 2, ...] — can iterate again
+
+        for n in FibonacciSequence(20):
+            print(n, end=" ")  # 1 1 2 3 5 8 13

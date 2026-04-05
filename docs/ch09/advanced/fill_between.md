@@ -210,3 +210,84 @@ plt.show()
 - Set `interpolate=True` for smooth boundaries
 - `fill_betweenx()` fills horizontally
 - Great for confidence intervals and crossover signals
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Plot the function `y = sin(x)` for `x` in $[0, 2\pi]$ and use `fill_between` to shade the area where `sin(x) > 0` in green and the area where `sin(x) < 0` in red. Use the `where` parameter and set `alpha=0.3` for both fills.
+
+??? success "Solution to Exercise 1"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(0, 2 * np.pi, 500)
+        y = np.sin(x)
+
+        fig, ax = plt.subplots(figsize=(10, 5))
+        ax.plot(x, y, color='black')
+        ax.fill_between(x, y, 0, where=(y > 0), color='green', alpha=0.3, label='Positive')
+        ax.fill_between(x, y, 0, where=(y < 0), color='red', alpha=0.3, label='Negative')
+        ax.axhline(0, color='gray', linestyle='--', linewidth=0.5)
+        ax.legend()
+        ax.set_title('sin(x) with Positive/Negative Regions')
+        plt.show()
+
+---
+
+**Exercise 2.**
+Generate two curves `y1 = x^2` and `y2 = 2*x + 1` over `x` in $[-1, 3]$. Fill the region between them where `y2 > y1` in light blue and where `y1 > y2` in light coral. Use `interpolate=True` for smooth boundaries at the intersection points.
+
+??? success "Solution to Exercise 2"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(-1, 3, 500)
+        y1 = x ** 2
+        y2 = 2 * x + 1
+
+        fig, ax = plt.subplots(figsize=(8, 6))
+        ax.plot(x, y1, label=r'$y = x^2$', color='blue')
+        ax.plot(x, y2, label=r'$y = 2x + 1$', color='red')
+
+        ax.fill_between(x, y1, y2, where=(y2 > y1), interpolate=True,
+                         color='lightblue', alpha=0.5, label=r'$2x+1 > x^2$')
+        ax.fill_between(x, y1, y2, where=(y1 > y2), interpolate=True,
+                         color='lightcoral', alpha=0.5, label=r'$x^2 > 2x+1$')
+
+        ax.legend()
+        ax.set_title('Fill Between Two Curves')
+        plt.show()
+
+---
+
+**Exercise 3.**
+Simulate a random walk of 200 steps and compute a rolling mean and rolling standard deviation with a window of 20. Plot the rolling mean as a solid line and use `fill_between` to show a band at mean plus/minus one standard deviation. Label the band "1 SD Band" and add a legend.
+
+??? success "Solution to Exercise 3"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+        import pandas as pd
+
+        np.random.seed(42)
+        steps = np.random.randn(200)
+        walk = np.cumsum(steps)
+
+        s = pd.Series(walk)
+        rolling_mean = s.rolling(20).mean()
+        rolling_std = s.rolling(20).std()
+
+        fig, ax = plt.subplots(figsize=(10, 5))
+        ax.plot(walk, color='gray', alpha=0.5, label='Random Walk')
+        ax.plot(rolling_mean, color='blue', linewidth=2, label='Rolling Mean')
+        ax.fill_between(range(200),
+                         rolling_mean - rolling_std,
+                         rolling_mean + rolling_std,
+                         color='blue', alpha=0.2, label='1 SD Band')
+        ax.legend()
+        ax.set_title('Random Walk with Rolling Mean and SD Band')
+        plt.show()

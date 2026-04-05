@@ -116,3 +116,61 @@ if (data := some_expensive_computation()):
 Output:
 ```
 ```
+
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Rewrite the following code to use the walrus operator so that `len(data)` is computed only once:
+
+```python
+data = [1, 2, 3, 4, 5]
+if len(data) > 3:
+    print(f"Long list with {len(data)} elements")
+```
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    data = [1, 2, 3, 4, 5]
+    if (n := len(data)) > 3:
+        print(f"Long list with {n} elements")
+    ```
+
+    The walrus operator assigns `len(data)` to `n` and evaluates it in the condition simultaneously, avoiding a redundant call.
+
+---
+
+**Exercise 2.**
+Use the walrus operator in a list comprehension to collect the squares of numbers from 1 to 10, but only include squares greater than 50.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    result = [sq for x in range(1, 11) if (sq := x**2) > 50]
+    print(result)  # [64, 81, 100]
+    ```
+
+    The walrus operator computes `x**2` once per iteration, assigns it to `sq`, uses it in the filter condition, and includes it in the output list.
+
+---
+
+**Exercise 3.**
+Write a `while` loop that uses the walrus operator to read items from an iterator until `None` is encountered. Use `iter([10, 20, 30, None, 40])` as the data source.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    data = iter([10, 20, 30, None, 40])
+
+    while (value := next(data, None)) is not None:
+        print(f"Processing: {value}")
+    # Processing: 10
+    # Processing: 20
+    # Processing: 30
+    ```
+
+    The loop stops when `next()` returns `None`. The value `40` is never reached because `None` appears first and terminates the loop.

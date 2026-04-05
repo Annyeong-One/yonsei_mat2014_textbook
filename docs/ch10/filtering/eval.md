@@ -266,3 +266,52 @@ df.eval('deviation = A - rolling_mean', inplace=True)
 - Need method calls (`.abs()`, `.str`, etc.)
 - Custom functions required
 - Debugging (easier to step through)
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a DataFrame with columns `'revenue'` and `'cost'`. Use `df.eval('profit = revenue - cost')` to add a new `'profit'` column without modifying the original DataFrame (use `inplace=False`).
+
+??? success "Solution to Exercise 1"
+    Use `eval` to create a computed column.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'revenue': [100, 200, 300],
+            'cost': [60, 120, 180]
+        })
+        result = df.eval('profit = revenue - cost')
+        print(result)
+
+---
+
+**Exercise 2.**
+Use `pd.eval()` to compute an expression involving two DataFrames: given `df1` and `df2` each with a column `'value'`, compute `df1['value'] + df2['value']` using `pd.eval('df1.value + df2.value')`.
+
+??? success "Solution to Exercise 2"
+    Use `pd.eval()` for cross-DataFrame operations.
+
+        import pandas as pd
+
+        df1 = pd.DataFrame({'value': [10, 20, 30]})
+        df2 = pd.DataFrame({'value': [1, 2, 3]})
+        result = pd.eval('df1.value + df2.value')
+        print(result)
+
+---
+
+**Exercise 3.**
+Use `df.eval()` with the `@` syntax to reference a local variable. Given a tax rate stored in a Python variable, compute `after_tax = salary * (1 - @tax_rate)` inside eval.
+
+??? success "Solution to Exercise 3"
+    Reference local variables with the `@` prefix.
+
+        import pandas as pd
+
+        df = pd.DataFrame({'salary': [50000, 60000, 70000]})
+        tax_rate = 0.25
+        result = df.eval('after_tax = salary * (1 - @tax_rate)')
+        print(result)

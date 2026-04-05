@@ -100,3 +100,54 @@ The multivariate normal distribution is pervasive in quantitative finance. Marko
 ## Summary
 
 The multivariate normal distribution generalizes the univariate normal to $p$ dimensions via a mean vector and a covariance matrix. In `scipy.stats`, use `stats.multivariate_normal(mean, cov)` to create a frozen distribution for computing densities, generating samples, and evaluating log-likelihoods.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a bivariate normal distribution with $\boldsymbol{\mu} = [0, 0]$ and covariance matrix $\Sigma = \begin{pmatrix} 1 & 0.7 \\ 0.7 & 1 \end{pmatrix}$. Generate 1000 samples and compute the sample correlation coefficient. Verify it is close to 0.7.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        from scipy import stats
+
+        mu = [0, 0]
+        cov = [[1, 0.7], [0.7, 1]]
+        rv = stats.multivariate_normal(mean=mu, cov=cov)
+        samples = rv.rvs(size=1000, random_state=42)
+        r = np.corrcoef(samples[:, 0], samples[:, 1])[0, 1]
+        print(f"Sample correlation: {r:.4f} (expected ~0.7)")
+
+---
+
+**Exercise 2.**
+For the same bivariate normal, evaluate the PDF at the point $(1, 1)$ using `stats.multivariate_normal.pdf()`. Compare with the PDF at the mean $(0, 0)$.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy import stats
+
+        mu = [0, 0]
+        cov = [[1, 0.7], [0.7, 1]]
+        rv = stats.multivariate_normal(mean=mu, cov=cov)
+        print(f"PDF at (1,1): {rv.pdf([1, 1]):.6f}")
+        print(f"PDF at (0,0): {rv.pdf([0, 0]):.6f}")
+
+---
+
+**Exercise 3.**
+Generate 5000 samples from a 3-dimensional multivariate normal with identity covariance. Compute the sample covariance matrix using `np.cov()` and verify it is close to the identity matrix.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+
+        rv = stats.multivariate_normal(mean=[0, 0, 0], cov=np.eye(3))
+        samples = rv.rvs(size=5000, random_state=42)
+        sample_cov = np.cov(samples, rowvar=False)
+        print("Sample covariance matrix:")
+        print(np.round(sample_cov, 3))

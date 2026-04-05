@@ -525,3 +525,53 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Use `np.mgrid` to create a 2D integer grid from 0 to 3 in both dimensions. Print the two resulting arrays and their shapes.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        Y, X = np.mgrid[0:4, 0:4]
+        print(f"Y shape: {Y.shape}")
+        print(f"X shape: {X.shape}")
+        print(f"Y:\n{Y}")
+        print(f"X:\n{X}")
+
+---
+
+**Exercise 2.**
+Use `np.ogrid` to create open grids for `x` in [0, 4] and `y` in [0, 3] (integer steps). Compute `x + y` using broadcasting and verify the result matches the equivalent `np.mgrid` computation.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        y_o, x_o = np.ogrid[0:4, 0:4]
+        result_ogrid = y_o + x_o
+
+        Y, X = np.mgrid[0:4, 0:4]
+        result_mgrid = Y + X
+
+        print(f"ogrid result:\n{result_ogrid}")
+        print(f"Match: {np.array_equal(result_ogrid, result_mgrid)}")
+
+---
+
+**Exercise 3.**
+Use `np.mgrid` with complex step notation to create a float grid: `np.mgrid[0:1:5j, 0:2:3j]` (5 points from 0 to 1, 3 points from 0 to 2). Print the resulting shapes and values.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        Y, X = np.mgrid[0:1:5j, 0:2:3j]
+        print(f"Y shape: {Y.shape}")  # (5, 3)
+        print(f"X shape: {X.shape}")  # (5, 3)
+        print(f"Y:\n{Y}")
+        print(f"X:\n{X}")

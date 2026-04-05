@@ -631,3 +631,130 @@ if __name__ == "__main__":
 
     print(f"\n" + "=" * 70)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create the same `Point` class three ways: as a `dataclass`, as a `NamedTuple`, and as a regular class. Each should have `x` and `y` fields. Compare them by testing equality (`==`), immutability (can you change `x`?), and whether they can be used as dictionary keys.
+
+??? success "Solution to Exercise 1"
+
+        from dataclasses import dataclass
+        from typing import NamedTuple
+
+        # Dataclass
+        @dataclass
+        class PointDC:
+            x: float
+            y: float
+
+        # NamedTuple
+        class PointNT(NamedTuple):
+            x: float
+            y: float
+
+        # Regular class
+        class PointReg:
+            def __init__(self, x, y):
+                self.x = x
+                self.y = y
+
+            def __eq__(self, other):
+                return self.x == other.x and self.y == other.y
+
+        # Equality
+        print(PointDC(1, 2) == PointDC(1, 2))    # True
+        print(PointNT(1, 2) == PointNT(1, 2))    # True
+        print(PointReg(1, 2) == PointReg(1, 2))   # True
+
+        # Immutability
+        dc = PointDC(1, 2)
+        dc.x = 10  # Works — mutable by default
+
+        nt = PointNT(1, 2)
+        # nt.x = 10  # AttributeError — immutable
+
+        # Dictionary keys
+        # print({PointDC(1, 2): "a"})  # TypeError — not hashable
+        print({PointNT(1, 2): "a"})    # Works — immutable and hashable
+
+---
+
+**Exercise 2.**
+Model a `Config` object with fields `host`, `port`, and `debug`. Implement it as both a `NamedTuple` and a `frozen=True` dataclass. Compare: which supports default values more naturally? Which supports inheritance? Show the differences in practice.
+
+??? success "Solution to Exercise 2"
+
+        from dataclasses import dataclass
+        from typing import NamedTuple
+
+        class ConfigNT(NamedTuple):
+            host: str = "localhost"
+            port: int = 8080
+            debug: bool = False
+
+        @dataclass(frozen=True)
+        class ConfigDC:
+            host: str = "localhost"
+            port: int = 8080
+            debug: bool = False
+
+        # Both support defaults
+        nt = ConfigNT()
+        dc = ConfigDC()
+        print(nt)  # ConfigNT(host='localhost', port=8080, debug=False)
+        print(dc)  # ConfigDC(host='localhost', port=8080, debug=False)
+
+        # Dataclass supports inheritance; NamedTuple has limitations
+        @dataclass(frozen=True)
+        class ProdConfig(ConfigDC):
+            ssl: bool = True
+
+        print(ProdConfig())
+        # ProdConfig(host='localhost', port=8080, debug=False, ssl=True)
+
+---
+
+**Exercise 3.**
+Create a `Student` with `name`, `grade`, and `gpa` fields using all three approaches (regular class, NamedTuple, dataclass). For each, add a method `is_honors()` that returns `True` if `gpa >= 3.5`. Discuss which approach makes adding methods easiest and which produces the cleanest code.
+
+??? success "Solution to Exercise 3"
+
+        from dataclasses import dataclass
+        from typing import NamedTuple
+
+        # Regular class
+        class StudentReg:
+            def __init__(self, name, grade, gpa):
+                self.name = name
+                self.grade = grade
+                self.gpa = gpa
+
+            def is_honors(self):
+                return self.gpa >= 3.5
+
+        # NamedTuple
+        class StudentNT(NamedTuple):
+            name: str
+            grade: int
+            gpa: float
+
+            def is_honors(self):
+                return self.gpa >= 3.5
+
+        # Dataclass
+        @dataclass
+        class StudentDC:
+            name: str
+            grade: int
+            gpa: float
+
+            def is_honors(self):
+                return self.gpa >= 3.5
+
+        for cls in [StudentReg, StudentNT, StudentDC]:
+            s = cls("Alice", 12, 3.8)
+            print(f"{cls.__name__}: is_honors={s.is_honors()}")
+        # Dataclass is cleanest: no boilerplate, easy to add methods

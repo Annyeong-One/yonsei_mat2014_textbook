@@ -260,6 +260,154 @@ Key points:
 
 ## Runnable Example: `weakref_practical_example.py`
 
+---
+
+## Exercises
+
+**Exercise 1.**
+Implement a function `memoize(func)` that returns a decorated version of `func` using a plain dictionary as the cache. The decorator should cache results based on positional arguments. Then compare its behavior with `functools.lru_cache` by calling both on a recursive Fibonacci function with `n=30` and printing cache statistics (hit count, miss count).
+
+??? success "Solution to Exercise 1"
+        ```python
+        from functools import lru_cache
+
+        def memoize(func):
+            cache = {}
+            hits = 0
+            misses = 0
+
+            def wrapper(*args):
+                nonlocal hits, misses
+                if args in cache:
+                    hits += 1
+                    return cache[args]
+                misses += 1
+                result = func(*args)
+                cache[args] = result
+                return result
+
+            def cache_info():
+                return {"hits": hits, "misses": misses, "size": len(cache)}
+
+            wrapper.cache_info = cache_info
+            return wrapper
+
+        @memoize
+        def fib_manual(n):
+            if n <= 1:
+                return n
+            return fib_manual(n - 1) + fib_manual(n - 2)
+
+        @lru_cache(maxsize=None)
+        def fib_lru(n):
+            if n <= 1:
+                return n
+            return fib_lru(n - 1) + fib_lru(n - 2)
+
+        print(fib_manual(30))
+        print("Manual cache:", fib_manual.cache_info())
+
+        print(fib_lru(30))
+        print("lru_cache:", fib_lru.cache_info())
+        ```
+
+---
+
+**Exercise 2.**
+Build a `TTLCache` class that stores key-value pairs with a configurable time-to-live (in seconds). Implement `get(key)`, `put(key, value)`, and `cleanup()` (which removes all expired entries). Demonstrate that after sleeping past the TTL, entries are no longer retrievable and `cleanup()` reduces the internal dictionary size.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import time
+
+        class TTLCache:
+            def __init__(self, ttl_seconds=2):
+                self.ttl = ttl_seconds
+                self.cache = {}
+
+            def put(self, key, value):
+                self.cache[key] = (value, time.time())
+
+            def get(self, key):
+                if key in self.cache:
+                    value, timestamp = self.cache[key]
+                    if time.time() - timestamp < self.ttl:
+                        return value
+                    del self.cache[key]
+                return None
+
+            def cleanup(self):
+                now = time.time()
+                expired = [k for k, (v, t) in self.cache.items() if now - t >= self.ttl]
+                for k in expired:
+                    del self.cache[k]
+                return len(expired)
+
+        cache = TTLCache(ttl_seconds=1)
+        cache.put("a", 100)
+        cache.put("b", 200)
+
+        print(cache.get("a"))  # 100
+        print(f"Size before sleep: {len(cache.cache)}")
+
+        time.sleep(1.1)
+
+        print(cache.get("a"))  # None (expired)
+        removed = cache.cleanup()
+        print(f"Removed {removed} expired entries")
+        print(f"Size after cleanup: {len(cache.cache)}")
+        ```
+
+---
+
+**Exercise 3.**
+Create a context-manager-based `ObjectPool` for a class called `Connection` (simulate an expensive `__init__` with `time.sleep(0.01)`). The pool should pre-allocate 5 objects. Write a loop that acquires and releases a connection 20 times using `with pool.acquire() as conn:`, and compare the elapsed time against creating 20 fresh `Connection()` instances without a pool.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import time
+        from contextlib import contextmanager
+
+        class Connection:
+            def __init__(self):
+                time.sleep(0.01)  # Simulate expensive init
+
+            def reset(self):
+                pass  # Reset state for reuse
+
+        class ObjectPool:
+            def __init__(self, cls, size=5):
+                self.cls = cls
+                self.available = [cls() for _ in range(size)]
+
+            @contextmanager
+            def acquire(self):
+                obj = self.available.pop() if self.available else self.cls()
+                try:
+                    yield obj
+                finally:
+                    obj.reset()
+                    self.available.append(obj)
+
+        # With pool
+        pool = ObjectPool(Connection, size=5)
+        start = time.time()
+        for _ in range(20):
+            with pool.acquire() as conn:
+                pass  # Use connection
+        pool_time = time.time() - start
+
+        # Without pool
+        start = time.time()
+        for _ in range(20):
+            conn = Connection()
+        no_pool_time = time.time() - start
+
+        print(f"With pool:    {pool_time:.3f}s")
+        print(f"Without pool: {no_pool_time:.3f}s")
+        print(f"Speedup:      {no_pool_time / pool_time:.1f}x")
+        ```
+
 ```python
 """
 TUTORIAL: Weak References with WeakValueDictionary

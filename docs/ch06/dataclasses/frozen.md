@@ -327,3 +327,83 @@ if __name__ == "__main__":
 
     print(f"\n" + "=" * 70)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a frozen dataclass `Coordinate` with `latitude` and `longitude` fields. Show that attempting to modify a field raises `FrozenInstanceError`. Then demonstrate that a `Coordinate` can be used as a dictionary key and stored in a set.
+
+??? success "Solution to Exercise 1"
+
+        from dataclasses import dataclass
+
+        @dataclass(frozen=True)
+        class Coordinate:
+            latitude: float
+            longitude: float
+
+        c = Coordinate(37.7749, -122.4194)
+
+        try:
+            c.latitude = 0.0
+        except AttributeError as e:
+            print(f"Cannot modify: {e}")
+
+        # Use as dictionary key
+        locations = {c: "San Francisco"}
+        print(locations[Coordinate(37.7749, -122.4194)])  # San Francisco
+
+        # Use in a set
+        coords = {Coordinate(0, 0), Coordinate(1, 1), Coordinate(0, 0)}
+        print(len(coords))  # 2 — duplicate removed
+
+---
+
+**Exercise 2.**
+Define a frozen dataclass `Color` with `r`, `g`, `b` (int) fields. Add a method `hex()` that returns the color as a hex string (e.g., `"#FF0000"`). Create a set of colors and demonstrate deduplication (adding the same color twice results in only one entry).
+
+??? success "Solution to Exercise 2"
+
+        from dataclasses import dataclass
+
+        @dataclass(frozen=True)
+        class Color:
+            r: int
+            g: int
+            b: int
+
+            def hex(self):
+                return f"#{self.r:02X}{self.g:02X}{self.b:02X}"
+
+        red = Color(255, 0, 0)
+        green = Color(0, 255, 0)
+        print(red.hex())    # #FF0000
+        print(green.hex())  # #00FF00
+
+        colors = {Color(255, 0, 0), Color(0, 255, 0), Color(255, 0, 0)}
+        print(len(colors))  # 2 — red deduplicated
+
+---
+
+**Exercise 3.**
+Create a frozen dataclass `AppConfig` with fields `db_host`, `db_port`, and `debug`. Demonstrate the "copy and modify" pattern: use `dataclasses.replace()` to create a new config with `debug=True` while keeping the original unchanged. Show that the original and modified configs are different objects.
+
+??? success "Solution to Exercise 3"
+
+        from dataclasses import dataclass, replace
+
+        @dataclass(frozen=True)
+        class AppConfig:
+            db_host: str
+            db_port: int
+            debug: bool
+
+        prod = AppConfig("db.example.com", 5432, False)
+        dev = replace(prod, debug=True)
+
+        print(prod)  # AppConfig(db_host='db.example.com', db_port=5432, debug=False)
+        print(dev)   # AppConfig(db_host='db.example.com', db_port=5432, debug=True)
+        print(prod is dev)    # False — different objects
+        print(prod == dev)    # False — debug differs

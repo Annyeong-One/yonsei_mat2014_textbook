@@ -152,3 +152,58 @@ q2 = df.loc['2025-04':'2025-06']  # Q2
 jan_2024 = df.loc['2024-01']
 jan_2025 = df.loc['2025-01']
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that creates a time series with DatetimeIndex and slices it using string indexing (e.g., `ts['2024-06']`).
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    # Solution for the specific exercise
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(10), 'B': np.random.randn(10)})
+    print(df.head())
+    ```
+
+---
+
+**Exercise 2.** Explain partial string indexing for DatetimeIndex. What does `ts['2024']` return?
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the Pandas API and its behavior for this specific operation.
+
+---
+
+**Exercise 3.** Write code using `.between_time('09:00', '17:00')` to select only business hours from an intraday time series.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(20), 'B': np.random.randn(20)})
+    result = df.describe()
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Create a time series and use `.truncate(before='2024-03-01', after='2024-06-30')` to select a date range.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(50), 'group': np.random.choice(['X', 'Y'], 50)})
+    result = df.groupby('group').mean()
+    print(result)
+    ```

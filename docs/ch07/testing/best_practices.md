@@ -75,3 +75,84 @@ print("Best practices applied")
 Best practices applied
 ```
 
+---
+
+## Exercises
+
+**Exercise 1.**
+Refactor the following test to follow the Arrange-Act-Assert pattern. The test checks that a shopping cart correctly calculates the total: items are `[("apple", 1.50), ("banana", 0.75)]` and the expected total is `2.25`. Write both the function and the test.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    def cart_total(items):
+        return sum(price for _, price in items)
+
+    def test_cart_total_with_multiple_items():
+        # Arrange
+        items = [("apple", 1.50), ("banana", 0.75)]
+        expected = 2.25
+
+        # Act
+        result = cart_total(items)
+
+        # Assert
+        assert result == expected
+    ```
+
+---
+
+**Exercise 2.**
+Write a test class `TestStringUtils` with three well-named test methods for a function `capitalize_words(text)` that capitalizes the first letter of each word. Test normal input, empty string, and already-capitalized input. Use descriptive test names.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    def capitalize_words(text):
+        return text.title()
+
+    class TestStringUtils:
+        def test_capitalize_words_normal_input(self):
+            assert capitalize_words("hello world") == "Hello World"
+
+        def test_capitalize_words_empty_string(self):
+            assert capitalize_words("") == ""
+
+        def test_capitalize_words_already_capitalized(self):
+            assert capitalize_words("Hello World") == "Hello World"
+    ```
+
+---
+
+**Exercise 3.**
+Create a test file structure for a project with `src/calculator.py` and `tests/test_calculator.py`. Write the test file with a `conftest.py` that provides a `calculator` fixture. Include at least three tests in a `TestCalculator` class.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    # conftest.py
+    import pytest
+
+    class Calculator:
+        def add(self, a, b):
+            return a + b
+        def subtract(self, a, b):
+            return a - b
+        def multiply(self, a, b):
+            return a * b
+
+    @pytest.fixture
+    def calculator():
+        return Calculator()
+
+    # test_calculator.py
+    class TestCalculator:
+        def test_add_positive_numbers(self, calculator):
+            assert calculator.add(2, 3) == 5
+
+        def test_subtract_returns_negative(self, calculator):
+            assert calculator.subtract(3, 5) == -2
+
+        def test_multiply_by_zero(self, calculator):
+            assert calculator.multiply(5, 0) == 0
+    ```

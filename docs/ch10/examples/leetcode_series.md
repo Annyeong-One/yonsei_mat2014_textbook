@@ -328,3 +328,63 @@ def biggest_single_number(my_numbers: pd.DataFrame) -> pd.DataFrame:
 | String Operations | `str.capitalize()`, `str.contains()` | Text processing |
 | Rolling Windows | `rolling()`, `sum()` | Time series |
 | Aggregation | `to_frame()`, `reset_index()` | Result formatting |
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Create a Series of integers and write code to find all values that appear more than once using `value_counts()`.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+
+    df = pd.DataFrame({
+        'name': ['Alice', 'Bob', 'Charlie', 'David'],
+        'salary': [70000, 80000, 60000, 90000],
+        'department': ['IT', 'IT', 'HR', 'HR']
+    })
+    result = df.groupby('department')['salary'].max()
+    print(result)
+    ```
+
+---
+
+**Exercise 2.** Write code to find the second-highest value in a Series without sorting the entire Series.
+
+??? success "Solution to Exercise 2"
+    See the main content for the relevant patterns and API calls. The solution involves understanding how to combine Pandas operations to solve data manipulation problems.
+
+---
+
+**Exercise 3.** Create a Series of strings and write code to find all entries longer than 5 characters using `.str.len()`.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({
+        'value': np.random.randint(0, 100, 20),
+        'group': np.random.choice(['A', 'B'], 20)
+    })
+    result = df.groupby('group')['value'].transform('sum')
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Write code that replaces all negative values in a Series with 0 using boolean indexing.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    s = pd.Series(np.random.randn(100))
+    s_clean = s.clip(lower=0)
+    print(s_clean.describe())
+    ```

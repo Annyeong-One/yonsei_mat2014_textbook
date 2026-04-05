@@ -266,3 +266,62 @@ print(tokens)
 | `re.split()` | Split by pattern | More flexible than `str.split()` |
 | `count` param | Limit replacements | `re.sub(..., count=1)` for first only |
 | Capturing in split | Keep delimiters | `re.split(r'(\d+)', ...)` |
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Use `re.sub` to convert a string from camelCase to snake_case. For example, `"myVariableName"` should become `"my_variable_name"`. Hint: insert an underscore before each uppercase letter and lowercase everything.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    import re
+
+    def camel_to_snake(name):
+        result = re.sub(r'([A-Z])', r'_\1', name)
+        return result.lower().lstrip('_')
+
+    # Test
+    print(camel_to_snake("myVariableName"))   # my_variable_name
+    print(camel_to_snake("HTMLParser"))        # h_t_m_l_parser
+    print(camel_to_snake("simpleTest"))        # simple_test
+    ```
+
+---
+
+**Exercise 2.**
+Use `re.split` to split a mathematical expression string into tokens (numbers and operators). For example, `"3+42*7-10/2"` should return `["3", "+", "42", "*", "7", "-", "10", "/", "2"]`. Use a capturing group in the split pattern to keep the delimiters.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    import re
+
+    expression = "3+42*7-10/2"
+    tokens = re.split(r'([+\-*/])', expression)
+    print(tokens)
+    # ['3', '+', '42', '*', '7', '-', '10', '/', '2']
+    ```
+
+---
+
+**Exercise 3.**
+Use `re.sub` with a replacement function to censor specific words in a text by replacing them with asterisks of the same length. Write a function `censor` that takes a text and a list of words to censor. For example, `censor("The password is secret123", ["password", "secret123"])` should return `"The ******** is *********"`.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    import re
+
+    def censor(text, words):
+        for word in words:
+            pattern = re.compile(re.escape(word), re.IGNORECASE)
+            text = pattern.sub(lambda m: '*' * len(m.group()), text)
+        return text
+
+    # Test
+    print(censor("The password is secret123", ["password", "secret123"]))
+    # The ******** is *********
+    ```

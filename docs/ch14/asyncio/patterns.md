@@ -523,3 +523,112 @@ class CircuitBreaker:
 - Handle graceful shutdown with signal handlers
 - Use retry with exponential backoff for reliability
 - Batch operations to manage resource usage
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Implement an async producer-consumer pipeline with `asyncio.Queue(maxsize=5)`. The producer generates 15 items (with 0.05s per item). Two consumers each process items (with 0.1s per item). Use a sentinel value `None` to signal each consumer to stop. Print which consumer handled each item.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import asyncio
+
+        async def producer(queue, n):
+            for i in range(n):
+                await asyncio.sleep(0.05)
+                await queue.put(i)
+                print(f"Produced: {i}")
+            await queue.put(None)
+            await queue.put(None)
+
+        async def consumer(queue, name):
+            while True:
+                item = await queue.get()
+                if item is None:
+                    break
+                await asyncio.sleep(0.1)
+                print(f"{name} consumed: {item}")
+                queue.task_done()
+
+        async def main():
+            queue = asyncio.Queue(maxsize=5)
+            await asyncio.gather(
+                producer(queue, 15),
+                consumer(queue, "Consumer-A"),
+                consumer(queue, "Consumer-B"),
+            )
+
+        asyncio.run(main())
+        ```
+
+---
+
+**Exercise 2.**
+Write an `async_retry` decorator that retries an async function up to 3 times with exponential backoff (delays of 0.1s, 0.2s, 0.4s). Test it with a function that fails twice then succeeds on the third attempt, printing each attempt number.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import asyncio
+        import functools
+
+        def async_retry(max_retries=3, base_delay=0.1):
+            def decorator(func):
+                @functools.wraps(func)
+                async def wrapper(*args, **kwargs):
+                    for attempt in range(1, max_retries + 1):
+                        try:
+                            print(f"  Attempt {attempt}")
+                            return await func(*args, **kwargs)
+                        except Exception as e:
+                            if attempt == max_retries:
+                                raise
+                            delay = base_delay * (2 ** (attempt - 1))
+                            await asyncio.sleep(delay)
+                return wrapper
+            return decorator
+
+        call_count = 0
+
+        @async_retry(max_retries=3, base_delay=0.1)
+        async def flaky_operation():
+            global call_count
+            call_count += 1
+            if call_count < 3:
+                raise RuntimeError(f"Fail #{call_count}")
+            return "success"
+
+        async def main():
+            result = await flaky_operation()
+            print(f"Result: {result}")
+
+        asyncio.run(main())
+        ```
+
+---
+
+**Exercise 3.**
+Use `asyncio.Semaphore(3)` to limit concurrency when processing 10 tasks. Each task should print when it starts and finishes, sleeping for 0.2s. Verify from the output that at most 3 tasks run simultaneously by checking the timestamps.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import asyncio
+        import time
+
+        async def limited_task(sem, task_id):
+            async with sem:
+                start = time.perf_counter()
+                print(f"Task {task_id}: started  at {start:.2f}")
+                await asyncio.sleep(0.2)
+                end = time.perf_counter()
+                print(f"Task {task_id}: finished at {end:.2f}")
+
+        async def main():
+            sem = asyncio.Semaphore(3)
+            await asyncio.gather(
+                *[limited_task(sem, i) for i in range(10)]
+            )
+
+        asyncio.run(main())
+        ```

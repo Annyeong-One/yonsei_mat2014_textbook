@@ -353,3 +353,70 @@ Rules of thumb:
 - Many small requests → optimize latency (reduce round trips)
 - Few large transfers → optimize bandwidth (compression, parallelism)
 - Real applications → profile to find the bottleneck
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Explain the difference between latency and bandwidth. Give a real-world analogy for each.
+
+??? success "Solution to Exercise 1"
+    ```python
+    # Conceptual solution - see page content for details
+    import sys
+    import platform
+
+    print(f"Python version: {sys.version}")
+    print(f"Platform: {platform.platform()}")
+    print(f"Architecture: {platform.machine()}")
+    ```
+
+---
+
+**Exercise 2.** Calculate the total transfer time for a 1 GB file over a network with 100 Mbps bandwidth and 50 ms latency.
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the hardware-software interaction and how it affects Python performance.
+
+---
+
+**Exercise 3.** Explain why high bandwidth does not help if latency is the bottleneck. Give an example scenario.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import time
+
+    # Simple benchmark
+    n = 10_000_000
+    start = time.perf_counter()
+    total = sum(range(n))
+    elapsed = time.perf_counter() - start
+    print(f"Sum of {n} integers: {total}")
+    print(f"Time: {elapsed:.4f} seconds")
+    ```
+
+---
+
+**Exercise 4.** Write Python code that measures the round-trip time (latency) to a server using `urllib.request` or `requests`.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    import time
+
+    n = 1_000_000
+    # Python loop
+    start = time.perf_counter()
+    result_py = sum(i * i for i in range(n))
+    time_py = time.perf_counter() - start
+
+    # NumPy vectorized
+    arr = np.arange(n)
+    start = time.perf_counter()
+    result_np = np.sum(arr * arr)
+    time_np = time.perf_counter() - start
+
+    print(f"Python: {time_py:.4f}s, NumPy: {time_np:.4f}s")
+    print(f"Speedup: {time_py / time_np:.1f}x")
+    ```

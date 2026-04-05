@@ -334,3 +334,58 @@ Verify shapes before multiplication to avoid broadcasting surprises.
 ### 3. Batch Operations
 
 Use batch matmul instead of loops for multiple matrix multiplications.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create two matrices `A` of shape `(3, 4)` and `B` of shape `(4, 2)`. Compute their product using both `A @ B` and `np.matmul(A, B)`. Verify both produce the same result and the output shape is `(3, 2)`.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        A = np.random.randn(3, 4)
+        B = np.random.randn(4, 2)
+        result1 = A @ B
+        result2 = np.matmul(A, B)
+        print(f"Shape: {result1.shape}")  # (3, 2)
+        print(f"Match: {np.allclose(result1, result2)}")
+
+---
+
+**Exercise 2.**
+Demonstrate the difference between element-wise multiplication (`A * B`) and matrix multiplication (`A @ B`) for two 3x3 matrices. Show that the results are different and explain when each is appropriate.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        A = np.array([[1, 2], [3, 4]])
+        B = np.array([[5, 6], [7, 8]])
+        print(f"Element-wise A * B:\n{A * B}")
+        print(f"Matrix A @ B:\n{A @ B}")
+        # Element-wise: each (i,j) = A[i,j] * B[i,j]
+        # Matrix: row-column dot products
+
+---
+
+**Exercise 3.**
+Compute the matrix-vector product `A @ v` where `A = np.array([[1, 2, 3], [4, 5, 6]])` and `v = np.array([1, 0, -1])`. Then compute the same result using `np.dot` and `np.einsum('ij,j->i', A, v)`. Verify all three produce the same output.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        A = np.array([[1, 2, 3], [4, 5, 6]])
+        v = np.array([1, 0, -1])
+
+        r1 = A @ v
+        r2 = np.dot(A, v)
+        r3 = np.einsum('ij,j->i', A, v)
+
+        print(f"A @ v:    {r1}")
+        print(f"np.dot:   {r2}")
+        print(f"einsum:   {r3}")
+        print(f"All match: {np.allclose(r1, r2) and np.allclose(r1, r3)}")

@@ -647,3 +647,76 @@ result = x + y
 print(f"0.1 + 0.2 ∈ {result}")
 print(f"Contains 0.3? {result.lo <= 0.3 <= result.hi}")
 ```
+
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Demonstrate catastrophic cancellation by computing `(1 + 1e-16) - 1` and comparing it to the expected result `1e-16`. How many significant digits are lost?
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    result = (1 + 1e-16) - 1
+    expected = 1e-16
+    print(f"Computed: {result}")
+    print(f"Expected: {expected}")
+    print(f"Relative error: {abs(result - expected) / expected:.2%}")
+    ```
+
+    The result is `0.0` instead of `1e-16`. Adding `1e-16` to `1.0` does not change the float because the value falls below machine epsilon. All significant digits are lost.
+
+---
+
+**Exercise 2.**
+Implement Kahan summation and compare it against the built-in `sum()` when adding `[0.1] * 10000`. Report the error of each relative to the expected value `1000.0`.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    def kahan_sum(values):
+        total = 0.0
+        compensation = 0.0
+        for x in values:
+            y = x - compensation
+            t = total + y
+            compensation = (t - total) - y
+            total = t
+        return total
+
+    values = [0.1] * 10000
+    expected = 1000.0
+
+    builtin_result = sum(values)
+    kahan_result = kahan_sum(values)
+
+    print(f"sum():  {builtin_result:.15f}, error: {abs(builtin_result - expected):.2e}")
+    print(f"kahan:  {kahan_result:.15f}, error: {abs(kahan_result - expected):.2e}")
+    ```
+
+    Kahan summation tracks a compensation term that captures the low-order bits lost during each addition, producing a result much closer to the true value.
+
+---
+
+**Exercise 3.**
+Show that floating-point addition is not associative by finding three values `a`, `b`, `c` where `(a + b) + c != a + (b + c)`. Print both results and their difference.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    a = 1e16
+    b = -1e16
+    c = 1.0
+
+    left = (a + b) + c
+    right = a + (b + c)
+
+    print(f"(a + b) + c = {left}")   # 1.0
+    print(f"a + (b + c) = {right}")  # 0.0
+    print(f"Difference: {abs(left - right)}")  # 1.0
+    ```
+
+    `b + c` equals `-1e16` because `c = 1.0` is too small relative to `-1e16` to affect the sum. So `a + (b + c) = 0.0`. But `(a + b) = 0.0`, then `0.0 + c = 1.0`.

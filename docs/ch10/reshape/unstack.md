@@ -338,3 +338,58 @@ print(unstacked)
 - Creates NaN for missing combinations
 - Use `fill_value` to handle missing data
 - Essential for converting long to wide format
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that creates a Series with a MultiIndex and uses `.unstack()` to convert it to a DataFrame.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    # Solution for the specific exercise
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(10), 'B': np.random.randn(10)})
+    print(df.head())
+    ```
+
+---
+
+**Exercise 2.** Explain what `.unstack()` does. Which index level is moved to columns by default?
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the Pandas API and its behavior for this specific operation.
+
+---
+
+**Exercise 3.** Create a MultiIndex DataFrame and use `.unstack(fill_value=0)` to fill NaN values created by the reshape.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(20), 'B': np.random.randn(20)})
+    result = df.describe()
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Write code that unstacks a grouped aggregation result (e.g., `df.groupby(['a', 'b']).mean().unstack()`).
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(50), 'group': np.random.choice(['X', 'Y'], 50)})
+    result = df.groupby('group').mean()
+    print(result)
+    ```

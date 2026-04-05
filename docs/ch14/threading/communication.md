@@ -738,3 +738,161 @@ if __name__ == '__main__':
     run_simulation()
     demo_condition_vs_lock()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Build a 3-stage pipeline using `queue.Queue`. Stage 1 reads integers 0-9 and doubles them. Stage 2 takes the doubled values and adds 10. Stage 3 collects final results into a list. Use `None` as a sentinel to signal each stage to shut down. Print the final list of results.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import threading
+        import queue
+
+        q1 = queue.Queue()
+        q2 = queue.Queue()
+        results = []
+
+        def stage1(in_q, out_q):
+            while True:
+                item = in_q.get()
+                if item is None:
+                    out_q.put(None)
+                    break
+                out_q.put(item * 2)
+
+        def stage2(in_q, out_q):
+            while True:
+                item = in_q.get()
+                if item is None:
+                    out_q.put(None)
+                    break
+                out_q.put(item + 10)
+
+        def stage3(in_q, result_list):
+            while True:
+                item = in_q.get()
+                if item is None:
+                    break
+                result_list.append(item)
+
+        q_a = queue.Queue()
+        q_b = queue.Queue()
+        q_c = queue.Queue()
+
+        t1 = threading.Thread(target=stage1, args=(q_a, q_b))
+        t2 = threading.Thread(target=stage2, args=(q_b, q_c))
+        t3 = threading.Thread(target=stage3, args=(q_c, results))
+
+        t1.start(); t2.start(); t3.start()
+
+        for i in range(10):
+            q_a.put(i)
+        q_a.put(None)
+
+        t1.join(); t2.join(); t3.join()
+        print(f"Results: {results}")
+        # Expected: [10, 12, 14, 16, 18, 20, 22, 24, 26, 28]
+        ```
+
+---
+
+**Exercise 2.**
+Implement a `PriorityQueue`-based task scheduler. Create 3 producer threads that each submit 5 tasks with random priorities (1-10, where 1 is highest). A single consumer thread processes tasks in priority order, printing each task's priority and content. Use a sentinel with priority 999 to signal termination.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import threading
+        import queue
+        import random
+
+        pq = queue.PriorityQueue()
+        num_producers = 3
+
+        def producer(pid):
+            for i in range(5):
+                priority = random.randint(1, 10)
+                task = f"P{pid}-Task{i}"
+                pq.put((priority, task))
+                print(f"[Producer {pid}] submitted {task} (priority {priority})")
+
+        def consumer():
+            sentinels = 0
+            while sentinels < num_producers:
+                priority, task = pq.get()
+                if priority == 999:
+                    sentinels += 1
+                    continue
+                print(f"[Consumer] processing {task} (priority {priority})")
+
+        threads = []
+        for i in range(num_producers):
+            t = threading.Thread(target=producer, args=(i,))
+            threads.append(t)
+            t.start()
+
+        for t in threads:
+            t.join()
+
+        # Send sentinels after all producers finish
+        for _ in range(num_producers):
+            pq.put((999, "STOP"))
+
+        ct = threading.Thread(target=consumer)
+        ct.start()
+        ct.join()
+        print("All tasks processed.")
+        ```
+
+---
+
+**Exercise 3.**
+Write a `ThreadSafeCounter` class that supports `increment()`, `decrement()`, and `value` (property). Spawn 10 threads that each increment 10,000 times and 10 threads that each decrement 10,000 times. Verify the final value is 0.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import threading
+
+        class ThreadSafeCounter:
+            def __init__(self):
+                self._value = 0
+                self._lock = threading.Lock()
+
+            def increment(self):
+                with self._lock:
+                    self._value += 1
+
+            def decrement(self):
+                with self._lock:
+                    self._value -= 1
+
+            @property
+            def value(self):
+                with self._lock:
+                    return self._value
+
+        counter = ThreadSafeCounter()
+
+        def inc_worker():
+            for _ in range(10_000):
+                counter.increment()
+
+        def dec_worker():
+            for _ in range(10_000):
+                counter.decrement()
+
+        threads = []
+        for _ in range(10):
+            threads.append(threading.Thread(target=inc_worker))
+            threads.append(threading.Thread(target=dec_worker))
+
+        for t in threads:
+            t.start()
+        for t in threads:
+            t.join()
+
+        print(f"Final value: {counter.value}")
+        assert counter.value == 0
+        ```

@@ -464,6 +464,66 @@ Binary columnar storage reduces both file size and parsing overhead.
 
 ---
 
+**Exercise 9.**
+A data scientist loads a 2 GB CSV file into a Pandas DataFrame, which takes 45 seconds. They then save the same data as a Parquet file and reload it, which takes only 3 seconds. Explain the multiple reasons why Parquet is faster than CSV for this workload. Consider: parsing overhead, data representation (text vs. binary), I/O volume (bytes read from disk), and columnar vs. row-based layout. Which of these factors contributes the most to the 15x speedup?
+
+??? success "Solution to Exercise 9"
+    The 15x speedup comes from multiple compounding factors:
+
+    **1. Parsing overhead (largest factor, ~5--10x):** CSV is a text format. Every number must be parsed character-by-character from its string representation (e.g., `"3.14159"`) into a binary `float64`. This parsing is computationally expensive. Parquet stores data in binary format -- the bytes on disk are already in the numeric representation Python/Pandas needs, so "loading" is essentially just copying bytes into memory.
+
+    **2. I/O volume (~2--4x):** CSV represents numbers as text strings, which are larger than their binary equivalents. The number `3.14159265358979` is 16 text bytes in CSV but only 8 bytes as a binary `float64`. Parquet also applies compression (e.g., Snappy, zstd), further reducing file size. A 2 GB CSV might be only 400--600 MB as compressed Parquet, meaning less data read from disk.
+
+    **3. Columnar layout (~1.5--2x for typical queries):** Parquet stores data column-by-column, so reading a subset of columns avoids reading the entire file. CSV must scan every row to extract columns. Even when reading all columns, columnar storage compresses better because similar values are adjacent.
+
+    The parsing overhead is typically the dominant factor, followed by reduced I/O volume.
+
+---
+
+**Exercise 10.**
+The OS page cache stores recently accessed disk data in RAM so that repeated reads do not hit the disk. Explain why running a Python script that reads a file takes noticeably longer the first time than the second time (even without the script doing any explicit caching). What happens at the OS level between the first and second runs? If the machine has 16 GB of RAM and only 4 GB is used by programs, what happens to the remaining 12 GB?
+
+??? success "Solution to Exercise 10"
+    **First run:** The file is not in the OS page cache. The `read()` system call triggers disk I/O -- the OS reads the file from SSD/HDD into RAM (page cache), then copies it to the application's buffer. Disk latency dominates.
+
+    **Second run:** The file's contents remain in the OS page cache (in RAM). The same `read()` system call finds the data already in memory and copies it directly from the page cache -- no disk I/O occurs. The speedup can be 10--1000x.
+
+    The remaining 12 GB of RAM is not wasted. The OS uses unused RAM as page cache, storing recently accessed file data. This happens automatically and transparently -- no application code is needed. If a program later needs that RAM for allocations, the OS evicts page cache entries (since they are just cached copies of disk data and can be re-read if needed).
+
+    This is why `free` on Linux shows most RAM as "used" even with few programs running -- the OS aggressively caches disk data in otherwise-idle memory.
+
+---
+
+**Exercise 11.**
+SSDs have no moving parts (unlike HDDs), which makes random reads much faster. However, SSDs still perform significantly worse on random writes than sequential writes. Explain *why* random writes are problematic for flash memory. Consider the erase-before-write constraint, the write amplification problem, and the role of the Flash Translation Layer (FTL) in mitigating these issues.
+
+??? success "Solution to Exercise 11"
+    Flash memory has a fundamental asymmetry: **you cannot overwrite a cell directly**. You must first **erase** the entire block containing the cell, then write the new data. Erase operations work on large blocks (typically 128 KB--4 MB), while writes work on smaller pages (typically 4--16 KB).
+
+    **Random writes are problematic because:**
+
+    1. **Erase-before-write constraint:** To modify a single 4 KB page within a 256 KB block, the SSD must read the entire block, erase it, then rewrite all 256 KB (with the one page changed). This is an enormous overhead for a small write.
+
+    2. **Write amplification:** The ratio of data physically written to flash vs. data logically written by the host. For random writes, this ratio can be 10x or higher, because each small write triggers a large block erase-rewrite cycle.
+
+    3. **Wear:** Flash cells can only endure a limited number of erase cycles (~1,000--100,000 depending on technology). High write amplification accelerates wear.
+
+    The **FTL (Flash Translation Layer)** mitigates this by maintaining a logical-to-physical address map. Instead of overwriting in place, it writes new data to a fresh page and updates the map. Old pages are garbage-collected in the background. This converts random logical writes into more sequential physical writes, reducing write amplification but adding complexity and occasional latency spikes during garbage collection.
+
+---
+
+**Exercise 12.**
+A programmer needs to process a 50 GB dataset on a machine with 8 GB of RAM. They consider three strategies: (a) load everything into RAM at once, (b) process the file in chunks using `pandas.read_csv(chunksize=...)`, (c) use memory-mapped files with `np.memmap`. Compare and contrast these approaches. Which will fail, which will be slow, and which will work well? Explain the underlying memory mechanism each relies on.
+
+??? success "Solution to Exercise 12"
+    **(a) Load everything into RAM at once:** This will **fail** (or cause severe thrashing). The 50 GB dataset cannot fit in 8 GB of RAM. Pandas will try to allocate memory, the OS will begin swapping heavily, and the program will either crash with `MemoryError` or slow to a crawl due to thrashing (continuous swapping between RAM and disk).
+
+    **(b) Chunked processing with `read_csv(chunksize=...)`:** This **works well**. Only one chunk (e.g., 100,000 rows) is in memory at a time. The program processes each chunk and discards it before loading the next. Memory usage stays bounded. The trade-off is that the programmer must write code to accumulate partial results (e.g., running sums, concatenated results). The underlying mechanism is straightforward application-level memory management -- only a small portion of the file is in RAM at any time.
+
+    **(c) Memory-mapped files with `np.memmap`:** This **works well for binary data**. The file is mapped into the process's virtual address space without loading it all into RAM. The OS loads pages on demand (4 KB at a time) as they are accessed, and evicts unused pages when RAM is needed. This relies on the **virtual memory system** -- the OS treats the file as an extension of RAM, paging data in and out transparently. This works best for random access patterns on binary data. For CSV (text) data, `memmap` is not directly useful because the data must still be parsed.
+
+---
+
 ## 13. Short Answers
 
 1. Volatile memory loses data without power
@@ -474,8 +534,6 @@ Binary columnar storage reduces both file size and parsing overhead.
 6. Reading data in order
 7. Less parsing and smaller files
 8. RAM cache for recently accessed disk data
-
----
 
 ## 14. Summary
 

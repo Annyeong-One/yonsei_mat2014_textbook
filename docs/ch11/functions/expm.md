@@ -202,3 +202,59 @@ if __name__ == "__main__":
 | `linalg.expm_frechet(A, E)` | Frechet derivative |
 
 Key: $e^A \neq$ element-wise exp. Use `np.exp(A)` for element-wise.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Compute the matrix exponential of $A = \begin{pmatrix} 0 & -\pi/2 \\ \pi/2 & 0 \end{pmatrix}$ (a skew-symmetric matrix). Verify that the result is a rotation matrix by checking that $R^TR = I$ and $\det(R) = 1$. What rotation angle does this correspond to?
+
+??? success "Solution to Exercise 1"
+        import numpy as np
+        from scipy import linalg
+
+        A = np.array([[0, -np.pi / 2],
+                       [np.pi / 2, 0]])
+        R = linalg.expm(A)
+
+        print(f"exp(A) =\n{R.round(10)}")
+        print(f"R^T R = I: {np.allclose(R.T @ R, np.eye(2))}")
+        print(f"det(R) = {np.linalg.det(R):.10f}")
+        angle = np.arctan2(R[1, 0], R[0, 0])
+        print(f"Rotation angle: {np.degrees(angle):.1f} degrees")
+
+---
+
+**Exercise 2.**
+Solve the linear ODE system $\frac{dx}{dt} = Ax$ with $A = \begin{pmatrix} -1 & 2 \\ 0 & -3 \end{pmatrix}$ and initial condition $x(0) = (1, 1)^T$. Compute the solution $x(t) = e^{At} x_0$ at times $t = 0, 0.5, 1, 2, 5$ and print the state vector at each time.
+
+??? success "Solution to Exercise 2"
+        import numpy as np
+        from scipy import linalg
+
+        A = np.array([[-1, 2],
+                       [0, -3]])
+        x0 = np.array([1, 1])
+
+        for t in [0, 0.5, 1, 2, 5]:
+            x_t = linalg.expm(A * t) @ x0
+            print(f"x({t}) = {x_t}")
+
+---
+
+**Exercise 3.**
+Verify that `expm(A) @ expm(-A)` equals the identity matrix for a random $4 \times 4$ matrix (use `np.random.seed(50)`). Compute the Frobenius norm of the difference from identity and confirm it is below $10^{-12}$.
+
+??? success "Solution to Exercise 3"
+        import numpy as np
+        from scipy import linalg
+
+        np.random.seed(50)
+        A = np.random.randn(4, 4)
+
+        product = linalg.expm(A) @ linalg.expm(-A)
+        error = np.linalg.norm(product - np.eye(4))
+        print(f"expm(A) @ expm(-A) =\n{product.round(12)}")
+        print(f"Error from identity: {error:.2e}")
+        assert error < 1e-12

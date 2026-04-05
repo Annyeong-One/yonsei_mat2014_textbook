@@ -476,3 +476,59 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.** Generate 10,000 samples from a normal distribution with mean 100 and standard deviation 15. Verify the sample mean and std are close to the true parameters.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(42)
+    samples = rng.normal(100, 15, 10000)
+    print(f"Mean: {samples.mean():.1f}")  # ~100
+    print(f"Std: {samples.std():.1f}")    # ~15
+    ```
+
+---
+
+**Exercise 2.** Generate standard normal samples and verify that approximately 68% fall within one standard deviation of the mean.
+
+??? success "Solution to Exercise 2"
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(42)
+    samples = rng.standard_normal(10000)
+    within_1std = np.sum(np.abs(samples) <= 1) / len(samples)
+    print(f"Within 1 std: {within_1std:.2%}")  # ~68%
+    ```
+
+---
+
+**Exercise 3.** Generate a 2D array of shape (1000, 3) from a standard normal. Compute the mean and std of each column.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(42)
+    data = rng.standard_normal((1000, 3))
+    print("Means:", data.mean(axis=0))
+    print("Stds:", data.std(axis=0))
+    ```
+
+---
+
+**Exercise 4.** Use the Box-Muller transform to generate normal samples from uniform samples: $Z = \sqrt{-2\ln U_1}\cos(2\pi U_2)$. Compare with `rng.standard_normal`.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(42)
+    n = 10000
+    u1 = rng.uniform(0, 1, n)
+    u2 = rng.uniform(0, 1, n)
+    z = np.sqrt(-2 * np.log(u1)) * np.cos(2 * np.pi * u2)
+    print(f"Box-Muller mean: {z.mean():.3f}, std: {z.std():.3f}")
+    ```

@@ -263,3 +263,79 @@ Key points:
 - `_` is convention for ignored values
 - Walrus operator combines assignment and expression
 - Works in loops, comprehensions, and conditions
+
+## Exercises
+
+**Exercise 1.**
+Predict the output of each unpacking:
+
+```python
+first, *middle, last = [1, 2, 3, 4, 5]
+print(first, middle, last)
+
+a, *b = [1]
+print(a, b)
+
+*c, d = [1]
+print(c, d)
+```
+
+What type is the `*` variable always? What happens when there are not enough elements for the starred variable?
+
+??? success "Solution to Exercise 1"
+    Output:
+
+    ```text
+    1 [2, 3, 4] 5
+    1 []
+    [] 1
+    ```
+
+    The `*` variable is always a **list**, even if it captures zero elements. This is guaranteed by the language -- it never produces a tuple or other type.
+
+    - `first, *middle, last`: `first` gets `1`, `last` gets `5`, `*middle` gets everything in between as `[2, 3, 4]`.
+    - `a, *b = [1]`: `a` gets `1`, `*b` gets the remaining (nothing) as `[]`.
+    - `*c, d = [1]`: `d` gets `1` (the last element), `*c` gets the remaining (nothing) as `[]`.
+
+    If there are not enough elements for the non-starred variables, Python raises `ValueError`. For example, `a, b, *c = [1]` would fail because `a` and `b` need at least two elements.
+
+---
+
+**Exercise 2.**
+Python's swap idiom `a, b = b, a` works without a temporary variable. Explain *why* this works by describing the evaluation order. What would happen in a language that evaluates assignments left-to-right?
+
+??? success "Solution to Exercise 2"
+    `a, b = b, a` works because Python evaluates the **entire right-hand side** before performing any binding:
+
+    1. Evaluate `b` -> gets current value of `b`
+    2. Evaluate `a` -> gets current value of `a`
+    3. Pack into tuple: `(old_b, old_a)`
+    4. Unpack and bind: `a = old_b`, `b = old_a`
+
+    The old values are captured in step 1-2 before any reassignment happens in step 4.
+
+    In a language with left-to-right assignment (pseudocode: `a = b; b = a`), the swap would fail: after `a = b`, `a` already holds `b`'s value, so `b = a` assigns `b`'s own old value back to itself. You would need a temporary variable: `temp = a; a = b; b = temp`.
+
+    Python's "evaluate RHS completely first" rule makes multi-target assignment and swaps work correctly without temporaries.
+
+---
+
+**Exercise 3.**
+Nested unpacking lets you destructure complex structures in one step:
+
+```python
+data = ("Alice", (95, 87, 92))
+name, (score1, score2, score3) = data
+print(name, score1, score2, score3)
+```
+
+Predict the output. Then explain what would happen if the structure does not match -- for example, if `data = ("Alice", (95, 87))` (only two scores instead of three).
+
+??? success "Solution to Exercise 3"
+    Output: `Alice 95 87 92`
+
+    Nested unpacking matches the **structure** of the right-hand side. The outer tuple has two elements: a string and a tuple. The inner `(score1, score2, score3)` matches the three-element inner tuple.
+
+    If `data = ("Alice", (95, 87))` (only two scores), Python would raise `ValueError: not enough values to unpack (expected 3, got 2)` because the inner unpacking expects three values but finds only two.
+
+    Unpacking requires the structure to match exactly. The number of targets on each nesting level must equal the number of elements in the corresponding part of the data structure. This strictness catches structural mismatches immediately rather than producing silent errors.

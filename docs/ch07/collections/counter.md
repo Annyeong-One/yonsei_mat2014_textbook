@@ -228,3 +228,74 @@ print(f"Winner: {winner[0]} with {winner[1]} votes")
 - Supports arithmetic: `+`, `-`, `&`, `|`
 - `elements()` iterates with repetition
 - Perfect for frequency analysis, anagrams, voting, inventory
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a function `common_elements` that takes two lists and returns a `Counter` containing only the elements common to both lists, with counts equal to the minimum count in either list. For example, `common_elements([1, 1, 2, 3], [1, 1, 1, 3, 3])` should return `Counter({1: 2, 3: 1})`. Hint: use Counter intersection.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    from collections import Counter
+
+    def common_elements(list1, list2):
+        return Counter(list1) & Counter(list2)
+
+    # Test
+    result = common_elements([1, 1, 2, 3], [1, 1, 1, 3, 3])
+    print(result)  # Counter({1: 2, 3: 1})
+
+    result2 = common_elements(['a', 'b', 'b'], ['b', 'b', 'c'])
+    print(result2)  # Counter({'b': 2})
+    ```
+
+---
+
+**Exercise 2.**
+Write a function `remove_duplicates_preserve_order` that takes a string and returns a new string with duplicate characters removed, keeping only the first occurrence of each character. Use `Counter` to identify which characters appear, but preserve the original order. For example, `remove_duplicates_preserve_order("abracadabra")` should return `"abrcd"`.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    def remove_duplicates_preserve_order(text):
+        seen = set()
+        result = []
+        for char in text:
+            if char not in seen:
+                seen.add(char)
+                result.append(char)
+        return ''.join(result)
+
+    # Test
+    print(remove_duplicates_preserve_order("abracadabra"))  # "abrcd"
+    print(remove_duplicates_preserve_order("mississippi"))   # "misp"
+    ```
+
+---
+
+**Exercise 3.**
+Write a function `can_construct` that takes two strings, `message` and `source`, and returns `True` if the `message` can be constructed using the characters from `source` (each character used at most as many times as it appears in `source`). For example, `can_construct("hello", "hellllooo")` returns `True`, but `can_construct("hello", "world")` returns `False`.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    from collections import Counter
+
+    def can_construct(message, source):
+        message_counts = Counter(message)
+        source_counts = Counter(source)
+        # Check every character in message has enough in source
+        return all(
+            source_counts[char] >= count
+            for char, count in message_counts.items()
+        )
+
+    # Test
+    print(can_construct("hello", "hellllooo"))  # True
+    print(can_construct("hello", "world"))       # False
+    print(can_construct("aab", "aab"))           # True
+    print(can_construct("aab", "ab"))            # False
+    ```

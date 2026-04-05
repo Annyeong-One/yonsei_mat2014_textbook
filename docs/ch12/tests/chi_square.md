@@ -116,3 +116,52 @@ where $V \in [0, 1]$, with $V = 0$ indicating no association and $V = 1$ indicat
 ## Summary
 
 Chi-square tests assess categorical data through goodness-of-fit (`scipy.stats.chisquare`) and independence testing (`scipy.stats.chi2_contingency`). Both tests compare observed and expected frequencies using the same $\chi^2$ statistic but differ in how expected counts and degrees of freedom are computed. The chi-square approximation requires sufficiently large expected counts, and effect sizes like Cramer's $V$ should supplement p-values for practical interpretation.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+A die is rolled 120 times with outcomes: {1: 25, 2: 17, 3: 15, 4: 23, 5: 22, 6: 18}. Test whether the die is fair using a chi-square goodness-of-fit test at $\alpha = 0.05$.
+
+??? success "Solution to Exercise 1"
+
+        from scipy import stats
+
+        observed = [25, 17, 15, 23, 22, 18]
+        expected = [20, 20, 20, 20, 20, 20]
+        chi2, p = stats.chisquare(observed, expected)
+        print(f"Chi-square: {chi2:.4f}, p: {p:.4f}")
+        print(f"Decision: {'Reject H0 (unfair)' if p < 0.05 else 'Fail to reject H0 (fair)'}")
+
+---
+
+**Exercise 2.**
+A contingency table records preferences: Men: [45 coffee, 30 tea, 25 juice], Women: [35 coffee, 40 tea, 45 juice]. Test for independence between gender and beverage preference. Compute Cramer's V.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy import stats
+
+        table = np.array([[45, 30, 25], [35, 40, 45]])
+        chi2, p, dof, expected = stats.chi2_contingency(table)
+        n = table.sum()
+        v = np.sqrt(chi2 / (n * (min(table.shape) - 1)))
+
+        print(f"Chi-square: {chi2:.4f}, p: {p:.4f}, dof: {dof}")
+        print(f"Cramer's V: {v:.4f}")
+
+---
+
+**Exercise 3.**
+Generate a $3 \times 3$ contingency table under perfect independence (expected = observed). Verify that the chi-square statistic is 0 and the p-value is 1.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+
+        table = np.array([[30, 30, 30], [30, 30, 30], [30, 30, 30]])
+        chi2, p, dof, expected = stats.chi2_contingency(table)
+        print(f"Chi-square: {chi2:.6f}, p: {p:.4f}")

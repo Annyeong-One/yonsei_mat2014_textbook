@@ -646,3 +646,94 @@ if __name__ == '__main__':
     asyncio.run(demo_concurrent_progress())
     asyncio.run(demo_comparison())
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create 5 tasks using `asyncio.create_task()`, each sleeping for a different duration (0.1s to 0.5s) and returning its task name. Use `asyncio.as_completed()` to print results in completion order. Verify that shorter tasks complete first.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import asyncio
+
+        async def task(name, delay):
+            await asyncio.sleep(delay)
+            return name
+
+        async def main():
+            tasks = [
+                asyncio.create_task(task(f"task-{i}", 0.1 * (i + 1)))
+                for i in range(5)
+            ]
+
+            for coro in asyncio.as_completed(tasks):
+                result = await coro
+                print(f"Completed: {result}")
+
+        asyncio.run(main())
+        ```
+
+---
+
+**Exercise 2.**
+Write a program that creates a long-running task (`await asyncio.sleep(10)`) and cancels it after 0.5 seconds. Catch `asyncio.CancelledError` in both the task and the caller. Print messages showing when the task starts, when it is cancelled, and when the caller handles the cancellation.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import asyncio
+
+        async def long_running():
+            try:
+                print("Task: started")
+                await asyncio.sleep(10)
+                return "done"
+            except asyncio.CancelledError:
+                print("Task: cancelled, cleaning up")
+                raise
+
+        async def main():
+            t = asyncio.create_task(long_running())
+            await asyncio.sleep(0.5)
+            t.cancel()
+
+            try:
+                await t
+            except asyncio.CancelledError:
+                print("Caller: handled cancellation")
+
+        asyncio.run(main())
+        ```
+
+---
+
+**Exercise 3.**
+Use `asyncio.TaskGroup` (Python 3.11+) to run 4 tasks concurrently. Three tasks should succeed (returning their ID squared), and one should raise a `ValueError`. Catch the resulting `ExceptionGroup` and print both the successful results and the error message.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import asyncio
+
+        async def compute(task_id):
+            await asyncio.sleep(0.1)
+            if task_id == 3:
+                raise ValueError(f"Task {task_id} failed")
+            return task_id ** 2
+
+        async def main():
+            try:
+                async with asyncio.TaskGroup() as tg:
+                    tasks = [tg.create_task(compute(i)) for i in range(1, 5)]
+            except* ValueError as eg:
+                print("Errors:")
+                for exc in eg.exceptions:
+                    print(f"  {exc}")
+
+            print("Results from successful tasks:")
+            for t in tasks:
+                if not t.cancelled() and t.exception() is None:
+                    print(f"  {t.result()}")
+
+        asyncio.run(main())
+        ```

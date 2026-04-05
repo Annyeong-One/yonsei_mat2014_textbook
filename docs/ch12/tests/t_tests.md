@@ -792,3 +792,58 @@ if __name__ == "__main__":
     print("6. Report effect sizes along with p-values for complete picture")
     print("7. Multiple comparisons require adjustment (e.g., Bonferroni correction)")
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+A sample of 15 light bulbs has lifetimes (in hours): 1020, 980, 1050, 990, 1010, 1030, 960, 1040, 1000, 1020, 970, 1060, 1010, 985, 1025. Test whether the mean lifetime differs from 1000 hours at $\alpha = 0.05$.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        from scipy import stats
+
+        data = [1020, 980, 1050, 990, 1010, 1030, 960, 1040, 1000, 1020, 970, 1060, 1010, 985, 1025]
+        t_stat, p_val = stats.ttest_1samp(data, 1000)
+        print(f"t = {t_stat:.4f}, p = {p_val:.4f}")
+        print(f"Decision: {'Reject H0' if p_val < 0.05 else 'Fail to reject H0'}")
+
+---
+
+**Exercise 2.**
+Two groups of students took different prep courses. Group A scores: 78, 85, 90, 72, 88. Group B scores: 82, 91, 95, 88, 93. Perform both a pooled t-test and Welch's t-test. Compare the results.
+
+??? success "Solution to Exercise 2"
+
+        from scipy import stats
+
+        a = [78, 85, 90, 72, 88]
+        b = [82, 91, 95, 88, 93]
+
+        t_pooled, p_pooled = stats.ttest_ind(a, b, equal_var=True)
+        t_welch, p_welch = stats.ttest_ind(a, b, equal_var=False)
+
+        print(f"Pooled: t={t_pooled:.4f}, p={p_pooled:.4f}")
+        print(f"Welch:  t={t_welch:.4f}, p={p_welch:.4f}")
+
+---
+
+**Exercise 3.**
+Blood pressure was measured before and after a medication for 8 patients: before = [140, 135, 150, 145, 138, 142, 148, 136], after = [132, 130, 145, 140, 135, 138, 142, 130]. Perform a paired t-test and compute Cohen's $d_z$ for the paired differences.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+
+        before = np.array([140, 135, 150, 145, 138, 142, 148, 136])
+        after = np.array([132, 130, 145, 140, 135, 138, 142, 130])
+
+        t_stat, p_val = stats.ttest_rel(before, after)
+        diff = after - before
+        d_z = np.mean(diff) / np.std(diff, ddof=1)
+
+        print(f"Paired t-test: t={t_stat:.4f}, p={p_val:.4f}")
+        print(f"Cohen's d_z: {d_z:.4f}")

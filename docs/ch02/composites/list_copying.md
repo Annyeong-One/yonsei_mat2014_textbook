@@ -174,3 +174,72 @@ a = [x for x in a if x % 2 != 0]
 | `b = a.copy()` | ✅ | ❌ | ✅ |
 | `b = list(a)` | ✅ | ❌ | ✅ |
 | `b = copy.deepcopy(a)` | ✅ | ✅ | ✅ |
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Demonstrate the aliasing problem by creating a list `a`, assigning `b = a`, appending to `b`, and showing that `a` is also affected. Then fix it using a shallow copy.
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        a = [1, 2, 3]
+        b = a
+        b.append(4)
+        print(a)  # [1, 2, 3, 4] (affected!)
+
+        # Fix with shallow copy
+        a = [1, 2, 3]
+        b = a.copy()
+        b.append(4)
+        print(a)  # [1, 2, 3] (unchanged)
+        print(b)  # [1, 2, 3, 4]
+        ```
+
+    `b = a` creates an alias. `b = a.copy()` creates an independent shallow copy.
+
+---
+
+**Exercise 2.**
+Given the nested list `matrix = [[1, 2], [3, 4]]`, create both a shallow copy and a deep copy. Modify `matrix[0][0] = 99` and show which copy is affected and which is not.
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        import copy
+
+        matrix = [[1, 2], [3, 4]]
+        shallow = matrix.copy()
+        deep = copy.deepcopy(matrix)
+
+        matrix[0][0] = 99
+
+        print(matrix)  # [[99, 2], [3, 4]]
+        print(shallow) # [[99, 2], [3, 4]] (affected!)
+        print(deep)    # [[1, 2], [3, 4]]  (unchanged)
+        ```
+
+    Shallow copy shares nested objects. Deep copy recursively copies everything, creating fully independent structures.
+
+---
+
+**Exercise 3.**
+Write a function `safe_remove_evens(lst)` that returns a new list with all even numbers removed, without modifying the original list. Demonstrate that the original list is unchanged.
+
+??? success "Solution to Exercise 3"
+
+        ```python
+        def safe_remove_evens(lst):
+            return [x for x in lst if x % 2 != 0]
+
+        original = [1, 2, 3, 4, 5, 6]
+        filtered = safe_remove_evens(original)
+
+        print(original)  # [1, 2, 3, 4, 5, 6] (unchanged)
+        print(filtered)  # [1, 3, 5]
+        ```
+
+    List comprehension creates a new list, leaving the original intact.

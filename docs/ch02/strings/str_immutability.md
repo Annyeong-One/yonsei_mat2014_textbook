@@ -168,3 +168,67 @@ This eliminates unintended side effects.
 * Variables may be reassigned, but the original object is unchanged.
 * Immutability enables **memory optimizations, hashing, and safer code**.
 
+
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Show that calling `.upper()` on a string returns a new object by comparing the `id()` of the original and the result. Verify that the original string is unchanged.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    original = "hello"
+    upper = original.upper()
+
+    print(f"original: {original}, id: {id(original)}")
+    print(f"upper:    {upper}, id: {id(upper)}")
+    print(f"Same object: {original is upper}")  # False
+    ```
+
+    `.upper()` creates a new string object. The original remains unchanged because strings are immutable.
+
+---
+
+**Exercise 2.**
+Write code that attempts to change the second character of a string using index assignment. Catch the resulting error and then show the correct way to create a modified string using slicing.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    s = "hello"
+    try:
+        s[1] = "E"
+    except TypeError as e:
+        print(f"Error: {e}")
+
+    # Correct approach using slicing
+    s_new = s[0] + "E" + s[2:]
+    print(s_new)  # hEllo
+    print(s)      # hello (unchanged)
+    ```
+
+    Strings do not support item assignment. To create a modified version, build a new string from slices of the original.
+
+---
+
+**Exercise 3.**
+Demonstrate string interning by creating two variables with the same short string literal and checking if they are the same object using `is`. Then show a case where interning does not apply.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    a = "hello"
+    b = "hello"
+    print(a is b)  # True (interned)
+
+    # Interning may not apply for dynamically created strings
+    c = "".join(["h", "e", "l", "l", "o"])
+    print(a == c)  # True (same value)
+    print(a is c)  # May be False (different object)
+    ```
+
+    Python interns small string literals as an optimization. However, dynamically constructed strings may not be interned, so `is` may return `False` even when values are equal.

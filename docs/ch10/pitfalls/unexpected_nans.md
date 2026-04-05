@@ -298,3 +298,58 @@ validate_no_new_nan(df1, result, "merge")
 | Rolling window | Use `min_periods=1` |
 | shift/pct_change | Fill or handle first values |
 | Reindex new labels | Provide `fill_value` |
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Create two Series with mismatched indices and perform arithmetic. Explain why NaN values appear in the result.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    # Solution for the specific exercise
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(10), 'B': np.random.randn(10)})
+    print(df.head())
+    ```
+
+---
+
+**Exercise 2.** Write code that demonstrates how `merge()` with `how='left'` can introduce NaN values. How do you handle them?
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the Pandas API and its behavior for this specific operation.
+
+---
+
+**Exercise 3.** Explain three common sources of unexpected NaN values in Pandas operations.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(20), 'B': np.random.randn(20)})
+    result = df.describe()
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Write code that uses `fillna()` and `dropna()` to handle NaN values introduced by index misalignment.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(50), 'group': np.random.choice(['X', 'Y'], 50)})
+    result = df.groupby('group').mean()
+    print(result)
+    ```

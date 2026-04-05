@@ -183,3 +183,96 @@ plt.show()
 - Color-code axes and labels for clarity
 - Combine legends manually when using twin axes
 - Adjust spine positions for additional axes
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Plot monthly rainfall (in mm) and average temperature (in Celsius) on the same figure using `twinx`. Use bar chart for rainfall on the left y-axis and a line plot for temperature on the right y-axis. Color-code the axes and labels to match each dataset.
+
+??? success "Solution to Exercise 1"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        rainfall = [78, 52, 65, 45, 30, 15, 10, 12, 35, 60, 80, 90]
+        temperature = [5, 7, 12, 18, 23, 28, 31, 30, 25, 18, 11, 6]
+
+        fig, ax1 = plt.subplots(figsize=(10, 6))
+
+        ax1.bar(months, rainfall, color='steelblue', alpha=0.7, label='Rainfall')
+        ax1.set_xlabel('Month')
+        ax1.set_ylabel('Rainfall (mm)', color='steelblue')
+        ax1.tick_params(axis='y', labelcolor='steelblue')
+
+        ax2 = ax1.twinx()
+        ax2.plot(months, temperature, 'o-', color='red', linewidth=2, label='Temperature')
+        ax2.set_ylabel('Temperature (°C)', color='red')
+        ax2.tick_params(axis='y', labelcolor='red')
+
+        ax1.set_title('Monthly Rainfall and Temperature')
+        fig.tight_layout()
+        plt.show()
+
+---
+
+**Exercise 2.**
+Create a figure showing a stock price on the left y-axis and its daily trading volume on the right y-axis using `twinx`. Generate synthetic data: 100 days of prices starting at 100 with random walk increments, and volumes as random integers between 1M and 10M. Combine legends from both axes into a single legend.
+
+??? success "Solution to Exercise 2"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        np.random.seed(42)
+        days = np.arange(100)
+        prices = 100 + np.cumsum(np.random.randn(100) * 0.5)
+        volumes = np.random.randint(1_000_000, 10_000_000, 100)
+
+        fig, ax1 = plt.subplots(figsize=(12, 6))
+
+        line1, = ax1.plot(days, prices, color='navy', linewidth=1.5, label='Price')
+        ax1.set_xlabel('Day')
+        ax1.set_ylabel('Price ($)', color='navy')
+        ax1.tick_params(axis='y', labelcolor='navy')
+
+        ax2 = ax1.twinx()
+        bar1 = ax2.bar(days, volumes, color='lightcoral', alpha=0.4, label='Volume')
+        ax2.set_ylabel('Volume', color='lightcoral')
+        ax2.tick_params(axis='y', labelcolor='lightcoral')
+
+        lines = [line1, bar1]
+        labels = [l.get_label() for l in lines]
+        ax1.legend(lines, labels, loc='upper left')
+        ax1.set_title('Stock Price and Volume')
+        fig.tight_layout()
+        plt.show()
+
+---
+
+**Exercise 3.**
+Use `twiny` to show two different x-axis scales. Plot a function `y = sin(x)` where the bottom x-axis shows `x` in radians ($[0, 2\pi]$) and the top x-axis shows the same range in degrees ($[0, 360]$). Synchronize the two axes so they correspond correctly.
+
+??? success "Solution to Exercise 3"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x_rad = np.linspace(0, 2 * np.pi, 500)
+        y = np.sin(x_rad)
+
+        fig, ax1 = plt.subplots(figsize=(10, 5))
+        ax1.plot(x_rad, y, color='purple', linewidth=2)
+        ax1.set_xlabel('x (radians)')
+        ax1.set_ylabel('sin(x)')
+        ax1.set_xlim(0, 2 * np.pi)
+
+        ax2 = ax1.twiny()
+        ax2.set_xlim(0, 360)
+        ax2.set_xlabel('x (degrees)')
+
+        ax1.set_title('sin(x) with Radian and Degree Axes', pad=30)
+        plt.show()

@@ -300,3 +300,98 @@ bp = ax.boxplot(data, widths=0.15, patch_artist=True,
 
 plt.show()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a figure with a box plot on the left and a histogram on the right showing the same dataset (500 samples from a skewed distribution using `np.random.exponential`). Use the box plot to identify the median and quartiles, then mark those same values on the histogram with vertical lines.
+
+??? success "Solution to Exercise 1"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        np.random.seed(42)
+        data = np.random.exponential(2, 500)
+
+        q1, median, q3 = np.percentile(data, [25, 50, 75])
+
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+
+        ax1.boxplot(data, vert=True)
+        ax1.set_title('Box Plot')
+
+        ax2.hist(data, bins=30, color='steelblue', edgecolor='white', alpha=0.7)
+        ax2.axvline(q1, color='orange', linestyle='--', label=f'Q1={q1:.2f}')
+        ax2.axvline(median, color='red', linestyle='-', linewidth=2, label=f'Median={median:.2f}')
+        ax2.axvline(q3, color='orange', linestyle='--', label=f'Q3={q3:.2f}')
+        ax2.legend()
+        ax2.set_title('Histogram with Quartile Lines')
+
+        plt.tight_layout()
+        plt.show()
+
+---
+
+**Exercise 2.**
+Overlay a strip plot (individual points with jitter) on top of a box plot. Generate 4 groups of 50 samples from normal distributions with different means. Show the box plot with `patch_artist=True` and `alpha=0.5`, then scatter the actual points on top.
+
+??? success "Solution to Exercise 2"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        np.random.seed(42)
+        data = [np.random.normal(loc=m, scale=1, size=50) for m in [2, 4, 6, 8]]
+
+        fig, ax = plt.subplots(figsize=(8, 5))
+        bp = ax.boxplot(data, patch_artist=True, showfliers=False)
+
+        colors = ['#a6cee3', '#b2df8a', '#fb9a99', '#fdbf6f']
+        for patch, color in zip(bp['boxes'], colors):
+            patch.set_facecolor(color)
+            patch.set_alpha(0.5)
+
+        for i, d in enumerate(data, 1):
+            jitter = np.random.uniform(-0.15, 0.15, len(d))
+            ax.scatter(np.full_like(d, i) + jitter, d, alpha=0.6, s=20, color='black', zorder=3)
+
+        ax.set_xticklabels(['Group 1', 'Group 2', 'Group 3', 'Group 4'])
+        ax.set_title('Box Plot with Strip Plot Overlay')
+        plt.show()
+
+---
+
+**Exercise 3.**
+Create a combined visualization with three panels stacked vertically: a box plot at the top showing distribution summary, a histogram in the middle showing frequency, and a rug plot (short vertical lines at each data point) at the bottom. Use 300 samples from a bimodal distribution (mix of two normals).
+
+??? success "Solution to Exercise 3"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        np.random.seed(42)
+        data = np.concatenate([np.random.normal(-2, 0.8, 150),
+                                np.random.normal(2, 0.8, 150)])
+
+        fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(8, 8),
+                                              gridspec_kw={'height_ratios': [1, 3, 0.5]},
+                                              sharex=True)
+
+        ax1.boxplot(data, vert=False, widths=0.6)
+        ax1.set_yticks([])
+        ax1.set_title('Distribution Summary')
+
+        ax2.hist(data, bins=40, color='steelblue', edgecolor='white')
+        ax2.set_ylabel('Frequency')
+
+        ax3.eventplot(data, orientation='horizontal', lineoffsets=0.5,
+                       linelengths=0.8, color='black', linewidths=0.5)
+        ax3.set_yticks([])
+        ax3.set_xlabel('Value')
+        ax3.set_ylabel('Rug')
+
+        plt.tight_layout()
+        plt.show()

@@ -137,3 +137,83 @@ def set_coordinates(x, y):
 set_coordinates(50, 50)   # Position set to (50, 50)
 set_coordinates(150, 50)  # AssertionError: Coordinates (150, 50) out of bounds
 ```
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Write a function `calculate_average(numbers)` that uses `assert` to ensure the input list is not empty before computing the average. Test it with both a valid list and an empty list.
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        def calculate_average(numbers):
+            assert len(numbers) > 0, "Cannot compute average of empty list"
+            return sum(numbers) / len(numbers)
+
+        print(calculate_average([10, 20, 30]))  # 20.0
+
+        try:
+            calculate_average([])
+        except AssertionError as e:
+            print(f"Error: {e}")  # Cannot compute average of empty list
+        ```
+
+    The `assert` statement raises `AssertionError` with the custom message when the condition is `False`.
+
+---
+
+**Exercise 2.**
+Explain why `assert` should not be used for input validation in production code. What happens when Python is run with the `-O` (optimize) flag?
+
+??? success "Solution to Exercise 2"
+
+    `assert` statements are removed entirely when Python is run with `-O` (optimize) flag:
+
+        ```bash
+        python -O script.py
+        ```
+
+    This means any validation done via `assert` will be silently skipped in optimized mode. For input validation, always use explicit `if`/`raise`:
+
+        ```python
+        # Bad: silently skipped with -O
+        assert user_input > 0
+
+        # Good: always runs
+        if user_input <= 0:
+            raise ValueError("Input must be positive")
+        ```
+
+    Use `assert` only for internal consistency checks during development, not for validating external input.
+
+---
+
+**Exercise 3.**
+Write a function `validate_age(age)` that uses `assert` with a custom error message to check that `age` is between 0 and 150. Then rewrite it using a proper `if`/`raise` pattern that works even with optimization enabled.
+
+??? success "Solution to Exercise 3"
+
+        ```python
+        # Using assert (development only)
+        def validate_age_assert(age):
+            assert 0 <= age <= 150, f"Invalid age: {age}"
+            return age
+
+        # Using if/raise (production safe)
+        def validate_age(age):
+            if not (0 <= age <= 150):
+                raise ValueError(f"Invalid age: {age}")
+            return age
+
+        print(validate_age(25))  # 25
+
+        try:
+            validate_age(-5)
+        except ValueError as e:
+            print(f"Error: {e}")  # Invalid age: -5
+        ```
+
+    The `if`/`raise` version works regardless of optimization flags and raises a more appropriate `ValueError` instead of `AssertionError`.

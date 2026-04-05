@@ -440,3 +440,95 @@ if __name__ == "__main__":
 - Add `__main__.py` for `python -m package` support
 - Use `[project.scripts]` for CLI entry points
 - Build with `python -m build`, publish with `twine`
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a minimal `pyproject.toml` file for a package called `myutils` with version `"0.1.0"`, a description, and Python 3.8+ requirement. Include a `[project.scripts]` entry that maps the command `myutils-cli` to `myutils.cli:main`.
+
+??? success "Solution to Exercise 1"
+
+    ```toml
+    [build-system]
+    requires = ["setuptools>=61.0"]
+    build-backend = "setuptools.backends._legacy:_Backend"
+
+    [project]
+    name = "myutils"
+    version = "0.1.0"
+    description = "A collection of utility functions"
+    requires-python = ">=3.8"
+
+    [project.scripts]
+    myutils-cli = "myutils.cli:main"
+    ```
+
+---
+
+**Exercise 2.**
+Create the directory structure for a Python package called `datatools` that has two submodules: `datatools.io` (for reading/writing) and `datatools.transform` (for data transformations). Write the `__init__.py` files so that `from datatools import read_csv, normalize` works.
+
+??? success "Solution to Exercise 2"
+
+    ```
+    datatools/
+        __init__.py
+        io.py
+        transform.py
+    ```
+
+    ```python
+    # datatools/__init__.py
+    from datatools.io import read_csv
+    from datatools.transform import normalize
+
+    __all__ = ["read_csv", "normalize"]
+    ```
+
+    ```python
+    # datatools/io.py
+    def read_csv(path):
+        print(f"Reading {path}")
+        return []
+    ```
+
+    ```python
+    # datatools/transform.py
+    def normalize(data):
+        print("Normalizing data")
+        return data
+    ```
+
+---
+
+**Exercise 3.**
+Write a `__main__.py` file for a package called `analyzer` so that running `python -m analyzer` prints usage information and accepts a `--version` flag. Use `argparse` inside `__main__.py`.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    # analyzer/__main__.py
+    import argparse
+
+    def main():
+        parser = argparse.ArgumentParser(
+            prog="analyzer",
+            description="Data analysis tool"
+        )
+        parser.add_argument(
+            "--version", action="version", version="analyzer 1.0.0"
+        )
+        parser.add_argument("input", nargs="?", help="Input file")
+        args = parser.parse_args()
+
+        if args.input:
+            print(f"Analyzing {args.input}...")
+        else:
+            parser.print_help()
+
+    main()
+    # Run with: python -m analyzer
+    # or: python -m analyzer --version
+    ```

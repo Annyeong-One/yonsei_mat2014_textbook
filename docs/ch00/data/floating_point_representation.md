@@ -597,6 +597,84 @@ The difference is below floating-point resolution.
 
 ---
 
+**Exercise 8.**
+A student claims: "Floating-point numbers are just decimals stored in binary, so they work like regular math but with small rounding errors." Critique this claim. Specifically, explain why floating-point arithmetic violates the **associativity** of addition -- that is, why `(a + b) + c` can give a different result than `a + (b + c)`. Construct a concrete Python example using `float` values where changing the grouping of additions produces a different result, and explain the mechanism behind the discrepancy.
+
+??? success "Solution to Exercise 8"
+    The claim is misleading because floating-point arithmetic does not obey the same algebraic laws as real-number arithmetic. In particular, **addition is not associative**.
+
+    This happens because each intermediate result is rounded to the nearest representable float. Different groupings produce different intermediate values, which get rounded differently.
+
+    **Concrete example:**
+
+    ```python
+    a = 1e16
+    b = -1e16
+    c = 1.0
+
+    print((a + b) + c)  # (1e16 + (-1e16)) + 1.0 = 0.0 + 1.0 = 1.0
+    print(a + (b + c))  # 1e16 + (-1e16 + 1.0) = 1e16 + (-1e16) = 0.0
+    ```
+
+    In the second grouping, `b + c = -1e16 + 1.0 = -1e16` because `1.0` is smaller than the spacing between floats near $10^{16}$ (the spacing is approximately $2$). The small value is absorbed. Then `a + (-1e16) = 0.0`, losing the `1.0` entirely.
+
+    In the first grouping, `a + b = 0.0` exactly (no rounding needed), then `0.0 + 1.0 = 1.0`.
+
+---
+
+**Exercise 9.**
+The **spacing** between consecutive representable floating-point numbers is not constant -- it grows with the magnitude of the numbers. Explain *why* this non-uniform spacing is an inherent consequence of the IEEE 754 representation (sign, exponent, significand). Then explain the practical implication: why is `1e16 + 1.0 == 1e16` true in Python, while `1.0 + 1e-16 != 1.0` is also true? What determines the threshold at which a small addition "disappears"?
+
+??? success "Solution to Exercise 9"
+    In IEEE 754, a floating-point number is $(-1)^S \times 1.\text{fraction} \times 2^e$. The significand (fraction) has a fixed number of bits (52 for float64). The spacing between consecutive representable numbers is determined by the value of the least significant bit of the significand, which is $2^e \times 2^{-52} = 2^{e-52}$.
+
+    As the magnitude increases, the exponent $e$ increases, so the spacing $2^{e-52}$ grows proportionally. Near $1.0$ ($e = 0$), the spacing is $2^{-52} \approx 2.2 \times 10^{-16}$. Near $10^{16}$ ($e \approx 53$), the spacing is $2^{53-52} = 2$.
+
+    `1e16 + 1.0 == 1e16` is true because the spacing between consecutive floats near $10^{16}$ is approximately $2$. Adding $1.0$ (which is less than half the spacing) rounds back to the original value.
+
+    `1.0 + 1e-16 != 1.0` is true because the spacing near $1.0$ is about $2.2 \times 10^{-16}$, and $10^{-16}$ is roughly half of that, just barely enough to cause a change (the exact threshold is $\epsilon/2$ where $\epsilon$ is machine epsilon).
+
+    The general threshold: an addition `x + y` is absorbed (gives `x`) when $|y| < \frac{1}{2} \cdot \text{spacing}(x) = \frac{1}{2} |x| \cdot \epsilon$.
+
+---
+
+**Exercise 10.**
+Explain why `0.1 + 0.2 != 0.3` in Python, but `0.5 + 0.25 == 0.75` is exact. What is special about `0.5`, `0.25`, and `0.75` that makes them exactly representable in binary floating-point, while `0.1`, `0.2`, and `0.3` are not? State the general rule for which decimal fractions have exact binary representations.
+
+??? success "Solution to Exercise 10"
+    A decimal fraction $p/q$ has an exact binary representation if and only if $q$ is a power of $2$. This is because binary "decimals" represent sums of negative powers of $2$: $2^{-1} = 0.5$, $2^{-2} = 0.25$, $2^{-3} = 0.125$, etc.
+
+    - $0.5 = 1/2 = 2^{-1}$ -- exact in binary: `0.1`
+    - $0.25 = 1/4 = 2^{-2}$ -- exact in binary: `0.01`
+    - $0.75 = 3/4 = 2^{-1} + 2^{-2}$ -- exact in binary: `0.11`
+    - $0.5 + 0.25 = 0.75$ -- all operands and the result are exact, so no rounding occurs.
+
+    - $0.1 = 1/10$ -- the denominator $10 = 2 \times 5$ has a factor of $5$, which is not a power of $2$. Its binary expansion is $0.0\overline{0011}$ (repeating), so it must be rounded.
+    - $0.2 = 1/5$ and $0.3 = 3/10$ are similarly non-terminating in binary.
+
+    When `0.1 + 0.2` is computed, both operands carry rounding error, and the sum's rounding error does not cancel. The result is slightly above $0.3$, while the stored value of `0.3` is slightly below $0.3$, so they differ.
+
+---
+
+**Exercise 11.**
+IEEE 754 defines that `NaN != NaN` (NaN is not equal to itself). This seems bizarre at first. Explain the reasoning behind this design decision. Consider: if `NaN == NaN` were true, what problems would arise when using `==` to check whether a computation produced a valid result? How does `NaN`'s self-inequality enable a simple idiom for detecting `NaN` without calling a special function?
+
+??? success "Solution to Exercise 11"
+    NaN represents the result of **undefined operations** (like $0/0$ or $\sqrt{-1}$). It is not a number -- it has no value. The IEEE 754 committee made `NaN != NaN` for a critical practical reason:
+
+    If `NaN == NaN` were true, then the common pattern of checking `x == x` would always return `True`, making it impossible to detect NaN through comparison. With the actual design, `x != x` is `True` **if and only if** `x` is `NaN`. This provides a simple NaN-detection idiom:
+
+    ```python
+    def is_nan(x):
+        return x != x
+    ```
+
+    Furthermore, if `NaN == NaN` were true, then expressions like `max([1.0, float('nan'), 2.0])` would have to choose NaN as a legitimate "largest" value, propagating undefined results into valid data in confusing ways.
+
+    The self-inequality of NaN signals that the value is not meaningful and should not participate in comparisons as if it were an ordinary number. Any comparison involving NaN (except `!=`) returns `False`, which ensures that NaN does not silently "pass" equality checks that assume valid data.
+
+---
+
 ## 15. Short Answers
 
 1. Sign, exponent, significand
@@ -606,8 +684,6 @@ The difference is below floating-point resolution.
 5. NaN is defined as unequal to everything
 6. It becomes infinity
 7. Because spacing between floats grows with magnitude
-
----
 
 ## 16. Summary
 

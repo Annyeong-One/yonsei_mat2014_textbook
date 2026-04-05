@@ -274,3 +274,114 @@ Key principles:
 - Always use context managers for resources
 - Use comprehensions for clarity and performance
 - Choose patterns that fit your problem
+
+---
+
+## Exercises
+
+**Exercise 1.**
+EAFP vs LBYL have different behavior under race conditions. Predict which pattern is safer:
+
+```python
+import os
+
+filename = "data.txt"
+
+# LBYL
+if os.path.exists(filename):
+    with open(filename) as f:
+        data = f.read()
+
+# EAFP
+try:
+    with open(filename) as f:
+        data = f.read()
+except FileNotFoundError:
+    data = ""
+```
+
+What can go wrong with the LBYL pattern between the `exists()` check and the `open()` call? Why is EAFP the preferred Python idiom?
+
+??? success "Solution to Exercise 1"
+    The EAFP pattern is safer. With LBYL, a **race condition** (TOCTOU -- Time of Check to Time of Use) can occur: the file could be deleted by another process between `os.path.exists(filename)` returning `True` and `open(filename)` executing. The LBYL code would then raise `FileNotFoundError` anyway, with no handler in place.
+
+    EAFP avoids this because the check and the operation are atomic from the application's perspective: you try to open the file, and if it fails, you handle the error. There is no window where the file's state can change between checking and using.
+
+    EAFP is also more Pythonic because:
+    - It handles the "usually succeeds" case with zero overhead (no preliminary check)
+    - It uses Python's exception mechanism, which is well-optimized for the no-exception path
+    - It covers all failure modes, not just the ones you thought to check for
+
+---
+
+**Exercise 2.**
+The walrus operator (`:=`) assigns inside expressions. Predict the output:
+
+```python
+data = [1, 2, 3, 4, 5, 6, 7, 8]
+
+result = [y for x in data if (y := x ** 2) > 10]
+print(result)
+
+# What about this?
+total = 0
+running = [total := total + x for x in [1, 2, 3, 4]]
+print(running)
+print(total)
+```
+
+Why does `total` have the final value outside the comprehension? How does the walrus operator's scoping differ from regular comprehension variables?
+
+??? success "Solution to Exercise 2"
+    Output:
+
+    ```text
+    [16, 25, 36, 49, 64]
+    [1, 3, 6, 10]
+    10
+    ```
+
+    The first comprehension filters to keep only squares greater than 10: `1, 4, 9` are excluded; `16, 25, 36, 49, 64` are kept.
+
+    `total` has value `10` outside the comprehension because the walrus operator (`:=`) assigns to the **enclosing scope**, not the comprehension's internal scope. Regular comprehension variables (like `x`) are scoped to the comprehension and do not leak. But `:=` explicitly targets the enclosing scope, so `total` accumulates across iterations and persists after the comprehension.
+
+    This scoping behavior is by design (PEP 572): the walrus operator always binds in the enclosing scope, making it useful for accumulation patterns but requiring care to avoid surprising side effects.
+
+---
+
+**Exercise 3.**
+Tuple unpacking with `*` is more powerful than it appears. Predict the output:
+
+```python
+first, *middle, last = [1, 2, 3, 4, 5]
+print(first, middle, last)
+
+a, *b = [1]
+print(a, b)
+
+*c, d = [1]
+print(c, d)
+
+head, *_ = "hello"
+print(head)
+print(type(_))
+```
+
+Why does `*b` become an empty list `[]` when unpacking `[1]`? What type does the starred variable always produce?
+
+??? success "Solution to Exercise 3"
+    Output:
+
+    ```text
+    1 [2, 3, 4] 5
+    1 []
+    [] 1
+    h
+    <class 'list'>
+    ```
+
+    `*b` in `a, *b = [1]` becomes `[]` because after assigning `a = 1`, there are no remaining elements. The starred variable **always produces a list**, even if it captures zero elements. This is a design guarantee: you can always iterate over the starred result without checking if it is `None` or a single value.
+
+    The starred variable absorbs whatever is left after the non-starred variables claim their positions. `first` and `last` each claim one element from the ends; `*middle` gets everything between them.
+
+    `_` is conventionally used for values you want to discard, but it is still a regular variable. In this case, `*_` is a list of discarded characters: `['e', 'l', 'l', 'o']`.

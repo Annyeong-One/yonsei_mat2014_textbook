@@ -307,3 +307,66 @@ Most encoding errors occur because **the wrong encoding is assumed**. Always ens
 * UTF-8 is the **default encoding in Python 3**.
 * ASCII characters use **1 byte**, while many Unicode characters use **multiple bytes**.
 * Encoding mismatches cause `UnicodeEncodeError` and `UnicodeDecodeError`.
+
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Encode the string `"Hello, World!"` in UTF-8, then decode it back. Verify that the decoded string equals the original.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    original = "Hello, World!"
+    encoded = original.encode("utf-8")
+    decoded = encoded.decode("utf-8")
+
+    print(f"Encoded: {encoded}")
+    print(f"Decoded: {decoded}")
+    print(f"Equal: {original == decoded}")  # True
+    ```
+
+    `encode()` converts a string to bytes, and `decode()` converts bytes back to a string. The round-trip preserves the original content.
+
+---
+
+**Exercise 2.**
+Encode the string `"\u4f60\u597d"` (Chinese for "hello") in UTF-8 and print the resulting bytes. Then count the number of bytes and compare it to `len()` of the original string.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    text = "\u4f60\u597d"  # 你好
+    encoded = text.encode("utf-8")
+
+    print(f"String: {text}")
+    print(f"Bytes: {encoded}")
+    print(f"Character count: {len(text)}")  # 2
+    print(f"Byte count: {len(encoded)}")    # 6
+    ```
+
+    Each Chinese character uses 3 bytes in UTF-8, so 2 characters produce 6 bytes.
+
+---
+
+**Exercise 3.**
+Demonstrate a `UnicodeEncodeError` by trying to encode a non-ASCII string with the `"ascii"` codec. Then handle the error using the `"replace"` and `"ignore"` error handlers.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    text = "Caf\u00e9"
+
+    try:
+        text.encode("ascii")
+    except UnicodeEncodeError as e:
+        print(f"Error: {e}")
+
+    print(text.encode("ascii", errors="replace"))  # b'Caf?'
+    print(text.encode("ascii", errors="ignore"))   # b'Caf'
+    ```
+
+    ASCII cannot represent `\u00e9` (é). The `"replace"` handler substitutes `?`, and `"ignore"` silently drops the character.

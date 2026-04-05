@@ -622,3 +622,93 @@ if __name__ == "__main__":
     - Inspecting __code__ and __closure__ shows what's captured
     """)
 ```
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Write a closure `make_counter()` that returns three functions: `increment`, `decrement`, and `get_value`. The counter should start at 0. Use `nonlocal` to modify the shared state.
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        def make_counter():
+            value = 0
+            def increment():
+                nonlocal value
+                value += 1
+            def decrement():
+                nonlocal value
+                value -= 1
+            def get_value():
+                return value
+            return increment, decrement, get_value
+
+        inc, dec, get = make_counter()
+        inc(); inc(); inc()
+        print(get())  # 3
+        dec()
+        print(get())  # 2
+        ```
+
+    All three functions share the same `value` variable from the enclosing scope, modified via `nonlocal`.
+
+---
+
+**Exercise 2.**
+Explain why the following code raises `UnboundLocalError`. Fix it using `nonlocal`.
+
+```python
+def outer():
+    count = 0
+    def inner():
+        count += 1
+        return count
+    return inner
+```
+
+??? success "Solution to Exercise 2"
+
+    The assignment `count += 1` makes `count` a local variable in `inner`. Python detects this at compile time, so reading `count` before assignment raises `UnboundLocalError`.
+
+        ```python
+        def outer():
+            count = 0
+            def inner():
+                nonlocal count
+                count += 1
+                return count
+            return inner
+
+        f = outer()
+        print(f())  # 1
+        print(f())  # 2
+        ```
+
+    `nonlocal count` tells Python that `count` refers to the variable in the enclosing scope, not a new local variable.
+
+---
+
+**Exercise 3.**
+Write a closure `make_toggle()` that returns a function. Each call toggles between `True` and `False`, starting with `True` on the first call.
+
+??? success "Solution to Exercise 3"
+
+        ```python
+        def make_toggle():
+            state = False
+            def toggle():
+                nonlocal state
+                state = not state
+                return state
+            return toggle
+
+        t = make_toggle()
+        print(t())  # True
+        print(t())  # False
+        print(t())  # True
+        ```
+
+    The state starts as `False` and flips on each call. The first call returns `True`.

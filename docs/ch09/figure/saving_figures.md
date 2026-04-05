@@ -184,3 +184,76 @@ for fmt in ['png', 'pdf', 'svg']:
 - Higher DPI means better quality but larger files
 - Use `bbox_inches='tight'` to remove whitespace
 - Use `transparent=True` for overlay graphics
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that creates a simple plot and saves it to a PNG file with `dpi=200` and a tight bounding box. Use `fig.savefig()`.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    x = np.linspace(0, 2 * np.pi, 100)
+    fig, ax = plt.subplots()
+    ax.plot(x, np.sin(x), 'b-', lw=2)
+    ax.set_title('Saved Figure')
+
+    fig.savefig('my_plot.png', dpi=200, bbox_inches='tight')
+    plt.show()
+    ```
+
+---
+
+**Exercise 2.** Explain the difference between saving a figure as PNG versus SVG. When would you choose each format?
+
+??? success "Solution to Exercise 2"
+    **PNG** is a raster format that stores pixels. It is best for web display, quick sharing, and when file size matters. The quality depends on DPI -- higher DPI means larger files but sharper images.
+
+    **SVG** is a vector format that stores shapes and curves as mathematical descriptions. It is best for publication-quality figures, presentations, and documents because it scales to any size without losing quality. However, SVG files can be larger and slower to render for plots with very many data points (e.g., scatter plots with millions of points).
+
+    Choose PNG for screen display and web. Choose SVG (or PDF) for print and publication.
+
+---
+
+**Exercise 3.** Write code that saves the same figure in three formats (PNG, PDF, SVG) by calling `fig.savefig()` three times with different file extensions. Set `dpi=150` for the raster format.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    x = np.linspace(0, 10, 100)
+    fig, ax = plt.subplots()
+    ax.plot(x, np.sin(x), 'r-', lw=2)
+    ax.set_title('Multi-Format Save')
+
+    fig.savefig('plot.png', dpi=150, bbox_inches='tight')
+    fig.savefig('plot.pdf', bbox_inches='tight')
+    fig.savefig('plot.svg', bbox_inches='tight')
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Create a figure with a transparent background by passing `transparent=True` to `savefig()`. Explain why this is useful when embedding plots in presentations.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    x = np.linspace(0, 2 * np.pi, 100)
+    fig, ax = plt.subplots()
+    ax.plot(x, np.cos(x), 'b-', lw=2)
+    ax.set_title('Transparent Background')
+
+    fig.savefig('transparent_plot.png', dpi=150,
+                bbox_inches='tight', transparent=True)
+    plt.show()
+    ```
+
+    Saving with `transparent=True` makes the figure and axes backgrounds transparent (alpha=0). This is useful for presentations and documents where you want to overlay the plot on a colored or image background without a white rectangle surrounding it.

@@ -187,6 +187,98 @@ print(f"After: {gc.get_count()}")
 
 ## Runnable Example: `memory_management_tutorial.py`
 
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a script that creates 500 circular reference pairs (two objects referencing each other). Use `gc.get_count()` before and after creation, then call `gc.collect()` and print how many objects were collected. Verify that the count in generation 0 decreases after collection.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import gc
+
+        class Node:
+            def __init__(self):
+                self.ref = None
+
+        gc.collect()
+        before = gc.get_count()
+        print(f"Before: {before}")
+
+        pairs = []
+        for _ in range(500):
+            a, b = Node(), Node()
+            a.ref = b
+            b.ref = a
+            pairs.append((a, b))
+
+        after_create = gc.get_count()
+        print(f"After creation: {after_create}")
+
+        del pairs
+        collected = gc.collect()
+        after_gc = gc.get_count()
+
+        print(f"Collected: {collected} objects")
+        print(f"After gc.collect(): {after_gc}")
+        ```
+
+---
+
+**Exercise 2.**
+Write a function `monitor_gc_stats()` that saves `gc.get_stats()` before and after running a function that creates 10,000 short-lived lists. Print the number of collections that occurred in each generation during the function's execution.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import gc
+
+        def monitor_gc_stats(func):
+            gc.collect()
+            before = gc.get_stats()
+            func()
+            after = gc.get_stats()
+
+            for i in range(3):
+                delta = after[i]['collections'] - before[i]['collections']
+                print(f"Gen {i}: {delta} collections during execution")
+
+        def create_short_lived():
+            for _ in range(10_000):
+                _ = [0] * 100
+
+        monitor_gc_stats(create_short_lived)
+        ```
+
+---
+
+**Exercise 3.**
+Experiment with GC thresholds: set thresholds to `(100, 5, 5)` using `gc.set_threshold()`, then create 200 circular references in a loop. After each batch of 50, print `gc.get_count()`. Reset thresholds to the defaults at the end. Observe how lower thresholds trigger more frequent collections.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import gc
+
+        class Node:
+            def __init__(self):
+                self.ref = None
+
+        default = gc.get_threshold()
+        gc.set_threshold(100, 5, 5)
+        print(f"Thresholds set to: {gc.get_threshold()}")
+
+        gc.collect()
+        for batch in range(4):
+            for _ in range(50):
+                a, b = Node(), Node()
+                a.ref = b
+                b.ref = a
+            print(f"After batch {batch + 1} (50 pairs): gc.get_count() = {gc.get_count()}")
+
+        gc.set_threshold(*default)
+        print(f"Thresholds restored to: {gc.get_threshold()}")
+        ```
+
 ```python
 """
 05_advanced_memory_management.py

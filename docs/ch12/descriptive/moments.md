@@ -490,3 +490,55 @@ from statsmodels.stats.power import normal_power_het
 - <0: Light tails (fewer extremes)
 
 **Key insight:** Higher moments reveal distribution shape beyond mean and variance, with skewness indicating asymmetry (important for risk assessment) and kurtosis measuring tail thickness (critical for extreme event modeling).
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Compute the skewness and excess kurtosis of 1000 samples from (a) a standard normal, (b) an exponential with $\lambda = 1$, and (c) a uniform on $[0, 1]$. Use `scipy.stats.skew()` and `scipy.stats.kurtosis()`.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        for name, data in [("Normal", np.random.normal(size=1000)),
+                           ("Exponential", np.random.exponential(size=1000)),
+                           ("Uniform", np.random.uniform(size=1000))]:
+            print(f"{name:12s}: skew={stats.skew(data):.4f}, kurtosis={stats.kurtosis(data):.4f}")
+
+---
+
+**Exercise 2.**
+For 500 samples from a $\chi^2(5)$ distribution, compute the first four raw moments using `scipy.stats.moment()` (for central moments) and manual computation. Compare with theoretical moments.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy import stats as st
+
+        np.random.seed(42)
+        data = st.chi2.rvs(df=5, size=500)
+        for k in range(1, 5):
+            cm = st.moment(data, moment=k)
+            print(f"Central moment {k}: {cm:.4f}")
+
+---
+
+**Exercise 3.**
+Apply the Jarque-Bera test (`scipy.stats.jarque_bera()`) to samples from a normal and a lognormal distribution (500 samples each). Print the test statistics and p-values to demonstrate which sample departs from normality.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        normal_data = np.random.normal(size=500)
+        lognormal_data = np.random.lognormal(size=500)
+
+        for name, data in [("Normal", normal_data), ("Lognormal", lognormal_data)]:
+            jb_stat, p_val = stats.jarque_bera(data)
+            print(f"{name:10s}: JB={jb_stat:.4f}, p={p_val:.4f}")

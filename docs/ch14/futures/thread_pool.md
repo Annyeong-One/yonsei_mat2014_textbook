@@ -698,3 +698,90 @@ print()
 if __name__ == '__main__':
     main()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Use `ThreadPoolExecutor` with 5 workers to concurrently simulate fetching 10 URLs (each `time.sleep(0.5)` returning the URL string). Measure the elapsed time and verify it is approximately 1 second (two batches of 5), not 5 seconds.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import time
+        from concurrent.futures import ThreadPoolExecutor
+
+        def fetch(url):
+            time.sleep(0.5)
+            return url
+
+        urls = [f"https://example.com/page{i}" for i in range(10)]
+
+        start = time.perf_counter()
+        with ThreadPoolExecutor(max_workers=5) as ex:
+            results = list(ex.map(fetch, urls))
+        elapsed = time.perf_counter() - start
+
+        print(f"Fetched {len(results)} URLs in {elapsed:.2f}s")
+        assert elapsed < 2.0, "Should be ~1s, not 5s"
+        ```
+
+---
+
+**Exercise 2.**
+Use `submit()` and `as_completed()` to process 15 tasks with random delays (0.1-0.8s). Map each future to its task ID using a dictionary. Print results in completion order, showing the task ID and result. Count how many completed in under 0.5 seconds.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import time
+        import random
+        from concurrent.futures import ThreadPoolExecutor, as_completed
+
+        def task(tid):
+            delay = random.uniform(0.1, 0.8)
+            time.sleep(delay)
+            return tid, delay
+
+        fast_count = 0
+        with ThreadPoolExecutor(max_workers=5) as ex:
+            futs = {ex.submit(task, i): i for i in range(15)}
+            for f in as_completed(futs):
+                tid, delay = f.result()
+                print(f"Task {tid}: {delay:.2f}s")
+                if delay < 0.5:
+                    fast_count += 1
+
+        print(f"\n{fast_count}/15 completed in under 0.5s")
+        ```
+
+---
+
+**Exercise 3.**
+Implement a retry wrapper. Write a `fetch_with_retry(url, max_retries=3)` function that simulates a flaky network call (randomly raises `ConnectionError` 50% of the time). Use `ThreadPoolExecutor` to fetch 8 URLs concurrently. Print which URLs succeeded, which exhausted retries, and the total elapsed time.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import time
+        import random
+        from concurrent.futures import ThreadPoolExecutor
+
+        def fetch_with_retry(url, max_retries=3):
+            for attempt in range(max_retries):
+                if random.random() > 0.5:
+                    return f"OK: {url}"
+                time.sleep(0.1)
+            return f"FAIL: {url}"
+
+        urls = [f"https://api.example.com/{i}" for i in range(8)]
+
+        start = time.perf_counter()
+        with ThreadPoolExecutor(max_workers=4) as ex:
+            results = list(ex.map(fetch_with_retry, urls))
+        elapsed = time.perf_counter() - start
+
+        ok = sum(1 for r in results if r.startswith("OK"))
+        fail = sum(1 for r in results if r.startswith("FAIL"))
+        for r in results:
+            print(f"  {r}")
+        print(f"\nSucceeded: {ok}, Failed: {fail}, Time: {elapsed:.2f}s")
+        ```

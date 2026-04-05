@@ -547,3 +547,86 @@ print(f"Python list: ~{py_size} bytes")   # ~32,000
 print(f"NumPy array: {np_size} bytes")    # 8,000
 print(f"Ratio: {py_size/np_size:.1f}x")   # ~4x more memory
 ```
+
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Use `sys.getsizeof()` to compare the memory used by a single Python `float`, a Python `int`, and a Python `str` of `"3.14"`. Explain why a Python float uses more memory than the 8 bytes needed for the IEEE 754 value.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    import sys
+
+    f = 3.14
+    i = 3
+    s = "3.14"
+
+    print(f"float: {sys.getsizeof(f)} bytes")  # 24
+    print(f"int:   {sys.getsizeof(i)} bytes")   # 28
+    print(f"str:   {sys.getsizeof(s)} bytes")   # 53
+
+    # Python float uses 24 bytes:
+    #   8 bytes for reference count
+    #   8 bytes for type pointer
+    #   8 bytes for the actual IEEE 754 double value
+    ```
+
+    Every Python object carries metadata (reference count and type pointer), adding 16 bytes of overhead on top of the 8-byte double value.
+
+---
+
+**Exercise 2.**
+Write a timing comparison that sums one million `0.1` values using (a) a Python `for` loop and (b) `sum()` with a generator expression. Report the times and explain the difference.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    import time
+
+    n = 1_000_000
+
+    # Method 1: for loop
+    start = time.perf_counter()
+    total = 0.0
+    for _ in range(n):
+        total += 0.1
+    loop_time = time.perf_counter() - start
+
+    # Method 2: sum with generator
+    start = time.perf_counter()
+    total = sum(0.1 for _ in range(n))
+    sum_time = time.perf_counter() - start
+
+    print(f"for loop: {loop_time:.4f}s")
+    print(f"sum():    {sum_time:.4f}s")
+    ```
+
+    `sum()` is implemented in C and avoids Python bytecode overhead for each addition, making it faster than an explicit loop.
+
+---
+
+**Exercise 3.**
+Demonstrate that `0.1 + 0.2 != 0.3` in Python and show two different ways to correctly compare floating-point values for approximate equality.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    import math
+
+    # The problem
+    print(0.1 + 0.2 == 0.3)  # False
+
+    # Solution 1: math.isclose
+    print(math.isclose(0.1 + 0.2, 0.3))  # True
+
+    # Solution 2: absolute tolerance
+    epsilon = 1e-9
+    print(abs((0.1 + 0.2) - 0.3) < epsilon)  # True
+    ```
+
+    Floating-point representation errors mean `0.1 + 0.2` produces `0.30000000000000004`. Use `math.isclose()` or an explicit tolerance for comparisons.

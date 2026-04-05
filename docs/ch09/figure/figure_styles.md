@@ -141,3 +141,95 @@ plt.style.use('default')
 - Use context managers for temporary style changes
 - `plt.xkcd()` creates hand-drawn style plots
 - Custom styles can be saved as `.mplstyle` files
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that creates a figure with a light gray background (`facecolor='#f0f0f0'`) and a black border (`edgecolor='black'`, `linewidth=2`). Plot any function on it.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    x = np.linspace(0, 2 * np.pi, 100)
+
+    fig = plt.figure(figsize=(8, 5), facecolor='#f0f0f0',
+                     edgecolor='black', linewidth=2)
+    ax = fig.add_subplot(111)
+    ax.plot(x, np.sin(x), 'b-', lw=2)
+    ax.set_title('Figure with Custom Background')
+    plt.show()
+    ```
+
+---
+
+**Exercise 2.** List three different Matplotlib style sheets and explain when each might be appropriate. Write code that applies one of them using `plt.style.use()`.
+
+??? success "Solution to Exercise 2"
+    Three common Matplotlib style sheets:
+
+    1. **`'ggplot'`** -- Mimics the look of R's ggplot2 library. Good for data science presentations with a clean, colorful aesthetic.
+    2. **`'seaborn-v0_8'`** -- Based on Seaborn defaults. Good for statistical visualizations with soft colors and grid backgrounds.
+    3. **`'dark_background'`** -- White/bright elements on dark background. Good for presentations on dark-themed slides or monitors.
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    plt.style.use('ggplot')
+
+    x = np.linspace(0, 10, 100)
+    fig, ax = plt.subplots()
+    ax.plot(x, np.sin(x), lw=2, label='sin(x)')
+    ax.plot(x, np.cos(x), lw=2, label='cos(x)')
+    ax.legend()
+    ax.set_title('Using ggplot Style')
+    plt.show()
+    ```
+
+---
+
+**Exercise 3.** Write code that creates two figures (in the same script) using different style contexts via `plt.style.context()`. Use `'ggplot'` for the first and `'dark_background'` for the second.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    x = np.linspace(0, 2 * np.pi, 100)
+
+    with plt.style.context('ggplot'):
+        fig, ax = plt.subplots(figsize=(6, 4))
+        ax.plot(x, np.sin(x), lw=2)
+        ax.set_title('ggplot style')
+        plt.show()
+
+    with plt.style.context('dark_background'):
+        fig, ax = plt.subplots(figsize=(6, 4))
+        ax.plot(x, np.cos(x), lw=2)
+        ax.set_title('dark_background style')
+        plt.show()
+    ```
+
+---
+
+**Exercise 4.** Create a figure with customized `dpi=150` and `figsize=(6, 4)`. Calculate the resulting pixel dimensions and verify by printing `fig.get_size_inches()` and `fig.dpi`.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    fig, ax = plt.subplots(figsize=(6, 4), dpi=150)
+    ax.plot([0, 1, 2], [0, 1, 4])
+    ax.set_title('Custom DPI Figure')
+
+    print(f"Size in inches: {fig.get_size_inches()}")  # [6. 4.]
+    print(f"DPI: {fig.dpi}")                            # 150.0
+    # Pixel dimensions: 6 * 150 = 900 x 4 * 150 = 600
+    print(f"Pixel dimensions: {6 * 150} x {4 * 150}")   # 900 x 600
+    plt.show()
+    ```

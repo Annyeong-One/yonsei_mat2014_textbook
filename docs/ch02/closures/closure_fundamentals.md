@@ -693,3 +693,77 @@ if __name__ == "__main__":
     print("END OF EXAMPLES")
     print("=" * 70)
 ```
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Write a function `make_greeting(greeting)` that returns a closure. The closure should take a `name` parameter and return the string `f"{greeting}, {name}!"`. For example, `hello = make_greeting("Hello")` followed by `hello("Alice")` should return `"Hello, Alice!"`.
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        def make_greeting(greeting):
+            def greet(name):
+                return f"{greeting}, {name}!"
+            return greet
+
+        hello = make_greeting("Hello")
+        print(hello("Alice"))  # Hello, Alice!
+        print(hello("Bob"))    # Hello, Bob!
+
+        hi = make_greeting("Hi")
+        print(hi("Carol"))     # Hi, Carol!
+        ```
+
+    The inner function `greet` captures `greeting` from the enclosing scope. Each call to `make_greeting` creates a new closure with its own captured value.
+
+---
+
+**Exercise 2.**
+Write a function `make_accumulator(initial=0)` that returns a closure. Each time the closure is called with a number, it adds that number to a running total and returns the new total. Use the `nonlocal` keyword.
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        def make_accumulator(initial=0):
+            total = initial
+            def add(n):
+                nonlocal total
+                total += n
+                return total
+            return add
+
+        acc = make_accumulator()
+        print(acc(5))    # 5
+        print(acc(10))   # 15
+        print(acc(3))    # 18
+
+        acc2 = make_accumulator(100)
+        print(acc2(1))   # 101
+        ```
+
+    `nonlocal total` allows the inner function to modify `total` in the enclosing scope. Each accumulator maintains its own independent total.
+
+---
+
+**Exercise 3.**
+Inspect the closure created by `make_greeting("Hi")` from Exercise 1. Print the `__closure__` attribute and access the captured value using `cell_contents`. Verify that it holds the string `"Hi"`.
+
+??? success "Solution to Exercise 3"
+
+        ```python
+        def make_greeting(greeting):
+            def greet(name):
+                return f"{greeting}, {name}!"
+            return greet
+
+        hi = make_greeting("Hi")
+
+        print(hi.__closure__)                     # (<cell at 0x...>,)
+        print(hi.__closure__[0].cell_contents)    # Hi
+        ```
+
+    The `__closure__` attribute is a tuple of cell objects, one for each captured variable. `cell_contents` reveals the actual captured value.

@@ -417,3 +417,80 @@ copied["nested"]["value"].append(4)
 print(original["nested"]["value"])  # [1, 2, 3]
 print(copied["nested"]["value"])    # [1, 2, 3, 4]
 ```
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Write a function `flatten(nested)` that takes an arbitrarily nested list and returns a flat list of all non-list elements. For example, `flatten([1, [2, [3, 4]], 5])` should return `[1, 2, 3, 4, 5]`.
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        def flatten(nested):
+            result = []
+            for item in nested:
+                if isinstance(item, list):
+                    result.extend(flatten(item))
+                else:
+                    result.append(item)
+            return result
+
+        print(flatten([1, [2, [3, 4]], 5]))  # [1, 2, 3, 4, 5]
+        print(flatten([[1, 2], [3, [4, [5]]]]))  # [1, 2, 3, 4, 5]
+        ```
+
+    The function uses recursion to handle arbitrary nesting depth.
+
+---
+
+**Exercise 2.**
+Given the nested dictionary below, write a function `safe_get(d, *keys, default=None)` that navigates the nested structure safely. It should return the value if all keys exist, or `default` otherwise.
+
+```python
+data = {"user": {"address": {"city": "Seoul"}}}
+```
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        def safe_get(d, *keys, default=None):
+            for key in keys:
+                if isinstance(d, dict):
+                    d = d.get(key, default)
+                else:
+                    return default
+            return d
+
+        data = {"user": {"address": {"city": "Seoul"}}}
+
+        print(safe_get(data, "user", "address", "city"))     # Seoul
+        print(safe_get(data, "user", "phone"))                # None
+        print(safe_get(data, "missing", "key", default="N/A"))  # N/A
+        ```
+
+    The function chains `.get()` calls, returning the default if any key is missing.
+
+---
+
+**Exercise 3.**
+Explain the common pitfall of `grid = [[0] * 3] * 3`. What happens when you set `grid[0][0] = 1`? Write the correct way to create a 3x3 grid of zeros.
+
+??? success "Solution to Exercise 3"
+
+    `[[0] * 3] * 3` creates three references to the same inner list. Modifying one row affects all rows:
+
+        ```python
+        bad_grid = [[0] * 3] * 3
+        bad_grid[0][0] = 1
+        print(bad_grid)  # [[1, 0, 0], [1, 0, 0], [1, 0, 0]]
+
+        # Correct way
+        good_grid = [[0] * 3 for _ in range(3)]
+        good_grid[0][0] = 1
+        print(good_grid)  # [[1, 0, 0], [0, 0, 0], [0, 0, 0]]
+        ```
+
+    The list comprehension creates independent inner lists for each row.

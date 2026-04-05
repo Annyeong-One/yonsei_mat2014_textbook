@@ -45,3 +45,57 @@ print("Max so far:", max_so_far)
 Product: [1, 2, 6, 24]
 Max so far: [3, 3, 5, 5, 8, 8]
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Use `accumulate` to compute a running balance from a list of transactions (positive for deposits, negative for withdrawals) starting from an initial balance of 1000. For example, given transactions `[200, -50, -100, 300]`, the running balances should be `[1200, 1150, 1050, 1350]`.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    from itertools import accumulate
+    import operator
+
+    initial_balance = 1000
+    transactions = [200, -50, -100, 300]
+    adjusted = [initial_balance + transactions[0]] + transactions[1:]
+    balances = list(accumulate(
+        transactions, operator.add, initial=initial_balance
+    ))
+    # Drop the initial value
+    print(balances[1:])  # [1200, 1150, 1050, 1350]
+    ```
+
+---
+
+**Exercise 2.**
+Use `accumulate` with `min` to compute the running minimum of a list of numbers. For example, given `[5, 3, 8, 1, 9, 2]`, the result should be `[5, 3, 3, 1, 1, 1]`.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    from itertools import accumulate
+
+    values = [5, 3, 8, 1, 9, 2]
+    running_min = list(accumulate(values, min))
+    print(running_min)  # [5, 3, 3, 1, 1, 1]
+    ```
+
+---
+
+**Exercise 3.**
+Use `accumulate` with a custom function to compute a running concatenation of strings with a separator. For example, given `["a", "b", "c", "d"]` with separator `"-"`, the result should be `["a", "a-b", "a-b-c", "a-b-c-d"]`.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    from itertools import accumulate
+
+    words = ["a", "b", "c", "d"]
+    running_concat = list(accumulate(words, lambda a, b: f"{a}-{b}"))
+    print(running_concat)
+    # ['a', 'a-b', 'a-b-c', 'a-b-c-d']
+    ```

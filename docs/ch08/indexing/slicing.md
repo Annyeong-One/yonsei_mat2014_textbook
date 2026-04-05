@@ -287,3 +287,58 @@ Output:
 [[2 3]
  [5 6]]
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Given `a = np.arange(20)`, use slicing to extract every third element starting from index 2. Also extract the last 5 elements in reverse order using a single slice.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        a = np.arange(20)
+        every_third = a[2::3]
+        print(f"Every third from index 2: {every_third}")
+
+        last_five_reversed = a[-1:-6:-1]
+        print(f"Last 5 reversed: {last_five_reversed}")
+
+---
+
+**Exercise 2.**
+Create a 5x6 matrix `M = np.arange(30).reshape(5, 6)`. Use multi-axis slicing to extract the 3x2 submatrix consisting of rows 1--3 and columns 4--5. Also extract every other row and every other column.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        M = np.arange(30).reshape(5, 6)
+        submatrix = M[1:4, 4:6]
+        print(f"Submatrix (rows 1-3, cols 4-5):\n{submatrix}")
+
+        every_other = M[::2, ::2]
+        print(f"Every other row and col:\n{every_other}")
+
+---
+
+**Exercise 3.**
+Given a 2D array, demonstrate that a NumPy slice returns a view by modifying a sliced subarray and checking that the original is also modified. Then repeat with `.copy()` and show the original is not modified.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        original = np.arange(12).reshape(3, 4)
+        view = original[0:2, 0:2]
+        view[0, 0] = 999
+        print(f"Original after view modification:\n{original}")
+        # original[0, 0] is now 999
+
+        original2 = np.arange(12).reshape(3, 4)
+        copy = original2[0:2, 0:2].copy()
+        copy[0, 0] = 888
+        print(f"Original after copy modification:\n{original2}")
+        # original2[0, 0] is still 0

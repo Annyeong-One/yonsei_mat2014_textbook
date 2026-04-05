@@ -118,3 +118,64 @@ print(f"Before: {len(df)} rows")
 print(f"After: {len(df.dropna())} rows")
 print(f"Dropped: {len(df) - len(df.dropna())} rows")
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a DataFrame with `NaN` values in different positions. Use `.dropna()` to drop rows with any missing values. Compare the number of rows before and after.
+
+??? success "Solution to Exercise 1"
+    Drop rows with any NaN and compare counts.
+
+        import pandas as pd
+        import numpy as np
+
+        df = pd.DataFrame({
+            'A': [1, np.nan, 3, 4],
+            'B': [5, 6, np.nan, 8],
+            'C': [9, 10, 11, 12]
+        })
+        print(f"Before: {len(df)} rows")
+        result = df.dropna()
+        print(f"After: {len(result)} rows")
+
+---
+
+**Exercise 2.**
+Create a DataFrame where one column is entirely `NaN`. Use `.dropna(axis=1)` to drop columns with any missing values. Verify the all-NaN column is removed.
+
+??? success "Solution to Exercise 2"
+    Drop all-NaN columns with axis=1.
+
+        import pandas as pd
+        import numpy as np
+
+        df = pd.DataFrame({
+            'A': [1, 2, 3],
+            'B': [np.nan, np.nan, np.nan],
+            'C': [4, np.nan, 6]
+        })
+        result = df.dropna(axis=1)
+        print(result.columns.tolist())
+        assert 'B' not in result.columns
+
+---
+
+**Exercise 3.**
+Create a DataFrame and use `.dropna(subset=['col_name'])` to drop rows only where a specific column has missing values, leaving other columns' NaN values intact.
+
+??? success "Solution to Exercise 3"
+    Drop rows based on a specific column's missing values.
+
+        import pandas as pd
+        import numpy as np
+
+        df = pd.DataFrame({
+            'name': ['Alice', None, 'Carol', 'Dave'],
+            'score': [90, 85, np.nan, 88]
+        })
+        result = df.dropna(subset=['name'])
+        print(result)
+        # Row with None name is dropped, but NaN in score is kept

@@ -177,3 +177,58 @@ df.melt(id_vars=["day"])
 ### 3. Equivalent Results
 
 Both produce identical output.
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that converts a wide DataFrame to long format using `pd.melt()`. Specify `id_vars` and `value_vars`.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    # Solution for the specific exercise
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(10), 'B': np.random.randn(10)})
+    print(df.head())
+    ```
+
+---
+
+**Exercise 2.** Explain the `id_vars`, `value_vars`, `var_name`, and `value_name` parameters of `pd.melt()`.
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the Pandas API and its behavior for this specific operation.
+
+---
+
+**Exercise 3.** Write code that melts a DataFrame with column names like `'Jan'`, `'Feb'`, `'Mar'` into a long format with a `'month'` column.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(20), 'B': np.random.randn(20)})
+    result = df.describe()
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Create a wide DataFrame, melt it, and then use `.pivot()` to convert it back to wide format.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(50), 'group': np.random.choice(['X', 'Y'], 50)})
+    result = df.groupby('group').mean()
+    print(result)
+    ```

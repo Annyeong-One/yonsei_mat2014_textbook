@@ -649,3 +649,92 @@ if __name__ == "__main__":
     9. Save with savefig() before show()
     """
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Plot `y = sin(x)` over $[0, 4\pi]$. Set the x-axis ticks at multiples of $\pi$ (0, $\pi$, $2\pi$, $3\pi$, $4\pi$) with labels showing the $\pi$ symbol. Set the y-axis limits to $[-1.5, 1.5]$ with ticks at $[-1, -0.5, 0, 0.5, 1]$.
+
+??? success "Solution to Exercise 1"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(0, 4 * np.pi, 500)
+        y = np.sin(x)
+
+        fig, ax = plt.subplots(figsize=(10, 5))
+        ax.plot(x, y)
+
+        ax.set_xticks([0, np.pi, 2*np.pi, 3*np.pi, 4*np.pi])
+        ax.set_xticklabels([r'$0$', r'$\pi$', r'$2\pi$', r'$3\pi$', r'$4\pi$'])
+        ax.set_ylim(-1.5, 1.5)
+        ax.set_yticks([-1, -0.5, 0, 0.5, 1])
+
+        ax.set_title(r'$y = \sin(x)$ with $\pi$ Tick Labels')
+        plt.show()
+
+---
+
+**Exercise 2.**
+Create a scatter plot of 200 random points. Set the x-limits to `[0, 1]` and y-limits to `[0, 1]` regardless of the data range. Add ticks at every 0.1 increment and rotate the x-tick labels by 45 degrees. Also set minor ticks at every 0.05 increment.
+
+??? success "Solution to Exercise 2"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+        from matplotlib.ticker import MultipleLocator
+
+        np.random.seed(42)
+        x = np.random.rand(200)
+        y = np.random.rand(200)
+
+        fig, ax = plt.subplots(figsize=(7, 7))
+        ax.scatter(x, y, alpha=0.5, s=20)
+        ax.set_xlim(0, 1)
+        ax.set_ylim(0, 1)
+
+        ax.xaxis.set_major_locator(MultipleLocator(0.1))
+        ax.yaxis.set_major_locator(MultipleLocator(0.1))
+        ax.xaxis.set_minor_locator(MultipleLocator(0.05))
+        ax.yaxis.set_minor_locator(MultipleLocator(0.05))
+
+        ax.tick_params(axis='x', rotation=45)
+        ax.set_title('Scatter with Fine Ticks')
+        plt.show()
+
+---
+
+**Exercise 3.**
+Plot three subplots (1x3) of the same data `y = x^3 - 3*x` over $[-3, 3]$: the first with default limits, the second zoomed into the region $[-1, 1] \times [-2, 2]$, and the third zoomed into $[1, 3] \times [0, 20]$. Add titles indicating the zoom region for each.
+
+??? success "Solution to Exercise 3"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(-3, 3, 500)
+        y = x**3 - 3*x
+
+        fig, axes = plt.subplots(1, 3, figsize=(15, 4))
+
+        axes[0].plot(x, y, color='navy')
+        axes[0].set_title('Full View (default)')
+
+        axes[1].plot(x, y, color='navy')
+        axes[1].set_xlim(-1, 1)
+        axes[1].set_ylim(-2, 2)
+        axes[1].set_title('Zoom: [-1,1] x [-2,2]')
+
+        axes[2].plot(x, y, color='navy')
+        axes[2].set_xlim(1, 3)
+        axes[2].set_ylim(0, 20)
+        axes[2].set_title('Zoom: [1,3] x [0,20]')
+
+        for ax in axes:
+            ax.grid(True, alpha=0.3)
+
+        plt.tight_layout()
+        plt.show()

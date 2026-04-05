@@ -832,3 +832,116 @@ if __name__ == "__main__":
     # Note: multiprocessing requires this guard on Windows
     main()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a program that starts 10 threads, each incrementing a shared global counter 100,000 times without a lock. Run it several times and observe that the final counter is less than 1,000,000. Then add a `threading.Lock` and verify the result is always exactly 1,000,000. Print the result for both versions.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import threading
+
+        # Without lock
+        counter = 0
+        def increment_unsafe():
+            global counter
+            for _ in range(100_000):
+                counter += 1
+
+        threads = [threading.Thread(target=increment_unsafe) for _ in range(10)]
+        for t in threads:
+            t.start()
+        for t in threads:
+            t.join()
+        print(f"Without lock: {counter} (expected 1000000)")
+
+        # With lock
+        counter = 0
+        lock = threading.Lock()
+        def increment_safe():
+            global counter
+            for _ in range(100_000):
+                with lock:
+                    counter += 1
+
+        threads = [threading.Thread(target=increment_safe) for _ in range(10)]
+        for t in threads:
+            t.start()
+        for t in threads:
+            t.join()
+        print(f"With lock: {counter} (expected 1000000)")
+        ```
+
+---
+
+**Exercise 2.**
+Demonstrate the GIL's impact by running a pure-Python countdown function (`while n > 0: n -= 1` starting from 50,000,000) in: (a) a single thread, and (b) two threads each counting down 25,000,000. Measure wall-clock time for both and print the results. Explain why the two-thread version is not faster.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import threading
+        import time
+
+        def countdown(n):
+            while n > 0:
+                n -= 1
+
+        N = 50_000_000
+
+        # Single thread
+        start = time.perf_counter()
+        countdown(N)
+        single = time.perf_counter() - start
+
+        # Two threads
+        start = time.perf_counter()
+        t1 = threading.Thread(target=countdown, args=(N // 2,))
+        t2 = threading.Thread(target=countdown, args=(N // 2,))
+        t1.start()
+        t2.start()
+        t1.join()
+        t2.join()
+        multi = time.perf_counter() - start
+
+        print(f"Single thread: {single:.2f}s")
+        print(f"Two threads:   {multi:.2f}s")
+        print("Two threads are not faster (may be slower) because the GIL "
+              "prevents parallel execution of pure Python bytecode.")
+        ```
+
+---
+
+**Exercise 3.**
+Show that NumPy operations can achieve true thread-level parallelism despite the GIL. Create 4 large NumPy arrays (1,000,000 elements each) and compute `np.sum(arr ** 2)` for each using `ThreadPoolExecutor` with 4 workers. Compare the wall-clock time against a sequential loop. Print both times and the speedup factor.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import time
+        import numpy as np
+        from concurrent.futures import ThreadPoolExecutor
+
+        def compute(arr):
+            return np.sum(arr ** 2)
+
+        arrays = [np.random.rand(1_000_000) for _ in range(4)]
+
+        # Sequential
+        start = time.perf_counter()
+        seq_results = [compute(a) for a in arrays]
+        seq_time = time.perf_counter() - start
+
+        # Threaded
+        start = time.perf_counter()
+        with ThreadPoolExecutor(max_workers=4) as ex:
+            thr_results = list(ex.map(compute, arrays))
+        thr_time = time.perf_counter() - start
+
+        print(f"Sequential: {seq_time:.4f}s")
+        print(f"Threaded:   {thr_time:.4f}s")
+        print(f"Speedup:    {seq_time / thr_time:.2f}x")
+        print("NumPy releases the GIL during C-level computation, "
+              "enabling true parallelism with threads.")
+        ```

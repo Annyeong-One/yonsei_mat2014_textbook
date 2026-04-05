@@ -122,3 +122,81 @@ Output:
 ```
 {'name': 'Alice', 'age': 30}
 ```
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Use `pickle` to serialize and deserialize a Python dictionary containing a list, a tuple, and a nested dictionary. Verify that the deserialized object equals the original.
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        import pickle
+
+        data = {
+            "list": [1, 2, 3],
+            "tuple": (4, 5, 6),
+            "nested": {"a": 1, "b": 2}
+        }
+
+        serialized = pickle.dumps(data)
+        restored = pickle.loads(serialized)
+
+        print(restored == data)  # True
+        print(type(restored["tuple"]))  # <class 'tuple'>
+        ```
+
+    Pickle preserves Python types exactly, including tuples (which JSON would convert to lists).
+
+---
+
+**Exercise 2.**
+Explain why unpickling data from an untrusted source is a security risk. Write a short example showing how `pickle.loads` can execute arbitrary code.
+
+??? success "Solution to Exercise 2"
+
+    Never unpickle untrusted data. A malicious pickle can execute arbitrary code:
+
+        ```python
+        import pickle
+        import os
+
+        # This is DANGEROUS - for educational purposes only
+        class Exploit:
+            def __reduce__(self):
+                return (os.system, ("echo 'compromised'",))
+
+        payload = pickle.dumps(Exploit())
+        # pickle.loads(payload)  # Would execute os.system("echo 'compromised'")
+        ```
+
+    The `__reduce__` method tells pickle how to reconstruct the object. A malicious implementation can specify any callable, including `os.system`. Always use `json` for untrusted data.
+
+---
+
+**Exercise 3.**
+Compare `pickle` with `json` for serializing `{"name": "Alice", "scores": [95, 87, 92]}`. What are the advantages of each format?
+
+??? success "Solution to Exercise 3"
+
+        ```python
+        import pickle
+        import json
+
+        data = {"name": "Alice", "scores": [95, 87, 92]}
+
+        # Pickle
+        p = pickle.dumps(data)
+        print(f"Pickle size: {len(p)} bytes")
+
+        # JSON
+        j = json.dumps(data)
+        print(f"JSON size: {len(j)} bytes")
+        print(f"JSON: {j}")
+        ```
+
+    **Pickle advantages**: preserves all Python types, handles circular references.
+    **JSON advantages**: human-readable, language-agnostic, safe to load from untrusted sources.

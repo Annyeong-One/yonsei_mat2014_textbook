@@ -329,3 +329,62 @@ values = pd.Series([1, 1, 2, 2])
 # pd.qcut(values, q=4)  # Error!
 pd.qcut(values, q=4, duplicates='drop')  # Works
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that uses `pd.cut()` to bin a list of ages `[5, 15, 25, 35, 45, 55, 65, 75]` into categories: `'Child'`, `'Young Adult'`, `'Adult'`, `'Senior'` with boundaries `[0, 18, 35, 60, 100]`.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+
+    ages = [5, 15, 25, 35, 45, 55, 65, 75]
+    bins = [0, 18, 35, 60, 100]
+    labels = ['Child', 'Young Adult', 'Adult', 'Senior']
+    categories = pd.cut(ages, bins=bins, labels=labels)
+    print(categories)
+    print(categories.value_counts())
+    ```
+
+---
+
+**Exercise 2.** Explain the difference between `pd.cut()` and `pd.qcut()`. When would you use each?
+
+??? success "Solution to Exercise 2"
+    `pd.cut()` bins data into intervals of equal **width** (or custom boundaries). `pd.qcut()` bins data into intervals of equal **frequency** (each bin has approximately the same number of observations). Use `cut()` when you have meaningful boundary values (e.g., age groups). Use `qcut()` when you want to split data into quantiles (e.g., quartiles, deciles).
+
+---
+
+**Exercise 3.** Write code that uses `pd.qcut()` to divide 100 random values into 4 equal-frequency bins. Print the value counts of each bin.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    values = np.random.randn(100)
+    quartiles = pd.qcut(values, q=4, labels=['Q1', 'Q2', 'Q3', 'Q4'])
+    print(quartiles.value_counts())
+    ```
+
+---
+
+**Exercise 4.** Create a DataFrame with a `'score'` column of random integers from 0 to 100. Use `pd.cut()` to add a `'grade'` column with categories A (90-100), B (80-89), C (70-79), D (60-69), F (0-59).
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'score': np.random.randint(0, 101, 50)})
+    bins = [0, 60, 70, 80, 90, 101]
+    labels = ['F', 'D', 'C', 'B', 'A']
+    df['grade'] = pd.cut(df['score'], bins=bins, labels=labels, right=False)
+    print(df.head(10))
+    print(df['grade'].value_counts())
+    ```

@@ -380,3 +380,96 @@ if __name__ == "__main__":
    - In real code with millions of iterations: seconds wasted
     """)
 ```
+
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Compare building a string from 10,000 integers using `+=` concatenation versus `"".join()`. Time both approaches and explain why one is faster.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    import timeit
+
+    code_concat = '''
+    result = ""
+    for i in range(10000):
+        result += str(i)
+    '''
+
+    code_join = '''
+    result = "".join(str(i) for i in range(10000))
+    '''
+
+    t_concat = timeit.timeit(code_concat, number=100)
+    t_join = timeit.timeit(code_join, number=100)
+
+    print(f"+= concat: {t_concat:.4f}s")
+    print(f"join():    {t_join:.4f}s")
+    ```
+
+    String concatenation with `+=` creates a new string object each iteration because strings are immutable. `"".join()` allocates the final string once after computing the total length.
+
+---
+
+**Exercise 2.**
+Show the performance difference between appending to a list with `append()` in a loop versus using a list comprehension. Use `timeit` with 100,000 elements.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    import timeit
+
+    code_loop = '''
+    result = []
+    for i in range(100000):
+        result.append(i * 2)
+    '''
+
+    code_comp = '[i * 2 for i in range(100000)]'
+
+    t_loop = timeit.timeit(code_loop, number=100)
+    t_comp = timeit.timeit(code_comp, number=100)
+
+    print(f"Loop + append: {t_loop:.4f}s")
+    print(f"Comprehension: {t_comp:.4f}s")
+    ```
+
+    List comprehensions are faster because the append operation is handled internally in C bytecode, avoiding the overhead of the `append` method lookup and call on every iteration.
+
+---
+
+**Exercise 3.**
+Demonstrate the attribute lookup optimization by caching `list.append` in a local variable before a loop. Compare the timed results for 1,000,000 iterations with and without caching.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    import timeit
+
+    code_with_dot = '''
+    result = []
+    for i in range(1000000):
+        result.append(i)
+    '''
+
+    code_cached = '''
+    result = []
+    append = result.append
+    for i in range(1000000):
+        append(i)
+    '''
+
+    t_dot = timeit.timeit(code_with_dot, number=10)
+    t_cached = timeit.timeit(code_cached, number=10)
+
+    print(f"With dot:    {t_dot:.4f}s")
+    print(f"Cached:      {t_cached:.4f}s")
+    print(f"Speedup:     {t_dot / t_cached:.2f}x")
+    ```
+
+    Caching `result.append` avoids an attribute dictionary lookup on every iteration. For millions of iterations, eliminating one dictionary lookup per cycle produces a measurable speedup.

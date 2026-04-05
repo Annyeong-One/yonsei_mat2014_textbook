@@ -102,3 +102,65 @@ For case-insensitive comparison, see [Unicode Case Folding](unicode_case_folding
 - Unicode strings that look identical may have different internal representations.
 - `normalize("NFC", s)` converts to a consistent precomposed form.
 - Always normalize before comparing Unicode strings from external sources.
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Create two strings that look identical when printed (`"cafe\u0301"` and `"caf\u00e9"`) and show that `==` returns `False`. Then use `unicodedata.normalize("NFC", ...)` to make them compare equal.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    from unicodedata import normalize
+
+    s1 = "caf\u00e9"    # precomposed
+    s2 = "cafe\u0301"   # decomposed
+
+    print(s1 == s2)       # False
+    print(normalize("NFC", s1) == normalize("NFC", s2))  # True
+    ```
+
+    The two strings have different internal code point sequences despite looking identical. NFC normalization converts both to the same precomposed form.
+
+---
+
+**Exercise 2.**
+Write a function `normalize_and_compare(s1, s2)` that returns `True` if two strings are equivalent after NFC normalization. Test it with both precomposed and decomposed forms of accented characters.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    from unicodedata import normalize
+
+    def normalize_and_compare(s1, s2):
+        return normalize("NFC", s1) == normalize("NFC", s2)
+
+    print(normalize_and_compare("caf\u00e9", "cafe\u0301"))  # True
+    print(normalize_and_compare("nai\u0308ve", "na\u00efve"))  # True
+    print(normalize_and_compare("hello", "world"))              # False
+    ```
+
+    Normalizing both strings to NFC before comparison ensures equivalent representations match.
+
+---
+
+**Exercise 3.**
+Demonstrate the difference between NFC and NFD normalization by showing the `len()` of the same accented string after applying each form.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    from unicodedata import normalize
+
+    s = "caf\u00e9"
+    nfc = normalize("NFC", s)
+    nfd = normalize("NFD", s)
+
+    print(f"NFC: '{nfc}', length: {len(nfc)}")  # 4
+    print(f"NFD: '{nfd}', length: {len(nfd)}")  # 5
+    ```
+
+    NFC produces precomposed characters (fewer code points), while NFD decomposes characters into base character plus combining marks (more code points). Both render identically.

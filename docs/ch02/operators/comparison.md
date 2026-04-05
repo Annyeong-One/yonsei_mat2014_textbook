@@ -152,3 +152,73 @@ else:
 - Chained comparisons: `a < b < c` means `a < b and b < c`
 - Be careful with float comparison (use `math.isclose`)
 - Cannot compare incompatible types in Python 3
+
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Write a function `clamp(value, low, high)` that uses chained comparisons to check if `value` is within the range `[low, high]`. Return `low` if below, `high` if above, or `value` if within range.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    def clamp(value, low, high):
+        if low <= value <= high:
+            return value
+        elif value < low:
+            return low
+        else:
+            return high
+
+    print(clamp(5, 0, 10))   # 5
+    print(clamp(-3, 0, 10))  # 0
+    print(clamp(15, 0, 10))  # 10
+    ```
+
+    The chained comparison `low <= value <= high` is equivalent to `low <= value and value <= high` but more readable.
+
+---
+
+**Exercise 2.**
+Demonstrate the floating-point comparison gotcha with `0.1 + 0.2 == 0.3`. Then fix the comparison using `math.isclose()` with both default and custom tolerances.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    import math
+
+    # The gotcha
+    print(0.1 + 0.2 == 0.3)   # False
+    print(f"{0.1 + 0.2:.20f}")  # 0.30000000000000004441
+
+    # Fix with math.isclose (default tolerance)
+    print(math.isclose(0.1 + 0.2, 0.3))  # True
+
+    # Custom tolerance
+    print(math.isclose(0.1 + 0.2, 0.3, rel_tol=1e-9, abs_tol=1e-12))  # True
+    ```
+
+    `math.isclose()` uses a relative tolerance (default `1e-9`) to account for floating-point representation errors.
+
+---
+
+**Exercise 3.**
+Explain the difference between `==` and `is` by creating two lists with the same contents. Show that `==` returns `True` but `is` returns `False`, and explain when to use each.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    a = [1, 2, 3]
+    b = [1, 2, 3]
+
+    print(a == b)   # True  (same values)
+    print(a is b)   # False (different objects)
+
+    c = a
+    print(a is c)   # True  (same object)
+    ```
+
+    Use `==` to compare values. Use `is` only for singleton comparisons (`None`, `True`, `False`). Two separately created lists are equal in value but are distinct objects in memory.

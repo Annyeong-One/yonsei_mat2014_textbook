@@ -175,3 +175,53 @@ except KeyError as e:
 # int and float usually work
 # str and int will not match
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create two DataFrames that share two columns: `'year'` and `'month'`. Merge them on both columns simultaneously using `on=['year', 'month']`.
+
+??? success "Solution to Exercise 1"
+    Merge on multiple shared columns.
+
+        import pandas as pd
+
+        sales = pd.DataFrame({'year': [2023, 2023, 2024], 'month': [1, 2, 1], 'revenue': [100, 200, 150]})
+        targets = pd.DataFrame({'year': [2023, 2023, 2024], 'month': [1, 2, 1], 'target': [120, 180, 160]})
+        result = pd.merge(sales, targets, on=['year', 'month'])
+        print(result)
+
+---
+
+**Exercise 2.**
+Create two DataFrames with one shared column name. Merge using `on` to specify the key explicitly, even though pandas would auto-detect it. Verify the result is the same as merging without the `on` parameter.
+
+??? success "Solution to Exercise 2"
+    Compare explicit on vs auto-detected key.
+
+        import pandas as pd
+
+        df1 = pd.DataFrame({'key': ['a', 'b', 'c'], 'val1': [1, 2, 3]})
+        df2 = pd.DataFrame({'key': ['a', 'b', 'd'], 'val2': [4, 5, 6]})
+        explicit = pd.merge(df1, df2, on='key')
+        auto = pd.merge(df1, df2)
+        assert explicit.equals(auto)
+        print("Explicit on= gives same result as auto-detect.")
+
+---
+
+**Exercise 3.**
+Create two DataFrames that share a column name `'id'` but also have other overlapping column names. Merge on `'id'` and observe how the overlapping non-key columns get suffixed with `_x` and `_y`.
+
+??? success "Solution to Exercise 3"
+    Observe suffix behavior for overlapping non-key columns.
+
+        import pandas as pd
+
+        df1 = pd.DataFrame({'id': [1, 2], 'score': [85, 90], 'grade': ['B', 'A']})
+        df2 = pd.DataFrame({'id': [1, 2], 'score': [88, 92], 'comment': ['good', 'great']})
+        result = pd.merge(df1, df2, on='id')
+        print(result)
+        print("Columns:", result.columns.tolist())

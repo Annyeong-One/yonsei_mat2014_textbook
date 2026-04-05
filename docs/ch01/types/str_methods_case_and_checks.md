@@ -157,6 +157,7 @@ Methods such as `isdigit()` are useful, but real-world validation often needs ad
 
 ---
 
+
 ## 7. Summary
 
 Key ideas:
@@ -167,3 +168,94 @@ Key ideas:
 * these methods are useful for normalization and validation
 
 Case and check methods are among the most frequently used string tools in Python.
+
+
+## Exercises
+
+**Exercise 1.**
+A programmer writes a case-insensitive comparison:
+
+```python
+user_input = "YES"
+if user_input.lower() == "yes":
+    print("Confirmed")
+```
+
+This works for English, but explain why `.lower()` is not always sufficient for case-insensitive comparison in Unicode. What does `"ß".lower() == "ss"` return? What is the correct general approach for case-insensitive matching (`casefold`)?
+
+??? success "Solution to Exercise 1"
+    `"ß".lower()` returns `"ß"` (unchanged), not `"ss"`. So `"ß".lower() == "ss"` is `False`. But in German, `"ß"` is considered equivalent to `"ss"` for case-insensitive comparison.
+
+    The correct approach is `casefold()`:
+
+    ```python
+    print("ß".casefold())  # "ss"
+    print("ß".casefold() == "ss".casefold())  # True
+    ```
+
+    `casefold()` performs aggressive case folding as defined by Unicode. It handles special characters like `ß` (German sharp s), `ſ` (long s), and other locale-specific equivalences. For ASCII-only text, `lower()` and `casefold()` are identical. For internationalized text, always use `casefold()` for case-insensitive comparison.
+
+---
+
+**Exercise 2.**
+Predict the output and explain each result:
+
+```python
+print("".isalpha())
+print("".isdigit())
+print("".isspace())
+print(" \t\n".isspace())
+print("123".isalpha())
+print("abc123".isalnum())
+```
+
+Why do empty strings return `False` for all `is*()` methods? What is the common pattern these methods follow?
+
+??? success "Solution to Exercise 2"
+    Output:
+
+    ```text
+    False
+    False
+    False
+    True
+    False
+    True
+    ```
+
+    Empty strings return `False` for all `is*()` methods. The common pattern: these methods return `True` if the string is **non-empty** and **every character** satisfies the condition. An empty string has no characters to satisfy the condition, so it returns `False`.
+
+    `" \t\n".isspace()` is `True` because the string is non-empty and every character (space, tab, newline) is whitespace.
+
+    `"123".isalpha()` is `False` because digits are not alphabetic. `"abc123".isalnum()` is `True` because every character is either alphabetic or numeric.
+
+---
+
+**Exercise 3.**
+String methods return new strings, not modify in place. A programmer writes:
+
+```python
+name = "  alice  "
+name.strip()
+name.capitalize()
+print(name)
+```
+
+Predict the output and explain the bug. Then show how to fix it using method chaining. Why does Python make string methods return new strings instead of modifying in place?
+
+??? success "Solution to Exercise 3"
+    Output: `  alice  ` (unchanged).
+
+    The bug: `strip()` and `capitalize()` return **new strings**, but the return values are discarded. The original `name` is never modified because strings are immutable.
+
+    Fixed with method chaining:
+
+    ```python
+    name = "  alice  "
+    name = name.strip().capitalize()
+    print(name)  # "Alice"
+    ```
+
+    Method chaining works because each method returns a new string, and the next method is called on that new string. `name.strip()` returns `"alice"`, and `.capitalize()` is called on `"alice"`, returning `"Alice"`.
+
+    Python makes string methods return new strings (instead of modifying in place) because strings are **immutable**. Immutability means strings can be safely used as dictionary keys, shared between variables without defensive copying, and used safely across threads. The trade-off is that every "modification" creates a new object, but this is the fundamental design decision that makes strings reliable and predictable.

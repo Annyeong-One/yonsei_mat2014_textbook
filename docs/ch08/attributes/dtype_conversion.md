@@ -210,3 +210,57 @@ np.uint8(-1.8001195) = 255
 ### 3. Warning
 
 Negative floats converting to uint8 produce unexpected results due to overflow.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a float64 array `a = np.array([1.7, 2.3, 3.9, 4.1])` and convert it to `int32` using `.astype()`. Print both arrays and note which values changed. Then convert the int32 result back to float64 and verify that the original fractional parts are lost.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        a = np.array([1.7, 2.3, 3.9, 4.1])
+        b = a.astype(np.int32)
+        print(a)  # [1.7 2.3 3.9 4.1]
+        print(b)  # [1 2 3 4]  (truncated toward zero)
+
+        c = b.astype(np.float64)
+        print(c)  # [1. 2. 3. 4.]  — fractional parts are lost
+
+---
+
+**Exercise 2.**
+Create an integer array `a = np.array([0, 1, 2, 3])` and convert it to `bool` using `.astype(bool)`. Print the result and explain why only one element becomes `False`. Then convert the boolean array back to `int8` and print the values.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        a = np.array([0, 1, 2, 3])
+        b = a.astype(bool)
+        print(b)  # [False  True  True  True]
+        # Only 0 becomes False; all nonzero values become True.
+
+        c = b.astype(np.int8)
+        print(c)  # [0 1 1 1]
+
+---
+
+**Exercise 3.**
+Create a large array `a = np.arange(1_000_000, dtype=np.float64)` and convert it to `float32`. Compare the `nbytes` of both arrays and compute the memory savings as a percentage.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        a = np.arange(1_000_000, dtype=np.float64)
+        b = a.astype(np.float32)
+
+        print(f"float64 nbytes: {a.nbytes:,}")  # 8,000,000
+        print(f"float32 nbytes: {b.nbytes:,}")  # 4,000,000
+
+        savings = (1 - b.nbytes / a.nbytes) * 100
+        print(f"Memory savings: {savings:.0f}%")  # 50%

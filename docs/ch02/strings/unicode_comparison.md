@@ -73,3 +73,70 @@ comparison, always prefer Level 3.
 
 - [Unicode Normalization](unicode_normalization.md)
 - [Unicode Case Folding](unicode_case_folding.md)
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Demonstrate the three levels of Unicode string comparison (exact, normalized, fold-equal) by comparing `"Cafe\u0301"` with `"cafe"` at each level.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    from unicodedata import normalize
+
+    a = "Cafe\u0301"
+    b = "cafe"
+
+    # Level 1: Exact
+    print(a == b)  # False
+
+    # Level 2: Normalized (case-sensitive)
+    print(normalize("NFC", a) == normalize("NFC", b))  # False
+
+    # Level 3: Fold-equal (case-insensitive)
+    print(normalize("NFC", a).casefold() == normalize("NFC", b).casefold())  # True
+    ```
+
+    Level 1 fails because representations differ. Level 2 fails because case differs. Level 3 succeeds by handling both differences.
+
+---
+
+**Exercise 2.**
+Write a function that takes a list of Unicode strings and returns them deduplicated using NFC normalization. For example, `["cafe\u0301", "caf\u00e9"]` should return a single entry.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    from unicodedata import normalize
+
+    def deduplicate(strings):
+        seen = set()
+        result = []
+        for s in strings:
+            normalized = normalize("NFC", s)
+            if normalized not in seen:
+                seen.add(normalized)
+                result.append(s)
+        return result
+
+    strings = ["cafe\u0301", "caf\u00e9", "hello", "cafe\u0301"]
+    print(deduplicate(strings))  # Two unique entries
+    ```
+
+    By normalizing strings before adding to the set, visually identical strings with different internal representations are treated as duplicates.
+
+---
+
+**Exercise 3.**
+Explain when you would use Level 1 (exact), Level 2 (normalized), and Level 3 (fold-equal) comparison. Give a practical example for each level.
+
+??? success "Solution to Exercise 3"
+
+    Level 1 (exact `==`): comparing strings you control, like dictionary keys that were all created in the same way. Example: checking if a config key matches a known constant.
+
+    Level 2 (normalized): comparing identifiers or filenames from different sources where case matters but representation may vary. Example: matching database keys.
+
+    Level 3 (fold-equal): user-facing search or authentication where both case and representation can vary. Example: searching a user directory by name.

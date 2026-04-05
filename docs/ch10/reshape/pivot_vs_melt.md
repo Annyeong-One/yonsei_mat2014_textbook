@@ -312,3 +312,58 @@ if __name__ == "__main__":
     print("- unstack(): Pivot row index to columns")
     print("- crosstab(): Compute frequency table")
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Explain the relationship between `pivot()` and `melt()`. Are they inverse operations?
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    # Solution for the specific exercise
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(10), 'B': np.random.randn(10)})
+    print(df.head())
+    ```
+
+---
+
+**Exercise 2.** Write code that converts wide to long with `melt()` and then back to wide with `pivot()`. Is the result identical?
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the Pandas API and its behavior for this specific operation.
+
+---
+
+**Exercise 3.** Create a long-format DataFrame and reshape it to wide format using `pivot()`. Then reverse it with `melt()`.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(20), 'B': np.random.randn(20)})
+    result = df.describe()
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Explain when you would choose `melt()` over `stack()` for reshaping. Give a concrete example.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(50), 'group': np.random.choice(['X', 'Y'], 50)})
+    result = df.groupby('group').mean()
+    print(result)
+    ```

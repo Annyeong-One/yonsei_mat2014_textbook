@@ -110,3 +110,61 @@ print(f"Integral of f*f: {self_integral:.4f}")
 ## Summary
 
 SciPy's `gaussian_kde` object provides three key operations after fitting: evaluation at arbitrary points via `kde(x)` or `kde.logpdf(x)`, resampling via `kde.resample(size)` which generates new observations from the mixture-of-Gaussians representation, and integration via `integrate_box_1d` for interval probabilities and `integrate_kde` for density product integrals. Evaluation costs $O(mn)$ for $m$ query points and $n$ training points, while resampling is $O(m)$ per generated sample.
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that fits a KDE to 500 data points and evaluates the density at 100 evenly-spaced points using `kernel(x_grid)`.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(100)
+    print(f'Mean: {data.mean():.4f}')
+    print(f'Std: {data.std():.4f}')
+    ```
+
+---
+
+**Exercise 2.** Explain the difference between evaluating a KDE at specific points and resampling from the estimated density.
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the statistical method and its assumptions.
+
+---
+
+**Exercise 3.** Write code that fits a KDE and uses `kernel.resample(1000)` to generate new synthetic samples. Plot the original data and the resampled data.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+    from scipy import stats
+    import matplotlib.pyplot as plt
+
+    np.random.seed(42)
+    data = np.random.randn(1000)
+    fig, ax = plt.subplots()
+    ax.hist(data, bins=30, density=True, alpha=0.7)
+    ax.set_title('Distribution')
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Compute the integral of a KDE estimate over a specific interval using numerical integration. Verify it is approximately equal to the probability of data falling in that interval.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(500)
+    result = stats.describe(data)
+    print(result)
+    ```

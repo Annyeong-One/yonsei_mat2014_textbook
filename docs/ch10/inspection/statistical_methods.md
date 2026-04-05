@@ -252,3 +252,72 @@ elif skewness > 0:
 else:
     print("Left-skewed")
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a DataFrame with columns `'A'` and `'B'` containing 1000 random values. Compute the mean, median, and standard deviation for each column. Verify that the median equals the 0.5 quantile using `.quantile(0.5)`.
+
+??? success "Solution to Exercise 1"
+    Compute central tendency measures and verify quantile.
+
+        import pandas as pd
+        import numpy as np
+
+        np.random.seed(42)
+        df = pd.DataFrame({
+            'A': np.random.randn(1000),
+            'B': np.random.randn(1000) * 2 + 5
+        })
+        print("Mean:\n", df.mean())
+        print("Median:\n", df.median())
+        print("Std:\n", df.std())
+        assert df['A'].median() == df['A'].quantile(0.5)
+        print("Median equals 0.5 quantile: True")
+
+---
+
+**Exercise 2.**
+Given a numeric Series, use `.cumsum()` to compute the cumulative sum and `.cummax()` to compute the running maximum. Create a new column that shows the difference between the running maximum and the current value (a "drawdown" measure).
+
+??? success "Solution to Exercise 2"
+    Compute cumulative sum, running max, and drawdown.
+
+        import pandas as pd
+        import numpy as np
+
+        np.random.seed(42)
+        s = pd.Series(np.random.randn(20).cumsum(), name='price')
+        df = pd.DataFrame({'price': s})
+        df['cumsum'] = df['price'].cumsum()
+        df['running_max'] = df['price'].cummax()
+        df['drawdown'] = df['running_max'] - df['price']
+        print(df)
+
+---
+
+**Exercise 3.**
+Create a DataFrame with two numeric columns. Compute the correlation between them using `.corr()`. Then compute skewness and kurtosis for one column and interpret whether the distribution is approximately symmetric.
+
+??? success "Solution to Exercise 3"
+    Compute correlation, skewness, and kurtosis.
+
+        import pandas as pd
+        import numpy as np
+
+        np.random.seed(42)
+        df = pd.DataFrame({
+            'x': np.random.randn(500),
+            'y': np.random.randn(500) + 1
+        })
+        print("Correlation:\n", df.corr())
+        skew = df['x'].skew()
+        kurt = df['x'].kurtosis()
+        print(f"Skewness of x: {skew:.4f}")
+        print(f"Kurtosis of x: {kurt:.4f}")
+        if abs(skew) < 0.5:
+            print("Distribution is approximately symmetric")
+        else:
+            print("Distribution is skewed")

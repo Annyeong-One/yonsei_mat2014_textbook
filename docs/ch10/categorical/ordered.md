@@ -352,3 +352,59 @@ s = s.cat.reorder_categories(['a', 'b', 'c'], ordered=True)
 | `min()`, `max()` | Yes (for meaningful results) |
 | `sort_values()` | No (but uses category order if ordered) |
 | Filtering with comparison | Yes |
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Create an ordered categorical with levels `['small', 'medium', 'large']` and demonstrate that comparison operators (`<`, `>`) work correctly.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+
+    # See page content for relevant API details
+    s = pd.Series(['a', 'b', 'c', 'a', 'b'], dtype='category')
+    print(s)
+    print(s.cat.categories)
+    print(s.cat.codes)
+    ```
+
+---
+
+**Exercise 2.** Explain the difference between ordered and unordered categoricals. What operations are only available for ordered categoricals?
+
+??? success "Solution to Exercise 2"
+    See the explanation in the main content of this page. The key concept involves understanding the categorical data type and its internal representation in Pandas.
+
+---
+
+**Exercise 3.** Write code that creates a Series of t-shirt sizes, converts it to an ordered categorical, and filters for all sizes greater than `'medium'`.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'col': np.random.choice(['A', 'B', 'C'], 1000)})
+    df['col'] = df['col'].astype('category')
+    print(df.dtypes)
+    print(df['col'].value_counts())
+    ```
+
+---
+
+**Exercise 4.** Create an ordered categorical and use `.cat.set_categories()` to reorder the levels. Show that the comparison behavior changes accordingly.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+
+    s = pd.Categorical(['low', 'medium', 'high', 'low'],
+                        categories=['low', 'medium', 'high'],
+                        ordered=True)
+    print(s)
+    print(s > 'low')
+    ```

@@ -267,3 +267,106 @@ Key points:
 - GIL affects CPU-bound parallelism
 - Use multiprocessing for CPU-bound tasks
 - Use threading/asyncio for I/O-bound tasks
+
+---
+
+## Exercises
+
+**Exercise 1.**
+`globals()` and `locals()` behave differently at module level vs inside functions. Predict the output:
+
+```python
+# At module level
+print(globals() is locals())
+
+def f():
+    x = 10
+    print(globals() is locals())
+    print("x" in globals())
+    print("x" in locals())
+
+f()
+```
+
+Why are `globals()` and `locals()` the same object at module level but different inside a function?
+
+??? success "Solution to Exercise 1"
+    Output:
+
+    ```text
+    True
+    False
+    False
+    True
+    ```
+
+    At module level, there is no separate "local" scope -- the module's global scope **is** the local scope. So `globals()` and `locals()` return the same dictionary object.
+
+    Inside a function, `locals()` returns a dictionary representing the function's local namespace (created from the fast-locals array), while `globals()` returns the module's global namespace. These are completely separate dictionaries. `x` exists only in `f`'s local scope, so it appears in `locals()` but not `globals()`.
+
+---
+
+**Exercise 2.**
+`dir()` and `vars()` reveal different things about an object. Predict the output:
+
+```python
+class MyClass:
+    class_var = 10
+    def method(self):
+        pass
+
+obj = MyClass()
+obj.instance_var = 20
+
+print("class_var" in vars(obj))
+print("class_var" in dir(obj))
+print("instance_var" in vars(obj))
+print("method" in dir(obj))
+print("__class__" in dir(obj))
+```
+
+Why does `"class_var"` appear in `dir(obj)` but not in `vars(obj)`? What is the difference between these two functions?
+
+??? success "Solution to Exercise 2"
+    Output:
+
+    ```text
+    False
+    True
+    True
+    True
+    True
+    ```
+
+    `vars(obj)` returns `obj.__dict__`, which contains only the **instance** attributes: `{'instance_var': 20}`. `class_var` is defined on the class, not the instance, so it is not in `obj.__dict__`.
+
+    `dir(obj)` walks the entire **Method Resolution Order** (MRO): it includes attributes from the instance, the class, and all base classes (including `object`). That is why `class_var`, `method`, and `__class__` all appear in `dir(obj)`.
+
+    Rule: `vars()` shows what an object **directly owns**. `dir()` shows everything an object **can access** through the attribute lookup chain.
+
+---
+
+**Exercise 3.**
+The GIL (Global Interpreter Lock) affects concurrent execution. Predict which scenario benefits from threading:
+
+```python
+import threading
+import time
+
+# Scenario A: CPU-bound
+def compute():
+    total = sum(range(10_000_000))
+
+# Scenario B: I/O-bound
+def fetch():
+    time.sleep(1)  # Simulates network I/O
+```
+
+If you run 4 instances of `compute()` with threading, will it be faster than running them sequentially? What about 4 instances of `fetch()`? Why?
+
+??? success "Solution to Exercise 3"
+    **Scenario A (CPU-bound)**: Threading provides **no speedup**. The GIL ensures only one thread executes Python bytecode at a time. Running 4 CPU-bound threads takes roughly the same time as running them sequentially (often slightly slower due to context-switching overhead). Use `multiprocessing` for CPU-bound parallelism.
+
+    **Scenario B (I/O-bound)**: Threading provides a **~4x speedup**. When a thread calls `time.sleep(1)` (or performs real I/O like network requests), it **releases the GIL**. Other threads can execute while one is waiting for I/O. Four threads each sleeping 1 second complete in ~1 second total, not 4.
+
+    The GIL is released during I/O operations, system calls, and certain C-extension computations (like NumPy array operations). This is why threading works well for I/O-bound tasks but not for CPU-bound Python code.

@@ -509,3 +509,87 @@ for category, cmap_list in categories.items():
     plt.tight_layout()
     plt.show()
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that displays the same 8x8 random data array using four different colormaps in a 2x2 subplot grid. Add the colormap name as the title of each subplot.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    data = np.random.randn(8, 8)
+
+    fig, axes = plt.subplots(2, 2, figsize=(10, 8))
+    cmaps = ['viridis', 'plasma', 'coolwarm', 'gray']
+
+    for ax, cmap in zip(axes.flat, cmaps):
+        im = ax.imshow(data, cmap=cmap)
+        ax.set_title(f"cmap='{cmap}'")
+        fig.colorbar(im, ax=ax, shrink=0.8)
+
+    plt.tight_layout()
+    plt.show()
+    ```
+
+---
+
+**Exercise 2.** Explain the difference between sequential, diverging, and qualitative colormaps. Give one example of each and when to use it.
+
+??? success "Solution to Exercise 2"
+    - **Sequential colormaps** (e.g., `'viridis'`, `'Blues'`) map low-to-high values with a single color gradient. Use for data that goes in one direction (counts, temperatures, concentrations).
+    - **Diverging colormaps** (e.g., `'coolwarm'`, `'RdBu'`) have two contrasting colors meeting at a midpoint. Use for data with a meaningful center point (e.g., deviations from zero, anomalies).
+    - **Qualitative colormaps** (e.g., `'Set1'`, `'tab10'`) use distinct colors without implied ordering. Use for categorical data or distinguishing groups.
+
+---
+
+**Exercise 3.** Write code that creates a custom diverging colormap centered at zero using `matplotlib.colors.TwoSlopeNorm`. Apply it to data that ranges from -5 to 10.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import matplotlib.pyplot as plt
+    import matplotlib.colors as mcolors
+    import numpy as np
+
+    np.random.seed(42)
+    data = np.random.uniform(-5, 10, (10, 10))
+
+    norm = mcolors.TwoSlopeNorm(vmin=-5, vcenter=0, vmax=10)
+
+    fig, ax = plt.subplots()
+    im = ax.imshow(data, cmap='RdBu_r', norm=norm)
+    fig.colorbar(im, ax=ax, label='Value')
+    ax.set_title('Diverging Colormap Centered at Zero')
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Create a figure showing how `vmin` and `vmax` affect the colormap mapping. Show the same data with default limits and with `vmin=-2, vmax=2`.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    data = np.random.randn(8, 8) * 3
+
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+
+    im1 = ax1.imshow(data, cmap='RdBu')
+    ax1.set_title('Default vmin/vmax')
+    fig.colorbar(im1, ax=ax1)
+
+    im2 = ax2.imshow(data, cmap='RdBu', vmin=-2, vmax=2)
+    ax2.set_title('vmin=-2, vmax=2')
+    fig.colorbar(im2, ax=ax2)
+
+    plt.tight_layout()
+    plt.show()
+    ```

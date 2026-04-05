@@ -171,3 +171,58 @@ normal equations generalizes to multiple predictors through the matrix formula
 $\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$.
 The geometric view reveals that OLS computes an orthogonal projection of the
 response onto the column space of the design matrix.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Verify the OLS normal equations numerically: for data $x = [1, 2, 3, 4, 5]$ and $y = [2.3, 4.1, 5.8, 8.2, 9.9]$, construct the design matrix $\mathbf{X}$, compute $\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$, and verify that $\mathbf{X}^\top\hat{\boldsymbol{\varepsilon}} = \mathbf{0}$.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        x = np.array([1, 2, 3, 4, 5], dtype=float)
+        y = np.array([2.3, 4.1, 5.8, 8.2, 9.9])
+        X = np.column_stack([np.ones_like(x), x])
+        beta = np.linalg.solve(X.T @ X, X.T @ y)
+        residuals = y - X @ beta
+        print(f"beta: {beta}")
+        print(f"X'e = {X.T @ residuals}")
+
+---
+
+**Exercise 2.**
+Compute the hat matrix $\mathbf{H}$ for the simple regression in Exercise 1. Verify that $\mathbf{H}$ is idempotent ($\mathbf{H}^2 = \mathbf{H}$) and that the diagonal elements (leverages) sum to $p + 1 = 2$.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        x = np.array([1, 2, 3, 4, 5], dtype=float)
+        X = np.column_stack([np.ones_like(x), x])
+        H = X @ np.linalg.solve(X.T @ X, X.T)
+        print(f"H^2 == H: {np.allclose(H @ H, H)}")
+        print(f"Sum of leverages: {np.trace(H):.1f} (expected 2)")
+
+---
+
+**Exercise 3.**
+Generate 50 samples from $Y = 5 + 3X + \varepsilon$ and compute $\hat{\sigma}^2 = \text{RSS}/(n-2)$. Compare it with the true $\sigma^2 = 4$ (assuming $\varepsilon \sim N(0, 2)$). Verify unbiasedness by averaging over 1000 simulations.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        np.random.seed(42)
+        sigma2_estimates = []
+        for _ in range(1000):
+            x = np.random.uniform(0, 10, 50)
+            y = 5 + 3*x + np.random.normal(0, 2, 50)
+            X = np.column_stack([np.ones_like(x), x])
+            beta = np.linalg.lstsq(X, y, rcond=None)[0]
+            resid = y - X @ beta
+            sigma2_hat = np.sum(resid**2) / (50 - 2)
+            sigma2_estimates.append(sigma2_hat)
+        print(f"Mean sigma^2 estimate: {np.mean(sigma2_estimates):.4f} (true: 4)")

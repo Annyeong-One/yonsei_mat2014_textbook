@@ -205,3 +205,67 @@ print(result)
 - Non-overlapping columns are never modified by suffix parameters
 - Unlike `pd.merge`, `DataFrame.join` does not provide default suffixes — they must be specified explicitly when overlaps exist
 - Use `on` with a list of column names when the other DataFrame has a MultiIndex
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create an `employees` DataFrame with columns `'name'` and `'dept_id'`, and a `departments` DataFrame indexed by department ID with a `'dept_name'` column. Use `.join()` with `on='dept_id'` to look up each employee's department name.
+
+??? success "Solution to Exercise 1"
+    Use the on parameter to join a column to an index.
+
+        import pandas as pd
+
+        employees = pd.DataFrame({
+            'name': ['Alice', 'Bob', 'Carol'],
+            'dept_id': ['D1', 'D2', 'D1']
+        })
+        departments = pd.DataFrame(
+            {'dept_name': ['Engineering', 'Sales']},
+            index=['D1', 'D2']
+        )
+        result = employees.join(departments, on='dept_id')
+        print(result)
+
+---
+
+**Exercise 2.**
+Create two DataFrames that both have a column named `'score'`. Join them by index using `lsuffix='_exam1'` and `rsuffix='_exam2'`. Then compute a new column `'avg_score'` as the mean of the two score columns.
+
+??? success "Solution to Exercise 2"
+    Resolve overlapping column names and compute an average.
+
+        import pandas as pd
+
+        df1 = pd.DataFrame({'score': [85, 90, 78]}, index=['Alice', 'Bob', 'Carol'])
+        df2 = pd.DataFrame({'score': [88, 92, 80]}, index=['Alice', 'Bob', 'Carol'])
+        result = df1.join(df2, lsuffix='_exam1', rsuffix='_exam2')
+        result['avg_score'] = (result['score_exam1'] + result['score_exam2']) / 2
+        print(result)
+
+---
+
+**Exercise 3.**
+Create a flat DataFrame with `'year'` and `'quarter'` columns, and a targets DataFrame with a MultiIndex of (year, quarter). Use `.join()` with `on=['year', 'quarter']` to combine them. Verify the target values are correctly aligned.
+
+??? success "Solution to Exercise 3"
+    Join flat columns against a MultiIndex using on.
+
+        import pandas as pd
+
+        data = pd.DataFrame({
+            'year': [2023, 2023, 2024],
+            'quarter': ['Q1', 'Q2', 'Q1'],
+            'revenue': [100, 200, 150]
+        })
+        targets = pd.DataFrame(
+            {'target': [120, 180, 160]},
+            index=pd.MultiIndex.from_tuples(
+                [(2023, 'Q1'), (2023, 'Q2'), (2024, 'Q1')],
+                names=['year', 'quarter']
+            )
+        )
+        result = data.join(targets, on=['year', 'quarter'])
+        print(result)

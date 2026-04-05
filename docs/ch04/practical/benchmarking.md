@@ -82,6 +82,7 @@ print(f"Generator: {time_gen:.4f}s")
 
 ---
 
+
 ## Runnable Example: `timeit_tutorial.py`
 
 ```python
@@ -629,3 +630,88 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+
+## Exercises
+
+**Exercise 1.**
+Use `timeit.repeat` with `repeat=7` and `number=10000` to benchmark three ways of checking membership in a collection of 10,000 elements: (a) a list, (b) a set, (c) a dictionary. Report the minimum time for each and compute the speedup of set and dict over list.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import timeit
+
+        setup = """
+data_list = list(range(10_000))
+data_set = set(range(10_000))
+data_dict = {i: None for i in range(10_000)}
+target = 9_999
+"""
+
+        t_list = min(timeit.repeat(
+            'target in data_list', setup=setup, repeat=7, number=10000))
+        t_set = min(timeit.repeat(
+            'target in data_set', setup=setup, repeat=7, number=10000))
+        t_dict = min(timeit.repeat(
+            'target in data_dict', setup=setup, repeat=7, number=10000))
+
+        print(f"List: {t_list:.4f}s")
+        print(f"Set:  {t_set:.4f}s  ({t_list/t_set:.0f}x faster)")
+        print(f"Dict: {t_dict:.4f}s  ({t_list/t_dict:.0f}x faster)")
+        ```
+
+---
+
+**Exercise 2.**
+Write a `benchmark_report(func, name, number=1000, repeat=5)` function that uses `timeit.repeat` and the `statistics` module to print a formatted report including the function name, min, max, mean, and standard deviation of the timings. Test it on two sorting approaches: `sorted(data)` vs `data.sort()` on a list of 10,000 random integers.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import timeit
+        import statistics
+        import random
+
+        def benchmark_report(func, name, number=1000, repeat=5):
+            times = timeit.repeat(func, number=number, repeat=repeat)
+            print(f"{name}:")
+            print(f"  Min:   {min(times):.6f}s")
+            print(f"  Max:   {max(times):.6f}s")
+            print(f"  Mean:  {statistics.mean(times):.6f}s")
+            print(f"  Stdev: {statistics.stdev(times):.6f}s")
+
+        data = [random.randint(0, 100_000) for _ in range(10_000)]
+
+        benchmark_report(
+            lambda: sorted(data), "sorted(data)")
+        benchmark_report(
+            lambda: data.copy().sort(), "data.sort() (on copy)")
+        ```
+
+---
+
+**Exercise 3.**
+Compare the performance of three string formatting methods (f-string, `.format()`, and `%` formatting) for building 10,000 strings of the form `"Name: Alice, Age: 30"`. Use `timeit` to time each approach and print the results in a table showing method name, total time, and per-operation time in microseconds.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import timeit
+
+        setup = 'name = "Alice"; age = 30'
+        n = 10_000
+
+        methods = {
+            "f-string":  'f"Name: {name}, Age: {age}"',
+            ".format()": '"Name: {}, Age: {}".format(name, age)',
+            "% format":  '"Name: %s, Age: %d" % (name, age)',
+        }
+
+        print(f"{'Method':<12} {'Total (s)':>10} {'Per op (us)':>12}")
+        print("-" * 36)
+
+        for label, stmt in methods.items():
+            t = min(timeit.repeat(stmt, setup=setup, repeat=5, number=n))
+            per_op = t / n * 1e6
+            print(f"{label:<12} {t:>10.4f} {per_op:>12.2f}")
+        ```
+
+---

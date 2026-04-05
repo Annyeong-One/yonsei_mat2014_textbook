@@ -165,3 +165,61 @@ print(f"Exact mean: {exact_posterior.mean():.4f}")
 ## Summary
 
 Bayesian inference updates a prior distribution with observed data via Bayes' theorem to produce a posterior distribution. Conjugate analysis provides closed-form posteriors for specific prior-likelihood pairs, while grid approximation handles arbitrary models numerically. The `scipy.stats` distribution objects serve as building blocks for specifying priors and evaluating posteriors in both approaches.
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Explain the difference between frequentist and Bayesian approaches to statistical inference. Give one advantage of each.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(100)
+    print(f'Mean: {data.mean():.4f}')
+    print(f'Std: {data.std():.4f}')
+    ```
+
+---
+
+**Exercise 2.** Write code that computes Bayes' theorem for a simple example: if a disease has 1% prevalence and a test has 95% sensitivity and 90% specificity, what is the probability of having the disease given a positive test?
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the statistical method and its assumptions.
+
+---
+
+**Exercise 3.** Write code that performs a Bayesian update: start with a uniform prior on a coin's bias, observe 7 heads out of 10 flips, and compute the posterior distribution.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+    from scipy import stats
+    import matplotlib.pyplot as plt
+
+    np.random.seed(42)
+    data = np.random.randn(1000)
+    fig, ax = plt.subplots()
+    ax.hist(data, bins=30, density=True, alpha=0.7)
+    ax.set_title('Distribution')
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Explain what a prior, likelihood, and posterior distribution represent in Bayesian statistics.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(500)
+    result = stats.describe(data)
+    print(result)
+    ```

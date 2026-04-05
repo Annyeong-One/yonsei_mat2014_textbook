@@ -515,3 +515,106 @@ result = future.result(timeout=30)
 - Log errors for debugging
 - Ensure cleanup happens even on errors
 - Collect partial results when some tasks fail
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Use `ThreadPoolExecutor.submit()` and `as_completed()` to process 10 items where items 3, 6, and 9 raise a `ValueError`. Collect successful results and errors separately into two dictionaries mapping input to result/error. Print both dictionaries.
+
+??? success "Solution to Exercise 1"
+        ```python
+        from concurrent.futures import ThreadPoolExecutor, as_completed
+
+        def process(x):
+            if x in (3, 6, 9):
+                raise ValueError(f"Cannot process {x}")
+            return x ** 2
+
+        with ThreadPoolExecutor() as executor:
+            futures = {executor.submit(process, x): x for x in range(10)}
+            results = {}
+            errors = {}
+
+            for future in as_completed(futures):
+                x = futures[future]
+                try:
+                    results[x] = future.result()
+                except Exception as e:
+                    errors[x] = str(e)
+
+            print(f"Results: {dict(sorted(results.items()))}")
+            print(f"Errors:  {dict(sorted(errors.items()))}")
+        ```
+
+---
+
+**Exercise 2.**
+Write a `safe_map(executor, func, items)` function that wraps each call so that exceptions are returned as `("error", str(e))` tuples instead of raising. Use `executor.map()` internally. Test it with a function that fails on negative inputs. Print the count of successes and errors.
+
+??? success "Solution to Exercise 2"
+        ```python
+        from concurrent.futures import ThreadPoolExecutor
+
+        def safe_map(executor, func, items):
+            def safe_func(x):
+                try:
+                    return ("success", func(x))
+                except Exception as e:
+                    return ("error", str(e))
+            return list(executor.map(safe_func, items))
+
+        def process(x):
+            if x < 0:
+                raise ValueError(f"Negative: {x}")
+            return x ** 2
+
+        data = [3, -1, 5, -2, 7, 0, -4, 10]
+
+        with ThreadPoolExecutor() as executor:
+            results = safe_map(executor, process, data)
+
+        successes = [(r[1]) for r in results if r[0] == "success"]
+        errors = [(r[1]) for r in results if r[0] == "error"]
+        print(f"Successes ({len(successes)}): {successes}")
+        print(f"Errors ({len(errors)}): {errors}")
+        ```
+
+---
+
+**Exercise 3.**
+Implement a batch processor with timeout handling. Submit 8 tasks to a `ThreadPoolExecutor`, where each task sleeps for a random duration (0.1-2.0s). Use `as_completed(futures, timeout=1.0)` to collect results that finish within 1 second. Cancel remaining tasks and print how many completed, how many timed out, and the results of the completed ones.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import time
+        import random
+        from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError
+
+        def task(task_id):
+            delay = random.uniform(0.1, 2.0)
+            time.sleep(delay)
+            return (task_id, delay)
+
+        with ThreadPoolExecutor() as executor:
+            futures = {executor.submit(task, i): i for i in range(8)}
+            completed = []
+
+            try:
+                for future in as_completed(futures, timeout=1.0):
+                    completed.append(future.result())
+            except TimeoutError:
+                pass
+
+            timed_out = 0
+            for future in futures:
+                if not future.done():
+                    future.cancel()
+                    timed_out += 1
+
+            print(f"Completed: {len(completed)}")
+            print(f"Timed out: {timed_out}")
+            for tid, delay in completed:
+                print(f"  Task {tid}: {delay:.2f}s")
+        ```

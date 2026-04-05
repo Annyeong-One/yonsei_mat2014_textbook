@@ -117,3 +117,79 @@ d1: {'a': 1, 'b': 2}
 d3: {'a': 1, 'b': 2, 'c': 3}
 d1 unchanged: True
 ```
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Given two dictionaries `defaults = {"color": "red", "size": 10}` and `custom = {"size": 20, "font": "Arial"}`, merge them so that `custom` values take priority. Show two approaches: one using `|` and one using `{**d1, **d2}`.
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        defaults = {"color": "red", "size": 10}
+        custom = {"size": 20, "font": "Arial"}
+
+        # Using | (Python 3.9+)
+        merged1 = defaults | custom
+        print(merged1)  # {'color': 'red', 'size': 20, 'font': 'Arial'}
+
+        # Using ** unpacking
+        merged2 = {**defaults, **custom}
+        print(merged2)  # {'color': 'red', 'size': 20, 'font': 'Arial'}
+        ```
+
+    Both approaches give `custom` priority. The rightmost dictionary's values win for duplicate keys.
+
+---
+
+**Exercise 2.**
+Write a function `deep_merge(d1, d2)` that merges two dictionaries recursively. If both values for a key are dictionaries, merge them recursively. Otherwise, `d2`'s value wins.
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        def deep_merge(d1, d2):
+            result = d1.copy()
+            for key, value in d2.items():
+                if key in result and isinstance(result[key], dict) and isinstance(value, dict):
+                    result[key] = deep_merge(result[key], value)
+                else:
+                    result[key] = value
+            return result
+
+        a = {"db": {"host": "localhost", "port": 5432}, "debug": True}
+        b = {"db": {"port": 3306, "user": "admin"}, "debug": False}
+
+        print(deep_merge(a, b))
+        # {'db': {'host': 'localhost', 'port': 3306, 'user': 'admin'}, 'debug': False}
+        ```
+
+    The recursive approach preserves nested keys from both dictionaries while letting `d2` values take priority.
+
+---
+
+**Exercise 3.**
+Demonstrate the difference between `d1 | d2` (creates new dict) and `d1 |= d2` (updates in place) by showing that one changes the original dictionary and the other does not.
+
+??? success "Solution to Exercise 3"
+
+        ```python
+        d1 = {"a": 1, "b": 2}
+        d2 = {"b": 3, "c": 4}
+
+        # | creates a new dict
+        d3 = d1 | d2
+        print(d1)  # {'a': 1, 'b': 2} (unchanged)
+        print(d3)  # {'a': 1, 'b': 3, 'c': 4}
+
+        # |= updates in place
+        original_id = id(d1)
+        d1 |= d2
+        print(d1)  # {'a': 1, 'b': 3, 'c': 4} (modified)
+        print(id(d1) == original_id)  # True (same object)
+        ```
+
+    `|` returns a new dictionary, leaving originals intact. `|=` modifies the left-hand dictionary in place.

@@ -195,3 +195,81 @@ if __name__ == "__main__":
 | `linalg.sqrtm(A)` | Principal matrix square root |
 
 Key: Returns principal square root. May be complex if A has negative eigenvalues.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Compute the matrix square root of $A = \begin{pmatrix} 5 & 2 \\ 2 & 8 \end{pmatrix}$ and verify that $X^2 = A$ by checking $\|X^2 - A\|_F < 10^{-12}$. Also verify that the square root is real (since $A$ is positive definite).
+
+??? success "Solution to Exercise 1"
+        import numpy as np
+        from scipy import linalg
+
+        A = np.array([[5, 2],
+                       [2, 8]], dtype=float)
+
+        X = linalg.sqrtm(A)
+        error = np.linalg.norm(X @ X - A)
+        is_real = np.allclose(X.imag, 0) if np.iscomplexobj(X) else True
+
+        print(f"sqrt(A) =\n{X.real.round(6)}")
+        print(f"X^2 - A error: {error:.2e}")
+        print(f"Result is real: {is_real}")
+
+---
+
+**Exercise 2.**
+Implement the whitening transform for the covariance matrix $\Sigma = \begin{pmatrix} 4 & 2 \\ 2 & 3 \end{pmatrix}$. Compute $W = \Sigma^{-1/2}$ using `sqrtm` and `np.linalg.inv`. Generate 1000 correlated samples from $N(0, \Sigma)$, apply the whitening transform, and verify that the sample covariance of the whitened data is approximately the identity.
+
+??? success "Solution to Exercise 2"
+        import numpy as np
+        from scipy import linalg
+
+        np.random.seed(0)
+        Sigma = np.array([[4, 2],
+                           [2, 3]], dtype=float)
+
+        Sigma_sqrt = linalg.sqrtm(Sigma)
+        W = np.linalg.inv(Sigma_sqrt.real)
+
+        # Generate correlated samples
+        samples = np.random.randn(1000, 2) @ Sigma_sqrt.real
+
+        # Whiten
+        whitened = samples @ W
+        cov_whitened = np.cov(whitened.T)
+
+        print(f"Whitened covariance:\n{cov_whitened.round(2)}")
+        print(f"Close to identity: {np.allclose(cov_whitened, np.eye(2), atol=0.15)}")
+
+---
+
+**Exercise 3.**
+Compute the matrix geometric mean of $A = \begin{pmatrix} 4 & 1 \\ 1 & 3 \end{pmatrix}$ and $B = \begin{pmatrix} 2 & 0 \\ 0 & 5 \end{pmatrix}$ using the formula $A \# B = A^{1/2} (A^{-1/2} B A^{-1/2})^{1/2} A^{1/2}$. Verify that the result is symmetric and its eigenvalues lie between those of $A$ and $B$.
+
+??? success "Solution to Exercise 3"
+        import numpy as np
+        from scipy import linalg
+
+        A = np.array([[4, 1],
+                       [1, 3]], dtype=float)
+        B = np.array([[2, 0],
+                       [0, 5]], dtype=float)
+
+        A_sqrt = linalg.sqrtm(A).real
+        A_inv_sqrt = linalg.sqrtm(np.linalg.inv(A)).real
+
+        inner = A_inv_sqrt @ B @ A_inv_sqrt
+        geo_mean = A_sqrt @ linalg.sqrtm(inner).real @ A_sqrt
+
+        print(f"Geometric mean A#B:\n{geo_mean.round(6)}")
+        print(f"Symmetric: {np.allclose(geo_mean, geo_mean.T)}")
+
+        eig_geo = np.sort(np.linalg.eigvalsh(geo_mean))
+        eig_A = np.sort(np.linalg.eigvalsh(A))
+        eig_B = np.sort(np.linalg.eigvalsh(B))
+        print(f"Eigenvalues of A: {eig_A}")
+        print(f"Eigenvalues of A#B: {eig_geo.round(6)}")
+        print(f"Eigenvalues of B: {eig_B}")

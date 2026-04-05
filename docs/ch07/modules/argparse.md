@@ -221,3 +221,81 @@ parser.add_argument("files", nargs="+", help="Input files")
 | Boolean | `action="store_true"` |
 | Choices | `choices=["a", "b", "c"]` |
 | Help | `help="Description"` |
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create an `ArgumentParser` that accepts a required positional argument `filename` and an optional `--lines` argument (defaulting to 10) that specifies how many lines to display. Print the parsed arguments. Test by calling `parse_args` with `["test.txt", "--lines", "20"]`.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Display file lines")
+    parser.add_argument("filename", help="File to display")
+    parser.add_argument("--lines", type=int, default=10,
+                        help="Number of lines (default: 10)")
+
+    # Test
+    args = parser.parse_args(["test.txt", "--lines", "20"])
+    print(f"File: {args.filename}, Lines: {args.lines}")
+    # File: test.txt, Lines: 20
+    ```
+
+---
+
+**Exercise 2.**
+Create an `ArgumentParser` for a simple calculator that takes two positional float arguments `a` and `b`, and a required `--operation` argument with choices `["add", "sub", "mul", "div"]`. Implement the calculation and print the result.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Simple calculator")
+    parser.add_argument("a", type=float, help="First number")
+    parser.add_argument("b", type=float, help="Second number")
+    parser.add_argument("--operation", required=True,
+                        choices=["add", "sub", "mul", "div"])
+
+    args = parser.parse_args(["10", "3", "--operation", "add"])
+
+    ops = {
+        "add": lambda a, b: a + b,
+        "sub": lambda a, b: a - b,
+        "mul": lambda a, b: a * b,
+        "div": lambda a, b: a / b if b != 0 else float("inf"),
+    }
+    result = ops[args.operation](args.a, args.b)
+    print(f"{args.a} {args.operation} {args.b} = {result}")
+    # 10.0 add 3.0 = 13.0
+    ```
+
+---
+
+**Exercise 3.**
+Create an `ArgumentParser` that accepts a `--verbose` flag (boolean), a `--output` option with a default of `"result.txt"`, and a `files` positional argument that accepts one or more filenames using `nargs="+"`. Print all parsed arguments.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    import argparse
+
+    parser = argparse.ArgumentParser(description="File processor")
+    parser.add_argument("files", nargs="+", help="Files to process")
+    parser.add_argument("--verbose", action="store_true",
+                        help="Enable verbose output")
+    parser.add_argument("--output", default="result.txt",
+                        help="Output file (default: result.txt)")
+
+    args = parser.parse_args(["a.txt", "b.txt", "--verbose"])
+    print(f"Files: {args.files}")
+    print(f"Verbose: {args.verbose}")
+    print(f"Output: {args.output}")
+    # Files: ['a.txt', 'b.txt']
+    # Verbose: True
+    # Output: result.txt
+    ```

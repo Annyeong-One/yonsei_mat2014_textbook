@@ -274,3 +274,61 @@ print(positive)
 3. **Use CategoricalDtype** for consistency across multiple columns
 4. **Specify dtype in read_csv** to save memory on large files
 5. **Handle invalid values** - they become NaN silently
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that creates a Pandas Categorical from the list `['low', 'medium', 'high', 'medium', 'low']` with categories `['low', 'medium', 'high']` and `ordered=True`.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+
+    cat = pd.Categorical(
+        ['low', 'medium', 'high', 'medium', 'low'],
+        categories=['low', 'medium', 'high'],
+        ordered=True
+    )
+    print(cat)
+    print(f'Ordered: {cat.ordered}')
+    ```
+
+---
+
+**Exercise 2.** Explain the difference between `pd.Categorical()` and `astype('category')`. When would you use each?
+
+??? success "Solution to Exercise 2"
+    `pd.Categorical()` creates a standalone categorical array where you can specify the categories and ordering explicitly at creation time. `.astype('category')` converts an existing Series to a categorical dtype, inferring the categories from the data. Use `pd.Categorical()` when you need to set custom categories or ordering upfront. Use `.astype('category')` for quick conversion of an existing column.
+
+---
+
+**Exercise 3.** Create a DataFrame with a string column and convert it to categorical using `.astype('category')`. Print the category codes and the memory usage before and after conversion.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+
+    df = pd.DataFrame({'color': ['red', 'blue', 'green', 'red', 'blue'] * 100})
+    print(f'Before: {df["color"].memory_usage()} bytes')
+    df['color'] = df['color'].astype('category')
+    print(f'After:  {df["color"].memory_usage()} bytes')
+    print(df['color'].cat.codes[:5])
+    ```
+
+---
+
+**Exercise 4.** Write code that creates a categorical with custom categories that include a category not present in the data (e.g., `'very_high'`). Show that this category appears in `.cat.categories`.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+
+    cat = pd.Categorical(
+        ['low', 'medium', 'high'],
+        categories=['low', 'medium', 'high', 'very_high']
+    )
+    print(cat)
+    print(f'Categories: {cat.categories.tolist()}')
+    ```

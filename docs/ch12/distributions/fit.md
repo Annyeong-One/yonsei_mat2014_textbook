@@ -115,3 +115,70 @@ print(f"KS statistic={ks_stat:.4f}, p-value={p_value:.4f}")
 ## Summary
 
 The `.fit()` method on `scipy.stats` distributions finds maximum likelihood estimates of shape, location, and scale parameters. MLE maximizes the log-likelihood $\ell(\theta) = \sum \ln f(x_i; \theta)$, yielding estimators with strong asymptotic properties. Fixing known parameters with `floc` or `fscale` improves reliability, and overlaying the fitted PDF on a histogram provides an immediate visual diagnostic.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Generate 500 samples from a normal distribution with $\mu = 50$ and $\sigma = 8$. Use `stats.norm.fit()` to estimate the parameters. Print the estimated values and compare to the true parameters.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        data = stats.norm.rvs(loc=50, scale=8, size=500)
+        mu_hat, sigma_hat = stats.norm.fit(data)
+        print(f"Estimated mu: {mu_hat:.4f} (true: 50)")
+        print(f"Estimated sigma: {sigma_hat:.4f} (true: 8)")
+
+---
+
+**Exercise 2.**
+Generate 1000 samples from a gamma distribution with shape $a = 3$ and scale $\theta = 2$. Fit a gamma distribution using `.fit()` with `floc=0` (fixing the location). Print the estimated shape and scale, then overlay the fitted PDF on a histogram.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy import stats
+        import matplotlib.pyplot as plt
+
+        np.random.seed(42)
+        data = stats.gamma.rvs(a=3, scale=2, size=1000)
+        a_hat, loc_hat, scale_hat = stats.gamma.fit(data, floc=0)
+
+        print(f"Estimated shape: {a_hat:.4f} (true: 3)")
+        print(f"Estimated scale: {scale_hat:.4f} (true: 2)")
+
+        x = np.linspace(0, data.max(), 200)
+        plt.hist(data, bins=40, density=True, alpha=0.6)
+        plt.plot(x, stats.gamma.pdf(x, a_hat, loc=0, scale=scale_hat), 'r-', lw=2)
+        plt.title('Gamma Fit')
+        plt.show()
+
+---
+
+**Exercise 3.**
+Generate 500 samples from an exponential distribution with $\lambda = 0.5$. Fit both an exponential and a normal distribution to the data. Use the Kolmogorov-Smirnov test (`stats.kstest`) to determine which fit is better by comparing p-values.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        data = stats.expon.rvs(scale=2, size=500)
+
+        # Fit exponential
+        loc_e, scale_e = stats.expon.fit(data, floc=0)
+        ks_exp, p_exp = stats.kstest(data, 'expon', args=(0, scale_e))
+
+        # Fit normal
+        mu_n, sigma_n = stats.norm.fit(data)
+        ks_norm, p_norm = stats.kstest(data, 'norm', args=(mu_n, sigma_n))
+
+        print(f"Exponential fit — KS: {ks_exp:.4f}, p: {p_exp:.4f}")
+        print(f"Normal fit     — KS: {ks_norm:.4f}, p: {p_norm:.4f}")
+        print(f"Better fit: {'Exponential' if p_exp > p_norm else 'Normal'}")

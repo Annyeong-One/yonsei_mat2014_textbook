@@ -369,3 +369,68 @@ result = [x for _, x in decorated]
 - Python's sort is stable—use for multi-key sorting
 - Use tuple keys for multiple sort criteria
 - Negate numeric values for mixed ascending/descending sorts
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Given a list of tuples representing students and their scores, sort them by score in descending order. If two students have the same score, sort them alphabetically by name.
+
+```python
+students = [("Alice", 88), ("Bob", 95), ("Carol", 88), ("Dave", 95)]
+```
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        students = [("Alice", 88), ("Bob", 95), ("Carol", 88), ("Dave", 95)]
+
+        result = sorted(students, key=lambda s: (-s[1], s[0]))
+        print(result)
+        # [('Bob', 95), ('Dave', 95), ('Alice', 88), ('Carol', 88)]
+        ```
+
+    Negating the score (`-s[1]`) sorts scores in descending order. The name `s[0]` serves as the tiebreaker and sorts alphabetically in ascending order.
+
+---
+
+**Exercise 2.**
+Write a function `sort_by_last_word(sentences)` that takes a list of strings and returns them sorted by their last word (case-insensitive). For example, `["Hello World", "Foo Bar", "Python Alpha"]` should be sorted by `"World"`, `"Bar"`, `"Alpha"`.
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        def sort_by_last_word(sentences):
+            return sorted(sentences, key=lambda s: s.split()[-1].lower())
+
+        result = sort_by_last_word(["Hello World", "Foo Bar", "Python Alpha"])
+        print(result)
+        # ['Python Alpha', 'Foo Bar', 'Hello World']
+        ```
+
+    `s.split()[-1]` extracts the last word, and `.lower()` makes the comparison case-insensitive.
+
+---
+
+**Exercise 3.**
+Explain the difference between `sorted()` and `list.sort()`. Write a code example that demonstrates that `sorted()` returns a new list while `list.sort()` modifies the list in place and returns `None`.
+
+??? success "Solution to Exercise 3"
+
+        ```python
+        original = [3, 1, 2]
+
+        # sorted() returns a new list
+        new_list = sorted(original)
+        print(new_list)    # [1, 2, 3]
+        print(original)    # [3, 1, 2] (unchanged)
+
+        # list.sort() modifies in place and returns None
+        result = original.sort()
+        print(result)      # None
+        print(original)    # [1, 2, 3] (modified)
+        ```
+
+    `sorted()` creates and returns a new list, leaving the original unchanged. `list.sort()` sorts the list in place and returns `None` -- a common source of bugs when developers write `x = my_list.sort()` expecting to get the sorted list.

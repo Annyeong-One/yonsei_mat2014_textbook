@@ -119,3 +119,55 @@ prob = a.cdf(1) - a.cdf(-1)  # P(-1 < X ≤ 1) ≈ 0.6827
 ## Summary
 
 The CDF and survival function are essential tools for probability computation. In `scipy.stats`, `.cdf()` gives $P(X \le x)$ and `.sf()` gives $P(X > x)$ with numerical stability. Together with the PDF/PMF and quantile functions, they form the complete interface for working with probability distributions.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+For a standard normal distribution, compute $P(X \le 1.96)$ using `.cdf()` and $P(X > 1.96)$ using `.sf()`. Verify that they sum to 1.
+
+??? success "Solution to Exercise 1"
+
+        from scipy import stats
+
+        rv = stats.norm()
+        cdf_val = rv.cdf(1.96)
+        sf_val = rv.sf(1.96)
+        print(f"P(X <= 1.96) = {cdf_val:.6f}")
+        print(f"P(X > 1.96)  = {sf_val:.6f}")
+        print(f"Sum = {cdf_val + sf_val:.6f}")
+
+---
+
+**Exercise 2.**
+A light bulb lifetime follows an exponential distribution with mean 1000 hours. Compute the probability that a bulb lasts more than 1500 hours using the survival function. Then compute $P(500 \le X \le 1500)$ using the CDF.
+
+??? success "Solution to Exercise 2"
+
+        from scipy import stats
+
+        rv = stats.expon(scale=1000)
+        p_gt_1500 = rv.sf(1500)
+        p_interval = rv.cdf(1500) - rv.cdf(500)
+        print(f"P(X > 1500) = {p_gt_1500:.4f}")
+        print(f"P(500 <= X <= 1500) = {p_interval:.4f}")
+
+---
+
+**Exercise 3.**
+For a Poisson distribution with $\lambda = 7$, compute $P(X \le 5)$ and $P(X > 10)$ using `.cdf()` and `.sf()` respectively. Verify the SF result by computing $1 - P(X \le 10)$.
+
+??? success "Solution to Exercise 3"
+
+        from scipy import stats
+
+        rv = stats.poisson(mu=7)
+        p_le_5 = rv.cdf(5)
+        p_gt_10 = rv.sf(10)
+        p_gt_10_check = 1 - rv.cdf(10)
+
+        print(f"P(X <= 5)  = {p_le_5:.4f}")
+        print(f"P(X > 10)  = {p_gt_10:.6f}")
+        print(f"1 - P(X<=10) = {p_gt_10_check:.6f}")
+        print(f"Match: {abs(p_gt_10 - p_gt_10_check) < 1e-10}")

@@ -127,3 +127,82 @@ Output:
 ['Alice', '30']
 ['Bob', '25']
 ```
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Use `io.StringIO` to capture the output of multiple `print()` calls into a single string. Print the combined result.
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        import io
+
+        buffer = io.StringIO()
+        print("Hello", file=buffer)
+        print("World", file=buffer)
+        print("Python", file=buffer)
+
+        result = buffer.getvalue()
+        print(result)
+        # Hello
+        # World
+        # Python
+        ```
+
+    `io.StringIO` acts as an in-memory text file. `print()` with `file=buffer` writes to it instead of stdout.
+
+---
+
+**Exercise 2.**
+Write a function that takes a CSV string (e.g., `"name,age\nAlice,30\nBob,25"`) and uses `io.StringIO` with the `csv` module to parse it into a list of dictionaries.
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        import io
+        import csv
+
+        def parse_csv(csv_string):
+            reader = csv.DictReader(io.StringIO(csv_string))
+            return list(reader)
+
+        data = "name,age\nAlice,30\nBob,25"
+        records = parse_csv(data)
+        print(records)
+        # [{'name': 'Alice', 'age': '30'}, {'name': 'Bob', 'age': '25'}]
+        ```
+
+    `io.StringIO` wraps the string as a file-like object that `csv.DictReader` can consume.
+
+---
+
+**Exercise 3.**
+Demonstrate the difference between `io.StringIO` (works with `str`) and `io.BytesIO` (works with `bytes`). Show that writing bytes to `StringIO` raises an error and vice versa.
+
+??? success "Solution to Exercise 3"
+
+        ```python
+        import io
+
+        # StringIO works with str
+        s = io.StringIO()
+        s.write("hello")
+        try:
+            s.write(b"bytes")
+        except TypeError as e:
+            print(f"StringIO error: {e}")
+
+        # BytesIO works with bytes
+        b = io.BytesIO()
+        b.write(b"hello")
+        try:
+            b.write("text")
+        except TypeError as e:
+            print(f"BytesIO error: {e}")
+        ```
+
+    `StringIO` accepts only `str`, and `BytesIO` accepts only `bytes`. Mixing them raises `TypeError`.

@@ -204,3 +204,63 @@ from typing import List
 def createDataframe(student_data: List[List[int]]) -> pd.DataFrame:
     return pd.DataFrame(student_data, columns=['student_id', 'age'])
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a DataFrame from a dictionary where keys are `'ticker'`, `'sector'`, and `'market_cap'` with at least four rows of sample stock data. Set the `'ticker'` column as the index after creation using `set_index`.
+
+??? success "Solution to Exercise 1"
+    Create from a dictionary and set the index.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'ticker': ['AAPL', 'MSFT', 'GOOGL', 'AMZN'],
+            'sector': ['Tech', 'Tech', 'Tech', 'Consumer'],
+            'market_cap': [2800, 2400, 1800, 1500]
+        })
+        df = df.set_index('ticker')
+        print(df)
+
+---
+
+**Exercise 2.**
+Create a DataFrame from a list of dictionaries where each dictionary represents a student with keys `'name'`, `'grade'`, and `'score'`. One of the dictionaries should be missing the `'score'` key. Print the DataFrame and observe how pandas handles the missing value.
+
+??? success "Solution to Exercise 2"
+    Missing keys in dictionaries produce `NaN` in the DataFrame.
+
+        import pandas as pd
+
+        students = [
+            {'name': 'Alice', 'grade': 'A', 'score': 95},
+            {'name': 'Bob', 'grade': 'B', 'score': 85},
+            {'name': 'Carol', 'grade': 'A'},  # Missing 'score'
+        ]
+        df = pd.DataFrame(students)
+        print(df)
+        # Carol's score will be NaN
+
+---
+
+**Exercise 3.**
+Create a DataFrame from a 3x4 NumPy random array. Assign custom column names `['Q1', 'Q2', 'Q3', 'Q4']` and custom index labels `['2022', '2023', '2024']`. Then verify the shape is `(3, 4)`.
+
+??? success "Solution to Exercise 3"
+    Create from a NumPy array with custom labels.
+
+        import pandas as pd
+        import numpy as np
+
+        np.random.seed(42)
+        data = np.random.rand(3, 4)
+        df = pd.DataFrame(
+            data,
+            columns=['Q1', 'Q2', 'Q3', 'Q4'],
+            index=['2022', '2023', '2024']
+        )
+        print(df)
+        print(f"Shape: {df.shape}")  # (3, 4)

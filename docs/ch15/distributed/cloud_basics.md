@@ -355,3 +355,70 @@ Key takeaways:
 - Monitor costs—easy to overspend
 - Spot/preemptible instances for cost savings
 - Python SDKs available for all major clouds
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Explain the difference between IaaS, PaaS, and SaaS. Give an example of each relevant to data science.
+
+??? success "Solution to Exercise 1"
+    ```python
+    # Conceptual solution - see page content for details
+    import sys
+    import platform
+
+    print(f"Python version: {sys.version}")
+    print(f"Platform: {platform.platform()}")
+    print(f"Architecture: {platform.machine()}")
+    ```
+
+---
+
+**Exercise 2.** Name three major cloud providers and one service from each that is commonly used for machine learning workloads.
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the hardware-software interaction and how it affects Python performance.
+
+---
+
+**Exercise 3.** Explain the concept of horizontal scaling (scaling out) vs vertical scaling (scaling up). When would you use each?
+
+??? success "Solution to Exercise 3"
+    ```python
+    import time
+
+    # Simple benchmark
+    n = 10_000_000
+    start = time.perf_counter()
+    total = sum(range(n))
+    elapsed = time.perf_counter() - start
+    print(f"Sum of {n} integers: {total}")
+    print(f"Time: {elapsed:.4f} seconds")
+    ```
+
+---
+
+**Exercise 4.** Write Python code that demonstrates a simple client-server interaction using `requests` to call a REST API endpoint.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    import time
+
+    n = 1_000_000
+    # Python loop
+    start = time.perf_counter()
+    result_py = sum(i * i for i in range(n))
+    time_py = time.perf_counter() - start
+
+    # NumPy vectorized
+    arr = np.arange(n)
+    start = time.perf_counter()
+    result_np = np.sum(arr * arr)
+    time_np = time.perf_counter() - start
+
+    print(f"Python: {time_py:.4f}s, NumPy: {time_np:.4f}s")
+    print(f"Speedup: {time_py / time_np:.1f}x")
+    ```

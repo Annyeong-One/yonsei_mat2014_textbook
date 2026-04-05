@@ -446,3 +446,78 @@ plt.show()
 | `set_xticklabels(labels)` | Set angular tick labels |
 | `set_rgrids(radii)` | Set radial grid lines |
 | `set_thetagrids(angles)` | Set angular grid lines |
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a polar plot of a four-petaled rose curve defined by $r = \cos(2\theta)$ for $\theta \in [0, 2\pi]$. Fill the curve with a semi-transparent color using `fill` and add a descriptive title.
+
+??? success "Solution to Exercise 1"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        theta = np.linspace(0, 2 * np.pi, 1000)
+        r = np.cos(2 * theta)
+
+        fig, ax = plt.subplots(subplot_kw={'projection': 'polar'}, figsize=(6, 6))
+        ax.plot(theta, r, color='purple')
+        ax.fill(theta, r, alpha=0.3, color='purple')
+        ax.set_title('Four-Petaled Rose: r = cos(2θ)', pad=20)
+        plt.show()
+
+---
+
+**Exercise 2.**
+Build a radar chart (spider plot) for comparing three students across five subjects: Math, Science, English, History, and Art. Use scores like `[85, 90, 78, 92, 88]`, `[70, 85, 95, 80, 75]`, and `[90, 75, 80, 85, 95]`. Close each polygon by repeating the first value. Add a legend.
+
+??? success "Solution to Exercise 2"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        categories = ['Math', 'Science', 'English', 'History', 'Art']
+        n = len(categories)
+        angles = np.linspace(0, 2 * np.pi, n, endpoint=False).tolist()
+        angles += angles[:1]
+
+        students = {
+            'Alice': [85, 90, 78, 92, 88],
+            'Bob':   [70, 85, 95, 80, 75],
+            'Carol': [90, 75, 80, 85, 95],
+        }
+
+        fig, ax = plt.subplots(subplot_kw={'projection': 'polar'}, figsize=(7, 7))
+
+        for name, scores in students.items():
+            values = scores + scores[:1]
+            ax.plot(angles, values, 'o-', label=name)
+            ax.fill(angles, values, alpha=0.1)
+
+        ax.set_xticks(angles[:-1])
+        ax.set_xticklabels(categories)
+        ax.set_ylim(0, 100)
+        ax.legend(loc='upper right', bbox_to_anchor=(1.3, 1.1))
+        ax.set_title('Student Performance Radar Chart', pad=20)
+        plt.show()
+
+---
+
+**Exercise 3.**
+Plot the Archimedean spiral $r = \theta$ for $\theta \in [0, 6\pi]$ in polar coordinates. Color the line by the angle value using a colormap by plotting small segments with `plt.scatter` in polar mode. Add a colorbar labeled "Angle (radians)".
+
+??? success "Solution to Exercise 3"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        theta = np.linspace(0, 6 * np.pi, 1000)
+        r = theta
+
+        fig, ax = plt.subplots(subplot_kw={'projection': 'polar'}, figsize=(7, 7))
+        sc = ax.scatter(theta, r, c=theta, cmap='viridis', s=2)
+        ax.set_title('Archimedean Spiral: r = θ', pad=20)
+        plt.colorbar(sc, ax=ax, label='Angle (radians)', pad=0.1)
+        plt.show()

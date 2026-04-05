@@ -533,3 +533,91 @@ def _(data):
 - Use `singledispatchmethod` for methods inside classes
 - Only dispatches on the first argument — use third-party tools for multi-dispatch
 - Register against ABCs (`Sequence`, `Mapping`) for broad type matching
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Use `@singledispatch` to create a `to_string` function that converts values to formatted strings: `int` should be formatted with commas (`1000` becomes `"1,000"`), `float` with two decimal places, `list` as a comma-separated string of elements, and the default should use `repr()`.
+
+??? success "Solution to Exercise 1"
+
+        from functools import singledispatch
+
+        @singledispatch
+        def to_string(value):
+            return repr(value)
+
+        @to_string.register(int)
+        def _(value):
+            return f"{value:,}"
+
+        @to_string.register(float)
+        def _(value):
+            return f"{value:.2f}"
+
+        @to_string.register(list)
+        def _(value):
+            return ", ".join(str(item) for item in value)
+
+        print(to_string(1000000))       # 1,000,000
+        print(to_string(3.14159))       # 3.14
+        print(to_string([1, 2, 3]))     # 1, 2, 3
+        print(to_string({"key": "val"}))# {'key': 'val'}
+
+---
+
+**Exercise 2.**
+Create a `@singledispatch` function `calculate_area` that computes areas for different shape representations: a `tuple` of two elements `(width, height)` is a rectangle, a single `float` or `int` is the radius of a circle. The default should raise `TypeError`.
+
+??? success "Solution to Exercise 2"
+
+        import math
+        from functools import singledispatch
+
+        @singledispatch
+        def calculate_area(shape):
+            raise TypeError(f"Cannot calculate area for {type(shape).__name__}")
+
+        @calculate_area.register(tuple)
+        def _(shape):
+            width, height = shape
+            return width * height
+
+        @calculate_area.register(int)
+        @calculate_area.register(float)
+        def _(radius):
+            return math.pi * radius ** 2
+
+        print(f"Rectangle: {calculate_area((5, 10))}")   # 50
+        print(f"Circle:    {calculate_area(7):.2f}")      # 153.94
+
+---
+
+**Exercise 3.**
+Register a handler for `bool` and `int` on the same `@singledispatch` function `describe`. The `bool` handler should return `"Boolean: True/False"` and the `int` handler should return `"Integer: <value>"`. Demonstrate that `describe(True)` dispatches to the `bool` handler (not `int`), and explain why registration order matters for subclasses.
+
+??? success "Solution to Exercise 3"
+
+        from functools import singledispatch
+
+        @singledispatch
+        def describe(value):
+            return f"Unknown: {value}"
+
+        @describe.register(int)
+        def _(value):
+            return f"Integer: {value}"
+
+        @describe.register(bool)
+        def _(value):
+            return f"Boolean: {value}"
+
+        print(describe(42))     # Integer: 42
+        print(describe(True))   # Boolean: True  (not Integer!)
+        print(describe("hi"))   # Unknown: hi
+
+        # bool is a subclass of int. singledispatch checks exact type
+        # first, so the bool handler is found before the int handler.
+        # If bool were not registered, True would dispatch to int.

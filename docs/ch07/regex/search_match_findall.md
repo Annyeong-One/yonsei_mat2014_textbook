@@ -237,3 +237,72 @@ re.fullmatch(pattern, 'cat')           # <re.Match ...>
 | `fullmatch()` | Entire string | `Match` / `None` | Input validation |
 | `findall()` | All matches | `list` | Extracting all occurrences |
 | `finditer()` | All matches | Iterator of `Match` | Position-aware extraction |
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a function `validate_email` that uses `re.fullmatch` to check if a string is a valid email address (simplified pattern). Return `True` or `False`. Test with `"user@example.com"`, `"@invalid.com"`, `"user@.com"`, and `"name@domain.org"`.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    import re
+
+    def validate_email(email):
+        pattern = r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
+        return bool(re.fullmatch(pattern, email))
+
+    # Test
+    print(validate_email("user@example.com"))  # True
+    print(validate_email("@invalid.com"))       # False
+    print(validate_email("user@.com"))          # False
+    print(validate_email("name@domain.org"))    # True
+    ```
+
+---
+
+**Exercise 2.**
+Write a function `find_all_hashtags` that uses `re.findall` to extract all hashtags from a social media post. A hashtag starts with `#` followed by one or more word characters. For example, `"Love #Python and #coding! #100DaysOfCode"` should return `["#Python", "#coding", "#100DaysOfCode"]`.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    import re
+
+    def find_all_hashtags(text):
+        return re.findall(r'#\w+', text)
+
+    # Test
+    post = "Love #Python and #coding! #100DaysOfCode"
+    print(find_all_hashtags(post))
+    # ['#Python', '#coding', '#100DaysOfCode']
+    ```
+
+---
+
+**Exercise 3.**
+Write a function `search_vs_match_demo` that takes a pattern and a string, and returns a dictionary with keys `"search"`, `"match"`, and `"fullmatch"`, each containing `True` or `False` depending on whether the respective function found a match. Demonstrate with the pattern `r"\d+"` and the string `"abc123"`.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    import re
+
+    def search_vs_match_demo(pattern, text):
+        return {
+            "search": bool(re.search(pattern, text)),
+            "match": bool(re.match(pattern, text)),
+            "fullmatch": bool(re.fullmatch(pattern, text)),
+        }
+
+    # Test
+    result = search_vs_match_demo(r"\d+", "abc123")
+    print(result)
+    # {'search': True, 'match': False, 'fullmatch': False}
+
+    result2 = search_vs_match_demo(r"\d+", "123")
+    print(result2)
+    # {'search': True, 'match': True, 'fullmatch': True}
+    ```

@@ -794,3 +794,90 @@ if __name__ == "__main__":
     maintain, and modify by your team!
     """)
 ```
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Write a memoization closure `make_memoized(func)` that caches results of a single-argument function. The closure should store results in a dictionary and return cached values for repeated arguments.
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        def make_memoized(func):
+            cache = {}
+            def wrapper(arg):
+                if arg not in cache:
+                    cache[arg] = func(arg)
+                return cache[arg]
+            return wrapper
+
+        @make_memoized
+        def square(x):
+            print(f"Computing {x}^2")
+            return x ** 2
+
+        print(square(4))  # Computing 4^2 -> 16
+        print(square(4))  # 16 (cached, no print)
+        print(square(5))  # Computing 5^2 -> 25
+        ```
+
+    The closure captures `cache` (a dict) and `func`. Results are stored on first call and returned from cache on subsequent calls.
+
+---
+
+**Exercise 2.**
+Write a closure `make_rate_limiter(max_calls, period)` that returns a function wrapper. The wrapper should allow at most `max_calls` calls within `period` seconds, raising a `RuntimeError` if the limit is exceeded. Use `time.time()` and a list to track call timestamps.
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        import time
+
+        def make_rate_limiter(max_calls, period):
+            timestamps = []
+            def wrapper(func):
+                def limited(*args, **kwargs):
+                    now = time.time()
+                    timestamps[:] = [t for t in timestamps if now - t < period]
+                    if len(timestamps) >= max_calls:
+                        raise RuntimeError("Rate limit exceeded")
+                    timestamps.append(now)
+                    return func(*args, **kwargs)
+                return limited
+            return wrapper
+
+        @make_rate_limiter(3, 1.0)
+        def api_call():
+            return "success"
+
+        print(api_call())  # success
+        print(api_call())  # success
+        print(api_call())  # success
+        # api_call()       # RuntimeError: Rate limit exceeded
+        ```
+
+    The closure maintains a list of timestamps. Old timestamps outside the period are removed before each check.
+
+---
+
+**Exercise 3.**
+Write a closure `make_validator(min_val, max_val)` that returns a function. The returned function takes a value and returns `True` if it is between `min_val` and `max_val` (inclusive), `False` otherwise.
+
+??? success "Solution to Exercise 3"
+
+        ```python
+        def make_validator(min_val, max_val):
+            def validate(value):
+                return min_val <= value <= max_val
+            return validate
+
+        is_valid_age = make_validator(0, 120)
+        print(is_valid_age(25))   # True
+        print(is_valid_age(-5))   # False
+        print(is_valid_age(150))  # False
+        ```
+
+    The closure captures `min_val` and `max_val` and uses Python's chained comparison.

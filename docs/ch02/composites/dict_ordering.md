@@ -115,3 +115,67 @@ Output:
 ```
 ['a', 'c', 'b']
 ```
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Create a dictionary with keys inserted in the order `"z"`, `"a"`, `"m"`. Verify that iterating over the dictionary yields the keys in insertion order. Then delete `"a"` and re-insert it. What order do the keys appear in now?
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        d = {}
+        d["z"] = 1
+        d["a"] = 2
+        d["m"] = 3
+        print(list(d.keys()))  # ['z', 'a', 'm']
+
+        del d["a"]
+        d["a"] = 2
+        print(list(d.keys()))  # ['z', 'm', 'a']
+        ```
+
+    Deleting and re-inserting a key places it at the end. Updating an existing key's value does not change its position.
+
+---
+
+**Exercise 2.**
+Write a function `move_to_front(d, key)` that takes a dictionary and a key, and returns a new dictionary with that key moved to the front (first position), preserving the relative order of all other keys.
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        def move_to_front(d, key):
+            if key not in d:
+                return dict(d)
+            return {key: d[key], **{k: v for k, v in d.items() if k != key}}
+
+        d = {"a": 1, "b": 2, "c": 3}
+        print(move_to_front(d, "c"))  # {'c': 3, 'a': 1, 'b': 2}
+        ```
+
+    The function creates a new dict with `key` first, followed by all other items in their original order.
+
+---
+
+**Exercise 3.**
+Using `next(iter(d))` and `next(reversed(d))`, write a function `first_and_last(d)` that returns a tuple of the first and last key-value pairs of a dictionary.
+
+??? success "Solution to Exercise 3"
+
+        ```python
+        def first_and_last(d):
+            first_key = next(iter(d))
+            last_key = next(reversed(d))
+            return (first_key, d[first_key]), (last_key, d[last_key])
+
+        d = {"x": 10, "y": 20, "z": 30}
+        first, last = first_and_last(d)
+        print(f"First: {first}")  # First: ('x', 10)
+        print(f"Last: {last}")    # Last: ('z', 30)
+        ```
+
+    `iter(d)` starts from the first key, `reversed(d)` starts from the last. Both are O(1) operations.

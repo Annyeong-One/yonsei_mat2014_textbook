@@ -505,3 +505,108 @@ if __name__ == '__main__':
     demo_thread_safety()
     demo_metaclass_singleton()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a class decorator `add_str` that adds a `__str__` method to any class. The generated `__str__` should return the class name followed by all instance attributes in `key=value` format. Apply it to a `Book` class with `title` and `author` attributes and verify the output.
+
+??? success "Solution to Exercise 1"
+
+        def add_str(cls):
+            """Add a __str__ method that shows all instance attributes."""
+            def __str__(self):
+                attrs = ', '.join(f'{k}={v!r}' for k, v in vars(self).items())
+                return f"{cls.__name__}({attrs})"
+            cls.__str__ = __str__
+            return cls
+
+        @add_str
+        class Book:
+            def __init__(self, title, author):
+                self.title = title
+                self.author = author
+
+        b = Book("1984", "Orwell")
+        print(b)  # Book(title='1984', author='Orwell')
+
+---
+
+**Exercise 2.**
+Create a decorator class `RateLimiter` that limits how many times a decorated function can be called within a given number of seconds. The constructor should accept a `max_calls` parameter (default 3). If the function is called more than `max_calls` times within one second, raise a `RuntimeError`. Expose a `reset()` method to clear the call history.
+
+??? success "Solution to Exercise 2"
+
+        import time
+
+        class RateLimiter:
+            """Decorator class that limits function call frequency."""
+
+            def __init__(self, max_calls=3):
+                self.max_calls = max_calls
+                self.call_times = []
+
+            def __call__(self, func):
+                def wrapper(*args, **kwargs):
+                    now = time.time()
+                    # Keep only calls within the last second
+                    self.call_times = [t for t in self.call_times if now - t < 1.0]
+                    if len(self.call_times) >= self.max_calls:
+                        raise RuntimeError(
+                            f"Rate limit exceeded: {self.max_calls} calls per second"
+                        )
+                    self.call_times.append(now)
+                    return func(*args, **kwargs)
+                wrapper.reset = self.reset
+                return wrapper
+
+            def reset(self):
+                self.call_times.clear()
+
+        @RateLimiter(max_calls=2)
+        def ping():
+            return "pong"
+
+        print(ping())  # pong
+        print(ping())  # pong
+        try:
+            ping()  # RuntimeError
+        except RuntimeError as e:
+            print(e)
+
+---
+
+**Exercise 3.**
+Write a class decorator `track_instances` that adds instance tracking to any class. The decorated class should gain a class-level `instances` list that holds weak references (or plain references) to every object created, and a class method `get_instance_count()` that returns the current number of tracked instances. Demonstrate it with a `Player` class.
+
+??? success "Solution to Exercise 3"
+
+        def track_instances(cls):
+            """Class decorator that tracks all created instances."""
+            original_init = cls.__init__
+            cls.instances = []
+
+            def new_init(self, *args, **kwargs):
+                original_init(self, *args, **kwargs)
+                cls.instances.append(self)
+
+            cls.__init__ = new_init
+
+            @classmethod
+            def get_instance_count(klass):
+                return len(klass.instances)
+
+            cls.get_instance_count = get_instance_count
+            return cls
+
+        @track_instances
+        class Player:
+            def __init__(self, name):
+                self.name = name
+
+        p1 = Player("Alice")
+        p2 = Player("Bob")
+        p3 = Player("Charlie")
+        print(Player.get_instance_count())  # 3

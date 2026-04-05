@@ -409,3 +409,123 @@ async with aiohttp.ClientSession(connector=connector) as session:
 - Handle timeouts and errors gracefully
 - Use connection pooling for high-throughput applications
 - Stream large responses with `iter_chunked()`
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write an async function that simulates fetching 10 URLs concurrently using a shared `aiohttp.ClientSession`. Use `asyncio.Semaphore(3)` to limit concurrency to 3 simultaneous requests. Each "fetch" should simulate a network delay with `asyncio.sleep(0.2)` and return the URL with its status. Print all results.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import asyncio
+
+        async def fetch(sem, url):
+            async with sem:
+                await asyncio.sleep(0.2)
+                return (url, 200)
+
+        async def main():
+            sem = asyncio.Semaphore(3)
+            urls = [f"https://example.com/page{i}" for i in range(10)]
+
+            tasks = [fetch(sem, url) for url in urls]
+            results = await asyncio.gather(*tasks)
+
+            for url, status in results:
+                print(f"{url}: {status}")
+
+        asyncio.run(main())
+        ```
+
+---
+
+**Exercise 2.**
+Create an `APIClient` class that uses `async with` for session lifecycle (`__aenter__`/`__aexit__`). It should have a `get(endpoint)` method that simulates a GET request and a `post(endpoint, data)` method. Include a retry mechanism that retries up to 2 times on failure. Demonstrate usage with `async with APIClient(...) as client:`.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import asyncio
+
+        class APIClient:
+            def __init__(self, base_url):
+                self.base_url = base_url
+
+            async def __aenter__(self):
+                print(f"Session opened for {self.base_url}")
+                return self
+
+            async def __aexit__(self, *args):
+                print("Session closed")
+
+            async def _request(self, method, endpoint, **kwargs):
+                url = f"{self.base_url}/{endpoint}"
+                for attempt in range(3):
+                    try:
+                        await asyncio.sleep(0.1)
+                        if attempt < 1:
+                            raise ConnectionError("Simulated failure")
+                        return {"url": url, "method": method, "status": 200}
+                    except ConnectionError:
+                        if attempt == 2:
+                            raise
+                        await asyncio.sleep(0.1 * (attempt + 1))
+
+            async def get(self, endpoint):
+                return await self._request("GET", endpoint)
+
+            async def post(self, endpoint, data):
+                return await self._request("POST", endpoint, data=data)
+
+        async def main():
+            async with APIClient("https://api.example.com") as client:
+                result = await client.get("users")
+                print(f"GET: {result}")
+                result = await client.post("users", {"name": "Alice"})
+                print(f"POST: {result}")
+
+        asyncio.run(main())
+        ```
+
+---
+
+**Exercise 3.**
+Write a function `fetch_with_timeout(urls, timeout)` that uses `asyncio.wait()` with a timeout. For each completed task, print the result. For each timed-out (pending) task, cancel it and print a timeout message. Test with 5 URLs where delays vary from 0.1s to 0.5s and a timeout of 0.3s.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import asyncio
+
+        async def fetch(url, delay):
+            await asyncio.sleep(delay)
+            return f"Data from {url}"
+
+        async def fetch_with_timeout(urls_and_delays, timeout):
+            tasks = {
+                asyncio.create_task(fetch(url, delay)): url
+                for url, delay in urls_and_delays
+            }
+
+            done, pending = await asyncio.wait(tasks.keys(), timeout=timeout)
+
+            for t in done:
+                url = tasks[t]
+                print(f"Completed: {url} -> {t.result()}")
+
+            for t in pending:
+                url = tasks[t]
+                t.cancel()
+                print(f"Timed out: {url}")
+
+            await asyncio.gather(*pending, return_exceptions=True)
+
+        async def main():
+            urls = [
+                (f"https://example.com/{i}", 0.1 * (i + 1))
+                for i in range(5)
+            ]
+            await fetch_with_timeout(urls, timeout=0.3)
+
+        asyncio.run(main())
+        ```

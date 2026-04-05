@@ -420,3 +420,95 @@ for name, w in windows.items():
 1. Read **Spectrogram and STFT** to see windows in action on time-varying signals
 2. Explore **2D FFT** for image processing where windowing is less critical
 3. Study window design theory for specialized applications
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a 10 Hz sine wave sampled at 1000 Hz for exactly 1.0 seconds (integer number of periods) and for 0.95 seconds (non-integer). Compute the FFT of each and compare the peak magnitudes and the noise floor. Quantify how much spectral leakage is reduced when the signal has an integer number of periods.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        fs = 1000
+        # Integer periods
+        t1 = np.arange(0, 1.0, 1/fs)
+        x1 = np.sin(2*np.pi*10*t1)
+        X1 = np.fft.rfft(x1)
+        freqs1 = np.fft.rfftfreq(len(x1), 1/fs)
+
+        # Non-integer periods
+        t2 = np.arange(0, 0.95, 1/fs)
+        x2 = np.sin(2*np.pi*10*t2)
+        X2 = np.fft.rfft(x2)
+        freqs2 = np.fft.rfftfreq(len(x2), 1/fs)
+
+        mag1 = np.abs(X1)
+        mag2 = np.abs(X2)
+
+        peak1 = mag1.max()
+        floor1 = np.mean(mag1[mag1 < peak1 * 0.1])
+        peak2 = mag2.max()
+        floor2 = np.mean(mag2[mag2 < peak2 * 0.1])
+
+        print(f"Integer periods - Peak: {peak1:.1f}, Floor: {floor1:.4f}, Ratio: {peak1/floor1:.0f}")
+        print(f"Non-integer     - Peak: {peak2:.1f}, Floor: {floor2:.4f}, Ratio: {peak2/floor2:.0f}")
+
+---
+
+**Exercise 2.**
+Apply three different windows (rectangular, Hann, and Blackman) to a 50 Hz sine wave of duration 0.93 seconds sampled at 1000 Hz. For each windowed FFT, compute the sidelobe level relative to the main peak in dB. Verify that Blackman has the lowest sidelobes.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        fs = 1000
+        t = np.arange(0, 0.93, 1/fs)
+        x = np.sin(2*np.pi*50*t)
+
+        for name, w in [('Rectangular', np.ones(len(t))),
+                         ('Hann', np.hanning(len(t))),
+                         ('Blackman', np.blackman(len(t)))]:
+            X = np.fft.rfft(x * w)
+            mag_db = 20 * np.log10(np.abs(X) + 1e-10)
+            peak_db = mag_db.max()
+            sidelobe_db = np.sort(mag_db)[-2]  # second highest
+            print(f"{name:12s}: peak={peak_db:.1f} dB, sidelobe={sidelobe_db:.1f} dB, "
+                  f"difference={peak_db - sidelobe_db:.1f} dB")
+
+---
+
+**Exercise 3.**
+Design a Kaiser window with target sidelobe attenuation of 60 dB using the design formula. Apply it to a signal containing two sine waves at 100 Hz (amplitude 1.0) and 103 Hz (amplitude 0.01) sampled at 1000 Hz for 1 second. Show that the weak 103 Hz signal is visible in the windowed FFT but not in the rectangular-windowed FFT.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        fs = 1000
+        t = np.arange(0, 1.0, 1/fs)
+        x = 1.0 * np.sin(2*np.pi*100*t) + 0.01 * np.sin(2*np.pi*103*t)
+
+        # Kaiser design for 60 dB
+        beta = 0.1102 * (60 - 8.7)  # ~5.65
+        w_kaiser = np.kaiser(len(t), beta)
+
+        # Rectangular
+        X_rect = np.fft.rfft(x)
+        freqs = np.fft.rfftfreq(len(t), 1/fs)
+        mag_rect_db = 20 * np.log10(np.abs(X_rect) + 1e-10)
+
+        # Kaiser
+        X_kaiser = np.fft.rfft(x * w_kaiser)
+        mag_kaiser_db = 20 * np.log10(np.abs(X_kaiser) + 1e-10)
+
+        idx_103 = np.argmin(np.abs(freqs - 103))
+        peak_100_rect = mag_rect_db[np.argmin(np.abs(freqs - 100))]
+        val_103_rect = mag_rect_db[idx_103]
+        val_103_kaiser = mag_kaiser_db[idx_103]
+
+        print(f"Rectangular at 103 Hz: {val_103_rect:.1f} dB (relative peak: {peak_100_rect - val_103_rect:.1f} dB)")
+        print(f"Kaiser at 103 Hz:      {val_103_kaiser:.1f} dB")

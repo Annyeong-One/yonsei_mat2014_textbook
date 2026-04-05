@@ -249,3 +249,52 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a sorted array `a = np.array([1, 3, 5, 7, 9, 11])`. Use `np.searchsorted` to find the insertion indices for values `[2, 6, 11]` using both `side='left'` and `side='right'`.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        a = np.array([1, 3, 5, 7, 9, 11])
+        vals = np.array([2, 6, 11])
+        left = np.searchsorted(a, vals, side='left')
+        right = np.searchsorted(a, vals, side='right')
+        print(f"Left:  {left}")
+        print(f"Right: {right}")
+
+---
+
+**Exercise 2.**
+Use `np.argwhere` to find all positions where a 4x4 matrix has values greater than 0.5. Print the indices and the corresponding values.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        np.random.seed(42)
+        M = np.random.rand(4, 4)
+        indices = np.argwhere(M > 0.5)
+        print(f"Positions where > 0.5:\n{indices}")
+        for idx in indices:
+            print(f"  M{tuple(idx)} = {M[tuple(idx)]:.4f}")
+
+---
+
+**Exercise 3.**
+Use `np.nonzero` to find all non-zero elements in a sparse array created by `a = np.zeros(20); a[[3, 7, 12, 18]] = [1, 2, 3, 4]`. Print the non-zero indices and values.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        a = np.zeros(20)
+        a[[3, 7, 12, 18]] = [1, 2, 3, 4]
+        nz = np.nonzero(a)
+        print(f"Non-zero indices: {nz[0]}")
+        print(f"Non-zero values: {a[nz]}")

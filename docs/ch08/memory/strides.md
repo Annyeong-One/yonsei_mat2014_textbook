@@ -249,3 +249,55 @@ If you must modify window data, copy first.
 ### 3. Validate Shapes
 
 Always verify output shapes match expectations.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create `a = np.arange(12).reshape(3, 4)`. Print its strides and explain what each stride value means in terms of bytes. Then create a Fortran-order version and compare strides.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        a = np.arange(12).reshape(3, 4)
+        print(f"C-order strides: {a.strides}")  # (32, 8)
+        # 32 bytes to move one row (4 elements * 8 bytes)
+        # 8 bytes to move one column (1 element * 8 bytes)
+
+        b = np.asfortranarray(a)
+        print(f"F-order strides: {b.strides}")  # (8, 24)
+
+---
+
+**Exercise 2.**
+Create `a = np.arange(24, dtype=np.float32).reshape(2, 3, 4)`. Print the strides and manually compute the byte offset to access element `a[1, 2, 3]`. Verify by comparing with `a[1, 2, 3]`.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        a = np.arange(24, dtype=np.float32).reshape(2, 3, 4)
+        print(f"Strides: {a.strides}")  # (48, 16, 4) for float32
+        # Offset for [1, 2, 3] = 1*48 + 2*16 + 3*4 = 48+32+12 = 92
+        print(f"a[1, 2, 3] = {a[1, 2, 3]}")  # 23.0
+
+---
+
+**Exercise 3.**
+Use `np.lib.stride_tricks.as_strided` to create a sliding window view of `a = np.arange(10)` with window size 3 and step 1 (resulting shape `(8, 3)`). Print the result and verify no data was copied by checking that the result shares memory with `a`.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from numpy.lib.stride_tricks import as_strided
+
+        a = np.arange(10)
+        window_size = 3
+        shape = (len(a) - window_size + 1, window_size)
+        strides = (a.strides[0], a.strides[0])
+        windows = as_strided(a, shape=shape, strides=strides)
+
+        print(windows)
+        print(f"Shares memory: {np.shares_memory(a, windows)}")

@@ -209,3 +209,59 @@ When data integrity is critical, call `.copy()` explicitly.
 ### 4. Check flags
 
 Use `.flags` to inspect contiguity when debugging.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a C-contiguous array `a = np.arange(12).reshape(3, 4)` and a Fortran-contiguous array `b = np.asfortranarray(a)`. Check `flags['C_CONTIGUOUS']` and `flags['F_CONTIGUOUS']` for both. Print the strides of each and explain the difference.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        a = np.arange(12).reshape(3, 4)
+        b = np.asfortranarray(a)
+
+        print(f"a C_CONTIGUOUS: {a.flags['C_CONTIGUOUS']}")  # True
+        print(f"a F_CONTIGUOUS: {a.flags['F_CONTIGUOUS']}")  # False
+        print(f"a strides: {a.strides}")  # (32, 8)
+
+        print(f"b C_CONTIGUOUS: {b.flags['C_CONTIGUOUS']}")  # False
+        print(f"b F_CONTIGUOUS: {b.flags['F_CONTIGUOUS']}")  # True
+        print(f"b strides: {b.strides}")  # (8, 24)
+
+---
+
+**Exercise 2.**
+Starting from `a = np.arange(20).reshape(4, 5)`, create a slice `b = a[:, ::2]`. Check whether `b` is C-contiguous or F-contiguous. Explain why slicing with a step can break contiguity.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        a = np.arange(20).reshape(4, 5)
+        b = a[:, ::2]
+        print(f"b C_CONTIGUOUS: {b.flags['C_CONTIGUOUS']}")  # False
+        print(f"b F_CONTIGUOUS: {b.flags['F_CONTIGUOUS']}")  # False
+        print(f"b strides: {b.strides}")
+        # Step slicing skips elements, so the stride on axis 1
+        # is doubled, breaking the contiguous memory pattern.
+
+---
+
+**Exercise 3.**
+Use `np.ascontiguousarray` to convert a non-contiguous slice back to a C-contiguous array. Verify the conversion by checking the flags before and after. Measure the memory addresses to confirm a copy was made.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        a = np.arange(20).reshape(4, 5)
+        b = a[:, ::2]  # non-contiguous
+        c = np.ascontiguousarray(b)
+
+        print(f"Before: C_CONTIGUOUS={b.flags['C_CONTIGUOUS']}")
+        print(f"After:  C_CONTIGUOUS={c.flags['C_CONTIGUOUS']}")
+        print(f"Copy made: {c.base is not b}")

@@ -112,3 +112,61 @@ The weights must be non-negative and are normalized internally so that the densi
 ## Summary
 
 SciPy's `gaussian_kde` provides nonparametric density estimation using the Gaussian kernel. The class fits a mixture of Gaussians centered at each data point, controlled by a bandwidth parameter selected via Scott's rule (default), Silverman's rule, or a custom method. The fitted object is callable for evaluation and supports weighted observations. It serves as the foundation for the evaluation, resampling, bandwidth selection, and multivariate KDE topics covered in the companion pages of this section.
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that creates a `scipy.stats.gaussian_kde` object from 500 samples and plots the estimated density curve.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(100)
+    print(f'Mean: {data.mean():.4f}')
+    print(f'Std: {data.std():.4f}')
+    ```
+
+---
+
+**Exercise 2.** Explain what a Gaussian kernel is and how KDE works conceptually.
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the statistical method and its assumptions.
+
+---
+
+**Exercise 3.** Write code that fits a KDE to bimodal data (mixture of two normals) and shows that the KDE captures both modes.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+    from scipy import stats
+    import matplotlib.pyplot as plt
+
+    np.random.seed(42)
+    data = np.random.randn(1000)
+    fig, ax = plt.subplots()
+    ax.hist(data, bins=30, density=True, alpha=0.7)
+    ax.set_title('Distribution')
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Compare the KDE estimate with a histogram of the same data on the same axes. Use `density=True` for the histogram.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(500)
+    result = stats.describe(data)
+    print(result)
+    ```

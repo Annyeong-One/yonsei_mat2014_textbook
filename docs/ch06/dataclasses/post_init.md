@@ -125,3 +125,94 @@ print(container.items)  # [1, 2, 3]
 - Keep it lightweight for frequently created objects
 - Use for validation, derived fields, and conversions
 - Alternative: Use custom `__init__` if complex logic needed
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a `Rectangle` dataclass with `width` and `height` fields. In `__post_init__`, validate that both are positive numbers (raise `ValueError` if not). Also add a derived field `area` using `field(init=False)` that is computed in `__post_init__`. Show that the validation works and the area is automatically calculated.
+
+??? success "Solution to Exercise 1"
+
+        from dataclasses import dataclass, field
+
+        @dataclass
+        class Rectangle:
+            width: float
+            height: float
+            area: float = field(init=False)
+
+            def __post_init__(self):
+                if self.width <= 0 or self.height <= 0:
+                    raise ValueError("Width and height must be positive")
+                self.area = self.width * self.height
+
+        r = Rectangle(5.0, 3.0)
+        print(r)  # Rectangle(width=5.0, height=3.0, area=15.0)
+
+        try:
+            bad = Rectangle(-1, 5)
+        except ValueError as e:
+            print(f"Error: {e}")
+            # Error: Width and height must be positive
+
+---
+
+**Exercise 2.**
+Define an `Email` dataclass with a `address` field. In `__post_init__`, normalize the address to lowercase and validate that it contains `@`. If invalid, raise `ValueError`. Create valid and invalid instances to demonstrate both behaviors.
+
+??? success "Solution to Exercise 2"
+
+        from dataclasses import dataclass
+
+        @dataclass
+        class Email:
+            address: str
+
+            def __post_init__(self):
+                self.address = self.address.lower().strip()
+                if "@" not in self.address:
+                    raise ValueError(f"Invalid email: {self.address}")
+
+        e = Email("  Alice@Example.COM  ")
+        print(e)  # Email(address='alice@example.com')
+
+        try:
+            bad = Email("not-an-email")
+        except ValueError as e:
+            print(f"Error: {e}")
+            # Error: Invalid email: not-an-email
+
+---
+
+**Exercise 3.**
+Build a `TimePeriod` dataclass with `start_date` (str in "YYYY-MM-DD" format) and `end_date` (str). In `__post_init__`, convert both strings to `datetime.date` objects (store as new attributes `_start` and `_end`), validate that `start_date` is before `end_date`, and compute a `duration_days` field (`field(init=False)`). Show the conversion and validation in action.
+
+??? success "Solution to Exercise 3"
+
+        from dataclasses import dataclass, field
+        from datetime import date
+
+        @dataclass
+        class TimePeriod:
+            start_date: str
+            end_date: str
+            duration_days: int = field(init=False)
+
+            def __post_init__(self):
+                self._start = date.fromisoformat(self.start_date)
+                self._end = date.fromisoformat(self.end_date)
+                if self._start >= self._end:
+                    raise ValueError("start_date must be before end_date")
+                self.duration_days = (self._end - self._start).days
+
+        tp = TimePeriod("2024-01-01", "2024-03-15")
+        print(tp)  # TimePeriod(start_date='2024-01-01', end_date='2024-03-15', duration_days=74)
+        print(f"Duration: {tp.duration_days} days")
+
+        try:
+            bad = TimePeriod("2024-12-31", "2024-01-01")
+        except ValueError as e:
+            print(f"Error: {e}")
+            # Error: start_date must be before end_date

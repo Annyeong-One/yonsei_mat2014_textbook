@@ -401,3 +401,56 @@ Always check condition number for numerical stability.
 ### 3. Use pinv for Robustness
 
 When matrix may be singular or non-square, use `pinv`.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a 3x3 matrix `A` and compute its determinant. Then compute the determinant of `2 * A` and verify that `det(2A) = 2^3 * det(A)` (the scaling property of determinants for an nxn matrix).
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        A = np.array([[1, 2, 3], [0, 4, 5], [1, 0, 6]], dtype=float)
+        det_A = np.linalg.det(A)
+        det_2A = np.linalg.det(2 * A)
+        print(f"det(A) = {det_A:.4f}")
+        print(f"det(2A) = {det_2A:.4f}")
+        print(f"2^3 * det(A) = {8 * det_A:.4f}")
+        print(f"Match: {np.allclose(det_2A, 8 * det_A)}")
+
+---
+
+**Exercise 2.**
+Compute the inverse of `A = np.array([[1, 2], [3, 4]])` and verify that `A @ A_inv` and `A_inv @ A` both equal the identity matrix (within floating-point tolerance).
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        A = np.array([[1, 2], [3, 4]], dtype=float)
+        A_inv = np.linalg.inv(A)
+        print(f"A @ A_inv = \n{(A @ A_inv).round(10)}")
+        print(f"Identity: {np.allclose(A @ A_inv, np.eye(2))}")
+        print(f"Identity: {np.allclose(A_inv @ A, np.eye(2))}")
+
+---
+
+**Exercise 3.**
+Create a singular matrix `A = np.array([[1, 2], [2, 4]])` (rows are linearly dependent). Show that `np.linalg.det(A)` returns approximately zero and that `np.linalg.inv(A)` either raises a `LinAlgError` or returns a matrix with very large elements.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        A = np.array([[1, 2], [2, 4]], dtype=float)
+        det = np.linalg.det(A)
+        print(f"det(A) = {det:.2e}")  # ~0
+
+        try:
+            A_inv = np.linalg.inv(A)
+            print(f"Inverse has large values: {np.max(np.abs(A_inv)):.2e}")
+        except np.linalg.LinAlgError as e:
+            print(f"Error: {e}")

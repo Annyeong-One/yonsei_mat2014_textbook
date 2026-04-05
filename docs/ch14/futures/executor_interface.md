@@ -422,3 +422,89 @@ print(f"Processed {len(processed)} items")
 - Switch between threads (I/O-bound) and processes (CPU-bound) easily
 - Use `initializer` for per-worker setup (database connections, etc.)
 - Handle exceptions via `future.result()` or wrap in try/except
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a program that uses `executor.map()` with `ThreadPoolExecutor` to convert a list of 10 strings to uppercase, with a 0.3-second simulated delay per item. Then switch to `ProcessPoolExecutor` without changing any other code. Print both sets of results and verify they are identical.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import time
+        from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+
+        def slow_upper(s):
+            time.sleep(0.3)
+            return s.upper()
+
+        strings = [f"item_{i}" for i in range(10)]
+
+        with ThreadPoolExecutor(max_workers=5) as ex:
+            thread_results = list(ex.map(slow_upper, strings))
+
+        with ProcessPoolExecutor(max_workers=5) as ex:
+            proc_results = list(ex.map(slow_upper, strings))
+
+        print(f"Thread results: {thread_results}")
+        print(f"Process results: {proc_results}")
+        assert thread_results == proc_results
+        ```
+
+---
+
+**Exercise 2.**
+Use `executor.submit()` to submit 5 tasks that each return the square of their argument. Collect the `Future` objects into a list, then use `as_completed()` to print results in completion order. Use random sleep (0.1-1.0s) in the worker to make completion order differ from submission order.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import time
+        import random
+        from concurrent.futures import ThreadPoolExecutor, as_completed
+
+        def slow_square(x):
+            time.sleep(random.uniform(0.1, 1.0))
+            return x ** 2
+
+        with ThreadPoolExecutor(max_workers=3) as ex:
+            futures = {ex.submit(slow_square, i): i for i in range(5)}
+            for future in as_completed(futures):
+                inp = futures[future]
+                print(f"Input {inp} -> {future.result()}")
+        ```
+
+---
+
+**Exercise 3.**
+Create an `Executor` factory function that accepts a string `"io"` or `"cpu"` and returns the appropriate executor. Write a two-stage pipeline: stage 1 uses the I/O executor to "download" 6 items (simulated with `time.sleep(0.5)`), stage 2 uses the CPU executor to "process" the downloaded items (sum of squares up to 1,000,000). Print the total elapsed time.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import time
+        from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+
+        def get_executor(kind):
+            if kind == "io":
+                return ThreadPoolExecutor(max_workers=6)
+            return ProcessPoolExecutor()
+
+        def download(item_id):
+            time.sleep(0.5)
+            return f"data_{item_id}"
+
+        def process(data):
+            return sum(i * i for i in range(1_000_000))
+
+        if __name__ == "__main__":
+            start = time.perf_counter()
+
+            with get_executor("io") as ex:
+                raw = list(ex.map(download, range(6)))
+
+            with get_executor("cpu") as ex:
+                results = list(ex.map(process, raw))
+
+            elapsed = time.perf_counter() - start
+            print(f"Processed {len(results)} items in {elapsed:.2f}s")
+        ```

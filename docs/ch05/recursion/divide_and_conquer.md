@@ -384,3 +384,95 @@ if __name__ == '__main__':
     demo_string_sorting()
     compare_performance()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Implement `merge_sort(arr)` from scratch using the divide-and-conquer pattern. Split the array in half, recursively sort each half, then merge them. Verify by sorting `[38, 27, 43, 3, 9, 82, 10]`.
+
+??? success "Solution to Exercise 1"
+
+        def merge_sort(arr):
+            if len(arr) <= 1:
+                return arr
+
+            mid = len(arr) // 2
+            left = merge_sort(arr[:mid])
+            right = merge_sort(arr[mid:])
+
+            # Merge
+            result = []
+            i = j = 0
+            while i < len(left) and j < len(right):
+                if left[i] <= right[j]:
+                    result.append(left[i])
+                    i += 1
+                else:
+                    result.append(right[j])
+                    j += 1
+            result.extend(left[i:])
+            result.extend(right[j:])
+            return result
+
+        print(merge_sort([38, 27, 43, 3, 9, 82, 10]))
+        # [3, 9, 10, 27, 38, 43, 82]
+
+---
+
+**Exercise 2.**
+Write a recursive `binary_search(arr, target)` function that returns the index of `target` in a sorted array, or `-1` if not found. Use the divide-and-conquer approach by comparing with the middle element and recursing into the appropriate half.
+
+??? success "Solution to Exercise 2"
+
+        def binary_search(arr, target, low=0, high=None):
+            if high is None:
+                high = len(arr) - 1
+            if low > high:
+                return -1
+
+            mid = (low + high) // 2
+            if arr[mid] == target:
+                return mid
+            elif arr[mid] < target:
+                return binary_search(arr, target, mid + 1, high)
+            else:
+                return binary_search(arr, target, low, mid - 1)
+
+        data = [2, 5, 8, 12, 16, 23, 38, 56, 72, 91]
+        print(binary_search(data, 23))   # 5
+        print(binary_search(data, 100))  # -1
+
+---
+
+**Exercise 3.**
+Implement a `max_subarray_sum(arr)` function using divide and conquer. Split the array in half, recursively find the max subarray sum in the left half, right half, and the crossing subarray. Return the maximum of the three. Verify with `[-2, 1, -3, 4, -1, 2, 1, -5, 4]` (expected answer: `6`).
+
+??? success "Solution to Exercise 3"
+
+        def max_subarray_sum(arr):
+            if len(arr) == 1:
+                return arr[0]
+
+            mid = len(arr) // 2
+            left_max = max_subarray_sum(arr[:mid])
+            right_max = max_subarray_sum(arr[mid:])
+
+            # Max crossing subarray
+            left_sum = float("-inf")
+            total = 0
+            for i in range(mid - 1, -1, -1):
+                total += arr[i]
+                left_sum = max(left_sum, total)
+
+            right_sum = float("-inf")
+            total = 0
+            for i in range(mid, len(arr)):
+                total += arr[i]
+                right_sum = max(right_sum, total)
+
+            cross_max = left_sum + right_sum
+            return max(left_max, right_max, cross_max)
+
+        print(max_subarray_sum([-2, 1, -3, 4, -1, 2, 1, -5, 4]))  # 6

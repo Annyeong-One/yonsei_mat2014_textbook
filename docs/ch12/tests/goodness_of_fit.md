@@ -91,3 +91,63 @@ The `anderson` function returns critical values at multiple significance levels 
 ## Summary
 
 Goodness-of-fit tests assess whether observed data match a theoretical distribution. The chi-square test works with categorical or binned data, the Kolmogorov-Smirnov test measures the maximum CDF deviation for continuous data, and the Anderson-Darling test provides greater sensitivity in the tails. In SciPy, these are available through `chisquare`, `kstest`, and `anderson` respectively. The Shapiro-Wilk test, which specializes in normality testing, is covered in the normality tests page.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Generate 200 samples from an exponential distribution with $\lambda = 2$. Use the KS test (`stats.kstest`) to test the null hypothesis that the data come from $\text{Exp}(\lambda = 2)$ (i.e., `scale=0.5`). Then test against $\text{Exp}(\lambda = 1)$ and compare p-values.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        data = stats.expon.rvs(scale=0.5, size=200)
+
+        ks_correct, p_correct = stats.kstest(data, 'expon', args=(0, 0.5))
+        ks_wrong, p_wrong = stats.kstest(data, 'expon', args=(0, 1.0))
+
+        print(f"Correct model: KS={ks_correct:.4f}, p={p_correct:.4f}")
+        print(f"Wrong model:   KS={ks_wrong:.4f}, p={p_wrong:.4f}")
+
+---
+
+**Exercise 2.**
+Generate 150 samples from a $t$-distribution with 5 df and apply the Anderson-Darling normality test. Interpret the result by comparing the test statistic with the critical values.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        data = stats.t.rvs(df=5, size=150)
+        result = stats.anderson(data, dist='norm')
+        print(f"A-D statistic: {result.statistic:.4f}")
+        for sl, cv in zip(result.significance_level, result.critical_values):
+            decision = "Reject" if result.statistic > cv else "Fail to reject"
+            print(f"  {sl}%: critical={cv:.4f} -> {decision}")
+
+---
+
+**Exercise 3.**
+Compare the KS and Anderson-Darling tests on data from a mixture of two normals: $0.7 \cdot N(0,1) + 0.3 \cdot N(3,1)$. Test against a standard normal and see which test produces a smaller p-value (greater power).
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        n = 200
+        idx = np.random.choice([0, 1], size=n, p=[0.7, 0.3])
+        data = np.where(idx == 0, np.random.normal(0, 1, n), np.random.normal(3, 1, n))
+
+        ks_stat, ks_p = stats.kstest(data, 'norm', args=(0, 1))
+        ad_result = stats.anderson(data, dist='norm')
+
+        print(f"KS test: stat={ks_stat:.4f}, p={ks_p:.4f}")
+        print(f"A-D test: stat={ad_result.statistic:.4f}")

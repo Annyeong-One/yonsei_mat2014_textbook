@@ -838,3 +838,53 @@ if __name__ == "__main__":
 
     print(exercises)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a Series from a dictionary with 5 key-value pairs. Access a value by its label. Then use `.index` and `.values` to inspect the index and underlying data separately.
+
+??? success "Solution to Exercise 1"
+    Create a Series from a dictionary and inspect its components.
+
+        import pandas as pd
+
+        s = pd.Series({'a': 10, 'b': 20, 'c': 30, 'd': 40, 'e': 50})
+        print("Value at 'c':", s['c'])
+        print("Index:", s.index.tolist())
+        print("Values:", s.values)
+
+---
+
+**Exercise 2.**
+Create two numeric Series with partially overlapping indices. Add them together and observe how pandas aligns by index, producing `NaN` where indices do not match.
+
+??? success "Solution to Exercise 2"
+    Add two Series with different indices.
+
+        import pandas as pd
+
+        s1 = pd.Series([1, 2, 3], index=['a', 'b', 'c'])
+        s2 = pd.Series([4, 5, 6], index=['b', 'c', 'd'])
+        result = s1 + s2
+        print(result)
+        # 'a' and 'd' will have NaN
+
+---
+
+**Exercise 3.**
+Create a Series of 10 random floats. Use boolean indexing to select only values greater than 0. Then use `.sort_values()` to sort the result in descending order.
+
+??? success "Solution to Exercise 3"
+    Filter and sort a random Series.
+
+        import pandas as pd
+        import numpy as np
+
+        np.random.seed(42)
+        s = pd.Series(np.random.randn(10))
+        positive = s[s > 0]
+        sorted_desc = positive.sort_values(ascending=False)
+        print(sorted_desc)

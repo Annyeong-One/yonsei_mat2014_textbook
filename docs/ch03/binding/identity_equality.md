@@ -184,3 +184,105 @@ if not items:
 - Use `==` for all value comparisons
 - Don't rely on integer/string caching
 - Identity implies equality, but not vice versa
+
+## Exercises
+
+**Exercise 1.**
+The statement "identity implies equality, but not vice versa" is a fundamental principle. Explain what this means. Then explain the ONE exception in Python: `float('nan')`. Predict the output:
+
+```python
+x = float('nan')
+print(x == x)
+print(x is x)
+```
+
+Why is `NaN` the exception to "identity implies equality"?
+
+??? success "Solution to Exercise 1"
+    Output:
+
+    ```text
+    False
+    True
+    ```
+
+    "Identity implies equality" means: if `a is b` is `True` (same object), then `a == b` should also be `True` (same value). This makes intuitive sense -- an object should be equal to itself.
+
+    `NaN` violates this: `x is x` is `True` (it is the same object in memory), but `x == x` is `False` (IEEE 754 defines `NaN != NaN`).
+
+    This exception exists because `NaN` represents an **undefined result** -- it is not a number, so it has no meaningful value to compare. The IEEE 754 committee decided that `NaN` should not equal anything, including itself, to prevent undefined results from silently "matching" in equality checks. Python respects this standard, even though it violates the general principle of identity implying equality.
+
+---
+
+**Exercise 2.**
+A junior developer writes this helper:
+
+```python
+def is_empty(container):
+    if container is []:
+        return True
+    return False
+```
+
+This function always returns `False`, even for empty lists. Explain why. What is the correct way to check for an empty container?
+
+??? success "Solution to Exercise 2"
+    `container is []` checks whether `container` is the **same object** as a freshly created empty list `[]`. Every time `[]` is written, Python creates a **new** list object. So `container is []` compares `container`'s identity with this brand-new object, which is never the same object as `container` (even if `container` is also an empty list).
+
+    Correct approaches:
+
+    ```python
+    # Pythonic: use truthiness
+    if not container:
+        return True
+
+    # Explicit length check
+    if len(container) == 0:
+        return True
+
+    # Value comparison (works but less idiomatic)
+    if container == []:
+        return True
+    ```
+
+    The Pythonic way (`if not container`) leverages the fact that empty containers are falsy.
+
+---
+
+**Exercise 3.**
+Predict the output and explain:
+
+```python
+a = [1, 2, 3]
+b = a
+c = a[:]
+
+print(a == b, a is b)
+print(a == c, a is c)
+
+a.append(4)
+print(a == b, a is b)
+print(a == c, a is c)
+```
+
+How do `==` and `is` behave differently after mutation?
+
+??? success "Solution to Exercise 3"
+    Output:
+
+    ```text
+    True True
+    True False
+    True True
+    False False
+    ```
+
+    Before mutation:
+    - `a == b` and `a is b`: `b` is an alias for `a` -- same object, same value. Both `True`.
+    - `a == c` and `a is c`: `c` is a copy -- different object, same value. `==` is `True`, `is` is `False`.
+
+    After `a.append(4)`:
+    - `a == b` and `a is b`: still the same object. Both are now `[1, 2, 3, 4]`. Both `True`.
+    - `a == c` and `a is c`: `a` is `[1, 2, 3, 4]`, `c` is still `[1, 2, 3]`. Different values, different objects. Both `False`.
+
+    This demonstrates: `is` relationships are stable (once aliased, always aliased until rebinding), while `==` relationships can change through mutation.

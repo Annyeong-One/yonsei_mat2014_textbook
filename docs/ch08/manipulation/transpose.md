@@ -515,3 +515,50 @@ if __name__ == "__main__":
 - `.T` and `transpose()` return views, not copies
 - For 1D arrays, `.T` has no effect
 - Use `np.moveaxis` for clarity over `np.rollaxis`
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a 3x5 matrix `A`. Compute its transpose using both `A.T` and `np.transpose(A)`. Verify both produce the same `(5, 3)` result and that `(A.T).T` returns the original shape.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        A = np.random.randn(3, 5)
+        T1 = A.T
+        T2 = np.transpose(A)
+        print(f"A.T shape: {T1.shape}")  # (5, 3)
+        print(f"Same: {np.array_equal(T1, T2)}")
+        print(f"(A.T).T shape: {T1.T.shape}")  # (3, 5)
+
+---
+
+**Exercise 2.**
+Create a 3D array of shape `(2, 3, 4)`. Use `np.transpose(a, axes=(1, 0, 2))` to swap the first two axes. Print the resulting shape and verify it is `(3, 2, 4)`.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        a = np.arange(24).reshape(2, 3, 4)
+        b = np.transpose(a, axes=(1, 0, 2))
+        print(f"Original shape: {a.shape}")    # (2, 3, 4)
+        print(f"Transposed shape: {b.shape}")  # (3, 2, 4)
+
+---
+
+**Exercise 3.**
+Verify the matrix identity $(AB)^T = B^T A^T$ for random matrices `A` of shape `(3, 4)` and `B` of shape `(4, 2)`.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        A = np.random.randn(3, 4)
+        B = np.random.randn(4, 2)
+        lhs = (A @ B).T
+        rhs = B.T @ A.T
+        print(f"(AB)^T == B^T A^T: {np.allclose(lhs, rhs)}")

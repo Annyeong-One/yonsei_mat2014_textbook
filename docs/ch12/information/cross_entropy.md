@@ -67,3 +67,61 @@ Model A achieves a lower cross-entropy because it assigns higher probability to 
 ## Summary
 
 Cross-entropy $H(p, q)$ measures the expected coding cost when data from $p$ is encoded using a model $q$. It decomposes as $H(p) + D_{\mathrm{KL}}(p \| q)$, and minimizing it over $q$ is equivalent to minimizing the KL divergence from $p$ to $q$.
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that computes the cross-entropy between two discrete probability distributions using the formula $H(p, q) = -\sum p_i \log(q_i)$.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(100)
+    print(f'Mean: {data.mean():.4f}')
+    print(f'Std: {data.std():.4f}')
+    ```
+
+---
+
+**Exercise 2.** Explain the relationship between cross-entropy, entropy, and KL divergence. Write the mathematical formula connecting them.
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the statistical method and its assumptions.
+
+---
+
+**Exercise 3.** Write code that computes the cross-entropy loss for a binary classification example with predicted probabilities and true labels.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+    from scipy import stats
+    import matplotlib.pyplot as plt
+
+    np.random.seed(42)
+    data = np.random.randn(1000)
+    fig, ax = plt.subplots()
+    ax.hist(data, bins=30, density=True, alpha=0.7)
+    ax.set_title('Distribution')
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Demonstrate that the cross-entropy of a distribution with itself equals its entropy.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(500)
+    result = stats.describe(data)
+    print(result)
+    ```

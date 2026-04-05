@@ -361,3 +361,82 @@ fig, ax = plt.subplots()
 ax.bar(categories, values, color=colors, edgecolor='navy')
 plt.show()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a bar chart with five categories where bars above a threshold of 50 are colored green and bars below are colored red. Use values `[23, 65, 42, 78, 35]`. Add a horizontal dashed line at the threshold and use `edgecolor='black'` and `linewidth=1.5`.
+
+??? success "Solution to Exercise 1"
+
+        import matplotlib.pyplot as plt
+
+        categories = ['A', 'B', 'C', 'D', 'E']
+        values = [23, 65, 42, 78, 35]
+        threshold = 50
+        colors = ['green' if v > threshold else 'red' for v in values]
+
+        fig, ax = plt.subplots(figsize=(8, 5))
+        ax.bar(categories, values, color=colors, edgecolor='black', linewidth=1.5)
+        ax.axhline(y=threshold, color='gray', linestyle='--', label=f'Threshold = {threshold}')
+        ax.legend()
+        ax.set_title('Conditional Bar Coloring')
+        plt.show()
+
+---
+
+**Exercise 2.**
+Create a bar chart with error bars. Use categories `['A', 'B', 'C', 'D']`, values `[40, 55, 30, 70]`, and asymmetric errors `lower=[3, 4, 2, 5]`, `upper=[5, 7, 4, 8]`. Style the error bars with red color and cap size of 8. Use hatch pattern `'//'` on the bars.
+
+??? success "Solution to Exercise 2"
+
+        import matplotlib.pyplot as plt
+
+        categories = ['A', 'B', 'C', 'D']
+        values = [40, 55, 30, 70]
+        lower = [3, 4, 2, 5]
+        upper = [5, 7, 4, 8]
+
+        fig, ax = plt.subplots(figsize=(8, 5))
+        ax.bar(categories, values, hatch='//', edgecolor='black', color='lightblue',
+               yerr=[lower, upper], capsize=8,
+               error_kw={'ecolor': 'red', 'elinewidth': 2, 'capthick': 2})
+        ax.set_ylabel('Value')
+        ax.set_title('Bar Chart with Asymmetric Error Bars')
+        plt.show()
+
+---
+
+**Exercise 3.**
+Create a grouped bar chart with three series using the `width` and positional offset technique. Categories are `['Q1', 'Q2', 'Q3', 'Q4']` with three series: `[20, 35, 30, 45]`, `[25, 32, 34, 40]`, `[15, 27, 28, 38]`. Use `width=0.25`, different colors, `alpha=0.85`, and `edgecolor='black'`. Add bar labels and a legend.
+
+??? success "Solution to Exercise 3"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        categories = ['Q1', 'Q2', 'Q3', 'Q4']
+        series1 = [20, 35, 30, 45]
+        series2 = [25, 32, 34, 40]
+        series3 = [15, 27, 28, 38]
+
+        x = np.arange(len(categories))
+        width = 0.25
+
+        fig, ax = plt.subplots(figsize=(10, 6))
+        b1 = ax.bar(x - width, series1, width, label='Product A', alpha=0.85, edgecolor='black')
+        b2 = ax.bar(x, series2, width, label='Product B', alpha=0.85, edgecolor='black')
+        b3 = ax.bar(x + width, series3, width, label='Product C', alpha=0.85, edgecolor='black')
+
+        ax.bar_label(b1, padding=2, fontsize=8)
+        ax.bar_label(b2, padding=2, fontsize=8)
+        ax.bar_label(b3, padding=2, fontsize=8)
+
+        ax.set_xticks(x)
+        ax.set_xticklabels(categories)
+        ax.legend()
+        ax.set_title('Grouped Bar Chart')
+        plt.tight_layout()
+        plt.show()

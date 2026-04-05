@@ -99,4 +99,112 @@ Type hints document the expected types of parameters (`: type`) and return value
 Python does not enforce them at runtime, but they make code easier to read and allow static analysis tools to catch type errors early.
 For functions that only perform side effects and return nothing, use `-> None`.
 
+---
+
+## Exercises
+
+**Exercise 1.**
+Type hints are NOT enforced at runtime. Predict the output:
+
+```python
+def add(a: int, b: int) -> int:
+    return a + b
+
+print(add(3, 4))
+print(add("hello", " world"))
+print(add([1], [2]))
+```
+
+All three calls succeed. Why does Python not enforce type hints? What tool would catch the last two calls as errors? What is the benefit of type hints if they are not enforced?
+
+??? success "Solution to Exercise 1"
+    Output:
+
+    ```text
+    7
+    hello world
+    [1, 2]
+    ```
+
+    All three succeed because Python ignores type hints at runtime. The hints are **metadata** stored on the function object (`add.__annotations__`), but Python's interpreter does not check them when the function is called.
+
+    A **static type checker** like `mypy` or `pyright` would flag the last two calls as errors: `add("hello", " world")` passes `str` where `int` is expected.
+
+    The benefits of type hints without enforcement:
+    1. **Documentation**: readers immediately see expected types.
+    2. **IDE support**: autocompletion, refactoring, and inline error highlighting.
+    3. **Static analysis**: tools catch type errors before runtime, during development.
+    4. **Gradual adoption**: existing code works without changes; hints can be added incrementally.
+
+---
+
+**Exercise 2.**
+A programmer annotates a function incorrectly:
+
+```python
+def divide(a: int, b: int) -> int:
+    return a / b
+
+result = divide(7, 2)
+print(result, type(result))
+```
+
+What does the function actually return? Does the type hint `-> int` change the return type? What should the correct annotation be?
+
+??? success "Solution to Exercise 2"
+    Output:
+
+    ```text
+    3.5 <class 'float'>
+    ```
+
+    The `/` operator always returns `float` in Python 3, regardless of the operand types. The type hint `-> int` does NOT change the actual return type -- it is just a claim by the programmer, and in this case, the claim is **wrong**.
+
+    The correct annotation should be `-> float`:
+
+    ```python
+    def divide(a: int, b: int) -> float:
+        return a / b
+    ```
+
+    Or, if integer division is intended:
+
+    ```python
+    def divide(a: int, b: int) -> int:
+        return a // b
+    ```
+
+    This illustrates an important point: type hints are only as correct as the programmer makes them. A wrong hint is worse than no hint because it misleads readers and tools.
+
+---
+
+**Exercise 3.**
+Type hints can express complex types using `typing` module constructs. Explain what each annotation means:
+
+```python
+from typing import Optional, Union
+
+def find(items: list[int], target: int) -> Optional[int]:
+    ...
+
+def process(value: Union[str, int]) -> str:
+    ...
+
+def transform(data: list[tuple[str, int]]) -> dict[str, int]:
+    ...
+```
+
+What is the difference between `Optional[int]` and `Union[int, None]`? Why is expressing these types in hints useful even though Python does not check them?
+
+??? success "Solution to Exercise 3"
+    - `find(items: list[int], target: int) -> Optional[int]`: takes a list of integers and an integer target. Returns either an `int` (the found value/index) or `None` (if not found).
+
+    - `process(value: Union[str, int]) -> str`: accepts either a string or an integer. Returns a string.
+
+    - `transform(data: list[tuple[str, int]]) -> dict[str, int]`: takes a list of (string, integer) tuples. Returns a dictionary mapping strings to integers.
+
+    `Optional[int]` is exactly equivalent to `Union[int, None]` -- it means "int or None." `Optional` is just syntactic sugar for the common pattern of "this value might be None." In Python 3.10+, you can write `int | None` instead.
+
+    Expressing these types is useful because it communicates the **contract** of the function: what it accepts and what it returns, including edge cases like `None`. This helps other developers use the function correctly and helps static analysis tools verify that callers handle all possible return types (e.g., checking for `None` before using the result).
+
 Next: [Function Examples](function_examples.md).

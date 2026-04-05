@@ -118,3 +118,51 @@ In finance, the t-distribution is used in modeling asset returns when normal tai
 ## Summary
 
 The t-distribution arises from the ratio of a standard normal to a scaled chi-square variable and has heavier tails than the normal. In `scipy.stats`, use `stats.t(df)` to create a frozen distribution for computing PDFs, CDFs, critical values, and generating random samples.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Plot the PDF of the $t$-distribution for $\nu = 2, 5, 30$ and the standard normal on the same axes over $[-4, 4]$. Observe how the $t$-distribution approaches the normal as $\nu$ increases.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        from scipy import stats
+        import matplotlib.pyplot as plt
+
+        x = np.linspace(-4, 4, 200)
+        for df in [2, 5, 30]:
+            plt.plot(x, stats.t.pdf(x, df), label=f't(df={df})')
+        plt.plot(x, stats.norm.pdf(x), 'k--', label='Normal')
+        plt.legend()
+        plt.title('t-distribution vs Normal')
+        plt.show()
+
+---
+
+**Exercise 2.**
+For a $t$-distribution with 10 degrees of freedom, compute the probability $P(|T| > 2)$. Compare this with the corresponding probability under the standard normal.
+
+??? success "Solution to Exercise 2"
+
+        from scipy import stats
+
+        p_t = 2 * stats.t.sf(2, df=10)
+        p_norm = 2 * stats.norm.sf(2)
+        print(f"P(|T|>2), t(10):  {p_t:.4f}")
+        print(f"P(|Z|>2), Normal: {p_norm:.4f}")
+
+---
+
+**Exercise 3.**
+Compute the 95th percentile of the $t$-distribution for $\nu = 5, 10, 30, 100$ and the standard normal. Show that the $t$ percentile converges toward the normal percentile as $\nu$ grows.
+
+??? success "Solution to Exercise 3"
+
+        from scipy import stats
+
+        for df in [5, 10, 30, 100]:
+            print(f"t(df={df:3d}) 95th percentile: {stats.t.ppf(0.95, df):.4f}")
+        print(f"Normal 95th percentile:     {stats.norm.ppf(0.95):.4f}")

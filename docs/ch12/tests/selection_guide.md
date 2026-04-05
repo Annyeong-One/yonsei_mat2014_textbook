@@ -148,3 +148,70 @@ if __name__ == "__main__":
     # Detailed solutions continue...
     print("="*80)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Given the following dataset, choose and apply the appropriate test: two independent groups of exam scores, Group A (n=8) has a skewed distribution, Group B (n=10) is roughly normal. Justify your choice.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        a = np.random.exponential(5, 8)   # skewed
+        b = np.random.normal(10, 3, 10)   # normal
+
+        _, p_norm_a = stats.shapiro(a)
+        print(f"Shapiro-Wilk for A: p={p_norm_a:.4f}")
+        print("Group A is skewed -> use Mann-Whitney U")
+
+        u, p = stats.mannwhitneyu(a, b, alternative='two-sided')
+        print(f"Mann-Whitney U: U={u:.4f}, p={p:.4f}")
+
+---
+
+**Exercise 2.**
+A researcher has three groups of continuous measurements. First check normality (Shapiro-Wilk) and equal variance (Levene's test) for each group. Based on the results, decide whether to use ANOVA or Kruskal-Wallis.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        g1 = np.random.normal(50, 5, 25)
+        g2 = np.random.exponential(50, 25)  # non-normal
+        g3 = np.random.normal(55, 5, 25)
+
+        for name, g in [("G1", g1), ("G2", g2), ("G3", g3)]:
+            _, p = stats.shapiro(g)
+            print(f"{name} Shapiro p={p:.4f}", end="")
+            print(f" {'(normal)' if p > 0.05 else '(NOT normal)'}")
+
+        _, p_lev = stats.levene(g1, g2, g3)
+        print(f"Levene p={p_lev:.4f}")
+        print("G2 is non-normal -> use Kruskal-Wallis")
+
+        h, p = stats.kruskal(g1, g2, g3)
+        print(f"Kruskal-Wallis: H={h:.4f}, p={p:.4f}")
+
+---
+
+**Exercise 3.**
+Given a contingency table of treatment outcomes across three hospitals, select the appropriate test, apply it, and compute an effect size measure.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+
+        table = np.array([[50, 30], [45, 35], [60, 20]])
+        chi2, p, dof, expected = stats.chi2_contingency(table)
+        n = table.sum()
+        v = np.sqrt(chi2 / (n * (min(table.shape) - 1)))
+        print(f"Chi-square independence test: chi2={chi2:.4f}, p={p:.4f}")
+        print(f"Cramer's V = {v:.4f}")

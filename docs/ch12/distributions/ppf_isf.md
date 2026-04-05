@@ -121,3 +121,61 @@ The quantile function underpins several common statistical operations:
 ## Summary
 
 The quantile function $F^{-1}(q)$ and inverse survival function $S^{-1}(q) = F^{-1}(1-q)$ invert the CDF and survival function respectively. In `scipy.stats`, `.ppf()` computes quantiles from lower-tail probabilities and `.isf()` from upper-tail probabilities. These methods provide critical values, confidence interval endpoints, and the theoretical quantiles needed for probability plots.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Find the critical values $z_{0.025}$ and $z_{0.975}$ for the standard normal distribution using `.ppf()`. Then find the same upper-tail critical value $z_{0.025}$ using `.isf()` and verify the results match.
+
+??? success "Solution to Exercise 1"
+
+        from scipy import stats
+
+        rv = stats.norm()
+        z_low = rv.ppf(0.025)
+        z_high = rv.ppf(0.975)
+        z_isf = rv.isf(0.025)
+
+        print(f"z_0.025 (ppf) = {z_low:.4f}")
+        print(f"z_0.975 (ppf) = {z_high:.4f}")
+        print(f"z_0.025 (isf) = {z_isf:.4f}")
+        print(f"ppf(0.975) == isf(0.025): {abs(z_high - z_isf) < 1e-10}")
+
+---
+
+**Exercise 2.**
+For a $t$-distribution with 10 degrees of freedom, find the critical values that enclose the middle 99% of the distribution. Compare these with the corresponding standard normal critical values.
+
+??? success "Solution to Exercise 2"
+
+        from scipy import stats
+
+        t_rv = stats.t(df=10)
+        t_low = t_rv.ppf(0.005)
+        t_high = t_rv.ppf(0.995)
+
+        z_low = stats.norm.ppf(0.005)
+        z_high = stats.norm.ppf(0.995)
+
+        print(f"t(10) 99% critical values: [{t_low:.4f}, {t_high:.4f}]")
+        print(f"Normal 99% critical values: [{z_low:.4f}, {z_high:.4f}]")
+        print(f"t critical value is wider by: {t_high - z_high:.4f}")
+
+---
+
+**Exercise 3.**
+Generate 1000 samples from a uniform distribution on $[0, 1]$ and transform them to standard normal samples using `stats.norm.ppf()`. Verify the transformation by computing the mean and standard deviation of the resulting samples.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        u = np.random.uniform(0, 1, size=1000)
+        z = stats.norm.ppf(u)
+
+        print(f"Mean: {np.mean(z):.4f} (expected ~0)")
+        print(f"Std:  {np.std(z, ddof=1):.4f} (expected ~1)")

@@ -222,6 +222,7 @@ Expressions like `"10" < 20` are invalid.
 
 ---
 
+
 ## 9. Summary
 
 Key ideas:
@@ -233,3 +234,106 @@ Key ideas:
 * membership tests also produce Boolean values
 
 Comparison operators allow Python programs to reason about relationships between values.
+
+
+## Exercises
+
+**Exercise 1.**
+Python supports chained comparisons like `1 < x < 10`. Predict the output of each expression and explain how Python evaluates them:
+
+```python
+print(1 < 2 < 3)
+print(1 < 2 > 0)
+print(1 < 3 > 2 < 5)
+print((1 < 2) < 3)
+```
+
+Why does the last expression produce a different result than `1 < 2 < 3`? What hidden operation does Python perform when you write `(1 < 2) < 3`?
+
+??? success "Solution to Exercise 1"
+    Output:
+
+    ```text
+    True
+    True
+    True
+    True
+    ```
+
+    Wait -- the last one requires careful analysis. `1 < 2 < 3` is a chained comparison: Python evaluates it as `1 < 2 and 2 < 3`, which is `True and True` = `True`.
+
+    `1 < 2 > 0` is `1 < 2 and 2 > 0` = `True and True` = `True`.
+
+    `1 < 3 > 2 < 5` is `1 < 3 and 3 > 2 and 2 < 5` = `True and True and True` = `True`.
+
+    `(1 < 2) < 3` is NOT a chained comparison because of the parentheses. `(1 < 2)` evaluates to `True`. Then `True < 3` compares a boolean to an integer. Since `bool` is a subclass of `int` and `True == 1`, this becomes `1 < 3`, which is `True`.
+
+    The difference is subtle: if we had `(1 < 2) < 1`, it would be `True < 1`, which is `1 < 1` = `False`. But the unchained version `1 < 2 < 1` would be `1 < 2 and 2 < 1` = `True and False` = `False`. In this particular case both happen to be `False`, but the mechanism differs.
+
+---
+
+**Exercise 2.**
+A programmer checks whether two lists are equal:
+
+```python
+a = [1, 2, 3]
+b = [1, 2, 3]
+c = a
+
+print(a == b)
+print(a is b)
+print(a == c)
+print(a is c)
+```
+
+Predict all four outputs. Then explain: if `a == b` is `True`, why would you ever need `is`? Give the one case where `is` should always be used instead of `==`.
+
+??? success "Solution to Exercise 2"
+    Output:
+
+    ```text
+    True
+    False
+    True
+    True
+    ```
+
+    `a == b` is `True` because both lists contain the same values in the same order -- `==` compares **values**. `a is b` is `False` because `a` and `b` are two separate list objects in memory -- `is` compares **identity** (whether they are the same object).
+
+    `a == c` is `True` (same values) and `a is c` is also `True` because `c = a` makes `c` point to the **same object** as `a`.
+
+    The one case where `is` should always be used: comparing to `None`. Write `if x is None:`, not `if x == None:`. This is because `None` is a **singleton** -- there is exactly one `None` object. Using `is` is both faster (identity check vs value comparison) and safer (a class could define `__eq__` to return `True` when compared with `None`, making `==` unreliable).
+
+---
+
+**Exercise 3.**
+Python allows `==` between different types but restricts `<` and `>`. Predict which expressions succeed and which raise errors:
+
+```python
+print(3 == 3.0)
+print(3 == "3")
+print(True == 1)
+print(True == 1.0)
+print("abc" < "abd")
+print([1, 2] < [1, 3])
+print(1 < "2")
+```
+
+Why does Python allow `3 == 3.0` but forbid `1 < "2"`? What design principle does this reflect?
+
+??? success "Solution to Exercise 3"
+    Results:
+
+    ```text
+    True       # 3 == 3.0 succeeds: cross-type numeric equality
+    False      # 3 == "3" succeeds: different types, not equal
+    True       # True == 1 succeeds: bool is subclass of int
+    True       # True == 1.0 succeeds: numeric promotion
+    True       # string comparison: 'c' < 'd' lexicographically
+    True       # list comparison: element-by-element, 2 < 3
+    TypeError  # 1 < "2" fails: no ordering between int and str
+    ```
+
+    Python allows `3 == 3.0` because equality can always safely return `False` for incompatible types -- if two objects are of unrelated types, they are simply "not equal." No harm done.
+
+    But `1 < "2"` is forbidden because ordering between unrelated types has no meaningful interpretation. Is `1` less than `"2"`? There is no sensible answer. Python 2 allowed this (using arbitrary but consistent type-based ordering), and it was a major source of bugs. Python 3 explicitly rejects meaningless comparisons, following the principle: "Errors should never pass silently."

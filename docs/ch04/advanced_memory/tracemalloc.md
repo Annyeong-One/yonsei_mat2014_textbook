@@ -501,3 +501,95 @@ class MemoryTestCase(unittest.TestCase):
 - Low overhead (~5-30%) makes it suitable for profiling
 - Increase frame depth for detailed tracebacks
 - Combine with decorators and context managers for easy profiling
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a context manager `trace_memory(label)` that starts `tracemalloc`, takes a snapshot before and after a block of code, and prints the top 5 memory differences along with the total memory change in KB. Use it to profile creating a list of 500,000 random integers.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import tracemalloc
+        import random
+        from contextlib import contextmanager
+
+        @contextmanager
+        def trace_memory(label=""):
+            tracemalloc.start()
+            snap1 = tracemalloc.take_snapshot()
+            yield
+            snap2 = tracemalloc.take_snapshot()
+            diff = snap2.compare_to(snap1, 'lineno')
+            total = sum(s.size_diff for s in diff)
+            print(f"\n=== {label} ===")
+            print(f"Total change: {total / 1024:.2f} KB")
+            for stat in diff[:5]:
+                print(f"  {stat}")
+            tracemalloc.stop()
+
+        with trace_memory("500K random ints"):
+            data = [random.randint(0, 1_000_000) for _ in range(500_000)]
+        ```
+
+---
+
+**Exercise 2.**
+Write a decorator `@memory_profile` that wraps a function with `tracemalloc`, measures current and peak memory after the function runs, and prints a summary including the function name, current memory, and peak memory. Apply it to a function that builds a dictionary of 100,000 entries mapping strings to lists.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import tracemalloc
+        import functools
+
+        def memory_profile(func):
+            @functools.wraps(func)
+            def wrapper(*args, **kwargs):
+                tracemalloc.start()
+                result = func(*args, **kwargs)
+                current, peak = tracemalloc.get_traced_memory()
+                tracemalloc.stop()
+                print(f"[{func.__name__}] "
+                      f"Current: {current / 1024:.1f} KB, "
+                      f"Peak: {peak / 1024:.1f} KB")
+                return result
+            return wrapper
+
+        @memory_profile
+        def build_dict():
+            return {f"key_{i}": list(range(10)) for i in range(100_000)}
+
+        result = build_dict()
+        ```
+
+---
+
+**Exercise 3.**
+Use `tracemalloc` to take three snapshots: (1) at baseline, (2) after creating a list of 200,000 integers, and (3) after deleting that list and running `gc.collect()`. Compare snapshot 2 to snapshot 1 (showing growth), then snapshot 3 to snapshot 2 (showing reclamation). Print the top 3 differences for each comparison.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import tracemalloc
+        import gc
+
+        tracemalloc.start()
+        snap1 = tracemalloc.take_snapshot()
+
+        data = list(range(200_000))
+        snap2 = tracemalloc.take_snapshot()
+
+        del data
+        gc.collect()
+        snap3 = tracemalloc.take_snapshot()
+
+        print("=== Growth (snap2 vs snap1) ===")
+        for stat in snap2.compare_to(snap1, 'lineno')[:3]:
+            print(f"  {stat}")
+
+        print("\n=== Reclamation (snap3 vs snap2) ===")
+        for stat in snap3.compare_to(snap2, 'lineno')[:3]:
+            print(f"  {stat}")
+
+        tracemalloc.stop()
+        ```

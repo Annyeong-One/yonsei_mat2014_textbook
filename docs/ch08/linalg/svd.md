@@ -417,3 +417,54 @@ if __name__ == "__main__":
 - `np.linalg.svd`: Full SVD, small/medium matrices
 - `scipy.sparse.linalg.svds`: Truncated SVD, sparse matrices
 - `sklearn.decomposition.TruncatedSVD`: Randomized, very large matrices
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Compute the SVD of `A = np.array([[1, 2], [3, 4], [5, 6]])`. Reconstruct `A` from `U`, `s`, and `Vt` by forming `U[:, :2] @ np.diag(s) @ Vt`. Verify the reconstruction matches `A`.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        A = np.array([[1, 2], [3, 4], [5, 6]], dtype=float)
+        U, s, Vt = np.linalg.svd(A)
+        A_reconstructed = U[:, :2] @ np.diag(s) @ Vt
+        print(f"Match: {np.allclose(A, A_reconstructed)}")
+
+---
+
+**Exercise 2.**
+Use SVD to compute a rank-1 approximation of `A = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])`. Keep only the first singular value and its corresponding vectors. Compute the approximation error as the Frobenius norm of the difference.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        A = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]], dtype=float)
+        U, s, Vt = np.linalg.svd(A)
+
+        # Rank-1 approximation
+        A_rank1 = s[0] * np.outer(U[:, 0], Vt[0, :])
+        error = np.linalg.norm(A - A_rank1, 'fro')
+        print(f"Rank-1 approximation error: {error:.4f}")
+        print(f"Second singular value (expected error): {s[1]:.4f}")
+
+---
+
+**Exercise 3.**
+Compute the condition number of `A = np.array([[1, 2], [3, 4]])` using SVD (ratio of largest to smallest singular value). Verify it matches `np.linalg.cond(A)`.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        A = np.array([[1, 2], [3, 4]], dtype=float)
+        _, s, _ = np.linalg.svd(A)
+        cond_svd = s[0] / s[-1]
+        cond_np = np.linalg.cond(A)
+        print(f"SVD condition number: {cond_svd:.4f}")
+        print(f"np.linalg.cond:      {cond_np:.4f}")
+        print(f"Match: {np.allclose(cond_svd, cond_np)}")

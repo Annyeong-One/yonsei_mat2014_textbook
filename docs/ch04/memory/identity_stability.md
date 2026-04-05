@@ -117,6 +117,7 @@ x.append(5)
 
 ---
 
+
 ## Runnable Example: `immutable_types.py`
 
 ```python
@@ -573,3 +574,107 @@ if __name__ == "__main__":
     See exercises_01_beginner.py for complete practice problems!
     """)
 ```
+
+
+## Exercises
+
+**Exercise 1.**
+Write a script that starts with a list `lst = [3, 1, 4, 1, 5]` and applies every mutating method (append, extend, insert, remove, pop, sort, reverse) in sequence. After each operation, assert that `id(lst)` has not changed. Print the list after each step and the final confirmation message.
+
+??? success "Solution to Exercise 1"
+        ```python
+        lst = [3, 1, 4, 1, 5]
+        original_id = id(lst)
+
+        lst.append(9)
+        print(f"After append:  {lst}")
+        assert id(lst) == original_id
+
+        lst.extend([2, 6])
+        print(f"After extend:  {lst}")
+        assert id(lst) == original_id
+
+        lst.insert(0, 0)
+        print(f"After insert:  {lst}")
+        assert id(lst) == original_id
+
+        lst.remove(1)
+        print(f"After remove:  {lst}")
+        assert id(lst) == original_id
+
+        lst.pop()
+        print(f"After pop:     {lst}")
+        assert id(lst) == original_id
+
+        lst.sort()
+        print(f"After sort:    {lst}")
+        assert id(lst) == original_id
+
+        lst.reverse()
+        print(f"After reverse: {lst}")
+        assert id(lst) == original_id
+
+        print("\nAll mutations preserved identity!")
+        ```
+
+---
+
+**Exercise 2.**
+Demonstrate identity instability with strings: create a string `s`, record its `id`, then perform concatenation (`s = s + " world"`), a method call (`s = s.upper()`), and an f-string rebuild (`s = f"{s}!"`). Print the `id` after each step and count how many new objects were created.
+
+??? success "Solution to Exercise 2"
+        ```python
+        s = "hello"
+        ids = [id(s)]
+
+        s = s + " world"
+        ids.append(id(s))
+
+        s = s.upper()
+        ids.append(id(s))
+
+        s = f"{s}!"
+        ids.append(id(s))
+
+        new_objects = sum(1 for i in range(1, len(ids))
+                         if ids[i] != ids[i - 1])
+
+        for i, addr in enumerate(ids):
+            label = ["initial", "concat", "upper", "f-string"][i]
+            print(f"  {label:>10}: id = {addr}")
+
+        print(f"\nNew objects created: {new_objects}")
+        ```
+
+---
+
+**Exercise 3.**
+Write a function `track_identity(obj, operations)` that takes a mutable object and a list of callables. For each callable, it applies the operation to the object and records whether the `id` changed. Return a list of booleans indicating identity stability for each operation. Test it with a dictionary and operations like `update`, `pop`, `clear`, and reassignment.
+
+??? success "Solution to Exercise 3"
+        ```python
+        def track_identity(obj, operations):
+            results = []
+            for op in operations:
+                old_id = id(obj)
+                obj = op(obj)
+                results.append(id(obj) == old_id)
+            return results
+
+        d = {"a": 1, "b": 2, "c": 3}
+
+        ops = [
+            lambda d: (d.update({"d": 4}), d)[1],   # update (mutates)
+            lambda d: (d.pop("a"), d)[1],             # pop (mutates)
+            lambda d: (d.clear(), d)[1],              # clear (mutates)
+            lambda d: {"x": 99},                      # reassignment (new obj)
+        ]
+
+        labels = ["update", "pop", "clear", "reassign"]
+        results = track_identity(d, ops)
+
+        for label, stable in zip(labels, results):
+            print(f"  {label:>10}: identity stable = {stable}")
+        ```
+
+---

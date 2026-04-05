@@ -191,3 +191,86 @@ ax.set_xticklabels([])
 - Use `set_rotation()` and `set_horizontalalignment()` for angled labels
 - `set_bbox()` adds a background to labels
 - `tick_params()` provides bulk styling options
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Plot monthly revenue data and format the y-axis tick labels as currency (e.g., "\$10K", "\$20K") using `FuncFormatter`. Use months `['Jan', 'Feb', ..., 'Dec']` as x-tick labels rotated 45 degrees, and values in thousands like `[12, 15, 18, 22, 19, 25, 28, 30, 27, 24, 20, 35]`.
+
+??? success "Solution to Exercise 1"
+
+        import matplotlib.pyplot as plt
+        from matplotlib.ticker import FuncFormatter
+
+        months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        revenue = [12, 15, 18, 22, 19, 25, 28, 30, 27, 24, 20, 35]
+
+        def currency_fmt(x, pos):
+            return f'${x:.0f}K'
+
+        fig, ax = plt.subplots(figsize=(10, 5))
+        ax.bar(months, revenue, color='steelblue')
+        ax.yaxis.set_major_formatter(FuncFormatter(currency_fmt))
+        ax.tick_params(axis='x', rotation=45)
+        ax.set_title('Monthly Revenue')
+        plt.tight_layout()
+        plt.show()
+
+---
+
+**Exercise 2.**
+Create a plot of `y = sin(x)` for `x` in $[0, 2\pi]$ and use `FixedLocator` to place x-ticks at `[0, pi/4, pi/2, 3pi/4, pi, 5pi/4, 3pi/2, 7pi/4, 2pi]`. Format the labels as fractions of $\pi$ (e.g., "$\pi/4$", "$\pi/2$", "$3\pi/4$").
+
+??? success "Solution to Exercise 2"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+        from matplotlib.ticker import FixedLocator
+
+        x = np.linspace(0, 2 * np.pi, 500)
+        y = np.sin(x)
+
+        tick_positions = [0, np.pi/4, np.pi/2, 3*np.pi/4, np.pi,
+                          5*np.pi/4, 3*np.pi/2, 7*np.pi/4, 2*np.pi]
+        tick_labels = [r'$0$', r'$\pi/4$', r'$\pi/2$', r'$3\pi/4$', r'$\pi$',
+                       r'$5\pi/4$', r'$3\pi/2$', r'$7\pi/4$', r'$2\pi$']
+
+        fig, ax = plt.subplots(figsize=(10, 5))
+        ax.plot(x, y)
+        ax.xaxis.set_major_locator(FixedLocator(tick_positions))
+        ax.set_xticklabels(tick_labels)
+        ax.set_title(r'$\sin(x)$ with Fractional $\pi$ Labels')
+        ax.grid(True, alpha=0.3)
+        plt.show()
+
+---
+
+**Exercise 3.**
+Generate a time series of 365 daily data points and format the x-axis using `mdates.DateFormatter('%b %Y')` for month-year labels and `mdates.MonthLocator()` for monthly ticks. Rotate labels 30 degrees and add minor ticks at weekly intervals.
+
+??? success "Solution to Exercise 3"
+
+        import matplotlib.pyplot as plt
+        import matplotlib.dates as mdates
+        import numpy as np
+        import pandas as pd
+
+        np.random.seed(42)
+        dates = pd.date_range('2024-01-01', periods=365, freq='D')
+        values = np.cumsum(np.random.randn(365)) + 100
+
+        fig, ax = plt.subplots(figsize=(12, 5))
+        ax.plot(dates, values, color='steelblue', linewidth=1)
+
+        ax.xaxis.set_major_locator(mdates.MonthLocator())
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%b %Y'))
+        ax.xaxis.set_minor_locator(mdates.WeekdayLocator())
+
+        ax.tick_params(axis='x', rotation=30)
+        ax.set_title('Daily Time Series')
+        ax.grid(True, alpha=0.3)
+        plt.tight_layout()
+        plt.show()

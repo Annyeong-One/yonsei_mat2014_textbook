@@ -131,3 +131,78 @@ This pattern makes defaults visible, enables validation, and keeps the function 
 - Always default mutable parameters to `None` and create the object inside the function body.
 - Don't mutate arguments unless mutation is the function's purpose. Signal intent with `-> None` vs a return type.
 - When keyword arguments proliferate, extract them into a dataclass or configuration object.
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Rewrite the following function to follow best practices: use keyword-only arguments for configuration parameters and provide sensible defaults.
+
+```python
+def send_email(to, subject, body, cc, bcc, html, priority):
+    pass
+```
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        def send_email(to, subject, body, *, cc=None, bcc=None,
+                       html=False, priority="normal"):
+            print(f"To: {to}, Subject: {subject}")
+            print(f"CC: {cc}, BCC: {bcc}, HTML: {html}, Priority: {priority}")
+
+        send_email("alice@example.com", "Hello", "Body text")
+        send_email("bob@example.com", "Urgent", "Body", priority="high", html=True)
+        ```
+
+    The `*` separator forces configuration parameters to be keyword-only, making calls self-documenting.
+
+---
+
+**Exercise 2.**
+Write a function `create_user(name, *, email=None, role="viewer", active=True)` that returns a dictionary. The `*` forces `email`, `role`, and `active` to be keyword-only. Demonstrate calling it correctly and incorrectly.
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        def create_user(name, *, email=None, role="viewer", active=True):
+            return {"name": name, "email": email, "role": role, "active": active}
+
+        # Correct usage
+        user = create_user("Alice", email="alice@example.com", role="admin")
+        print(user)
+
+        # Incorrect usage
+        try:
+            create_user("Bob", "bob@example.com")  # Positional not allowed
+        except TypeError as e:
+            print(f"Error: {e}")
+        ```
+
+    Keyword-only arguments prevent positional mistakes and make the call site explicit.
+
+---
+
+**Exercise 3.**
+Explain why using `*args` and `**kwargs` together can make APIs harder to understand. Write an example where explicit parameters are better than `**kwargs`.
+
+??? success "Solution to Exercise 3"
+
+        ```python
+        # Hard to understand: what kwargs are valid?
+        def configure(**kwargs):
+            host = kwargs.get("host", "localhost")
+            port = kwargs.get("port", 8080)
+            debug = kwargs.get("debug", False)
+            # Typos like "debugg=True" silently ignored!
+
+        # Better: explicit parameters with defaults
+        def configure(host="localhost", port=8080, debug=False):
+            pass  # IDE can autocomplete, typos caught immediately
+
+        # configure(debugg=True)  # TypeError: unexpected keyword argument
+        ```
+
+    Explicit parameters provide documentation, IDE support, and error checking for typos. Use `**kwargs` only when the set of valid keys is truly dynamic.

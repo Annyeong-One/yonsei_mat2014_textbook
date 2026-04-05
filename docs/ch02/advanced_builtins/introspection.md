@@ -122,3 +122,83 @@ Memory is freed by the garbage collector when no references remain.
 - `dir()` lists available attributes and methods
 - `help()` displays documentation
 - `del` removes references (not the object itself)
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Write a function `list_methods(obj)` that takes any object and returns a sorted list of its public method names (names that do not start with `_` and are callable). Test it with a list and a string.
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        def list_methods(obj):
+            return sorted(
+                name for name in dir(obj)
+                if not name.startswith("_") and callable(getattr(obj, name))
+            )
+
+        print(list_methods([]))    # ['append', 'clear', 'copy', ...]
+        print(list_methods(""))    # ['capitalize', 'casefold', 'center', ...]
+        ```
+
+    `dir(obj)` returns all attribute names. Filtering out names starting with `_` removes dunder methods and private attributes. Checking `callable(getattr(obj, name))` ensures only methods are included.
+
+---
+
+**Exercise 2.**
+Given the class below, use `type()`, `isinstance()`, and `hasattr()` to answer the following questions in code: What is the type of `d`? Is `d` an instance of `Animal`? Does `d` have an attribute called `speak`?
+
+```python
+class Animal:
+    pass
+
+class Dog(Animal):
+    def speak(self):
+        return "Woof"
+
+d = Dog()
+```
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        class Animal:
+            pass
+
+        class Dog(Animal):
+            def speak(self):
+                return "Woof"
+
+        d = Dog()
+
+        print(type(d))                  # <class '__main__.Dog'>
+        print(isinstance(d, Animal))    # True
+        print(hasattr(d, "speak"))      # True
+        ```
+
+    `type(d)` returns `Dog`, but `isinstance(d, Animal)` returns `True` because `Dog` inherits from `Animal`. `hasattr` checks whether the attribute exists on the object or its class hierarchy.
+
+---
+
+**Exercise 3.**
+Write a function `inspect_object(obj)` that prints the object's type, its `id`, the number of attributes returned by `dir()`, and whether it is callable. Test it with an integer, a string, and a lambda function.
+
+??? success "Solution to Exercise 3"
+
+        ```python
+        def inspect_object(obj):
+            print(f"Type: {type(obj)}")
+            print(f"ID: {id(obj)}")
+            print(f"Attributes: {len(dir(obj))}")
+            print(f"Callable: {callable(obj)}")
+            print()
+
+        inspect_object(42)
+        inspect_object("hello")
+        inspect_object(lambda x: x)
+        ```
+
+    Integers and strings are not callable, so `callable` returns `False` for them. Lambda functions are callable, so it returns `True`.

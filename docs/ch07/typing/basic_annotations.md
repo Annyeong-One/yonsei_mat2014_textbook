@@ -62,3 +62,76 @@ print(result1, result2)
 8 Hello, World
 ```
 
+
+---
+
+## Exercises
+
+**Exercise 1.** Add type annotations to the following function and variable declarations:
+
+```python
+def greet(name, times):
+    for i in range(times):
+        print(f"Hello, {name}!")
+
+age = 25
+scores = [90, 85, 92]
+active = True
+```
+
+??? success "Solution to Exercise 1"
+    ```python
+    def greet(name: str, times: int) -> None:
+        for i in range(times):
+            print(f"Hello, {name}!")
+
+    age: int = 25
+    scores: list[int] = [90, 85, 92]
+    active: bool = True
+    ```
+
+---
+
+**Exercise 2.** Write a function `average(numbers: list[float]) -> float` that returns the arithmetic mean. What happens if you pass an empty list? Add a docstring explaining the expected behavior.
+
+??? success "Solution to Exercise 2"
+    ```python
+    def average(numbers: list[float]) -> float:
+        """Return the arithmetic mean of numbers.
+
+        Raises ZeroDivisionError if the list is empty.
+        """
+        return sum(numbers) / len(numbers)
+
+    print(average([1.0, 2.0, 3.0]))  # 2.0
+    ```
+
+---
+
+**Exercise 3.** Predict whether `mypy` would report an error for each line:
+
+```python
+x: int = "hello"
+y: str = 42
+z: list[int] = [1, 2, 3]
+w: list[int] = [1, "two", 3]
+```
+
+??? success "Solution to Exercise 3"
+    - `x: int = "hello"` — error: incompatible type `str` assigned to `int`
+    - `y: str = 42` — error: incompatible type `int` assigned to `str`
+    - `z: list[int] = [1, 2, 3]` — no error
+    - `w: list[int] = [1, "two", 3]` — error: `"two"` is `str`, not `int`
+
+---
+
+**Exercise 4.** Annotate a function `create_user(name: str, age: int, email: str) -> dict[str, str | int]` and implement it. Then annotate a variable that stores the return value.
+
+??? success "Solution to Exercise 4"
+    ```python
+    def create_user(name: str, age: int, email: str) -> dict[str, str | int]:
+        return {"name": name, "age": age, "email": email}
+
+    user: dict[str, str | int] = create_user("Alice", 30, "alice@example.com")
+    print(user)
+    ```

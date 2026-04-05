@@ -460,3 +460,58 @@ if __name__ == "__main__":
 | `np.equal` | Equal |
 | `np.maximum` | Element-wise maximum |
 | `np.minimum` | Element-wise minimum |
+
+---
+
+## Exercises
+
+**Exercise 1.** Use `np.add.reduce` to compute the sum of `[1, 2, 3, 4, 5]`. Compare with `np.sum`.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+
+    arr = np.array([1, 2, 3, 4, 5])
+    print(np.add.reduce(arr))  # 15
+    print(np.sum(arr))         # 15
+    ```
+
+---
+
+**Exercise 2.** Use `np.add.accumulate` to compute the cumulative sum of `[1, 2, 3, 4, 5]`. Compare with `np.cumsum`.
+
+??? success "Solution to Exercise 2"
+    ```python
+    import numpy as np
+
+    arr = np.array([1, 2, 3, 4, 5])
+    print(np.add.accumulate(arr))  # [ 1  3  6 10 15]
+    print(np.cumsum(arr))          # [ 1  3  6 10 15]
+    ```
+
+---
+
+**Exercise 3.** Use `np.add.outer` to create an addition table for digits 1 through 5. Print the 5x5 result.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+
+    digits = np.arange(1, 6)
+    table = np.add.outer(digits, digits)
+    print(table)
+    ```
+
+---
+
+**Exercise 4.** Write a custom ufunc using `np.frompyfunc` that converts Celsius to Fahrenheit. Apply it to an array of temperatures.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+
+    celsius_to_fahrenheit = np.frompyfunc(lambda c: c * 9/5 + 32, 1, 1)
+    temps_c = np.array([0, 20, 37, 100])
+    temps_f = celsius_to_fahrenheit(temps_c)
+    print(temps_f)  # [32.0, 68.0, 98.6, 212.0]
+    ```

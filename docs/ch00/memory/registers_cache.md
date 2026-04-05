@@ -511,6 +511,94 @@ NumPy performs operations in compiled code using SIMD registers and contiguous m
 
 ---
 
+**Exercise 9.**
+A CPU register access takes ~1 cycle, L1 cache takes ~4 cycles, L2 takes ~12 cycles, L3 takes ~40 cycles, and RAM takes ~200 cycles. Explain why the CPU does not simply have one very large, very fast memory instead of this hierarchy. What physical and engineering constraints make a single-level design impossible? Why must faster memory be smaller?
+
+??? success "Solution to Exercise 9"
+    Faster memory must be physically closer to the CPU's execution units (speed-of-light delay matters at nanosecond timescales) and uses more transistors per bit (SRAM uses 6 transistors per bit vs. DRAM's 1 transistor + 1 capacitor).
+
+    **Physical constraints:**
+
+    - **Proximity**: Signals travel about 15 cm per nanosecond. A 1-cycle access (0.25 ns at 4 GHz) limits memory to within ~4 cm of the execution units. Larger memories must be physically farther away.
+    - **Transistor cost**: SRAM is ~6x less dense than DRAM. A 64 KB L1 cache already occupies significant die area. Scaling it to gigabytes would require an impossibly large chip.
+    - **Power**: Faster memories consume more power per bit. A 16 GB SRAM chip running at L1-cache speeds would generate enormous heat.
+
+    The hierarchy is the engineering solution: a tiny amount of the fastest memory (registers, L1) handles the most frequently accessed data, with progressively larger and slower levels catching the rest. Locality of reference ensures that most accesses hit the faster levels, so the average access time is close to the fastest level despite most data residing in the slowest level.
+
+---
+
+**Exercise 10.**
+Consider a `for` loop in Python that sums elements of a list:
+
+```python
+total = 0
+for x in my_list:
+    total += x
+```
+
+And the NumPy equivalent: `total = np.sum(my_array)`. Both compute the same result. Explain, from the perspective of registers and SIMD, why the NumPy version is dramatically faster. Specifically, describe what happens at the register level in each case -- how many "useful" additions per CPU instruction does each approach achieve?
+
+??? success "Solution to Exercise 10"
+    **Python loop at the register level:** Each iteration of the `for` loop requires the Python interpreter to:
+
+    1. Fetch the next object pointer from the list (pointer chase -- likely a cache miss)
+    2. Dereference the pointer to reach the `float` object
+    3. Check the object's type (is it a `float`? an `int`?)
+    4. Extract the raw `float64` value from the object
+    5. Perform the addition using a single scalar `ADD` instruction
+    6. Create or update the result object, update reference counts
+
+    Each iteration performs **1 useful addition** but executes ~50--100 interpreter instructions.
+
+    **NumPy `np.sum` at the register level:** NumPy calls a compiled C function that:
+
+    1. Loads 4 or 8 `float64` values at once from contiguous memory into a SIMD register (e.g., AVX-256 holds 4 doubles, AVX-512 holds 8)
+    2. Performs a single SIMD addition instruction that adds all 4--8 values simultaneously
+    3. Repeats with the next block
+
+    Each SIMD instruction performs **4--8 useful additions** with zero interpreter overhead. Combined with perfect spatial locality (contiguous data fills cache lines efficiently), NumPy achieves ~100x more useful work per CPU cycle.
+
+---
+
+**Exercise 11.**
+Cache associativity determines how many cache lines can map to the same "set." A direct-mapped cache (1-way associative) is simplest but suffers from **conflict misses**. Explain what a conflict miss is using a concrete example: two arrays A and B whose starting addresses happen to map to the same cache set. How would increasing associativity to 4-way or 8-way help, and what is the trade-off?
+
+??? success "Solution to Exercise 11"
+    A **conflict miss** occurs when two memory addresses that the program needs simultaneously map to the same cache set, causing one to evict the other even though the cache has unused capacity in other sets.
+
+    **Concrete example:** Suppose a direct-mapped cache has 256 sets. Array A starts at address `0x0000` and array B starts at address `0x10000`. If the cache maps addresses modulo 256 sets, then `A[0]` and `B[0]` both map to set 0, `A[1]` and `B[1]` both map to set 1, etc. A loop that alternates between `A[i]` and `B[i]`:
+
+    ```python
+    for i in range(N):
+        result[i] = A[i] + B[i]
+    ```
+
+    In a direct-mapped cache, accessing `A[i]` evicts `B[i]`'s cache line (same set), and accessing `B[i]` evicts `A[i]`'s line. Every access is a miss, despite the cache being mostly empty.
+
+    A **4-way associative** cache allows 4 lines per set. Now `A[i]` and `B[i]` can coexist in the same set. The conflict miss disappears. With 8-way, even more concurrent mappings are tolerated.
+
+    **Trade-off:** Higher associativity requires more comparators per set (the cache must check all ways in parallel), increasing hardware complexity, power consumption, and potentially access latency.
+
+---
+
+**Exercise 12.**
+A programmer notices that summing a 1D NumPy array of 10 million `float64` values takes 5 ms, but summing the same values stored in a Python list takes 500 ms -- a 100x difference. Break down this 100x factor into its approximate components: how much comes from cache efficiency (memory layout), how much from SIMD vectorization, and how much from Python interpreter overhead (type checking, reference counting, etc.)? Which factor dominates?
+
+??? success "Solution to Exercise 12"
+    The ~100x factor decomposes roughly as follows:
+
+    1. **Python interpreter overhead (~20--50x):** Each iteration of the Python loop executes ~50--100 bytecode instructions for type checking, reference counting, object attribute lookup, and bytecode dispatch. The compiled C code in NumPy has zero per-element interpreter overhead. This is typically the **dominant factor**.
+
+    2. **Memory layout / cache efficiency (~2--5x):** Python list elements are scattered heap objects, causing cache misses on nearly every element access (pointer chasing). NumPy's contiguous layout achieves near-perfect cache utilization with 8 values per cache line.
+
+    3. **SIMD vectorization (~4--8x):** NumPy's compiled code can use AVX instructions to process 4 `float64` values per instruction. Python processes one value per (many) instructions.
+
+    **Approximate total:** $30 \times 3 \times 4 \approx 360\text{x}$ potential speedup, though the factors overlap and interact (e.g., interpreter overhead partially includes the cache misses from object access). The observed ~100x is typical because not all factors compound perfectly.
+
+    **Dominant factor:** Interpreter overhead is the largest single contributor. Even with perfect cache behavior, a Python loop adding floats would still be ~20--50x slower than compiled C due to bytecode interpretation.
+
+---
+
 ## 14. Short Answers
 
 1. Temporary storage for CPU operations
@@ -521,8 +609,6 @@ NumPy performs operations in compiled code using SIMD registers and contiguous m
 6. 8
 7. Multiple addresses mapping to the same cache set
 8. Vectorized compiled operations and contiguous memory
-
----
 
 ## 15. Summary
 

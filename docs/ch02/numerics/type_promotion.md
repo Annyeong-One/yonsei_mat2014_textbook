@@ -126,3 +126,72 @@ result = x + y
 print(result)        # 8.2
 print(type(result))  # <class 'float'>
 ```
+
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Predict the type and value of each expression without running the code, then verify:
+
+```python
+a = True + 2
+b = 1 + 2.0
+c = 3.0 + 4j
+```
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    a = True + 2
+    print(a, type(a))  # 3 <class 'int'>
+
+    b = 1 + 2.0
+    print(b, type(b))  # 3.0 <class 'float'>
+
+    c = 3.0 + 4j
+    print(c, type(c))  # (3+4j) <class 'complex'>
+    ```
+
+    `True` is promoted to `int(1)`, then `1 + 2 = 3`. An `int` plus a `float` promotes to `float`. A `float` plus a `complex` promotes to `complex`.
+
+---
+
+**Exercise 2.**
+Write a function `promotion_chain(value)` that accepts a numeric value and returns a string describing the promotion hierarchy from `bool` to `complex`. For example, `promotion_chain(True)` should return `"bool -> int -> float -> complex"` along with the value at each stage.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    def promotion_chain(value):
+        results = []
+        results.append(f"bool:    {bool(value)} (type: {type(bool(value)).__name__})")
+        results.append(f"int:     {int(value)} (type: {type(int(value)).__name__})")
+        results.append(f"float:   {float(value)} (type: {type(float(value)).__name__})")
+        results.append(f"complex: {complex(value)} (type: {type(complex(value)).__name__})")
+        return "\n".join(results)
+
+    print(promotion_chain(True))
+    ```
+
+    Each constructor explicitly converts the value to the next type in the hierarchy.
+
+---
+
+**Exercise 3.**
+Explain why `True + True + True` equals `3` and what type the result is. Then show how `sum([True, False, True, True, False])` leverages this behavior.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    result = True + True + True
+    print(result)        # 3
+    print(type(result))  # <class 'int'>
+
+    values = [True, False, True, True, False]
+    print(sum(values))   # 3
+    ```
+
+    `True` is `1` and `False` is `0` in arithmetic context. `sum()` adds them as integers, effectively counting the number of `True` values.

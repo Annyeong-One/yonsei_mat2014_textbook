@@ -1022,3 +1022,121 @@ if __name__ == "__main__":
     handles methods, properties, static methods, and more.
     """)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a descriptor `ValidatedString` that implements `__get__`, `__set__`, and `__delete__`. On `__set__`, ensure the value is a non-empty string. On `__delete__`, set the value to `None` instead of removing it. Use `__set_name__` to store the attribute name automatically. Demonstrate all three operations.
+
+??? success "Solution to Exercise 1"
+
+        class ValidatedString:
+            def __set_name__(self, owner, name):
+                self.name = name
+
+            def __get__(self, obj, objtype=None):
+                if obj is None:
+                    return self
+                return obj.__dict__.get(self.name)
+
+            def __set__(self, obj, value):
+                if not isinstance(value, str) or not value:
+                    raise ValueError(f"{self.name} must be a non-empty string")
+                obj.__dict__[self.name] = value
+
+            def __delete__(self, obj):
+                obj.__dict__[self.name] = None
+
+        class Profile:
+            bio = ValidatedString()
+
+            def __init__(self, bio):
+                self.bio = bio
+
+        p = Profile("Hello world")
+        print(p.bio)  # Hello world
+
+        del p.bio
+        print(p.bio)  # None (not removed, just set to None)
+
+        try:
+            p.bio = ""
+        except ValueError as e:
+            print(f"Error: {e}")
+
+---
+
+**Exercise 2.**
+Write a descriptor `Counter` that tracks how many times an attribute has been set. Implement `__get__` to return a tuple of `(current_value, set_count)`. Implement `__set__` to update the value and increment the count. Apply it to a `Sensor` class with a `reading` field. Show the count increasing with each assignment.
+
+??? success "Solution to Exercise 2"
+
+        class Counter:
+            def __set_name__(self, owner, name):
+                self.name = name
+                self.count_name = f"_{name}_count"
+
+            def __get__(self, obj, objtype=None):
+                if obj is None:
+                    return self
+                value = obj.__dict__.get(self.name)
+                count = obj.__dict__.get(self.count_name, 0)
+                return (value, count)
+
+            def __set__(self, obj, value):
+                obj.__dict__[self.name] = value
+                obj.__dict__[self.count_name] = obj.__dict__.get(self.count_name, 0) + 1
+
+        class Sensor:
+            reading = Counter()
+
+            def __init__(self, initial):
+                self.reading = initial
+
+        s = Sensor(10.5)
+        print(s.reading)  # (10.5, 1)
+
+        s.reading = 20.3
+        print(s.reading)  # (20.3, 2)
+
+        s.reading = 15.0
+        print(s.reading)  # (15.0, 3)
+
+---
+
+**Exercise 3.**
+Implement a `Transformer` descriptor that accepts a transform function in its `__init__`. On `__set__`, it applies the transform before storing. On `__get__`, it returns the stored value. Create a `Record` class using `Transformer(str.strip)` for `name` and `Transformer(float)` for `value`. Show that values are automatically transformed on assignment.
+
+??? success "Solution to Exercise 3"
+
+        class Transformer:
+            def __init__(self, func):
+                self.func = func
+
+            def __set_name__(self, owner, name):
+                self.name = name
+
+            def __get__(self, obj, objtype=None):
+                if obj is None:
+                    return self
+                return obj.__dict__.get(self.name)
+
+            def __set__(self, obj, value):
+                obj.__dict__[self.name] = self.func(value)
+
+        class Record:
+            name = Transformer(str.strip)
+            value = Transformer(float)
+
+            def __init__(self, name, value):
+                self.name = name
+                self.value = value
+
+        r = Record("  Alice  ", "42")
+        print(r.name)   # "Alice" (stripped)
+        print(r.value)  # 42.0 (converted to float)
+
+        r.value = "99.5"
+        print(r.value)  # 99.5

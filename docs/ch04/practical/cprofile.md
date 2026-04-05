@@ -103,6 +103,7 @@ stats.print_stats(5)
 
 ---
 
+
 ## Runnable Example: `cprofile_tutorial.py`
 
 ```python
@@ -251,3 +252,105 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+
+## Exercises
+
+**Exercise 1.**
+Write a function `slow_sum(n)` that computes the sum of squares by calling a helper function `square(x)` for each number. Profile it with `cProfile.Profile()`, sort results by `cumulative` time, and print the top 5 entries. Identify which function has the most calls.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import cProfile
+        import pstats
+
+        def square(x):
+            return x * x
+
+        def slow_sum(n):
+            total = 0
+            for i in range(n):
+                total += square(i)
+            return total
+
+        profiler = cProfile.Profile()
+        profiler.enable()
+        slow_sum(100_000)
+        profiler.disable()
+
+        stats = pstats.Stats(profiler)
+        stats.strip_dirs()
+        stats.sort_stats('cumulative')
+        stats.print_stats(5)
+        ```
+
+---
+
+**Exercise 2.**
+Use `cProfile` to profile two implementations of finding the n-th Fibonacci number: one recursive (without memoization) and one using `functools.lru_cache`. Compare the total number of function calls reported by each profile and print the ratio.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import cProfile
+        import pstats
+        from functools import lru_cache
+
+        def fib_recursive(n):
+            if n <= 1:
+                return n
+            return fib_recursive(n - 1) + fib_recursive(n - 2)
+
+        @lru_cache(maxsize=None)
+        def fib_cached(n):
+            if n <= 1:
+                return n
+            return fib_cached(n - 1) + fib_cached(n - 2)
+
+        p1 = cProfile.Profile()
+        p1.enable()
+        fib_recursive(30)
+        p1.disable()
+        s1 = pstats.Stats(p1)
+
+        p2 = cProfile.Profile()
+        p2.enable()
+        fib_cached(30)
+        p2.disable()
+        s2 = pstats.Stats(p2)
+
+        print(f"Recursive calls: {s1.total_calls:,}")
+        print(f"Cached calls:    {s2.total_calls:,}")
+        print(f"Ratio: {s1.total_calls / s2.total_calls:.0f}x")
+        ```
+
+---
+
+**Exercise 3.**
+Write a profiling context manager `class Profiler` that starts a `cProfile.Profile` on `__enter__` and on `__exit__` prints a summary of the top 10 functions sorted by total time. Use it to profile a block of code that sorts 10 random lists of 100,000 elements each.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import cProfile
+        import pstats
+        import random
+
+        class Profiler:
+            def __enter__(self):
+                self._profiler = cProfile.Profile()
+                self._profiler.enable()
+                return self
+
+            def __exit__(self, *args):
+                self._profiler.disable()
+                stats = pstats.Stats(self._profiler)
+                stats.strip_dirs()
+                stats.sort_stats('tottime')
+                stats.print_stats(10)
+
+        with Profiler():
+            for _ in range(10):
+                data = [random.random() for _ in range(100_000)]
+                data.sort()
+        ```
+
+---

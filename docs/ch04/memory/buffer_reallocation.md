@@ -118,6 +118,7 @@ size2 = sys.getsizeof(lst)
 
 ---
 
+
 ## Runnable Example: `defensive_copying_pattern.py`
 
 ```python
@@ -393,3 +394,90 @@ if __name__ == "__main__":
                       unless there's a documented reason not to.
     """)
 ```
+
+
+## Exercises
+
+**Exercise 1.**
+Write a script that appends elements to an empty list one at a time (up to 100 elements) and records `sys.getsizeof(lst)` after each append. Print each step where the size changes (indicating a reallocation). Count the total number of reallocations.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import sys
+
+        lst = []
+        prev_size = sys.getsizeof(lst)
+        reallocs = 0
+
+        for i in range(100):
+            lst.append(i)
+            curr_size = sys.getsizeof(lst)
+            if curr_size != prev_size:
+                reallocs += 1
+                print(f"  Realloc at len={len(lst)}: "
+                      f"{prev_size} -> {curr_size} bytes")
+                prev_size = curr_size
+
+        print(f"\nTotal reallocations: {reallocs}")
+        ```
+
+---
+
+**Exercise 2.**
+Compare the total memory used (via `sys.getsizeof`) by three approaches to creating a list of 10,000 integers: (a) appending in a loop, (b) pre-allocating with `[0] * 10000` and assigning by index, and (c) using a list comprehension. Print the final size for each and explain any differences.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import sys
+
+        # (a) Append loop
+        lst_a = []
+        for i in range(10_000):
+            lst_a.append(i)
+        size_a = sys.getsizeof(lst_a)
+
+        # (b) Pre-allocate
+        lst_b = [0] * 10_000
+        for i in range(10_000):
+            lst_b[i] = i
+        size_b = sys.getsizeof(lst_b)
+
+        # (c) List comprehension
+        lst_c = [i for i in range(10_000)]
+        size_c = sys.getsizeof(lst_c)
+
+        print(f"Append loop:        {size_a:,} bytes")
+        print(f"Pre-allocate:       {size_b:,} bytes")
+        print(f"List comprehension: {size_c:,} bytes")
+
+        # Append loop over-allocates; pre-allocate and
+        # comprehension allocate exactly what is needed.
+        ```
+
+---
+
+**Exercise 3.**
+Demonstrate that deleting elements from a list does not shrink its allocated buffer. Create a list of 10,000 elements, record its size, delete all but the first 10 elements using `del lst[10:]`, and record the size again. Then show that creating a new list from the remaining elements (`list(lst)`) reclaims the wasted space.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import sys
+
+        lst = list(range(10_000))
+        size_full = sys.getsizeof(lst)
+        print(f"Full list ({len(lst)} items): {size_full:,} bytes")
+
+        del lst[10:]
+        size_after_del = sys.getsizeof(lst)
+        print(f"After del lst[10:] ({len(lst)} items): "
+              f"{size_after_del:,} bytes")
+        print(f"Buffer shrunk? {size_after_del < size_full}")
+
+        # Reclaim space by creating a new list
+        lst = list(lst)
+        size_new = sys.getsizeof(lst)
+        print(f"New list ({len(lst)} items): {size_new:,} bytes")
+        print(f"Space reclaimed: {size_after_del - size_new:,} bytes")
+        ```
+
+---

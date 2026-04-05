@@ -458,3 +458,62 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create 1D arrays `x = np.linspace(-2, 2, 5)` and `y = np.linspace(-1, 1, 3)`. Use `np.meshgrid` to create 2D grids `X` and `Y`. Print their shapes and verify that `X[0, :]` equals `x` and `Y[:, 0]` equals `y`.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        x = np.linspace(-2, 2, 5)
+        y = np.linspace(-1, 1, 3)
+        X, Y = np.meshgrid(x, y)
+
+        print(f"X shape: {X.shape}")  # (3, 5)
+        print(f"Y shape: {Y.shape}")  # (3, 5)
+        print(f"X[0,:] == x: {np.array_equal(X[0, :], x)}")
+        print(f"Y[:,0] == y: {np.array_equal(Y[:, 0], y)}")
+
+---
+
+**Exercise 2.**
+Using meshgrid, evaluate the function `f(x, y) = x^2 + y^2` on a grid from -3 to 3 in both dimensions with 100 points each. Find the minimum value and its grid location.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        x = np.linspace(-3, 3, 100)
+        y = np.linspace(-3, 3, 100)
+        X, Y = np.meshgrid(x, y)
+        Z = X**2 + Y**2
+
+        min_val = Z.min()
+        min_idx = np.unravel_index(Z.argmin(), Z.shape)
+        print(f"Min value: {min_val:.6f}")
+        print(f"At grid position: ({X[min_idx]:.3f}, {Y[min_idx]:.3f})")
+
+---
+
+**Exercise 3.**
+Use `np.meshgrid` with `indexing='ij'` (matrix indexing) and compare with the default `indexing='xy'`. Create grids from `x = [1, 2, 3]` and `y = [4, 5]`. Print `X` and `Y` for both indexing modes and explain the difference.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        x = np.array([1, 2, 3])
+        y = np.array([4, 5])
+
+        X_xy, Y_xy = np.meshgrid(x, y, indexing='xy')
+        X_ij, Y_ij = np.meshgrid(x, y, indexing='ij')
+
+        print(f"xy: X shape {X_xy.shape}, Y shape {Y_xy.shape}")
+        print(f"ij: X shape {X_ij.shape}, Y shape {Y_ij.shape}")
+        # 'xy': X has shape (len(y), len(x))
+        # 'ij': X has shape (len(x), len(y)) — matrix convention

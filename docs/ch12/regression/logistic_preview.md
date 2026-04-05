@@ -131,3 +131,75 @@ estimated by maximum likelihood rather than least squares, and the coefficients
 are interpreted in terms of log-odds rather than direct changes in the response.
 SciPy's `scipy.special.expit` and `scipy.optimize.minimize` provide the
 building blocks for fitting the model from scratch.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Implement the sigmoid function and evaluate it at $z = -5, -2, 0, 2, 5$. Verify the symmetry property $\sigma(-z) = 1 - \sigma(z)$.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        from scipy.special import expit
+
+        for z in [-5, -2, 0, 2, 5]:
+            s = expit(z)
+            s_neg = expit(-z)
+            print(f"sigma({z:2d})={s:.4f}, sigma({-z:2d})={s_neg:.4f}, sum={s+s_neg:.4f}")
+
+---
+
+**Exercise 2.**
+Fit a logistic regression using `scipy.optimize.minimize` on the data: hours = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], passed = [0, 0, 0, 0, 1, 0, 1, 1, 1, 1]. Find the decision boundary (the number of hours where $P(\text{pass}) = 0.5$).
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy.optimize import minimize
+        from scipy.special import expit
+
+        hours = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+        passed = np.array([0, 0, 0, 0, 1, 0, 1, 1, 1, 1])
+
+        def neg_ll(params, x, y):
+            p = expit(params[0] + params[1] * x)
+            p = np.clip(p, 1e-12, 1 - 1e-12)
+            return -np.sum(y * np.log(p) + (1-y) * np.log(1-p))
+
+        result = minimize(neg_ll, x0=[0, 0], args=(hours, passed))
+        b0, b1 = result.x
+        boundary = -b0 / b1
+        print(f"b0={b0:.4f}, b1={b1:.4f}")
+        print(f"Decision boundary: {boundary:.2f} hours")
+
+---
+
+**Exercise 3.**
+Plot the fitted logistic curve from Exercise 2 alongside the data points. Mark the decision boundary on the plot.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        from scipy.optimize import minimize
+        from scipy.special import expit
+
+        hours = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+        passed = np.array([0, 0, 0, 0, 1, 0, 1, 1, 1, 1])
+
+        def neg_ll(params, x, y):
+            p = np.clip(expit(params[0] + params[1]*x), 1e-12, 1-1e-12)
+            return -np.sum(y*np.log(p) + (1-y)*np.log(1-p))
+
+        res = minimize(neg_ll, x0=[0, 0], args=(hours, passed))
+        b0, b1 = res.x
+        x_plot = np.linspace(0, 11, 200)
+        plt.plot(x_plot, expit(b0 + b1*x_plot), 'b-', label='Logistic curve')
+        plt.scatter(hours, passed, c='red', zorder=5, label='Data')
+        plt.axvline(-b0/b1, ls='--', color='gray', label=f'Boundary={-b0/b1:.1f}')
+        plt.xlabel('Hours')
+        plt.ylabel('P(Pass)')
+        plt.legend()
+        plt.show()

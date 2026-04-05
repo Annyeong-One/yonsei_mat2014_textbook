@@ -116,3 +116,48 @@ In quantitative finance, the uniform distribution appears in Monte Carlo simulat
 ## Summary
 
 The uniform distribution assigns equal density across an interval and serves as the foundation for random variate generation through the probability integral transform. In `scipy.stats`, use `stats.uniform(loc=a, scale=b-a)` to represent $U(a, b)$, noting the loc-scale parametrization rather than the endpoint parametrization.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a uniform distribution on $[3, 8]$ using `scipy.stats.uniform`. Compute $P(4 \le X \le 6)$ using the CDF and verify it equals $(6 - 4) / (8 - 3)$.
+
+??? success "Solution to Exercise 1"
+
+        from scipy import stats
+
+        rv = stats.uniform(loc=3, scale=5)
+        prob = rv.cdf(6) - rv.cdf(4)
+        expected = (6 - 4) / (8 - 3)
+        print(f"P(4 <= X <= 6) = {prob:.4f}, expected = {expected:.4f}")
+
+---
+
+**Exercise 2.**
+Generate 10,000 uniform samples on $[0, 1]$ and apply the CDF of an exponential distribution with $\lambda = 2$ (the probability integral transform in reverse) to produce exponential samples. Verify by comparing the sample mean to $1/\lambda$.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        u = np.random.uniform(0, 1, size=10000)
+        exp_samples = stats.expon.ppf(u, scale=0.5)
+        print(f"Sample mean: {np.mean(exp_samples):.4f} (expected 0.5)")
+
+---
+
+**Exercise 3.**
+Compute the entropy of uniform distributions on $[0, 1]$, $[0, 10]$, and $[0, 100]$. Verify that the entropy equals $\ln(b - a)$.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+
+        for width in [1, 10, 100]:
+            rv = stats.uniform(loc=0, scale=width)
+            print(f"U[0,{width:3d}]: entropy={rv.entropy():.4f}, ln({width})={np.log(width):.4f}")

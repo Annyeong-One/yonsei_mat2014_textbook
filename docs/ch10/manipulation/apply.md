@@ -224,3 +224,63 @@ df['a'] + df['b']
 - Complex logic that cannot be vectorized
 - Custom aggregation functions
 - Operations requiring multiple columns with conditions
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a Series of ages. Use `.apply()` with a function that classifies each age as `'Child'` (under 18), `'Adult'` (18-64), or `'Senior'` (65+). Count the occurrences of each category.
+
+??? success "Solution to Exercise 1"
+    Classify ages using apply with a named function.
+
+        import pandas as pd
+
+        ages = pd.Series([5, 17, 25, 45, 70, 12, 68])
+
+        def classify(age):
+            if age < 18:
+                return 'Child'
+            elif age < 65:
+                return 'Adult'
+            else:
+                return 'Senior'
+
+        categories = ages.apply(classify)
+        print(categories.value_counts())
+
+---
+
+**Exercise 2.**
+Create a DataFrame with `'first_name'` and `'last_name'` columns. Use `.apply()` on each row (axis=1) to create a `'full_name'` column that combines both names with a space.
+
+??? success "Solution to Exercise 2"
+    Combine columns row-wise using apply with axis=1.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'first_name': ['Alice', 'Bob', 'Carol'],
+            'last_name': ['Smith', 'Jones', 'Lee']
+        })
+        df['full_name'] = df.apply(lambda row: row['first_name'] + ' ' + row['last_name'], axis=1)
+        print(df)
+
+---
+
+**Exercise 3.**
+Create a numeric DataFrame. Apply a lambda function column-wise (axis=0) that returns the range (max - min) of each column. Compare the result with computing it manually using `.max() - .min()`.
+
+??? success "Solution to Exercise 3"
+    Apply a function column-wise and verify the result.
+
+        import pandas as pd
+        import numpy as np
+
+        df = pd.DataFrame(np.random.randn(10, 3), columns=['A', 'B', 'C'])
+        ranges_apply = df.apply(lambda col: col.max() - col.min(), axis=0)
+        ranges_manual = df.max() - df.min()
+        print(ranges_apply)
+        assert (ranges_apply == ranges_manual).all()
+        print("Results match.")

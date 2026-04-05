@@ -59,3 +59,64 @@ for date_str, fmt in dates:
 '02:30 PM' -> 1900-01-01 14:30:00
 ```
 
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a function `reformat_date` that takes a date string in `"MM/DD/YYYY"` format and returns it in `"YYYY-MM-DD"` format. For example, `reformat_date("12/25/2024")` should return `"2024-12-25"`.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    from datetime import datetime
+
+    def reformat_date(date_str):
+        dt = datetime.strptime(date_str, "%m/%d/%Y")
+        return dt.strftime("%Y-%m-%d")
+
+    # Test
+    print(reformat_date("12/25/2024"))  # 2024-12-25
+    print(reformat_date("01/01/2025"))  # 2025-01-01
+    ```
+
+---
+
+**Exercise 2.**
+Write a function `format_log_timestamp` that takes a `datetime` object and returns a string in the format `"[YYYY-MM-DD HH:MM:SS]"` suitable for log files. For example, `format_log_timestamp(datetime(2024, 12, 25, 14, 30, 45))` should return `"[2024-12-25 14:30:45]"`.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    from datetime import datetime
+
+    def format_log_timestamp(dt):
+        return dt.strftime("[%Y-%m-%d %H:%M:%S]")
+
+    # Test
+    dt = datetime(2024, 12, 25, 14, 30, 45)
+    print(format_log_timestamp(dt))  # [2024-12-25 14:30:45]
+    print(format_log_timestamp(datetime.now()))
+    ```
+
+---
+
+**Exercise 3.**
+Write a function `parse_and_add_days` that takes a date string in `"%B %d, %Y"` format and an integer number of days, and returns the resulting date as a string in `"%Y-%m-%d"` format. For example, `parse_and_add_days("December 25, 2024", 7)` should return `"2025-01-01"`.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    from datetime import datetime, timedelta
+
+    def parse_and_add_days(date_str, days):
+        dt = datetime.strptime(date_str, "%B %d, %Y")
+        result = dt + timedelta(days=days)
+        return result.strftime("%Y-%m-%d")
+
+    # Test
+    print(parse_and_add_days("December 25, 2024", 7))
+    # 2025-01-01
+    print(parse_and_add_days("February 28, 2024", 1))
+    # 2024-02-29 (leap year)
+    ```

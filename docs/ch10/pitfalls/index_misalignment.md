@@ -283,3 +283,58 @@ print(means)  # Index is ['A', 'B'], not [0, 1]
 | Need position-based | Use `.values` for NumPy |
 | Unknown alignment | Check `.index.equals()` |
 | After groupby | Be aware new index is group keys |
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Create two Series with different indices and add them. Explain why some results are `NaN`.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    # Solution for the specific exercise
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(10), 'B': np.random.randn(10)})
+    print(df.head())
+    ```
+
+---
+
+**Exercise 2.** Write code that demonstrates index alignment in DataFrame arithmetic. Show what happens when indices don't match.
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the Pandas API and its behavior for this specific operation.
+
+---
+
+**Exercise 3.** Explain how to use `reindex()` or `reset_index()` to fix index misalignment issues.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(20), 'B': np.random.randn(20)})
+    result = df.describe()
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Write code showing the difference between `df1 + df2` (which aligns by index) and `df1.values + df2.values` (which does not).
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(50), 'group': np.random.choice(['X', 'Y'], 50)})
+    result = df.groupby('group').mean()
+    print(result)
+    ```

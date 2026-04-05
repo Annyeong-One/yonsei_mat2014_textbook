@@ -113,3 +113,67 @@ The combined positive correlation arises because group membership acts as a conf
 ## Summary
 
 Correlation coefficients are powerful summary measures, but they can mislead when used without care. The key pitfalls are: (1) confusing correlation with causation, (2) ignoring sensitivity to outliers, (3) assuming $r = 0$ means independence, (4) trusting a single number without visualization, (5) ignoring range restriction, and (6) aggregating over heterogeneous subgroups. Guarding against these errors requires combining correlation measures with scatter plots, robust alternatives, and domain knowledge.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create Anscombe-like data: generate 50 points where $X$ and $Y$ have a perfect Pearson $r \approx 0$ but a clear nonlinear (quadratic) relationship. Compute Pearson's $r$ and Spearman's $\rho$ and explain the discrepancy.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        x = np.linspace(-3, 3, 50)
+        y = x**2 + np.random.normal(0, 0.5, 50)
+        r_p, _ = stats.pearsonr(x, y)
+        r_s, _ = stats.spearmanr(x, y)
+        print(f"Pearson:  {r_p:.4f} (misses U-shape)")
+        print(f"Spearman: {r_s:.4f}")
+
+---
+
+**Exercise 2.**
+Demonstrate Simpson's paradox: create two subgroups where within each group $X$ and $Y$ are positively correlated, but in the combined data the correlation is negative. Compute correlations for each subgroup and the combined data.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        # Group 1: low x range
+        x1 = np.random.normal(2, 0.5, 50)
+        y1 = 0.5 * x1 + np.random.normal(8, 0.3, 50)
+        # Group 2: high x range
+        x2 = np.random.normal(6, 0.5, 50)
+        y2 = 0.5 * x2 + np.random.normal(2, 0.3, 50)
+
+        r1, _ = stats.pearsonr(x1, y1)
+        r2, _ = stats.pearsonr(x2, y2)
+        r_all, _ = stats.pearsonr(np.concatenate([x1,x2]), np.concatenate([y1,y2]))
+
+        print(f"Group 1 r: {r1:.4f}")
+        print(f"Group 2 r: {r2:.4f}")
+        print(f"Combined r: {r_all:.4f} (Simpson's paradox)")
+
+---
+
+**Exercise 3.**
+Show how restriction of range reduces correlation: generate 500 samples from a bivariate normal with $\rho = 0.8$. Compute Pearson's $r$ on the full data, then restrict to samples where $X > 0$ and compute $r$ again. Show the restricted correlation is lower.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        data = stats.multivariate_normal.rvs(mean=[0,0], cov=[[1,0.8],[0.8,1]], size=500)
+        r_full, _ = stats.pearsonr(data[:, 0], data[:, 1])
+        mask = data[:, 0] > 0
+        r_restricted, _ = stats.pearsonr(data[mask, 0], data[mask, 1])
+        print(f"Full data r:       {r_full:.4f}")
+        print(f"Restricted (X>0) r:{r_restricted:.4f}")

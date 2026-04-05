@@ -375,3 +375,59 @@ if __name__ == "__main__":
     🔜 NEXT: 04_basic_operations.py
     """)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a 2D array of shape `(5, 4)` with values from 0 to 19. Access the element at row 3, column 2 using both `a[3][2]` (chained indexing) and `a[3, 2]` (tuple indexing). Verify both return the same value.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        a = np.arange(20).reshape(5, 4)
+        val1 = a[3][2]
+        val2 = a[3, 2]
+        print(f"a[3][2] = {val1}")
+        print(f"a[3, 2] = {val2}")
+        print(f"Equal: {val1 == val2}")
+
+---
+
+**Exercise 2.**
+Given `a = np.arange(10)`, use negative indexing to extract the last three elements. Then use negative indexing on a 2D array `b = np.arange(20).reshape(4, 5)` to access the element in the second-to-last row and last column.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        a = np.arange(10)
+        last_three = a[-3:]
+        print(f"Last three: {last_three}")  # [7 8 9]
+
+        b = np.arange(20).reshape(4, 5)
+        val = b[-2, -1]
+        print(f"b[-2, -1] = {val}")
+
+---
+
+**Exercise 3.**
+Create a 3D array of shape `(2, 3, 4)` with `np.arange(24).reshape(2, 3, 4)`. Print the element at position `[1, 2, 3]` using tuple indexing. Then iterate over all elements using three nested loops and verify the sum equals `np.sum(a)`.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        a = np.arange(24).reshape(2, 3, 4)
+        print(f"a[1, 2, 3] = {a[1, 2, 3]}")
+
+        total = 0
+        for i in range(a.shape[0]):
+            for j in range(a.shape[1]):
+                for k in range(a.shape[2]):
+                    total += a[i, j, k]
+        print(f"Loop sum: {total}")
+        print(f"np.sum: {np.sum(a)}")
+        print(f"Match: {total == np.sum(a)}")

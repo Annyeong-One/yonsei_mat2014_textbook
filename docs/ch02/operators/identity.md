@@ -241,3 +241,65 @@ hash(NoHash())  # TypeError: unhashable type: 'NoHash'
 - Use `==` for value comparisons
 - Mutable objects: `is` almost always `False` for separate creations
 - Don't rely on integer/string interning behavior
+
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Create two empty lists using separate expressions. Verify that they are equal (`==`) but not identical (`is`). Then assign one to the other and verify they become identical.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    a = []
+    b = []
+    print(a == b)   # True  (same contents)
+    print(a is b)   # False (different objects)
+
+    c = a
+    print(a is c)   # True  (same object)
+    ```
+
+    Each `[]` literal creates a new list object. After `c = a`, both names refer to the same object.
+
+---
+
+**Exercise 2.**
+Demonstrate Python's integer caching by showing that `a is b` is `True` for `a = b = 256` but may be `False` for `a = b = 257`. Explain why you should never rely on this behavior.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    a = 256
+    b = 256
+    print(a is b)   # True (cached)
+
+    a = 257
+    b = 257
+    print(a is b)   # May be False (not cached)
+    ```
+
+    CPython caches integers from -5 to 256. Beyond that range, each creation may produce a new object. Never use `is` to compare integer values -- always use `==`.
+
+---
+
+**Exercise 3.**
+Write a function `process(data=None)` that creates a new empty list when no argument is passed. Explain why the check uses `is None` rather than `== None`.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    def process(data=None):
+        if data is None:
+            data = []
+        data.append("processed")
+        return data
+
+    print(process())           # ['processed']
+    print(process([1, 2, 3]))  # [1, 2, 3, 'processed']
+    ```
+
+    `is None` checks identity against the `None` singleton. Using `== None` would work but is not idiomatic, and a custom class could override `__eq__` to return `True` when compared to `None`, leading to unexpected behavior.

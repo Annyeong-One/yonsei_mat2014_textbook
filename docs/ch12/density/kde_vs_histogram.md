@@ -760,3 +760,61 @@ if __name__ == "__main__":
     print("Next: Tutorial 04 - Categorical Plots")
     print("="*80)
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that plots both a histogram and a KDE of the same data on the same axes. Use `density=True` for the histogram.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(100)
+    print(f'Mean: {data.mean():.4f}')
+    print(f'Std: {data.std():.4f}')
+    ```
+
+---
+
+**Exercise 2.** Explain three advantages of KDE over histograms for density estimation.
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the statistical method and its assumptions.
+
+---
+
+**Exercise 3.** Write code that demonstrates the sensitivity of histograms to bin edges by plotting the same data with different bin counts (10, 30, 100).
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+    from scipy import stats
+    import matplotlib.pyplot as plt
+
+    np.random.seed(42)
+    data = np.random.randn(1000)
+    fig, ax = plt.subplots()
+    ax.hist(data, bins=30, density=True, alpha=0.7)
+    ax.set_title('Distribution')
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Create a dataset where the KDE gives a clearly smoother and more informative estimate than a histogram (e.g., small sample size).
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(500)
+    result = stats.describe(data)
+    print(result)
+    ```

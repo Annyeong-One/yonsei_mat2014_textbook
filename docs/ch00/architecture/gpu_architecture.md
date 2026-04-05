@@ -549,6 +549,7 @@ GPU performance depends on several factors.
 
 ---
 
+
 ## 16. Summary
 
 | Concept           | Explanation                            |
@@ -571,3 +572,65 @@ GPUs achieve extraordinary performance by combining:
 * latency hiding through concurrency
 
 These architectural principles explain why GPUs excel at **deep learning, scientific computing, and large-scale numerical workloads**.
+
+
+## Exercises
+
+**Exercise 1.**
+GPUs and CPUs have fundamentally different design philosophies. A modern CPU has ~8 cores optimized for low latency, while a GPU has ~10,000 CUDA cores optimized for high throughput.
+
+(a) Why does a CPU core have large caches and sophisticated branch prediction, while a GPU core has minimal cache and no branch prediction?
+(b) For which type of workload is each design better: (i) parsing a complex JSON file, (ii) multiplying two 10,000x10,000 matrices?
+
+??? success "Solution to Exercise 1"
+    **(a)** CPU cores have large caches and branch prediction because they run **complex, branchy, serial code** (operating systems, compilers, web browsers) where a single thread needs low latency. GPUs have minimal per-core cache because they hide latency through **massive parallelism** -- instead of caching, they switch to another warp when one stalls on memory. Branch prediction is unnecessary because GPUs execute all paths and mask inactive threads.
+
+    **(b)** (i) **CPU** -- JSON parsing is a serial, branchy task with data dependencies between tokens. A single CPU core with branch prediction and out-of-order execution handles this efficiently. (ii) **GPU** -- matrix multiplication is massively data-parallel (each output element is independent) with high arithmetic intensity, perfectly suited for thousands of GPU threads.
+
+---
+
+**Exercise 2.**
+Warp divergence reduces GPU performance. Consider this kernel executed by a warp of 32 threads:
+
+```
+if thread_id % 2 == 0:
+    path_A  (10 instructions)
+else:
+    path_B  (10 instructions)
+```
+
+(a) How many instruction cycles does this warp take (assuming no divergence would take 10 cycles)?
+(b) What if the condition were `if thread_id < 16` instead? Would divergence still occur?
+(c) Why is warp divergence a problem unique to GPU SIMT execution and not an issue for CPU threads?
+
+??? success "Solution to Exercise 2"
+    **(a)** With divergence, the warp takes **20 cycles**: first it executes path_A for the even threads (10 cycles, odd threads masked), then path_B for the odd threads (10 cycles, even threads masked). Without divergence, it would take 10 cycles. Divergence halves the effective throughput.
+
+    **(b)** Yes, divergence still occurs -- threads 0-15 take path_A and threads 16-31 take path_B. Any split within a warp causes divergence. However, this pattern is slightly better than alternating because the two groups are contiguous, which may help the hardware reconverge faster.
+
+    **(c)** CPU threads are fully independent -- each has its own instruction pointer and pipeline. Thread 1 can execute path_A while Thread 2 simultaneously executes path_B on different cores. In GPU SIMT, all 32 threads in a warp share a **single instruction pointer**, so they must all execute the same instruction at the same time. Divergence forces serialization of the divergent paths.
+
+---
+
+**Exercise 3.**
+Memory coalescing is critical for GPU performance. A warp of 32 threads accesses memory:
+
+- **Pattern A:** Thread i accesses address `base + i * 4` (sequential, stride-1)
+- **Pattern B:** Thread i accesses address `base + i * 1024` (strided)
+- **Pattern C:** Thread i accesses a random address
+
+(a) Which pattern achieves the best memory bandwidth and why?
+(b) Approximately how many memory transactions does each pattern require (assuming a 128-byte cache line)?
+(c) How does this relate to the difference between row-major and column-major matrix storage?
+
+??? success "Solution to Exercise 3"
+    **(a)** Pattern A (sequential) achieves the best bandwidth. 32 threads accessing consecutive 4-byte addresses span 128 bytes, which fits in a single cache line. One memory transaction serves the entire warp.
+
+    **(b)**
+    - Pattern A: **1 transaction** (128 bytes covers all 32 * 4 = 128 bytes)
+    - Pattern B: **32 transactions** (each thread's address is 1024 bytes apart, requiring separate cache lines)
+    - Pattern C: up to **32 transactions** (worst case: every address hits a different cache line)
+
+    Pattern A is 32x more bandwidth-efficient than Patterns B and C.
+
+    **(c)** In a row-major matrix, accessing a row is sequential (stride-1, coalesced). Accessing a column requires stride-N jumps (uncoalesced). In column-major, it is reversed. Choosing the right storage order for your access pattern is critical for GPU performance. This is why transposing a matrix before a GPU kernel can dramatically improve performance.

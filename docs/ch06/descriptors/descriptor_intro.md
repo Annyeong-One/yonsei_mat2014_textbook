@@ -408,3 +408,111 @@ class ShoppingCart:
 class Inventory:
     quantity = NonNegative()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a simple descriptor `Uppercase` that, when a string value is set, automatically converts it to uppercase. Use `__set_name__`, `__get__`, and `__set__`. Apply it to a `User` class with a `username` field. Show that `user.username = "alice"` stores `"ALICE"`.
+
+??? success "Solution to Exercise 1"
+
+        class Uppercase:
+            def __set_name__(self, owner, name):
+                self.name = name
+
+            def __get__(self, obj, objtype=None):
+                if obj is None:
+                    return self
+                return obj.__dict__.get(self.name)
+
+            def __set__(self, obj, value):
+                obj.__dict__[self.name] = value.upper()
+
+        class User:
+            username = Uppercase()
+
+            def __init__(self, username):
+                self.username = username
+
+        u = User("alice")
+        print(u.username)  # ALICE
+
+        u.username = "bob"
+        print(u.username)  # BOB
+
+---
+
+**Exercise 2.**
+Write a `ReadOnly` descriptor that allows a value to be set once (in `__init__`) but raises `AttributeError` on any subsequent assignment. Use it in a `Product` class for the `sku` field. Show that the SKU can be set during construction but not changed afterward.
+
+??? success "Solution to Exercise 2"
+
+        class ReadOnly:
+            def __set_name__(self, owner, name):
+                self.name = name
+
+            def __get__(self, obj, objtype=None):
+                if obj is None:
+                    return self
+                return obj.__dict__.get(self.name)
+
+            def __set__(self, obj, value):
+                if self.name in obj.__dict__:
+                    raise AttributeError(f"'{self.name}' is read-only")
+                obj.__dict__[self.name] = value
+
+        class Product:
+            sku = ReadOnly()
+
+            def __init__(self, sku, name):
+                self.sku = sku
+                self.name = name
+
+        p = Product("ABC-123", "Widget")
+        print(p.sku)  # ABC-123
+
+        try:
+            p.sku = "NEW-456"
+        except AttributeError as e:
+            print(f"Error: {e}")  # Error: 'sku' is read-only
+
+---
+
+**Exercise 3.**
+Build a `Logged` descriptor that prints a message every time a value is set or accessed. Include the attribute name, old value, and new value in set messages. Apply it to a `Settings` class with `theme` and `language` fields. Demonstrate the logging output.
+
+??? success "Solution to Exercise 3"
+
+        class Logged:
+            def __set_name__(self, owner, name):
+                self.name = name
+
+            def __get__(self, obj, objtype=None):
+                if obj is None:
+                    return self
+                value = obj.__dict__.get(self.name)
+                print(f"GET {self.name} -> {value!r}")
+                return value
+
+            def __set__(self, obj, value):
+                old = obj.__dict__.get(self.name, "<unset>")
+                print(f"SET {self.name}: {old!r} -> {value!r}")
+                obj.__dict__[self.name] = value
+
+        class Settings:
+            theme = Logged()
+            language = Logged()
+
+            def __init__(self, theme, language):
+                self.theme = theme
+                self.language = language
+
+        s = Settings("dark", "en")
+        # SET theme: '<unset>' -> 'dark'
+        # SET language: '<unset>' -> 'en'
+        s.theme
+        # GET theme -> 'dark'
+        s.theme = "light"
+        # SET theme: 'dark' -> 'light'

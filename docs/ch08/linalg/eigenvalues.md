@@ -430,3 +430,55 @@ if __name__ == "__main__":
 ### 3. Handle Complex Results
 
 `eig` may return complex eigenvalues even for real matrices.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Compute the eigenvalues and eigenvectors of `A = np.array([[4, 2], [1, 3]])`. Verify the eigenvalue equation `A @ v = lambda * v` for each eigenvalue-eigenvector pair.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        A = np.array([[4, 2], [1, 3]], dtype=float)
+        vals, vecs = np.linalg.eig(A)
+
+        for i in range(len(vals)):
+            lhs = A @ vecs[:, i]
+            rhs = vals[i] * vecs[:, i]
+            print(f"lambda={vals[i]:.4f}: A@v = {lhs}, lambda*v = {rhs}, "
+                  f"match={np.allclose(lhs, rhs)}")
+
+---
+
+**Exercise 2.**
+Create a symmetric matrix `A = np.array([[2, 1], [1, 3]])`. Compute eigenvalues using both `np.linalg.eig` and `np.linalg.eigh` (for symmetric matrices). Verify the eigenvalues match and that the eigenvectors from `eigh` are orthonormal.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        A = np.array([[2, 1], [1, 3]], dtype=float)
+        vals_eig, vecs_eig = np.linalg.eig(A)
+        vals_eigh, vecs_eigh = np.linalg.eigh(A)
+
+        print(f"eig eigenvalues:  {sorted(vals_eig)}")
+        print(f"eigh eigenvalues: {sorted(vals_eigh)}")
+        print(f"Orthonormal: {np.allclose(vecs_eigh.T @ vecs_eigh, np.eye(2))}")
+
+---
+
+**Exercise 3.**
+Compute the eigenvalues of a 4x4 diagonal matrix `D = np.diag([1, 2, 3, 4])`. Verify that the eigenvalues are exactly the diagonal elements. Then verify that the trace of the matrix equals the sum of eigenvalues and the determinant equals the product of eigenvalues.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        D = np.diag([1, 2, 3, 4], ).astype(float)
+        vals = np.linalg.eigvalsh(D)
+        print(f"Eigenvalues: {vals}")
+        print(f"Trace = {np.trace(D)}, sum(eigenvals) = {vals.sum()}")
+        print(f"Det = {np.linalg.det(D):.1f}, prod(eigenvals) = {np.prod(vals):.1f}")

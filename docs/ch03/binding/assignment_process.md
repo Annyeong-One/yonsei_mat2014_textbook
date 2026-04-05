@@ -210,3 +210,77 @@ Key points:
 - Multiple assignment uses unpacking
 - Namespace determines scope of binding
 - `del` removes bindings, not objects
+
+## Exercises
+
+**Exercise 1.**
+Predict the output by tracing the evaluation order:
+
+```python
+a = 5
+b = 10
+a, b = b, a + b
+print(a, b)
+```
+
+In what order are the right-hand side expressions evaluated? When does the binding happen? Why does Python's rule of "evaluate the entire RHS first, then bind" matter for swap operations?
+
+??? success "Solution to Exercise 1"
+    Output: `10 15`
+
+    Python evaluates the entire right-hand side **before** any binding occurs:
+
+    1. Evaluate `b` -> `10`
+    2. Evaluate `a + b` -> `5 + 10` -> `15`
+    3. Pack into a tuple: `(10, 15)`
+    4. Unpack and bind: `a = 10`, `b = 15`
+
+    The "evaluate RHS first" rule is critical: `a + b` uses the **old** values of `a` and `b` (5 and 10), not the new ones. This is why `a, b = b, a` works as a swap -- both old values are captured before any rebinding occurs.
+
+    In languages where assignment happens left-to-right (like some C expressions), `a, b = b, a + b` would use the already-updated `a` in the second expression, producing a different result.
+
+---
+
+**Exercise 2.**
+Explain what `del x` does vs. what it does NOT do. Predict the output:
+
+```python
+a = [1, 2, 3]
+b = a
+del a
+print(b)
+# print(a)  # What would this do?
+```
+
+Does `del a` destroy the list? Does it affect `b`? What exactly is removed?
+
+??? success "Solution to Exercise 2"
+    Output: `[1, 2, 3]`
+
+    `del a` removes the **name** `a` from the current namespace. It does NOT destroy the list object. After `del a`, the name `a` no longer exists -- `print(a)` would raise `NameError: name 'a' is not defined`.
+
+    `b` is unaffected because `del a` only removes the binding between the name `a` and the object. The list object still exists because `b` still references it (reference count goes from 2 to 1, not to 0).
+
+    `del` removes **bindings** (name-to-object associations), not objects. Objects are destroyed automatically by the garbage collector when no references to them remain.
+
+---
+
+**Exercise 3.**
+Consider this chained assignment:
+
+```python
+a = b = [1, 2, 3]
+a.append(4)
+print(b)
+```
+
+Predict the output. Is `a = b = [1, 2, 3]` equivalent to `a = [1, 2, 3]; b = [1, 2, 3]`? Why or why not? How many list objects are created?
+
+??? success "Solution to Exercise 3"
+    Output: `[1, 2, 3, 4]`
+
+    `a = b = [1, 2, 3]` creates **one** list object and binds both `a` and `b` to it. This is NOT equivalent to `a = [1, 2, 3]; b = [1, 2, 3]`, which creates **two** separate list objects.
+
+    The chained assignment evaluates the RHS once (creating one list), then binds all target names to that single object, from left to right. Since `a` and `b` refer to the same list, `a.append(4)` mutates the shared object, and `b` sees the change.
+
+    Only **one** list object is created. `a is b` is `True`.

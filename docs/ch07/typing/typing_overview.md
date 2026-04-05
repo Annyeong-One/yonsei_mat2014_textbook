@@ -406,3 +406,69 @@ if __name__ == "__main__":
     print("To check types with mypy, run: mypy 01_basic_type_hints.py")
     print("Type hints improve code quality but don't affect runtime behavior!")
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.** Add type annotations to the following unannotated function:
+
+```python
+def count_words(text):
+    words = text.split()
+    counts = {}
+    for w in words:
+        counts[w] = counts.get(w, 0) + 1
+    return counts
+```
+
+??? success "Solution to Exercise 1"
+    ```python
+    def count_words(text: str) -> dict[str, int]:
+        words: list[str] = text.split()
+        counts: dict[str, int] = {}
+        for w in words:
+            counts[w] = counts.get(w, 0) + 1
+        return counts
+
+    print(count_words("the cat sat on the mat"))
+    ```
+
+---
+
+**Exercise 2.** Explain the difference between Python's runtime behavior and `mypy`'s static analysis. If you annotate `x: int = "hello"`, will Python raise an error at runtime? Will `mypy`?
+
+??? success "Solution to Exercise 2"
+    Python does not enforce type annotations at runtime. `x: int = "hello"` runs without error — annotations are metadata only. However, `mypy` (a static type checker) reports: `Incompatible types in assignment (expression has type "str", variable has type "int")`. The annotations serve as documentation and are checked by external tools, not by Python itself.
+
+---
+
+**Exercise 3.** Write a fully annotated function `safe_get(d: dict[str, T], key: str, default: T) -> T` using `TypeVar`. Test it with both `int` and `str` value types.
+
+??? success "Solution to Exercise 3"
+    ```python
+    from typing import TypeVar
+
+    T = TypeVar("T")
+
+    def safe_get(d: dict[str, T], key: str, default: T) -> T:
+        return d.get(key, default)
+
+    print(safe_get({"a": 1, "b": 2}, "c", 0))         # 0
+    print(safe_get({"x": "hello"}, "y", "default"))     # "default"
+    ```
+
+---
+
+**Exercise 4.** List three benefits and one potential drawback of adding type hints to a Python project. Provide a concrete example of each benefit.
+
+??? success "Solution to Exercise 4"
+    **Benefits:**
+
+    1. **Catch bugs early**: `mypy` flags `len(42)` before you run the code.
+    2. **Self-documenting**: `def connect(host: str, port: int) -> Socket` is clearer than an unannotated version.
+    3. **IDE support**: Editors provide better autocomplete and refactoring when types are known.
+
+    **Drawback:**
+
+    1. **Added verbosity**: Complex annotations like `dict[str, list[tuple[int, ...]]]` can reduce readability. Type aliases help mitigate this.

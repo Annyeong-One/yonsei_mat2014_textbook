@@ -212,3 +212,71 @@ def process_copy(data):
     local_data.append(5)
     return local_data
 ```
+
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Create a list, assign it to another variable, and modify it through the second variable. Show that the original is also modified. Explain how this differs from C's value semantics.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    x = [1, 2, 3]
+    y = x
+    y.append(4)
+    print(x)  # [1, 2, 3, 4]
+    ```
+
+    In Python, `y = x` creates an alias (both refer to the same object). In C, `int y = x` copies the value, so modifications to `y` would not affect `x`.
+
+---
+
+**Exercise 2.**
+Write a function that takes a list and appends an element. Show that the caller's list is modified. Then write a version that works on a copy so the caller's list is unchanged.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    def modify_original(lst):
+        lst.append(99)
+
+    def modify_copy(lst):
+        local = lst.copy()
+        local.append(99)
+        return local
+
+    data = [1, 2, 3]
+    modify_original(data)
+    print(data)  # [1, 2, 3, 99]
+
+    data = [1, 2, 3]
+    result = modify_copy(data)
+    print(data)    # [1, 2, 3] (unchanged)
+    print(result)  # [1, 2, 3, 99]
+    ```
+
+    Python passes object references to functions. To avoid modifying the caller's data, explicitly copy it with `.copy()`.
+
+---
+
+**Exercise 3.**
+Use `copy.deepcopy()` to create a completely independent copy of a nested list. Modify the copy and show the original is unchanged.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    import copy
+
+    original = [[1, 2], [3, 4]]
+    deep = copy.deepcopy(original)
+
+    deep[0].append(99)
+    print(original)  # [[1, 2], [3, 4]] (unchanged)
+    print(deep)      # [[1, 2, 99], [3, 4]]
+    ```
+
+    `deepcopy()` recursively copies all nested objects. A shallow copy (`list.copy()`) would only copy the outer list, leaving inner lists shared.

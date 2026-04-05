@@ -359,3 +359,78 @@ def __getattribute__(self, name):
 def __getattribute__(self, name):
     return "always this"  # Breaks __dict__, __class__, etc.
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a class `AccessLogger` that overrides `__getattribute__` to print a message every time ANY attribute is accessed (including methods). Use `super().__getattribute__()` to avoid infinite recursion. Demonstrate with a class that has both data attributes and methods.
+
+??? success "Solution to Exercise 1"
+
+        class AccessLogger:
+            def __init__(self, x, y):
+                self.x = x
+                self.y = y
+
+            def __getattribute__(self, name):
+                print(f"Accessing: {name}")
+                return super().__getattribute__(name)
+
+            def sum(self):
+                return self.x + self.y
+
+        obj = AccessLogger(10, 20)
+        print(obj.x)      # Accessing: x -> 10
+        print(obj.sum())   # Accessing: sum, Accessing: x, Accessing: y -> 30
+
+---
+
+**Exercise 2.**
+Write a class `CaseInsensitiveAccess` where `__getattribute__` converts attribute names to lowercase before looking them up. Set attributes with mixed case in `__init__` (using `object.__setattr__` with lowercase keys). Show that `obj.Name`, `obj.NAME`, and `obj.name` all return the same value.
+
+??? success "Solution to Exercise 2"
+
+        class CaseInsensitiveAccess:
+            def __init__(self, **kwargs):
+                for k, v in kwargs.items():
+                    object.__setattr__(self, k.lower(), v)
+
+            def __getattribute__(self, name):
+                return super().__getattribute__(name.lower())
+
+        obj = CaseInsensitiveAccess(Name="Alice", Age=30)
+        print(obj.name)   # Alice
+        print(obj.NAME)   # Alice
+        print(obj.Name)   # Alice
+        print(obj.AGE)    # 30
+
+---
+
+**Exercise 3.**
+Build a class `CountedAccess` that tracks how many times each attribute has been accessed. Override `__getattribute__` to increment a counter (stored in a dictionary) each time an attribute is read. Provide a method `access_counts()` that returns the counts. Be careful to avoid recursion when accessing the counter dict itself.
+
+??? success "Solution to Exercise 3"
+
+        class CountedAccess:
+            def __init__(self, **kwargs):
+                object.__setattr__(self, '_counts', {})
+                for k, v in kwargs.items():
+                    object.__setattr__(self, k, v)
+
+            def __getattribute__(self, name):
+                if name in ('_counts', 'access_counts'):
+                    return super().__getattribute__(name)
+                counts = super().__getattribute__('_counts')
+                counts[name] = counts.get(name, 0) + 1
+                return super().__getattribute__(name)
+
+            def access_counts(self):
+                return dict(self._counts)
+
+        obj = CountedAccess(x=10, y=20)
+        _ = obj.x
+        _ = obj.x
+        _ = obj.y
+        print(obj.access_counts())  # {'x': 2, 'y': 1}

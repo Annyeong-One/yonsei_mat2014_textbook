@@ -179,3 +179,82 @@ print(remaining)          # Level.ADVANCED
 - Configuration options
 - Combination of boolean settings
 - Need bitwise operations
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a `FilePermission` Flag with `READ`, `WRITE`, `EXECUTE`. Write a function `check_access(user_perms, required_perms)` that returns `True` if the user has all required permissions. Test with various combinations.
+
+??? success "Solution to Exercise 1"
+
+        from enum import Flag, auto
+
+        class FilePermission(Flag):
+            READ = auto()
+            WRITE = auto()
+            EXECUTE = auto()
+
+        def check_access(user_perms, required_perms):
+            return required_perms in user_perms
+
+        user = FilePermission.READ | FilePermission.WRITE
+        print(check_access(user, FilePermission.READ))                # True
+        print(check_access(user, FilePermission.EXECUTE))             # False
+        print(check_access(user, FilePermission.READ | FilePermission.WRITE))  # True
+
+---
+
+**Exercise 2.**
+Define a `Feature` Flag with `DARK_MODE`, `NOTIFICATIONS`, `ANALYTICS`, `BETA`. Write a function `toggle_feature(current, feature)` that flips a feature on or off (using XOR `^`). Start with no features enabled and toggle several features on and off.
+
+??? success "Solution to Exercise 2"
+
+        from enum import Flag, auto
+
+        class Feature(Flag):
+            DARK_MODE = auto()
+            NOTIFICATIONS = auto()
+            ANALYTICS = auto()
+            BETA = auto()
+
+        def toggle_feature(current, feature):
+            return current ^ feature
+
+        features = Feature(0)  # No features
+        features = toggle_feature(features, Feature.DARK_MODE)
+        print(features)  # Feature.DARK_MODE
+
+        features = toggle_feature(features, Feature.NOTIFICATIONS)
+        print(features)  # Feature.DARK_MODE|NOTIFICATIONS
+
+        features = toggle_feature(features, Feature.DARK_MODE)  # Toggle off
+        print(features)  # Feature.NOTIFICATIONS
+
+---
+
+**Exercise 3.**
+Create an `IntFlag` called `StatusCode` with `RUNNING = 1`, `PAUSED = 2`, `ERROR = 4`, `MAINTENANCE = 8`. Demonstrate that `IntFlag` values can be combined with plain integers using `|`. Show that `status.value` returns the numeric sum and that individual flags can be extracted using `&`.
+
+??? success "Solution to Exercise 3"
+
+        from enum import IntFlag, auto
+
+        class StatusCode(IntFlag):
+            RUNNING = 1
+            PAUSED = 2
+            ERROR = 4
+            MAINTENANCE = 8
+
+        status = StatusCode.RUNNING | StatusCode.ERROR
+        print(status)         # StatusCode.RUNNING|ERROR
+        print(status.value)   # 5 (1 + 4)
+
+        # Can mix with integers
+        combined = status | 0x10
+        print(combined.value)  # 21
+
+        # Extract individual flags
+        print(status & StatusCode.RUNNING)  # StatusCode.RUNNING
+        print(status & StatusCode.PAUSED)   # StatusCode(0) — not set

@@ -163,3 +163,53 @@ s.interpolate()  # Trailing NaN remain
 # First interpolate, then fill edges
 s.interpolate().fillna(method='bfill').fillna(method='ffill')
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a Series with `NaN` gaps between known values. Use `.interpolate()` (linear) to fill the gaps. Verify the interpolated values lie between their neighbors.
+
+??? success "Solution to Exercise 1"
+    Linear interpolation between known values.
+
+        import pandas as pd
+        import numpy as np
+
+        s = pd.Series([1, np.nan, np.nan, 4, np.nan, 6])
+        result = s.interpolate()
+        print(result)
+        # Values should be: 1, 2, 3, 4, 5, 6
+
+---
+
+**Exercise 2.**
+Create a time-indexed Series with missing values. Use `.interpolate(method='time')` to interpolate based on the time index. Compare with `.interpolate(method='linear')` to see the difference.
+
+??? success "Solution to Exercise 2"
+    Compare time-based and linear interpolation.
+
+        import pandas as pd
+        import numpy as np
+
+        idx = pd.to_datetime(['2024-01-01', '2024-01-02', '2024-01-05', '2024-01-06'])
+        s = pd.Series([10, np.nan, np.nan, 40], index=idx)
+        print("Linear:\n", s.interpolate(method='linear'))
+        print("\nTime-based:\n", s.interpolate(method='time'))
+
+---
+
+**Exercise 3.**
+Create a Series with several consecutive `NaN` values. Use `.interpolate(limit=1)` to restrict interpolation to at most 1 consecutive `NaN`. Verify that beyond the limit, values remain `NaN`.
+
+??? success "Solution to Exercise 3"
+    Limit the number of consecutive NaN values filled.
+
+        import pandas as pd
+        import numpy as np
+
+        s = pd.Series([1, np.nan, np.nan, np.nan, 5])
+        result = s.interpolate(limit=1)
+        print(result)
+        # Only the first NaN after a valid value is filled

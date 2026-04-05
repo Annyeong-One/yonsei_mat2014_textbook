@@ -851,3 +851,64 @@ if __name__ == "__main__":
 
     print(summary)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Using `pd.read_csv` with `io.StringIO`, read the following CSV string and set the `'date'` column as the index while parsing it as a datetime: `"date,value\n2024-01-01,10\n2024-01-02,20\n2024-01-03,30"`. Print the resulting DataFrame and confirm the index dtype is `datetime64`.
+
+??? success "Solution to Exercise 1"
+    Use `index_col` and `parse_dates` together.
+
+        import pandas as pd
+        import io
+
+        csv_data = "date,value\n2024-01-01,10\n2024-01-02,20\n2024-01-03,30"
+        df = pd.read_csv(
+            io.StringIO(csv_data),
+            index_col='date',
+            parse_dates=True
+        )
+        print(df)
+        print(f"Index dtype: {df.index.dtype}")  # datetime64[ns]
+
+---
+
+**Exercise 2.**
+Read a CSV string with columns `'name'`, `'age'`, `'salary'`, `'department'` but only load the `'name'` and `'salary'` columns using the `usecols` parameter. Also skip the first data row using `skiprows`.
+
+??? success "Solution to Exercise 2"
+    Combine `usecols` and `skiprows` to selectively load data.
+
+        import pandas as pd
+        import io
+
+        csv_data = "name,age,salary,department\nAlice,30,70000,HR\nBob,25,60000,IT\nCarol,35,80000,Finance"
+        df = pd.read_csv(
+            io.StringIO(csv_data),
+            usecols=['name', 'salary'],
+            skiprows=[1]  # Skip the first data row (Alice)
+        )
+        print(df)
+
+---
+
+**Exercise 3.**
+Read a CSV string that uses `';'` as the separator and `','` as the decimal separator (European format): `"item;price\nWidget;12,50\nGadget;25,99"`. Use the `sep` and `decimal` parameters to load the prices as proper floats.
+
+??? success "Solution to Exercise 3"
+    Handle European CSV format with semicolon separator and comma decimal.
+
+        import pandas as pd
+        import io
+
+        csv_data = "item;price\nWidget;12,50\nGadget;25,99"
+        df = pd.read_csv(
+            io.StringIO(csv_data),
+            sep=';',
+            decimal=','
+        )
+        print(df)
+        print(f"price dtype: {df['price'].dtype}")  # float64

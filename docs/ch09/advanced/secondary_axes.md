@@ -238,3 +238,84 @@ Secondary axes work best with monotonic transformations. Non-monotonic transform
 ### 3. Log Scale Interactions
 
 When using log scales, ensure transformations handle the log space correctly.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Plot temperature data in Celsius for 12 months (e.g., `[5, 7, 12, 18, 23, 28, 31, 30, 25, 18, 11, 6]`) and add a secondary y-axis that shows the values in Fahrenheit using the conversion $F = C \times 9/5 + 32$. Use `secondary_yaxis` with forward and inverse functions.
+
+??? success "Solution to Exercise 1"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        months = np.arange(1, 13)
+        temps_c = [5, 7, 12, 18, 23, 28, 31, 30, 25, 18, 11, 6]
+
+        fig, ax = plt.subplots(figsize=(10, 5))
+        ax.plot(months, temps_c, 'o-', color='tab:blue')
+        ax.set_xlabel('Month')
+        ax.set_ylabel('Temperature (°C)', color='tab:blue')
+        ax.set_xticks(months)
+
+        secax = ax.secondary_yaxis('right',
+                                    functions=(lambda c: c * 9/5 + 32,
+                                               lambda f: (f - 32) * 5/9))
+        secax.set_ylabel('Temperature (°F)', color='tab:red')
+        ax.set_title('Monthly Temperature with Celsius and Fahrenheit')
+        plt.show()
+
+---
+
+**Exercise 2.**
+Plot the function $y = e^x$ for `x` in $[0, 5]$ with a primary x-axis in linear scale. Add a secondary x-axis on top that shows the natural log of the x values. Use `secondary_xaxis` with `functions=(np.log, np.exp)`.
+
+??? success "Solution to Exercise 2"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(0.1, 5, 200)
+        y = np.exp(x)
+
+        fig, ax = plt.subplots(figsize=(10, 5))
+        ax.plot(x, y, color='navy')
+        ax.set_xlabel('x (linear)')
+        ax.set_ylabel(r'$e^x$')
+
+        secax = ax.secondary_xaxis('top', functions=(np.log, np.exp))
+        secax.set_xlabel('ln(x)')
+        ax.set_title(r'$y = e^x$ with Secondary Log Axis')
+        plt.show()
+
+---
+
+**Exercise 3.**
+Create a plot showing distance in kilometers over time in hours. Add a secondary y-axis that converts kilometers to miles (1 km = 0.621371 miles) and a secondary x-axis that converts hours to minutes. Use sample data `time = [0, 1, 2, 3, 4, 5]` and `distance = [0, 10, 25, 45, 60, 80]`.
+
+??? success "Solution to Exercise 3"
+
+        import matplotlib.pyplot as plt
+
+        time_h = [0, 1, 2, 3, 4, 5]
+        distance_km = [0, 10, 25, 45, 60, 80]
+
+        fig, ax = plt.subplots(figsize=(10, 5))
+        ax.plot(time_h, distance_km, 'o-', color='steelblue', linewidth=2)
+        ax.set_xlabel('Time (hours)')
+        ax.set_ylabel('Distance (km)')
+
+        secax_y = ax.secondary_yaxis('right',
+                                      functions=(lambda km: km * 0.621371,
+                                                 lambda mi: mi / 0.621371))
+        secax_y.set_ylabel('Distance (miles)')
+
+        secax_x = ax.secondary_xaxis('top',
+                                      functions=(lambda h: h * 60,
+                                                 lambda m: m / 60))
+        secax_x.set_xlabel('Time (minutes)')
+
+        ax.set_title('Distance over Time with Unit Conversions')
+        plt.show()

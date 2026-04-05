@@ -190,6 +190,7 @@ def good(item, lst=None):
     return lst
 ```
 
+
 ## Summary
 
 | Aspect | Immutable | Mutable |
@@ -198,3 +199,118 @@ def good(item, lst=None):
 | Operations | New object | In-place |
 | Hashable | Yes | No |
 | Default arg | Safe | Danger |
+
+
+## Exercises
+
+**Exercise 1.**
+Predict the output and explain each result:
+
+```python
+a = (1, [2, 3])
+a[1].append(4)
+print(a)
+
+try:
+    a[1] = [2, 3, 4]
+except TypeError as e:
+    print(e)
+```
+
+How can a "immutable" tuple be modified? Is this a contradiction? What exactly is immutable about a tuple?
+
+??? success "Solution to Exercise 1"
+    Output:
+
+    ```text
+    (1, [2, 3, 4])
+    'tuple' object does not support item assignment
+    ```
+
+    This is NOT a contradiction. A tuple's immutability means its **structure** (the references it holds) cannot change -- you cannot make `a[0]` or `a[1]` point to different objects. But the objects those references point to may themselves be mutable.
+
+    `a[1]` is a reference to a list object. `a[1].append(4)` mutates that list object -- it does not change the tuple's reference. The tuple still holds a reference to the same list; the list just has different contents.
+
+    `a[1] = [2, 3, 4]` tries to change the tuple's reference at index 1 to point to a different object -- this IS a structural change to the tuple, which is forbidden.
+
+    The key insight: immutability of a container constrains the **container's structure**, not the **contents of the objects it references**.
+
+---
+
+**Exercise 2.**
+Consider augmented assignment with different types:
+
+```python
+a = [1, 2]
+b = a
+a += [3]
+print(b)  # What?
+
+x = (1, 2)
+y = x
+x += (3,)
+print(y)  # What?
+```
+
+Predict the output. Why does `+=` behave differently for lists and tuples? What happens internally in each case?
+
+??? success "Solution to Exercise 2"
+    Output:
+
+    ```text
+    [1, 2, 3]
+    (1, 2)
+    ```
+
+    For **lists** (mutable): `a += [3]` calls `a.__iadd__([3])`, which mutates the list in place and returns the same object. Since `b` is an alias for the same list, `b` sees the change.
+
+    For **tuples** (immutable): `x += (3,)` calls `x.__iadd__((3,))`, but tuples cannot be mutated. Instead, `__iadd__` creates a **new tuple** `(1, 2, 3)` and rebinds `x` to it. `y` still refers to the original `(1, 2)`.
+
+    The `+=` operator has **dual behavior**: for mutable types, it mutates in place (same object); for immutable types, it creates a new object and rebinds. This is why `+=` can be confusing -- its behavior depends on the type of the left operand.
+
+---
+
+**Exercise 3.**
+Explain why mutable default arguments are dangerous using Python's object model. Trace what happens internally in this code:
+
+```python
+def append_to(item, lst=[]):
+    lst.append(item)
+    return lst
+
+result1 = append_to(1)
+result2 = append_to(2)
+print(result1)
+print(result2)
+print(result1 is result2)
+```
+
+At what point in time is the default list created? How many list objects exist?
+
+??? success "Solution to Exercise 3"
+    Output:
+
+    ```text
+    [1, 2]
+    [1, 2]
+    True
+    ```
+
+    The default list `[]` is created **once**, when the `def` statement executes (at function definition time). This single list object is stored as part of the function object (in `append_to.__defaults__`).
+
+    Every call that uses the default shares the **same list object**:
+
+    1. `append_to(1)`: `lst` is the default list `[]`. `lst.append(1)` mutates it to `[1]`. Returns `[1]`.
+    2. `append_to(2)`: `lst` is the same default list (now `[1]`). `lst.append(2)` mutates it to `[1, 2]`. Returns `[1, 2]`.
+
+    Only **one** list object exists. `result1` and `result2` are both references to it (`result1 is result2` is `True`). That is why `result1` also shows `[1, 2]` -- it was mutated by the second call.
+
+    The fix uses `None` as a sentinel and creates a new list on each call:
+
+    ```python
+    def append_to(item, lst=None):
+        if lst is None:
+            lst = []
+        lst.append(item)
+        return lst
+    ```

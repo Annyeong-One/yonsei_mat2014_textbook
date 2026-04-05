@@ -255,3 +255,73 @@ Use conda for:
 - Use **Mambaforge** for new installations
 - Still use `conda activate/deactivate`
 - **micromamba** for containers and CI/CD
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write the mamba commands to: (a) create a new environment called `ml-env` with Python 3.11, numpy, and scikit-learn, (b) activate it, and (c) install an additional package `pandas`. Explain which commands still use `conda` and which use `mamba`.
+
+??? success "Solution to Exercise 1"
+
+    ```bash
+    # (a) Create environment (use mamba)
+    mamba create -n ml-env python=3.11 numpy scikit-learn
+
+    # (b) Activate (still uses conda)
+    conda activate ml-env
+
+    # (c) Install additional package (use mamba)
+    mamba install pandas
+    ```
+
+    Use `mamba` for install/create/update (faster dependency resolution).
+    Use `conda` for activate/deactivate (environment management).
+
+---
+
+**Exercise 2.**
+Explain the key difference between mamba and micromamba. When would you choose micromamba over mamba, and what are its limitations?
+
+??? success "Solution to Exercise 2"
+
+    **mamba** is a drop-in replacement for conda written in C++. It
+    requires an existing conda installation (or Mambaforge) and shares
+    conda's environment management.
+
+    **micromamba** is a standalone, statically linked binary that does
+    not require conda or Python. It is ideal for:
+
+    - Docker containers (small image size)
+    - CI/CD pipelines (fast setup, no conda dependency)
+    - Minimal installations
+
+    **Limitations of micromamba:**
+
+    - Does not support all conda commands
+    - No `conda activate` -- uses `micromamba activate` or shell eval
+    - Smaller community and fewer tutorials
+
+---
+
+**Exercise 3.**
+Write a Dockerfile snippet that uses micromamba to create a Python environment and install packages. The environment should have Python 3.11 and Flask.
+
+??? success "Solution to Exercise 3"
+
+    ```dockerfile
+    FROM mambaorg/micromamba:latest
+
+    # Create environment
+    RUN micromamba create -n app python=3.11 flask -c conda-forge -y
+
+    # Activate environment in subsequent commands
+    ARG MAMBA_DOCKERFILE_ACTIVATE=1
+    ENV ENV_NAME=app
+
+    WORKDIR /app
+    COPY . .
+
+    CMD ["python", "app.py"]
+    ```

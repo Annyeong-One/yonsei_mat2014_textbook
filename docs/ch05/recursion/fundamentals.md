@@ -1186,3 +1186,67 @@ if __name__ == "__main__":
     print("• Memoization can dramatically improve performance")
     print("• Choose recursion when it makes code clearer")
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a recursive function `reverse_string(s)` that reverses a string without using slicing or built-in `reversed()`. The base case is when the string has 0 or 1 characters. Verify with `"hello"` (expected: `"olleh"`).
+
+??? success "Solution to Exercise 1"
+
+        def reverse_string(s):
+            # Base case
+            if len(s) <= 1:
+                return s
+            # Recursive case: last char + reverse of the rest
+            return s[-1] + reverse_string(s[:-1])
+
+        print(reverse_string("hello"))    # olleh
+        print(reverse_string("abcdef"))   # fedcba
+        print(reverse_string("a"))        # a
+        print(reverse_string(""))         # (empty)
+
+---
+
+**Exercise 2.**
+Write a recursive function `is_palindrome(s)` that returns `True` if a string reads the same forwards and backwards, ignoring case. The base case is when the string has 0 or 1 characters. Test with `"racecar"`, `"Madam"`, and `"hello"`.
+
+??? success "Solution to Exercise 2"
+
+        def is_palindrome(s):
+            s = s.lower()
+            # Base case
+            if len(s) <= 1:
+                return True
+            # Recursive case
+            if s[0] != s[-1]:
+                return False
+            return is_palindrome(s[1:-1])
+
+        print(is_palindrome("racecar"))  # True
+        print(is_palindrome("Madam"))    # True
+        print(is_palindrome("hello"))    # False
+
+---
+
+**Exercise 3.**
+Write a recursive function `flatten(data)` that takes an arbitrarily nested list structure and returns a flat list. For example, `flatten([1, [2, [3, [4]], 5]])` returns `[1, 2, 3, 4, 5]`. Identify the base case and recursive case clearly.
+
+??? success "Solution to Exercise 3"
+
+        def flatten(data):
+            result = []
+            for item in data:
+                if isinstance(item, list):
+                    # Recursive case: flatten the nested list
+                    result.extend(flatten(item))
+                else:
+                    # Base case: non-list element
+                    result.append(item)
+            return result
+
+        print(flatten([1, [2, [3, [4]], 5]]))     # [1, 2, 3, 4, 5]
+        print(flatten([[1, 2], [3, [4, [5]]]]))   # [1, 2, 3, 4, 5]
+        print(flatten([]))                         # []

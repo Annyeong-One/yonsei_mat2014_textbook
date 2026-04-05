@@ -290,6 +290,7 @@ Key points:
 
 ---
 
+
 ## Runnable Example: `list_internals.py`
 
 ```python
@@ -604,3 +605,104 @@ if __name__ == "__main__":
 
     print("\nSee exercises.py for practice!")
 ```
+
+
+## Exercises
+
+**Exercise 1.**
+Write a script that demonstrates the difference between shallow and deep copy for a nested structure: a list of dictionaries where each dictionary contains a list. Modify a deeply nested value through the shallow copy and show that the original is affected. Then do the same with a deep copy and show independence.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import copy
+
+        original = [
+            {"name": "Alice", "scores": [90, 85]},
+            {"name": "Bob", "scores": [78, 92]},
+        ]
+
+        shallow = copy.copy(original)
+        shallow[0]["scores"].append(100)
+        print("After shallow copy modification:")
+        print(f"  original[0]['scores'] = {original[0]['scores']}")  # [90, 85, 100]
+        print(f"  shallow[0]['scores']  = {shallow[0]['scores']}")   # [90, 85, 100]
+        print("  Original was affected!\n")
+
+        original[0]["scores"].pop()  # restore
+
+        deep = copy.deepcopy(original)
+        deep[0]["scores"].append(200)
+        print("After deep copy modification:")
+        print(f"  original[0]['scores'] = {original[0]['scores']}")  # [90, 85]
+        print(f"  deep[0]['scores']     = {deep[0]['scores']}")      # [90, 85, 200]
+        print("  Original is independent!")
+        ```
+
+---
+
+**Exercise 2.**
+Create a `bytearray` of 1000 bytes, then obtain a `memoryview` of it. Slice the memory view to get bytes 100 through 199 and modify the first byte of the slice to `0xFF`. Print the original `bytearray` at index 100 to prove that memory views provide zero-copy access. Measure and print the size of the slice versus creating an actual `bytes` copy of the same range.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import sys
+
+        data = bytearray(1000)
+        view = memoryview(data)
+
+        slice_view = view[100:200]
+        slice_view[0] = 0xFF
+
+        print(f"data[100] = {data[100]:#04x}")  # 0xff — zero-copy confirmed
+
+        copy_bytes = bytes(data[100:200])
+        print(f"memoryview slice size: {sys.getsizeof(slice_view)} bytes")
+        print(f"bytes copy size:       {sys.getsizeof(copy_bytes)} bytes")
+        ```
+
+---
+
+**Exercise 3.**
+Define a class `Sensor` with `__slots__ = ('id', 'value', 'timestamp')` and a class `SensorNoSlots` with the same attributes but no `__slots__`. Create 50,000 instances of each, then use `sys.getsizeof()` to compare per-instance sizes. Also use `tracemalloc` to measure the total memory consumed by each batch.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import sys
+        import tracemalloc
+
+        class Sensor:
+            __slots__ = ('id', 'value', 'timestamp')
+            def __init__(self, id, value, timestamp):
+                self.id = id
+                self.value = value
+                self.timestamp = timestamp
+
+        class SensorNoSlots:
+            def __init__(self, id, value, timestamp):
+                self.id = id
+                self.value = value
+                self.timestamp = timestamp
+
+        s = Sensor(1, 2.0, 3)
+        ns = SensorNoSlots(1, 2.0, 3)
+        print(f"With slots:    {sys.getsizeof(s)} bytes/instance")
+        print(f"Without slots: {sys.getsizeof(ns) + sys.getsizeof(ns.__dict__)} bytes/instance")
+
+        n = 50_000
+
+        tracemalloc.start()
+        slots_list = [Sensor(i, float(i), i) for i in range(n)]
+        _, slots_peak = tracemalloc.get_traced_memory()
+        tracemalloc.stop()
+
+        tracemalloc.start()
+        noslots_list = [SensorNoSlots(i, float(i), i) for i in range(n)]
+        _, noslots_peak = tracemalloc.get_traced_memory()
+        tracemalloc.stop()
+
+        print(f"\n{n:,} instances peak memory:")
+        print(f"  With slots:    {slots_peak / 1024 / 1024:.2f} MB")
+        print(f"  Without slots: {noslots_peak / 1024 / 1024:.2f} MB")
+        ```
+
+---

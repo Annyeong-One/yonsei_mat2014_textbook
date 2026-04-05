@@ -370,3 +370,72 @@ if __name__ == "__main__":
 - About 2x faster than LU for SPD matrices
 - Numerically stable for SPD systems
 - Half the storage of LU (only L needed)
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Generate a random $5 \times 5$ symmetric positive definite matrix by creating a random matrix $B$ with `np.random.seed(42)` and computing $A = B^T B + 5I$. Perform Cholesky decomposition to obtain $L$, then verify that $\|A - LL^T\|_F < 10^{-12}$ using `np.linalg.norm`.
+
+??? success "Solution to Exercise 1"
+        import numpy as np
+        from scipy import linalg
+
+        np.random.seed(42)
+        B = np.random.randn(5, 5)
+        A = B.T @ B + 5 * np.eye(5)
+
+        L = linalg.cholesky(A, lower=True)
+        error = np.linalg.norm(A - L @ L.T)
+        print(f"Reconstruction error: {error:.2e}")
+        assert error < 1e-12, "Reconstruction error too large"
+
+---
+
+**Exercise 2.**
+Using `cho_factor` and `cho_solve`, solve the system $Ax = b$ for $A = \begin{pmatrix} 10 & 3 & 1 \\ 3 & 8 & 2 \\ 1 & 2 & 6 \end{pmatrix}$ and three different right-hand sides $b_1 = (1, 0, 0)^T$, $b_2 = (0, 1, 0)^T$, $b_3 = (0, 0, 1)^T$. Stack the three solutions as columns and verify that the result approximates $A^{-1}$.
+
+??? success "Solution to Exercise 2"
+        import numpy as np
+        from scipy import linalg
+
+        A = np.array([[10, 3, 1],
+                       [3, 8, 2],
+                       [1, 2, 6]])
+        c, low = linalg.cho_factor(A)
+
+        solutions = []
+        for b in [np.array([1, 0, 0]), np.array([0, 1, 0]), np.array([0, 0, 1])]:
+            x = linalg.cho_solve((c, low), b)
+            solutions.append(x)
+
+        A_inv_cholesky = np.column_stack(solutions)
+        A_inv_direct = np.linalg.inv(A)
+        print("A^{-1} via Cholesky solves:")
+        print(A_inv_cholesky)
+        print(f"Match: {np.allclose(A_inv_cholesky, A_inv_direct)}")
+
+---
+
+**Exercise 3.**
+Create a $200 \times 200$ SPD matrix and compute its log-determinant using both the Cholesky-based formula $\log|A| = 2\sum_i \log L_{ii}$ and `np.linalg.slogdet`. Print the absolute difference between the two results and confirm it is below $10^{-8}$.
+
+??? success "Solution to Exercise 3"
+        import numpy as np
+        from scipy import linalg
+
+        np.random.seed(0)
+        n = 200
+        B = np.random.randn(n, n)
+        A = B @ B.T + n * np.eye(n)
+
+        L = linalg.cholesky(A, lower=True)
+        log_det_chol = 2 * np.sum(np.log(np.diag(L)))
+
+        sign, log_det_np = np.linalg.slogdet(A)
+        diff = abs(log_det_chol - log_det_np)
+        print(f"Cholesky log-det: {log_det_chol:.6f}")
+        print(f"slogdet log-det:  {log_det_np:.6f}")
+        print(f"Difference:       {diff:.2e}")
+        assert diff < 1e-8

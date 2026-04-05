@@ -210,3 +210,104 @@ def g():
 - vars()
 - Frame objects
 - Direct dict access
+
+---
+
+## Exercises
+
+**Exercise 1.**
+`locals()` inside a function returns a snapshot, not a live reference. Predict the output:
+
+```python
+def f():
+    x = 10
+    d = locals()
+    x = 20
+    print(d['x'])
+    print(locals()['x'])
+
+f()
+```
+
+Why does the first `d['x']` print `10` while the second `locals()['x']` prints `20`? What does "snapshot" mean in this context?
+
+??? success "Solution to Exercise 1"
+    Output:
+
+    ```text
+    10
+    20
+    ```
+
+    `locals()` creates a **new dictionary** each time it is called, populated from the current state of the fast-locals array. `d = locals()` captures the state when `x` is `10`. After `x = 20`, calling `locals()` again creates a new dictionary reflecting the updated state.
+
+    The dictionary `d` is not connected to the live local variables. CPython stores local variables in a C-level array (fast locals) for performance. `locals()` copies from this array into a fresh dict. Modifying `d` does not affect the fast locals, and modifying the fast locals does not retroactively update `d`.
+
+---
+
+**Exercise 2.**
+Modifying `globals()` creates real bindings, but modifying `locals()` does not. Predict the output:
+
+```python
+globals()['dynamic_var'] = 42
+print(dynamic_var)
+
+def g():
+    locals()['phantom'] = 99
+    try:
+        print(phantom)
+    except NameError as e:
+        print(e)
+
+g()
+```
+
+Why does modifying `globals()` work while modifying `locals()` inside a function has no effect? What CPython optimization explains this asymmetry?
+
+??? success "Solution to Exercise 2"
+    Output:
+
+    ```text
+    42
+    name 'phantom' is not defined
+    ```
+
+    `globals()` returns the **actual module namespace dictionary**. Writing to it genuinely creates a new binding in the global namespace, so `dynamic_var` becomes a real global variable.
+
+    `locals()` inside a function returns a **copy** of the fast-locals array. Writing to this copy does nothing because CPython's function locals are stored in a fixed-size C array, not in a dictionary. The `locals()` dictionary is created on demand and is not used for actual variable lookup. This optimization (called "fast locals") is why local variable access is faster than global access.
+
+---
+
+**Exercise 3.**
+Class and instance namespaces are separate `__dict__` objects. Predict the output:
+
+```python
+class MyClass:
+    x = "class"
+
+obj = MyClass()
+print("x" in obj.__dict__)
+print("x" in MyClass.__dict__)
+
+obj.x = "instance"
+print("x" in obj.__dict__)
+print(obj.x)
+print(MyClass.x)
+```
+
+Why is `x` not in `obj.__dict__` initially? After `obj.x = "instance"`, why does `MyClass.x` remain `"class"`?
+
+??? success "Solution to Exercise 3"
+    Output:
+
+    ```text
+    False
+    True
+    True
+    instance
+    class
+    ```
+
+    Initially, `obj.__dict__` is empty (`{}`). `x` is defined in `MyClass.__dict__`, not on the instance. When you access `obj.x`, Python's attribute lookup checks `obj.__dict__` first, finds nothing, then checks `type(obj).__dict__` (i.e., `MyClass.__dict__`) and finds `"class"`.
+
+    After `obj.x = "instance"`, Python creates an entry in `obj.__dict__`: `{'x': 'instance'}`. Now `obj.x` finds `"instance"` in the instance dict and never reaches the class dict. But `MyClass.x` directly accesses `MyClass.__dict__['x']`, which is still `"class"`. Instance and class namespaces are completely separate dictionaries.

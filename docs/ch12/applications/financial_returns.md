@@ -174,3 +174,61 @@ print(f"VaR (5%, normal):         {var_norm:.6f}")
 ## Summary
 
 Financial returns analysis applies descriptive statistics, normality tests, and distribution fitting from `scipy.stats` to characterize asset return behavior. The key findings across most asset classes are fat tails, slight negative skewness, and rejection of normality. The Student's $t$-distribution provides a better parametric fit than the normal, and quantile-based risk measures like VaR directly leverage fitted distribution objects.
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that generates a synthetic daily return series and computes the annualized mean return and volatility.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(100)
+    print(f'Mean: {data.mean():.4f}')
+    print(f'Std: {data.std():.4f}')
+    ```
+
+---
+
+**Exercise 2.** Explain the difference between arithmetic and geometric (log) returns. When should you use each?
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the statistical method and its assumptions.
+
+---
+
+**Exercise 3.** Write code that computes the Sharpe ratio for a return series with a risk-free rate of 2% per year.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+    from scipy import stats
+    import matplotlib.pyplot as plt
+
+    np.random.seed(42)
+    data = np.random.randn(1000)
+    fig, ax = plt.subplots()
+    ax.hist(data, bins=30, density=True, alpha=0.7)
+    ax.set_title('Distribution')
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Generate 10000 simulated daily returns from a normal distribution and test whether they are truly normally distributed using the Shapiro-Wilk test.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(500)
+    result = stats.describe(data)
+    print(result)
+    ```

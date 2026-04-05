@@ -163,3 +163,63 @@ Batch dimensions must be preserved; use `[0:1]` instead of `[0]`.
 ### 3. Matrix Operations
 
 Some operations require 2D arrays; slicing maintains dimensionality.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Given `a = np.zeros((6, 5, 4, 3))`, predict the shape of each expression without running the code, then verify:
+
+- `a[0]`
+- `a[0:1]`
+- `a[2, :, 1]`
+- `a[2:3, :, 1:2]`
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        a = np.zeros((6, 5, 4, 3))
+        print(a[0].shape)          # (5, 4, 3)
+        print(a[0:1].shape)        # (1, 5, 4, 3)
+        print(a[2, :, 1].shape)    # (5, 3)
+        print(a[2:3, :, 1:2].shape)# (1, 5, 1, 3)
+
+---
+
+**Exercise 2.**
+Create a 3D array `a = np.zeros((4, 3, 2))`. Extract a single row from the middle axis using an integer index (`a[:, 1, :]`) and using a slice (`a[:, 1:2, :]`). Print both shapes and explain why one has 2 dimensions and the other has 3.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        a = np.zeros((4, 3, 2))
+        with_index = a[:, 1, :]     # integer index removes axis 1
+        with_slice = a[:, 1:2, :]   # slice preserves axis 1
+
+        print(f"Integer index shape: {with_index.shape}")  # (4, 2)
+        print(f"Slice shape: {with_slice.shape}")          # (4, 1, 2)
+        # The integer index removes the dimension entirely,
+        # while the slice keeps it with size 1.
+
+---
+
+**Exercise 3.**
+Given `images = np.random.randn(32, 3, 64, 64)` (a batch of 32 RGB images), extract the first image preserving all 4 dimensions (shape `(1, 3, 64, 64)`) using a slice. Then extract it with an integer index and verify the shape is `(3, 64, 64)`. Show how to restore the batch dimension using `np.expand_dims`.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        images = np.random.randn(32, 3, 64, 64)
+
+        first_slice = images[0:1]
+        print(f"With slice: {first_slice.shape}")  # (1, 3, 64, 64)
+
+        first_index = images[0]
+        print(f"With index: {first_index.shape}")  # (3, 64, 64)
+
+        restored = np.expand_dims(first_index, axis=0)
+        print(f"Restored: {restored.shape}")  # (1, 3, 64, 64)

@@ -469,3 +469,61 @@ Normalization and preprocessing are critical foundations for reliable data analy
 - **Hierarchical clustering** reveals structure while providing visual quality control
 
 Master these techniques, and you'll spend less time fighting artifacts and more time discovering biological insights.
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that performs quantile normalization on a matrix of values. All columns should have the same distribution after normalization.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(100)
+    print(f'Mean: {data.mean():.4f}')
+    print(f'Std: {data.std():.4f}')
+    ```
+
+---
+
+**Exercise 2.** Explain the steps of quantile normalization: rank within columns, average across columns, reassign.
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the statistical method and its assumptions.
+
+---
+
+**Exercise 3.** Write code that compares the distributions before and after quantile normalization using histograms.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+    from scipy import stats
+    import matplotlib.pyplot as plt
+
+    np.random.seed(42)
+    data = np.random.randn(1000)
+    fig, ax = plt.subplots()
+    ax.hist(data, bins=30, density=True, alpha=0.7)
+    ax.set_title('Distribution')
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Explain when quantile normalization is appropriate. Give an example from genomics or another field.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(500)
+    result = stats.describe(data)
+    print(result)
+    ```

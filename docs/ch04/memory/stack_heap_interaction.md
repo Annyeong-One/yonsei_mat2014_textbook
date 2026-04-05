@@ -185,6 +185,7 @@ refs = [
 
 ---
 
+
 ## Runnable Example: `variables_and_memory.py`
 
 ```python
@@ -531,3 +532,91 @@ if __name__ == "__main__":
     See exercises_01_beginner.py for complete practice problems!
     """)
 ```
+
+
+## Exercises
+
+**Exercise 1.**
+Write a function `demonstrate_sharing()` that creates a list, passes it to three other functions (each of which appends an element), and then prints the final list back in the caller. Use `id()` to prove that all four functions operated on the same heap object.
+
+??? success "Solution to Exercise 1"
+        ```python
+        def add_a(lst):
+            print(f"  add_a sees id: {id(lst)}")
+            lst.append("a")
+
+        def add_b(lst):
+            print(f"  add_b sees id: {id(lst)}")
+            lst.append("b")
+
+        def add_c(lst):
+            print(f"  add_c sees id: {id(lst)}")
+            lst.append("c")
+
+        def demonstrate_sharing():
+            data = [0]
+            print(f"  caller id: {id(data)}")
+            add_a(data)
+            add_b(data)
+            add_c(data)
+            print(f"  Final list: {data}")
+
+        demonstrate_sharing()
+        ```
+
+---
+
+**Exercise 2.**
+Write a function `closure_keeps_alive()` that creates a large list inside a local scope, returns a closure that references the list, and then verifies (using `weakref.ref`) that the list stays alive as long as the closure exists. Delete the closure and verify the list is collected.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import weakref
+        import gc
+
+        def closure_keeps_alive():
+            data = list(range(10_000))
+            ref = weakref.ref(data)
+
+            def getter():
+                return data[0]
+
+            return getter, ref
+
+        getter, ref = closure_keeps_alive()
+        gc.collect()
+        print(f"Closure alive -> list alive: {ref() is not None}")  # True
+
+        del getter
+        gc.collect()
+        print(f"Closure deleted -> list alive: {ref() is not None}")  # False
+        ```
+
+---
+
+**Exercise 3.**
+Create a function `show_stack_heap(depth)` that recurses to the given depth. At each level, it creates a local list and prints `id()` of that list and the current depth. After the recursion completes, show that none of the local lists exist anymore by checking weak references created at each level.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import weakref
+        import gc
+
+        refs = []
+
+        def show_stack_heap(depth, current=0):
+            local_list = [current]
+            refs.append(weakref.ref(local_list))
+            print(f"  depth={current}, id={id(local_list)}")
+            if current < depth:
+                show_stack_heap(depth, current + 1)
+
+        show_stack_heap(5)
+        gc.collect()
+
+        alive = sum(1 for r in refs if r() is not None)
+        print(f"\nAfter recursion: {alive} of {len(refs)} lists still alive")
+        # Should be 0 — all local lists were freed when frames unwound
+        ```
+
+---

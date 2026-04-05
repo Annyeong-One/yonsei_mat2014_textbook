@@ -264,3 +264,64 @@ df.pipe(standardize_column_names)
 # Not needed: Simple operation
 df.pipe(lambda x: x.head())  # Just use df.head()
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write a method chain that: (1) reads/creates a DataFrame, (2) filters rows, (3) selects columns, and (4) sorts the result. Do it in a single expression.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+
+    df = pd.DataFrame({
+        'name': ['Alice', 'Bob', 'Charlie', 'David', 'Eve'],
+        'age': [25, 30, 35, 40, 28],
+        'score': [85, 92, 78, 95, 88]
+    })
+    print(f'Shape: {df.shape}')
+    print(f'Columns: {df.columns.tolist()}')
+    print(f'Dtypes:\n{df.dtypes}')
+    ```
+
+---
+
+**Exercise 2.** Explain the advantage of method chaining over step-by-step variable assignment. When might chaining be inappropriate?
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the Pandas data structures and their relationships.
+
+---
+
+**Exercise 3.** Write code that uses `.pipe()` to include a custom function in a method chain.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+
+    df = pd.DataFrame({
+        'name': ['Alice', 'Bob', 'Charlie'],
+        'age': [25, 30, 35],
+        'score': [85, 92, 78]
+    })
+    # Label-based
+    print(df.loc[0])
+    # Position-based
+    print(df.iloc[-1])
+    ```
+
+---
+
+**Exercise 4.** Rewrite the following step-by-step code as a method chain: filter rows where `age > 25`, select `name` and `salary` columns, sort by salary descending.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+
+    df = pd.DataFrame({'a': [1, 2, 3], 'b': [4, 5, 6]})
+    df['c'] = df['a'] + df['b']
+    df = df.drop(columns=['b'])
+    print(df)
+    ```

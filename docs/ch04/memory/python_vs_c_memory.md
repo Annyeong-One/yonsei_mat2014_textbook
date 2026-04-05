@@ -133,6 +133,7 @@ int x = 1;  // 4 bytes only
 
 ---
 
+
 ## Runnable Example: `mutable_default_arguments_gotcha.py`
 
 ```python
@@ -540,3 +541,87 @@ if __name__ == "__main__":
        "If your default value is mutable, you're doing it wrong!"
     """)
 ```
+
+
+## Exercises
+
+**Exercise 1.**
+Write a script that compares the memory overhead of storing 1,000 integers in Python vs the theoretical cost in C. For Python, sum `sys.getsizeof(i)` for each integer plus the container overhead. For C, compute `1000 * 4` bytes (assuming 4-byte `int`). Print both values and the overhead ratio.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import sys
+
+        n = 1_000
+        python_item_bytes = sum(sys.getsizeof(i) for i in range(n))
+        python_container = sys.getsizeof(list(range(n)))
+        python_total = python_item_bytes + python_container
+
+        c_total = n * 4  # 4 bytes per int in C
+
+        print(f"Python total: {python_total:,} bytes")
+        print(f"C total:      {c_total:,} bytes")
+        print(f"Overhead ratio: {python_total / c_total:.1f}x")
+        ```
+
+---
+
+**Exercise 2.**
+Demonstrate Python's automatic memory management by writing a function that creates a large list inside a local scope, returns only a summary (e.g., the sum), and show using `tracemalloc` that the memory is freed after the function returns and `gc.collect()` is called.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import tracemalloc
+        import gc
+
+        def compute_sum(n):
+            data = list(range(n))
+            return sum(data)
+
+        tracemalloc.start()
+        snap1 = tracemalloc.take_snapshot()
+
+        result = compute_sum(500_000)
+
+        gc.collect()
+        snap2 = tracemalloc.take_snapshot()
+
+        diff = snap2.compare_to(snap1, 'lineno')
+        total_change = sum(s.size_diff for s in diff)
+
+        print(f"Result: {result}")
+        print(f"Memory change after function return: "
+              f"{total_change / 1024:.1f} KB")
+        print("Memory was freed (small or negative change)")
+        tracemalloc.stop()
+        ```
+
+---
+
+**Exercise 3.**
+Compare `array.array('i', ...)` vs a regular Python list for storing 100,000 integers. Print `sys.getsizeof()` for both containers and compute the per-element cost for each. Show the memory savings as a percentage.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import sys
+        import array
+
+        n = 100_000
+
+        lst = list(range(n))
+        arr = array.array('i', range(n))
+
+        lst_size = sys.getsizeof(lst)
+        arr_size = sys.getsizeof(arr)
+
+        lst_per_elem = lst_size / n
+        arr_per_elem = arr_size / n
+
+        savings = (1 - arr_size / lst_size) * 100
+
+        print(f"List:  {lst_size:>10,} bytes ({lst_per_elem:.1f} bytes/elem)")
+        print(f"Array: {arr_size:>10,} bytes ({arr_per_elem:.1f} bytes/elem)")
+        print(f"Savings: {savings:.1f}%")
+        ```
+
+---

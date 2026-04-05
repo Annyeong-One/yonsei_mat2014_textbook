@@ -625,3 +625,117 @@ if __name__ == "__main__":
     print("END OF MINI-PROJECT")
     print("=" * 70)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write two decorators, `@bold` and `@italic`, that wrap a function's string return value in `<b>...</b>` and `<i>...</i>` tags respectively. Stack them as `@bold` on top and `@italic` on bottom, then call the function and verify the output is `<b><i>hello</i></b>`. Explain the application order.
+
+??? success "Solution to Exercise 1"
+
+        from functools import wraps
+
+        def bold(func):
+            @wraps(func)
+            def wrapper(*args, **kwargs):
+                return f"<b>{func(*args, **kwargs)}</b>"
+            return wrapper
+
+        def italic(func):
+            @wraps(func)
+            def wrapper(*args, **kwargs):
+                return f"<i>{func(*args, **kwargs)}</i>"
+            return wrapper
+
+        @bold      # Applied second (outermost)
+        @italic    # Applied first (innermost)
+        def greet():
+            return "hello"
+
+        print(greet())  # <b><i>hello</i></b>
+        # italic wraps greet first, then bold wraps the result
+
+---
+
+**Exercise 2.**
+Create `@log_entry` and `@log_exit` decorators. `@log_entry` prints `"Entering <name>"` before the call. `@log_exit` prints `"Exiting <name>"` after the call. Stack both on a function and demonstrate that the output order depends on which decorator is on top.
+
+??? success "Solution to Exercise 2"
+
+        from functools import wraps
+
+        def log_entry(func):
+            @wraps(func)
+            def wrapper(*args, **kwargs):
+                print(f"Entering {func.__name__}")
+                return func(*args, **kwargs)
+            return wrapper
+
+        def log_exit(func):
+            @wraps(func)
+            def wrapper(*args, **kwargs):
+                result = func(*args, **kwargs)
+                print(f"Exiting {func.__name__}")
+                return result
+            return wrapper
+
+        @log_entry
+        @log_exit
+        def compute(x):
+            print(f"  Computing {x}")
+            return x * 2
+
+        print(compute(5))
+        # Output:
+        # Entering compute
+        #   Computing 5
+        # Exiting compute
+        # 10
+
+---
+
+**Exercise 3.**
+Write three decorators: `@authenticate` (checks that a `user` keyword argument is not `None`), `@log` (prints the function name and arguments), and `@timer` (prints execution time). Stack all three on a single function in an order where authentication is checked first, then the call is logged, then timing is measured. Verify the behavior with both valid and invalid `user` values.
+
+??? success "Solution to Exercise 3"
+
+        import time
+        from functools import wraps
+
+        def authenticate(func):
+            @wraps(func)
+            def wrapper(*args, **kwargs):
+                if kwargs.get("user") is None:
+                    raise PermissionError("Authentication required")
+                return func(*args, **kwargs)
+            return wrapper
+
+        def log(func):
+            @wraps(func)
+            def wrapper(*args, **kwargs):
+                print(f"Calling {func.__name__}(args={args}, kwargs={kwargs})")
+                return func(*args, **kwargs)
+            return wrapper
+
+        def timer(func):
+            @wraps(func)
+            def wrapper(*args, **kwargs):
+                start = time.perf_counter()
+                result = func(*args, **kwargs)
+                print(f"{func.__name__} took {time.perf_counter() - start:.4f}s")
+                return result
+            return wrapper
+
+        @timer          # Outermost: measures total time
+        @log            # Middle: logs the call
+        @authenticate   # Innermost: checks auth first
+        def get_data(query, user=None):
+            return f"Results for '{query}'"
+
+        print(get_data("SELECT *", user="admin"))
+        try:
+            get_data("SELECT *", user=None)
+        except PermissionError as e:
+            print(e)

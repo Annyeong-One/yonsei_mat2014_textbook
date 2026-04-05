@@ -1210,3 +1210,131 @@ if __name__ == "__main__":
     # IMPORTANT: This guard is required on Windows
     main()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create 4 processes that each compute the sum of squares in a non-overlapping range of 0 to 4,000,000. Use a `multiprocessing.Queue` to collect results. Print the partial sums and the total. Compare the wall-clock time against a single-process sequential version.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import time
+        from multiprocessing import Process, Queue
+
+        def partial_sum(start, end, q):
+            total = sum(i * i for i in range(start, end))
+            q.put((start, end, total))
+
+        if __name__ == "__main__":
+            N = 4_000_000
+            chunk = N // 4
+            q = Queue()
+
+            # Parallel
+            start_t = time.perf_counter()
+            procs = []
+            for i in range(4):
+                s, e = i * chunk, (i + 1) * chunk
+                p = Process(target=partial_sum, args=(s, e, q))
+                p.start()
+                procs.append(p)
+            for p in procs:
+                p.join()
+            par_time = time.perf_counter() - start_t
+
+            total = 0
+            while not q.empty():
+                s, e, partial = q.get()
+                print(f"Range [{s}, {e}): {partial}")
+                total += partial
+
+            # Sequential
+            start_t = time.perf_counter()
+            seq_total = sum(i * i for i in range(N))
+            seq_time = time.perf_counter() - start_t
+
+            print(f"Total: {total} (check: {seq_total})")
+            print(f"Parallel: {par_time:.2f}s, Sequential: {seq_time:.2f}s")
+        ```
+
+---
+
+**Exercise 2.**
+Write a `WorkerProcess` subclass that takes a list of numbers as input and computes their mean and standard deviation. Use a `Queue` to return the results. Create 3 instances with different data, start and join them all, then print each worker's statistics.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import statistics
+        from multiprocessing import Process, Queue
+
+        class WorkerProcess(Process):
+            def __init__(self, name, data, result_queue):
+                super().__init__()
+                self.worker_name = name
+                self.data = data
+                self.result_queue = result_queue
+
+            def run(self):
+                mean = statistics.mean(self.data)
+                stdev = statistics.stdev(self.data) if len(self.data) > 1 else 0
+                self.result_queue.put((self.worker_name, mean, stdev))
+
+        if __name__ == "__main__":
+            q = Queue()
+            datasets = {
+                "A": [10, 20, 30, 40, 50],
+                "B": [100, 200, 300],
+                "C": [1.5, 2.5, 3.5, 4.5],
+            }
+
+            workers = [WorkerProcess(n, d, q) for n, d in datasets.items()]
+            for w in workers:
+                w.start()
+            for w in workers:
+                w.join()
+
+            while not q.empty():
+                name, mean, stdev = q.get()
+                print(f"{name}: mean={mean:.2f}, stdev={stdev:.2f}")
+        ```
+
+---
+
+**Exercise 3.**
+Demonstrate process isolation by having two processes each modify a global variable `counter` by incrementing it 100,000 times. Print the main process's `counter` after both finish (it should still be 0). Then fix it using `multiprocessing.Value` with proper locking to get the correct total of 200,000.
+
+??? success "Solution to Exercise 3"
+        ```python
+        from multiprocessing import Process, Value, Lock
+
+        counter = 0  # global — not shared across processes
+
+        def increment_global():
+            global counter
+            for _ in range(100_000):
+                counter += 1
+
+        def increment_shared(shared, lock):
+            for _ in range(100_000):
+                with lock:
+                    shared.value += 1
+
+        if __name__ == "__main__":
+            # Isolated version
+            p1 = Process(target=increment_global)
+            p2 = Process(target=increment_global)
+            p1.start(); p2.start()
+            p1.join(); p2.join()
+            print(f"Global counter (isolated): {counter}")  # 0
+
+            # Shared version
+            shared = Value('i', 0)
+            lock = Lock()
+            p3 = Process(target=increment_shared, args=(shared, lock))
+            p4 = Process(target=increment_shared, args=(shared, lock))
+            p3.start(); p4.start()
+            p3.join(); p4.join()
+            print(f"Shared counter: {shared.value}")  # 200000
+        ```

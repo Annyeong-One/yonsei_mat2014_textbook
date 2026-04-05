@@ -1121,3 +1121,71 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a function `extract_emails` that takes a text string and returns a list of all email addresses found in it. Use a regex pattern that matches common email formats. Test with a string containing emails mixed with other text.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    import re
+
+    def extract_emails(text):
+        pattern = r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
+        return re.findall(pattern, text)
+
+    # Test
+    text = "Contact alice@example.com or bob.smith@test.org. Not an email: @invalid"
+    print(extract_emails(text))
+    # ['alice@example.com', 'bob.smith@test.org']
+    ```
+
+---
+
+**Exercise 2.**
+Write a function `clean_phone_numbers` that takes a list of phone number strings in various formats (`"(555) 123-4567"`, `"555.123.4567"`, `"555-123-4567"`) and returns them all in a standardized format `"555-123-4567"`. Use `re.sub` to strip non-digit characters first, then reformat.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    import re
+
+    def clean_phone_numbers(phones):
+        result = []
+        for phone in phones:
+            digits = re.sub(r'\D', '', phone)
+            if len(digits) == 10:
+                formatted = f"{digits[:3]}-{digits[3:6]}-{digits[6:]}"
+                result.append(formatted)
+        return result
+
+    # Test
+    phones = ["(555) 123-4567", "555.123.4567", "555-123-4567"]
+    print(clean_phone_numbers(phones))
+    # ['555-123-4567', '555-123-4567', '555-123-4567']
+    ```
+
+---
+
+**Exercise 3.**
+Write a function `parse_csv_line` that takes a single CSV line string and correctly handles quoted fields (which may contain commas). For example, `'Alice,"New York, NY",30'` should return `["Alice", "New York, NY", "30"]`. Use `re.findall` with a pattern that handles both quoted and unquoted fields.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    import re
+
+    def parse_csv_line(line):
+        pattern = r'"([^"]*?)"|([^,]+)'
+        matches = re.findall(pattern, line)
+        return [quoted or unquoted for quoted, unquoted in matches]
+
+    # Test
+    line = 'Alice,"New York, NY",30'
+    print(parse_csv_line(line))
+    # ['Alice', 'New York, NY', '30']
+    ```

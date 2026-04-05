@@ -216,3 +216,63 @@ if __name__ == "__main__":
     print("Tutorial 05 demonstrates regression visualizations")
     print("Key functions: regplot(), lmplot(), residplot()")
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Use `stats.linregress` to fit a line to $x = [1, 2, 3, 4, 5, 6]$ and $y = [2.1, 3.9, 6.2, 7.8, 10.1, 11.9]$. Print the slope, intercept, $R^2$, and p-value. Predict the value at $x = 10$.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        from scipy import stats
+
+        x = [1, 2, 3, 4, 5, 6]
+        y = [2.1, 3.9, 6.2, 7.8, 10.1, 11.9]
+        result = stats.linregress(x, y)
+        print(f"Slope: {result.slope:.4f}, Intercept: {result.intercept:.4f}")
+        print(f"R-squared: {result.rvalue**2:.4f}, p-value: {result.pvalue:.4e}")
+        print(f"Prediction at x=10: {result.intercept + result.slope * 10:.4f}")
+
+---
+
+**Exercise 2.**
+Generate 100 samples from $Y = 3 + 2X + \varepsilon$ where $X \sim U(0, 10)$ and $\varepsilon \sim N(0, 2)$. Fit using `linregress`, compare estimated slope and intercept to the true values, and compute the 95% confidence interval for the slope.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        x = np.random.uniform(0, 10, 100)
+        y = 3 + 2 * x + np.random.normal(0, 2, 100)
+        result = stats.linregress(x, y)
+
+        t_crit = stats.t.ppf(0.975, df=98)
+        ci_low = result.slope - t_crit * result.stderr
+        ci_high = result.slope + t_crit * result.stderr
+
+        print(f"Slope: {result.slope:.4f} (true: 2), Intercept: {result.intercept:.4f} (true: 3)")
+        print(f"95% CI for slope: [{ci_low:.4f}, {ci_high:.4f}]")
+
+---
+
+**Exercise 3.**
+Fit a linear regression to data that has a clear quadratic relationship: $x = [1, ..., 20]$, $y = x^2$. Examine the $R^2$ value and residual pattern. Explain why the linear fit is inadequate.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+
+        x = np.arange(1, 21, dtype=float)
+        y = x ** 2
+        result = stats.linregress(x, y)
+        residuals = y - (result.intercept + result.slope * x)
+
+        print(f"R-squared: {result.rvalue**2:.4f}")
+        print(f"Residual range: [{residuals.min():.1f}, {residuals.max():.1f}]")
+        print("The parabolic residual pattern shows the linear model is inadequate")

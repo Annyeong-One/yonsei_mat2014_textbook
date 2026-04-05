@@ -704,3 +704,70 @@ if __name__ == "__main__":
     print("✓ Performance considerations")
     print("\nNext: Study 03_logging_to_file.py to learn about file logging!")
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a function `log_at_level` that takes a logger, a level name string (e.g., `"DEBUG"`, `"INFO"`), and a message, and logs the message at the specified level. Use `getattr` to dynamically call the correct logging method. Test with all five standard levels.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    import logging
+
+    def log_at_level(logger, level_name, message):
+        level_method = getattr(logger, level_name.lower())
+        level_method(message)
+
+    # Test
+    logging.basicConfig(level=logging.DEBUG, format="%(levelname)s: %(message)s")
+    logger = logging.getLogger("level_test")
+
+    for level in ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]:
+        log_at_level(logger, level, f"Message at {level}")
+    ```
+
+---
+
+**Exercise 2.**
+Write a function `count_log_levels` that takes a list of log record level names and returns a dictionary counting how many of each level appear. For example, `count_log_levels(["INFO", "DEBUG", "INFO", "ERROR"])` should return `{"INFO": 2, "DEBUG": 1, "ERROR": 1}`.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    from collections import Counter
+
+    def count_log_levels(levels):
+        return dict(Counter(levels))
+
+    # Test
+    levels = ["INFO", "DEBUG", "INFO", "ERROR", "INFO", "DEBUG"]
+    print(count_log_levels(levels))
+    # {'INFO': 3, 'DEBUG': 2, 'ERROR': 1}
+    ```
+
+---
+
+**Exercise 3.**
+Write a function `filter_by_level` that takes a list of `(level, message)` tuples and a minimum level string, and returns only the messages at or above that level. Use the numeric level values from `logging.getLevelName()`. For example, filtering `[("DEBUG", "d"), ("INFO", "i"), ("ERROR", "e")]` with minimum `"INFO"` should return `[("INFO", "i"), ("ERROR", "e")]`.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    import logging
+
+    def filter_by_level(records, min_level):
+        min_numeric = logging.getLevelName(min_level)
+        return [
+            (level, msg)
+            for level, msg in records
+            if logging.getLevelName(level) >= min_numeric
+        ]
+
+    # Test
+    records = [("DEBUG", "d"), ("INFO", "i"), ("WARNING", "w"), ("ERROR", "e")]
+    print(filter_by_level(records, "INFO"))
+    # [('INFO', 'i'), ('WARNING', 'w'), ('ERROR', 'e')]
+    ```

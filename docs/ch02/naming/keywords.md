@@ -204,3 +204,57 @@ cls = MyClass
 data_type = "string"
 kind = "integer"
 ```
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Write code that lists all Python keywords using the `keyword` module. How many are there in your Python version?
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        import keyword
+
+        print(keyword.kwlist)
+        print(f"Total keywords: {len(keyword.kwlist)}")
+        ```
+
+    Python 3.12 has 35 keywords. The exact number may vary by version.
+
+---
+
+**Exercise 2.**
+What happens when you try to use `class`, `return`, or `for` as a variable name? Demonstrate the error.
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        # All of these cause SyntaxError:
+        # class = 5
+        # return = 10
+        # for = "hello"
+
+        # SyntaxError: invalid syntax
+        ```
+
+    Keywords are reserved by the parser. Using them as identifiers causes `SyntaxError` at compile time.
+
+---
+
+**Exercise 3.**
+Some words that look like keywords are actually built-in names (e.g., `True`, `False`, `None`). Verify which of these are keywords using `keyword.iskeyword()` and which are just built-in constants.
+
+??? success "Solution to Exercise 3"
+
+        ```python
+        import keyword
+
+        for name in ["True", "False", "None", "print", "len"]:
+            is_kw = keyword.iskeyword(name)
+            print(f"{name:>6}: keyword={is_kw}")
+        ```
+
+    `True`, `False`, and `None` are keywords (since Python 3). `print` and `len` are built-in names, not keywords -- they can be reassigned (though doing so is not recommended).

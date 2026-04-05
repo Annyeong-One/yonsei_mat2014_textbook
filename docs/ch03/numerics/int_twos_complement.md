@@ -295,3 +295,108 @@ Evaluating the trade-offs of each representation.
 **Trade-off:** C is better for efficiency, while Python is better for flexibility and safety.
 
 Two's complement remains crucial for low-level systems and embedded computing, while Python's approach is advantageous for applications requiring precision without fixed bit-width constraints.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Python integers have no fixed size, so they never overflow. Predict the output:
+
+```python
+import sys
+
+a = 2 ** 63 - 1
+b = a + 1
+print(b)
+print(type(b))
+print(sys.getsizeof(a))
+print(sys.getsizeof(b))
+print(sys.getsizeof(2 ** 1000))
+```
+
+Why does `sys.getsizeof` return different values for `a` and `b`? How does Python's memory layout for integers differ from C's fixed 4-byte or 8-byte representation?
+
+??? success "Solution to Exercise 1"
+    Output (sizes may vary by platform):
+
+    ```text
+    9223372036854775808
+    <class 'int'>
+    36
+    36
+    172
+    ```
+
+    (Exact `getsizeof` values depend on CPython version and platform, but `b` will be equal to or larger than `a`, and `2 ** 1000` will be much larger.)
+
+    Python integers are objects with a variable-length array of "digits" (30-bit or 15-bit chunks in CPython). When a number exceeds the capacity of the current digit array, Python allocates more digits. The `getsizeof` reflects the object header (reference count, type pointer) plus the digit array.
+
+    C stores integers in a fixed number of bytes (typically 4 or 8), regardless of the value. Python trades memory efficiency and speed for the guarantee that integers never overflow and can grow to arbitrary size.
+
+---
+
+**Exercise 2.**
+Python simulates two's complement for bitwise operations on negative numbers. Predict the output:
+
+```python
+print(bin(5))
+print(bin(-5))
+print(bin(~5))
+
+print(-5 & 0xFF)
+print(bin(-5 & 0xFF))
+```
+
+Why does `bin(-5)` show `-0b101` instead of the two's complement bit pattern? Why does `-5 & 0xFF` give `251`? What is Python doing internally to make bitwise operations on negative numbers consistent with two's complement?
+
+??? success "Solution to Exercise 2"
+    Output:
+
+    ```text
+    0b101
+    -0b101
+    -0b110
+    251
+    0b11111011
+    ```
+
+    `bin(-5)` shows `-0b101` because Python displays negative integers with a minus sign followed by the magnitude in binary. Internally, Python uses sign-magnitude, not two's complement.
+
+    However, for **bitwise operations**, Python behaves **as if** negative numbers are stored in two's complement with infinite width. `-5` is treated as `...11111011` (infinite leading 1s). When you mask with `0xFF`, you extract the low 8 bits: `11111011` = 251.
+
+    `~5` (bitwise NOT) gives `-6` because in infinite-width two's complement, flipping all bits of `...00000101` gives `...11111010` = -6.
+
+    Python maintains two's complement semantics for bitwise operations while using sign-magnitude for storage -- a design choice that gives correct low-level behavior without fixed bit widths.
+
+---
+
+**Exercise 3.**
+In C, signed integer overflow is undefined behavior. Predict what happens in Python vs. what would happen in a 32-bit C `int`:
+
+```python
+# Python
+a = 2147483647  # 2^31 - 1 (max 32-bit signed int)
+b = a + 1
+c = a * a
+print(b)
+print(c)
+print(len(str(c)))
+```
+
+Why does Python handle this correctly while C produces undefined behavior? What is the trade-off Python makes for this safety?
+
+??? success "Solution to Exercise 3"
+    Output:
+
+    ```text
+    2147483648
+    4611686014132420609
+    19
+    ```
+
+    Python produces mathematically correct results because its integers automatically expand. `b` = 2^31, which exceeds the 32-bit signed range but is perfectly representable in Python. `c` = (2^31 - 1)^2, a 19-digit number.
+
+    In C with 32-bit signed `int`, `a + 1` would overflow. The C standard says signed integer overflow is **undefined behavior** -- the compiler can produce any result, crash, or even optimize away code that depends on overflow. In practice, most systems using two's complement would wrap to `-2147483648`, but this is not guaranteed.
+
+    The trade-off: Python pays for this safety with slower arithmetic (every operation must check for potential reallocation) and higher memory usage (object overhead per integer). C gets raw speed by operating directly on fixed-size hardware registers.

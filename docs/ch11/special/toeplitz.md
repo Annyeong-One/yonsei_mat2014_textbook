@@ -148,3 +148,94 @@ print(f"FFT:    {y_fft}")      # [3. 6. 6. 8.]
 - Circulant matrices are diagonalized by the DFT matrix, enabling $O(n \log n)$ multiplication via FFT
 - Symmetric Toeplitz matrices arise naturally as autocovariance matrices of stationary time series
 - Use `linalg.toeplitz(c)` (one argument) for symmetric Toeplitz, `linalg.toeplitz(c, r)` for general
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Construct a $5 \times 5$ symmetric Toeplitz matrix with first column $[4, -1, 0, 0, 0]$ (a tridiagonal matrix). Compute its eigenvalues using `linalg.eigvalsh` and verify that all eigenvalues are positive (the matrix is positive definite). Solve $Tx = b$ where $b = (1, 2, 3, 4, 5)^T$.
+
+??? success "Solution to Exercise 1"
+        import numpy as np
+        from scipy import linalg
+
+        c = [4, -1, 0, 0, 0]
+        T = linalg.toeplitz(c)
+        print("Toeplitz matrix:")
+        print(T)
+
+        eigenvalues = linalg.eigvalsh(T)
+        print(f"\nEigenvalues: {eigenvalues}")
+        print(f"All positive: {np.all(eigenvalues > 0)}")
+
+        b = np.array([1, 2, 3, 4, 5], dtype=float)
+        x = linalg.solve(T, b)
+        print(f"\nSolution x: {x}")
+
+---
+
+**Exercise 2.**
+Build a $6 \times 6$ circulant matrix from the vector $c = [3, -1, 0, 0, 0, -1]$. Verify the FFT diagonalization property: compute $\hat{c} = \text{FFT}(c)$ and check that for a test vector $x$, the circulant-vector product $Cx$ equals $\text{IFFT}(\hat{c} \odot \text{FFT}(x))$.
+
+??? success "Solution to Exercise 2"
+        import numpy as np
+        from scipy import linalg
+
+        c = np.array([3, -1, 0, 0, 0, -1], dtype=float)
+        C = linalg.circulant(c)
+        print("Circulant matrix:")
+        print(C)
+
+        # FFT diagonalization check
+        x = np.array([1, 0, 1, 0, 1, 0], dtype=float)
+        y_direct = C @ x
+
+        c_hat = np.fft.fft(c)
+        x_hat = np.fft.fft(x)
+        y_fft = np.fft.ifft(c_hat * x_hat).real
+
+        print(f"\nDirect: {y_direct}")
+        print(f"FFT:    {y_fft}")
+        print(f"Match: {np.allclose(y_direct, y_fft)}")
+
+---
+
+**Exercise 3.**
+Create a $100 \times 100$ Toeplitz matrix representing a discrete convolution with kernel $[0.1, 0.2, 0.4, 0.2, 0.1]$ (first column has these values at the top, first row has them at the left). Apply this operator to a random signal of length 100 using both direct matrix-vector multiplication and, for the circulant approximation, using FFT-based multiplication. Compare the results.
+
+??? success "Solution to Exercise 3"
+        import numpy as np
+        from scipy import linalg
+
+        np.random.seed(0)
+        n = 100
+        kernel = [0.1, 0.2, 0.4, 0.2, 0.1]
+
+        # Toeplitz matrix
+        col = np.zeros(n)
+        col[:3] = [0.4, 0.2, 0.1]
+        row = np.zeros(n)
+        row[:3] = [0.4, 0.2, 0.1]
+        T = linalg.toeplitz(col, row)
+
+        # Random signal
+        signal = np.random.randn(n)
+
+        # Direct multiplication
+        y_direct = T @ signal
+
+        # Circulant (FFT) approximation
+        c_circ = np.zeros(n)
+        c_circ[0] = 0.4
+        c_circ[1] = 0.2
+        c_circ[2] = 0.1
+        c_circ[-2] = 0.1
+        c_circ[-1] = 0.2
+        c_hat = np.fft.fft(c_circ)
+        y_fft = np.fft.ifft(c_hat * np.fft.fft(signal)).real
+
+        error = np.linalg.norm(y_direct - y_fft)
+        print(f"Direct vs FFT difference norm: {error:.6f}")
+        print(f"First 5 values (direct): {y_direct[:5].round(4)}")
+        print(f"First 5 values (FFT):    {y_fft[:5].round(4)}")

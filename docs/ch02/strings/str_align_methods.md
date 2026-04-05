@@ -234,3 +234,71 @@ print(f"{'Hi':*^10}")        # ****Hi****
 * `zfill()` pads numbers with leading zeros while preserving signs.
 * Alignment is commonly used for **tables, filenames, and formatted output**.
 * Format specifiers provide an alternative alignment method in f-strings.
+
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Format a simple table with names left-aligned in a 15-character field and scores right-aligned in a 5-character field. Use `ljust()` and `rjust()`.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    data = [("Alice", 95), ("Bob", 87), ("Carol", 100)]
+
+    for name, score in data:
+        print(name.ljust(15) + str(score).rjust(5))
+    # Alice              95
+    # Bob                87
+    # Carol             100
+    ```
+
+    `ljust(15)` pads the name with spaces on the right, and `rjust(5)` pads the score with spaces on the left.
+
+---
+
+**Exercise 2.**
+Use `zfill()` to format a list of integers `[1, 12, 123, 1234]` as zero-padded 6-digit strings. Show how `zfill()` handles negative numbers.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    numbers = [1, 12, 123, 1234]
+    for n in numbers:
+        print(str(n).zfill(6))
+    # 000001
+    # 000012
+    # 000123
+    # 001234
+
+    # Handles negative numbers
+    print(str(-42).zfill(6))  # -00042
+    ```
+
+    `zfill()` inserts zeros between the sign character and the digits, unlike `rjust()` which would pad before the sign.
+
+---
+
+**Exercise 3.**
+Recreate the same alignment from Exercise 1 using f-string format specifiers (`<`, `>`) instead of the alignment methods. Show both approaches produce identical output.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    data = [("Alice", 95), ("Bob", 87), ("Carol", 100)]
+
+    # Using alignment methods
+    for name, score in data:
+        print(name.ljust(15) + str(score).rjust(5))
+
+    print()
+
+    # Using f-string format specifiers
+    for name, score in data:
+        print(f"{name:<15}{score:>5}")
+    ```
+
+    Both approaches produce identical output. F-string format specifiers are more concise and commonly preferred for inline formatting.

@@ -380,3 +380,140 @@ def dump_threads():
 - Copy data before calling callbacks with locks held
 - Use timeouts to detect potential deadlocks
 - Test concurrent code thoroughly with different thread interleavings
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a program that deliberately creates a deadlock using two `threading.Lock` objects and two threads that acquire them in opposite order. Then fix the deadlock by enforcing a consistent lock-acquisition order. Print messages showing each lock acquisition so you can verify the fix works.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import threading
+        import time
+
+        lock_a = threading.Lock()
+        lock_b = threading.Lock()
+
+        def thread_1():
+            # Fixed: always acquire lock_a first, then lock_b
+            print("Thread 1: acquiring lock_a")
+            with lock_a:
+                print("Thread 1: got lock_a")
+                time.sleep(0.05)
+                print("Thread 1: acquiring lock_b")
+                with lock_b:
+                    print("Thread 1: got lock_b")
+
+        def thread_2():
+            # Fixed: same order as thread_1
+            print("Thread 2: acquiring lock_a")
+            with lock_a:
+                print("Thread 2: got lock_a")
+                time.sleep(0.05)
+                print("Thread 2: acquiring lock_b")
+                with lock_b:
+                    print("Thread 2: got lock_b")
+
+        t1 = threading.Thread(target=thread_1)
+        t2 = threading.Thread(target=thread_2)
+        t1.start()
+        t2.start()
+        t1.join()
+        t2.join()
+        print("No deadlock — both threads finished.")
+        ```
+
+---
+
+**Exercise 2.**
+Implement a `transfer(from_account, to_account, amount)` function for a simple `Account` class (with `id`, `balance`, and a `Lock`). The function must be deadlock-free even when two threads simultaneously call `transfer(A, B, 100)` and `transfer(B, A, 50)`. Use lock ordering by account ID. Verify correctness by running 1,000 transfers between two accounts from multiple threads and checking that the total balance is conserved.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import threading
+
+        class Account:
+            def __init__(self, account_id, balance):
+                self.id = account_id
+                self.balance = balance
+                self.lock = threading.Lock()
+
+        def transfer(src, dst, amount):
+            first, second = sorted([src, dst], key=lambda a: a.id)
+            with first.lock:
+                with second.lock:
+                    if src.balance >= amount:
+                        src.balance -= amount
+                        dst.balance += amount
+
+        a = Account(1, 10_000)
+        b = Account(2, 10_000)
+
+        def run_transfers(src, dst, n):
+            for _ in range(n):
+                transfer(src, dst, 1)
+
+        threads = []
+        for _ in range(5):
+            threads.append(threading.Thread(target=run_transfers, args=(a, b, 200)))
+            threads.append(threading.Thread(target=run_transfers, args=(b, a, 200)))
+
+        for t in threads:
+            t.start()
+        for t in threads:
+            t.join()
+
+        print(f"A: {a.balance}, B: {b.balance}, Total: {a.balance + b.balance}")
+        assert a.balance + b.balance == 20_000
+        ```
+
+---
+
+**Exercise 3.**
+Write a `try_acquire_all(*locks, timeout)` function that attempts to acquire an arbitrary number of locks within a given timeout. If any lock cannot be acquired in time, all previously acquired locks are released and the function returns `False`. Demonstrate it with three locks and two threads that request them in different orders.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import threading
+        import time
+
+        def try_acquire_all(*locks, timeout=1.0):
+            acquired = []
+            deadline = time.time() + timeout
+            for lock in locks:
+                remaining = deadline - time.time()
+                if remaining <= 0 or not lock.acquire(timeout=max(0, remaining)):
+                    for lk in acquired:
+                        lk.release()
+                    return False
+                acquired.append(lock)
+            return True
+
+        def release_all(*locks):
+            for lock in locks:
+                lock.release()
+
+        l1 = threading.Lock()
+        l2 = threading.Lock()
+        l3 = threading.Lock()
+
+        def worker(name, *locks):
+            if try_acquire_all(*locks, timeout=2.0):
+                try:
+                    print(f"{name}: acquired all locks")
+                    time.sleep(0.1)
+                finally:
+                    release_all(*locks)
+            else:
+                print(f"{name}: could not acquire all locks")
+
+        t1 = threading.Thread(target=worker, args=("T1", l1, l2, l3))
+        t2 = threading.Thread(target=worker, args=("T2", l3, l2, l1))
+        t1.start()
+        t2.start()
+        t1.join()
+        t2.join()
+        print("Done — no deadlock.")
+        ```

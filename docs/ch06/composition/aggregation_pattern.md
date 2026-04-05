@@ -43,3 +43,111 @@ Because `wheels` was created outside of `Car`, deleting the `Car` instance has n
 - Contained objects have independent lifetimes and can exist before and after the container.
 - Multiple containers can share the same aggregated objects, enabling flexible designs.
 - Aggregation produces loose coupling between the container and its parts, making each component easier to test and reuse independently.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a `Player` class with a `name` attribute and a `Team` class that accepts a list of `Player` objects in its constructor. Demonstrate aggregation: create players first, add them to a team, delete the team, and show the players still exist. Then add one player to two different teams to show objects can be shared.
+
+??? success "Solution to Exercise 1"
+
+        class Player:
+            def __init__(self, name):
+                self.name = name
+
+            def __repr__(self):
+                return f"Player('{self.name}')"
+
+        class Team:
+            def __init__(self, name, players):
+                self.name = name
+                self.players = players  # Aggregation: not owned
+
+        p1 = Player("Alice")
+        p2 = Player("Bob")
+        p3 = Player("Charlie")
+
+        team_a = Team("Alpha", [p1, p2])
+        team_b = Team("Beta", [p2, p3])  # p2 shared!
+
+        del team_a
+        print(p1)  # Player('Alice') — still exists
+        print(p2)  # Player('Bob') — still exists
+
+        # p2 is in team_b
+        print(team_b.players)  # [Player('Bob'), Player('Charlie')]
+
+---
+
+**Exercise 2.**
+Model a `Classroom` that aggregates `Student` objects. The `Classroom` should have an `add_student(student)` and `remove_student(name)` method. Create three students, add them to a classroom, remove one, and show the removed student still exists outside the classroom.
+
+??? success "Solution to Exercise 2"
+
+        class Student:
+            def __init__(self, name, grade):
+                self.name = name
+                self.grade = grade
+
+            def __repr__(self):
+                return f"Student('{self.name}')"
+
+        class Classroom:
+            def __init__(self):
+                self.students = []
+
+            def add_student(self, student):
+                self.students.append(student)
+
+            def remove_student(self, name):
+                self.students = [s for s in self.students if s.name != name]
+
+        s1 = Student("Alice", "A")
+        s2 = Student("Bob", "B")
+        s3 = Student("Charlie", "C")
+
+        room = Classroom()
+        room.add_student(s1)
+        room.add_student(s2)
+        room.add_student(s3)
+
+        room.remove_student("Bob")
+        print(room.students)  # [Student('Alice'), Student('Charlie')]
+        print(s2)             # Student('Bob') — still exists
+
+---
+
+**Exercise 3.**
+Design a `Playlist` class that aggregates `Song` objects. A `Song` has `title` and `artist`. The `Playlist` holds a list of songs passed in or added later. Create several songs, build two playlists that share some songs, delete one playlist, and verify the shared songs are still accessible from the other playlist.
+
+??? success "Solution to Exercise 3"
+
+        class Song:
+            def __init__(self, title, artist):
+                self.title = title
+                self.artist = artist
+
+            def __repr__(self):
+                return f"Song('{self.title}')"
+
+        class Playlist:
+            def __init__(self, name, songs=None):
+                self.name = name
+                self.songs = list(songs) if songs else []
+
+            def add(self, song):
+                self.songs.append(song)
+
+        s1 = Song("Song A", "Artist 1")
+        s2 = Song("Song B", "Artist 2")
+        s3 = Song("Song C", "Artist 3")
+
+        pl1 = Playlist("Morning", [s1, s2])
+        pl2 = Playlist("Evening", [s2, s3])  # s2 shared
+
+        del pl1
+        print(s1)  # Song('Song A') — still exists
+        print(s2)  # Song('Song B') — still exists
+        print(pl2.songs)  # [Song('Song B'), Song('Song C')]

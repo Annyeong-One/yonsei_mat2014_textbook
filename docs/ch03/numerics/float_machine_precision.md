@@ -427,3 +427,100 @@ print(f"sin stability: {test_stability(np.sin, 1.0):.1f}x")
 # Less stable near discontinuity
 print(f"tan stability (near π/2): {test_stability(np.tan, 1.57):.1f}x")
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Machine epsilon defines the limit of representable precision near 1.0. Predict the output:
+
+```python
+import sys
+eps = sys.float_info.epsilon
+
+print(1.0 + eps > 1.0)
+print(1.0 + eps / 2 > 1.0)
+print(1024.0 + eps > 1024.0)
+print(1024.0 + 1024 * eps > 1024.0)
+```
+
+Why does adding `eps` to `1024.0` fail to change the value, while adding `1024 * eps` succeeds? What is the general rule for the smallest distinguishable increment at a given magnitude?
+
+??? success "Solution to Exercise 1"
+    Output:
+
+    ```text
+    True
+    False
+    False
+    True
+    ```
+
+    Machine epsilon is the smallest value such that `1.0 + eps != 1.0`. But this guarantee only holds at magnitude 1.0. At magnitude `M`, the smallest distinguishable increment is `M * eps`. This is because floating-point numbers have a fixed number of mantissa bits (52 for double precision), so the spacing between consecutive representable numbers scales with the magnitude.
+
+    `1024.0 + eps` fails because `eps` (~2.2e-16) is smaller than the gap between consecutive floats near 1024 (~2.3e-13). The value `1024 * eps` correctly scales to the gap at that magnitude. The general rule: the precision near value `M` is approximately `M * eps`.
+
+---
+
+**Exercise 2.**
+Catastrophic cancellation destroys significant digits. Predict which computation is more accurate and explain why:
+
+```python
+import math
+
+x = 1e-15
+
+# Method A
+result_a = (1 + x) - 1
+
+# Method B
+result_b = x
+
+print(f"Method A: {result_a}")
+print(f"Method B: {result_b}")
+print(f"Relative error A: {abs(result_a - x) / x}")
+```
+
+Why does Method A lose precision? What general principle should you follow when computing differences of nearly equal numbers?
+
+??? success "Solution to Exercise 2"
+    Output:
+
+    ```text
+    Method A: 1.1102230246251565e-15
+    Method B: 1e-15
+    Relative error A: 0.11022302462515654
+    ```
+
+    Method A loses about 11% accuracy. The problem is **catastrophic cancellation**: `1 + x` rounds to a 16-digit float, losing the exact value of `x`. Then subtracting `1` removes the leading digits, leaving only the rounding error.
+
+    Method B is exact because no cancellation occurs. The general principle: avoid subtracting two nearly equal numbers. Reformulate expressions algebraically to avoid cancellation. For example, use `x / (sqrt(1 + x) + 1)` instead of `sqrt(1 + x) - 1` for small `x`.
+
+---
+
+**Exercise 3.**
+The `decimal` module provides arbitrary precision. Predict the output:
+
+```python
+from decimal import Decimal, getcontext
+
+print(0.1 + 0.2 == 0.3)
+print(Decimal('0.1') + Decimal('0.2') == Decimal('0.3'))
+print(Decimal(0.1) + Decimal(0.2) == Decimal(0.3))
+```
+
+Why does the third comparison using `Decimal(0.1)` still fail? What is the critical difference between `Decimal('0.1')` and `Decimal(0.1)`?
+
+??? success "Solution to Exercise 3"
+    Output:
+
+    ```text
+    False
+    True
+    False
+    ```
+
+    `Decimal('0.1')` constructs from the **string** `"0.1"`, giving the exact decimal value 0.1. `Decimal(0.1)` constructs from the **float** `0.1`, which is already the imprecise binary approximation `0.1000000000000000055511151231257827021181583404541015625`. The damage is done before `Decimal` ever sees it.
+
+    The critical rule: always construct `Decimal` from strings, never from floats. `Decimal('0.1')` preserves the intended value; `Decimal(0.1)` faithfully preserves the float's imprecision.

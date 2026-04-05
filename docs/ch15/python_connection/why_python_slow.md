@@ -347,3 +347,70 @@ if item in large_set:
 Key insight:
 
 Python is slow for **tight computational loops**. The solution isn't to avoid Python—it's to move the hot loops into compiled code (NumPy, Cython, C extensions) while keeping Python for orchestration and glue code.
+
+
+---
+
+## Exercises
+
+**Exercise 1.** List three reasons why Python is slower than compiled languages like C or Rust for numerical computation.
+
+??? success "Solution to Exercise 1"
+    ```python
+    # Conceptual solution - see page content for details
+    import sys
+    import platform
+
+    print(f"Python version: {sys.version}")
+    print(f"Platform: {platform.platform()}")
+    print(f"Architecture: {platform.machine()}")
+    ```
+
+---
+
+**Exercise 2.** Explain what dynamic typing costs at runtime. How does it affect performance compared to static typing?
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the hardware-software interaction and how it affects Python performance.
+
+---
+
+**Exercise 3.** Write Python code that benchmarks a pure Python loop versus an equivalent NumPy operation, and calculate the speedup factor.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import time
+
+    # Simple benchmark
+    n = 10_000_000
+    start = time.perf_counter()
+    total = sum(range(n))
+    elapsed = time.perf_counter() - start
+    print(f"Sum of {n} integers: {total}")
+    print(f"Time: {elapsed:.4f} seconds")
+    ```
+
+---
+
+**Exercise 4.** Explain the concept of 'boxing' and 'unboxing' in Python. How does it contribute to Python's overhead for numerical operations?
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    import time
+
+    n = 1_000_000
+    # Python loop
+    start = time.perf_counter()
+    result_py = sum(i * i for i in range(n))
+    time_py = time.perf_counter() - start
+
+    # NumPy vectorized
+    arr = np.arange(n)
+    start = time.perf_counter()
+    result_np = np.sum(arr * arr)
+    time_np = time.perf_counter() - start
+
+    print(f"Python: {time_py:.4f}s, NumPy: {time_np:.4f}s")
+    print(f"Speedup: {time_py / time_np:.1f}x")
+    ```

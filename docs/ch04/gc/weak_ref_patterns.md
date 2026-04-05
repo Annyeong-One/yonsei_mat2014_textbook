@@ -221,3 +221,141 @@ print(grandchild.path_to_root())  # ['root', 'child', 'grandchild']
 | Parent-Child | `weakref.ref()` | Break cycles in bidirectional relationships |
 
 **Key Principle**: Use strong references for ownership (parent → child), weak references for back-references or non-owning relationships (child → parent, cache → cached object, observable → observer).
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Implement an `EventBus` class that uses `weakref.WeakSet` to store subscribers. Write a test that subscribes 5 observer objects, deletes 3 of them, and then calls `notify()`. Print how many observers were actually notified and verify it equals 2.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import weakref
+        import gc
+
+        class EventBus:
+            def __init__(self):
+                self._subscribers = weakref.WeakSet()
+
+            def subscribe(self, obj):
+                self._subscribers.add(obj)
+
+            def notify(self):
+                count = 0
+                for sub in self._subscribers:
+                    sub.on_event()
+                    count += 1
+                return count
+
+        class Subscriber:
+            def __init__(self, name):
+                self.name = name
+            def on_event(self):
+                print(f"  {self.name} notified")
+
+        bus = EventBus()
+        subs = [Subscriber(f"S{i}") for i in range(5)]
+        for s in subs:
+            bus.subscribe(s)
+
+        # Delete 3 subscribers
+        del subs[0], subs[1], subs[2]
+        gc.collect()
+
+        notified = bus.notify()
+        print(f"Notified: {notified}")  # 2
+        ```
+
+---
+
+**Exercise 2.**
+Build an `ObjectCache` class backed by `weakref.WeakValueDictionary`. Write a test that inserts 10 objects, keeps strong references to only 3, and then triggers garbage collection. Print the cache length before and after to show automatic eviction.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import weakref
+        import gc
+
+        class ObjectCache:
+            def __init__(self):
+                self._cache = weakref.WeakValueDictionary()
+
+            def put(self, key, value):
+                self._cache[key] = value
+
+            def __len__(self):
+                return len(self._cache)
+
+        class Heavy:
+            def __init__(self, n):
+                self.data = list(range(n))
+
+        cache = ObjectCache()
+        strong_refs = []
+
+        for i in range(10):
+            obj = Heavy(100)
+            cache.put(f"key_{i}", obj)
+            if i < 3:
+                strong_refs.append(obj)
+
+        print(f"Before GC: {len(cache)} entries")  # 10
+        gc.collect()
+        print(f"After GC:  {len(cache)} entries")  # 3
+        ```
+
+---
+
+**Exercise 3.**
+Create a `TreeNode` class with a `children` list (strong references) and a `parent` property backed by `weakref.ref`. Build a tree of depth 4, then delete the root. Use `weakref.ref` callbacks to print a message when each node is collected, and verify that all nodes are freed.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import weakref
+        import gc
+
+        class TreeNode:
+            def __init__(self, value):
+                self.value = value
+                self.children = []
+                self._parent_ref = None
+
+            def add_child(self, child):
+                self.children.append(child)
+                child._parent_ref = weakref.ref(self)
+
+            @property
+            def parent(self):
+                if self._parent_ref is None:
+                    return None
+                return self._parent_ref()
+
+        collected = []
+
+        def on_collect(ref):
+            collected.append(ref)
+
+        # Build tree of depth 4
+        root = TreeNode("root")
+        refs = [weakref.ref(root, on_collect)]
+
+        current_level = [root]
+        for depth in range(1, 4):
+            next_level = []
+            for parent in current_level:
+                for i in range(2):
+                    child = TreeNode(f"d{depth}-{i}")
+                    parent.add_child(child)
+                    refs.append(weakref.ref(child, on_collect))
+                    next_level.append(child)
+            current_level = next_level
+
+        total_nodes = len(refs)
+        del root, current_level, next_level, child, parent
+        gc.collect()
+
+        print(f"Total nodes: {total_nodes}")
+        print(f"Collected:   {len(collected)}")
+        print(f"All freed:   {len(collected) == total_nodes}")
+        ```

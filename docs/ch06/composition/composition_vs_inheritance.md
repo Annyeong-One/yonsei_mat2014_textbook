@@ -621,3 +621,135 @@ logger = TimestampDecorator(Logger())
 | Testing | Harder | Easier |
 | Changes | Cascading | Isolated |
 | Use for | Type hierarchies | Building systems |
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Refactor the following inheritance-based design into a composition-based design. `FlyingFish` inherits from both `Fish` and `Bird`. Instead, create `SwimAbility` and `FlyAbility` classes, and have `FlyingFish` compose them. Show that the composed version is easier to extend (e.g., adding `RunAbility`).
+
+??? success "Solution to Exercise 1"
+
+        # Composition-based design
+        class SwimAbility:
+            def swim(self):
+                return "Swimming through water"
+
+        class FlyAbility:
+            def fly(self):
+                return "Flying through air"
+
+        class RunAbility:
+            def run(self):
+                return "Running on land"
+
+        class FlyingFish:
+            def __init__(self):
+                self._swim = SwimAbility()
+                self._fly = FlyAbility()
+
+            def swim(self):
+                return self._swim.swim()
+
+            def fly(self):
+                return self._fly.fly()
+
+        class SuperCreature:
+            def __init__(self):
+                self._swim = SwimAbility()
+                self._fly = FlyAbility()
+                self._run = RunAbility()
+
+            def swim(self):
+                return self._swim.swim()
+
+            def fly(self):
+                return self._fly.fly()
+
+            def run(self):
+                return self._run.run()
+
+        ff = FlyingFish()
+        print(ff.swim())  # Swimming through water
+        print(ff.fly())   # Flying through air
+
+        sc = SuperCreature()
+        print(sc.run())   # Running on land — easy to extend
+
+---
+
+**Exercise 2.**
+Compare an inheritance approach and a composition approach for modeling notifications. In the inheritance version, create `Notification`, `EmailNotification`, and `SMSNotification` classes. In the composition version, create a `Notification` class that accepts a `Sender` object (either `EmailSender` or `SMSSender`). Show how the composition version makes it easy to swap senders at runtime.
+
+??? success "Solution to Exercise 2"
+
+        # Composition version
+        class EmailSender:
+            def send(self, recipient, message):
+                return f"Email to {recipient}: {message}"
+
+        class SMSSender:
+            def send(self, recipient, message):
+                return f"SMS to {recipient}: {message}"
+
+        class Notification:
+            def __init__(self, sender):
+                self._sender = sender
+
+            def notify(self, recipient, message):
+                return self._sender.send(recipient, message)
+
+            def set_sender(self, sender):
+                self._sender = sender  # Swap at runtime!
+
+        notif = Notification(EmailSender())
+        print(notif.notify("alice@example.com", "Hello"))
+        # Email to alice@example.com: Hello
+
+        notif.set_sender(SMSSender())
+        print(notif.notify("555-1234", "Hello"))
+        # SMS to 555-1234: Hello
+
+---
+
+**Exercise 3.**
+Design a `Character` class for a game using composition instead of inheritance. Instead of subclasses like `Warrior` and `Mage`, create `AttackStrategy` and `DefenseStrategy` objects that can be swapped. A `Character` has a name, an attack strategy, and a defense strategy. Demonstrate creating different character types by composing different strategies.
+
+??? success "Solution to Exercise 3"
+
+        class SwordAttack:
+            def attack(self):
+                return "Swings sword for 20 damage"
+
+        class FireballAttack:
+            def attack(self):
+                return "Casts fireball for 35 damage"
+
+        class ShieldDefense:
+            def defend(self):
+                return "Blocks with shield, reducing damage by 15"
+
+        class MagicBarrier:
+            def defend(self):
+                return "Summons magic barrier, reducing damage by 25"
+
+        class Character:
+            def __init__(self, name, attack_strategy, defense_strategy):
+                self.name = name
+                self._attack = attack_strategy
+                self._defense = defense_strategy
+
+            def attack(self):
+                return f"{self.name}: {self._attack.attack()}"
+
+            def defend(self):
+                return f"{self.name}: {self._defense.defend()}"
+
+        warrior = Character("Warrior", SwordAttack(), ShieldDefense())
+        mage = Character("Mage", FireballAttack(), MagicBarrier())
+
+        print(warrior.attack())  # Warrior: Swings sword for 20 damage
+        print(warrior.defend())  # Warrior: Blocks with shield...
+        print(mage.attack())     # Mage: Casts fireball for 35 damage
+        print(mage.defend())     # Mage: Summons magic barrier...

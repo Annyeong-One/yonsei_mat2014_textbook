@@ -660,3 +660,112 @@ if __name__ == "__main__":
     print("\nMatrix after setting row 1:")
     print(matrix)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a `Phonebook` class that supports `__getitem__` (lookup by name), `__setitem__` (add/update entry), `__delitem__` (remove entry), `__contains__` (check if name exists), and `__len__` (number of entries). Demonstrate all five operations.
+
+??? success "Solution to Exercise 1"
+
+        class Phonebook:
+            def __init__(self):
+                self._entries = {}
+
+            def __getitem__(self, name):
+                return self._entries[name]
+
+            def __setitem__(self, name, number):
+                self._entries[name] = number
+
+            def __delitem__(self, name):
+                del self._entries[name]
+
+            def __contains__(self, name):
+                return name in self._entries
+
+            def __len__(self):
+                return len(self._entries)
+
+        pb = Phonebook()
+        pb["Alice"] = "555-0001"
+        pb["Bob"] = "555-0002"
+        print(pb["Alice"])       # 555-0001
+        print("Bob" in pb)       # True
+        print(len(pb))           # 2
+        del pb["Bob"]
+        print("Bob" in pb)       # False
+
+---
+
+**Exercise 2.**
+Write a `CircularBuffer` class with a fixed capacity. Implement `__setitem__` (wraps index), `__getitem__` (wraps index), `__len__` (returns current size, not capacity), and `__iter__` (iterates through items in order). Show that accessing index beyond capacity wraps around.
+
+??? success "Solution to Exercise 2"
+
+        class CircularBuffer:
+            def __init__(self, capacity):
+                self.capacity = capacity
+                self._data = [None] * capacity
+                self._size = 0
+
+            def __setitem__(self, index, value):
+                self._data[index % self.capacity] = value
+                if index >= self._size:
+                    self._size = min(index + 1, self.capacity)
+
+            def __getitem__(self, index):
+                return self._data[index % self.capacity]
+
+            def __len__(self):
+                return self._size
+
+            def __iter__(self):
+                return iter(self._data[:self._size])
+
+        buf = CircularBuffer(3)
+        buf[0] = "a"
+        buf[1] = "b"
+        buf[2] = "c"
+        print(buf[3])  # "a" — wraps around (3 % 3 = 0)
+        print(len(buf))  # 3
+        print(list(buf))  # ['a', 'b', 'c']
+
+---
+
+**Exercise 3.**
+Build a `DataFrame` class that stores data as a list of dictionaries (rows). Implement `__getitem__` that supports both integer indexing (returns a row) and string indexing (returns a column as a list). Implement `__len__` (number of rows) and `__contains__` (checks if column name exists). Demonstrate both access patterns.
+
+??? success "Solution to Exercise 3"
+
+        class DataFrame:
+            def __init__(self, data):
+                self._data = data  # list of dicts
+
+            def __getitem__(self, key):
+                if isinstance(key, int):
+                    return self._data[key]  # Row access
+                elif isinstance(key, str):
+                    return [row.get(key) for row in self._data]  # Column access
+                raise TypeError(f"Invalid key type: {type(key)}")
+
+            def __len__(self):
+                return len(self._data)
+
+            def __contains__(self, column_name):
+                if not self._data:
+                    return False
+                return column_name in self._data[0]
+
+        df = DataFrame([
+            {"name": "Alice", "age": 30},
+            {"name": "Bob", "age": 25},
+            {"name": "Charlie", "age": 35},
+        ])
+
+        print(df[0])          # {'name': 'Alice', 'age': 30}
+        print(df["name"])     # ['Alice', 'Bob', 'Charlie']
+        print(len(df))        # 3
+        print("age" in df)    # True

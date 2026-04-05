@@ -355,3 +355,58 @@ f = lambda x=list(data): x
 5. This applies to `def`, `lambda`, and comprehensions
 
 **Golden Rule**: When creating closures in a loop, always **capture the value** at definition time.
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Without running the code, predict the output. Then verify.
+
+```python
+funcs = [lambda x: x + i for i in range(3)]
+print([f(10) for f in funcs])
+```
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        funcs = [lambda x: x + i for i in range(3)]
+        print([f(10) for f in funcs])  # [12, 12, 12]
+        ```
+
+    All lambdas share the same `i` variable. By the time they are called, the loop has finished and `i` is `2`, so each returns `10 + 2 = 12`.
+
+---
+
+**Exercise 2.**
+Rewrite the list comprehension from Exercise 1 so that each lambda correctly captures its own value of `i`, producing `[10, 11, 12]`.
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        funcs = [lambda x, i=i: x + i for i in range(3)]
+        print([f(10) for f in funcs])  # [10, 11, 12]
+        ```
+
+    The default argument `i=i` captures the current value of `i` at each iteration.
+
+---
+
+**Exercise 3.**
+Explain why using `functools.partial` can also solve the late-binding problem. Rewrite the list comprehension from Exercise 1 using `functools.partial`.
+
+??? success "Solution to Exercise 3"
+
+        ```python
+        from functools import partial
+
+        def add(x, i):
+            return x + i
+
+        funcs = [partial(add, i=i) for i in range(3)]
+        print([f(10) for f in funcs])  # [10, 11, 12]
+        ```
+
+    `functools.partial` creates a new function with `i` bound to a specific value. Unlike closures, `partial` stores the value directly rather than referencing a variable, so late binding is not an issue.

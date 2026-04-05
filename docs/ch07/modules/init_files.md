@@ -238,3 +238,66 @@ This allows `from sklearn import clone` while hiding internal structure.
 | Initialization | Run package-level setup code |
 | Lazy Loading | Defer expensive imports |
 | Compatibility | Hide refactoring from users |
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write an `__init__.py` file for a package called `mathtools` that imports `add` and `multiply` from a submodule `mathtools.operations`, and defines `__all__ = ["add", "multiply"]`. Explain what happens when a user runs `from mathtools import *`.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    # mathtools/__init__.py
+    from mathtools.operations import add, multiply
+
+    __all__ = ["add", "multiply"]
+
+    # When a user runs: from mathtools import *
+    # Only 'add' and 'multiply' are imported into their namespace.
+    # Any other names in __init__.py are excluded from wildcard import.
+    ```
+
+---
+
+**Exercise 2.**
+Write an `__init__.py` that implements lazy loading: define a `__getattr__` function at the module level that only imports the `heavy_module` submodule when `heavy_module` is first accessed. Print a message when the import actually occurs.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    # mypackage/__init__.py
+
+    def __getattr__(name):
+        if name == "heavy_module":
+            print("Lazy loading heavy_module...")
+            from mypackage import heavy_module
+            globals()["heavy_module"] = heavy_module
+            return heavy_module
+        raise AttributeError(f"module 'mypackage' has no attribute {name!r}")
+
+    # Usage:
+    # import mypackage
+    # mypackage.heavy_module  # Prints "Lazy loading..." on first access
+    ```
+
+---
+
+**Exercise 3.**
+Given a package structure with `mypackage/__init__.py`, `mypackage/core.py`, and `mypackage/utils.py`, write the `__init__.py` so that `from mypackage import process, helper` works, where `process` is in `core.py` and `helper` is in `utils.py`. Also define `__version__ = "1.0.0"` in `__init__.py`.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    # mypackage/__init__.py
+    from mypackage.core import process
+    from mypackage.utils import helper
+
+    __version__ = "1.0.0"
+    __all__ = ["process", "helper"]
+
+    # Now users can do:
+    # from mypackage import process, helper
+    # print(mypackage.__version__)
+    ```

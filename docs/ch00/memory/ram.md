@@ -446,6 +446,70 @@ Python lists store pointers to separate objects, while NumPy arrays store raw va
 
 ---
 
+**Exercise 9.**
+RAM is volatile (data disappears when power is lost), while SSDs and HDDs are non-volatile. Yet we always load programs from storage into RAM before executing them. Explain *why* the CPU cannot simply execute programs directly from an SSD. What fundamental property of RAM (random access latency, addressability, and speed) makes it essential as working memory, even though it loses data on power loss?
+
+??? success "Solution to Exercise 9"
+    The CPU cannot execute programs directly from an SSD for several reasons:
+
+    1. **Latency**: Even the fastest NVMe SSDs have access latencies of ~10--100 microseconds, while RAM access takes ~50--100 nanoseconds -- roughly 100--1000x faster. The CPU needs to fetch instructions every few nanoseconds; waiting for an SSD on every instruction fetch would make execution thousands of times slower.
+
+    2. **Byte-addressability**: RAM is byte-addressable -- the CPU can read or write any individual byte. SSDs operate in blocks (typically 4 KB pages); reading a single byte requires reading an entire page. The CPU's instruction fetch and data access patterns require fine-grained random access.
+
+    3. **Read/write symmetry**: RAM allows equally fast reads and writes to any address. SSDs have asymmetric performance (writes are slower than reads) and limited write endurance. Program execution involves constant writes (stack frames, variable updates, etc.) that would quickly wear out flash memory.
+
+    RAM serves as the essential intermediary because it provides the speed, granularity, and read/write symmetry that CPU execution demands, while storage provides the persistence and capacity for long-term data retention.
+
+---
+
+**Exercise 10.**
+A programmer has a Python program that creates a list of 100 million `float` values. Each Python `float` object uses about 24 bytes, and each list pointer uses 8 bytes, for a total of roughly 3.2 GB. Their machine has 4 GB of RAM. Explain what happens as this list is being built: at what point does the program's behavior change, and what mechanism does the operating system use to keep the program running? What would be the performance consequence, and how would switching to a NumPy `float64` array change the situation?
+
+??? success "Solution to Exercise 10"
+    As the list is built, Python allocates memory for each `float` object and the list's internal pointer array. Initially, the OS provides physical RAM pages for each virtual memory allocation. Around 3--3.5 GB of consumption (depending on OS overhead), physical RAM is exhausted.
+
+    At this point, the OS's **virtual memory system** intervenes: it begins **swapping** -- moving least-recently-used pages from RAM to the swap space on disk. The program continues running, but now some memory accesses trigger **page faults**: the CPU tries to access data that has been swapped to disk, and the OS must load it back into RAM (evicting something else). This causes a dramatic slowdown -- disk access is ~100,000x slower than RAM access.
+
+    If the access pattern is sequential, swapping may be tolerable. But building and later iterating over a large list involves scattered object allocations, causing frequent page faults (**thrashing**).
+
+    Switching to `np.zeros(100_000_000, dtype=np.float64)` would use only $100{,}000{,}000 \times 8 = 800$ MB -- a single contiguous block, well within 4 GB. No swapping occurs, and the contiguous layout ensures efficient sequential access.
+
+---
+
+**Exercise 11.**
+DRAM must be refreshed thousands of times per second because capacitors leak charge. This refresh process temporarily blocks normal memory access. Explain why this design trade-off (using capacitors that leak) was chosen over a more stable storage technology like SRAM (which uses flip-flops and does not need refresh). Consider cost, density, and the role of RAM in the memory hierarchy.
+
+??? success "Solution to Exercise 11"
+    DRAM uses one capacitor and one transistor per bit, while SRAM uses six transistors per bit. This makes DRAM roughly **6x denser** and significantly cheaper per bit.
+
+    The trade-off is deliberate given RAM's role in the memory hierarchy:
+
+    - **Capacity is critical**: RAM must be large enough to hold active programs and data (typically 8--64 GB in modern systems). At SRAM's density and cost, this much memory would be prohibitively expensive.
+    - **SRAM is used where speed matters most**: L1 and L2 caches ARE SRAM -- small (KB to MB) but extremely fast and needing no refresh.
+    - **Refresh overhead is tolerable**: Refresh consumes only ~1--5% of total memory bandwidth, a small price for the 6x density advantage.
+
+    The hierarchy exploits this: SRAM for the small-but-fast cache levels, DRAM for the large-but-slower main memory level. Each technology is used where its trade-offs are optimal.
+
+---
+
+**Exercise 12.**
+Modern systems use multiple memory channels (dual-channel, quad-channel) to increase memory bandwidth. Explain why simply making a single channel wider (e.g., doubling the bus width) is not equivalent to having two independent channels. What types of memory access patterns benefit most from multiple channels, and why?
+
+??? success "Solution to Exercise 12"
+    A wider single channel increases the data transferred per transaction but is still limited to **one address at a time**. After each data transfer, the channel must receive a new address, perform a row activation (if needed), and then transfer data. The channel's command/address bus becomes the bottleneck.
+
+    Two independent channels can **service two different memory addresses simultaneously**. While channel A is performing a row activation, channel B can be transferring data. This concurrency is the key advantage -- it is parallelism, not just wider bandwidth.
+
+    Access patterns that benefit most from multiple channels:
+
+    - **Multiple independent streams**: Two threads accessing different memory regions can be served in parallel by different channels.
+    - **Interleaved access**: Memory controllers typically interleave addresses across channels, so sequential access to a large array automatically distributes requests across channels.
+    - **Mixed read/write patterns**: One channel can handle reads while another handles writes.
+
+    A single sequential stream benefits less, because consecutive addresses may map to the same channel, causing the other channel to idle. The benefit is maximized when memory requests target diverse addresses.
+
+---
+
 ## 15. Short Answers
 
 1. Active programs and data
@@ -456,8 +520,6 @@ Python lists store pointers to separate objects, while NumPy arrays store raw va
 6. Row hit uses open row; row miss opens a new row
 7. Double Data Rate
 8. NumPy stores contiguous raw values
-
----
 
 ## 16. Summary
 

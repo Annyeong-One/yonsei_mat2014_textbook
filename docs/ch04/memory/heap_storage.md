@@ -175,6 +175,7 @@ def function():
 
 ---
 
+
 ## Runnable Example: `mutable_types.py`
 
 ```python
@@ -692,3 +693,96 @@ if __name__ == "__main__":
     See exercises_02_intermediate.py for complete practice problems!
     """)
 ```
+
+
+## Exercises
+
+**Exercise 1.**
+Write a script that creates 10 different types of Python objects (int, float, str, list, dict, set, tuple, bool, bytes, bytearray) and prints `sys.getsizeof()` for each. Sort and display them from smallest to largest, demonstrating the per-object overhead on the heap.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import sys
+
+        objects = [
+            ("int", 42),
+            ("float", 3.14),
+            ("str", "hello"),
+            ("list", [1, 2, 3]),
+            ("dict", {"a": 1}),
+            ("set", {1, 2, 3}),
+            ("tuple", (1, 2, 3)),
+            ("bool", True),
+            ("bytes", b"hello"),
+            ("bytearray", bytearray(b"hello")),
+        ]
+
+        sizes = [(name, sys.getsizeof(obj)) for name, obj in objects]
+        sizes.sort(key=lambda x: x[1])
+
+        print(f"{'Type':<12} {'Size (bytes)':>12}")
+        print("-" * 26)
+        for name, size in sizes:
+            print(f"{name:<12} {size:>12}")
+        ```
+
+---
+
+**Exercise 2.**
+Demonstrate memory pool reuse for small objects by creating and deleting 1,000 small lists (each containing a single integer), then creating 1,000 more. Use `id()` to show that some of the new objects reuse the same memory addresses as the deleted ones. Print the number of reused addresses.
+
+??? success "Solution to Exercise 2"
+        ```python
+        # Phase 1: create and record IDs, then delete
+        old_ids = set()
+        temp = []
+        for i in range(1_000):
+            obj = [i]
+            old_ids.add(id(obj))
+            temp.append(obj)
+        del temp  # Free all
+
+        # Phase 2: create new objects and check for reused addresses
+        reused = 0
+        for i in range(1_000):
+            obj = [i]
+            if id(obj) in old_ids:
+                reused += 1
+
+        print(f"Reused addresses: {reused} out of 1,000")
+        ```
+
+---
+
+**Exercise 3.**
+Compare heap fragmentation effects: (a) create a list of 10,000 small lists, delete every other one, then measure total tracked memory with `tracemalloc`; (b) repeat but delete all at once instead. Print peak and current memory for both scenarios and explain the difference.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import tracemalloc
+        import gc
+
+        # Scenario (a): delete every other one
+        tracemalloc.start()
+        items = [[i] for i in range(10_000)]
+        for i in range(0, 10_000, 2):
+            items[i] = None
+        gc.collect()
+        curr_a, peak_a = tracemalloc.get_traced_memory()
+        tracemalloc.stop()
+
+        # Scenario (b): delete all at once
+        tracemalloc.start()
+        items = [[i] for i in range(10_000)]
+        items.clear()
+        gc.collect()
+        curr_b, peak_b = tracemalloc.get_traced_memory()
+        tracemalloc.stop()
+
+        print(f"Alternating delete - Current: {curr_a/1024:.1f} KB, "
+              f"Peak: {peak_a/1024:.1f} KB")
+        print(f"Bulk delete        - Current: {curr_b/1024:.1f} KB, "
+              f"Peak: {peak_b/1024:.1f} KB")
+        ```
+
+---

@@ -558,3 +558,79 @@ if __name__ == "__main__":
     🔜 NEXT: Intermediate tutorials on broadcasting!
     """)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.** Create two NumPy arrays `a = [10, 20, 30]` and `b = [3, 5, 7]`. Compute element-wise addition, subtraction, multiplication, division, and integer division. Print all results.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+
+    a = np.array([10, 20, 30])
+    b = np.array([3, 5, 7])
+
+    print("Add:", a + b)       # [13 25 37]
+    print("Sub:", a - b)       # [ 7 15 23]
+    print("Mul:", a * b)       # [ 30 100 210]
+    print("Div:", a / b)       # [3.333 4.0 4.286]
+    print("IntDiv:", a // b)   # [3 4 4]
+    ```
+
+---
+
+**Exercise 2.** Predict the output:
+
+```python
+import numpy as np
+a = np.array([1, 2, 3])
+b = np.array([10])
+print(a + b)
+print(a * b)
+```
+
+??? success "Solution to Exercise 2"
+    ```
+    [11 12 13]
+    [10 20 30]
+    ```
+
+    Broadcasting: the scalar array `[10]` is broadcast to match the shape of `a`.
+
+---
+
+**Exercise 3.** Create a 3x3 matrix of ones and add a 1D array `[1, 2, 3]` to each row using broadcasting. Explain why this works.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+
+    matrix = np.ones((3, 3))
+    row = np.array([1, 2, 3])
+    result = matrix + row
+    print(result)
+    # [[2. 3. 4.]
+    #  [2. 3. 4.]
+    #  [2. 3. 4.]]
+    ```
+
+    Broadcasting adds the 1D array to each row of the 2D matrix because their trailing dimensions match.
+
+---
+
+**Exercise 4.** Write a function `normalize(arr)` that subtracts the mean and divides by the standard deviation using only NumPy arithmetic operations. Test it and verify the result has mean approximately 0 and std approximately 1.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+
+    def normalize(arr):
+        return (arr - np.mean(arr)) / np.std(arr)
+
+    data = np.array([10.0, 20.0, 30.0, 40.0, 50.0])
+    result = normalize(data)
+    print(f"Mean: {np.mean(result):.10f}")  # ~0
+    print(f"Std:  {np.std(result):.10f}")   # ~1
+    ```

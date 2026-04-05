@@ -42,3 +42,65 @@ print(flattened)
 [1, 2, 3, 4, 5, 6]
 [0, 10, 1, 11, 2, 12]
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a function `flatten_one_level` that takes a list of lists and returns a single flat list using `chain.from_iterable`. For example, `flatten_one_level([[1, 2], [3], [4, 5, 6]])` should return `[1, 2, 3, 4, 5, 6]`.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    from itertools import chain
+
+    def flatten_one_level(nested):
+        return list(chain.from_iterable(nested))
+
+    # Test
+    print(flatten_one_level([[1, 2], [3], [4, 5, 6]]))
+    # [1, 2, 3, 4, 5, 6]
+    ```
+
+---
+
+**Exercise 2.**
+Write a function `merge_sorted_iterators` that takes multiple sorted lists and returns a single sorted list by chaining them together and then sorting. For example, `merge_sorted_iterators([1, 4, 7], [2, 5, 8], [3, 6, 9])` should return `[1, 2, 3, 4, 5, 6, 7, 8, 9]`.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    from itertools import chain
+
+    def merge_sorted_iterators(*iterables):
+        return sorted(chain(*iterables))
+
+    # Test
+    print(merge_sorted_iterators([1, 4, 7], [2, 5, 8], [3, 6, 9]))
+    # [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    ```
+
+---
+
+**Exercise 3.**
+Write a function `unique_items` that takes multiple iterables and returns a list of unique items (preserving first-seen order) using `chain`. For example, `unique_items([1, 2, 3], [2, 3, 4], [4, 5])` should return `[1, 2, 3, 4, 5]`.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    from itertools import chain
+
+    def unique_items(*iterables):
+        seen = set()
+        result = []
+        for item in chain(*iterables):
+            if item not in seen:
+                seen.add(item)
+                result.append(item)
+        return result
+
+    # Test
+    print(unique_items([1, 2, 3], [2, 3, 4], [4, 5]))
+    # [1, 2, 3, 4, 5]
+    ```

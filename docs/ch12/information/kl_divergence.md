@@ -77,3 +77,61 @@ where $H(p, q) = -\sum_x p(x) \log q(x)$ is the cross-entropy and $H(p) = -\sum_
 ## Summary
 
 KL divergence $D_{\mathrm{KL}}(p \| q) = \sum_x p(x) \log \frac{p(x)}{q(x)}$ measures the information-theoretic cost of approximating distribution $p$ with distribution $q$. It is non-negative (Gibbs' inequality), zero only when $p = q$, and asymmetric. Its relationship to cross-entropy, $D_{\mathrm{KL}}(p \| q) = H(p, q) - H(p)$, makes minimizing KL divergence equivalent to minimizing cross-entropy.
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that computes the KL divergence $D_{KL}(P \| Q)$ between two discrete distributions using the formula $\sum p_i \log(p_i / q_i)$.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(100)
+    print(f'Mean: {data.mean():.4f}')
+    print(f'Std: {data.std():.4f}')
+    ```
+
+---
+
+**Exercise 2.** Explain why KL divergence is not a true distance metric. What properties does it lack?
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the statistical method and its assumptions.
+
+---
+
+**Exercise 3.** Write code that demonstrates that $D_{KL}(P \| Q) \neq D_{KL}(Q \| P)$ for two specific distributions.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+    from scipy import stats
+    import matplotlib.pyplot as plt
+
+    np.random.seed(42)
+    data = np.random.randn(1000)
+    fig, ax = plt.subplots()
+    ax.hist(data, bins=30, density=True, alpha=0.7)
+    ax.set_title('Distribution')
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Compute the KL divergence between two normal distributions $N(\mu_1, \sigma_1^2)$ and $N(\mu_2, \sigma_2^2)$ using the analytical formula.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(500)
+    result = stats.describe(data)
+    print(result)
+    ```

@@ -445,3 +445,72 @@ if __name__ == "__main__":
     print("- Spectral methods bridge linear algebra and graph structure")
     print("=" * 70)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a $2000 \times 2000$ sparse symmetric tridiagonal matrix with 2 on the diagonal and -1 on the sub/super-diagonals. Use `eigsh` to find the 5 largest and 5 smallest eigenvalues. Print them and verify the smallest eigenvalue is positive (the matrix is positive definite).
+
+??? success "Solution to Exercise 1"
+        import numpy as np
+        from scipy import sparse
+        from scipy.sparse import linalg as splinalg
+
+        n = 2000
+        A = sparse.diags([-1, 2, -1], [-1, 0, 1], shape=(n, n), format='csr')
+
+        vals_large, _ = splinalg.eigsh(A, k=5, which='LA')
+        vals_small, _ = splinalg.eigsh(A, k=5, which='SA')
+
+        print("5 largest eigenvalues:", np.sort(vals_large)[::-1])
+        print("5 smallest eigenvalues:", np.sort(vals_small))
+        print(f"Smallest eigenvalue positive: {np.min(vals_small) > 0}")
+
+---
+
+**Exercise 2.**
+Build a sparse adjacency matrix for a ring graph with 500 nodes (each node connected to its two neighbors). Construct the graph Laplacian and use `eigsh` to compute the 4 smallest eigenvalues. Verify that the smallest eigenvalue is approximately 0 (the graph is connected) and compare the second smallest with the analytical value $2(1 - \cos(2\pi/500))$.
+
+??? success "Solution to Exercise 2"
+        import numpy as np
+        from scipy import sparse
+        from scipy.sparse import linalg as splinalg
+
+        n = 500
+        row = list(range(n)) + list(range(n))
+        col = [(i + 1) % n for i in range(n)] + [(i - 1) % n for i in range(n)]
+        data = np.ones(2 * n)
+        A = sparse.csr_matrix((data, (row, col)), shape=(n, n))
+
+        D = sparse.diags(np.array(A.sum(axis=1)).flatten())
+        L = D - A
+
+        vals, _ = splinalg.eigsh(L.astype(float), k=4, which='SM')
+        vals = np.sort(vals)
+        print(f"4 smallest eigenvalues: {vals}")
+        print(f"Smallest ~ 0: {np.isclose(vals[0], 0, atol=1e-10)}")
+
+        analytical_2nd = 2 * (1 - np.cos(2 * np.pi / n))
+        print(f"2nd smallest: {vals[1]:.8f}")
+        print(f"Analytical:   {analytical_2nd:.8f}")
+
+---
+
+**Exercise 3.**
+Generate a $1000 \times 1000$ sparse random matrix with density 0.01 using `sparse.random` and `np.random.seed(7)`. Make it symmetric by computing $(A + A^T)/2$, then add $2I$ to ensure positive definiteness. Use `eigs` (not `eigsh`) with `which='LM'` to find the 3 eigenvalues of largest magnitude. Print their values and magnitudes.
+
+??? success "Solution to Exercise 3"
+        import numpy as np
+        from scipy import sparse
+        from scipy.sparse import linalg as splinalg
+
+        np.random.seed(7)
+        A = sparse.random(1000, 1000, density=0.01, format='csr')
+        A = (A + A.T) / 2
+        A = A + 2 * sparse.eye(1000)
+
+        vals, vecs = splinalg.eigs(A, k=3, which='LM')
+        for v in vals:
+            print(f"Eigenvalue: {v:.6f}, magnitude: {abs(v):.6f}")

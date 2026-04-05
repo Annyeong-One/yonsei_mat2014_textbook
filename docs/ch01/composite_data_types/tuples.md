@@ -245,6 +245,7 @@ Output:
 
 ---
 
+
 ## 8. Summary
 
 Key ideas:
@@ -256,3 +257,70 @@ Key ideas:
 - mutable objects inside a tuple can still be changed
 
 Tuples provide a compact and reliable way to represent stable structured data. For a mutable sequence, see [Lists](lists.md).
+
+
+## Exercises
+
+**Exercise 1.**
+A tuple is immutable, yet the following code modifies a tuple's "contents":
+
+```python
+t = (1, [2, 3], 4)
+t[1].append(5)
+print(t)
+```
+
+Predict the output. Does this violate tuple immutability? Explain exactly what "immutable" means for a tuple -- what can and cannot change. What would happen if you tried `t[1] = [2, 3, 5]` instead?
+
+??? success "Solution to Exercise 1"
+    Output:
+
+    ```text
+    (1, [2, 3, 5], 4)
+    ```
+
+    This does NOT violate tuple immutability. A tuple's immutability means that the **references** stored in the tuple cannot be changed -- you cannot make `t[0]` point to a different object. But the tuple stores a reference to a list object at `t[1]`, and that list object itself is mutable. Modifying the list via `t[1].append(5)` changes the list object's contents, not the tuple's reference to it.
+
+    `t[1] = [2, 3, 5]` would fail with `TypeError: 'tuple' object does not support item assignment`, because that tries to change which object `t[1]` refers to -- which IS a modification of the tuple's structure.
+
+    The key insight: immutability of a container means the container's structure (which references it holds) is fixed, but the objects those references point to may themselves be mutable.
+
+---
+
+**Exercise 2.**
+Tuples can be dictionary keys but lists cannot. Explain why immutability is the key property that enables this. Then consider: can a tuple containing a list be used as a dictionary key? Predict what happens and explain why.
+
+??? success "Solution to Exercise 2"
+    Dictionary keys must be hashable, which requires that the hash value never changes. Immutable objects can guarantee this because their state never changes, so their hash remains constant.
+
+    A tuple containing a list **cannot** be used as a dictionary key:
+
+    ```python
+    d = {}
+    d[(1, [2, 3])] = "value"  # TypeError: unhashable type: 'list'
+    ```
+
+    Even though the tuple itself is immutable, it contains a mutable element (a list), which is unhashable. The tuple's hash would depend on the list's contents, which could change. Python detects this and refuses to compute a hash, raising `TypeError`.
+
+    Only tuples whose **every element** is also hashable can be used as dictionary keys. A tuple of ints, strings, and other tuples is fine. A tuple containing any mutable element is not.
+
+---
+
+**Exercise 3.**
+Explain the difference between these two lines:
+
+```python
+a = (42)
+b = (42,)
+```
+
+What are the types of `a` and `b`? Why does the comma matter? How would you create a tuple containing a single element?
+
+??? success "Solution to Exercise 3"
+    `a = (42)` -- the parentheses are just grouping (like in math). This is the integer `42`. `type(a)` is `int`.
+
+    `b = (42,)` -- the trailing comma makes this a one-element tuple. `type(b)` is `tuple`.
+
+    The comma is what creates a tuple, not the parentheses. In fact, `b = 42,` (without parentheses) also creates a tuple. The parentheses are optional in most contexts -- they are just used for clarity and for empty tuples (`()`).
+
+    To create a single-element tuple, you must include the trailing comma: `(42,)` or simply `42,`. This syntax exists because Python needed a way to distinguish between "parenthesized expression" and "one-element tuple," and the comma is the disambiguator.

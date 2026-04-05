@@ -317,3 +317,72 @@ p_fit = Polynomial.fit(x, y, deg=2)
 - Check fit quality with R² or residuals
 - For numerical stability, consider `np.polynomial` module
 - Use `deriv()` and `integ()` for calculus operations
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Fit a quadratic polynomial to the projectile data `t = [0, 0.5, 1.0, 1.5, 2.0]` and `h = [0, 11.4, 15.2, 11.5, 0.1]`. Use the fitted `poly1d` to find the time at which the maximum height occurs and the value of that maximum height.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        t = np.array([0, 0.5, 1.0, 1.5, 2.0])
+        h = np.array([0, 11.4, 15.2, 11.5, 0.1])
+
+        coeffs = np.polyfit(t, h, 2)
+        trajectory = np.poly1d(coeffs)
+
+        # Maximum at vertex: t = -b / (2a)
+        a, b, c = coeffs
+        t_max = -b / (2 * a)
+        h_max = trajectory(t_max)
+        print(f"Polynomial: {a:.2f}t^2 + {b:.2f}t + {c:.2f}")
+        print(f"Max height: {h_max:.2f} at t = {t_max:.2f}")
+
+---
+
+**Exercise 2.**
+Generate 100 points from `y = sin(x)` on `[0, 2*pi]` with Gaussian noise (`sigma=0.1`). Fit polynomials of degrees 3, 5, 7, and 9. Compute the R-squared value for each and print which degree gives the best fit without overfitting (hint: the R-squared should plateau).
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        np.random.seed(42)
+        x = np.linspace(0, 2*np.pi, 100)
+        y = np.sin(x) + 0.1 * np.random.randn(100)
+
+        def r_squared(y_true, y_pred):
+            ss_res = np.sum((y_true - y_pred)**2)
+            ss_tot = np.sum((y_true - y_true.mean())**2)
+            return 1 - ss_res / ss_tot
+
+        for deg in [3, 5, 7, 9]:
+            p = np.poly1d(np.polyfit(x, y, deg))
+            r2 = r_squared(y, p(x))
+            print(f"Degree {deg}: R^2 = {r2:.6f}")
+
+---
+
+**Exercise 3.**
+Create a time series with a quadratic trend: `signal = 0.01*t**2 + 0.5*t + 10 + noise` for `t = np.arange(200)`. Use `np.polyfit` and `np.poly1d` to fit and remove the quadratic trend. Verify that the detrended signal has approximately zero mean and no visible trend.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        np.random.seed(42)
+        t = np.arange(200, dtype=float)
+        noise = np.random.randn(200) * 2
+        signal = 0.01*t**2 + 0.5*t + 10 + noise
+
+        # Fit and remove quadratic trend
+        trend_coeffs = np.polyfit(t, signal, 2)
+        trend = np.poly1d(trend_coeffs)
+        detrended = signal - trend(t)
+
+        print(f"Detrended mean: {detrended.mean():.4f}")
+        print(f"Detrended std:  {detrended.std():.4f}")

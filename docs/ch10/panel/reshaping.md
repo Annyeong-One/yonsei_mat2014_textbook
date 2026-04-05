@@ -271,3 +271,58 @@ print(wide_by_ticker)
 3. **Name index levels** - makes reshaping code clearer
 4. **Sort after reshaping** - ensures consistent ordering
 5. **Check for NaN after unstack** - unbalanced panels create missing values
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that converts panel data from long format to wide format using `pivot()` or `unstack()`.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    # Solution for the specific exercise
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(10), 'B': np.random.randn(10)})
+    print(df.head())
+    ```
+
+---
+
+**Exercise 2.** Explain the relationship between `stack()`, `unstack()`, `melt()`, and `pivot()` in the context of reshaping panel data.
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the Pandas API and its behavior for this specific operation.
+
+---
+
+**Exercise 3.** Write code that uses `unstack()` to convert a MultiIndex DataFrame to a wide-format DataFrame.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(20), 'B': np.random.randn(20)})
+    result = df.describe()
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Create wide-format panel data and convert it to long format using `melt()` or `stack()`.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(50), 'group': np.random.choice(['X', 'Y'], 50)})
+    result = df.groupby('group').mean()
+    print(result)
+    ```

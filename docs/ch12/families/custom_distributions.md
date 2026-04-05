@@ -171,3 +171,59 @@ if __name__ == "__main__":
     # Detailed solutions continue...
     print("="*80)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a custom continuous distribution whose PDF is $f(x) = 3x^2$ on $[0, 1]$ by subclassing `rv_continuous`. Verify that the CDF at $x = 1$ equals 1 and generate 1000 samples.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        from scipy import stats
+
+        class CubicDist(stats.rv_continuous):
+            def _pdf(self, x):
+                return 3 * x**2
+
+        rv = CubicDist(a=0, b=1, name='cubic')
+        print(f"CDF at x=1: {rv.cdf(1):.4f}")
+        samples = rv.rvs(size=1000, random_state=42)
+        print(f"Sample mean: {np.mean(samples):.4f} (expected 0.75)")
+
+---
+
+**Exercise 2.**
+Subclass `rv_continuous` to implement a triangular distribution on $[0, 2]$ with peak at $x = 1$: $f(x) = x$ for $0 \le x \le 1$ and $f(x) = 2 - x$ for $1 < x \le 2$. Compute its mean using `.mean()`.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy import stats
+
+        class TriDist(stats.rv_continuous):
+            def _pdf(self, x):
+                return np.where(x <= 1, x, 2 - x)
+
+        rv = TriDist(a=0, b=2, name='triangle')
+        print(f"Mean: {rv.mean():.4f} (expected 1.0)")
+
+---
+
+**Exercise 3.**
+Create a custom distribution with PDF $f(x) = 2e^{-2x}$ for $x \ge 0$ (an exponential with $\lambda = 2$). Generate 5000 samples and compare the sample mean to the theoretical value $1/\lambda = 0.5$.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+
+        class MyExp(stats.rv_continuous):
+            def _pdf(self, x):
+                return 2 * np.exp(-2 * x)
+
+        rv = MyExp(a=0, name='myexp')
+        samples = rv.rvs(size=5000, random_state=42)
+        print(f"Sample mean: {np.mean(samples):.4f} (expected 0.5)")

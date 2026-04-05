@@ -122,3 +122,81 @@ print(b)  # [1, 2, 3] — unaffected, different object
 Whether two names share an object or merely hold equal values determines whether mutation through one name is visible through the other.
 
 The detailed consequences of this mechanism — rebinding vs mutating, defensive copying patterns, and the augmented assignment gotcha (`+=`) — are covered in [Parameter Passing](parameter_passing.md) and [Default Parameter Gotcha](default_parameter_gotcha.md).
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Predict the output without running the code. Then verify.
+
+```python
+def modify(lst, num):
+    lst.append(4)
+    num += 10
+
+my_list = [1, 2, 3]
+my_num = 5
+modify(my_list, my_num)
+print(my_list, my_num)
+```
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        def modify(lst, num):
+            lst.append(4)
+            num += 10
+
+        my_list = [1, 2, 3]
+        my_num = 5
+        modify(my_list, my_num)
+        print(my_list, my_num)  # [1, 2, 3, 4] 5
+        ```
+
+    `lst.append(4)` mutates the original list (mutable object). `num += 10` rebinds the local name `num` to a new integer object (immutable), leaving `my_num` unchanged.
+
+---
+
+**Exercise 2.**
+Write a function `double_values(d)` that takes a dictionary and doubles all its values in place. Demonstrate that the original dictionary is modified after the function call.
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        def double_values(d):
+            for key in d:
+                d[key] *= 2
+
+        data = {"a": 1, "b": 2, "c": 3}
+        double_values(data)
+        print(data)  # {'a': 2, 'b': 4, 'c': 6}
+        ```
+
+    Dictionaries are mutable, so modifying values through the reference changes the original object.
+
+---
+
+**Exercise 3.**
+Explain the difference between rebinding and mutating inside a function. Write two functions: one that mutates a list (caller sees the change) and one that rebinds it (caller does not see the change).
+
+??? success "Solution to Exercise 3"
+
+        ```python
+        def mutate(lst):
+            lst.append(99)  # Mutates the object
+
+        def rebind(lst):
+            lst = [99]       # Rebinds local name only
+
+        a = [1, 2, 3]
+        mutate(a)
+        print(a)  # [1, 2, 3, 99] (changed)
+
+        b = [1, 2, 3]
+        rebind(b)
+        print(b)  # [1, 2, 3] (unchanged)
+        ```
+
+    Mutation changes the object itself (all references see the change). Rebinding creates a new local variable, leaving the original unaffected.

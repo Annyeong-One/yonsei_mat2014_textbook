@@ -287,3 +287,70 @@ if __name__ == "__main__":
     print("\nNEXT: 05_intermediate_encoding.py")
     print("="*80)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Generate 100 standard normal samples and insert one outlier at value 10. Apply the z-score method ($|z| > 3$) and the IQR method ($1.5 \times$ IQR) to detect the outlier. Compare which method finds it.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        data = np.append(np.random.normal(size=100), 10.0)
+
+        z_scores = np.abs(stats.zscore(data))
+        z_outliers = np.where(z_scores > 3)[0]
+
+        q1, q3 = np.percentile(data, [25, 75])
+        iqr = q3 - q1
+        iqr_outliers = np.where((data < q1 - 1.5*iqr) | (data > q3 + 1.5*iqr))[0]
+
+        print(f"Z-score outliers: {z_outliers}")
+        print(f"IQR outliers:     {iqr_outliers}")
+
+---
+
+**Exercise 2.**
+Compute the modified z-score (using MAD) for the same dataset from Exercise 1. Use the threshold $|M_i| > 3.5$ to flag outliers. Compare the result with the standard z-score method.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        data = np.append(np.random.normal(size=100), 10.0)
+
+        mad = stats.median_abs_deviation(data)
+        median = np.median(data)
+        modified_z = 0.6745 * (data - median) / mad
+        mod_outliers = np.where(np.abs(modified_z) > 3.5)[0]
+
+        z_outliers = np.where(np.abs(stats.zscore(data)) > 3)[0]
+
+        print(f"Modified z-score outliers: {mod_outliers}")
+        print(f"Standard z-score outliers: {z_outliers}")
+
+---
+
+**Exercise 3.**
+Generate 200 samples from a $t$-distribution with 3 degrees of freedom (heavy tails). Apply the IQR outlier method and count how many values are flagged as outliers. Discuss whether these are true outliers or simply heavy-tailed behavior.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        data = stats.t.rvs(df=3, size=200)
+
+        q1, q3 = np.percentile(data, [25, 75])
+        iqr = q3 - q1
+        outliers = np.where((data < q1 - 1.5*iqr) | (data > q3 + 1.5*iqr))[0]
+        print(f"Flagged outliers: {len(outliers)} out of 200")
+        print("Note: heavy-tailed distributions produce many IQR 'outliers'")

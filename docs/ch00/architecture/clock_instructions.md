@@ -430,16 +430,64 @@ Because a single memory access may cost **hundreds of CPU cycles**.
 
 ## 12. Exercises
 
-1. What does clock speed measure?
-2. What is IPC?
-3. Why does clock speed alone not determine performance?
-4. What is instruction pipelining?
-5. What is superscalar execution?
-6. What is branch prediction?
-7. Why can memory latency stall CPUs?
-8. Why is cache locality important?
+**Exercise 1.**
+CPU A runs at 4 GHz with an average IPC of 2. CPU B runs at 3 GHz with an average IPC of 4.
+
+(a) How many instructions per second does each CPU complete?
+(b) Which CPU has higher instruction throughput despite lower clock speed?
+(c) Why is clock speed alone a misleading measure of performance?
+
+??? success "Solution to Exercise 1"
+    **(a)** Throughput = Clock speed * IPC.
+
+    - CPU A: 4 GHz * 2 IPC = 8 billion instructions/second
+    - CPU B: 3 GHz * 4 IPC = 12 billion instructions/second
+
+    **(b)** CPU B has 50% higher throughput despite 25% lower clock speed, because its higher IPC more than compensates.
+
+    **(c)** Clock speed only measures how fast the clock ticks, not how much useful work is done per tick. A CPU with high IPC (through better pipelining, wider execution units, better branch prediction, and smarter caching) can outperform a higher-clocked CPU with lower IPC. This is why modern CPUs focus on improving IPC rather than increasing clock speed (which is limited by power consumption and heat).
 
 ---
+
+**Exercise 2.**
+A 5-stage pipeline (Fetch, Decode, Execute, Memory, Writeback) is processing a stream of instructions. After the pipeline fills, one instruction completes per cycle. However, a branch misprediction flushes the pipeline, wasting cycles.
+
+(a) If a program has 1000 instructions and 10% are branches with 80% prediction accuracy, how many pipeline flushes occur?
+(b) Each flush wastes 4 cycles (to refill the pipeline). How many extra cycles does this add?
+(c) What is the effective IPC if the ideal IPC is 1.0?
+
+??? success "Solution to Exercise 2"
+    **(a)** Branches: 1000 * 10% = 100 branches. Mispredictions: 100 * (1 - 0.80) = **20 pipeline flushes**.
+
+    **(b)** Extra cycles: 20 * 4 = **80 extra cycles**.
+
+    **(c)** Without mispredictions: 1000 cycles for 1000 instructions. With mispredictions: 1000 + 80 = 1080 cycles. Effective IPC = 1000 / 1080 = **~0.93**. Branch mispredictions reduced performance by about 7%.
+
+    In real programs with more branches and deeper pipelines (15-20 stages in modern CPUs), misprediction penalties are much more severe. This is why branch prediction accuracy of 95%+ is critical for modern CPUs.
+
+---
+
+**Exercise 3.**
+A program runs 1 billion instructions. 30% are memory accesses, and 70% of memory accesses hit the L1 cache (4 cycles). The remaining 30% miss L1 and go to RAM (200 cycles). Non-memory instructions take 1 cycle each.
+
+(a) Calculate the total cycles for non-memory instructions.
+(b) Calculate the total cycles for memory instructions (L1 hits + L1 misses).
+(c) What is the average CPI (cycles per instruction)?
+(d) On a 3 GHz CPU, how long does the program take to run?
+
+??? success "Solution to Exercise 3"
+    **(a)** Non-memory instructions: 1,000,000,000 * 0.70 = 700,000,000 instructions * 1 cycle = **700,000,000 cycles**.
+
+    **(b)** Memory instructions: 300,000,000 total.
+    - L1 hits: 300,000,000 * 0.70 = 210,000,000 * 4 cycles = 840,000,000 cycles
+    - L1 misses: 300,000,000 * 0.30 = 90,000,000 * 200 cycles = 18,000,000,000 cycles
+    - Total memory cycles: 840,000,000 + 18,000,000,000 = **18,840,000,000 cycles**
+
+    **(c)** Total cycles: 700,000,000 + 18,840,000,000 = 19,540,000,000. Average CPI = 19,540,000,000 / 1,000,000,000 = **~19.5 cycles per instruction**.
+
+    **(d)** Runtime = 19,540,000,000 / 3,000,000,000 = **~6.5 seconds**.
+
+    The L1 misses (only 9% of instructions) account for 92% of total cycles. This dramatically illustrates why memory access patterns dominate performance -- optimizing cache behavior is often more impactful than optimizing computation.
 
 ## 13. Summary
 

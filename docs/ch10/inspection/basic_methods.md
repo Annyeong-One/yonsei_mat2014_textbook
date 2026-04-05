@@ -284,3 +284,61 @@ print(df['Close'].count())
 print(len(df))       # Total rows
 print(df.count())    # Non-null per column
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a DataFrame with 100 rows of random data. Use `.head(10)` and `.tail(10)` to view the first and last 10 rows. Then use `.sample(5, random_state=0)` to get a reproducible random sample.
+
+??? success "Solution to Exercise 1"
+    Use head, tail, and sample for quick inspection.
+
+        import pandas as pd
+        import numpy as np
+
+        np.random.seed(42)
+        df = pd.DataFrame(np.random.randn(100, 3), columns=['A', 'B', 'C'])
+        print(df.head(10))
+        print(df.tail(10))
+        print(df.sample(5, random_state=0))
+
+---
+
+**Exercise 2.**
+Create a DataFrame with some `NaN` values. Use `.info()` to inspect the non-null counts per column, then use `.isna().sum()` to confirm the count of missing values in each column.
+
+??? success "Solution to Exercise 2"
+    Use info and isna to inspect missing data.
+
+        import pandas as pd
+        import numpy as np
+
+        df = pd.DataFrame({
+            'name': ['Alice', 'Bob', None, 'Dave'],
+            'age': [25, np.nan, 35, np.nan],
+            'score': [90, 85, 88, 92]
+        })
+        df.info()
+        print("\nMissing values per column:")
+        print(df.isna().sum())
+
+---
+
+**Exercise 3.**
+Create a DataFrame with a `'price'` column. Use `.min()`, `.max()`, `.idxmin()`, and `.idxmax()` to find the minimum and maximum prices along with their row indices. Verify that `df.loc[df['price'].idxmax(), 'price'] == df['price'].max()`.
+
+??? success "Solution to Exercise 3"
+    Find min/max values and their indices.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'product': ['A', 'B', 'C', 'D', 'E'],
+            'price': [19.99, 5.49, 42.00, 12.75, 35.50]
+        })
+        print("Min price:", df['price'].min(), "at index", df['price'].idxmin())
+        print("Max price:", df['price'].max(), "at index", df['price'].idxmax())
+        assert df.loc[df['price'].idxmax(), 'price'] == df['price'].max()
+        print("Verification passed.")

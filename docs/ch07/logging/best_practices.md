@@ -63,3 +63,89 @@ logger.info("User login", extra={'user_id': 123})
 {"timestamp": "2026-02-12 12:34:56,789", "level": "INFO", "message": "User login", "logger": "__main__"}
 ```
 
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a named logger for a module called `"myapp.database"`. Configure it with a `StreamHandler` that uses the format `"%(name)s - %(levelname)s - %(message)s"`. Log an INFO message `"Connection established"` and a WARNING message `"Slow query detected"`. Verify the output includes the logger name.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    import logging
+
+    logger = logging.getLogger("myapp.database")
+    logger.setLevel(logging.DEBUG)
+
+    handler = logging.StreamHandler()
+    formatter = logging.Formatter("%(name)s - %(levelname)s - %(message)s")
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+
+    logger.info("Connection established")
+    logger.warning("Slow query detected")
+    # myapp.database - INFO - Connection established
+    # myapp.database - WARNING - Slow query detected
+    ```
+
+---
+
+**Exercise 2.**
+Write a function `setup_file_logger` that creates a logger writing to a specified file path with rotation (using `RotatingFileHandler` with `maxBytes=1024` and `backupCount=3`). The format should include the timestamp, level, and message. Return the configured logger.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    import logging
+    from logging.handlers import RotatingFileHandler
+
+    def setup_file_logger(name, file_path):
+        logger = logging.getLogger(name)
+        logger.setLevel(logging.DEBUG)
+
+        handler = RotatingFileHandler(
+            file_path, maxBytes=1024, backupCount=3
+        )
+        formatter = logging.Formatter(
+            "%(asctime)s - %(levelname)s - %(message)s"
+        )
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+        return logger
+
+    # Usage:
+    # logger = setup_file_logger("myapp", "app.log")
+    # logger.info("Application started")
+    ```
+
+---
+
+**Exercise 3.**
+Write a context manager `log_execution_time` that logs the start and end of a code block, along with the elapsed time in seconds. Use a logger (not print) for all output. For example, `with log_execution_time(logger, "data processing"):` should log `"Starting data processing"` and `"Finished data processing in 0.5s"`.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    import logging
+    import time
+    from contextlib import contextmanager
+
+    @contextmanager
+    def log_execution_time(logger, task_name):
+        logger.info(f"Starting {task_name}")
+        start = time.time()
+        try:
+            yield
+        finally:
+            elapsed = time.time() - start
+            logger.info(f"Finished {task_name} in {elapsed:.2f}s")
+
+    # Test
+    logger = logging.getLogger("timer")
+    logger.setLevel(logging.DEBUG)
+    logger.addHandler(logging.StreamHandler())
+
+    with log_execution_time(logger, "data processing"):
+        time.sleep(0.1)  # Simulate work
+    ```

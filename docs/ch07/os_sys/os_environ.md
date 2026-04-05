@@ -64,3 +64,82 @@ VAR2: value2
 Environment updated
 ```
 
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a function `get_config` that reads configuration from environment variables with defaults: `"APP_HOST"` (default `"localhost"`), `"APP_PORT"` (default `"8080"`), and `"APP_DEBUG"` (default `"false"`). Return a dictionary with these values. Convert `APP_PORT` to int and `APP_DEBUG` to bool.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    import os
+
+    def get_config():
+        return {
+            "host": os.environ.get("APP_HOST", "localhost"),
+            "port": int(os.environ.get("APP_PORT", "8080")),
+            "debug": os.environ.get("APP_DEBUG", "false").lower() == "true",
+        }
+
+    # Test
+    config = get_config()
+    print(config)
+    # {'host': 'localhost', 'port': 8080, 'debug': False}
+    ```
+
+---
+
+**Exercise 2.**
+Write a context manager `temp_env` that temporarily sets an environment variable, yields, and then restores the original value (or removes the variable if it did not exist before). Test by setting `"TEST_VAR"` inside the context and verifying it is gone after.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    import os
+    from contextlib import contextmanager
+
+    @contextmanager
+    def temp_env(key, value):
+        old_value = os.environ.get(key)
+        os.environ[key] = value
+        try:
+            yield
+        finally:
+            if old_value is None:
+                del os.environ[key]
+            else:
+                os.environ[key] = old_value
+
+    # Test
+    with temp_env("TEST_VAR", "hello"):
+        print(os.environ["TEST_VAR"])  # hello
+    print("TEST_VAR" in os.environ)    # False
+    ```
+
+---
+
+**Exercise 3.**
+Write a function `env_summary` that returns a dictionary with the count of environment variables, the total character length of all values combined, and a list of any variables whose names start with `"PYTHON"`.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    import os
+
+    def env_summary():
+        env = os.environ
+        python_vars = [k for k in env if k.startswith("PYTHON")]
+        total_length = sum(len(v) for v in env.values())
+        return {
+            "count": len(env),
+            "total_value_length": total_length,
+            "python_vars": python_vars,
+        }
+
+    # Test
+    summary = env_summary()
+    print(f"Variables: {summary['count']}")
+    print(f"Python vars: {summary['python_vars']}")
+    ```

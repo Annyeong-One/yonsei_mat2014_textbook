@@ -117,3 +117,64 @@ df.sum()      # Sum each column
 df.mean()     # Mean each column
 df.describe() # Summary statistics
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Create a DataFrame from a dictionary with three columns and five rows. Print its shape, columns, and dtypes.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+
+    df = pd.DataFrame({
+        'name': ['Alice', 'Bob', 'Charlie', 'David', 'Eve'],
+        'age': [25, 30, 35, 40, 28],
+        'score': [85, 92, 78, 95, 88]
+    })
+    print(f'Shape: {df.shape}')
+    print(f'Columns: {df.columns.tolist()}')
+    print(f'Dtypes:\n{df.dtypes}')
+    ```
+
+---
+
+**Exercise 2.** Explain the relationship between a DataFrame and its constituent Series objects. How do you extract a single column as a Series?
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the Pandas data structures and their relationships.
+
+---
+
+**Exercise 3.** Write code that creates a DataFrame and accesses rows using `.loc[]` (label-based) and `.iloc[]` (position-based). Show the difference.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+
+    df = pd.DataFrame({
+        'name': ['Alice', 'Bob', 'Charlie'],
+        'age': [25, 30, 35],
+        'score': [85, 92, 78]
+    })
+    # Label-based
+    print(df.loc[0])
+    # Position-based
+    print(df.iloc[-1])
+    ```
+
+---
+
+**Exercise 4.** Create a DataFrame and add a new column computed from existing columns. Then delete a column using `del` or `.drop()`.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+
+    df = pd.DataFrame({'a': [1, 2, 3], 'b': [4, 5, 6]})
+    df['c'] = df['a'] + df['b']
+    df = df.drop(columns=['b'])
+    print(df)
+    ```

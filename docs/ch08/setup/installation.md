@@ -118,3 +118,51 @@ python --version
 
 # NumPy 1.26+ requires Python 3.9+
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Install NumPy using pip and verify the installation by printing the version number. What command do you run?
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+    print(np.__version__)
+    ```
+
+    Install with: `pip install numpy`
+
+---
+
+**Exercise 2.** Write a script that checks if NumPy is installed and prints a helpful error message if it is not.
+
+??? success "Solution to Exercise 2"
+    ```python
+    try:
+        import numpy as np
+        print(f"NumPy {np.__version__} is installed")
+    except ImportError:
+        print("NumPy is not installed. Run: pip install numpy")
+    ```
+
+---
+
+**Exercise 3.** Explain the difference between `pip install numpy` and `conda install numpy`. When might you prefer one over the other?
+
+??? success "Solution to Exercise 3"
+    `pip install numpy` installs from PyPI and works in any Python environment. `conda install numpy` uses Anaconda's package manager, which can install optimized BLAS/LAPACK libraries automatically, potentially giving better performance for linear algebra operations. Use `conda` if you are in a conda environment; use `pip` otherwise.
+
+---
+
+**Exercise 4.** Import NumPy and create a simple array `[1, 2, 3]`. Print both the array and its type.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+
+    arr = np.array([1, 2, 3])
+    print(arr)        # [1 2 3]
+    print(type(arr))  # <class 'numpy.ndarray'>
+    ```

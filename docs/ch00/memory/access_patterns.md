@@ -467,6 +467,84 @@ Because it produces a strided access pattern.
 
 ---
 
+**Exercise 9.**
+A programmer iterates over a 2D NumPy array in two ways:
+
+```python
+import numpy as np
+a = np.zeros((10000, 10000), dtype=np.float64)
+
+# Method A: row-by-row
+for i in range(10000):
+    for j in range(10000):
+        a[i, j] += 1.0
+
+# Method B: column-by-column
+for i in range(10000):
+    for j in range(10000):
+        a[j, i] += 1.0
+```
+
+Both perform the same number of additions and memory accesses. Explain why Method A is significantly faster than Method B. Describe the memory access pattern of each method in terms of cache lines, and estimate the ratio of cache misses.
+
+??? success "Solution to Exercise 9"
+    NumPy uses **row-major (C order)** layout by default. This means elements in the same row are contiguous in memory: `a[i, 0], a[i, 1], a[i, 2], ...` are adjacent bytes.
+
+    **Method A (row-by-row):** The inner loop iterates over `j` (columns) with `i` fixed. This accesses `a[i, 0], a[i, 1], a[i, 2], ...` -- consecutive memory addresses. This is **sequential access**. Each cache line (64 bytes = 8 `float64` values) is fully utilized, and the hardware prefetcher loads upcoming cache lines in advance.
+
+    **Method B (column-by-column):** The inner loop iterates over `j` (used as the row index) with `i` fixed. This accesses `a[0, i], a[1, i], a[2, i], ...` -- addresses separated by the row stride ($10{,}000 \times 8 = 80{,}000$ bytes). This is **strided access** with a large stride. Each cache line loaded contains only 1 useful value out of 8, and the stride far exceeds the cache line size, so spatial locality is completely wasted.
+
+    **Cache miss ratio:** Method A causes 1 cache miss per 8 elements. Method B causes 1 cache miss per element (each access is ~80 KB apart, guaranteed to be a different cache line). The ratio is approximately **8:1** in cache misses, translating to a significant speed difference (typically 3--10x depending on cache sizes and prefetcher effectiveness).
+
+---
+
+**Exercise 10.**
+The "Structure of Arrays" (SoA) layout stores data as separate arrays per field: `x[i], y[i], z[i]` are in three separate contiguous arrays. The "Array of Structures" (AoS) layout stores data as an array of structs: `points[i].x, points[i].y, points[i].z` are adjacent in memory. Explain why SoA is better for a computation that processes only the `x` values of all points, while AoS is better for a computation that processes all three fields of a single point. Connect your explanation to cache lines and spatial locality.
+
+??? success "Solution to Exercise 10"
+    **SoA for x-only computation:** The `x` values are stored contiguously: `x[0], x[1], x[2], ...`. Processing only `x` values reads sequential memory, maximizing cache line utilization -- every byte in each cache line contains a useful `x` value. The `y` and `z` arrays are never loaded into cache, saving bandwidth.
+
+    With AoS: `points[0].x, points[0].y, points[0].z, points[1].x, points[1].y, points[1].z, ...`. Processing only `x` values reads every third element (stride = 24 bytes for 3 `float64` fields). Each 64-byte cache line contains roughly 2--3 `x` values mixed with `y` and `z` values. Two-thirds of the loaded data is wasted.
+
+    **AoS for all-fields-of-one-point:** Accessing `points[i].x, points[i].y, points[i].z` reads 24 consecutive bytes, likely within a single cache line. One cache load gives all three fields for one point.
+
+    With SoA: `x[i]`, `y[i]`, and `z[i]` are in three different arrays, potentially in three different cache lines. Processing one complete point requires three separate memory accesses to distant locations.
+
+    The key insight: SoA favors **field-at-a-time** processing (common in numerical computing), while AoS favors **record-at-a-time** processing (common in databases and game engines).
+
+---
+
+**Exercise 11.**
+Hardware prefetchers can detect sequential and simple strided access patterns and pre-load cache lines before they are needed. Explain why random access patterns (e.g., accessing array elements via random indices) defeat the prefetcher. What is the consequence in terms of CPU stall cycles? Then explain why a hash table lookup is inherently "random access" from the memory system's perspective, even though the algorithm is deterministic.
+
+??? success "Solution to Exercise 11"
+    Hardware prefetchers work by detecting **patterns** in the sequence of memory addresses requested. They track recent addresses and extrapolate: if the last three accesses were to addresses A, A+64, A+128, the prefetcher predicts A+192 and loads it in advance.
+
+    Random access has **no pattern** to detect. If accesses go to addresses 50000, 12800, 99200, 3500, ... there is no stride or sequence the prefetcher can extrapolate. It gives up and does not prefetch. Every access must wait for the full memory latency (~100 ns for a cache miss to RAM), and the CPU stalls waiting for data.
+
+    A hash table lookup is "random" from the memory perspective because the hash function deliberately scatters keys across the table. Looking up `hash("Alice")` and then `hash("Bob")` produces addresses that are unrelated (that is the point of a good hash function -- distributing keys uniformly). Even though the algorithm is deterministic, the sequence of memory addresses appears random to the prefetcher, which cannot learn the hash function.
+
+    The consequence is that hash table lookups are dominated by memory latency. For tables that fit in L1/L2 cache, this is manageable (~4--12 cycles per lookup). For tables larger than LLC, each lookup may cost ~200 cycles waiting for RAM.
+
+---
+
+**Exercise 12.**
+"Blocking" (or "tiling") is a technique where a large computation is broken into small blocks that fit in cache. Consider matrix multiplication $C = A \times B$ where each matrix is $N \times N$ with $N = 10{,}000$. The naive triple loop accesses elements of $B$ column-by-column, which is a strided access pattern in row-major memory. Explain why this strided access is problematic for cache performance, and describe conceptually how blocking helps: what changes about the memory access pattern when the computation is done in small tiles?
+
+??? success "Solution to Exercise 12"
+    In the naive triple loop for $C_{ij} = \sum_k A_{ik} \cdot B_{kj}$, the innermost loop varies $k$:
+
+    - `A[i, k]`: sequential access across row $i$ (good -- contiguous in row-major)
+    - `B[k, j]`: access down column $j$ with stride $N$ elements (bad -- each access is $80{,}000$ bytes apart for $N = 10{,}000$)
+
+    For each element of `B` accessed, a full cache line is loaded but only 1 of 8 values is used. Worse, column $j$ of `B` spans $10{,}000$ cache lines, far exceeding cache capacity. By the time the next element of the same column is needed, the previous cache line has been evicted. Every access to `B` is essentially a cache miss.
+
+    **Blocking helps** by dividing the matrices into small tiles (e.g., $64 \times 64$). The computation proceeds tile-by-tile: for each pair of tiles, all elements of both tiles are accessed repeatedly before moving on. A $64 \times 64$ tile of `float64` values is $64 \times 64 \times 8 = 32$ KB, which fits comfortably in L1 cache.
+
+    Within a tile, column access in `B` has stride 64 (not 10,000), and all 64 rows of the tile stay in cache. The strided access pattern is limited to a small, cache-resident region. After computing one tile's contribution, the next tile is loaded, reusing the same cache space. This transforms the global stride-$N$ pattern into many local, cache-friendly accesses.
+
+---
+
 ## 14. Short Answers
 
 1. Order in which memory addresses are accessed
@@ -477,8 +555,6 @@ Because it produces a strided access pattern.
 6. Row-major (C order)
 7. Splitting computations into cache-sized blocks
 8. AoS stores mixed fields; SoA stores fields separately
-
----
 
 ## 15. Summary
 

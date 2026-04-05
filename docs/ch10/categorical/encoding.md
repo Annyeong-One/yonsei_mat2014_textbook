@@ -366,3 +366,59 @@ df['category_grouped'] = df['category'].apply(
     lambda x: x if df['category'].value_counts()[x] > 100 else 'Other'
 )
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that converts a categorical column to dummy variables using `pd.get_dummies()`. Show the resulting DataFrame.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+
+    # See page content for relevant API details
+    s = pd.Series(['a', 'b', 'c', 'a', 'b'], dtype='category')
+    print(s)
+    print(s.cat.categories)
+    print(s.cat.codes)
+    ```
+
+---
+
+**Exercise 2.** Explain the difference between one-hot encoding and label encoding. Give an example of when each is appropriate.
+
+??? success "Solution to Exercise 2"
+    See the explanation in the main content of this page. The key concept involves understanding the categorical data type and its internal representation in Pandas.
+
+---
+
+**Exercise 3.** Write code that performs label encoding by using `.cat.codes` on a categorical Series. Print the codes alongside the original values.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'col': np.random.choice(['A', 'B', 'C'], 1000)})
+    df['col'] = df['col'].astype('category')
+    print(df.dtypes)
+    print(df['col'].value_counts())
+    ```
+
+---
+
+**Exercise 4.** Create a DataFrame with a categorical column and use `pd.get_dummies(drop_first=True)` to avoid the dummy variable trap. Explain why `drop_first` is useful.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+
+    s = pd.Categorical(['low', 'medium', 'high', 'low'],
+                        categories=['low', 'medium', 'high'],
+                        ordered=True)
+    print(s)
+    print(s > 'low')
+    ```

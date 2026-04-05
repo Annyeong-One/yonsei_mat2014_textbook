@@ -130,3 +130,68 @@ append: 0.0012s
 insert_0: 0.0456s
 extend: 0.0045s
 ```
+
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Use `timeit.timeit()` to compare the speed of creating a list using `list(range(1000))` versus `[*range(1000)]`. Run each 10,000 times and report which is faster.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    import timeit
+
+    t_list = timeit.timeit("list(range(1000))", number=10000)
+    t_unpack = timeit.timeit("[*range(1000)]", number=10000)
+
+    print(f"list():    {t_list:.4f}s")
+    print(f"[*...]:    {t_unpack:.4f}s")
+    ```
+
+    Both create a list from a range, but unpacking (`[*range()]`) can be slightly faster because it avoids the overhead of calling the `list()` constructor function.
+
+---
+
+**Exercise 2.**
+Use `timeit.repeat()` to measure `sum(range(1000))` with 5 repeats of 10,000 executions each. Print the best, worst, and average times.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    import timeit
+
+    times = timeit.repeat("sum(range(1000))", number=10000, repeat=5)
+
+    print(f"Best:    {min(times):.4f}s")
+    print(f"Worst:   {max(times):.4f}s")
+    print(f"Average: {sum(times)/len(times):.4f}s")
+    ```
+
+    `timeit.repeat()` runs the full measurement multiple times. The best time is the most reliable because higher times include OS scheduling overhead.
+
+---
+
+**Exercise 3.**
+Write a benchmark that compares three ways to check if a number is even: `n % 2 == 0`, `n & 1 == 0`, and `not n % 2`. Use `timeit` to determine which is fastest.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    import timeit
+
+    setup = "n = 42"
+
+    t_mod = timeit.timeit("n % 2 == 0", setup=setup, number=1000000)
+    t_bit = timeit.timeit("n & 1 == 0", setup=setup, number=1000000)
+    t_not = timeit.timeit("not n % 2", setup=setup, number=1000000)
+
+    print(f"n % 2 == 0: {t_mod:.4f}s")
+    print(f"n & 1 == 0: {t_bit:.4f}s")
+    print(f"not n % 2:  {t_not:.4f}s")
+    ```
+
+    All three approaches are very fast for single checks. The bitwise approach (`n & 1`) may be marginally faster since it avoids a comparison, but the difference is negligible in practice.

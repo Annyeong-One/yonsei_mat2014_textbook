@@ -132,3 +132,71 @@ The nested list structure mirrors the block layout: `[[top-left, top-right], [bo
 - Use `scipy.linalg.block_diag` for small dense block diagonal matrices
 - Use `scipy.sparse.block_diag` when the total size is large and memory matters
 - Use `np.block` for general (non-diagonal) block matrix construction from a nested list of arrays
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a block diagonal matrix from three blocks: $A = \begin{pmatrix} 1 & 2 \\ 3 & 4 \end{pmatrix}$, $B = \begin{pmatrix} 5 \end{pmatrix}$, and $C = \begin{pmatrix} 6 & 7 & 8 \\ 9 & 10 & 11 \\ 12 & 13 & 14 \end{pmatrix}$. Verify that the determinant of the block diagonal matrix equals the product of determinants of the individual blocks.
+
+??? success "Solution to Exercise 1"
+        import numpy as np
+        from scipy import linalg
+
+        A = np.array([[1, 2], [3, 4]])
+        B = np.array([[5]])
+        C = np.array([[6, 7, 8], [9, 10, 11], [12, 13, 14]])
+
+        D = linalg.block_diag(A, B, C)
+        print("Block diagonal matrix:")
+        print(D)
+
+        det_D = np.linalg.det(D)
+        det_product = np.linalg.det(A) * np.linalg.det(B) * np.linalg.det(C)
+        print(f"\ndet(D) = {det_D:.6f}")
+        print(f"det(A)*det(B)*det(C) = {det_product:.6f}")
+        print(f"Match: {np.isclose(det_D, det_product)}")
+
+---
+
+**Exercise 2.**
+Build a $2 \times 2$ block matrix (not block diagonal) using `np.block`: the top-left block is a $3 \times 3$ identity matrix, the top-right is a $3 \times 2$ matrix of ones, the bottom-left is a $2 \times 3$ matrix of zeros, and the bottom-right is a $2 \times 2$ matrix with 5 on the diagonal. Print the resulting $5 \times 5$ matrix and compute its eigenvalues.
+
+??? success "Solution to Exercise 2"
+        import numpy as np
+
+        TL = np.eye(3)
+        TR = np.ones((3, 2))
+        BL = np.zeros((2, 3))
+        BR = 5 * np.eye(2)
+
+        M = np.block([[TL, TR], [BL, BR]])
+        print("Block matrix:")
+        print(M)
+
+        eigenvalues = np.linalg.eigvals(M)
+        print(f"\nEigenvalues: {eigenvalues}")
+
+---
+
+**Exercise 3.**
+Create a sparse block diagonal matrix with 50 identical $2 \times 2$ blocks where each block is $\begin{pmatrix} 3 & 1 \\ 1 & 3 \end{pmatrix}$. Print the total matrix shape, number of nonzeros, and density. Then solve $Dx = b$ where $b$ is a vector of ones, and verify the solution is correct.
+
+??? success "Solution to Exercise 3"
+        import numpy as np
+        from scipy import sparse
+        from scipy.sparse import linalg as splinalg
+
+        block = [[3, 1], [1, 3]]
+        blocks = [block] * 50
+        D = sparse.block_diag(blocks, format='csr')
+
+        print(f"Shape: {D.shape}")
+        print(f"Nonzeros: {D.nnz}")
+        print(f"Density: {D.nnz / (D.shape[0] * D.shape[1]):.4%}")
+
+        b = np.ones(D.shape[0])
+        x = splinalg.spsolve(D, b)
+        residual = np.linalg.norm(D @ x - b)
+        print(f"Residual: {residual:.2e}")

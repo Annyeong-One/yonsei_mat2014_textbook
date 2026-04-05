@@ -375,3 +375,100 @@ Static methods can be overridden in subclasses.
 - For utility functions grouped with class.
 - Not bound to instances.
 - Use when no class/instance access needed.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a `MathUtils` class with static methods `is_prime(n)`, `factorial(n)`, and `fibonacci(n)`. Show that these can be called without creating an instance: `MathUtils.is_prime(17)`. Discuss why static methods are appropriate here.
+
+??? success "Solution to Exercise 1"
+
+        class MathUtils:
+            @staticmethod
+            def is_prime(n):
+                if n < 2:
+                    return False
+                for i in range(2, int(n**0.5) + 1):
+                    if n % i == 0:
+                        return False
+                return True
+
+            @staticmethod
+            def factorial(n):
+                result = 1
+                for i in range(2, n + 1):
+                    result *= i
+                return result
+
+            @staticmethod
+            def fibonacci(n):
+                a, b = 0, 1
+                for _ in range(n):
+                    a, b = b, a + b
+                return a
+
+        print(MathUtils.is_prime(17))    # True
+        print(MathUtils.factorial(5))     # 120
+        print(MathUtils.fibonacci(10))    # 55
+        # Static because: no instance/class state needed
+
+---
+
+**Exercise 2.**
+Write a `Validator` class with static methods `is_email(text)` (checks for `@`), `is_phone(text)` (checks digits and length), and `is_url(text)` (checks for `http`). Use the class to validate user input. Show that static methods can also be called on instances, though it adds no benefit.
+
+??? success "Solution to Exercise 2"
+
+        class Validator:
+            @staticmethod
+            def is_email(text):
+                return "@" in text and "." in text.split("@")[-1]
+
+            @staticmethod
+            def is_phone(text):
+                digits = text.replace("-", "").replace(" ", "")
+                return digits.isdigit() and len(digits) >= 10
+
+            @staticmethod
+            def is_url(text):
+                return text.startswith("http://") or text.startswith("https://")
+
+        print(Validator.is_email("user@example.com"))  # True
+        print(Validator.is_phone("555-123-4567"))      # True
+        print(Validator.is_url("https://python.org"))  # True
+
+        # Works on instance too (but no benefit)
+        v = Validator()
+        print(v.is_email("test"))  # False
+
+---
+
+**Exercise 3.**
+Build a `Temperature` class with instance attribute `celsius` and static methods `c_to_f(c)` and `f_to_c(f)` for conversion. Add an instance method `to_fahrenheit()` that uses the static method internally. Demonstrate both calling patterns: `Temperature.c_to_f(100)` and `t.to_fahrenheit()`.
+
+??? success "Solution to Exercise 3"
+
+        class Temperature:
+            def __init__(self, celsius):
+                self.celsius = celsius
+
+            @staticmethod
+            def c_to_f(c):
+                return c * 9 / 5 + 32
+
+            @staticmethod
+            def f_to_c(f):
+                return (f - 32) * 5 / 9
+
+            def to_fahrenheit(self):
+                return Temperature.c_to_f(self.celsius)
+
+        # Static method call (no instance needed)
+        print(Temperature.c_to_f(100))  # 212.0
+        print(Temperature.f_to_c(32))   # 0.0
+
+        # Instance method uses static method internally
+        t = Temperature(37)
+        print(t.to_fahrenheit())  # 98.6

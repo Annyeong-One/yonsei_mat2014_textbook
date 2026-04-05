@@ -87,3 +87,51 @@ In finance, the chi-square distribution appears in variance ratio tests for mark
 ## Summary
 
 The chi-square distribution is fundamental to statistical inference. In `scipy.stats`, use `stats.chi2(df)` to create a frozen distribution for computing PDFs, CDFs, critical values, and generating random samples.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Generate 5000 standard normal samples, square each one, and show that the resulting distribution matches a $\chi^2(1)$ distribution by comparing sample quantiles to theoretical quantiles from `stats.chi2(df=1).ppf()`.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        z = np.random.normal(size=5000)
+        chi2_samples = z ** 2
+
+        theoretical_q = stats.chi2.ppf([0.25, 0.50, 0.75], df=1)
+        sample_q = np.quantile(chi2_samples, [0.25, 0.50, 0.75])
+        for p, tq, sq in zip([0.25, 0.50, 0.75], theoretical_q, sample_q):
+            print(f"Quantile {p}: theoretical={tq:.4f}, sample={sq:.4f}")
+
+---
+
+**Exercise 2.**
+Compute the mean and variance of $\chi^2$ distributions for $k = 1, 5, 10, 30$. Verify that the mean equals $k$ and the variance equals $2k$ for each.
+
+??? success "Solution to Exercise 2"
+
+        from scipy import stats
+
+        for k in [1, 5, 10, 30]:
+            rv = stats.chi2(df=k)
+            print(f"k={k:2d}: mean={rv.mean():.1f} (exp {k}), var={rv.var():.1f} (exp {2*k})")
+
+---
+
+**Exercise 3.**
+For a $\chi^2$ distribution with 15 degrees of freedom, find the critical value $c$ such that $P(\chi^2 > c) = 0.05$. Verify using the survival function.
+
+??? success "Solution to Exercise 3"
+
+        from scipy import stats
+
+        rv = stats.chi2(df=15)
+        c = rv.isf(0.05)
+        print(f"Critical value: {c:.4f}")
+        print(f"Verification: P(X > {c:.4f}) = {rv.sf(c):.4f}")

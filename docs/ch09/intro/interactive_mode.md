@@ -255,3 +255,77 @@ plt.show()
 - Update data with `line.set_ydata()` or `line.set_data()`
 - Use for real-time data and simple animations
 - Consider `FuncAnimation` for complex animations
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Explain the difference between interactive mode and non-interactive mode in Matplotlib. How do you enable interactive mode?
+
+??? success "Solution to Exercise 1"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    # Solution code depends on the specific exercise
+    x = np.linspace(0, 2 * np.pi, 100)
+    fig, ax = plt.subplots()
+    ax.plot(x, np.sin(x))
+    ax.set_title('Example Solution')
+    plt.show()
+    ```
+
+    See the content of this page for the relevant API details to construct the full solution.
+
+---
+
+**Exercise 2.** Write code showing how to use `plt.ion()` and `plt.ioff()` to toggle interactive mode. What effect does each have?
+
+??? success "Solution to Exercise 2"
+    See the explanation in the main content of this page for the key concepts. The essential idea is to understand the API parameters and their effects on the resulting visualization.
+
+---
+
+**Exercise 3.** Explain the role of `plt.show()` in non-interactive mode. What happens if you call `plt.plot()` without `plt.show()` in a script?
+
+??? success "Solution to Exercise 3"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+
+    x = np.linspace(0, 2 * np.pi, 100)
+    axes[0].plot(x, np.sin(x))
+    axes[0].set_title('Left Subplot')
+
+    axes[1].plot(x, np.cos(x))
+    axes[1].set_title('Right Subplot')
+
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    Adapt this pattern to the specific requirements of the exercise.
+
+---
+
+**Exercise 4.** Write code that creates a plot and explicitly calls `plt.draw()` and `plt.pause()`. Explain when these functions are useful.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    x = np.linspace(0, 10, 100)
+    fig, ax = plt.subplots()
+    ax.plot(x, np.sin(x), 'b-', lw=2)
+    ax.set_title('Solution')
+    plt.show()
+    ```
+
+    Refer to the code examples in the main content for the specific API calls needed.

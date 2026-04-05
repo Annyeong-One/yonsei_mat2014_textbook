@@ -190,3 +190,62 @@ Choose the right method for your use case.
 ### 3. Performance
 
 Both methods have similar performance; choose based on data structure.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create two DataFrames with a shared column `'key'`. Combine them using `pd.merge()`. Then set `'key'` as the index of both and use `.join()` to achieve the same result. Compare the outputs.
+
+??? success "Solution to Exercise 1"
+    Achieve the same result with merge and join.
+
+        import pandas as pd
+
+        df1 = pd.DataFrame({'key': ['a', 'b', 'c'], 'val1': [1, 2, 3]})
+        df2 = pd.DataFrame({'key': ['a', 'b', 'c'], 'val2': [4, 5, 6]})
+        result_merge = pd.merge(df1, df2, on='key')
+        result_join = df1.set_index('key').join(df2.set_index('key'))
+        print("merge:\n", result_merge)
+        print("join:\n", result_join)
+
+---
+
+**Exercise 2.**
+Demonstrate the different default behaviors: show that `pd.merge()` defaults to an inner join while `.join()` defaults to a left join, using the same pair of DataFrames.
+
+??? success "Solution to Exercise 2"
+    Show different default join types.
+
+        import pandas as pd
+
+        df1 = pd.DataFrame({'key': ['a', 'b', 'c'], 'v1': [1, 2, 3]})
+        df2 = pd.DataFrame({'key': ['a', 'b', 'd'], 'v2': [4, 5, 6]})
+        print("merge (default inner):")
+        print(pd.merge(df1, df2, on='key'))
+        print("\njoin (default left):")
+        print(df1.set_index('key').join(df2.set_index('key')))
+
+---
+
+**Exercise 3.**
+Identify a scenario where `pd.merge()` is clearly better than `.join()` (e.g., joining on columns with different names) and another where `.join()` is clearly better (e.g., joining multiple DataFrames by index). Implement both.
+
+??? success "Solution to Exercise 3"
+    Show when merge is better and when join is better.
+
+        import pandas as pd
+
+        # merge is better: different key column names
+        df1 = pd.DataFrame({'emp_id': [1, 2], 'name': ['Alice', 'Bob']})
+        df2 = pd.DataFrame({'employee_id': [1, 2], 'dept': ['HR', 'IT']})
+        print("merge with different key names:")
+        print(pd.merge(df1, df2, left_on='emp_id', right_on='employee_id'))
+
+        # join is better: multiple DataFrames by index
+        a = pd.DataFrame({'A': [1, 2]}, index=['x', 'y'])
+        b = pd.DataFrame({'B': [3, 4]}, index=['x', 'y'])
+        c = pd.DataFrame({'C': [5, 6]}, index=['x', 'y'])
+        print("\njoin multiple DataFrames:")
+        print(a.join([b, c]))

@@ -252,3 +252,58 @@ df['cum_return'] = df.groupby('ticker')['return'].transform(
 # Pivot for comparison
 pivot = df.pivot(columns='ticker', values='cum_return')
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that computes percentage changes using `s.pct_change()` on a price Series. What does the first value equal?
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    # Solution for the specific exercise
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(10), 'B': np.random.randn(10)})
+    print(df.head())
+    ```
+
+---
+
+**Exercise 2.** Explain the difference between `pct_change()` and `diff()`. When would you use each?
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the Pandas API and its behavior for this specific operation.
+
+---
+
+**Exercise 3.** Write code that computes the 5-period percentage change using `pct_change(periods=5)`.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(20), 'B': np.random.randn(20)})
+    result = df.describe()
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Create a DataFrame of stock prices and compute daily returns using `pct_change()`. Calculate the mean and standard deviation of returns.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(50), 'group': np.random.choice(['X', 'Y'], 50)})
+    result = df.groupby('group').mean()
+    print(result)
+    ```

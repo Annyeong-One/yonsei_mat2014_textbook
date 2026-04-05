@@ -233,3 +233,65 @@ if __name__ == "__main__":
     print("- transform() to broadcast results back")
     print("- apply() for custom group-wise operations")
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a sales DataFrame with columns `'region'`, `'product'`, and `'amount'`. Group by `'region'` and use `.ngroups` and `.groups.keys()` to print the number of groups and the group names.
+
+??? success "Solution to Exercise 1"
+    Use `.ngroups` and `.groups.keys()` on the GroupBy object.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'region': ['East', 'West', 'East', 'West', 'North'],
+            'product': ['A', 'B', 'A', 'C', 'B'],
+            'amount': [100, 200, 150, 300, 250]
+        })
+        grouped = df.groupby('region')
+        print(f"Number of groups: {grouped.ngroups}")
+        print(f"Group names: {list(grouped.groups.keys())}")
+
+---
+
+**Exercise 2.**
+Group a DataFrame by `'category'` and use `as_index=False` to get the mean of a numeric column with the group column as a regular column (not the index). Compare the result shape with the default `as_index=True`.
+
+??? success "Solution to Exercise 2"
+    Compare `as_index=True` (default) vs `as_index=False`.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'category': ['A', 'A', 'B', 'B'],
+            'value': [10, 20, 30, 40]
+        })
+        with_index = df.groupby('category')['value'].mean()
+        without_index = df.groupby('category', as_index=False)['value'].mean()
+        print("as_index=True:\n", with_index)
+        print("\nas_index=False:\n", without_index)
+
+---
+
+**Exercise 3.**
+Create a GroupBy object and select two specific columns from it before aggregating. Demonstrate the difference between selecting a single column (SeriesGroupBy) vs multiple columns (DataFrameGroupBy).
+
+??? success "Solution to Exercise 3"
+    Select single vs multiple columns from a GroupBy object.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'group': ['X', 'X', 'Y', 'Y'],
+            'a': [1, 2, 3, 4],
+            'b': [10, 20, 30, 40]
+        })
+        grouped = df.groupby('group')
+        series_gb = grouped['a']         # SeriesGroupBy
+        df_gb = grouped[['a', 'b']]      # DataFrameGroupBy
+        print(type(series_gb))
+        print(type(df_gb))
+        print(df_gb.mean())

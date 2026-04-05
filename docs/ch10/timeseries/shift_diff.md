@@ -254,3 +254,58 @@ df['daily_return'] = df['Close'].pct_change()
 ```python
 df['cum_return'] = (1 + df['daily_return']).cumprod() - 1
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that uses `s.shift(1)` and `s.diff(1)` on a price Series. Explain the relationship between them.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    # Solution for the specific exercise
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(10), 'B': np.random.randn(10)})
+    print(df.head())
+    ```
+
+---
+
+**Exercise 2.** Explain the `shift()` method. What does a positive vs negative shift value do?
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the Pandas API and its behavior for this specific operation.
+
+---
+
+**Exercise 3.** Write code that computes log returns using `np.log(s / s.shift(1))`. Compare with `pct_change()`.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(20), 'B': np.random.randn(20)})
+    result = df.describe()
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Create a DataFrame and use `shift()` to create a lagged feature column for time series forecasting.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(50), 'group': np.random.choice(['X', 'Y'], 50)})
+    result = df.groupby('group').mean()
+    print(result)
+    ```

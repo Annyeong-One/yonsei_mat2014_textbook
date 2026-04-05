@@ -409,3 +409,65 @@ Benefits of `@cache`:
 - Cache grows forever — clear manually or use `@lru_cache` for bounds
 - Don't use with side effects or unlimited input domains
 - Available in Python 3.9+; use `@lru_cache(maxsize=None)` for earlier versions
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a recursive `factorial(n)` function decorated with `@cache`. Call it for `n = 100` and verify the result. Then inspect the cache with `factorial.cache_info()` and print the number of hits and misses.
+
+??? success "Solution to Exercise 1"
+
+        from functools import cache
+
+        @cache
+        def factorial(n):
+            if n <= 1:
+                return 1
+            return n * factorial(n - 1)
+
+        print(factorial(100))
+        info = factorial.cache_info()
+        print(f"Hits: {info.hits}, Misses: {info.misses}")
+
+---
+
+**Exercise 2.**
+Use `@cache` to memoize a `count_paths(m, n)` function that counts the number of unique paths from the top-left to the bottom-right of an `m x n` grid (moving only right or down). Verify that `count_paths(3, 3)` returns `6` and `count_paths(10, 10)` returns `48620`.
+
+??? success "Solution to Exercise 2"
+
+        from functools import cache
+
+        @cache
+        def count_paths(m, n):
+            if m == 1 or n == 1:
+                return 1
+            return count_paths(m - 1, n) + count_paths(m, n - 1)
+
+        print(count_paths(3, 3))     # 6
+        print(count_paths(10, 10))   # 48620
+
+---
+
+**Exercise 3.**
+Demonstrate the unbounded-growth risk of `@cache`. Write a cached function `process(data)` that accepts a tuple of integers and returns their sum. Call it with 10,000 different inputs, print the cache size via `cache_info()`, then call `cache_clear()` and confirm the cache is empty.
+
+??? success "Solution to Exercise 3"
+
+        from functools import cache
+
+        @cache
+        def process(data):
+            return sum(data)
+
+        for i in range(10_000):
+            process((i, i + 1, i + 2))
+
+        info = process.cache_info()
+        print(f"Cache size (misses): {info.misses}")  # 10000
+
+        process.cache_clear()
+        info = process.cache_info()
+        print(f"After clear — hits: {info.hits}, misses: {info.misses}")  # 0, 0

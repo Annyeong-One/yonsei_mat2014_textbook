@@ -292,3 +292,88 @@ ax.contour(X, Y, Z, colors='black', linewidths=0.5, levels=10)
 plt.colorbar(pc)
 plt.show()
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that creates a 2D array and displays it using `ax.pcolormesh()`. Add a colorbar and labels.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    x = np.linspace(0, 5, 30)
+    y = np.linspace(0, 3, 20)
+    X, Y = np.meshgrid(x, y)
+    Z = np.sin(X) * np.cos(Y)
+
+    fig, ax = plt.subplots(figsize=(8, 5))
+    pc = ax.pcolormesh(X, Y, Z, cmap='RdBu', shading='auto')
+    fig.colorbar(pc, ax=ax, label='Value')
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set_title('pcolormesh Heatmap')
+    plt.show()
+    ```
+
+---
+
+**Exercise 2.** Explain the key difference between `ax.imshow()` and `ax.pcolormesh()`. When would you prefer `pcolormesh`?
+
+??? success "Solution to Exercise 2"
+    `ax.imshow()` assumes a regular (equally-spaced) grid and treats the data as an image. `ax.pcolormesh()` accepts explicit x and y coordinate arrays, so it can handle **non-uniform** (irregularly spaced) grids.
+
+    Prefer `pcolormesh` when your data is on an irregular grid, when you need precise control over cell edges, or when you are plotting geospatial/scientific data with non-uniform coordinates. Use `imshow` for simple, regularly-spaced data or actual images.
+
+---
+
+**Exercise 3.** Write code using `pcolormesh` with non-uniform grid spacing (e.g., logarithmically spaced x-coordinates).
+
+??? success "Solution to Exercise 3"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    x = np.logspace(0, 2, 30)  # Non-uniform: 1 to 100
+    y = np.linspace(0, 5, 20)
+    X, Y = np.meshgrid(x, y)
+    Z = np.sin(np.log(X)) * np.cos(Y)
+
+    fig, ax = plt.subplots(figsize=(8, 5))
+    pc = ax.pcolormesh(X, Y, Z, cmap='viridis', shading='auto')
+    fig.colorbar(pc, ax=ax, label='Value')
+    ax.set_xlabel('X (log scale)')
+    ax.set_ylabel('Y')
+    ax.set_title('pcolormesh with Non-Uniform Grid')
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Create a side-by-side comparison of the same data displayed with `imshow` and `pcolormesh`, showing that `pcolormesh` handles non-uniform grids correctly.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    x = np.logspace(0, 1, 20)
+    y = np.linspace(0, 3, 15)
+    X, Y = np.meshgrid(x, y)
+    Z = np.sin(X) * np.cos(Y)
+
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
+
+    ax1.imshow(Z, cmap='RdBu', aspect='auto', origin='lower')
+    ax1.set_title('imshow (ignores non-uniform grid)')
+
+    pc = ax2.pcolormesh(X, Y, Z, cmap='RdBu', shading='auto')
+    fig.colorbar(pc, ax=ax2)
+    ax2.set_title('pcolormesh (respects non-uniform grid)')
+
+    plt.tight_layout()
+    plt.show()
+    ```

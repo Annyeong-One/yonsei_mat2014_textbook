@@ -236,3 +236,57 @@ result = df[df['date'].dt.year == 2020]
 ```python
 result = df[df['date'].dt.month.isin([1, 2, 3])]  # Q1
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a DataFrame of employees with columns `'name'`, `'department'`, and `'salary'`. Use boolean indexing to find all employees in the `'IT'` department with a salary greater than 60000.
+
+??? success "Solution to Exercise 1"
+    Combine two conditions with the `&` operator.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'name': ['Alice', 'Bob', 'Carol', 'Dave'],
+            'department': ['IT', 'HR', 'IT', 'IT'],
+            'salary': [55000, 60000, 70000, 65000]
+        })
+        result = df[(df['department'] == 'IT') & (df['salary'] > 60000)]
+        print(result)
+
+---
+
+**Exercise 2.**
+Given a stock prices DataFrame with columns `'ticker'`, `'date'`, and `'close'`, create a boolean mask that selects rows where the close price is between 100 and 200 (inclusive) using the `&` operator. Demonstrate why parentheses are required.
+
+??? success "Solution to Exercise 2"
+    Use parentheses around each condition before combining with `&`.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'ticker': ['AAPL', 'MSFT', 'GOOGL', 'AMZN'],
+            'close': [150.0, 350.0, 140.0, 180.0]
+        })
+        # Parentheses required because & has higher precedence than >=
+        mask = (df['close'] >= 100) & (df['close'] <= 200)
+        print(df[mask])
+
+---
+
+**Exercise 3.**
+Use `.loc` with a boolean mask to update values in place. Given a DataFrame with a `'score'` column, set all scores below 50 to 50 (a minimum floor). Verify the change by printing the minimum score before and after.
+
+??? success "Solution to Exercise 3"
+    Use `.loc` with a boolean mask to set values.
+
+        import pandas as pd
+
+        df = pd.DataFrame({'score': [85, 42, 67, 38, 91, 25]})
+        print(f"Min before: {df['score'].min()}")
+        df.loc[df['score'] < 50, 'score'] = 50
+        print(f"Min after: {df['score'].min()}")
+        print(df)

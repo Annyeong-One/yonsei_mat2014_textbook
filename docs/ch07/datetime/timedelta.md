@@ -61,3 +61,86 @@ Days between: 364
 Age (approximate): 35 years
 ```
 
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a function `total_hours` that takes a `timedelta` object and returns the total number of hours as a float (including fractional hours from minutes and seconds). For example, `total_hours(timedelta(days=1, hours=6, minutes=30))` should return `30.5`.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    from datetime import timedelta
+
+    def total_hours(delta):
+        return delta.total_seconds() / 3600
+
+    # Test
+    print(total_hours(timedelta(days=1, hours=6, minutes=30)))
+    # 30.5
+    print(total_hours(timedelta(hours=2, minutes=15)))
+    # 2.25
+    ```
+
+---
+
+**Exercise 2.**
+Write a function `add_business_days` that takes a `date` and an integer `n`, and returns the date that is `n` business days (Monday-Friday) later. For example, adding 3 business days to Friday 2024-12-20 should return Wednesday 2024-12-25.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    from datetime import date, timedelta
+
+    def add_business_days(start_date, n):
+        current = start_date
+        added = 0
+        while added < n:
+            current += timedelta(days=1)
+            if current.weekday() < 5:  # Monday-Friday
+                added += 1
+        return current
+
+    # Test
+    # Friday Dec 20 + 3 business days = Wed Dec 25
+    print(add_business_days(date(2024, 12, 20), 3))
+    # 2024-12-25
+    print(add_business_days(date(2024, 12, 20), 5))
+    # 2024-12-27
+    ```
+
+---
+
+**Exercise 3.**
+Write a function `format_duration` that takes a `timedelta` and returns a human-readable string like `"2 days, 3 hours, 15 minutes"`. Omit components that are zero. For example, `format_duration(timedelta(hours=5))` should return `"5 hours"`.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    from datetime import timedelta
+
+    def format_duration(delta):
+        total_seconds = int(delta.total_seconds())
+        days = total_seconds // 86400
+        hours = (total_seconds % 86400) // 3600
+        minutes = (total_seconds % 3600) // 60
+
+        parts = []
+        if days:
+            parts.append(f"{days} day{'s' if days != 1 else ''}")
+        if hours:
+            parts.append(f"{hours} hour{'s' if hours != 1 else ''}")
+        if minutes:
+            parts.append(f"{minutes} minute{'s' if minutes != 1 else ''}")
+
+        return ", ".join(parts) if parts else "0 minutes"
+
+    # Test
+    print(format_duration(timedelta(days=2, hours=3, minutes=15)))
+    # 2 days, 3 hours, 15 minutes
+    print(format_duration(timedelta(hours=5)))
+    # 5 hours
+    print(format_duration(timedelta(minutes=1)))
+    # 1 minute
+    ```

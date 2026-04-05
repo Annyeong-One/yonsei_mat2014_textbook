@@ -91,3 +91,77 @@ print(f"Precision matrix r(X,Y|Z) = {r_precision:.4f}")
 ## Summary
 
 Partial correlation isolates the direct linear association between two variables by removing the influence of confounding variables. It can be computed from pairwise correlations using a closed-form formula, from regression residuals, or from the precision matrix. When a strong marginal correlation drops to near zero after conditioning, the original association is explained by the confounders rather than by a direct relationship.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Generate $X$, $Y$, and $Z$ where $X = Z + \varepsilon_1$ and $Y = Z + \varepsilon_2$ (with $Z, \varepsilon_1, \varepsilon_2$ independent standard normals). Compute the Pearson correlation between $X$ and $Y$, then compute the partial correlation controlling for $Z$. Show that the partial correlation is near zero.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        n = 500
+        z = np.random.normal(size=n)
+        x = z + np.random.normal(size=n)
+        y = z + np.random.normal(size=n)
+
+        r_xy, _ = stats.pearsonr(x, y)
+        r_xz, _ = stats.pearsonr(x, z)
+        r_yz, _ = stats.pearsonr(y, z)
+        partial_r = (r_xy - r_xz * r_yz) / np.sqrt((1 - r_xz**2) * (1 - r_yz**2))
+
+        print(f"Pearson r(X,Y): {r_xy:.4f}")
+        print(f"Partial r(X,Y|Z): {partial_r:.4f}")
+
+---
+
+**Exercise 2.**
+Compute the partial correlation between two variables from their precision matrix (inverse covariance matrix). Generate 300 samples from a 3-variable multivariate normal, compute the precision matrix, and extract the partial correlation $r_{12|3}$.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        cov = [[1, 0.5, 0.3], [0.5, 1, 0.4], [0.3, 0.4, 1]]
+        data = stats.multivariate_normal.rvs(mean=[0,0,0], cov=cov, size=300)
+        sample_cov = np.cov(data, rowvar=False)
+        precision = np.linalg.inv(sample_cov)
+
+        partial_r12 = -precision[0, 1] / np.sqrt(precision[0, 0] * precision[1, 1])
+        print(f"Partial r(X1,X2|X3) from precision: {partial_r12:.4f}")
+
+---
+
+**Exercise 3.**
+Using the residual approach, compute the partial correlation between $X_1$ and $X_2$ controlling for $X_3$ by regressing each on $X_3$ and correlating the residuals. Verify it matches the formula-based computation.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        cov = [[1, 0.5, 0.3], [0.5, 1, 0.4], [0.3, 0.4, 1]]
+        data = stats.multivariate_normal.rvs(mean=[0,0,0], cov=cov, size=300)
+        x1, x2, x3 = data[:, 0], data[:, 1], data[:, 2]
+
+        # Residual approach
+        res1 = x1 - np.polyval(np.polyfit(x3, x1, 1), x3)
+        res2 = x2 - np.polyval(np.polyfit(x3, x2, 1), x3)
+        r_resid, _ = stats.pearsonr(res1, res2)
+
+        # Formula approach
+        r12, _ = stats.pearsonr(x1, x2)
+        r13, _ = stats.pearsonr(x1, x3)
+        r23, _ = stats.pearsonr(x2, x3)
+        r_formula = (r12 - r13*r23) / np.sqrt((1-r13**2)*(1-r23**2))
+
+        print(f"Residual approach: {r_resid:.4f}")
+        print(f"Formula approach:  {r_formula:.4f}")

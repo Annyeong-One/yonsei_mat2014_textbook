@@ -255,6 +255,7 @@ The `%` operator computes the **remainder**, not a percentage.
 
 ---
 
+
 ## 10. Summary
 
 Key ideas:
@@ -266,3 +267,76 @@ Key ideas:
 * `0` is falsy and nonzero integers are truthy
 
 The `int` type is the foundation for counting, indexing, and exact numeric computation.
+
+
+## Exercises
+
+**Exercise 1.**
+Python integers have arbitrary precision, meaning `2 ** 1000` works without overflow. But this has a cost. Explain what trade-off Python makes compared to languages like C where integers are fixed-width (e.g., 32-bit or 64-bit). Consider memory usage, arithmetic speed, and what happens when a computation exceeds the range.
+
+??? success "Solution to Exercise 1"
+    Python integers use arbitrary precision by storing numbers as variable-length arrays of digits (internally, base $2^{30}$ chunks). The trade-offs:
+
+    - **Memory**: A Python `int` storing `42` uses ~28 bytes (object header, reference count, type pointer, digit array). A C `int32` uses only 4 bytes. For large datasets, this 7x overhead is significant.
+    - **Speed**: Each arithmetic operation on Python integers involves function calls, memory allocation, and multi-word arithmetic for large numbers. A C integer addition is a single CPU instruction. Python integers are ~10-100x slower for arithmetic.
+    - **Overflow**: C integers silently wrap around on overflow (e.g., `INT_MAX + 1` becomes `INT_MIN`). Python integers grow to accommodate any value, so `2 ** 1000` works correctly. C would need special "big integer" libraries.
+
+    The trade-off is correctness vs. performance. Python prioritizes correctness (never losing data to overflow) at the cost of speed and memory. For performance-critical code, libraries like NumPy use fixed-width integers.
+
+---
+
+**Exercise 2.**
+Predict the output and explain *why* each division operator behaves differently:
+
+```python
+print(7 / 2)
+print(7 // 2)
+print(-7 // 2)
+print(type(7 / 2))
+print(type(7 // 2))
+```
+
+Why does `-7 // 2` produce `-4` instead of `-3`? What does "floor division" mean mathematically, and why is this behavior useful?
+
+??? success "Solution to Exercise 2"
+    Output:
+
+    ```text
+    3.5
+    3
+    -4
+    <class 'float'>
+    <class 'int'>
+    ```
+
+    - `7 / 2` is **true division**: always returns a `float`, even when the result is a whole number.
+    - `7 // 2` is **floor division**: returns the largest integer less than or equal to the exact result. $\lfloor 7/2 \rfloor = \lfloor 3.5 \rfloor = 3$.
+    - `-7 // 2`: The exact result is $-3.5$. The floor (largest integer $\leq -3.5$) is $-4$, not $-3$. This is "floor toward negative infinity," not "truncation toward zero."
+
+    Floor division is useful because it pairs with the modulo operator (`%`) to satisfy the invariant: `a == (a // b) * b + (a % b)` for all integers. This makes `//` and `%` consistent and useful for cyclic computations (clock arithmetic, array wrapping, etc.).
+
+---
+
+**Exercise 3.**
+In Python, `bool` is a subclass of `int`, with `True == 1` and `False == 0`. Predict the output:
+
+```python
+print(True + True + True)
+print(True * 10)
+print(sum([True, False, True, True]))
+```
+
+Why did Python's designers make `bool` a subclass of `int` rather than a completely separate type? What practical benefit does this provide?
+
+??? success "Solution to Exercise 3"
+    Output:
+
+    ```text
+    3
+    10
+    3
+    ```
+
+    `True` behaves as `1` and `False` as `0` in arithmetic contexts because `bool` inherits from `int`. So `True + True + True = 1 + 1 + 1 = 3`, `True * 10 = 1 * 10 = 10`, and `sum([True, False, True, True]) = 1 + 0 + 1 + 1 = 3`.
+
+    Making `bool` a subclass of `int` was a pragmatic design decision. It allows booleans to work seamlessly in numeric contexts, which is extremely useful. For example, `sum(x > threshold for x in data)` counts how many values exceed a threshold -- each comparison produces `True` (1) or `False` (0), and `sum` adds them. Without this inheritance, you would need explicit conversions everywhere.

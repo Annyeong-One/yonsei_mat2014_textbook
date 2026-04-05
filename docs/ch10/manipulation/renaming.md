@@ -183,3 +183,51 @@ df1.add_suffix('_source1')
 df2.add_suffix('_source2')
 pd.merge(df1, df2, left_index=True, right_index=True)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a DataFrame with columns `'col_a'`, `'col_b'`, `'col_c'`. Rename them to `'Column A'`, `'Column B'`, `'Column C'` using a dictionary with `rename(columns=...)`.
+
+??? success "Solution to Exercise 1"
+    Rename columns using a dictionary.
+
+        import pandas as pd
+
+        df = pd.DataFrame({'col_a': [1], 'col_b': [2], 'col_c': [3]})
+        df = df.rename(columns={'col_a': 'Column A', 'col_b': 'Column B', 'col_c': 'Column C'})
+        print(df.columns.tolist())
+
+---
+
+**Exercise 2.**
+Given a DataFrame with uppercase column names, use `rename(columns=str.lower)` to convert all column names to lowercase. Then use a lambda to replace spaces with underscores.
+
+??? success "Solution to Exercise 2"
+    Use functions to transform column names.
+
+        import pandas as pd
+
+        df = pd.DataFrame({'FIRST NAME': [1], 'LAST NAME': [2], 'AGE GROUP': [3]})
+        df = df.rename(columns=str.lower)
+        print(df.columns.tolist())
+        df = df.rename(columns=lambda x: x.replace(' ', '_'))
+        print(df.columns.tolist())
+
+---
+
+**Exercise 3.**
+Create a DataFrame with a default `RangeIndex`. Use `rename(index=...)` with a dictionary to rename specific row indices (e.g., `{0: 'first', 1: 'second'}`). Verify the index changed for those rows.
+
+??? success "Solution to Exercise 3"
+    Rename specific index labels using a dictionary.
+
+        import pandas as pd
+
+        df = pd.DataFrame({'A': [10, 20, 30]})
+        df = df.rename(index={0: 'first', 1: 'second'})
+        print(df)
+        assert df.index[0] == 'first'
+        assert df.index[1] == 'second'

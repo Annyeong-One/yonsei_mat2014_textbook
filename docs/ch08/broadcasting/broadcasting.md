@@ -674,3 +674,63 @@ if __name__ == "__main__":
     🔜 NEXT: 02_shape_manipulation.py
     """)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Predict the result shape of each operation without running the code, then verify with NumPy:
+
+- `np.ones((5, 3)) + np.ones((3,))`
+- `np.ones((4, 1)) * np.ones((1, 6))`
+- `np.ones((2, 1, 4)) + np.ones((3, 1))`
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        # Predict then verify
+        r1 = np.ones((5, 3)) + np.ones((3,))
+        print(r1.shape)  # (5, 3)
+
+        r2 = np.ones((4, 1)) * np.ones((1, 6))
+        print(r2.shape)  # (4, 6)
+
+        r3 = np.ones((2, 1, 4)) + np.ones((3, 1))
+        print(r3.shape)  # (2, 3, 4)
+
+---
+
+**Exercise 2.**
+Given a 2D array `data` of shape `(100, 5)`, use broadcasting to subtract the row-wise minimum from every element in each row so that each row's smallest value becomes zero. Do not use any explicit Python loop.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        data = np.random.randn(100, 5)
+        row_min = data.min(axis=1, keepdims=True)  # shape (100, 1)
+        result = data - row_min                     # broadcasts (100, 5) - (100, 1)
+        print(result.min(axis=1))  # all zeros
+
+---
+
+**Exercise 3.**
+Write a function that takes two 1D arrays `a` of shape `(m,)` and `b` of shape `(n,)` and returns a 2D boolean array of shape `(m, n)` where entry `(i, j)` is `True` if `a[i] > b[j]`, using only broadcasting (no loops).
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        def pairwise_greater(a, b):
+            return a[:, np.newaxis] > b[np.newaxis, :]
+
+        a = np.array([3, 1, 4])
+        b = np.array([2, 5])
+        result = pairwise_greater(a, b)
+        print(result)
+        # [[ True False]
+        #  [False False]
+        #  [ True False]]
+        print(result.shape)  # (3, 2)

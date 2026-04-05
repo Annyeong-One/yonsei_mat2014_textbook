@@ -245,3 +245,84 @@ def counter():
 - Lambda and def have identical closure behavior
 - Use `nonlocal` for rebinding, `global` for module-level
 - Class bodies don't create enclosing scopes for methods
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Without running the code, predict the output. Then verify.
+
+```python
+x = "global"
+
+def outer():
+    x = "enclosing"
+    def inner():
+        print(x)
+    inner()
+
+outer()
+print(x)
+```
+
+??? success "Solution to Exercise 1"
+
+        ```
+        enclosing
+        global
+        ```
+
+    `inner()` finds `x` in the enclosing scope (`"enclosing"`). The global `x` remains `"global"` because neither function modifies it.
+
+---
+
+**Exercise 2.**
+Write a function `outer()` that defines a variable `data = []` and returns two closures: `add(item)` (which appends to `data`) and `get()` (which returns a copy of `data`). Demonstrate that both closures share the same `data`.
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        def outer():
+            data = []
+            def add(item):
+                data.append(item)
+            def get():
+                return data.copy()
+            return add, get
+
+        add, get = outer()
+        add("a")
+        add("b")
+        print(get())  # ['a', 'b']
+        add("c")
+        print(get())  # ['a', 'b', 'c']
+        ```
+
+    Both closures capture the same `data` list. `add` mutates it (no `nonlocal` needed for mutation), and `get` returns a copy for safety.
+
+---
+
+**Exercise 3.**
+Explain what happens when you read a global variable inside a function versus when you assign to it. Why does assignment create a local variable?
+
+??? success "Solution to Exercise 3"
+
+    When Python compiles a function, it scans for all assignment targets. If a variable name appears on the left side of an assignment (e.g., `x = ...`), Python treats it as a local variable for the entire function. This means even reading `x` before the assignment raises `UnboundLocalError`.
+
+        ```python
+        x = 10
+
+        def read_only():
+            print(x)       # Works: reads global x
+
+        def assigns():
+            print(x)       # UnboundLocalError!
+            x = 20         # This makes x local for entire function
+
+        read_only()        # 10
+        # assigns()        # UnboundLocalError
+        ```
+
+    To modify a global variable, use `global x`. To modify an enclosing variable, use `nonlocal x`.

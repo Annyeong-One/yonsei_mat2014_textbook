@@ -228,3 +228,94 @@ print(s.nobel)              # False
 - Immutability is desired
 - Memory efficiency matters
 - Simple data container without methods
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Define a `Color` namedtuple with fields `name`, `hex_code`, and `rgb` (a tuple of three ints). Create a list of at least three colors and write a function `find_by_name` that takes the list and a color name string and returns the matching `Color` or `None`. For example, `find_by_name(colors, "red")` should return the red Color instance.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    from collections import namedtuple
+
+    Color = namedtuple('Color', ['name', 'hex_code', 'rgb'])
+
+    colors = [
+        Color('red', '#FF0000', (255, 0, 0)),
+        Color('green', '#00FF00', (0, 255, 0)),
+        Color('blue', '#0000FF', (0, 0, 255)),
+    ]
+
+    def find_by_name(color_list, name):
+        for color in color_list:
+            if color.name == name:
+                return color
+        return None
+
+    # Test
+    print(find_by_name(colors, "red"))
+    # Color(name='red', hex_code='#FF0000', rgb=(255, 0, 0))
+    print(find_by_name(colors, "yellow"))
+    # None
+    ```
+
+---
+
+**Exercise 2.**
+Write a function `csv_to_namedtuples` that takes a CSV-formatted string (with a header row) and returns a list of namedtuples, where the namedtuple type is created dynamically from the header. For example, given `"name,age\nAlice,30\nBob,25"`, it should return a list of `Row(name='Alice', age='30')` and `Row(name='Bob', age='25')`.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    from collections import namedtuple
+
+    def csv_to_namedtuples(csv_string):
+        lines = csv_string.strip().split('\n')
+        headers = lines[0].split(',')
+        Row = namedtuple('Row', headers)
+        result = []
+        for line in lines[1:]:
+            values = line.split(',')
+            result.append(Row._make(values))
+        return result
+
+    # Test
+    csv_data = "name,age\nAlice,30\nBob,25"
+    rows = csv_to_namedtuples(csv_data)
+    for row in rows:
+        print(row)
+    # Row(name='Alice', age='30')
+    # Row(name='Bob', age='25')
+    print(rows[0].name)  # Alice
+    ```
+
+---
+
+**Exercise 3.**
+Define a `Point` namedtuple with fields `x` and `y`. Write a function `translate` that takes a `Point` and two offsets `dx` and `dy`, and returns a new `Point` shifted by those offsets using `_replace()`. Then write a function `distance` that takes two `Point` instances and returns the Euclidean distance between them.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    from collections import namedtuple
+    import math
+
+    Point = namedtuple('Point', ['x', 'y'])
+
+    def translate(point, dx, dy):
+        return point._replace(x=point.x + dx, y=point.y + dy)
+
+    def distance(p1, p2):
+        return math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2)
+
+    # Test
+    p = Point(3, 4)
+    moved = translate(p, 1, -2)
+    print(moved)  # Point(x=4, y=2)
+
+    origin = Point(0, 0)
+    print(distance(p, origin))  # 5.0
+    ```

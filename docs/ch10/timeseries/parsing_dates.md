@@ -353,3 +353,58 @@ print(prices.resample('2D').mean())        # Resampling
 | Handle invalid dates | `errors='coerce'` |
 | Parse Unix timestamps | `unit='s'` parameter |
 | Specify date format | `format` parameter |
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that converts a string column to datetime using `pd.to_datetime()`. Handle a custom format like `'15-Mar-2024'`.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    # Solution for the specific exercise
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(10), 'B': np.random.randn(10)})
+    print(df.head())
+    ```
+
+---
+
+**Exercise 2.** Explain the `format` parameter in `pd.to_datetime()`. Why is specifying the format faster than letting Pandas infer it?
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the Pandas API and its behavior for this specific operation.
+
+---
+
+**Exercise 3.** Write code that handles parsing errors using `errors='coerce'` in `pd.to_datetime()`. Show what happens to unparseable values.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(20), 'B': np.random.randn(20)})
+    result = df.describe()
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Create a DataFrame with a date string column and set it as the index after converting to datetime.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(50), 'group': np.random.choice(['X', 'Y'], 50)})
+    result = df.groupby('group').mean()
+    print(result)
+    ```

@@ -569,3 +569,99 @@ finally:
 - Use `SharedMemory` for high-performance NumPy array sharing
 - **Always use locks** when multiple processes modify shared data
 - Prefer message passing over shared state when possible
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Use `multiprocessing.Value` and a `Lock` to implement a shared counter that 4 processes each increment 50,000 times. Verify the final value is exactly 200,000. Then remove the lock and show that the result is often incorrect.
+
+??? success "Solution to Exercise 1"
+        ```python
+        from multiprocessing import Process, Value, Lock
+
+        def increment_with_lock(counter, lock):
+            for _ in range(50_000):
+                with lock:
+                    counter.value += 1
+
+        def increment_no_lock(counter):
+            for _ in range(50_000):
+                counter.value += 1
+
+        if __name__ == "__main__":
+            # With lock
+            c1 = Value('i', 0)
+            lock = Lock()
+            procs = [Process(target=increment_with_lock, args=(c1, lock)) for _ in range(4)]
+            for p in procs: p.start()
+            for p in procs: p.join()
+            print(f"With lock: {c1.value} (expected 200000)")
+
+            # Without lock
+            c2 = Value('i', 0)
+            procs = [Process(target=increment_no_lock, args=(c2,)) for _ in range(4)]
+            for p in procs: p.start()
+            for p in procs: p.join()
+            print(f"Without lock: {c2.value} (may be < 200000)")
+        ```
+
+---
+
+**Exercise 2.**
+Use a `multiprocessing.Manager` to share a dictionary between 5 processes. Each process writes 10 key-value pairs of the form `f"proc{pid}_key{i}"`. After all processes finish, print the dictionary and verify it has exactly 50 entries.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import os
+        from multiprocessing import Process, Manager
+
+        def writer(shared_dict, pid):
+            for i in range(10):
+                shared_dict[f"proc{pid}_key{i}"] = i * pid
+
+        if __name__ == "__main__":
+            with Manager() as manager:
+                d = manager.dict()
+                procs = [Process(target=writer, args=(d, i)) for i in range(5)]
+                for p in procs: p.start()
+                for p in procs: p.join()
+                result = dict(d)
+
+            print(f"Total entries: {len(result)} (expected 50)")
+            for k in sorted(result)[:5]:
+                print(f"  {k}: {result[k]}")
+            print("  ...")
+        ```
+
+---
+
+**Exercise 3.**
+Use `multiprocessing.Pipe` to implement a simple request-response pattern. The main process sends 5 computation requests (a number to square) through the pipe; a child process reads each request, computes the square, and sends the result back. The main process collects and prints all results.
+
+??? success "Solution to Exercise 3"
+        ```python
+        from multiprocessing import Process, Pipe
+
+        def compute_worker(conn):
+            while True:
+                msg = conn.recv()
+                if msg is None:
+                    break
+                conn.send(msg ** 2)
+            conn.close()
+
+        if __name__ == "__main__":
+            parent_conn, child_conn = Pipe()
+            p = Process(target=compute_worker, args=(child_conn,))
+            p.start()
+
+            for num in [3, 7, 11, 15, 20]:
+                parent_conn.send(num)
+                result = parent_conn.recv()
+                print(f"{num}^2 = {result}")
+
+            parent_conn.send(None)  # shutdown signal
+            p.join()
+        ```

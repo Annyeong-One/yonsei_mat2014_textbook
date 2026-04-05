@@ -591,6 +591,61 @@ b'\xe4\xb8\xad'
 
 ---
 
+**Exercise 8.**
+In Python 3, `len("Hello, 世界!")` returns `10`, but `len("Hello, 世界!".encode("utf-8"))` returns `14`. Explain *why* these two lengths differ. What fundamental distinction does this reveal about the difference between "characters" (code points) and "bytes"? Could you design an encoding where these two lengths are always equal for all possible strings? What trade-off would that encoding make?
+
+??? success "Solution to Exercise 8"
+    `len("Hello, 世界!")` returns 10 because Python's `len()` on a `str` counts **Unicode code points** -- abstract characters. There are 10 characters: `H`, `e`, `l`, `l`, `o`, `,`, ` `, `世`, `界`, `!`.
+
+    `len("Hello, 世界!".encode("utf-8"))` returns 14 because `.encode("utf-8")` produces a `bytes` object, and `len()` on `bytes` counts **bytes**. The 7 ASCII characters each use 1 byte, while `世` and `界` each use 3 bytes in UTF-8: $7 + 3 + 3 + 1 = 14$.
+
+    This reveals that characters and bytes are fundamentally different units. A "character" is an abstract symbol; a "byte" is a unit of storage. The mapping between them depends on the encoding and can be one-to-many.
+
+    You could design an encoding where the two lengths are always equal: **UTF-32**. It uses exactly 4 bytes per code point, so `len(text) == len(text.encode("utf-32-be")) // 4`. The trade-off is massive space waste -- ASCII text uses 4x the memory compared to UTF-8. This is why UTF-32 is rarely used for storage or transmission.
+
+---
+
+**Exercise 9.**
+UTF-8 is described as "self-synchronizing." Explain what this means by considering the following scenario: a program starts reading a UTF-8 byte stream from the middle (not from the beginning). How can it determine where the next valid character starts without backtracking to the beginning of the stream? What specific property of UTF-8's bit patterns makes this possible, and why couldn't a fixed-width encoding like ASCII extended to two bytes (with no special marker bits) provide this property?
+
+??? success "Solution to Exercise 9"
+    "Self-synchronizing" means that a decoder can find the start of the next valid character from any arbitrary position in the byte stream, without needing to read from the beginning.
+
+    This works because UTF-8 has three distinct byte categories identifiable from their leading bits:
+
+    - **Start bytes** begin with `0` (single-byte) or `11` (multi-byte leader)
+    - **Continuation bytes** always begin with `10`
+
+    If a decoder lands on a continuation byte (`10xxxxxx`), it knows this is NOT the start of a character. It simply skips forward until it finds a byte that does NOT start with `10` -- that byte must be a start byte.
+
+    A hypothetical "ASCII extended to two bytes" with no marker bits (just using raw 16-bit values) would NOT be self-synchronizing. If the decoder lands in the middle of a two-byte character, it sees a byte that looks identical to any other byte -- there is no way to distinguish "first byte of a character" from "second byte of a character" without context. The decoder would produce garbage until it happened to realign by luck.
+
+---
+
+**Exercise 10.**
+Consider two programmers. Programmer A writes a file using Windows-1252 encoding. Programmer B reads the file assuming UTF-8 encoding. For pure ASCII text (code points 0--127), will Programmer B see any errors? Why or why not? Now consider the character `é` (code point 233 in Windows-1252, stored as the single byte `0xE9`). What happens when Programmer B tries to decode this byte as UTF-8? Trace through the UTF-8 bit pattern rules to explain the failure.
+
+??? success "Solution to Exercise 10"
+    For pure ASCII text (bytes `0x00`--`0x7F`), Programmer B will see no errors. UTF-8 was deliberately designed so that ASCII bytes have the same encoding in both ASCII and UTF-8. Every byte in the range `0x00`--`0x7F` is a valid single-byte UTF-8 character with the same meaning.
+
+    For `é` (Windows-1252 byte `0xE9` = `11101001` in binary): in UTF-8, a byte starting with `1110` signals the first byte of a **3-byte sequence**. The UTF-8 decoder expects two continuation bytes (starting with `10`) to follow. But the next bytes in the stream are whatever comes after `é` in the file -- likely ASCII bytes starting with `0`, not `10`. The decoder detects an invalid sequence and raises a `UnicodeDecodeError`.
+
+    Specifically, `0xE9` in UTF-8 means "I am the start of a 3-byte character, and the next 2 bytes must be continuation bytes." When those continuation bytes are missing or wrong, the decoding fails. This is why mixing encodings is dangerous for any non-ASCII characters.
+
+---
+
+**Exercise 11.**
+Python 3 made a deliberate design decision: strings (`str`) are sequences of Unicode code points, and raw bytes are a separate type (`bytes`). Python 2, by contrast, blurred the distinction, with `str` being bytes and `unicode` being a separate type. Explain *why* the Python 3 design is more correct from a character-encoding perspective. What category of bugs does the strict `str`/`bytes` separation prevent? Give a concrete scenario where Python 2's conflation would silently produce wrong results.
+
+??? success "Solution to Exercise 11"
+    The Python 3 design is more correct because it enforces the fundamental distinction between **text** (a sequence of abstract characters) and **binary data** (a sequence of bytes). These are genuinely different types of data that require an explicit encoding/decoding step to convert between them.
+
+    The strict separation prevents **silent encoding bugs**. In Python 2, `str` was bytes, so operations like concatenation (`str + unicode`) would silently attempt implicit encoding/decoding using ASCII. This works for pure ASCII data but fails unpredictably when non-ASCII characters appear.
+
+    **Concrete scenario:** In Python 2, a function receives a user's name as a `unicode` string: `u"José"`. It concatenates this with a byte string: `"Hello, " + name`. Python 2 silently tries to encode the `unicode` to ASCII for the concatenation. This raises `UnicodeEncodeError` because `é` is not ASCII -- but only at runtime, only for users with non-ASCII names. The bug is invisible during testing with ASCII-only test data and manifests only in production with international users.
+
+---
+
 ## 14. Short Answers
 
 1. Character set defines characters; encoding defines byte representation
@@ -600,8 +655,6 @@ b'\xe4\xb8\xad'
 5. 1–4 bytes
 6. Some characters require multiple bytes
 7. Garbled text (mojibake)
-
----
 
 ## 15. Summary
 

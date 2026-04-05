@@ -182,3 +182,89 @@ except TypeError as e:
 - Arbitrary values
 - No numeric/string compatibility needed
 - Mixed value types
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create an `IntEnum` called `Grade` with `A = 4`, `B = 3`, `C = 2`, `D = 1`, `F = 0`. Write a function `calculate_gpa(grades)` that takes a list of `Grade` members and returns the average as a float. Demonstrate that `Grade` values can be used directly in arithmetic.
+
+??? success "Solution to Exercise 1"
+
+        from enum import IntEnum
+
+        class Grade(IntEnum):
+            A = 4
+            B = 3
+            C = 2
+            D = 1
+            F = 0
+
+        def calculate_gpa(grades):
+            return sum(grades) / len(grades)
+
+        grades = [Grade.A, Grade.B, Grade.A, Grade.C, Grade.B]
+        gpa = calculate_gpa(grades)
+        print(f"GPA: {gpa:.2f}")  # GPA: 3.20
+
+        # IntEnum works in arithmetic
+        print(Grade.A + Grade.B)    # 7
+        print(Grade.A > Grade.C)    # True
+
+---
+
+**Exercise 2.**
+Define a `StrEnum` called `Color` with lowercase values. Show that `Color` members can be compared directly with strings (`Color.RED == "red"`), used in string operations (`.upper()`, `.startswith()`), and used as dictionary keys interchangeably with strings.
+
+??? success "Solution to Exercise 2"
+
+        from enum import StrEnum
+
+        class Color(StrEnum):
+            RED = "red"
+            GREEN = "green"
+            BLUE = "blue"
+
+        # Compare with strings
+        print(Color.RED == "red")        # True
+
+        # String operations
+        print(Color.RED.upper())         # RED
+        print(Color.GREEN.startswith("gr"))  # True
+
+        # Use as dictionary keys
+        prices = {Color.RED: 10, "green": 20}
+        print(prices[Color.RED])     # 10
+        print(prices[Color.GREEN])   # 20
+
+---
+
+**Exercise 3.**
+Create an `IntEnum` called `HTTPStatus` with common codes (200, 201, 400, 404, 500). Write a function `categorize(status)` that uses integer comparison (`< 300`, `< 400`, `< 500`) to return "success", "redirect", "client error", or "server error". Show that the function works with both `HTTPStatus` members and plain integers.
+
+??? success "Solution to Exercise 3"
+
+        from enum import IntEnum
+
+        class HTTPStatus(IntEnum):
+            OK = 200
+            CREATED = 201
+            BAD_REQUEST = 400
+            NOT_FOUND = 404
+            SERVER_ERROR = 500
+
+        def categorize(status):
+            if status < 300:
+                return "success"
+            elif status < 400:
+                return "redirect"
+            elif status < 500:
+                return "client error"
+            else:
+                return "server error"
+
+        print(categorize(HTTPStatus.OK))          # success
+        print(categorize(HTTPStatus.NOT_FOUND))   # client error
+        print(categorize(HTTPStatus.SERVER_ERROR)) # server error
+        print(categorize(301))                     # redirect (plain int works)

@@ -436,3 +436,50 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create `a = np.array([2, 4, 4, 4, 5, 5, 7, 9])`. Compute the mean, median, standard deviation, and variance. Verify that `var = std**2`.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        a = np.array([2, 4, 4, 4, 5, 5, 7, 9], dtype=float)
+        print(f"Mean: {np.mean(a)}")
+        print(f"Median: {np.median(a)}")
+        print(f"Std: {np.std(a):.4f}")
+        print(f"Var: {np.var(a):.4f}")
+        print(f"var == std^2: {np.allclose(np.var(a), np.std(a)**2)}")
+
+---
+
+**Exercise 2.**
+Generate 10000 samples from a normal distribution with mean 5 and std 2. Compute the sample mean and standard deviation and verify they are close to the true parameters.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        np.random.seed(42)
+        samples = np.random.normal(loc=5, scale=2, size=10000)
+        print(f"Sample mean: {samples.mean():.4f} (expected 5)")
+        print(f"Sample std:  {samples.std():.4f} (expected 2)")
+
+---
+
+**Exercise 3.**
+Compute the 25th, 50th (median), and 75th percentiles of `a = np.random.randn(1000)` using `np.percentile`. Verify that the 50th percentile matches `np.median(a)`.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        a = np.random.randn(1000)
+        p25, p50, p75 = np.percentile(a, [25, 50, 75])
+        print(f"25th: {p25:.4f}, 50th: {p50:.4f}, 75th: {p75:.4f}")
+        print(f"Median: {np.median(a):.4f}")
+        print(f"50th == median: {np.allclose(p50, np.median(a))}")

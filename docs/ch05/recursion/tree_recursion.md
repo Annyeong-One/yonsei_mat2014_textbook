@@ -96,3 +96,87 @@ print(traverse_tree(root))  # [1, 2, 3, 4, 6]
 ## Performance Comparison
 
 The exponential nature of tree recursion means small input size changes cause huge performance differences. Use memoization (chapter on memoization) to fix this.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a tree-recursive function `count_partitions(n, max_part)` that counts the number of ways to partition the integer `n` using parts up to `max_part`. For example, `count_partitions(6, 4)` returns `9`. Identify the two recursive branches (use the largest part vs. exclude it).
+
+??? success "Solution to Exercise 1"
+
+        def count_partitions(n, max_part):
+            if n == 0:
+                return 1
+            if n < 0 or max_part == 0:
+                return 0
+            # Use max_part + don't use max_part
+            return (count_partitions(n - max_part, max_part)
+                    + count_partitions(n, max_part - 1))
+
+        print(count_partitions(6, 4))   # 9
+        print(count_partitions(5, 5))   # 7
+        print(count_partitions(10, 5))  # 30
+
+---
+
+**Exercise 2.**
+Add a call counter to the naive recursive `fibonacci(n)` function. Compute `fibonacci(25)` and print the total number of function calls. Then add `@lru_cache` and repeat, printing the new call count to demonstrate the dramatic difference.
+
+??? success "Solution to Exercise 2"
+
+        from functools import lru_cache
+
+        # Without memoization
+        naive_calls = 0
+
+        def fib_naive(n):
+            global naive_calls
+            naive_calls += 1
+            if n < 2:
+                return n
+            return fib_naive(n - 1) + fib_naive(n - 2)
+
+        fib_naive(25)
+        print(f"Naive calls for fib(25): {naive_calls}")  # 242785
+
+        # With memoization
+        memo_calls = 0
+
+        @lru_cache(maxsize=None)
+        def fib_cached(n):
+            global memo_calls
+            memo_calls += 1
+            if n < 2:
+                return n
+            return fib_cached(n - 1) + fib_cached(n - 2)
+
+        fib_cached(25)
+        print(f"Cached calls for fib(25): {memo_calls}")  # 26
+
+---
+
+**Exercise 3.**
+Write a tree-recursive function `paths_in_grid(rows, cols)` that counts the number of unique paths from the top-left to the bottom-right of a `rows x cols` grid, where you can only move right or down. Draw the call tree for `paths_in_grid(3, 3)` in a comment and verify the result is `6`.
+
+??? success "Solution to Exercise 3"
+
+        def paths_in_grid(rows, cols):
+            # Base cases
+            if rows == 1 or cols == 1:
+                return 1
+            # Move down + move right
+            return paths_in_grid(rows - 1, cols) + paths_in_grid(rows, cols - 1)
+
+        print(paths_in_grid(3, 3))  # 6
+        print(paths_in_grid(4, 4))  # 20
+
+        # Call tree for paths_in_grid(3, 3):
+        #                 (3,3)
+        #                /     \
+        #           (2,3)       (3,2)
+        #           /   \       /   \
+        #       (1,3) (2,2)  (2,2) (3,1)
+        #              / \    / \
+        #          (1,2)(2,1)(1,2)(2,1)

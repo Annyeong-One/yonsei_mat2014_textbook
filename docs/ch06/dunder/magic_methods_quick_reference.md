@@ -154,3 +154,134 @@ Implement: `__init__`, `__enter__`, `__exit__`
 - Test edge cases thoroughly
 - Use `super()` when inheriting
 - Consider performance implications
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Using this reference, create a `TimeSlot` class that implements at least 6 different magic methods from different categories (representation, comparison, arithmetic, container, context manager, truth). List which magic method corresponds to which category.
+
+??? success "Solution to Exercise 1"
+
+        from functools import total_ordering
+
+        @total_ordering
+        class TimeSlot:
+            """Uses 6+ magic methods from different categories."""
+
+            # Lifecycle
+            def __init__(self, start_hour, end_hour):
+                self.start = start_hour
+                self.end = end_hour
+
+            # Representation
+            def __repr__(self):
+                return f"TimeSlot({self.start}, {self.end})"
+
+            def __str__(self):
+                return f"{self.start}:00-{self.end}:00"
+
+            # Comparison
+            def __eq__(self, other):
+                return (self.start, self.end) == (other.start, other.end)
+
+            def __lt__(self, other):
+                return self.start < other.start
+
+            # Arithmetic
+            def __add__(self, hours):
+                return TimeSlot(self.start, self.end + hours)
+
+            # Truth
+            def __bool__(self):
+                return self.end > self.start
+
+            # Container (length = duration)
+            def __len__(self):
+                return max(0, self.end - self.start)
+
+        ts = TimeSlot(9, 12)
+        print(repr(ts))       # Representation: TimeSlot(9, 12)
+        print(str(ts))        # Representation: 9:00-12:00
+        print(ts == TimeSlot(9, 12))  # Comparison: True
+        print(ts + 2)         # Arithmetic: TimeSlot(9, 14)
+        print(bool(ts))       # Truth: True
+        print(len(ts))        # Container: 3
+
+---
+
+**Exercise 2.**
+Write a `Config` class that uses `__getitem__` and `__setitem__` (container methods), `__contains__` (membership), `__len__` (sizing), `__repr__` (representation), and `__bool__` (truth). It should behave like a dictionary. Create and demonstrate all six methods.
+
+??? success "Solution to Exercise 2"
+
+        class Config:
+            def __init__(self, **kwargs):
+                self._data = dict(kwargs)
+
+            def __getitem__(self, key):
+                return self._data[key]
+
+            def __setitem__(self, key, value):
+                self._data[key] = value
+
+            def __contains__(self, key):
+                return key in self._data
+
+            def __len__(self):
+                return len(self._data)
+
+            def __repr__(self):
+                return f"Config({self._data})"
+
+            def __bool__(self):
+                return len(self._data) > 0
+
+        cfg = Config(host="localhost", port=8080)
+        print(cfg["host"])       # localhost
+        cfg["debug"] = True
+        print("debug" in cfg)    # True
+        print(len(cfg))          # 3
+        print(repr(cfg))         # Config({...})
+        print(bool(cfg))         # True
+        print(bool(Config()))    # False
+
+---
+
+**Exercise 3.**
+Build a `FileWrapper` class that uses `__init__` (lifecycle), `__enter__`/`__exit__` (context manager), `__len__` (returns file size), `__str__` (returns filename), and `__bool__` (returns whether file has content). Simulate the file operations without actually opening files.
+
+??? success "Solution to Exercise 3"
+
+        class FileWrapper:
+            def __init__(self, filename, content=""):
+                self.filename = filename
+                self.content = content
+                self.is_open = False
+
+            def __enter__(self):
+                self.is_open = True
+                print(f"Opened {self.filename}")
+                return self
+
+            def __exit__(self, exc_type, exc_val, exc_tb):
+                self.is_open = False
+                print(f"Closed {self.filename}")
+                return False
+
+            def __len__(self):
+                return len(self.content)
+
+            def __str__(self):
+                return self.filename
+
+            def __bool__(self):
+                return len(self.content) > 0
+
+        with FileWrapper("data.txt", "Hello World") as f:
+            print(str(f))      # data.txt
+            print(len(f))      # 11
+            print(bool(f))     # True
+
+        print(bool(FileWrapper("empty.txt")))  # False

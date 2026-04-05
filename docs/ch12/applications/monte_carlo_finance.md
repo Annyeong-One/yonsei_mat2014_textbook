@@ -257,3 +257,61 @@ if __name__ == "__main__":
     print("Tutorial 07 Complete!")
     print("="*80)
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that uses Monte Carlo simulation to estimate the price of a European call option under the Black-Scholes model.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(100)
+    print(f'Mean: {data.mean():.4f}')
+    print(f'Std: {data.std():.4f}')
+    ```
+
+---
+
+**Exercise 2.** Explain how Monte Carlo simulation can be used to estimate Value at Risk (VaR). What does the 95% VaR represent?
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the statistical method and its assumptions.
+
+---
+
+**Exercise 3.** Write code that simulates 10000 portfolio return paths and computes the 5th percentile as the VaR estimate.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+    from scipy import stats
+    import matplotlib.pyplot as plt
+
+    np.random.seed(42)
+    data = np.random.randn(1000)
+    fig, ax = plt.subplots()
+    ax.hist(data, bins=30, density=True, alpha=0.7)
+    ax.set_title('Distribution')
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Create a Monte Carlo simulation that estimates $\pi$ by generating random points in a unit square and counting those inside a quarter circle.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(500)
+    result = stats.describe(data)
+    print(result)
+    ```

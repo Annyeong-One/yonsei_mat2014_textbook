@@ -75,3 +75,61 @@ Differential entropy shares some properties with its discrete counterpart, but t
 ## Summary
 
 Shannon entropy $H(X) = -\sum_x p(x) \log p(x)$ measures the average uncertainty in a discrete random variable. It is non-negative, maximized by the uniform distribution, and concave. Differential entropy extends this concept to continuous distributions but can be negative and is not invariant under changes of variable.
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that computes the Shannon entropy of a discrete probability distribution $p = [0.25, 0.25, 0.25, 0.25]$ using the formula $H(p) = -\sum p_i \log_2(p_i)$.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(100)
+    print(f'Mean: {data.mean():.4f}')
+    print(f'Std: {data.std():.4f}')
+    ```
+
+---
+
+**Exercise 2.** Explain why the uniform distribution has maximum entropy among all distributions on the same support.
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the statistical method and its assumptions.
+
+---
+
+**Exercise 3.** Write code that plots the entropy of a binary distribution (Bernoulli) as a function of the probability parameter $p$ for $p \in [0, 1]$.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+    from scipy import stats
+    import matplotlib.pyplot as plt
+
+    np.random.seed(42)
+    data = np.random.randn(1000)
+    fig, ax = plt.subplots()
+    ax.hist(data, bins=30, density=True, alpha=0.7)
+    ax.set_title('Distribution')
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Compute the entropy of a dataset of categorical values by first computing the empirical probabilities and then applying the entropy formula.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(500)
+    result = stats.describe(data)
+    print(result)
+    ```

@@ -371,3 +371,84 @@ def adaptive_stft(x, fs, target_bw=10, min_win=128, max_win=2048):
 - **Visualization** via `pcolormesh()` or `imshow()` clearly shows time-frequency structure
 
 Next topic: **Windowing** explores how window functions reduce spectral leakage artifacts and why they matter for clean spectrograms.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Generate a signal that is a 200 Hz sine for the first 1.5 seconds and a 400 Hz sine for the remaining 1.5 seconds (sample rate 2000 Hz). Compute the spectrogram with `scipy.signal.spectrogram` using `nperseg=256` and `noverlap=128`. Verify that the spectrogram shows two distinct horizontal bands at 200 Hz and 400 Hz in their respective time intervals.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        from scipy import signal
+
+        fs = 2000
+        t = np.arange(0, 3, 1/fs)
+        x = np.where(t < 1.5,
+                      np.sin(2*np.pi*200*t),
+                      np.sin(2*np.pi*400*t))
+
+        f, t_spec, Sxx = signal.spectrogram(x, fs=fs, nperseg=256, noverlap=128)
+
+        # Check that 200 Hz dominates in first half
+        mid_time = len(t_spec) // 2
+        peak_first = f[np.argmax(Sxx[:, mid_time // 2])]
+        peak_second = f[np.argmax(Sxx[:, mid_time + mid_time // 2])]
+        print(f"First half peak: {peak_first:.0f} Hz")   # ~200
+        print(f"Second half peak: {peak_second:.0f} Hz") # ~400
+
+---
+
+**Exercise 2.**
+Using the chirp signal from `scipy.signal.chirp` (100 Hz to 500 Hz over 3 seconds, sample rate 2000 Hz), compute two spectrograms: one with `nperseg=64` (high time resolution) and one with `nperseg=512` (high frequency resolution). Compare the two and explain which one more clearly shows the chirp's instantaneous frequency versus which one has a thinner frequency trace.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy import signal
+
+        fs = 2000
+        duration = 3
+        t = np.linspace(0, duration, int(fs * duration))
+        x = signal.chirp(t, f0=100, f1=500, t1=duration)
+
+        f1, t1, Sxx1 = signal.spectrogram(x, fs=fs, nperseg=64, noverlap=32)
+        f2, t2, Sxx2 = signal.spectrogram(x, fs=fs, nperseg=512, noverlap=256)
+
+        print(f"Short window: {Sxx1.shape} (time frames={len(t1)}, freq bins={len(f1)})")
+        print(f"Long window:  {Sxx2.shape} (time frames={len(t2)}, freq bins={len(f2)})")
+        # Short window -> more time frames, fewer freq bins -> better time resolution
+        # Long window -> fewer time frames, more freq bins -> thinner freq trace
+
+---
+
+**Exercise 3.**
+Implement a manual STFT function that takes a signal, window length, hop length, and window type, and returns the magnitude spectrogram. Test it on a 500 Hz sine wave (sample rate 4000 Hz, duration 1 second) using a Hann window of length 256 and hop length 64. Verify that the peak frequency bin corresponds to 500 Hz.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy.signal import get_window
+
+        def manual_stft(x, fs, nperseg, hop, window='hann'):
+            w = get_window(window, nperseg)
+            n_frames = (len(x) - nperseg) // hop + 1
+            nfft = nperseg
+            Sxx = np.zeros((nfft // 2 + 1, n_frames))
+            for m in range(n_frames):
+                start = m * hop
+                segment = x[start:start + nperseg] * w
+                X = np.fft.rfft(segment)
+                Sxx[:, m] = np.abs(X)
+            f = np.fft.rfftfreq(nfft, 1/fs)
+            return f, Sxx
+
+        fs = 4000
+        t = np.arange(0, 1, 1/fs)
+        x = np.sin(2*np.pi*500*t)
+
+        f, Sxx = manual_stft(x, fs, nperseg=256, hop=64)
+        peak_freq = f[np.argmax(Sxx.mean(axis=1))]
+        print(f"Peak frequency: {peak_freq:.0f} Hz")  # 500

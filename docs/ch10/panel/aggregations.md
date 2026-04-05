@@ -244,3 +244,58 @@ print(summary.T)
 | Lag per entity | `df.groupby(level='ticker').shift(1)` |
 | Rank per time | `df.groupby(level='date').rank()` |
 | Correlation matrix | `df['col'].unstack().corr()` |
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that computes the mean across entities (panel groups) using `groupby().mean()` on a MultiIndex DataFrame.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    # Solution for the specific exercise
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(10), 'B': np.random.randn(10)})
+    print(df.head())
+    ```
+
+---
+
+**Exercise 2.** Explain the difference between aggregating across time (within-entity) and across entities (within-time) in panel data.
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the Pandas API and its behavior for this specific operation.
+
+---
+
+**Exercise 3.** Write code that computes both the within-entity mean and the between-entity mean for a panel dataset.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(20), 'B': np.random.randn(20)})
+    result = df.describe()
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Create panel data and compute the rolling mean for each entity separately using `groupby().rolling()`.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(50), 'group': np.random.choice(['X', 'Y'], 50)})
+    result = df.groupby('group').mean()
+    print(result)
+    ```

@@ -326,3 +326,70 @@ def patch_byte(filename, offset, value):
 
 # patch_byte("data.bin", 100, 0xFF)
 ```
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Write a script that creates a binary file containing the bytes `b'\x00\x01\x02\x03'`, then reads it back and prints each byte as a hexadecimal value.
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        # Write binary file
+        with open("/tmp/test.bin", "wb") as f:
+            f.write(b'\x00\x01\x02\x03')
+
+        # Read and print hex values
+        with open("/tmp/test.bin", "rb") as f:
+            data = f.read()
+            for byte in data:
+                print(f"0x{byte:02x}", end=" ")
+        # 0x00 0x01 0x02 0x03
+        ```
+
+    Binary mode (`"rb"`, `"wb"`) reads/writes raw bytes without text encoding.
+
+---
+
+**Exercise 2.**
+Write a function `copy_file(src, dst)` that copies a binary file from `src` to `dst` by reading and writing in 4096-byte chunks. Use `"rb"` and `"wb"` modes.
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        def copy_file(src, dst, chunk_size=4096):
+            with open(src, "rb") as fin, open(dst, "wb") as fout:
+                while True:
+                    chunk = fin.read(chunk_size)
+                    if not chunk:
+                        break
+                    fout.write(chunk)
+        ```
+
+    Reading in chunks avoids loading the entire file into memory, making this suitable for large files.
+
+---
+
+**Exercise 3.**
+Use the `struct` module to write two integers (42 and 100) to a binary file in little-endian format, then read them back and print them.
+
+??? success "Solution to Exercise 3"
+
+        ```python
+        import struct
+
+        # Write
+        with open("/tmp/ints.bin", "wb") as f:
+            f.write(struct.pack("<ii", 42, 100))
+
+        # Read
+        with open("/tmp/ints.bin", "rb") as f:
+            data = f.read()
+            a, b = struct.unpack("<ii", data)
+            print(a, b)  # 42 100
+        ```
+
+    `"<ii"` means little-endian (`<`) with two signed integers (`i`). `struct.pack` converts to bytes and `struct.unpack` converts back.

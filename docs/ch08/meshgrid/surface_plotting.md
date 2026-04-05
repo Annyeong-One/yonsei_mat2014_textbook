@@ -618,3 +618,54 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a meshgrid for `x` and `y` both ranging from -5 to 5 with 50 points. Compute `Z = np.sin(np.sqrt(X**2 + Y**2))` and print the shape of `Z`. Describe what this surface looks like geometrically.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        x = np.linspace(-5, 5, 50)
+        y = np.linspace(-5, 5, 50)
+        X, Y = np.meshgrid(x, y)
+        Z = np.sin(np.sqrt(X**2 + Y**2))
+        print(f"Z shape: {Z.shape}")  # (50, 50)
+        # This is a circular ripple pattern centered at the origin.
+
+---
+
+**Exercise 2.**
+Using meshgrid, evaluate and print the minimum and maximum of the function `f(x, y) = x * exp(-(x^2 + y^2))` on the grid `[-3, 3] x [-3, 3]` with 200 points per axis.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        x = np.linspace(-3, 3, 200)
+        y = np.linspace(-3, 3, 200)
+        X, Y = np.meshgrid(x, y)
+        Z = X * np.exp(-(X**2 + Y**2))
+        print(f"Min: {Z.min():.6f}")
+        print(f"Max: {Z.max():.6f}")
+
+---
+
+**Exercise 3.**
+Create meshgrid coordinates for a parametric surface: a hemisphere defined by `Z = sqrt(max(0, 1 - X^2 - Y^2))` on the grid `[-1, 1] x [-1, 1]`. Use `np.where` or `np.clip` to handle the square root of negative values. Print the shape of `Z` and its maximum value.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        x = np.linspace(-1, 1, 100)
+        y = np.linspace(-1, 1, 100)
+        X, Y = np.meshgrid(x, y)
+        R2 = X**2 + Y**2
+        Z = np.sqrt(np.clip(1 - R2, 0, None))
+        print(f"Z shape: {Z.shape}")  # (100, 100)
+        print(f"Z max: {Z.max():.4f}")  # 1.0

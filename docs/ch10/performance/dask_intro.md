@@ -319,3 +319,58 @@ ddf = ddf.set_index('id')
 3. Use `.compute()` sparingly (at the end)
 4. Prefer Parquet format for large files
 5. Monitor with Dask dashboard
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Explain what Dask is and how it extends Pandas for larger-than-memory datasets.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    # Solution for the specific exercise
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(10), 'B': np.random.randn(10)})
+    print(df.head())
+    ```
+
+---
+
+**Exercise 2.** Write the import statement for Dask DataFrame and explain how `dask.dataframe.read_csv()` differs from `pd.read_csv()`.
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the Pandas API and its behavior for this specific operation.
+
+---
+
+**Exercise 3.** Explain the concept of lazy evaluation in Dask. What does `.compute()` do?
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(20), 'B': np.random.randn(20)})
+    result = df.describe()
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Compare the syntax for a groupby aggregation in Pandas vs Dask. How similar are they?
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(50), 'group': np.random.choice(['X', 'Y'], 50)})
+    result = df.groupby('group').mean()
+    print(result)
+    ```

@@ -292,3 +292,107 @@ if __name__ == "__main__":
     swapped = p.swap()
     print(f"  Swapped: ({swapped.get_first()}, {swapped.get_second()})")
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.** Write a generic function `first(items: Sequence[T]) -> T` using `TypeVar` that returns the first element of any sequence. Demonstrate it with both a list of ints and a tuple of strings.
+
+??? success "Solution to Exercise 1"
+    ```python
+    from typing import TypeVar, Sequence
+
+    T = TypeVar("T")
+
+    def first(items: Sequence[T]) -> T:
+        return items[0]
+
+    print(first([1, 2, 3]))         # 1 (int)
+    print(first(("a", "b", "c")))   # a (str)
+    ```
+
+---
+
+**Exercise 2.** Create a generic class `Stack[T]` with `push(item: T)`, `pop() -> T`, and `peek() -> T` methods. Annotate everything properly.
+
+??? success "Solution to Exercise 2"
+    ```python
+    from typing import TypeVar, Generic
+
+    T = TypeVar("T")
+
+    class Stack(Generic[T]):
+        def __init__(self) -> None:
+            self._items: list[T] = []
+
+        def push(self, item: T) -> None:
+            self._items.append(item)
+
+        def pop(self) -> T:
+            return self._items.pop()
+
+        def peek(self) -> T:
+            return self._items[-1]
+
+    s: Stack[int] = Stack()
+    s.push(1)
+    s.push(2)
+    print(s.peek())  # 2
+    print(s.pop())   # 2
+    ```
+
+---
+
+**Exercise 3.** Explain the difference between `TypeVar("T")` and `TypeVar("T", bound=Comparable)`. When would you use a bounded `TypeVar`?
+
+??? success "Solution to Exercise 3"
+    `TypeVar("T")` is unconstrained — it can be any type. `TypeVar("T", bound=Comparable)` restricts `T` to types that are subtypes of `Comparable`.
+
+    Use a bounded `TypeVar` when you need to call methods or use operations that only certain types support. For example, `TypeVar("T", bound=SupportsLessThan)` ensures `T` has a `__lt__` method, which is needed for sorting.
+
+---
+
+**Exercise 4.** Write a function `merge_sorted(a: list[T], b: list[T]) -> list[T]` using `TypeVar` that merges two sorted lists into one sorted list. Test it with integers and strings.
+
+??? success "Solution to Exercise 4"
+    ```python
+    from typing import TypeVar
+
+    T = TypeVar("T")
+
+    def merge_sorted(a: list[T], b: list[T]) -> list[T]:
+        result: list[T] = []
+        i = j = 0
+        while i < len(a) and j < len(b):
+            if a[i] <= b[j]:
+                result.append(a[i])
+                i += 1
+            else:
+                result.append(b[j])
+                j += 1
+        result.extend(a[i:])
+        result.extend(b[j:])
+        return result
+
+    print(merge_sorted([1, 3, 5], [2, 4, 6]))    # [1, 2, 3, 4, 5, 6]
+    print(merge_sorted(["a", "c"], ["b", "d"]))   # ['a', 'b', 'c', 'd']
+    ```
+
+---
+
+**Exercise 5.** Use `TypeVar` with constraints (`TypeVar("T", int, float)`) to write a function `add(a: T, b: T) -> T` that only works with numeric types. Show that passing strings would be flagged by mypy.
+
+??? success "Solution to Exercise 5"
+    ```python
+    from typing import TypeVar
+
+    T = TypeVar("T", int, float)
+
+    def add(a: T, b: T) -> T:
+        return a + b
+
+    print(add(1, 2))      # 3
+    print(add(1.5, 2.5))  # 4.0
+    # add("a", "b")  # mypy error: Value of type variable "T" cannot be "str"
+    ```

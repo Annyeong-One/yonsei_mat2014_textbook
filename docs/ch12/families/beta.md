@@ -102,3 +102,60 @@ In quantitative finance, the beta distribution models recovery rates in credit r
 ## Summary
 
 The beta distribution provides a flexible family of densities on $[0, 1]$, controlled by two shape parameters. In `scipy.stats`, use `stats.beta(a, b)` to create a frozen distribution for computing PDFs, CDFs, quantiles, and generating random samples.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Plot the Beta PDF for $(a, b) = (0.5, 0.5)$, $(1, 1)$, $(2, 5)$, and $(5, 2)$ on the same axes. Describe how the shape changes with different parameter values.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        from scipy import stats
+        import matplotlib.pyplot as plt
+
+        x = np.linspace(0.01, 0.99, 200)
+        params = [(0.5, 0.5), (1, 1), (2, 5), (5, 2)]
+        for a, b in params:
+            plt.plot(x, stats.beta.pdf(x, a, b), label=f'Beta({a},{b})')
+        plt.legend()
+        plt.title('Beta Distribution PDFs')
+        plt.ylim(0, 4)
+        plt.show()
+
+---
+
+**Exercise 2.**
+For a $\text{Beta}(3, 7)$ distribution, compute the mean, mode, and variance analytically and verify using `scipy.stats.beta`. The mode is $(a-1)/(a+b-2)$ when $a, b > 1$.
+
+??? success "Solution to Exercise 2"
+
+        from scipy import stats
+
+        a, b = 3, 7
+        rv = stats.beta(a, b)
+        mode = (a - 1) / (a + b - 2)
+        mean_exact = a / (a + b)
+        var_exact = (a * b) / ((a + b)**2 * (a + b + 1))
+
+        print(f"Mean:     scipy={rv.mean():.4f}, exact={mean_exact:.4f}")
+        print(f"Variance: scipy={rv.var():.6f}, exact={var_exact:.6f}")
+        print(f"Mode:     {mode:.4f}")
+
+---
+
+**Exercise 3.**
+Generate 10,000 samples from $\text{Beta}(2, 5)$ and estimate $P(X < 0.3)$ from the samples. Compare with the exact value from `.cdf(0.3)`.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+
+        rv = stats.beta(2, 5)
+        samples = rv.rvs(size=10000, random_state=42)
+        p_sample = np.mean(samples < 0.3)
+        p_exact = rv.cdf(0.3)
+        print(f"P(X < 0.3) — sample: {p_sample:.4f}, exact: {p_exact:.4f}")

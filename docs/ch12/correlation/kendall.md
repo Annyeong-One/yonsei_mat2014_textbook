@@ -80,3 +80,67 @@ The p-value tests the null hypothesis $H_0\!: \tau = 0$ (no association) against
 ## Summary
 
 Kendall's Tau measures association by counting concordant and discordant pairs among all observation pairs. Tau-a uses the simple proportion, while Tau-b adjusts for ties in the denominator. The statistic ranges from $-1$ to $1$, has a direct probabilistic interpretation, and is available through `scipy.stats.kendalltau`, which computes Tau-b by default.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+For the paired data $X = [1, 2, 3, 4, 5]$ and $Y = [2, 4, 1, 3, 5]$, compute Kendall's tau-b by hand (counting concordant and discordant pairs), then verify with `stats.kendalltau()`.
+
+??? success "Solution to Exercise 1"
+
+        from scipy import stats
+
+        x = [1, 2, 3, 4, 5]
+        y = [2, 4, 1, 3, 5]
+
+        # Manual: count concordant/discordant pairs
+        n = len(x)
+        concordant = discordant = 0
+        for i in range(n):
+            for j in range(i+1, n):
+                if (x[j]-x[i])*(y[j]-y[i]) > 0:
+                    concordant += 1
+                elif (x[j]-x[i])*(y[j]-y[i]) < 0:
+                    discordant += 1
+        tau_manual = (concordant - discordant) / (concordant + discordant)
+
+        tau_scipy, p = stats.kendalltau(x, y)
+        print(f"Manual tau: {tau_manual:.4f}")
+        print(f"SciPy tau:  {tau_scipy:.4f}")
+
+---
+
+**Exercise 2.**
+Generate 100 samples from a bivariate normal with $\rho = 0.6$. Compute Pearson, Spearman, and Kendall correlations and compare their magnitudes. Note the typical ordering $|r| > |\rho_s| > |\tau|$.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        data = stats.multivariate_normal.rvs(mean=[0,0], cov=[[1,0.6],[0.6,1]], size=100)
+        x, y = data[:, 0], data[:, 1]
+
+        r, _ = stats.pearsonr(x, y)
+        rho, _ = stats.spearmanr(x, y)
+        tau, _ = stats.kendalltau(x, y)
+        print(f"Pearson:  {r:.4f}")
+        print(f"Spearman: {rho:.4f}")
+        print(f"Kendall:  {tau:.4f}")
+
+---
+
+**Exercise 3.**
+Create ranked data with many ties: $X = [1, 1, 2, 2, 3, 3, 4, 4]$, $Y = [1, 2, 1, 2, 3, 4, 3, 4]$. Compute Kendall's tau-b and verify it handles ties correctly.
+
+??? success "Solution to Exercise 3"
+
+        from scipy import stats
+
+        x = [1, 1, 2, 2, 3, 3, 4, 4]
+        y = [1, 2, 1, 2, 3, 4, 3, 4]
+        tau, p = stats.kendalltau(x, y)
+        print(f"Kendall tau-b (with ties): {tau:.4f}, p={p:.4f}")

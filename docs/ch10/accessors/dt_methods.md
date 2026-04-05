@@ -357,3 +357,59 @@ print(periods.dt.freq)        # <MonthEnd>
 | **Formatting** | `strftime()` |
 | **Normalization** | `normalize()` |
 | **Week Info** | `isocalendar()` |
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a Series of 12 monthly timestamps for the year 2024. Use `.dt.month_name()` to get the month names and `.dt.is_quarter_start` to identify which months are quarter starts.
+
+??? success "Solution to Exercise 1"
+    Use `pd.date_range` with monthly frequency.
+
+        import pandas as pd
+
+        months = pd.Series(pd.date_range('2024-01-01', periods=12, freq='MS'))
+        print(months.dt.month_name())
+        print("Quarter starts:")
+        print(months[months.dt.is_quarter_start])
+
+---
+
+**Exercise 2.**
+Given a Series of timestamps in UTC, use `.dt.tz_localize('UTC')` and then `.dt.tz_convert('US/Eastern')` to convert them to Eastern time. Print the resulting timestamps and confirm the timezone offset.
+
+??? success "Solution to Exercise 2"
+    Localize to UTC first, then convert to Eastern.
+
+        import pandas as pd
+
+        timestamps = pd.Series(pd.to_datetime([
+            '2024-06-15 18:00:00',
+            '2024-12-15 18:00:00'
+        ]))
+        utc = timestamps.dt.tz_localize('UTC')
+        eastern = utc.dt.tz_convert('US/Eastern')
+        print(eastern)
+
+---
+
+**Exercise 3.**
+Create a Series of timestamps with different times of day. Use `.dt.strftime('%Y/%m/%d %I:%M %p')` to format them in 12-hour format with AM/PM. Then use `.dt.normalize()` to strip the time component and keep only dates.
+
+??? success "Solution to Exercise 3"
+    Format with `strftime` and normalize to midnight.
+
+        import pandas as pd
+
+        ts = pd.Series(pd.to_datetime([
+            '2024-01-15 09:30:00',
+            '2024-01-15 14:45:00',
+            '2024-01-15 21:00:00'
+        ]))
+        formatted = ts.dt.strftime('%Y/%m/%d %I:%M %p')
+        print("Formatted:\n", formatted)
+
+        normalized = ts.dt.normalize()
+        print("Normalized:\n", normalized)

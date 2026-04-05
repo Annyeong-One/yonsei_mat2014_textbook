@@ -568,3 +568,83 @@ fig.colorbar(surf, shrink=0.6, aspect=15, label='Probability Density')
 plt.tight_layout()
 plt.show()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a 3D surface plot of the function $z = \cos(x) \cdot \sin(y)$ over the domain $[-\pi, \pi] \times [-\pi, \pi]$ using `meshgrid`. Apply the `coolwarm` colormap, add a colorbar with label "Value", and set axis labels.
+
+??? success "Solution to Exercise 1"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(-np.pi, np.pi, 100)
+        y = np.linspace(-np.pi, np.pi, 100)
+        X, Y = np.meshgrid(x, y)
+        Z = np.cos(X) * np.sin(Y)
+
+        fig = plt.figure(figsize=(10, 7))
+        ax = fig.add_subplot(111, projection='3d')
+        surf = ax.plot_surface(X, Y, Z, cmap='coolwarm')
+        ax.set_xlabel('X')
+        ax.set_ylabel('Y')
+        ax.set_zlabel('Z')
+        ax.set_title(r'$z = \cos(x) \cdot \sin(y)$')
+        fig.colorbar(surf, shrink=0.6, label='Value')
+        plt.show()
+
+---
+
+**Exercise 2.**
+Plot two surfaces on the same 3D axes: $z_1 = x^2 + y^2$ (a paraboloid) and $z_2 = 8 - x^2 - y^2$ (an inverted paraboloid) over $[-2, 2] \times [-2, 2]$. Use different colormaps for each surface and set `alpha=0.7` so both are visible. Add a title describing the intersection.
+
+??? success "Solution to Exercise 2"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(-2, 2, 100)
+        y = np.linspace(-2, 2, 100)
+        X, Y = np.meshgrid(x, y)
+        Z1 = X**2 + Y**2
+        Z2 = 8 - X**2 - Y**2
+
+        fig = plt.figure(figsize=(10, 7))
+        ax = fig.add_subplot(111, projection='3d')
+        ax.plot_surface(X, Y, Z1, cmap='viridis', alpha=0.7)
+        ax.plot_surface(X, Y, Z2, cmap='plasma', alpha=0.7)
+        ax.set_xlabel('X')
+        ax.set_ylabel('Y')
+        ax.set_zlabel('Z')
+        ax.set_title('Paraboloid and Inverted Paraboloid')
+        plt.show()
+
+---
+
+**Exercise 3.**
+Create a surface plot of the 2D Gaussian $z = e^{-(x^2 + y^2)}$ over $[-3, 3] \times [-3, 3]$. Customize the plot with `rstride=2`, `cstride=2`, `edgecolor='black'`, `linewidth=0.3`, and the `viridis` colormap. Add a colorbar and adjust the view angle to `elev=35, azim=225`.
+
+??? success "Solution to Exercise 3"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(-3, 3, 100)
+        y = np.linspace(-3, 3, 100)
+        X, Y = np.meshgrid(x, y)
+        Z = np.exp(-(X**2 + Y**2))
+
+        fig = plt.figure(figsize=(10, 7))
+        ax = fig.add_subplot(111, projection='3d')
+        surf = ax.plot_surface(X, Y, Z, cmap='viridis', rstride=2, cstride=2,
+                               edgecolor='black', linewidth=0.3)
+        ax.view_init(elev=35, azim=225)
+        ax.set_xlabel('X')
+        ax.set_ylabel('Y')
+        ax.set_zlabel('Z')
+        ax.set_title(r'$z = e^{-(x^2 + y^2)}$')
+        fig.colorbar(surf, shrink=0.6)
+        plt.show()

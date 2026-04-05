@@ -111,3 +111,66 @@ Output:
 tuple_key
 Lists cannot be dict keys
 ```
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Create a dictionary with keys `1`, `1.0`, and `True`. How many entries does the dictionary have? Explain why.
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        d = {1: "int", 1.0: "float", True: "bool"}
+        print(d)       # {1: 'bool'}
+        print(len(d))  # 1
+        ```
+
+    The dictionary has only 1 entry because `1 == 1.0 == True` and `hash(1) == hash(1.0) == hash(True)`. Python treats them as the same key, and each subsequent assignment overwrites the value.
+
+---
+
+**Exercise 2.**
+Write a function `find_hash_collision()` that finds two different strings (among the first 100000 integers converted to strings) that have the same hash modulo 1000. Print both strings and their hash values.
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        def find_hash_collision():
+            seen = {}
+            for i in range(100000):
+                s = str(i)
+                h = hash(s) % 1000
+                if h in seen:
+                    print(f"'{seen[h]}' and '{s}' both hash to {h}")
+                    return
+                seen[h] = s
+
+        find_hash_collision()
+        ```
+
+    Hash collisions are common when mapping to a small range. The function finds two strings whose hashes collide modulo 1000.
+
+---
+
+**Exercise 3.**
+Demonstrate that looking up a key in a dictionary is O(1) by timing lookups in dictionaries of size 1000 and 1000000 and showing that the times are approximately equal.
+
+??? success "Solution to Exercise 3"
+
+        ```python
+        import timeit
+
+        setup_small = "d = {i: i for i in range(1_000)}"
+        setup_large = "d = {i: i for i in range(1_000_000)}"
+
+        t_small = timeit.timeit("999 in d", setup=setup_small, number=100000)
+        t_large = timeit.timeit("999999 in d", setup=setup_large, number=100000)
+
+        print(f"Small dict: {t_small:.4f}s")
+        print(f"Large dict: {t_large:.4f}s")
+        ```
+
+    Both times should be approximately equal because dictionary lookup is O(1) regardless of size.

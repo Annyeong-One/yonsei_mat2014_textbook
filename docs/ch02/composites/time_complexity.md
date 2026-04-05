@@ -330,3 +330,91 @@ if __name__ == "__main__":
    - Always sort first if data order is uncertain
     """)
 ```
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Write a benchmark that compares the time to check membership (`x in collection`) for a list, set, and dictionary, each with 100000 elements. Which is fastest and why?
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        import timeit
+
+        n = 100_000
+        setup_list = f"c = list(range({n}))"
+        setup_set = f"c = set(range({n}))"
+        setup_dict = f"c = {{i: None for i in range({n})}}"
+
+        t_list = timeit.timeit(f"{n-1} in c", setup=setup_list, number=1000)
+        t_set = timeit.timeit(f"{n-1} in c", setup=setup_set, number=1000)
+        t_dict = timeit.timeit(f"{n-1} in c", setup=setup_dict, number=1000)
+
+        print(f"List: {t_list:.4f}s")
+        print(f"Set:  {t_set:.6f}s")
+        print(f"Dict: {t_dict:.6f}s")
+        ```
+
+    Sets and dicts use hash-based lookup (O(1) average), while lists require linear scan (O(n)). Sets and dicts are orders of magnitude faster for membership testing.
+
+---
+
+**Exercise 2.**
+Explain why `list.insert(0, x)` is O(n) while `list.append(x)` is O(1). Write a timing experiment that demonstrates this difference with a list of 100000 elements.
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        import timeit
+
+        n = 100_000
+        t_append = timeit.timeit(
+            "lst.append(0)",
+            setup=f"lst = list(range({n}))",
+            number=1000
+        )
+        t_insert = timeit.timeit(
+            "lst.insert(0, 0)",
+            setup=f"lst = list(range({n}))",
+            number=1000
+        )
+
+        print(f"append: {t_append:.4f}s")
+        print(f"insert(0): {t_insert:.4f}s")
+        ```
+
+    `append` adds to the end in O(1) amortized time. `insert(0, x)` must shift all existing elements one position to the right, requiring O(n) time.
+
+---
+
+**Exercise 3.**
+A developer has written the following code. Identify the performance problem and suggest a fix that improves the time complexity.
+
+```python
+def remove_duplicates(lst):
+    result = []
+    for item in lst:
+        if item not in result:
+            result.append(item)
+    return result
+```
+
+??? success "Solution to Exercise 3"
+
+    The problem is that `item not in result` performs a linear scan of `result` for each element, giving O(n^2) overall complexity. Fix by using a set for fast membership testing:
+
+        ```python
+        def remove_duplicates(lst):
+            seen = set()
+            result = []
+            for item in lst:
+                if item not in seen:
+                    seen.add(item)
+                    result.append(item)
+            return result
+        ```
+
+    The improved version is O(n) because set membership testing is O(1).

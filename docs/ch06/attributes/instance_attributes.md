@@ -422,3 +422,114 @@ if __name__ == "__main__":
     # 4. You can access and modify attributes using dot notation
     # 5. Default values can be provided in __init__ parameters
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a `Person` class whose `__init__` accepts `name`, `age`, and an optional `hobbies` list (defaulting to `None`). If `hobbies` is `None`, assign an empty list. Add an `add_hobby(hobby)` method. Create two instances and show that adding a hobby to one does not affect the other. Then create a buggy version where the default is `hobbies=[]` and show the mutable default argument problem.
+
+??? success "Solution to Exercise 1"
+
+        # Correct version
+        class Person:
+            def __init__(self, name, age, hobbies=None):
+                self.name = name
+                self.age = age
+                self.hobbies = hobbies if hobbies is not None else []
+
+            def add_hobby(self, hobby):
+                self.hobbies.append(hobby)
+
+        p1 = Person("Alice", 30)
+        p2 = Person("Bob", 25)
+        p1.add_hobby("chess")
+        print(p1.hobbies)  # ['chess']
+        print(p2.hobbies)  # [] - independent
+
+        # Buggy version with mutable default
+        class PersonBuggy:
+            def __init__(self, name, age, hobbies=[]):
+                self.name = name
+                self.age = age
+                self.hobbies = hobbies
+
+            def add_hobby(self, hobby):
+                self.hobbies.append(hobby)
+
+        b1 = PersonBuggy("Alice", 30)
+        b2 = PersonBuggy("Bob", 25)
+        b1.add_hobby("chess")
+        print(b1.hobbies)  # ['chess']
+        print(b2.hobbies)  # ['chess'] - shared default list!
+
+---
+
+**Exercise 2.**
+Write a `Temperature` class with an instance attribute `_celsius` set in `__init__`. Add a method `to_fahrenheit()` that computes the conversion. Create an instance, print the Fahrenheit value, then modify `_celsius` directly and print again. Finally, add a new attribute `_label` outside of `__init__` (e.g., `t._label = "Room"`) and show it appears in `__dict__`.
+
+??? success "Solution to Exercise 2"
+
+        class Temperature:
+            def __init__(self, celsius):
+                self._celsius = celsius
+
+            def to_fahrenheit(self):
+                return self._celsius * 9 / 5 + 32
+
+        t = Temperature(25)
+        print(t.to_fahrenheit())  # 77.0
+
+        t._celsius = 100
+        print(t.to_fahrenheit())  # 212.0
+
+        # Add attribute outside __init__
+        t._label = "Room"
+        print(t.__dict__)
+        # {'_celsius': 100, '_label': 'Room'}
+
+---
+
+**Exercise 3.**
+Design a `Student` class with instance attributes `name`, `grades` (a list), and `enrolled` (a boolean, default `True`). Add methods `add_grade(grade)`, `average()`, and `drop()` (sets enrolled to `False`). Create two students, add different grades, drop one, and print both students' states. Use `vars()` to inspect each instance's `__dict__`.
+
+??? success "Solution to Exercise 3"
+
+        class Student:
+            def __init__(self, name, grades=None, enrolled=True):
+                self.name = name
+                self.grades = grades if grades is not None else []
+                self.enrolled = enrolled
+
+            def add_grade(self, grade):
+                self.grades.append(grade)
+
+            def average(self):
+                if not self.grades:
+                    return 0.0
+                return sum(self.grades) / len(self.grades)
+
+            def drop(self):
+                self.enrolled = False
+
+        s1 = Student("Alice")
+        s2 = Student("Bob")
+
+        s1.add_grade(90)
+        s1.add_grade(85)
+        s2.add_grade(70)
+        s2.add_grade(75)
+        s2.add_grade(80)
+
+        s1.drop()
+
+        print(f"{s1.name}: avg={s1.average()}, enrolled={s1.enrolled}")
+        # Alice: avg=87.5, enrolled=False
+        print(f"{s2.name}: avg={s2.average()}, enrolled={s2.enrolled}")
+        # Bob: avg=75.0, enrolled=True
+
+        print(vars(s1))
+        # {'name': 'Alice', 'grades': [90, 85], 'enrolled': False}
+        print(vars(s2))
+        # {'name': 'Bob', 'grades': [70, 75, 80], 'enrolled': True}

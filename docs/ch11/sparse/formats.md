@@ -270,3 +270,88 @@ if __name__ == "__main__":
 | COO | Building matrices, format conversion |
 | LIL | Incremental construction |
 | DIA | Banded/diagonal matrices |
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create the same $4 \times 4$ matrix $A = \begin{pmatrix} 1 & 0 & 2 & 0 \\ 0 & 3 & 0 & 0 \\ 0 & 0 & 4 & 5 \\ 6 & 0 & 0 & 7 \end{pmatrix}$ in CSR, CSC, and COO formats. For each format, print the internal storage arrays (e.g., `data`, `indices`, `indptr` for CSR; `data`, `row`, `col` for COO). Verify all three produce the same dense array.
+
+??? success "Solution to Exercise 1"
+        import numpy as np
+        from scipy import sparse
+
+        A = np.array([[1, 0, 2, 0],
+                       [0, 3, 0, 0],
+                       [0, 0, 4, 5],
+                       [6, 0, 0, 7]])
+
+        csr = sparse.csr_matrix(A)
+        csc = sparse.csc_matrix(A)
+        coo = sparse.coo_matrix(A)
+
+        print("CSR: data={}, indices={}, indptr={}".format(
+            csr.data, csr.indices, csr.indptr))
+        print("CSC: data={}, indices={}, indptr={}".format(
+            csc.data, csc.indices, csc.indptr))
+        print("COO: data={}, row={}, col={}".format(
+            coo.data, coo.row, coo.col))
+
+        assert np.allclose(csr.toarray(), csc.toarray())
+        assert np.allclose(csr.toarray(), coo.toarray())
+        print("All formats match.")
+
+---
+
+**Exercise 2.**
+Build a $6 \times 6$ sparse matrix using LIL format where entry $(i, j)$ equals $10i + j$ for positions on the main diagonal and the two adjacent diagonals. Convert to CSR and DIA formats. Compare the number of stored elements in each format.
+
+??? success "Solution to Exercise 2"
+        import numpy as np
+        from scipy import sparse
+
+        n = 6
+        lil = sparse.lil_matrix((n, n))
+        for i in range(n):
+            for j in range(max(0, i - 1), min(n, i + 2)):
+                lil[i, j] = 10 * i + j
+
+        csr = lil.tocsr()
+        dia = lil.todia()
+
+        print("Matrix:")
+        print(csr.toarray())
+        print(f"CSR stored elements: {csr.nnz}")
+        print(f"DIA stored elements: {dia.data.size}")
+
+---
+
+**Exercise 3.**
+Create a $1000 \times 1000$ sparse random matrix with density 0.01 (use `np.random.seed(11)`). Convert it to all five formats (CSR, CSC, COO, LIL, DIA). For each format, measure the memory used by the internal arrays and print a comparison table. Which format uses the least memory for this matrix?
+
+??? success "Solution to Exercise 3"
+        import numpy as np
+        from scipy import sparse
+
+        np.random.seed(11)
+        A = sparse.random(1000, 1000, density=0.01, format='coo')
+
+        formats = {
+            'CSR': A.tocsr(),
+            'CSC': A.tocsc(),
+            'COO': A,
+            'LIL': A.tolil(),
+        }
+
+        print(f"{'Format':<6} {'Memory (KB)':>12}")
+        print("-" * 20)
+        for name, mat in formats.items():
+            if name == 'CSR' or name == 'CSC':
+                mem = mat.data.nbytes + mat.indices.nbytes + mat.indptr.nbytes
+            elif name == 'COO':
+                mem = mat.data.nbytes + mat.row.nbytes + mat.col.nbytes
+            elif name == 'LIL':
+                mem = sum(sum(len(r) for r in mat.rows) * 8,
+                          sum(len(d) for d in mat.data) * 8)
+            print(f"{name:<6} {mem / 1024:>12.1f}")

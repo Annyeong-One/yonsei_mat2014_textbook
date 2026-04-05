@@ -325,3 +325,65 @@ print(f"{value:*>+10,.1f}")
 * Numeric types support bases, separators, and signs.
 * Datetime formatting uses `strftime` codes.
 * Format specifiers are commonly used in **tables, reports, and numeric displays**.
+
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Format the number `1234567.891` as: (a) a float with 2 decimal places and comma separators, (b) scientific notation with 3 decimal places, and (c) a percentage (treating it as a ratio).
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    n = 1234567.891
+
+    print(f"{n:,.2f}")     # 1,234,567.89
+    print(f"{n:.3e}")      # 1.235e+06
+    print(f"{n:.1%}")      # 123456789.1%
+    ```
+
+    The `,` flag adds thousand separators, `e` switches to scientific notation, and `%` multiplies by 100 and appends a percent sign.
+
+---
+
+**Exercise 2.**
+Create a formatted table of 4 items showing a left-aligned name (20 chars), right-aligned price (10 chars, 2 decimal places), and centered status (10 chars). Use f-string format specifiers.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    items = [
+        ("Widget", 19.99, "In Stock"),
+        ("Gadget", 149.50, "Low"),
+        ("Thingamajig", 5.00, "Out"),
+        ("Doohickey", 89.99, "In Stock"),
+    ]
+
+    print(f"{'Name':<20}{'Price':>10}{'Status':^10}")
+    print("-" * 40)
+    for name, price, status in items:
+        print(f"{name:<20}{price:>10.2f}{status:^10}")
+    ```
+
+    `<` left-aligns, `>` right-aligns, and `^` centers. The width specifies the minimum field size.
+
+---
+
+**Exercise 3.**
+Use the `#` prefix to display the number `255` in binary, octal, and hexadecimal with their respective prefixes (`0b`, `0o`, `0x`).
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    n = 255
+
+    print(f"{n:#b}")   # 0b11111111
+    print(f"{n:#o}")   # 0o377
+    print(f"{n:#x}")   # 0xff
+    print(f"{n:#X}")   # 0XFF
+    ```
+
+    The `#` flag adds the base prefix (`0b`, `0o`, `0x`). Using `X` instead of `x` produces uppercase hex digits.

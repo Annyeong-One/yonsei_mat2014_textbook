@@ -712,3 +712,88 @@ if __name__ == "__main__":
        No learning curve required.
     """)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a class `TrackedObject` that prints a message in `__init__` when created and in `__del__` when destroyed. Create an instance, assign it to a second variable, then delete the first variable. Observe that `__del__` is NOT called until all references are gone.
+
+??? success "Solution to Exercise 1"
+
+        class TrackedObject:
+            def __init__(self, name):
+                self.name = name
+                print(f"Created: {self.name}")
+
+            def __del__(self):
+                print(f"Destroyed: {self.name}")
+
+        obj = TrackedObject("alpha")  # Created: alpha
+        ref = obj  # Second reference
+
+        del obj
+        print("obj deleted, ref still exists")
+        # __del__ NOT called yet
+
+        del ref
+        # Now __del__ is called: Destroyed: alpha
+
+---
+
+**Exercise 2.**
+Write a `Singleton` class where `__new__` ensures only one instance is ever created. If an instance already exists, `__new__` returns the existing one. Demonstrate that creating multiple instances all return the same object (same `id()`).
+
+??? success "Solution to Exercise 2"
+
+        class Singleton:
+            _instance = None
+
+            def __new__(cls, *args, **kwargs):
+                if cls._instance is None:
+                    cls._instance = super().__new__(cls)
+                return cls._instance
+
+            def __init__(self, value=None):
+                self.value = value
+
+        a = Singleton("first")
+        b = Singleton("second")
+
+        print(a is b)          # True
+        print(id(a) == id(b))  # True
+        print(a.value)         # "second" — __init__ ran again
+
+---
+
+**Exercise 3.**
+Build a `Connection` class that uses `__init__` to open a simulated connection and `__del__` to close it. Also implement `__enter__` and `__exit__` so it works as a context manager. Demonstrate both usage patterns and explain why the context manager approach is preferred.
+
+??? success "Solution to Exercise 3"
+
+        class Connection:
+            def __init__(self, url):
+                self.url = url
+                self.connected = True
+                print(f"Connected to {url}")
+
+            def __del__(self):
+                if self.connected:
+                    self.close()
+
+            def close(self):
+                self.connected = False
+                print(f"Disconnected from {self.url}")
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, exc_type, exc_val, exc_tb):
+                self.close()
+                return False
+
+        # Context manager (preferred — deterministic cleanup)
+        with Connection("https://api.example.com") as conn:
+            print(f"Using: {conn.connected}")
+        # Automatically disconnected

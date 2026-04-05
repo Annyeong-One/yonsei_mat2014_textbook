@@ -170,3 +170,59 @@ which pip
 # They should match
 python -c "import sys; print(sys.executable)"
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write a script that prints the NumPy version and checks if it is at least version 1.20. Print a warning if the version is older.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+
+    version = np.__version__
+    print(f"NumPy version: {version}")
+
+    major, minor = [int(x) for x in version.split(".")[:2]]
+    if (major, minor) < (1, 20):
+        print("Warning: NumPy 1.20+ recommended")
+    else:
+        print("Version OK")
+    ```
+
+---
+
+**Exercise 2.** Use `np.show_config()` to display the build configuration. What information does this provide?
+
+??? success "Solution to Exercise 2"
+    ```python
+    import numpy as np
+    np.show_config()
+    ```
+
+    This shows build details including the BLAS/LAPACK libraries used, compiler information, and optimization flags. It helps diagnose performance issues or verify that optimized linear algebra libraries are linked.
+
+---
+
+**Exercise 3.** Write a function `check_numpy_version(min_version: str) -> bool` that parses version strings and returns `True` if the installed version meets the requirement.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+
+    def check_numpy_version(min_version: str) -> bool:
+        installed = tuple(int(x) for x in np.__version__.split(".")[:3])
+        required = tuple(int(x) for x in min_version.split("."))
+        return installed >= required
+
+    print(check_numpy_version("1.20.0"))  # True or False
+    ```
+
+---
+
+**Exercise 4.** Explain why checking the NumPy version matters when writing code that uses newer features like `np.random.default_rng()`.
+
+??? success "Solution to Exercise 4"
+    `np.random.default_rng()` was introduced in NumPy 1.17. Code using newer APIs will fail with `AttributeError` on older versions. Checking the version at startup lets you provide helpful error messages or fall back to older APIs.

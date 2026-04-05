@@ -400,3 +400,105 @@ class Right:
 - Don't repeat parent slots in child classes
 - Add `__weakref__` if weak references needed
 - Python 3.10+ dataclasses support `slots=True`
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a slotted class `Vector3D` with attributes `x`, `y`, `z` and `__weakref__`. Verify that (a) setting a dynamic attribute like `w` raises `AttributeError`, (b) you can create a `weakref.ref` to an instance, and (c) print the instance's size using `sys.getsizeof()`.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import sys
+        import weakref
+
+        class Vector3D:
+            __slots__ = ('x', 'y', 'z', '__weakref__')
+
+            def __init__(self, x, y, z):
+                self.x = x
+                self.y = y
+                self.z = z
+
+        v = Vector3D(1.0, 2.0, 3.0)
+
+        # (a) Dynamic attribute blocked
+        try:
+            v.w = 4.0
+        except AttributeError as e:
+            print(f"AttributeError: {e}")
+
+        # (b) Weak reference works
+        ref = weakref.ref(v)
+        print(f"Weak ref alive: {ref() is not None}")
+
+        # (c) Instance size
+        print(f"Size: {sys.getsizeof(v)} bytes")
+        ```
+
+---
+
+**Exercise 2.**
+Define a parent class `Shape` with `__slots__ = ('color',)` and a child class `Circle` with `__slots__ = ('radius',)`. Create a `Circle` instance, set both `color` and `radius`, then demonstrate that attempting to set an unlisted attribute raises `AttributeError`. Also show that `Circle` does not have a `__dict__`.
+
+??? success "Solution to Exercise 2"
+        ```python
+        class Shape:
+            __slots__ = ('color',)
+
+        class Circle(Shape):
+            __slots__ = ('radius',)
+
+            def __init__(self, color, radius):
+                self.color = color
+                self.radius = radius
+
+        c = Circle('red', 5.0)
+        print(f"color={c.color}, radius={c.radius}")
+
+        # No dynamic attributes
+        try:
+            c.area = 78.5
+        except AttributeError as e:
+            print(f"AttributeError: {e}")
+
+        # No __dict__
+        print(f"Has __dict__: {hasattr(c, '__dict__')}")
+        ```
+
+---
+
+**Exercise 3.**
+Use `timeit` to compare attribute read/write speed between a slotted class and a regular class. Each class should have one attribute `x`. Run 10 million reads and 10 million writes for each and print the times and the percentage speedup from slots.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import timeit
+
+        class Regular:
+            def __init__(self):
+                self.x = 0
+
+        class Slotted:
+            __slots__ = ('x',)
+            def __init__(self):
+                self.x = 0
+
+        r = Regular()
+        s = Slotted()
+        n = 10_000_000
+
+        # Read benchmark
+        t_read_regular = timeit.timeit('r.x', globals={'r': r}, number=n)
+        t_read_slotted = timeit.timeit('s.x', globals={'s': s}, number=n)
+
+        # Write benchmark
+        t_write_regular = timeit.timeit('r.x = 1', globals={'r': r}, number=n)
+        t_write_slotted = timeit.timeit('s.x = 1', globals={'s': s}, number=n)
+
+        print(f"Read  - Regular: {t_read_regular:.3f}s, Slotted: {t_read_slotted:.3f}s "
+              f"({(1 - t_read_slotted / t_read_regular) * 100:.1f}% faster)")
+        print(f"Write - Regular: {t_write_regular:.3f}s, Slotted: {t_write_slotted:.3f}s "
+              f"({(1 - t_write_slotted / t_write_regular) * 100:.1f}% faster)")
+        ```

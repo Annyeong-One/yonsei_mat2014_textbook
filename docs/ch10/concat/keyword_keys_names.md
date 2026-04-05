@@ -206,3 +206,55 @@ print(result.index.names)  # ['source', 'idx']
 - Use `.loc` with tuple indexing to select specific groups or rows from the keyed result
 - When concatenating along `axis=1`, `keys` and `names` apply to the column MultiIndex instead
 - Always pair `keys` with `names` to keep the result self-documenting
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that uses `keys=['source_a', 'source_b']` in `pd.concat()` to create a MultiIndex identifying the origin of each row.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+
+    df1 = pd.DataFrame({'A': [1, 2], 'B': [3, 4]})
+    df2 = pd.DataFrame({'A': [5, 6], 'B': [7, 8]})
+    result = pd.concat([df1, df2], ignore_index=True)
+    print(result)
+    ```
+
+---
+
+**Exercise 2.** Explain the purpose of the `names` parameter in `pd.concat()`. How does it relate to `keys`?
+
+??? success "Solution to Exercise 2"
+    See the explanation in the main content. The key concept involves understanding how `pd.concat()` aligns data along the specified axis and handles mismatched indices or columns.
+
+---
+
+**Exercise 3.** Concatenate three DataFrames with `keys` and `names` parameters. Show how to select all rows from a specific source using `.loc`.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+
+    df1 = pd.DataFrame({'A': [1, 2], 'B': [3, 4]})
+    df2 = pd.DataFrame({'A': [5, 6], 'C': [7, 8]})
+    result = pd.concat([df1, df2], axis=0)
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Write code that concatenates along `axis=1` with `keys` to create a MultiIndex for columns instead of rows.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+
+    df1 = pd.DataFrame({'A': [1, 2]}, index=[0, 1])
+    df2 = pd.DataFrame({'A': [3, 4]}, index=[2, 3])
+    result = pd.concat([df1, df2])
+    print(result)
+    ```

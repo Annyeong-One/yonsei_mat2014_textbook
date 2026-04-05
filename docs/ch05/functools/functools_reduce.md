@@ -378,3 +378,66 @@ result = list(chain.from_iterable(lists))  # Fast!
 - `reduce` excels at function composition, deep merging, and complex accumulations
 - Watch for O(n²) performance with string/list concatenation — use `join` or `chain` instead
 - Guido van Rossum deliberately moved `reduce` out of built-ins because it's often less readable than loops or comprehensions
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Use `functools.reduce` to flatten a list of lists into a single list. For example, `[[1, 2], [3, 4], [5]]` should become `[1, 2, 3, 4, 5]`. Provide an initializer of `[]` to handle the edge case of an empty input list.
+
+??? success "Solution to Exercise 1"
+
+        from functools import reduce
+
+        nested = [[1, 2], [3, 4], [5]]
+        flat = reduce(lambda acc, lst: acc + lst, nested, [])
+        print(flat)  # [1, 2, 3, 4, 5]
+
+        # Edge case
+        empty = reduce(lambda acc, lst: acc + lst, [], [])
+        print(empty)  # []
+
+---
+
+**Exercise 2.**
+Use `reduce` to compose a list of single-argument functions into one function that applies them left to right. Given `[str.strip, str.lower, lambda s: s.replace(" ", "_")]`, the composed function applied to `"  Hello World  "` should produce `"hello_world"`.
+
+??? success "Solution to Exercise 2"
+
+        from functools import reduce
+
+        def compose(*funcs):
+            """Compose functions left to right using reduce."""
+            return reduce(lambda f, g: lambda x: g(f(x)), funcs)
+
+        pipeline = compose(
+            str.strip,
+            str.lower,
+            lambda s: s.replace(" ", "_"),
+        )
+
+        print(pipeline("  Hello World  "))  # hello_world
+
+---
+
+**Exercise 3.**
+Use `reduce` with an initializer to build a nested dictionary from a list of keys. For example, given `["a", "b", "c"]` and value `42`, produce `{"a": {"b": {"c": 42}}}`. Write this as a function `nest_keys(keys, value)`.
+
+??? success "Solution to Exercise 3"
+
+        from functools import reduce
+
+        def nest_keys(keys, value):
+            """Build nested dict from keys list and a leaf value."""
+            return reduce(
+                lambda acc, key: {key: acc},
+                reversed(keys),
+                value,
+            )
+
+        result = nest_keys(["a", "b", "c"], 42)
+        print(result)  # {'a': {'b': {'c': 42}}}
+
+        result2 = nest_keys(["x"], "hello")
+        print(result2)  # {'x': 'hello'}

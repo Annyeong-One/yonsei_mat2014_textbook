@@ -255,6 +255,7 @@ Python also provides `frozenset`, an immutable variant that is itself hashable a
 
 ---
 
+
 ## 8. Summary
 
 Key ideas:
@@ -266,3 +267,63 @@ Key ideas:
 - `frozenset` provides an immutable, hashable alternative
 
 Sets are especially useful for uniqueness, filtering, and fast membership logic.
+
+
+## Exercises
+
+**Exercise 1.**
+Checking membership with `in` is dramatically faster for sets than for lists. Explain *why* from a data structure perspective. If you have a list of 1 million items and need to check whether 10,000 values exist in it, why is converting to a set first (and then checking) much faster than checking the list directly?
+
+??? success "Solution to Exercise 1"
+    A list `in` check scans elements one by one until a match is found -- **O(n)** time on average. For 10,000 checks against a 1 million-item list: $10{,}000 \times 1{,}000{,}000 / 2 = 5 \times 10^9$ comparisons.
+
+    A set uses a **hash table**. `in` computes the hash of the value, looks up the corresponding bucket, and checks a small number of entries -- **O(1)** average time. For 10,000 checks: $10{,}000 \times O(1) = O(10{,}000)$ operations.
+
+    Converting the list to a set costs O(n) -- one pass through the data. After that, each `in` check is O(1). Total: $O(1{,}000{,}000) + O(10{,}000) = O(1{,}010{,}000)$, which is roughly 5000x faster than the list approach.
+
+    This is why converting to a set is worthwhile whenever you need repeated membership checks.
+
+---
+
+**Exercise 2.**
+Explain why `{}` creates an empty dictionary rather than an empty set. If you need an empty set, how do you create one? Why did Python's designers make this choice, given that `{1, 2, 3}` creates a set?
+
+??? success "Solution to Exercise 2"
+    `{}` creates an empty dictionary because **dictionaries existed in Python before sets**. The `{key: value}` syntax was already established for dictionaries. When set literals were added (Python 2.7 / 3.1), the non-empty form `{1, 2, 3}` was unambiguous (no colons = set), but `{}` was already taken.
+
+    To create an empty set: `set()`.
+
+    This is a historical artifact. If Python were designed from scratch with both types, the syntax might be different. The key distinction: `{...}` without colons and with at least one element is a set literal; `{key: value, ...}` is a dict literal; `{}` is always a dict.
+
+---
+
+**Exercise 3.**
+Predict the output and explain:
+
+```python
+a = {1, 2, 3}
+b = {3, 4, 5}
+print(a | b)
+print(a & b)
+print(a - b)
+print(a ^ b)
+```
+
+How do these set operations correspond to mathematical set concepts? Why are sets the natural data structure for these operations, rather than lists?
+
+??? success "Solution to Exercise 3"
+    Output:
+
+    ```text
+    {1, 2, 3, 4, 5}
+    {3}
+    {1, 2}
+    {1, 2, 4, 5}
+    ```
+
+    - `a | b` is **union**: all elements in either set. Corresponds to $A \cup B$.
+    - `a & b` is **intersection**: elements in both sets. Corresponds to $A \cap B$.
+    - `a - b` is **difference**: elements in `a` but not in `b`. Corresponds to $A \setminus B$.
+    - `a ^ b` is **symmetric difference**: elements in either set but not both. Corresponds to $A \triangle B$.
+
+    Sets are natural for these operations because they enforce uniqueness and are backed by hash tables, making each operation efficient (O(n) where n is the size of the sets). Lists would require manual deduplication and nested loops, making the same operations O(n*m) and more error-prone.

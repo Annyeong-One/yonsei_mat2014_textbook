@@ -170,3 +170,66 @@ Standard NumPy idiom, clear intent.
 ### 3. None Shorthand
 
 Shortest syntax, common in concise code.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Given `a = np.array([10, 20, 30])` (shape `(3,)`), use `np.expand_dims` to create a row vector of shape `(1, 3)` and a column vector of shape `(3, 1)`. Verify the shapes by printing them.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        a = np.array([10, 20, 30])
+
+        row = np.expand_dims(a, axis=0)
+        col = np.expand_dims(a, axis=1)
+
+        print(row.shape)  # (1, 3)
+        print(col.shape)  # (3, 1)
+
+---
+
+**Exercise 2.**
+Create a 2D array `a = np.arange(12).reshape(3, 4)`. Use `np.expand_dims` to add a new axis at position 0, producing shape `(1, 3, 4)`. Then add another axis at position 2 to the original array, producing shape `(3, 1, 4)`. Print both shapes.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        a = np.arange(12).reshape(3, 4)
+
+        b = np.expand_dims(a, axis=0)
+        print(b.shape)  # (1, 3, 4)
+
+        c = np.expand_dims(a, axis=1)  # axis=1 inserts between dim 0 and dim 1
+        # For the original (3, 4), inserting at position 2 means after dim 1
+        d = np.expand_dims(a, axis=2)
+        print(d.shape)  # (3, 4, 1)
+        # Inserting at axis=1 gives (3, 1, 4)
+        print(c.shape)  # (3, 1, 4)
+
+---
+
+**Exercise 3.**
+Given `a = np.array([1, 2, 3])` and `b = np.array([10, 20])`, use `np.expand_dims` (or `np.newaxis`) on both arrays so that you can broadcast them into an outer-sum of shape `(3, 2)`. Print the resulting array.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        a = np.array([1, 2, 3])      # shape (3,)
+        b = np.array([10, 20])        # shape (2,)
+
+        # Make a into (3, 1) and b into (1, 2) for broadcasting
+        a_col = np.expand_dims(a, axis=1)  # (3, 1)
+        b_row = np.expand_dims(b, axis=0)  # (1, 2)
+
+        result = a_col + b_row
+        print(result)
+        # [[11 21]
+        #  [12 22]
+        #  [13 23]]
+        print(result.shape)  # (3, 2)

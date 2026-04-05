@@ -458,3 +458,123 @@ with ThreadPoolExecutor(max_workers=20) as executor:
 8. **Batch Processing**: Reduce overhead for many small tasks
 9. **Graceful Shutdown**: Clean termination handling
 10. **Resource Pool**: Manage limited resources safely
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Implement a fan-out/fan-in pattern using `ThreadPoolExecutor`. Submit 10 tasks that each compute the sum of squares up to a given number. Use `as_completed()` to collect results, then aggregate them with `sum()`. Print each partial result as it arrives and the final total.
+
+??? success "Solution to Exercise 1"
+        ```python
+        from concurrent.futures import ThreadPoolExecutor, as_completed
+
+        def sum_of_squares(n):
+            return sum(i * i for i in range(n))
+
+        items = list(range(1000, 11000, 1000))
+
+        with ThreadPoolExecutor(max_workers=4) as executor:
+            futures = {executor.submit(sum_of_squares, n): n for n in items}
+            partial_results = []
+
+            for future in as_completed(futures):
+                n = futures[future]
+                result = future.result()
+                partial_results.append(result)
+                print(f"n={n}: {result}")
+
+            total = sum(partial_results)
+            print(f"\nAggregate total: {total}")
+        ```
+
+---
+
+**Exercise 2.**
+Write a `ProgressTracker` class with thread-safe `update()` and implement `process_with_progress(items, func)` that maps a function over a list using `ThreadPoolExecutor` while printing progress as a percentage. Test with 20 items where each item sleeps for 0.1s.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import threading
+        import time
+        from concurrent.futures import ThreadPoolExecutor
+
+        class ProgressTracker:
+            def __init__(self, total):
+                self.total = total
+                self.completed = 0
+                self.lock = threading.Lock()
+
+            def update(self):
+                with self.lock:
+                    self.completed += 1
+                    pct = 100 * self.completed / self.total
+                    print(f"\rProgress: {self.completed}/{self.total} ({pct:.0f}%)", end="")
+
+        def process_with_progress(items, func, max_workers=5):
+            tracker = ProgressTracker(len(items))
+
+            def wrapped(item):
+                result = func(item)
+                tracker.update()
+                return result
+
+            with ThreadPoolExecutor(max_workers=max_workers) as executor:
+                results = list(executor.map(wrapped, items))
+            print()
+            return results
+
+        def slow_square(x):
+            time.sleep(0.1)
+            return x ** 2
+
+        results = process_with_progress(list(range(20)), slow_square)
+        print(f"Results: {results}")
+        ```
+
+---
+
+**Exercise 3.**
+Implement a producer-consumer pattern using `threading`, `queue.Queue(maxsize=5)`, and two consumer threads. The producer generates 20 items. Each consumer processes items (simulated with 0.1s sleep) and appends results to a shared list. Use a `None` sentinel to signal consumers to stop. Print the final sorted results.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import threading
+        import queue
+        import time
+
+        def producer(q, n):
+            for i in range(n):
+                q.put(i)
+            q.put(None)
+            q.put(None)
+
+        def consumer(q, results, lock, name):
+            while True:
+                item = q.get()
+                if item is None:
+                    break
+                time.sleep(0.1)
+                result = item ** 2
+                with lock:
+                    results.append(result)
+                    print(f"{name} processed {item} -> {result}")
+
+        q = queue.Queue(maxsize=5)
+        results = []
+        lock = threading.Lock()
+
+        threads = [
+            threading.Thread(target=producer, args=(q, 20)),
+            threading.Thread(target=consumer, args=(q, results, lock, "Consumer-A")),
+            threading.Thread(target=consumer, args=(q, results, lock, "Consumer-B")),
+        ]
+
+        for t in threads:
+            t.start()
+        for t in threads:
+            t.join()
+
+        print(f"\nSorted results: {sorted(results)}")
+        ```

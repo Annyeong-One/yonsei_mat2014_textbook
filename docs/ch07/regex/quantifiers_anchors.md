@@ -796,3 +796,63 @@ if __name__ == "__main__":
     print("Next: Tutorial 04 - Anchors and Boundaries")
     print("="*70)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a regex pattern that matches strings containing between 2 and 4 consecutive digits, but not more. For example, `"ab12cd"` should match the `"12"`, `"test1234end"` should match `"1234"`, but in `"12345"` the match should only capture `"1234"` (greedy) or `"12"` (lazy). Test both greedy and lazy versions.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    import re
+
+    # Greedy: matches as many digits as possible (up to 4)
+    greedy = re.findall(r'\d{2,4}', "ab12cd test1234end 12345")
+    print(f"Greedy: {greedy}")  # ['12', '1234', '1234']
+
+    # Lazy: matches as few digits as possible (at least 2)
+    lazy = re.findall(r'\d{2,4}?', "ab12cd test1234end 12345")
+    print(f"Lazy: {lazy}")  # ['12', '12', '34', '12', '34']
+    ```
+
+---
+
+**Exercise 2.**
+Write a regex using `^` and `$` anchors to validate that a string is a valid username: 3-16 characters long, containing only letters, digits, underscores, and hyphens. Test against `"alice"`, `"a"`, `"valid_user-123"`, and `"invalid user"`.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    import re
+
+    pattern = r'^[a-zA-Z0-9_-]{3,16}$'
+
+    tests = ["alice", "a", "valid_user-123", "invalid user", "ab"]
+    for t in tests:
+        valid = bool(re.fullmatch(pattern, t))
+        print(f"'{t}': {'Valid' if valid else 'Invalid'}")
+    # 'alice': Valid
+    # 'a': Invalid (too short)
+    # 'valid_user-123': Valid
+    # 'invalid user': Invalid (contains space)
+    # 'ab': Invalid (too short)
+    ```
+
+---
+
+**Exercise 3.**
+Write a regex using `\b` word boundaries to find all occurrences of words that are exactly 3 letters long in a text. For example, in `"The big cat sat on the mat"`, find `["The", "big", "cat", "sat", "the", "mat"]`.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    import re
+
+    pattern = r'\b\w{3}\b'
+    text = "The big cat sat on the mat"
+    matches = re.findall(pattern, text)
+    print(matches)  # ['The', 'big', 'cat', 'sat', 'the', 'mat']
+    ```

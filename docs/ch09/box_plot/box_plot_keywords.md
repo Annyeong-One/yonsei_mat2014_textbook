@@ -169,3 +169,83 @@ ax.boxplot(data, whis=2.0)  # Fewer outliers shown
 ```python
 ax.boxplot(data, whis=[5, 95])  # Whiskers at 5th and 95th percentiles
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a box plot of three datasets with the following customizations: `notch=True`, `patch_artist=True`, `showmeans=True` with a diamond marker. Use different face colors for each box and set `medianprops` to display a red line.
+
+??? success "Solution to Exercise 1"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        np.random.seed(42)
+        data = [np.random.randn(100) + i for i in range(3)]
+
+        fig, ax = plt.subplots(figsize=(8, 5))
+        bp = ax.boxplot(data, notch=True, patch_artist=True, showmeans=True,
+                         meanprops=dict(marker='D', markerfacecolor='gold', markersize=8),
+                         medianprops=dict(color='red', linewidth=2))
+
+        colors = ['lightblue', 'lightcoral', 'lightgreen']
+        for patch, color in zip(bp['boxes'], colors):
+            patch.set_facecolor(color)
+
+        ax.set_xticklabels(['Group 1', 'Group 2', 'Group 3'])
+        ax.set_title('Notched Box Plot with Means')
+        plt.show()
+
+---
+
+**Exercise 2.**
+Create a box plot using `showfliers=False` to hide outliers, and instead overlay individual data points using `ax.scatter` with jitter (small random horizontal offsets). Use 200 samples from a standard normal distribution across 4 groups.
+
+??? success "Solution to Exercise 2"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        np.random.seed(42)
+        data = [np.random.randn(200) for _ in range(4)]
+
+        fig, ax = plt.subplots(figsize=(8, 5))
+        ax.boxplot(data, showfliers=False, patch_artist=True,
+                    boxprops=dict(facecolor='lightyellow'))
+
+        for i, d in enumerate(data, 1):
+            jitter = np.random.uniform(-0.15, 0.15, len(d))
+            ax.scatter(np.full_like(d, i) + jitter, d, alpha=0.3, s=10, color='steelblue')
+
+        ax.set_xticklabels(['A', 'B', 'C', 'D'])
+        ax.set_title('Box Plot with Jittered Data Points')
+        plt.show()
+
+---
+
+**Exercise 3.**
+Create a box plot with `widths=[0.3, 0.5, 0.7, 0.9]` for four datasets to show how box width affects visual perception. Use `patch_artist=True` with graduated blue colors (light to dark). Set `whiskerprops`, `capprops`, and `flierprops` to customize every visible component.
+
+??? success "Solution to Exercise 3"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        np.random.seed(42)
+        data = [np.random.randn(100) * (i + 1) for i in range(4)]
+
+        fig, ax = plt.subplots(figsize=(8, 5))
+        bp = ax.boxplot(data, widths=[0.3, 0.5, 0.7, 0.9], patch_artist=True,
+                         whiskerprops=dict(color='navy', linewidth=1.5),
+                         capprops=dict(color='navy', linewidth=2),
+                         flierprops=dict(marker='o', markerfacecolor='red', markersize=4))
+
+        blues = ['#c6dbef', '#6baed6', '#2171b5', '#08306b']
+        for patch, color in zip(bp['boxes'], blues):
+            patch.set_facecolor(color)
+
+        ax.set_xticklabels(['Narrow', 'Medium', 'Wide', 'Widest'])
+        ax.set_title('Variable Width Box Plots')
+        plt.show()

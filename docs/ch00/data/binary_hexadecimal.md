@@ -628,6 +628,77 @@ Binary:
 
 ---
 
+**Exercise 9.**
+The positional value formula says that a number in base $b$ is $\sum d_i \cdot b^i$. Using this formula, explain *why* every hex digit maps to exactly four binary digits, every octal digit maps to exactly three binary digits, but there is no clean grouping of binary digits that maps to one decimal digit. What mathematical property must the base have for such a clean mapping to exist?
+
+??? success "Solution to Exercise 9"
+    A clean digit-to-digit mapping between base $b_1$ and base $b_2$ exists if and only if $b_1$ is a power of $b_2$ (or vice versa). Hexadecimal is $16 = 2^4$, so each hex digit corresponds to exactly $4$ binary digits. Octal is $8 = 2^3$, so each octal digit corresponds to exactly $3$ binary digits.
+
+    Decimal ($10$) is *not* a power of $2$. There is no integer $k$ such that $10 = 2^k$. This means there is no fixed number of binary digits that maps cleanly to one decimal digit. Converting between binary and decimal requires actual arithmetic (multiplication, addition, division), not just grouping.
+
+    This is why hexadecimal became the preferred shorthand for binary data: the conversion is purely mechanical grouping with no arithmetic required.
+
+---
+
+**Exercise 10.**
+Consider the following Python session:
+
+```python
+x = 0xFF
+y = int('FF', 16)
+z = 255
+print(x == y == z)           # What does this print?
+print(type(x), type(y), type(z))  # What types are these?
+```
+
+Predict the output. Then explain: when Python encounters `0xFF` in source code, does it store the number internally in hexadecimal? What is the relationship between a number's *value* and its *representation in a particular base*?
+
+??? success "Solution to Exercise 10"
+    The output is:
+
+    ```text
+    True
+    <class 'int'> <class 'int'> <class 'int'>
+    ```
+
+    All three variables hold the same integer value `255` and have the same type `int`. Python does *not* store numbers in hexadecimal, decimal, or any particular base internally. The prefixes `0x`, `0b`, `0o` are *source code notations* -- they tell the parser how to interpret the literal, but the resulting integer object is base-independent. Internally, CPython stores the value as an array of binary chunks (base $2^{30}$ digits), but this is an implementation detail.
+
+    A number's *value* is abstract and independent of base. A *representation* is how we write that value using a specific base and digit symbols. `0xFF`, `255`, `0b11111111`, and `0o377` are four different representations of the same value.
+
+---
+
+**Exercise 11.**
+A programmer writes `format(255, '04x')` and gets `'00ff'`. They then try `format(-1, '04x')` expecting `'ff'` (thinking of 8-bit two's complement), but instead get `'-1'`. Explain *why* Python's `format()` with `'x'` does not produce two's complement hex for negative numbers. How does this relate to the fact that Python integers have no fixed bit width? What would the programmer need to do to get the 8-bit two's complement hex representation of `-1`?
+
+??? success "Solution to Exercise 11"
+    Python's `format()` with `'x'` treats the integer as a mathematical value, not as a fixed-width bit pattern. Since Python integers have arbitrary precision (no fixed bit width), there is no "natural" two's complement representation for negative numbers. The format specifier simply prepends a minus sign for negative values.
+
+    In a language like C, `-1` as an `int8` is `0xFF` because `int8` has exactly 8 bits. But Python's `-1` could be 8-bit, 16-bit, 32-bit, or any width -- there is no single "correct" hex representation.
+
+    To get the 8-bit two's complement hex:
+
+    ```python
+    value = -1
+    twos_comp = value & 0xFF  # Mask to 8 bits: gives 255
+    print(format(twos_comp, '02x'))  # 'ff'
+    ```
+
+    The `& 0xFF` operation forces the value into an 8-bit unsigned range, effectively computing the two's complement representation at that width.
+
+---
+
+**Exercise 12.**
+RGB color values are often written as 6-digit hex strings like `#3498DB`. Explain why hexadecimal is the natural choice for this rather than decimal or binary. Then consider: if humans could comfortably read base-256 (with 256 distinct digit symbols), how would the same color be written? Why don't we use base-256 in practice, and what does this tell us about why hexadecimal became the standard "human-friendly binary shorthand"?
+
+??? success "Solution to Exercise 12"
+    Hexadecimal is natural for RGB colors because each color channel is one byte (8 bits = values 0--255), and one byte is exactly two hex digits. So `#3498DB` immediately reveals three channels: `34` (red = 52), `98` (green = 152), `DB` (blue = 219). The representation is compact (6 characters) and each channel boundary aligns with a digit boundary.
+
+    In decimal, the same color would be `52, 152, 219` -- three separate numbers requiring delimiters, with no fixed width. In binary, it would be `00110100 10011000 11011011` -- 24 characters, hard to read.
+
+    In base-256, each channel would be a single "digit," so the color would be just 3 digits. This would be maximally compact, but humans cannot memorize 256 distinct symbols. Hexadecimal (16 symbols: 0--9, A--F) is the sweet spot: it is a power of 2 (so binary conversion is trivial), each digit represents exactly 4 bits, and 16 symbols are few enough for humans to learn easily. This balance between compactness and human readability is why hexadecimal became the standard shorthand.
+
+---
+
 ## 14. Short Answers
 
 1. 173
@@ -639,8 +710,6 @@ Binary:
 7. Because one hex digit equals four bits
 8. `FF`
 
----
-
 ## 15. Summary
 
 * Binary (base 2) is the fundamental number system used by computers.
@@ -651,5 +720,3 @@ Binary:
 * Programmers frequently convert between bases when debugging, inspecting memory, or working with binary protocols.
 
 Understanding binary and hexadecimal allows programmers to reason about **bit patterns, memory layout, and low-level data formats** with precision.
-
-

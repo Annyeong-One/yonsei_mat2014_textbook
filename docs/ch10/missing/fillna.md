@@ -366,3 +366,56 @@ if __name__ == '__main__':
     # Report
     final_report(raw_df, cleaned_df)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a DataFrame with `NaN` values. Use `.fillna(0)` to replace all missing values with 0. Then use `.fillna()` with a dictionary to fill different columns with different values.
+
+??? success "Solution to Exercise 1"
+    Fill with a constant and with per-column values.
+
+        import pandas as pd
+        import numpy as np
+
+        df = pd.DataFrame({
+            'temp': [21, np.nan, 25, np.nan],
+            'humidity': [65, 68, np.nan, 75]
+        })
+        print("Fill with 0:\n", df.fillna(0))
+        print("\nFill per column:\n", df.fillna({'temp': 20, 'humidity': 70}))
+
+---
+
+**Exercise 2.**
+Create a DataFrame with a numeric column containing `NaN`. Use `.fillna()` with the column's mean to impute missing values. Compare the mean before and after imputation.
+
+??? success "Solution to Exercise 2"
+    Impute missing values with the column mean.
+
+        import pandas as pd
+        import numpy as np
+
+        df = pd.DataFrame({'score': [85, np.nan, 90, np.nan, 78]})
+        mean_val = df['score'].mean()
+        print(f"Mean before: {mean_val:.2f}")
+        df['score'] = df['score'].fillna(mean_val)
+        print(f"Mean after: {df['score'].mean():.2f}")
+        print(df)
+
+---
+
+**Exercise 3.**
+Create a DataFrame and use `.fillna(method='ffill')` (forward fill) to propagate the last valid value forward. Then use `.fillna(method='bfill')` (backward fill) and compare the two results.
+
+??? success "Solution to Exercise 3"
+    Compare forward fill and backward fill.
+
+        import pandas as pd
+        import numpy as np
+
+        df = pd.DataFrame({'val': [1, np.nan, np.nan, 4, np.nan]})
+        print("Forward fill:\n", df.fillna(method='ffill'))
+        print("\nBackward fill:\n", df.fillna(method='bfill'))

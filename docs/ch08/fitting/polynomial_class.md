@@ -239,3 +239,73 @@ print(str(p))   # 1.0 - 2.0·x + 3.0·x²
 - Weighted fitting adjusts influence of individual data points via the `w` parameter
 - `convert(kind=...)` enables basis conversion between Polynomial, Chebyshev, Legendre, and other classes
 - `truncate` and `trim` simplify polynomials by removing high-degree or near-zero terms
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a `Polynomial` from roots at `x = -1, 2, 5` using `Polynomial.fromroots`. Verify the roots by calling `.roots()` on the resulting polynomial. Then evaluate the polynomial at `x = 0` and confirm it equals the product `(-1) * (2) * (5) = -10` (with appropriate sign from the leading coefficient).
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        from numpy.polynomial import Polynomial
+
+        p = Polynomial.fromroots([-1, 2, 5])
+        print(f"Coefficients: {p.coef}")
+        print(f"Roots: {p.roots()}")
+
+        val_at_0 = p(0)
+        # (x+1)(x-2)(x-5) at x=0 = (1)(-2)(-5) = 10
+        # But leading coeff matters: coef gives ascending order
+        print(f"p(0) = {val_at_0}")
+
+---
+
+**Exercise 2.**
+Fit a degree-4 polynomial to `x = np.linspace(0, 100, 50)` and `y = np.log(1 + x)` using `Polynomial.fit`. Print the domain of the fitted polynomial. Convert to standard form with `.convert()` and compare the condition number improvement by printing `np.linalg.cond(V)` for both the raw and centered-scaled Vandermonde matrices.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from numpy.polynomial import Polynomial
+
+        x = np.linspace(0, 100, 50)
+        y = np.log(1 + x)
+
+        p = Polynomial.fit(x, y, deg=4)
+        print(f"Domain: {p.domain}")
+
+        # Raw Vandermonde
+        V_raw = np.vander(x, N=5, increasing=True)
+        cond_raw = np.linalg.cond(V_raw)
+
+        # Centered/scaled Vandermonde
+        x_norm = (x - x.mean()) / x.std()
+        V_norm = np.vander(x_norm, N=5, increasing=True)
+        cond_norm = np.linalg.cond(V_norm)
+
+        print(f"Raw condition number:    {cond_raw:.2e}")
+        print(f"Scaled condition number: {cond_norm:.2e}")
+        print(f"Improvement: {cond_raw / cond_norm:.0f}x")
+
+---
+
+**Exercise 3.**
+Create a degree-6 polynomial with `Polynomial([1, 0, -3, 0, 2, 0, -0.5])`, then use `.truncate(5)` to keep only terms up to degree 4 and `.trim()` to remove trailing near-zero coefficients from `Polynomial([1, 2, 3, 1e-16, 2e-17])`. Print the results and verify the degree of each trimmed/truncated polynomial.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from numpy.polynomial import Polynomial
+
+        p = Polynomial([1, 0, -3, 0, 2, 0, -0.5])
+        print(f"Original degree: {p.degree()}")
+
+        p_trunc = p.truncate(5)  # keep up to degree 4
+        print(f"Truncated coeffs: {p_trunc.coef}, degree: {p_trunc.degree()}")
+
+        p_noisy = Polynomial([1, 2, 3, 1e-16, 2e-17])
+        p_trimmed = p_noisy.trim()
+        print(f"Trimmed coeffs: {p_trimmed.coef}, degree: {p_trimmed.degree()}")

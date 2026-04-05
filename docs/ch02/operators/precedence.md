@@ -171,3 +171,70 @@ x = condition1 or condition2 or e
 | Right-to-left for `**` | `2 ** 3 ** 2 = 512` |
 
 **When in doubt, use parentheses!**
+
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Without running the code, evaluate the following expression step by step and give the final result:
+
+```python
+result = 2 + 3 * 4 ** 2 / 8 - 1
+```
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    # Step by step:
+    # 1. 4 ** 2 = 16         (exponentiation first)
+    # 2. 3 * 16 = 48         (multiplication)
+    # 3. 48 / 8 = 6.0        (division)
+    # 4. 2 + 6.0 = 8.0       (addition)
+    # 5. 8.0 - 1 = 7.0       (subtraction)
+
+    result = 2 + 3 * 4 ** 2 / 8 - 1
+    print(result)  # 7.0
+    ```
+
+    Exponentiation has the highest precedence among arithmetic operators, followed by multiplication/division (left to right), then addition/subtraction.
+
+---
+
+**Exercise 2.**
+Explain why `5 & 3 == 1` evaluates to `False` and how adding parentheses fixes it to `True`. What precedence rule causes this?
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    # Without parentheses
+    print(5 & 3 == 1)     # False
+    # Evaluated as: 5 & (3 == 1) = 5 & False = 0
+
+    # With parentheses
+    print((5 & 3) == 1)   # True
+    # Evaluated as: (5 & 3) = 1, then 1 == 1 = True
+    ```
+
+    Comparison operators (`==`) have higher precedence than bitwise operators (`&`). So `3 == 1` is evaluated first, yielding `False`, and then `5 & False` gives `0`.
+
+---
+
+**Exercise 3.**
+Rewrite the following expression using parentheses to make the evaluation order explicit and unambiguous:
+
+```python
+x = not a or b and c > d + e * f
+```
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    # Original: not a or b and c > d + e * f
+    # Fully parenthesized:
+    x = (not a) or (b and (c > (d + (e * f))))
+    ```
+
+    The precedence order is: `*` > `+` > `>` > `not` > `and` > `or`. Multiplication is evaluated first, then addition, then the comparison, then logical operators from highest to lowest precedence.

@@ -285,3 +285,75 @@ python -v script.py  # Shows all import steps
 - Avoid name collisions with standard library modules
 - Use virtual environments instead of modifying `sys.path`
 - Use `module.__file__` to find where a module is located
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a script that prints the first 5 entries of `sys.path` and explains what each one represents (current directory, standard library, site-packages, etc.). Use comments to annotate each entry.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    import sys
+
+    print("First 5 entries in sys.path:")
+    for i, path in enumerate(sys.path[:5]):
+        if i == 0:
+            note = "(current directory or script location)"
+        elif "lib/python" in path and "site-packages" not in path:
+            note = "(standard library)"
+        elif "site-packages" in path:
+            note = "(third-party packages)"
+        else:
+            note = ""
+        print(f"  {i}: {path} {note}")
+    ```
+
+---
+
+**Exercise 2.**
+Write a function `find_module_location` that takes a module name string, imports it using `importlib`, and returns the file path where the module is located. Handle the case where the module has no `__file__` attribute (built-in modules). For example, `find_module_location("json")` should return the path to `json/__init__.py`.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    import importlib
+
+    def find_module_location(module_name):
+        try:
+            module = importlib.import_module(module_name)
+            return getattr(module, "__file__", "Built-in (no file)")
+        except ImportError:
+            return None
+
+    # Test
+    print(find_module_location("json"))     # .../json/__init__.py
+    print(find_module_location("sys"))      # Built-in (no file)
+    print(find_module_location("nonexist")) # None
+    ```
+
+---
+
+**Exercise 3.**
+Write a function `check_name_shadow` that takes a module name and checks whether a file with that name exists in the current directory, which would shadow the standard library module. Return `True` if shadowing is detected, `False` otherwise.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    import os
+
+    def check_name_shadow(module_name):
+        # Check for .py file or directory with that name
+        py_file = f"{module_name}.py"
+        if os.path.exists(py_file):
+            return True
+        if os.path.isdir(module_name):
+            return True
+        return False
+
+    # Test
+    print(check_name_shadow("json"))  # False (unless you have json.py locally)
+    print(check_name_shadow("os"))    # False
+    ```

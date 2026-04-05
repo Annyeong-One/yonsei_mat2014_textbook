@@ -114,3 +114,80 @@ plt.show()
 
 - [matplotlib.axes.Axes.hist](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.hist.html)
 - [scipy.stats](https://docs.scipy.org/doc/scipy/reference/stats.html)
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that generates 2000 samples from a normal distribution, plots a histogram with `density=True`, and overlays the theoretical PDF curve using `scipy.stats.norm.pdf()`.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    data = np.random.normal(5, 2, 1000)
+
+    fig, ax = plt.subplots()
+    ax.hist(data, bins=30, density=True, alpha=0.7, color='steelblue',
+            edgecolor='black')
+    ax.set_xlabel('Value')
+    ax.set_ylabel('Density')
+    ax.set_title('Histogram')
+    plt.show()
+    ```
+
+---
+
+**Exercise 2.** Explain why `density=True` is necessary when overlaying a PDF curve on a histogram. What units does the y-axis represent?
+
+??? success "Solution to Exercise 2"
+    `ax.hist()` returns `(n, bins, patches)` where `n` has shape `(20,)` containing the count or density in each bin, `bins` has shape `(21,)` containing the bin edges (one more than the number of bins), and `patches` is a list of 20 Rectangle objects.
+
+---
+
+**Exercise 3.** Create a figure that fits and overlays an exponential distribution PDF on histogram data generated from `np.random.exponential()`.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    normal_data = np.random.normal(0, 1, 1000)
+    exp_data = np.random.exponential(1, 1000)
+
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
+
+    ax1.hist(normal_data, bins=30, density=True, alpha=0.7, color='steelblue')
+    ax1.set_title('Normal Distribution')
+
+    ax2.hist(exp_data, bins=30, density=True, alpha=0.7, color='coral')
+    ax2.set_title('Exponential Distribution')
+
+    plt.tight_layout()
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Write code that generates data from a mixture of two normal distributions and overlays both individual component PDFs and the combined PDF on the histogram.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    data1 = np.random.normal(0, 1, 1000)
+    data2 = np.random.normal(3, 1, 1000)
+
+    fig, ax = plt.subplots()
+    ax.hist(data1, bins=30, alpha=0.5, label='N(0, 1)', color='blue')
+    ax.hist(data2, bins=30, alpha=0.5, label='N(3, 1)', color='red')
+    ax.legend()
+    ax.set_title('Overlaid Histograms')
+    plt.show()
+    ```

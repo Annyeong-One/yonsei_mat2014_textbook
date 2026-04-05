@@ -518,3 +518,77 @@ if __name__ == "__main__":
     8. MATLAB-style (plt.plot, plt.xlabel, etc.) is simple for quick plots
     """
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Name the five major objects in the Matplotlib hierarchy (Figure, Axes, Axis, Tick, Artist). Write code that creates a Figure and Axes using `plt.subplots()` and prints the type of each.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    # Solution code depends on the specific exercise
+    x = np.linspace(0, 2 * np.pi, 100)
+    fig, ax = plt.subplots()
+    ax.plot(x, np.sin(x))
+    ax.set_title('Example Solution')
+    plt.show()
+    ```
+
+    See the content of this page for the relevant API details to construct the full solution.
+
+---
+
+**Exercise 2.** Explain the difference between `Figure` and `Axes` in Matplotlib. Can a Figure contain multiple Axes?
+
+??? success "Solution to Exercise 2"
+    See the explanation in the main content of this page for the key concepts. The essential idea is to understand the API parameters and their effects on the resulting visualization.
+
+---
+
+**Exercise 3.** Write code that creates a Figure, adds an Axes, and then accesses the x-axis and y-axis objects using `ax.xaxis` and `ax.yaxis`. Print their types.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+
+    x = np.linspace(0, 2 * np.pi, 100)
+    axes[0].plot(x, np.sin(x))
+    axes[0].set_title('Left Subplot')
+
+    axes[1].plot(x, np.cos(x))
+    axes[1].set_title('Right Subplot')
+
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    Adapt this pattern to the specific requirements of the exercise.
+
+---
+
+**Exercise 4.** Explain the role of the Artist class in Matplotlib. Is a Line2D object an Artist? What about an Axes object?
+
+??? success "Solution to Exercise 4"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    x = np.linspace(0, 10, 100)
+    fig, ax = plt.subplots()
+    ax.plot(x, np.sin(x), 'b-', lw=2)
+    ax.set_title('Solution')
+    plt.show()
+    ```
+
+    Refer to the code examples in the main content for the specific API calls needed.

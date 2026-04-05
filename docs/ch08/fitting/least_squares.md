@@ -325,3 +325,73 @@ Weights are useful when data points have different measurement uncertainties. Se
 | Modern API | `Polynomial.fit` | Best | Auto-centering and scaling |
 
 The least squares framework unifies all polynomial fitting: `np.polyfit` builds a Vandermonde matrix and solves via QR, `np.linalg.lstsq` uses SVD for maximum stability, and `np.polynomial.Polynomial.fit` adds automatic conditioning improvements.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Build the Vandermonde matrix for `x = [0, 1, 2, 3, 4]` with degree 3 using `np.vander(x, N=4, increasing=True)`. Solve the least-squares problem `V @ c = y` for `y = [1, 2, 9, 28, 65]` using both the normal equations and `np.linalg.lstsq`. Verify both methods produce the same coefficients.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        x = np.array([0, 1, 2, 3, 4], dtype=float)
+        y = np.array([1, 2, 9, 28, 65], dtype=float)
+        V = np.vander(x, N=4, increasing=True)
+
+        # Normal equations
+        c_normal = np.linalg.solve(V.T @ V, V.T @ y)
+
+        # lstsq
+        c_lstsq, _, _, _ = np.linalg.lstsq(V, y, rcond=None)
+
+        print(f"Normal equations: {c_normal}")
+        print(f"lstsq:           {c_lstsq}")
+        print(f"Match: {np.allclose(c_normal, c_lstsq)}")
+
+---
+
+**Exercise 2.**
+Fit a degree-1 polynomial (line) to `x = [0, 1, 2, 3, 4]`, `y = [1.0, 2.8, 5.1, 7.0, 20.0]` with and without weights. Use `w = [1, 1, 1, 1, 0.1]` to downweight the outlier at `x=4`. Print the slope and intercept for both fits and confirm the weighted fit is closer to the true underlying line `y = 2x + 1`.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        x = np.array([0, 1, 2, 3, 4], dtype=float)
+        y = np.array([1.0, 2.8, 5.1, 7.0, 20.0])
+
+        # Unweighted
+        m, b = np.polyfit(x, y, 1)
+        print(f"Unweighted: y = {m:.2f}x + {b:.2f}")
+
+        # Weighted
+        w = np.array([1, 1, 1, 1, 0.1])
+        m_w, b_w = np.polyfit(x, y, 1, w=w)
+        print(f"Weighted:   y = {m_w:.2f}x + {b_w:.2f}")
+
+        # True line is y = 2x + 1
+        print(f"Weighted slope closer to 2: {abs(m_w - 2) < abs(m - 2)}")
+
+---
+
+**Exercise 3.**
+Compute the condition number of the Vandermonde matrix for `x = np.linspace(0, 100, 20)` at degrees 5, 10, and 15. Then center and scale `x` to `x_norm = (x - x.mean()) / x.std()` and recompute the condition numbers. Print the improvement factor at each degree.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        x = np.linspace(0, 100, 20)
+        x_norm = (x - x.mean()) / x.std()
+
+        for deg in [5, 10, 15]:
+            V_raw = np.vander(x, N=deg+1, increasing=True)
+            V_norm = np.vander(x_norm, N=deg+1, increasing=True)
+            cond_raw = np.linalg.cond(V_raw)
+            cond_norm = np.linalg.cond(V_norm)
+            print(f"Degree {deg:2d}: raw cond={cond_raw:.2e}, "
+                  f"norm cond={cond_norm:.2e}, "
+                  f"improvement={cond_raw/cond_norm:.0f}x")

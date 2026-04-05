@@ -243,3 +243,104 @@ result = "".join(strings)
 5. **Catch specific exceptions**
 6. **Don't modify collections while iterating**
 7. **Use `==` for value comparison, `is` for identity**
+
+## Exercises
+
+**Exercise 1.**
+The "late binding closure" gotcha is one of Python's most famous pitfalls. Predict the output:
+
+```python
+funcs = []
+for i in range(4):
+    funcs.append(lambda: i)
+
+print([f() for f in funcs])
+```
+
+Explain *why* all functions return the same value. What does "late binding" mean -- when does the closure look up `i`? What is the standard fix, and why does it work?
+
+??? success "Solution to Exercise 1"
+    Output: `[3, 3, 3, 3]`
+
+    All four lambdas return `3` because Python closures use **late binding** -- the variable `i` is looked up at the time the function is **called**, not at the time it is **defined**. When the list comprehension calls each function, the `for` loop has already completed, and `i` is `3`.
+
+    All four lambdas close over the **same variable** `i` (in the enclosing scope). They do not capture the value of `i` at each iteration -- they capture a reference to the variable itself.
+
+    **Fix using a default argument:**
+
+    ```python
+    funcs = []
+    for i in range(4):
+        funcs.append(lambda i=i: i)  # Captures current value as default
+
+    print([f() for f in funcs])  # [0, 1, 2, 3]
+    ```
+
+    The default argument `i=i` is evaluated at function **definition** time (each iteration), capturing the current value. The lambda body uses the parameter `i` (which has the captured default), not the enclosing variable.
+
+---
+
+**Exercise 2.**
+Explain why this code raises `UnboundLocalError` instead of printing `1`:
+
+```python
+x = 1
+
+def f():
+    print(x)
+    x += 1
+
+f()
+```
+
+The programmer's intent is to read `x`, then increment it. Why does the `print(x)` line fail? What are two different ways to fix this, and what are the trade-offs?
+
+??? success "Solution to Exercise 2"
+    Python determines scope at **compile time**. Because `x += 1` (which is `x = x + 1`) contains an assignment to `x`, Python classifies `x` as a **local variable** for the entire function. The `print(x)` then tries to read the local `x`, which has not been assigned yet, causing `UnboundLocalError`.
+
+    **Fix 1 -- `global`:** Declare that `x` refers to the global variable:
+
+    ```python
+    def f():
+        global x
+        print(x)
+        x += 1
+    ```
+
+    Trade-off: modifies global state, making the function less predictable and harder to test.
+
+    **Fix 2 -- pass as argument and return:**
+
+    ```python
+    def f(x):
+        print(x)
+        return x + 1
+
+    x = f(x)
+    ```
+
+    Trade-off: more explicit and testable, but requires the caller to handle the return value. This is generally the better approach.
+
+---
+
+**Exercise 3.**
+String concatenation in a loop (`result += s`) is described as O(n^2). Explain *why* it has quadratic complexity for immutable strings. What happens in memory each time `result += s` executes? Why is `"".join(strings)` O(n) instead?
+
+??? success "Solution to Exercise 3"
+    Strings are immutable. Each `result += s` creates a **new** string object containing all characters of `result` plus all characters of `s`, then rebinds `result` to this new object. The old string is discarded.
+
+    If there are $n$ strings of average length $k$:
+
+    - Iteration 1: copies $k$ characters (length of first string)
+    - Iteration 2: copies $2k$ characters (result so far + new string)
+    - Iteration $n$: copies $nk$ characters
+
+    Total characters copied: $k + 2k + 3k + \ldots + nk = k \cdot n(n+1)/2 = O(n^2 k)$.
+
+    `"".join(strings)` is O(n) because it:
+
+    1. Pre-computes the total length by scanning all strings (one pass)
+    2. Allocates a single buffer of the correct size
+    3. Copies each string into the buffer once
+
+    Total work: one scan to compute length + one copy of each character = $O(nk)$. No intermediate string objects are created.

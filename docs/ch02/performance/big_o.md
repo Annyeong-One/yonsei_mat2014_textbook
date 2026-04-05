@@ -316,3 +316,131 @@ if __name__ == '__main__':
     # Uncomment to see the plot:
     # plot_complexity_growth()
 ```
+
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Write both a linear search and a binary search for a sorted list. Time each when searching for the last element in a list of 1,000,000 items. Report the time difference.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    import time
+
+    def linear_search(arr, target):
+        for i, val in enumerate(arr):
+            if val == target:
+                return i
+        return -1
+
+    def binary_search(arr, target):
+        lo, hi = 0, len(arr) - 1
+        while lo <= hi:
+            mid = (lo + hi) // 2
+            if arr[mid] == target:
+                return mid
+            elif arr[mid] < target:
+                lo = mid + 1
+            else:
+                hi = mid - 1
+        return -1
+
+    data = list(range(1_000_000))
+    target = 999_999
+
+    start = time.perf_counter()
+    linear_search(data, target)
+    linear_time = time.perf_counter() - start
+
+    start = time.perf_counter()
+    binary_search(data, target)
+    binary_time = time.perf_counter() - start
+
+    print(f"Linear: {linear_time:.4f}s")
+    print(f"Binary: {binary_time:.6f}s")
+    ```
+
+    Linear search checks every element (O(n)), while binary search halves the search space each step (O(log n)).
+
+---
+
+**Exercise 2.**
+Write a function that finds all duplicate values in a list. Implement it in two ways: one with O(n^2) time complexity (nested loops) and one with O(n) time complexity (using a set). Compare their performance on a list of 10,000 elements.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    import time
+
+    def find_dupes_quadratic(lst):
+        dupes = []
+        for i in range(len(lst)):
+            for j in range(i + 1, len(lst)):
+                if lst[i] == lst[j] and lst[i] not in dupes:
+                    dupes.append(lst[i])
+        return dupes
+
+    def find_dupes_linear(lst):
+        seen = set()
+        dupes = set()
+        for item in lst:
+            if item in seen:
+                dupes.add(item)
+            seen.add(item)
+        return list(dupes)
+
+    data = list(range(5000)) + list(range(5000))
+
+    start = time.perf_counter()
+    find_dupes_quadratic(data)
+    quad_time = time.perf_counter() - start
+
+    start = time.perf_counter()
+    find_dupes_linear(data)
+    lin_time = time.perf_counter() - start
+
+    print(f"O(n^2): {quad_time:.4f}s")
+    print(f"O(n):   {lin_time:.6f}s")
+    ```
+
+    The set-based approach uses O(1) membership testing, reducing the overall complexity from O(n^2) to O(n).
+
+---
+
+**Exercise 3.**
+Explain why an O(n^2) algorithm with a small constant factor might outperform an O(n log n) algorithm for small input sizes. Demonstrate with a concrete example using `timeit`.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    import timeit
+
+    # Simple O(n^2) insertion sort vs O(n log n) sorted()
+    def insertion_sort(arr):
+        for i in range(1, len(arr)):
+            key = arr[i]
+            j = i - 1
+            while j >= 0 and arr[j] > key:
+                arr[j + 1] = arr[j]
+                j -= 1
+            arr[j + 1] = key
+
+    n = 10
+    setup = f"import random; data = random.sample(range({n}), {n})"
+
+    t_insert = timeit.timeit("insertion_sort(data[:])",
+                              setup=setup + "; from __main__ import insertion_sort",
+                              number=10000)
+    t_sorted = timeit.timeit("sorted(data)",
+                              setup=setup,
+                              number=10000)
+
+    print(f"Insertion sort (n={n}): {t_insert:.4f}s")
+    print(f"sorted() (n={n}):      {t_sorted:.4f}s")
+    ```
+
+    For very small inputs, the overhead of O(n log n) algorithms (function calls, more complex logic) can exceed the theoretical advantage. The constant factors dominate when `n` is tiny.

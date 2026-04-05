@@ -106,3 +106,67 @@ Autocorrelation analysis serves several practical purposes in data analysis:
 ## Summary
 
 Autocorrelation measures the linear dependence between values of a time series at different lags. The ACF captures total correlation at each lag, while the PACF isolates direct effects by removing intermediate dependencies. Together, they provide the primary diagnostic tools for time series model identification and residual analysis, with efficient implementations available through SciPy and statsmodels.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Generate an AR(1) process $x_t = 0.8 x_{t-1} + \varepsilon_t$ with $\varepsilon_t \sim N(0, 1)$ for 500 time steps. Plot the autocorrelation function (ACF) for lags 0 to 20 using `statsmodels.tsa.stattools.acf`.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        from statsmodels.tsa.stattools import acf
+
+        np.random.seed(42)
+        n = 500
+        x = np.zeros(n)
+        for t in range(1, n):
+            x[t] = 0.8 * x[t-1] + np.random.normal()
+
+        acf_vals = acf(x, nlags=20)
+        plt.bar(range(21), acf_vals)
+        plt.xlabel('Lag')
+        plt.ylabel('ACF')
+        plt.title('ACF of AR(1) with phi=0.8')
+        plt.show()
+
+---
+
+**Exercise 2.**
+For the same AR(1) process, compute the partial autocorrelation function (PACF) using `statsmodels.tsa.stattools.pacf`. Verify that only the first lag has a significant PACF value (close to 0.8).
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from statsmodels.tsa.stattools import pacf
+
+        np.random.seed(42)
+        n = 500
+        x = np.zeros(n)
+        for t in range(1, n):
+            x[t] = 0.8 * x[t-1] + np.random.normal()
+
+        pacf_vals = pacf(x, nlags=10)
+        for lag, val in enumerate(pacf_vals):
+            print(f"Lag {lag}: PACF = {val:.4f}")
+
+---
+
+**Exercise 3.**
+Generate white noise (iid $N(0, 1)$, 200 samples) and compute the ACF for lags 1-15. Verify that all autocorrelations fall within the 95% confidence band $\pm 1.96/\sqrt{n}$.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from statsmodels.tsa.stattools import acf
+
+        np.random.seed(42)
+        noise = np.random.normal(size=200)
+        acf_vals = acf(noise, nlags=15)
+        band = 1.96 / np.sqrt(200)
+        all_inside = all(abs(acf_vals[k]) < band for k in range(1, 16))
+        print(f"95% band: +/- {band:.4f}")
+        print(f"All lags within band: {all_inside}")

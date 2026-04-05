@@ -1008,3 +1008,114 @@ if __name__ == "__main__":
         - Test that metadata is preserved
     """)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a `@timer` decorator that measures and prints the execution time of any function. Store the last measured duration as a `last_elapsed` attribute on the wrapper. Use `@wraps` to preserve metadata. Demonstrate it on a function that sorts a large list.
+
+??? success "Solution to Exercise 1"
+
+        import time
+        from functools import wraps
+
+        def timer(func):
+            """Decorator that measures execution time."""
+            @wraps(func)
+            def wrapper(*args, **kwargs):
+                start = time.perf_counter()
+                result = func(*args, **kwargs)
+                wrapper.last_elapsed = time.perf_counter() - start
+                print(f"{func.__name__} took {wrapper.last_elapsed:.4f}s")
+                return result
+            wrapper.last_elapsed = 0.0
+            return wrapper
+
+        @timer
+        def sort_numbers(n):
+            """Sort a list of n random numbers."""
+            import random
+            data = [random.randint(0, n) for _ in range(n)]
+            return sorted(data)
+
+        sort_numbers(100_000)
+        print(f"Last elapsed: {sort_numbers.last_elapsed:.4f}s")
+
+---
+
+**Exercise 2.**
+Create a `@retry(max_attempts, delay)` decorator factory that retries a function when it raises an exception. After all attempts are exhausted, re-raise the last exception. Demonstrate it with a function that simulates intermittent `ConnectionError` failures.
+
+??? success "Solution to Exercise 2"
+
+        import time
+        from functools import wraps
+
+        def retry(max_attempts=3, delay=1.0):
+            """Decorator factory that retries on exception."""
+            def decorator(func):
+                @wraps(func)
+                def wrapper(*args, **kwargs):
+                    last_exc = None
+                    for attempt in range(1, max_attempts + 1):
+                        try:
+                            return func(*args, **kwargs)
+                        except Exception as e:
+                            last_exc = e
+                            if attempt < max_attempts:
+                                print(f"Attempt {attempt} failed: {e}. Retrying...")
+                                time.sleep(delay)
+                    raise last_exc
+                return wrapper
+            return decorator
+
+        call_count = 0
+
+        @retry(max_attempts=3, delay=0.1)
+        def fetch_data():
+            global call_count
+            call_count += 1
+            if call_count < 3:
+                raise ConnectionError("Server unreachable")
+            return {"status": "ok"}
+
+        result = fetch_data()
+        print(result)  # {"status": "ok"}
+
+---
+
+**Exercise 3.**
+Write a `@validate_return(expected_type)` decorator factory that checks whether the return value of the decorated function is an instance of `expected_type`. If not, raise a `TypeError` with a descriptive message. Demonstrate it by decorating a function that should return a `dict` but sometimes returns `None`.
+
+??? success "Solution to Exercise 3"
+
+        from functools import wraps
+
+        def validate_return(expected_type):
+            """Decorator factory that validates return type."""
+            def decorator(func):
+                @wraps(func)
+                def wrapper(*args, **kwargs):
+                    result = func(*args, **kwargs)
+                    if not isinstance(result, expected_type):
+                        raise TypeError(
+                            f"{func.__name__} must return {expected_type.__name__}, "
+                            f"got {type(result).__name__}"
+                        )
+                    return result
+                return wrapper
+            return decorator
+
+        @validate_return(dict)
+        def get_config(use_default=True):
+            if use_default:
+                return {"debug": False}
+            return None  # Bug: should return a dict
+
+        print(get_config())            # {'debug': False}
+        try:
+            get_config(use_default=False)  # TypeError
+        except TypeError as e:
+            print(e)

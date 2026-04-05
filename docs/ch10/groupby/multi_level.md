@@ -156,3 +156,64 @@ print(stats)
 stats.columns = ['_'.join(col) for col in stats.columns]
 stats = stats.reset_index()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Group a DataFrame by `['region', 'product']` and compute the sum of `'sales'`. Then use `.unstack()` to reshape the result into a pivot-like table with regions as rows and products as columns.
+
+??? success "Solution to Exercise 1"
+    Group, aggregate, and unstack for a pivot-like view.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'region': ['East', 'East', 'West', 'West'],
+            'product': ['A', 'B', 'A', 'B'],
+            'sales': [100, 150, 200, 250]
+        })
+        result = df.groupby(['region', 'product'])['sales'].sum().unstack()
+        print(result)
+
+---
+
+**Exercise 2.**
+Apply named aggregations with multi-level grouping: group by `['sector', 'ticker']` and compute `total_volume=('volume', 'sum')` and `avg_price=('price', 'mean')`. Flatten the column index and reset the row index.
+
+??? success "Solution to Exercise 2"
+    Named aggregations with multi-level grouping.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'sector': ['Tech', 'Tech', 'Finance', 'Finance'],
+            'ticker': ['AAPL', 'MSFT', 'JPM', 'GS'],
+            'volume': [1000, 800, 500, 300],
+            'price': [150.0, 350.0, 180.0, 380.0]
+        })
+        result = df.groupby(['sector', 'ticker']).agg(
+            total_volume=('volume', 'sum'),
+            avg_price=('price', 'mean')
+        ).reset_index()
+        print(result)
+
+---
+
+**Exercise 3.**
+Group by two columns and access a specific sub-group using bracket indexing on the resulting MultiIndex Series: `result['East']` to get all products in the East region, and `result['East', 'A']` for a specific combination.
+
+??? success "Solution to Exercise 3"
+    Access sub-groups in a MultiIndex result.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'region': ['East', 'East', 'West', 'West'],
+            'product': ['A', 'B', 'A', 'B'],
+            'sales': [100, 150, 200, 250]
+        })
+        result = df.groupby(['region', 'product'])['sales'].sum()
+        print("All East:", result['East'])
+        print("East-A:", result['East', 'A'])

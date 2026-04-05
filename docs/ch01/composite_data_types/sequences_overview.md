@@ -190,6 +190,7 @@ ababab
 
 ---
 
+
 ## 5. Summary
 
 Key ideas:
@@ -200,3 +201,101 @@ Key ideas:
 - mutable sequences (lists) can be modified; immutable sequences (tuples, strings) cannot
 
 Knowing that something is a sequence tells you immediately what operations it supports. See [Tuples](tuples.md) and [Lists](lists.md) for full coverage of each type.
+
+
+## Exercises
+
+**Exercise 1.**
+All sequences support the same operations (indexing, slicing, `len`, `in`, iteration). Predict the output for each sequence type:
+
+```python
+for seq in [[10, 20, 30], (10, 20, 30), "abc"]:
+    print(type(seq).__name__, seq[0], seq[-1], len(seq), 20 in seq)
+```
+
+Why does `20 in "abc"` behave differently from `20 in [10, 20, 30]`? What does the shared sequence interface buy you as a programmer?
+
+??? success "Solution to Exercise 1"
+    Output:
+
+    ```text
+    list 10 30 4 True
+    tuple 10 30 4 True
+    str a c 3 False
+    ```
+
+    For `[10, 20, 30]` and `(10, 20, 30)`, `20 in seq` checks if the **value** `20` is an element. For `"abc"`, `20 in seq` checks if `20` is a **substring** -- but `20` is an integer, not a string, and strings can only contain string substrings. So `20 in "abc"` raises `TypeError` in strict mode, or for `in`, it returns `False` because an integer can never be found in a string. (Actually, `20 in "abc"` raises `TypeError: 'in <string>' requires string as left operand, not int`.)
+
+    The shared sequence interface (called the **Sequence ABC** or protocol) means code that works with indexing, slicing, and iteration works with **any** sequence type. A function that takes `seq[0]` and `len(seq)` works equally well with lists, tuples, and strings. This is Python's "duck typing" in action.
+
+---
+
+**Exercise 2.**
+Slicing returns a new object of the same type. Predict the types:
+
+```python
+a = [1, 2, 3][1:]
+b = (1, 2, 3)[1:]
+c = "abc"[1:]
+print(type(a), type(b), type(c))
+```
+
+Now explain: when you slice a list, does the new list share elements with the original, or are they independent copies? What happens if those elements are mutable objects?
+
+??? success "Solution to Exercise 2"
+    Output:
+
+    ```text
+    <class 'list'> <class 'tuple'> <class 'str'>
+    ```
+
+    Each slice returns a new object of the **same type** as the source.
+
+    When you slice a list, the new list contains **references to the same objects** -- this is a **shallow copy**. For immutable elements (ints, strings), this distinction does not matter. But if elements are mutable:
+
+    ```python
+    original = [[1, 2], [3, 4]]
+    sliced = original[:]
+    sliced[0].append(99)
+    print(original)  # [[1, 2, 99], [3, 4]]
+    ```
+
+    The inner list `[1, 2]` is shared between `original` and `sliced`. Mutating it through one reference affects both. This is the shallow copy behavior -- the outer container is new, but the inner objects are shared.
+
+---
+
+**Exercise 3.**
+Concatenation with `+` creates a new sequence. Explain why this matters for mutable sequences:
+
+```python
+a = [1, 2]
+b = [3, 4]
+c = a + b
+c[0] = 99
+print(a)
+print(c)
+```
+
+Predict the output. Then explain: does `+` create a shallow copy or a deep copy of the elements? What would happen if `a` contained a list: `a = [[1], 2]`?
+
+??? success "Solution to Exercise 3"
+    Output:
+
+    ```text
+    [1, 2]
+    [99, 2, 3, 4]
+    ```
+
+    `c = a + b` creates a **new list** that is independent from `a` and `b`. Modifying `c[0]` does not affect `a` because `c` is a separate list object.
+
+    However, `+` creates a **shallow copy**. If `a` contains a mutable object:
+
+    ```python
+    a = [[1], 2]
+    b = [3, 4]
+    c = a + b
+    c[0].append(99)
+    print(a)  # [[1, 99], 2]
+    ```
+
+    `c[0]` and `a[0]` refer to the **same inner list**. The concatenation copied the reference, not the inner list itself. This is the standard shallow copy behavior: the top-level container is new, but the elements inside are shared references.

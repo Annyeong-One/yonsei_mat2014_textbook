@@ -198,3 +198,67 @@ for i in range(1000):
 # Fast
 s = "".join(str(i) for i in range(1000))
 ```
+
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Show the difference between `+=` and `+` for lists. Create a list, use `+=` to extend it, and show the `id()` does not change. Then use `+` and show the `id()` does change.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    # += modifies in place (same object)
+    lst = [1, 2, 3]
+    original_id = id(lst)
+    lst += [4, 5]
+    print(f"Same object: {id(lst) == original_id}")  # True
+
+    # + creates new object
+    lst = [1, 2, 3]
+    original_id = id(lst)
+    lst = lst + [4, 5]
+    print(f"Same object: {id(lst) == original_id}")  # False
+    ```
+
+    For mutable types like lists, `+=` calls `__iadd__` (in-place addition). The `+` operator calls `__add__` and creates a new list.
+
+---
+
+**Exercise 2.**
+Write a loop that computes the sum of squares from 1 to 100 using the `+=` operator. Then show the equivalent one-liner using `sum()` with a generator.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    # Using += in a loop
+    total = 0
+    for i in range(1, 101):
+        total += i ** 2
+    print(total)  # 338350
+
+    # One-liner equivalent
+    print(sum(i ** 2 for i in range(1, 101)))  # 338350
+    ```
+
+    Both approaches compute the same result. The `sum()` with generator is more Pythonic and avoids the explicit loop.
+
+---
+
+**Exercise 3.**
+Demonstrate that `+=` on a string creates a new object (since strings are immutable) by checking the `id()` before and after the operation.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    s = "hello"
+    original_id = id(s)
+    s += " world"
+    print(f"Same object: {id(s) == original_id}")  # False
+    print(s)  # hello world
+    ```
+
+    Strings are immutable, so `+=` cannot modify the original object. Python creates a new string and rebinds the variable to it.

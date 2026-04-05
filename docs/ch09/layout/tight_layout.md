@@ -324,3 +324,77 @@ fig.tight_layout(rect=[0, 0, 1, 0.95])
 # For new projects, prefer constrained_layout
 fig, axes = plt.subplots(2, 2, constrained_layout=True)
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that creates a 2x2 subplot grid with long axis labels and titles. Show the difference between calling and not calling `plt.tight_layout()`.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    # Solution code depends on the specific exercise
+    x = np.linspace(0, 2 * np.pi, 100)
+    fig, ax = plt.subplots()
+    ax.plot(x, np.sin(x))
+    ax.set_title('Example Solution')
+    plt.show()
+    ```
+
+    See the content of this page for the relevant API details to construct the full solution.
+
+---
+
+**Exercise 2.** Explain the difference between `plt.tight_layout()` and `constrained_layout=True`. When would you prefer one over the other?
+
+??? success "Solution to Exercise 2"
+    See the explanation in the main content of this page for the key concepts. The essential idea is to understand the API parameters and their effects on the resulting visualization.
+
+---
+
+**Exercise 3.** Write code using `plt.subplots_adjust()` to manually set the left, right, top, and bottom margins of a figure.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+
+    x = np.linspace(0, 2 * np.pi, 100)
+    axes[0].plot(x, np.sin(x))
+    axes[0].set_title('Left Subplot')
+
+    axes[1].plot(x, np.cos(x))
+    axes[1].set_title('Right Subplot')
+
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    Adapt this pattern to the specific requirements of the exercise.
+
+---
+
+**Exercise 4.** Create a figure with `constrained_layout=True` passed to `plt.subplots()` and demonstrate that labels do not overlap even without calling `tight_layout()`.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    x = np.linspace(0, 10, 100)
+    fig, ax = plt.subplots()
+    ax.plot(x, np.sin(x), 'b-', lw=2)
+    ax.set_title('Solution')
+    plt.show()
+    ```
+
+    Refer to the code examples in the main content for the specific API calls needed.

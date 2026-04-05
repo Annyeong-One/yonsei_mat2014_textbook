@@ -250,3 +250,139 @@ plt.show()
 - `set_aspect('equal')` for geometric figures
 - Visualize derivatives and critical points
 - Grid layouts compare multiple functions
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that plots $y = \cos(x)$ from $-2\pi$ to $2\pi$ using centered spines (spines at the origin). Set x-tick labels to show $-2\pi$, $-\pi$, $0$, $\pi$, $2\pi$ using LaTeX formatting.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    x = np.linspace(-2 * np.pi, 2 * np.pi, 200)
+    y = np.cos(x)
+
+    fig, ax = plt.subplots(figsize=(10, 4))
+    ax.plot(x, y, 'b-', linewidth=2)
+
+    ax.set_xticks([-2 * np.pi, -np.pi, 0, np.pi, 2 * np.pi])
+    ax.set_xticklabels([r'$-2\pi$', r'$-\pi$', '0', r'$\pi$', r'$2\pi$'])
+    ax.set_yticks([-1, 0, 1])
+
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['bottom'].set_position('zero')
+    ax.spines['left'].set_position('zero')
+
+    ax.set_title(r'$y = \cos(x)$', pad=20)
+    plt.show()
+    ```
+
+---
+
+**Exercise 2.** Create a 2x2 subplot grid showing four functions: $x^2$, $\sin(x)$, $e^x$, and $\ln(x)$ (for $x > 0$). Use a shared range where appropriate and add LaTeX titles for each subplot.
+
+??? success "Solution to Exercise 2"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    fig, axes = plt.subplots(2, 2, figsize=(10, 8))
+
+    x1 = np.linspace(-3, 3, 200)
+    axes[0, 0].plot(x1, x1**2, 'b-', lw=2)
+    axes[0, 0].set_title(r'$y = x^2$')
+    axes[0, 0].grid(True, alpha=0.3)
+
+    x2 = np.linspace(-2 * np.pi, 2 * np.pi, 200)
+    axes[0, 1].plot(x2, np.sin(x2), 'r-', lw=2)
+    axes[0, 1].set_title(r'$y = \sin(x)$')
+    axes[0, 1].grid(True, alpha=0.3)
+
+    x3 = np.linspace(-2, 3, 200)
+    axes[1, 0].plot(x3, np.exp(x3), 'g-', lw=2)
+    axes[1, 0].set_title(r'$y = e^x$')
+    axes[1, 0].grid(True, alpha=0.3)
+
+    x4 = np.linspace(0.01, 5, 200)
+    axes[1, 1].plot(x4, np.log(x4), 'm-', lw=2)
+    axes[1, 1].set_title(r'$y = \ln(x)$')
+    axes[1, 1].grid(True, alpha=0.3)
+
+    plt.tight_layout()
+    plt.show()
+    ```
+
+---
+
+**Exercise 3.** Write code that visualizes a left Riemann sum approximation for $f(x) = \sin(x)$ on $[0, \pi]$ using 15 rectangles. Plot the function curve in red and draw the rectangles in blue.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    f = np.sin
+    a, b = 0, np.pi
+    n_rect = 15
+
+    x_fine = np.linspace(a, b, 200)
+    x_grid = np.linspace(a, b, n_rect + 1)
+    dx = (b - a) / n_rect
+
+    fig, ax = plt.subplots(figsize=(10, 5))
+    ax.plot(x_fine, f(x_fine), 'r-', linewidth=2, label=r'$f(x) = \sin(x)$')
+
+    approx = 0
+    for i in range(n_rect):
+        x0 = x_grid[i]
+        height = f(x0)
+        rect = plt.Rectangle((x0, 0), dx, height,
+                              edgecolor='blue', facecolor='lightblue', alpha=0.6)
+        ax.add_patch(rect)
+        approx += height * dx
+
+    ax.set_xlabel('$x$')
+    ax.set_ylabel('$y$')
+    ax.set_title(f'Left Riemann Sum ({n_rect} rectangles), Approx = {approx:.4f}')
+    ax.legend()
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Create a plot showing a function $f(x) = x^3 - 3x$ and its derivative $f'(x) = 3x^2 - 3$. Mark the critical points where $f'(x) = 0$ with black dots and add vertical dashed lines from those points to the x-axis.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    x = np.linspace(-3, 3, 200)
+    f = x**3 - 3 * x
+    f_prime = 3 * x**2 - 3
+
+    # Critical points: 3x^2 - 3 = 0 => x = +/-1
+    cp_x = np.array([-1, 1])
+    cp_y = cp_x**3 - 3 * cp_x
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.plot(x, f, 'b-', lw=2, label=r"$f(x) = x^3 - 3x$")
+    ax.plot(x, f_prime, 'r--', lw=2, label=r"$f'(x) = 3x^2 - 3$")
+
+    ax.scatter(cp_x, cp_y, color='black', s=60, zorder=5)
+    for cx, cy in zip(cp_x, cp_y):
+        ax.plot([cx, cx], [cy, 0], 'k--', lw=1)
+
+    ax.axhline(0, color='gray', lw=0.5)
+    ax.set_xlabel('$x$')
+    ax.set_ylabel('$y$')
+    ax.set_title('Function and Derivative with Critical Points')
+    ax.legend()
+    ax.grid(True, alpha=0.3)
+    plt.show()
+    ```

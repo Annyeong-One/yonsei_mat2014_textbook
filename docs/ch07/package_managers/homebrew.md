@@ -329,3 +329,74 @@ Useful for:
 - `brew services` manages background services
 - Works on both macOS and Linux
 - Run `brew doctor` to troubleshoot issues
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write the Homebrew commands to: (a) search for available Python versions, (b) install Python 3.12, and (c) verify which Python Homebrew installed by checking the path. Explain the difference between `python3` from Homebrew vs the system Python on macOS.
+
+??? success "Solution to Exercise 1"
+
+    ```bash
+    # (a) Search for Python versions
+    brew search python
+
+    # (b) Install Python 3.12
+    brew install python@3.12
+
+    # (c) Check installed path
+    which python3
+    # Typically: /opt/homebrew/bin/python3 (Apple Silicon)
+    # or: /usr/local/bin/python3 (Intel)
+    ```
+
+    Homebrew Python is a user-managed installation updated via `brew
+    upgrade`. The macOS system Python (`/usr/bin/python3`) is managed
+    by Apple and should not be modified. Use Homebrew Python for
+    development to avoid interfering with system tools.
+
+---
+
+**Exercise 2.**
+Write the Homebrew commands to: (a) install PostgreSQL, (b) start it as a background service, (c) check the service status, and (d) stop the service.
+
+??? success "Solution to Exercise 2"
+
+    ```bash
+    # (a) Install PostgreSQL
+    brew install postgresql@16
+
+    # (b) Start as background service
+    brew services start postgresql@16
+
+    # (c) Check service status
+    brew services list
+
+    # (d) Stop the service
+    brew services stop postgresql@16
+    ```
+
+---
+
+**Exercise 3.**
+Write the commands to: (a) list all installed Homebrew packages, (b) find which packages are outdated, (c) upgrade all packages, and (d) clean up old versions to free disk space.
+
+??? success "Solution to Exercise 3"
+
+    ```bash
+    # (a) List all installed packages
+    brew list
+
+    # (b) Find outdated packages
+    brew outdated
+
+    # (c) Upgrade all packages
+    brew upgrade
+
+    # (d) Clean up old versions
+    brew cleanup
+    # To see what would be cleaned without deleting:
+    brew cleanup -n
+    ```

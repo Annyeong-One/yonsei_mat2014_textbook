@@ -497,3 +497,102 @@ if __name__ == '__main__':
     deal_game()
     demo_enum_features()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Implement a simple state machine for a `TrafficLight` using an enum. States are `RED`, `YELLOW`, `GREEN`. Add a `next_state` property that cycles through the states in order (GREEN -> YELLOW -> RED -> GREEN). Simulate 6 state transitions.
+
+??? success "Solution to Exercise 1"
+
+        from enum import Enum
+
+        class TrafficLight(Enum):
+            GREEN = "green"
+            YELLOW = "yellow"
+            RED = "red"
+
+            @property
+            def next_state(self):
+                order = [TrafficLight.GREEN, TrafficLight.YELLOW, TrafficLight.RED]
+                idx = order.index(self)
+                return order[(idx + 1) % len(order)]
+
+        light = TrafficLight.GREEN
+        for _ in range(6):
+            print(f"{light.name} -> ", end="")
+            light = light.next_state
+        print(light.name)
+
+---
+
+**Exercise 2.**
+Create a `MenuItem` enum for a restaurant with values as `(price, category)` tuples. Categories are "appetizer", "main", "dessert". Add a class method `by_category(cat)` that returns all items in a given category. Add a class method `cheapest()` that returns the item with the lowest price.
+
+??? success "Solution to Exercise 2"
+
+        from enum import Enum
+
+        class MenuItem(Enum):
+            SOUP = (5.99, "appetizer")
+            SALAD = (7.99, "appetizer")
+            STEAK = (24.99, "main")
+            PASTA = (14.99, "main")
+            CAKE = (8.99, "dessert")
+            ICE_CREAM = (6.99, "dessert")
+
+            @property
+            def price(self):
+                return self.value[0]
+
+            @property
+            def category(self):
+                return self.value[1]
+
+            @classmethod
+            def by_category(cls, cat):
+                return [item for item in cls if item.category == cat]
+
+            @classmethod
+            def cheapest(cls):
+                return min(cls, key=lambda item: item.price)
+
+        for item in MenuItem.by_category("appetizer"):
+            print(f"{item.name}: ${item.price}")
+
+        print(f"Cheapest: {MenuItem.cheapest().name}")
+
+---
+
+**Exercise 3.**
+Build a `Command` enum for a CLI application with values as description strings. Members: `HELP`, `VERSION`, `LIST`, `CREATE`, `DELETE`. Add an `execute()` method that prints "Executing: {name} - {description}". Add a class method `from_input(text)` that matches user input (case-insensitive) to a command, returning `None` for unknown commands.
+
+??? success "Solution to Exercise 3"
+
+        from enum import Enum
+
+        class Command(Enum):
+            HELP = "Show help information"
+            VERSION = "Display version number"
+            LIST = "List all items"
+            CREATE = "Create a new item"
+            DELETE = "Delete an item"
+
+            def execute(self):
+                print(f"Executing: {self.name} - {self.value}")
+
+            @classmethod
+            def from_input(cls, text):
+                try:
+                    return cls[text.upper()]
+                except KeyError:
+                    return None
+
+        cmd = Command.from_input("list")
+        if cmd:
+            cmd.execute()  # Executing: LIST - List all items
+
+        unknown = Command.from_input("quit")
+        print(unknown)  # None

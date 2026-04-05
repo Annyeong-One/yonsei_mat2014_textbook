@@ -66,3 +66,74 @@ Is dir: False
 Size: 12 bytes
 ```
 
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a function `file_info` that takes a file path and returns a dictionary with `"exists"`, `"size"`, `"is_file"`, and `"is_dir"` keys. Use `os.path` functions. Return size as 0 if the file does not exist.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    import os
+
+    def file_info(path):
+        exists = os.path.exists(path)
+        return {
+            "exists": exists,
+            "size": os.path.getsize(path) if exists else 0,
+            "is_file": os.path.isfile(path),
+            "is_dir": os.path.isdir(path),
+        }
+
+    # Test
+    print(file_info("/tmp"))
+    # {'exists': True, 'size': ..., 'is_file': False, 'is_dir': True}
+    ```
+
+---
+
+**Exercise 2.**
+Write a function `current_directory_contents` that returns a dictionary with two keys: `"files"` (list of file names) and `"dirs"` (list of directory names) in the current working directory. Use `os.listdir` and `os.path.isfile`/`os.path.isdir`.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    import os
+
+    def current_directory_contents():
+        cwd = os.getcwd()
+        entries = os.listdir(cwd)
+        return {
+            "files": [e for e in entries if os.path.isfile(os.path.join(cwd, e))],
+            "dirs": [e for e in entries if os.path.isdir(os.path.join(cwd, e))],
+        }
+
+    # Test
+    contents = current_directory_contents()
+    print(f"Files: {len(contents['files'])}, Dirs: {len(contents['dirs'])}")
+    ```
+
+---
+
+**Exercise 3.**
+Write a function `get_os_info` that returns a dictionary containing the current working directory, the OS name (`os.name`), and the path separator (`os.sep`).
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    import os
+
+    def get_os_info():
+        return {
+            "cwd": os.getcwd(),
+            "os_name": os.name,
+            "path_separator": os.sep,
+        }
+
+    # Test
+    info = get_os_info()
+    for key, value in info.items():
+        print(f"{key}: {value}")
+    ```

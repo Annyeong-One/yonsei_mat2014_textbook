@@ -415,3 +415,62 @@ if __name__ == "__main__":
 - `floor` vs `trunc`: Differ for negative numbers
 - `round`: Uses banker's rounding (half to even)
 - `fix` = `trunc`: Identical functions
+
+---
+
+## Exercises
+
+**Exercise 1.** Apply `np.floor`, `np.ceil`, `np.round`, and `np.trunc` to the array `[-2.7, -0.5, 0.5, 2.3, 3.8]`. Print all results.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+
+    arr = np.array([-2.7, -0.5, 0.5, 2.3, 3.8])
+    print("floor:", np.floor(arr))   # [-3. -1.  0.  2.  3.]
+    print("ceil:", np.ceil(arr))     # [-2.  0.  1.  3.  4.]
+    print("round:", np.round(arr))   # [-3.  0.  0.  2.  4.]
+    print("trunc:", np.trunc(arr))   # [-2.  0.  0.  2.  3.]
+    ```
+
+---
+
+**Exercise 2.** Predict the output of `np.round(2.5)` and `np.round(3.5)`. Explain the banker's rounding behavior.
+
+??? success "Solution to Exercise 2"
+    ```python
+    import numpy as np
+    print(np.round(2.5))  # 2.0
+    print(np.round(3.5))  # 4.0
+    ```
+
+    NumPy uses banker's rounding (round half to even). When the value is exactly halfway, it rounds to the nearest even number. So 2.5 rounds to 2 and 3.5 rounds to 4.
+
+---
+
+**Exercise 3.** Write a function that rounds all elements of an array to the nearest multiple of 5 (e.g., 12 becomes 10, 13 becomes 15).
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+
+    def round_to_nearest(arr, multiple):
+        return np.round(arr / multiple) * multiple
+
+    arr = np.array([12, 13, 17, 22, 28])
+    print(round_to_nearest(arr, 5))  # [10. 15. 15. 20. 30.]
+    ```
+
+---
+
+**Exercise 4.** Given prices `[19.99, 24.50, 9.999]`, round to 2 decimal places, then compute the total using `np.sum`.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+
+    prices = np.array([19.99, 24.50, 9.999])
+    rounded = np.round(prices, 2)
+    print(f"Rounded: {rounded}")
+    print(f"Total: {np.sum(rounded):.2f}")
+    ```

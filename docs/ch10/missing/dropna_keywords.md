@@ -179,3 +179,67 @@ df.dropna(inplace=True)  # Modifies df directly
 ```python
 df = df.dropna()  # More explicit than inplace
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a DataFrame where one row is entirely `NaN`. Use `dropna(how='all')` to drop only that row. Verify that rows with partial `NaN` values are kept.
+
+??? success "Solution to Exercise 1"
+    Drop only rows where all values are NaN.
+
+        import pandas as pd
+        import numpy as np
+
+        df = pd.DataFrame({
+            'A': [1, np.nan, 3],
+            'B': [np.nan, np.nan, 6],
+            'C': [7, np.nan, 9]
+        })
+        result = df.dropna(how='all')
+        print(result)
+        print(f"Rows kept: {len(result)}")
+
+---
+
+**Exercise 2.**
+Create a DataFrame and use `dropna(thresh=2)` to keep only rows that have at least 2 non-null values. Count how many rows are dropped.
+
+??? success "Solution to Exercise 2"
+    Use thresh to require a minimum number of non-null values.
+
+        import pandas as pd
+        import numpy as np
+
+        df = pd.DataFrame({
+            'A': [1, np.nan, np.nan, 4],
+            'B': [np.nan, np.nan, 3, 4],
+            'C': [1, np.nan, np.nan, 4]
+        })
+        before = len(df)
+        result = df.dropna(thresh=2)
+        print(result)
+        print(f"Dropped: {before - len(result)} rows")
+
+---
+
+**Exercise 3.**
+Create a DataFrame with 4 columns and use `dropna(subset=['col1', 'col2'])` to drop rows only when `col1` or `col2` has `NaN`, ignoring `NaN` in other columns.
+
+??? success "Solution to Exercise 3"
+    Drop based on specific column subset.
+
+        import pandas as pd
+        import numpy as np
+
+        df = pd.DataFrame({
+            'col1': [1, np.nan, 3, 4],
+            'col2': [5, 6, np.nan, 8],
+            'col3': [np.nan, np.nan, np.nan, 12],
+            'col4': [13, 14, 15, 16]
+        })
+        result = df.dropna(subset=['col1', 'col2'])
+        print(result)
+        # NaN in col3 does not trigger row removal

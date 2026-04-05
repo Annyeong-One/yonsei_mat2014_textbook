@@ -570,3 +570,67 @@ if __name__ == "__main__":
     print("Next: Tutorial 02 - Character Classes")
     print("="*70)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Use `re.search` to find the first number in a string and return it as an integer. Write a function `first_number` that takes a string and returns the first integer found, or `None` if no number exists. For example, `first_number("Room 404 not found")` should return `404`.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    import re
+
+    def first_number(text):
+        match = re.search(r'\d+', text)
+        return int(match.group()) if match else None
+
+    # Test
+    print(first_number("Room 404 not found"))  # 404
+    print(first_number("No numbers here"))     # None
+    print(first_number("42 is the answer"))    # 42
+    ```
+
+---
+
+**Exercise 2.**
+Use `re.finditer` to find all words in a string that start with an uppercase letter. Return a list of tuples `(word, start_position)`. For example, in `"Alice met Bob in Paris"`, return `[("Alice", 0), ("Bob", 10), ("Paris", 17)]`.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    import re
+
+    def capitalized_words(text):
+        return [
+            (m.group(), m.start())
+            for m in re.finditer(r'\b[A-Z]\w*', text)
+        ]
+
+    # Test
+    result = capitalized_words("Alice met Bob in Paris")
+    print(result)
+    # [('Alice', 0), ('Bob', 10), ('Paris', 17)]
+    ```
+
+---
+
+**Exercise 3.**
+Write a function `highlight_matches` that takes a text and a regex pattern, and returns the text with all matches wrapped in square brackets. For example, `highlight_matches("hello world", r"\w+o")` should return `"[hello] [wo]rld"`. Use `re.sub` with a replacement function.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    import re
+
+    def highlight_matches(text, pattern):
+        return re.sub(pattern, lambda m: f"[{m.group()}]", text)
+
+    # Test
+    print(highlight_matches("hello world", r"\w+o"))
+    # [hello] [wo]rld
+    print(highlight_matches("2024-12-25", r"\d+"))
+    # [2024]-[12]-[25]
+    ```

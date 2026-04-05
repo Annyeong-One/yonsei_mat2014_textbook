@@ -197,3 +197,70 @@ Self merge creates more rows.
 # For simple comparisons, consider:
 df['prev_value'] = df['value'].shift(1)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create an `employees` DataFrame with `'id'`, `'name'`, and `'manager_id'` columns. Perform a self merge to add each employee's manager name as a new column.
+
+??? success "Solution to Exercise 1"
+    Self merge to find each employee's manager name.
+
+        import pandas as pd
+
+        employees = pd.DataFrame({
+            'id': [1, 2, 3, 4],
+            'name': ['Alice', 'Bob', 'Carol', 'Dave'],
+            'manager_id': [None, 1, 1, 2]
+        })
+        result = pd.merge(
+            employees, employees[['id', 'name']],
+            left_on='manager_id', right_on='id',
+            suffixes=('', '_manager'), how='left'
+        )
+        print(result[['name', 'name_manager']])
+
+---
+
+**Exercise 2.**
+Create a `flights` DataFrame with `'origin'` and `'destination'` airport codes. Perform a self merge to find all pairs of flights that can be connected (where the destination of one flight matches the origin of another).
+
+??? success "Solution to Exercise 2"
+    Find connecting flights via self merge.
+
+        import pandas as pd
+
+        flights = pd.DataFrame({
+            'flight': ['F1', 'F2', 'F3'],
+            'origin': ['NYC', 'CHI', 'LAX'],
+            'destination': ['CHI', 'LAX', 'NYC']
+        })
+        connections = pd.merge(
+            flights, flights,
+            left_on='destination', right_on='origin',
+            suffixes=('_first', '_second')
+        )
+        print(connections[['flight_first', 'origin_first', 'destination_first', 'flight_second', 'destination_second']])
+
+---
+
+**Exercise 3.**
+Create a table of parent-child relationships. Use a self merge to find all grandparent-grandchild pairs (merge twice: child to parent, then parent to grandparent).
+
+??? success "Solution to Exercise 3"
+    Find grandparent-grandchild pairs with two self merges.
+
+        import pandas as pd
+
+        family = pd.DataFrame({
+            'person': ['Alice', 'Bob', 'Carol', 'Dave'],
+            'parent': ['Bob', 'Carol', None, 'Carol']
+        })
+        # First merge: person -> parent
+        step1 = pd.merge(family, family[['person', 'parent']], left_on='parent', right_on='person', suffixes=('', '_gp'))
+        # parent_gp is the grandparent
+        grandparents = step1[step1['parent_gp'].notna()][['person', 'parent_gp']]
+        grandparents.columns = ['grandchild', 'grandparent']
+        print(grandparents)

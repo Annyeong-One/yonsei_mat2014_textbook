@@ -376,3 +376,92 @@ if __name__ == "__main__":
     # 8. Use properties when value needs computation or validation
     # 9. Use regular methods when action/operation is being performed
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a class hierarchy `A -> B -> C` where `A` defines a class attribute `x = "A"`, `B` defines `x = "B"`, and `C` does not define `x`. Create an instance of `C` and predict what `instance.x` returns. Then assign `instance.x = "instance"` and show how `instance.x`, `C.x`, `B.x`, and `A.x` each resolve differently. Explain the lookup order using `__mro__`.
+
+??? success "Solution to Exercise 1"
+
+        class A:
+            x = "A"
+
+        class B(A):
+            x = "B"
+
+        class C(B):
+            pass
+
+        obj = C()
+        print(obj.x)  # "B" - found in B (next in MRO after C)
+        print(C.__mro__)
+        # (<class 'C'>, <class 'B'>, <class 'A'>, <class 'object'>)
+
+        obj.x = "instance"
+        print(obj.x)   # "instance" - found in instance __dict__
+        print(C.x)     # "B" - class C has no x, looks up to B
+        print(B.x)     # "B" - defined on B
+        print(A.x)     # "A" - defined on A
+
+---
+
+**Exercise 2.**
+Write a class `Config` with a class attribute `defaults = {"debug": False, "verbose": True}`. In `__init__`, do NOT copy `defaults`---just let attribute lookup find it. Create two instances and show that modifying `defaults` through one instance via `self.defaults["debug"] = True` affects the other instance. Then fix the problem by copying `defaults` in `__init__` so each instance has its own dictionary.
+
+??? success "Solution to Exercise 2"
+
+        class Config:
+            defaults = {"debug": False, "verbose": True}
+
+            def __init__(self):
+                pass  # No copy - shared reference
+
+        c1 = Config()
+        c2 = Config()
+        c1.defaults["debug"] = True
+        print(c2.defaults["debug"])  # True - both share same dict!
+
+        # Fixed version
+        class ConfigFixed:
+            defaults = {"debug": False, "verbose": True}
+
+            def __init__(self):
+                self.defaults = dict(ConfigFixed.defaults)  # Copy
+
+        f1 = ConfigFixed()
+        f2 = ConfigFixed()
+        f1.defaults["debug"] = True
+        print(f2.defaults["debug"])  # False - independent copy
+
+---
+
+**Exercise 3.**
+Build a class `Tracker` that uses `__dict__` inspection to demonstrate attribute lookup. Add a class attribute `version = 1`. In `__init__`, set `self.name`. After creating an instance, print `instance.__dict__`, `type(instance).__dict__`, and show that `version` is NOT in `instance.__dict__` but IS in `type(instance).__dict__`. Then shadow `version` on the instance and show the change in both `__dict__` outputs.
+
+??? success "Solution to Exercise 3"
+
+        class Tracker:
+            version = 1
+
+            def __init__(self, name):
+                self.name = name
+
+        t = Tracker("alpha")
+        print(t.__dict__)
+        # {'name': 'alpha'}
+        print("version" in t.__dict__)
+        # False - not on instance
+        print("version" in type(t).__dict__)
+        # True - on the class
+
+        print(t.version)  # 1 - found via class lookup
+
+        # Shadow version on instance
+        t.version = 2
+        print(t.__dict__)
+        # {'name': 'alpha', 'version': 2}
+        print(t.version)         # 2 - instance shadows class
+        print(Tracker.version)   # 1 - class attribute unchanged

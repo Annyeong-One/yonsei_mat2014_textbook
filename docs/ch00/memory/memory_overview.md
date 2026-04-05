@@ -536,6 +536,62 @@ When arrays no longer fit in cache, accesses must fetch data from RAM, which is 
 
 ---
 
+**Exercise 9.**
+A Python `list` of 1,000,000 `float` values and a NumPy `ndarray` of 1,000,000 `float64` values both "store" the same data. Yet iterating over the NumPy array can be 10--100x faster. Explain *why* from the perspective of the memory hierarchy. Specifically, describe the memory layout difference between the two and explain how this affects cache line utilization. How many useful `float64` values does a single 64-byte cache line deliver for each data structure?
+
+??? success "Solution to Exercise 9"
+    A Python `list` of floats is an array of **pointers**, where each pointer references a separate Python `float` object allocated somewhere on the heap. These `float` objects are scattered across memory -- they are not contiguous. Each `float` object also carries overhead (reference count, type pointer, etc.), using about 24 bytes per object instead of just 8 bytes for the numeric value.
+
+    A NumPy `ndarray` stores the `float64` values as **raw 8-byte values packed contiguously** in a single memory block.
+
+    Cache impact: A 64-byte cache line fetched for a NumPy array contains $64 / 8 = 8$ useful `float64` values, all adjacent. The next 7 values after a cache miss are "free."
+
+    For a Python list, a cache line fetched for the pointer array contains $64 / 8 = 8$ pointers, but following each pointer to the actual float object triggers a **separate cache miss** (because the float objects are scattered). Each cache line fetched for a float object contains mostly overhead (reference count, type pointer), with only 8 useful bytes out of ~24 bytes fetched.
+
+    The NumPy array achieves near-perfect spatial locality; the Python list forces random-like access patterns due to pointer chasing.
+
+---
+
+**Exercise 10.**
+The memory hierarchy has a fundamental design principle: each level acts as a "cache" for the level below it (L1 caches L2, L2 caches RAM, RAM "caches" disk). Explain *why* this layered caching works well despite each level being much smaller than the level below. What statistical property of real program behavior makes this possible? What would happen to performance if programs accessed memory addresses completely at random with no pattern?
+
+??? success "Solution to Exercise 10"
+    Layered caching works because real programs exhibit **locality of reference** -- both temporal locality (recently accessed data is likely to be accessed again soon) and spatial locality (nearby memory addresses are likely to be accessed close in time).
+
+    Because of locality, a small fast cache can serve a large fraction of memory requests (the "working set" of a program at any moment is typically much smaller than total data). L1 cache, despite being only ~32--64 KB, often achieves hit rates above 90% because programs repeatedly access the same small set of variables, instructions, and data structures.
+
+    Each level exploits the same principle: the data most likely to be needed next is a small subset of the level below. The working set at each level fits within that level's capacity.
+
+    If programs accessed memory completely at random, every access would be a cache miss at every level. Performance would collapse to the speed of the slowest level actually needed (RAM or disk). The memory hierarchy would provide no benefit, and a CPU running at 4 GHz would stall on almost every instruction, effectively running at the speed of main memory (~100 ns per access, equivalent to ~10 MHz effective speed). The entire rationale for the hierarchy depends on locality.
+
+---
+
+**Exercise 11.**
+Consider two algorithms that both sum $N$ floating-point numbers. Algorithm A reads the numbers sequentially from an array. Algorithm B reads numbers from random positions in the array (using random indices). Both perform the same number of additions. Explain why Algorithm A can be dramatically faster than Algorithm B, even though the total amount of data read and the total computation are identical. At what value of $N$ (roughly) would you expect the difference to become significant, and why?
+
+??? success "Solution to Exercise 11"
+    Algorithm A (sequential) benefits from **spatial locality** and **hardware prefetching**. When the CPU reads the first element of the array, it fetches an entire 64-byte cache line containing 8 consecutive `float64` values. The next 7 reads are cache hits (essentially free). The CPU's prefetcher also detects the sequential pattern and loads future cache lines before they are needed, further hiding memory latency.
+
+    Algorithm B (random indices) has poor spatial locality. Each random access likely hits a different cache line, wasting the 7 other values loaded with each line. The hardware prefetcher cannot predict the next address, so every access potentially stalls the CPU waiting for RAM (~100 ns per access vs. ~1 ns for a cache hit).
+
+    The difference becomes significant when $N$ exceeds the L1 cache capacity. For a 32 KB L1 cache, that is roughly $32{,}768 / 8 = 4{,}096$ `float64` values. For $N < 4{,}096$, the entire array may fit in L1, and random access still hits cache. Once $N$ exceeds the L1 (and especially the L2/L3 cache), random access increasingly hits RAM, and the performance gap grows to 10--100x.
+
+---
+
+**Exercise 12.**
+A cache line is typically 64 bytes. Explain why this size is a design trade-off. What would happen if cache lines were very small (say 1 byte)? What would happen if they were very large (say 4 KB, a full page)? In each extreme case, identify which type of access pattern would suffer and which would benefit.
+
+??? success "Solution to Exercise 12"
+    Cache line size is a trade-off between **spatial locality exploitation** and **wasted bandwidth**.
+
+    **Very small cache lines (1 byte):** Every access fetches exactly the byte needed -- no waste. But spatial locality is not exploited at all. Sequential access through an array would require a separate memory fetch for every byte, overwhelming the memory bus. The cache would also need vastly more tag entries (metadata), increasing its complexity and power consumption.
+
+    **Very large cache lines (4 KB):** Sequential access would be extremely efficient -- one fetch loads 4 KB of data. But any access to a different region of memory would evict 4 KB of cached data, even if only a few bytes were needed. Random access patterns would be catastrophic: each access wastes almost the entire 4 KB line. Cache "thrashing" (evicting useful data to make room) would be severe because fewer lines fit in the cache.
+
+    The 64-byte sweet spot balances these concerns: it is large enough to exploit spatial locality for sequential patterns (8 doubles per line) but small enough that random accesses do not waste excessive bandwidth or evict too much useful data.
+
+---
+
 ## 13. Short Answers
 
 1. To balance speed and capacity of memory
@@ -546,8 +602,6 @@ When arrays no longer fit in cache, accesses must fetch data from RAM, which is 
 6. Nearby memory accessed together
 7. Contiguous memory improves cache efficiency
 8. Eight
-
----
 
 ## 14. Summary
 

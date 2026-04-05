@@ -171,3 +171,86 @@ def safe_get_status(value: str) -> Status:
 status = safe_get_status("unknown")
 print(status)  # Status.PENDING
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a `Planet` enum with members and tuple values containing `(mass, radius)`. Access a planet's mass and radius via `planet.value[0]` and `planet.value[1]`. Write a function `heaviest(planets)` that returns the planet with the greatest mass from a list of `Planet` members.
+
+??? success "Solution to Exercise 1"
+
+        from enum import Enum
+
+        class Planet(Enum):
+            MERCURY = (3.303e+23, 2.4397e6)
+            VENUS = (4.869e+24, 6.0518e6)
+            EARTH = (5.976e+24, 6.37814e6)
+            MARS = (6.421e+23, 3.3972e6)
+
+        earth = Planet.EARTH
+        print(f"Mass: {earth.value[0]:.2e}")    # Mass: 5.98e+24
+        print(f"Radius: {earth.value[1]:.2e}")  # Radius: 6.38e+06
+
+        def heaviest(planets):
+            return max(planets, key=lambda p: p.value[0])
+
+        print(heaviest(list(Planet)))  # Planet.EARTH
+
+---
+
+**Exercise 2.**
+Define a `Status` enum with an alias: `ACTIVE = 1`, `ENABLED = 1` (alias), `INACTIVE = 2`, `DISABLED = 2` (alias). Show how to iterate over only canonical members (using `Status.__members__`) vs all members. Demonstrate that `Status.ACTIVE is Status.ENABLED`.
+
+??? success "Solution to Exercise 2"
+
+        from enum import Enum
+
+        class Status(Enum):
+            ACTIVE = 1
+            ENABLED = 1   # Alias for ACTIVE
+            INACTIVE = 2
+            DISABLED = 2  # Alias for INACTIVE
+
+        # Canonical members only (no aliases)
+        for s in Status:
+            print(s.name, s.value)
+        # ACTIVE 1, INACTIVE 2
+
+        # All members including aliases
+        for name, member in Status.__members__.items():
+            print(f"{name} -> {member.name}")
+        # ACTIVE -> ACTIVE, ENABLED -> ACTIVE, ...
+
+        print(Status.ACTIVE is Status.ENABLED)  # True
+
+---
+
+**Exercise 3.**
+Create a `Currency` enum with values as 3-letter codes. Write a `from_value(value)` class method that converts a string value to the enum member (using `Currency(value)`). Handle invalid values by raising `ValueError` with a helpful message listing all valid values.
+
+??? success "Solution to Exercise 3"
+
+        from enum import Enum
+
+        class Currency(Enum):
+            USD = "USD"
+            EUR = "EUR"
+            GBP = "GBP"
+            JPY = "JPY"
+
+            @classmethod
+            def from_value(cls, value):
+                try:
+                    return cls(value)
+                except ValueError:
+                    valid = [m.value for m in cls]
+                    raise ValueError(f"Invalid currency '{value}'. Valid: {valid}")
+
+        print(Currency.from_value("EUR"))  # Currency.EUR
+
+        try:
+            Currency.from_value("XYZ")
+        except ValueError as e:
+            print(f"Error: {e}")

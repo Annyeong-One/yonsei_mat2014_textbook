@@ -282,3 +282,73 @@ conda config --add channels conda-forge
 - Avoid `defaults` channel for commercial projects
 - Set `channel_priority: strict` to prevent mixing
 - Most packages are available on conda-forge
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write the commands to configure conda to use conda-forge as the default channel with strict channel priority. Explain why strict priority is recommended.
+
+??? success "Solution to Exercise 1"
+
+    ```bash
+    # Add conda-forge as highest priority channel
+    conda config --add channels conda-forge
+
+    # Set strict channel priority
+    conda config --set channel_priority strict
+
+    # Verify configuration
+    conda config --show channels
+    conda config --show channel_priority
+    ```
+
+    Strict priority ensures that once a package is found in the
+    highest-priority channel (conda-forge), it is always used, even
+    if a newer version exists in a lower-priority channel. This
+    prevents mixing packages from different channels, which can
+    cause binary incompatibilities.
+
+---
+
+**Exercise 2.**
+Compare Miniforge and Mambaforge: what is included in each, when would you choose one over the other, and what are the licensing implications for commercial use?
+
+??? success "Solution to Exercise 2"
+
+    **Miniforge:**
+
+    - Minimal conda installer
+    - Default channel: conda-forge (not defaults)
+    - Free for commercial use
+    - Does not include mamba
+
+    **Mambaforge:**
+
+    - Same as Miniforge but includes mamba pre-installed
+    - Faster dependency resolution out of the box
+    - Also free for commercial use
+
+    **When to choose:**
+
+    - Miniforge: if you want to add mamba later or prefer conda only
+    - Mambaforge: if you want fast package management immediately
+    - Both: for commercial projects (avoids Anaconda licensing issues)
+
+---
+
+**Exercise 3.**
+Write the commands to create a new environment using only conda-forge packages (no defaults channel) with Python 3.11, numpy, and matplotlib. Verify that all packages come from conda-forge.
+
+??? success "Solution to Exercise 3"
+
+    ```bash
+    # Create environment with only conda-forge
+    conda create -n myproject -c conda-forge --override-channels \
+        python=3.11 numpy matplotlib
+
+    # Activate and verify
+    conda activate myproject
+    conda list  # Check "Channel" column shows conda-forge
+    ```

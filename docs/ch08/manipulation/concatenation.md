@@ -487,3 +487,56 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Concatenate two 1D arrays `a = np.array([1, 2, 3])` and `b = np.array([4, 5, 6])` using `np.concatenate`. Then create 2D row vectors from each and stack them vertically using `np.vstack`.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        a = np.array([1, 2, 3])
+        b = np.array([4, 5, 6])
+        c = np.concatenate([a, b])
+        print(f"Concatenated: {c}")
+
+        stacked = np.vstack([a, b])
+        print(f"Stacked shape: {stacked.shape}")  # (2, 3)
+
+---
+
+**Exercise 2.**
+Given two matrices `A` of shape `(3, 2)` and `B` of shape `(3, 4)`, concatenate them horizontally along axis 1 to form a `(3, 6)` matrix. Verify the result shape.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        A = np.ones((3, 2))
+        B = np.zeros((3, 4))
+        result = np.concatenate([A, B], axis=1)
+        print(f"Shape: {result.shape}")  # (3, 6)
+
+---
+
+**Exercise 3.**
+Use `np.hstack`, `np.vstack`, and `np.concatenate` to build a 4x4 block matrix from four 2x2 blocks: `A = np.ones((2,2))`, `B = np.zeros((2,2))`, `C = np.full((2,2), 2)`, `D = np.eye(2)`. The result should have `A` and `B` on the top row and `C` and `D` on the bottom.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        A = np.ones((2, 2))
+        B = np.zeros((2, 2))
+        C = np.full((2, 2), 2)
+        D = np.eye(2)
+
+        top = np.hstack([A, B])
+        bottom = np.hstack([C, D])
+        block = np.vstack([top, bottom])
+        print(f"Shape: {block.shape}")  # (4, 4)
+        print(block)

@@ -277,3 +277,69 @@ squares = [x for x in range(5)]
 Comprehensions create collections concisely by combining an expression, one or more `for` clauses, and an optional `if` filter. List, set, dictionary, and generator forms all follow the same pattern — the only differences are the enclosing brackets and the presence of `:` for dictionaries. A trailing `if` selects which elements to include; an `if`/`else` before `for` transforms every element. Generator expressions are lazy and memory-efficient — prefer them when the full collection is not needed. Keep comprehensions simple: once they require nested loops with conditions, a regular loop is clearer.
 
 Comprehensions build on [Lists](lists.md), [Sets](sets.md), and [Dictionaries](dictionaries.md) covered earlier in this section. For deeper coverage of how these collections work internally, see [Hashing and Hash Tables](../../ch02/composites/hashing_deep_dive.md).
+
+
+## Exercises
+
+**Exercise 1.**
+In Python 3, comprehension variables do not leak into the enclosing scope, but regular `for` loop variables do. Predict the output:
+
+```python
+squares = [x**2 for x in range(5)]
+# print(x)  # Would this work?
+
+for y in range(5):
+    pass
+print(y)  # What about this?
+```
+
+Explain *why* Python made comprehension variables private but loop variables visible. What scoping mechanism is at work?
+
+??? success "Solution to Exercise 1"
+    `print(x)` after the comprehension would raise `NameError` in Python 3 -- `x` is not defined in the enclosing scope. The comprehension runs in its own implicit scope.
+
+    `print(y)` prints `4` -- the last value from the `for` loop. Regular `for` loops do NOT create a new scope; the loop variable `y` remains in the enclosing scope after the loop ends.
+
+    The reason for the difference: comprehensions were redesigned in Python 3 to run in their own scope (implemented as an implicit function call). This prevents accidental variable name collisions. Regular `for` loops were kept backward-compatible -- changing their scoping would break enormous amounts of existing code. The result is an intentional asymmetry in Python's scoping rules.
+
+---
+
+**Exercise 2.**
+Rewrite the following nested loop as a single list comprehension:
+
+```python
+result = []
+for i in range(3):
+    for j in range(3):
+        if i != j:
+            result.append((i, j))
+```
+
+Then explain: at what level of nesting does a comprehension become less readable than an explicit loop? What is the guiding principle?
+
+??? success "Solution to Exercise 2"
+    ```python
+    result = [(i, j) for i in range(3) for j in range(3) if i != j]
+    ```
+
+    The `for` clauses in a comprehension are read left-to-right, matching the nesting order of the explicit loop (outer loop first, inner loop second).
+
+    **Readability guideline:** A comprehension with one `for` and one `if` is almost always clearer than an explicit loop. Two `for` clauses (one level of nesting) are acceptable if the logic is simple. Three or more `for` clauses, or complex conditions, should be written as explicit loops. The guiding principle: if a comprehension takes more than a moment to understand, it should be an explicit loop. Comprehensions optimize for **readability**, not for minimizing line count.
+
+---
+
+**Exercise 3.**
+A generator expression `(x**2 for x in range(1_000_000))` and a list comprehension `[x**2 for x in range(1_000_000)]` produce the same values. Explain the key difference in memory usage. When should you prefer a generator expression over a list comprehension?
+
+??? success "Solution to Exercise 3"
+    The list comprehension `[x**2 for x in range(1_000_000)]` creates a **list of 1 million integers** in memory all at once. This uses approximately 8 MB of memory (plus Python object overhead).
+
+    The generator expression `(x**2 for x in range(1_000_000))` creates a **generator object** that computes values **lazily** -- one at a time, only when requested. It uses essentially constant memory regardless of the range size, because it only holds the current value and the iteration state.
+
+    Prefer a generator expression when:
+
+    - You only need to iterate through the values once (e.g., `sum(x**2 for x in range(1_000_000))`)
+    - The dataset is large and storing all values would waste memory
+    - You are passing the result to a function that consumes an iterable (like `sum`, `max`, `min`, `any`, `all`)
+
+    Prefer a list comprehension when you need to access the result multiple times, index into it, or know its length.

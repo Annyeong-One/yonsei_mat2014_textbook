@@ -267,3 +267,58 @@ df[(df['city'] == 'NY') | (df['city'] == 'LA') | (df['city'] == 'SF')]
 lookup = pd.DataFrame({'city': ['NY', 'LA', 'SF']})
 result = df.merge(lookup, on='city')
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a DataFrame of orders with a `'status'` column. Use `.isin()` to filter rows where the status is either `'shipped'` or `'delivered'`, excluding `'pending'` and `'cancelled'` orders.
+
+??? success "Solution to Exercise 1"
+    Pass a list of target values to `.isin()`.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'order_id': [1, 2, 3, 4, 5],
+            'status': ['shipped', 'pending', 'delivered', 'cancelled', 'shipped']
+        })
+        active = df[df['status'].isin(['shipped', 'delivered'])]
+        print(active)
+
+---
+
+**Exercise 2.**
+Use the negation of `.isin()` (with `~`) to find all employees whose department is NOT in the list `['HR', 'Finance']`. Print the filtered result.
+
+??? success "Solution to Exercise 2"
+    Negate the isin mask with `~`.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'name': ['Alice', 'Bob', 'Carol', 'Dave'],
+            'department': ['IT', 'HR', 'Finance', 'IT']
+        })
+        result = df[~df['department'].isin(['HR', 'Finance'])]
+        print(result)
+
+---
+
+**Exercise 3.**
+Given a DataFrame with `'ticker'` and `'sector'` columns, use `.isin()` on two columns simultaneously: filter rows where the ticker is in a watchlist AND the sector is in an approved sectors list.
+
+??? success "Solution to Exercise 3"
+    Combine two `.isin()` conditions with `&`.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'ticker': ['AAPL', 'JPM', 'MSFT', 'XOM', 'GOOGL'],
+            'sector': ['Tech', 'Finance', 'Tech', 'Energy', 'Tech']
+        })
+        watchlist = ['AAPL', 'MSFT', 'GOOGL']
+        approved = ['Tech', 'Energy']
+        result = df[df['ticker'].isin(watchlist) & df['sector'].isin(approved)]
+        print(result)

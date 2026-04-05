@@ -238,3 +238,72 @@ Start
 - **Homebrew**: System packages on macOS/Linux
 - Don't mix Homebrew Python with conda
 - For commercial projects, avoid Anaconda defaults channel
+
+---
+
+## Exercises
+
+**Exercise 1.**
+For each scenario, recommend the best package manager and explain why: (a) a beginner starting a Django web project, (b) a data scientist needing GPU-accelerated TensorFlow, (c) a DevOps engineer setting up a CI/CD pipeline.
+
+??? success "Solution to Exercise 1"
+
+    **(a) Django web project (beginner):**
+    Use **pip + venv**. It is the simplest setup, well-documented
+    for web development, and Django's own tutorials use pip.
+
+    **(b) GPU-accelerated TensorFlow:**
+    Use **conda or mamba** with conda-forge. Conda handles CUDA
+    toolkit and cuDNN as dependencies, avoiding manual GPU driver
+    management. pip would require installing CUDA separately.
+
+    **(c) CI/CD pipeline:**
+    Use **pip** for Python-only projects (fastest install, smallest
+    footprint). Use **micromamba** if non-Python dependencies (like
+    GDAL or HDF5) are needed -- it is a single binary with no conda
+    dependency.
+
+---
+
+**Exercise 2.**
+Compare `pip install numpy` vs `conda install numpy` vs `mamba install numpy` in terms of: what gets installed, where it comes from, how dependencies are resolved, and approximate installation speed.
+
+??? success "Solution to Exercise 2"
+
+    | Aspect | pip | conda | mamba |
+    |--------|-----|-------|-------|
+    | Source | PyPI | defaults/conda-forge | conda-forge |
+    | Format | wheel/sdist | conda package | conda package |
+    | Deps | Python only | Python + C/system | Python + C/system |
+    | Resolver | pip resolver | conda SAT solver | libmamba (C++) |
+    | Speed | Fast | Slow | Fast |
+
+    `pip install numpy` downloads a wheel from PyPI with bundled
+    OpenBLAS. `conda install numpy` downloads a conda package that
+    may use MKL. `mamba install numpy` does the same as conda but
+    resolves dependencies 10-100x faster.
+
+---
+
+**Exercise 3.**
+Write the commands to set up a complete development environment using pip + venv: (a) create a virtual environment, (b) activate it, (c) install packages from a `requirements.txt`, (d) freeze the current packages, and (e) deactivate the environment.
+
+??? success "Solution to Exercise 3"
+
+    ```bash
+    # (a) Create virtual environment
+    python -m venv .venv
+
+    # (b) Activate
+    source .venv/bin/activate  # macOS/Linux
+    # .venv\Scripts\activate   # Windows
+
+    # (c) Install from requirements.txt
+    pip install -r requirements.txt
+
+    # (d) Freeze current packages
+    pip freeze > requirements.txt
+
+    # (e) Deactivate
+    deactivate
+    ```

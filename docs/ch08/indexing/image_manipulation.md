@@ -230,3 +230,61 @@ if __name__ == "__main__":
 ### 2. Axis Parameter
 
 `axis=0` rolls vertically; `axis=1` rolls horizontally.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a synthetic 100x100x3 RGB image (random uint8 values). Flip it vertically using `img[::-1]` and horizontally using `img[:, ::-1]`. Verify that the vertically flipped image's first row matches the original's last row.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        np.random.seed(42)
+        img = np.random.randint(0, 256, size=(100, 100, 3), dtype=np.uint8)
+        flipped_v = img[::-1]
+        flipped_h = img[:, ::-1]
+
+        print(f"First row of flipped == last row of original: "
+              f"{np.array_equal(flipped_v[0], img[-1])}")
+
+---
+
+**Exercise 2.**
+Create a 200x200x3 image filled with zeros (black). Using slice assignment, draw a red border 5 pixels wide around the entire image (set the border pixels' red channel to 255). Print the shape and verify the corners are red.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        img = np.zeros((200, 200, 3), dtype=np.uint8)
+        # Top and bottom borders
+        img[:5, :, 0] = 255
+        img[-5:, :, 0] = 255
+        # Left and right borders
+        img[:, :5, 0] = 255
+        img[:, -5:, 0] = 255
+
+        print(f"Shape: {img.shape}")
+        print(f"Top-left corner red channel: {img[0, 0, 0]}")  # 255
+        print(f"Bottom-right corner red channel: {img[-1, -1, 0]}")  # 255
+
+---
+
+**Exercise 3.**
+Create a 64x64x3 random image. Downsample it by a factor of 4 using stride slicing `img[::4, ::4]` to produce a 16x16x3 image. Then crop the center 32x32 region from the original. Print the shapes of all three images.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        img = np.random.randint(0, 256, size=(64, 64, 3), dtype=np.uint8)
+        downsampled = img[::4, ::4]
+        h, w = img.shape[:2]
+        cropped = img[h//4:3*h//4, w//4:3*w//4]
+
+        print(f"Original: {img.shape}")        # (64, 64, 3)
+        print(f"Downsampled: {downsampled.shape}") # (16, 16, 3)
+        print(f"Cropped: {cropped.shape}")      # (32, 32, 3)

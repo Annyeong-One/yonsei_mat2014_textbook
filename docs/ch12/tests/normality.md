@@ -99,3 +99,58 @@ print(f"p-value: {p_value:.4f}")
 ## Summary
 
 Normality tests check whether data plausibly come from a normal distribution, which is an assumption underlying many parametric methods. The Shapiro-Wilk test offers the best overall power for small samples, the Anderson-Darling test is most sensitive to tail departures, and the D'Agostino-Pearson test specifically targets asymmetry and tail weight. In practice, combine formal tests with QQ plots for a complete assessment.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Generate 100 samples from a lognormal distribution. Apply the Shapiro-Wilk, Anderson-Darling, and D'Agostino-Pearson tests. Compare which tests detect the departure from normality.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        data = np.random.lognormal(0, 1, 100)
+
+        w, p_sw = stats.shapiro(data)
+        k2, p_dp = stats.normaltest(data)
+        ad = stats.anderson(data, dist='norm')
+
+        print(f"Shapiro-Wilk:      p={p_sw:.6f}")
+        print(f"D'Agostino-Pearson: p={p_dp:.6f}")
+        print(f"Anderson-Darling:  stat={ad.statistic:.4f}, 5% cv={ad.critical_values[2]:.4f}")
+
+---
+
+**Exercise 2.**
+Investigate the effect of sample size on the Shapiro-Wilk test by generating normal data with $n = 10, 50, 200, 1000$ and running the test on each. Show that p-values remain large for truly normal data regardless of $n$.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        for n in [10, 50, 200, 1000]:
+            data = np.random.normal(size=n)
+            _, p = stats.shapiro(data)
+            print(f"n={n:4d}: p={p:.4f}")
+
+---
+
+**Exercise 3.**
+Apply the Shapiro-Wilk test to 100 samples from a $t$-distribution with 30 degrees of freedom. Since $t(30)$ is very close to normal, discuss whether the test rejects and what this means for practical analysis.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        data = stats.t.rvs(df=30, size=100)
+        w, p = stats.shapiro(data)
+        print(f"Shapiro-Wilk: W={w:.4f}, p={p:.4f}")
+        print("t(30) is very close to normal; test likely does not reject")

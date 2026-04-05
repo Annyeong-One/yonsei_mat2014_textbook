@@ -406,3 +406,107 @@ Ask yourself:
 - Can I say "B has-a A" naturally? → Composition
 - Does B exist without A? → Aggregation
 - Is B meaningless without A? → Composition
+
+---
+
+## Exercises
+
+**Exercise 1.**
+For each of the following pairs, decide whether the relationship is "is-a" (inheritance) or "has-a" (composition/aggregation), and explain why: (a) `Dog` and `Animal`, (b) `Car` and `Engine`, (c) `Manager` and `Employee`, (d) `Library` and `Book`.
+
+??? success "Solution to Exercise 1"
+
+        # (a) Dog is-a Animal — inheritance
+        #     A dog IS a kind of animal. Natural type hierarchy.
+
+        # (b) Car has-a Engine — composition
+        #     A car is NOT an engine. It contains an engine as a part.
+
+        # (c) Manager is-a Employee — inheritance
+        #     A manager IS a specialized type of employee.
+
+        # (d) Library has-a Book — aggregation
+        #     A library contains books, but books exist independently.
+        #     Books can be moved between libraries.
+
+---
+
+**Exercise 2.**
+Model a `University` system. A `University` has-a list of `Department` objects (composition---departments don't exist without the university). Each `Department` has-a list of `Professor` objects (aggregation---professors exist independently). Implement both relationships and demonstrate the lifecycle differences.
+
+??? success "Solution to Exercise 2"
+
+        class Professor:
+            def __init__(self, name):
+                self.name = name
+
+            def __repr__(self):
+                return f"Prof({self.name})"
+
+        class Department:
+            def __init__(self, name, professors):
+                self.name = name
+                self.professors = professors  # Aggregation
+
+        class University:
+            def __init__(self, name, dept_names):
+                # Composition: departments created here
+                self.name = name
+                self._departments = [Department(n, []) for n in dept_names]
+
+            def get_department(self, name):
+                for d in self._departments:
+                    if d.name == name:
+                        return d
+                return None
+
+        prof_a = Professor("Dr. Smith")
+        prof_b = Professor("Dr. Jones")
+
+        uni = University("MIT", ["CS", "Math"])
+        cs = uni.get_department("CS")
+        cs.professors.append(prof_a)
+        cs.professors.append(prof_b)
+
+        del uni  # Departments destroyed (composition)
+        print(prof_a)  # Prof(Dr. Smith) — still exists (aggregation)
+
+---
+
+**Exercise 3.**
+Create an `Employee` class with `name` and `role`. Then create `Company` that owns a list of employees (composition) and `Project` that references employees (aggregation). Show that when a `Company` is deleted, its employees are gone (if no other references exist), but employees assigned to a `Project` from an external source survive the project's deletion.
+
+??? success "Solution to Exercise 3"
+
+        class Employee:
+            def __init__(self, name, role):
+                self.name = name
+                self.role = role
+
+            def __repr__(self):
+                return f"Employee('{self.name}')"
+
+        class Company:
+            def __init__(self, name):
+                self.name = name
+                self._employees = []  # Composition: owns employees
+
+            def hire(self, name, role):
+                emp = Employee(name, role)
+                self._employees.append(emp)
+                return emp
+
+        class Project:
+            def __init__(self, name, members):
+                self.name = name
+                self.members = members  # Aggregation: references
+
+        company = Company("Acme")
+        alice = company.hire("Alice", "Developer")
+        bob = company.hire("Bob", "Designer")
+
+        # External reference to alice for the project
+        project = Project("Website", [alice])
+
+        del project
+        print(alice)  # Employee('Alice') — survives project deletion

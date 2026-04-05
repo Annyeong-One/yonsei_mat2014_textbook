@@ -394,3 +394,70 @@ print(p(1, b=99, c=3)) # (1, 99, 3) — b=10 silently overridden
 - Watch positional argument order — `partial(f, x)` always fills the first positional argument
 - Later keyword arguments override earlier ones when chaining partial objects
 - `partial` objects are picklable, making them suitable for multiprocessing
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a `power(base, exponent)` function. Use `functools.partial` to create `square`, `cube`, and `fourth_power` functions. Verify each with the input `5`.
+
+??? success "Solution to Exercise 1"
+
+        from functools import partial
+
+        def power(base, exponent):
+            return base ** exponent
+
+        square = partial(power, exponent=2)
+        cube = partial(power, exponent=3)
+        fourth_power = partial(power, exponent=4)
+
+        print(square(5))        # 25
+        print(cube(5))          # 125
+        print(fourth_power(5))  # 625
+
+---
+
+**Exercise 2.**
+Use `partial` to create a family of string formatting functions from a single `format_string(template, value)` function. Create `format_currency` (template `"${:.2f}"`), `format_percent` (template `"{:.1%}"`), and `format_scientific` (template `"{:.2e}"`). Test each.
+
+??? success "Solution to Exercise 2"
+
+        from functools import partial
+
+        def format_string(template, value):
+            return template.format(value)
+
+        format_currency = partial(format_string, "${:.2f}")
+        format_percent = partial(format_string, "{:.1%}")
+        format_scientific = partial(format_string, "{:.2e}")
+
+        print(format_currency(1234.5))     # $1234.50
+        print(format_percent(0.856))       # 85.6%
+        print(format_scientific(0.00042))  # 4.20e-04
+
+---
+
+**Exercise 3.**
+Demonstrate the difference between `partial` and `lambda` for argument binding. Create both `partial_double = partial(mul, 2)` and `lambda_double = lambda x: mul(2, x)`. Print the `func`, `args`, and `keywords` of the partial object and show that the lambda has no such attributes. Verify both produce the same results.
+
+??? success "Solution to Exercise 3"
+
+        from functools import partial
+        from operator import mul
+
+        partial_double = partial(mul, 2)
+        lambda_double = lambda x: mul(2, x)
+
+        # partial exposes its internals
+        print(partial_double.func)       # <built-in function mul>
+        print(partial_double.args)       # (2,)
+        print(partial_double.keywords)   # {}
+
+        # lambda has no such attributes
+        print(hasattr(lambda_double, 'func'))  # False
+
+        # Both produce the same results
+        print(partial_double(5))  # 10
+        print(lambda_double(5))   # 10

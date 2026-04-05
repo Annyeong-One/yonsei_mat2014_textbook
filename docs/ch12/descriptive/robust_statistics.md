@@ -149,3 +149,57 @@ print(f"  Trim mean:  {stats.trim_mean(clean, 0.1):8.3f}    "
 ## Summary
 
 Robust statistics provides estimators that resist the influence of outliers and model violations. The **median** and **MAD** achieve the maximum 50% breakdown point for location and scale estimation. **Trimmed means** offer a tunable compromise between robustness and efficiency through the trimming proportion $\alpha$. **Winsorization** caps extremes rather than removing them, preserving sample size. When data quality is uncertain, using robust estimators alongside classical ones reveals whether conclusions depend on a few influential observations.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Generate 100 normal samples ($\mu = 50$, $\sigma = 5$) and add 5 extreme outliers at value 200. Compare the mean vs trimmed mean (10% trim) and standard deviation vs MAD to show robustness.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        data = np.concatenate([np.random.normal(50, 5, 100), [200]*5])
+        print(f"Mean:         {np.mean(data):.4f}")
+        print(f"Trimmed mean: {stats.trim_mean(data, 0.1):.4f}")
+        print(f"Std:          {np.std(data, ddof=1):.4f}")
+        print(f"MAD:          {stats.median_abs_deviation(data):.4f}")
+
+---
+
+**Exercise 2.**
+Compute the Winsorized mean and Winsorized variance of 200 samples from a $t$-distribution with 3 degrees of freedom using `scipy.stats.mstats.winsorize()`. Compare with the ordinary mean and variance.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy import stats
+        from scipy.stats.mstats import winsorize
+
+        np.random.seed(42)
+        data = stats.t.rvs(df=3, size=200)
+        winsorized = winsorize(data, limits=[0.05, 0.05])
+        print(f"Mean:           {np.mean(data):.4f}")
+        print(f"Winsorized mean:{np.mean(winsorized):.4f}")
+        print(f"Var:            {np.var(data, ddof=1):.4f}")
+        print(f"Winsorized var: {np.var(winsorized, ddof=1):.4f}")
+
+---
+
+**Exercise 3.**
+Using `scipy.stats.trim_mean()`, compute the trimmed mean at trim proportions 0%, 5%, 10%, 25%, and 50% (the median) for a dataset with heavy outliers. Show how the estimate becomes more stable as the trim proportion increases.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        data = np.concatenate([np.random.normal(10, 2, 90), [100, -80, 150, 200, -100]])
+        for prop in [0.0, 0.05, 0.10, 0.25, 0.50]:
+            tm = stats.trim_mean(data, prop)
+            print(f"Trim {prop:.0%}: {tm:.4f}")

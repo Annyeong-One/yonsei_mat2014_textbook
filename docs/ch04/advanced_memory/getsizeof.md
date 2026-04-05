@@ -391,3 +391,115 @@ instance_memory_report(MyClass, "test", [1, 2, 3])
 - `__slots__` reduces instance size by ~60-70%
 - String size depends on character encoding
 - Integer size grows with magnitude (arbitrary precision)
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a function `compare_container_overhead()` that creates an empty `list`, `tuple`, `dict`, `set`, and `frozenset`, then prints each container's overhead (in bytes) using `sys.getsizeof()`. Next, populate each with 100 integers (0 through 99) and print the sizes again. Calculate and display the per-element cost for each container type.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import sys
+
+        containers = {
+            "list": (list, list(range(100))),
+            "tuple": (tuple, tuple(range(100))),
+            "dict": (dict, {i: i for i in range(100)}),
+            "set": (set, set(range(100))),
+            "frozenset": (frozenset, frozenset(range(100))),
+        }
+
+        for name, (cls, filled) in containers.items():
+            empty_size = sys.getsizeof(cls())
+            filled_size = sys.getsizeof(filled)
+            per_element = (filled_size - empty_size) / 100
+            print(f"{name:>10}: empty={empty_size:>6}B, "
+                  f"filled={filled_size:>6}B, "
+                  f"per-element={per_element:.1f}B")
+        ```
+
+---
+
+**Exercise 2.**
+Implement the `deep_getsizeof(obj, seen=None)` function from the chapter. Use it to measure the total memory of a dictionary `{"users": [{"name": "Alice", "scores": [95, 87]}, {"name": "Bob", "scores": [72, 88]}]}`. Print both the shallow size (`sys.getsizeof`) and the deep size, and explain in a comment why they differ.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import sys
+
+        def deep_getsizeof(obj, seen=None):
+            if seen is None:
+                seen = set()
+            obj_id = id(obj)
+            if obj_id in seen:
+                return 0
+            seen.add(obj_id)
+
+            size = sys.getsizeof(obj)
+
+            if isinstance(obj, dict):
+                size += sum(deep_getsizeof(k, seen) + deep_getsizeof(v, seen)
+                            for k, v in obj.items())
+            elif isinstance(obj, (list, tuple, set, frozenset)):
+                size += sum(deep_getsizeof(item, seen) for item in obj)
+            elif hasattr(obj, '__dict__'):
+                size += deep_getsizeof(obj.__dict__, seen)
+
+            return size
+
+        data = {
+            "users": [
+                {"name": "Alice", "scores": [95, 87]},
+                {"name": "Bob", "scores": [72, 88]},
+            ]
+        }
+
+        shallow = sys.getsizeof(data)
+        deep = deep_getsizeof(data)
+        print(f"Shallow size: {shallow} bytes")
+        print(f"Deep size:    {deep} bytes")
+        # The shallow size only measures the outer dict structure.
+        # The deep size includes all nested dicts, lists, strings, and ints.
+        ```
+
+---
+
+**Exercise 3.**
+Create two classes: `RegularPoint` with attributes `x`, `y`, `z` and `SlottedPoint` with `__slots__ = ('x', 'y', 'z')`. Instantiate 100,000 of each and use `sys.getsizeof()` to compare per-instance memory. Print the total estimated memory for each approach and the percentage saved by using `__slots__`.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import sys
+
+        class RegularPoint:
+            def __init__(self, x, y, z):
+                self.x = x
+                self.y = y
+                self.z = z
+
+        class SlottedPoint:
+            __slots__ = ('x', 'y', 'z')
+            def __init__(self, x, y, z):
+                self.x = x
+                self.y = y
+                self.z = z
+
+        r = RegularPoint(1, 2, 3)
+        s = SlottedPoint(1, 2, 3)
+
+        regular_size = sys.getsizeof(r) + sys.getsizeof(r.__dict__)
+        slotted_size = sys.getsizeof(s)
+
+        n = 100_000
+        total_regular = regular_size * n
+        total_slotted = slotted_size * n
+        savings = (1 - total_slotted / total_regular) * 100
+
+        print(f"Per instance - Regular: {regular_size}B, Slotted: {slotted_size}B")
+        print(f"Total for {n:,} instances:")
+        print(f"  Regular: {total_regular:,} bytes ({total_regular/1024/1024:.1f} MB)")
+        print(f"  Slotted: {total_slotted:,} bytes ({total_slotted/1024/1024:.1f} MB)")
+        print(f"  Savings: {savings:.1f}%")
+        ```

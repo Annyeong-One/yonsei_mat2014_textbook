@@ -166,3 +166,55 @@ print(result.index)
 ```python
 result.loc['first']  # Get first DataFrame's rows
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that creates two DataFrames with the same columns and concatenates them vertically using `pd.concat()`. Reset the index with `ignore_index=True`.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+
+    df1 = pd.DataFrame({'A': [1, 2], 'B': [3, 4]})
+    df2 = pd.DataFrame({'A': [5, 6], 'B': [7, 8]})
+    result = pd.concat([df1, df2], ignore_index=True)
+    print(result)
+    ```
+
+---
+
+**Exercise 2.** Explain the difference between `pd.concat()` with `axis=0` and `axis=1`. What does each produce?
+
+??? success "Solution to Exercise 2"
+    See the explanation in the main content. The key concept involves understanding how `pd.concat()` aligns data along the specified axis and handles mismatched indices or columns.
+
+---
+
+**Exercise 3.** Write code that concatenates three DataFrames and uses the `keys` parameter to create a hierarchical index identifying the source of each row.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+
+    df1 = pd.DataFrame({'A': [1, 2], 'B': [3, 4]})
+    df2 = pd.DataFrame({'A': [5, 6], 'C': [7, 8]})
+    result = pd.concat([df1, df2], axis=0)
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Create two DataFrames with overlapping and non-overlapping columns. Concatenate them and show what happens to the non-matching columns.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+
+    df1 = pd.DataFrame({'A': [1, 2]}, index=[0, 1])
+    df2 = pd.DataFrame({'A': [3, 4]}, index=[2, 3])
+    result = pd.concat([df1, df2])
+    print(result)
+    ```

@@ -219,3 +219,68 @@ When to use each format.
 - Large datasets
 - Fast I/O
 - Scientific computing
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a JSON string in "records" orientation (a list of dictionaries) with keys `'name'`, `'age'`, and `'city'` for three people. Write it to a file and read it back using `pd.read_json` with `orient='records'`. Print the resulting DataFrame.
+
+??? success "Solution to Exercise 1"
+    Write JSON records and read them back.
+
+        import pandas as pd
+        import json
+
+        records = [
+            {"name": "Alice", "age": 30, "city": "NYC"},
+            {"name": "Bob", "age": 25, "city": "LA"},
+            {"name": "Carol", "age": 35, "city": "SF"}
+        ]
+        with open('people.json', 'w') as f:
+            json.dump(records, f)
+
+        df = pd.read_json('people.json', orient='records')
+        print(df)
+
+---
+
+**Exercise 2.**
+Create a DataFrame and save it to an Excel file with the sheet name `'Report'`. Then read it back specifying the sheet name. Verify the loaded DataFrame matches the original.
+
+??? success "Solution to Exercise 2"
+    Save to Excel with a named sheet and read it back.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'product': ['Widget', 'Gadget'],
+            'sales': [100, 200]
+        })
+        df.to_excel('report.xlsx', sheet_name='Report', index=False)
+
+        df_loaded = pd.read_excel('report.xlsx', sheet_name='Report')
+        print(df_loaded)
+        print(df.equals(df_loaded))  # True
+
+---
+
+**Exercise 3.**
+Given a pipe-delimited text string with header `user_id|age|gender`, use `pd.read_table` (with `io.StringIO`) to read the data. Add custom column names `['ID', 'Age', 'Gender']` using the `names` parameter and skip the original header row.
+
+??? success "Solution to Exercise 3"
+    Use `io.StringIO` with `pd.read_table` and custom column names.
+
+        import pandas as pd
+        import io
+
+        text = "user_id|age|gender\n1|25|M\n2|30|F\n3|28|M"
+        df = pd.read_table(
+            io.StringIO(text),
+            sep='|',
+            header=0,
+            names=['ID', 'Age', 'Gender'],
+            skiprows=1
+        )
+        print(df)

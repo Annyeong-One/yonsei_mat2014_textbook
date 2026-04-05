@@ -383,3 +383,79 @@ def safe_mean(values, default=0.0):
 print(safe_mean([1, 2, float('nan'), 4]))  # 2.333...
 print(safe_mean([]))     # 0.0
 ```
+
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Write a function `classify_float(x)` that returns `"positive infinity"`, `"negative infinity"`, `"NaN"`, or `"finite"` for any given float value. Use the `math` module.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    import math
+
+    def classify_float(x):
+        if math.isnan(x):
+            return "NaN"
+        elif math.isinf(x):
+            return "positive infinity" if x > 0 else "negative infinity"
+        else:
+            return "finite"
+
+    print(classify_float(float('inf')))   # positive infinity
+    print(classify_float(float('nan')))   # NaN
+    print(classify_float(3.14))           # finite
+    print(classify_float(float('-inf')))  # negative infinity
+    ```
+
+    Check NaN first because `math.isinf(nan)` returns `False`, but NaN also fails all comparison operators.
+
+---
+
+**Exercise 2.**
+Demonstrate that `float('nan') != float('nan')` is `True`. Then write a function `safe_equal(a, b)` that correctly handles NaN comparisons (two NaN values should be considered equal).
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    import math
+
+    # NaN is not equal to itself
+    print(float('nan') != float('nan'))  # True
+
+    def safe_equal(a, b):
+        if math.isnan(a) and math.isnan(b):
+            return True
+        return a == b
+
+    print(safe_equal(float('nan'), float('nan')))  # True
+    print(safe_equal(1.0, 1.0))                    # True
+    print(safe_equal(1.0, 2.0))                    # False
+    ```
+
+    The standard `==` operator returns `False` for NaN comparisons. The workaround uses `math.isnan()` to detect NaN values explicitly.
+
+---
+
+**Exercise 3.**
+Create a list containing `[1.0, float('inf'), float('nan'), -2.5, float('-inf')]`. Write code that filters out all non-finite values and computes the mean of the remaining finite values.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    import math
+
+    values = [1.0, float('inf'), float('nan'), -2.5, float('-inf')]
+
+    finite_values = [x for x in values if math.isfinite(x)]
+    mean = sum(finite_values) / len(finite_values)
+
+    print(finite_values)  # [1.0, -2.5]
+    print(mean)           # -0.75
+    ```
+
+    `math.isfinite()` returns `True` only for values that are neither infinity nor NaN.

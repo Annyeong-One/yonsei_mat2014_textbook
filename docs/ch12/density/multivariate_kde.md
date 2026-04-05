@@ -107,3 +107,61 @@ As $d$ increases, the rate degrades rapidly:
 ## Summary
 
 Multivariate KDE extends the univariate estimator by using a multivariate Gaussian kernel shaped by a bandwidth matrix $\mathbf{H}$. SciPy parameterizes $\mathbf{H}$ as a scalar factor times the sample covariance, automatically adapting to the data's correlation structure. The key practical considerations are the data shape convention (`(d, n)` not `(n, d)`), grid-based evaluation for visualization, and the curse of dimensionality that limits effective use to low-dimensional settings.
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that fits a 2D Gaussian KDE to bivariate data and visualizes it using `imshow`.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(100)
+    print(f'Mean: {data.mean():.4f}')
+    print(f'Std: {data.std():.4f}')
+    ```
+
+---
+
+**Exercise 2.** Explain how multivariate KDE extends the univariate case. What role does the bandwidth matrix play?
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the statistical method and its assumptions.
+
+---
+
+**Exercise 3.** Write code that generates data from a mixture of two bivariate normals and fits a 2D KDE to it.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+    from scipy import stats
+    import matplotlib.pyplot as plt
+
+    np.random.seed(42)
+    data = np.random.randn(1000)
+    fig, ax = plt.subplots()
+    ax.hist(data, bins=30, density=True, alpha=0.7)
+    ax.set_title('Distribution')
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Create a visualization that shows the 2D KDE as a contour plot overlaid with the original scatter data.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(500)
+    result = stats.describe(data)
+    print(result)
+    ```

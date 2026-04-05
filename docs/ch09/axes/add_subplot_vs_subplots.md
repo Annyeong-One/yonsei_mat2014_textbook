@@ -252,3 +252,95 @@ ax4 = fig.add_subplot(224, sharex=ax1, sharey=ax1)
 
 - Start with `plt.subplots()` for most cases
 - Use `fig.add_subplot()` + GridSpec for complex layouts
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a figure using `fig.add_subplot()` to add three subplots in a single row (1x3 layout). In each subplot, plot a different trigonometric function (`sin`, `cos`, `tan`) over $[0, 2\pi]$. Add titles to each subplot.
+
+??? success "Solution to Exercise 1"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(0, 2 * np.pi, 200)
+
+        fig = plt.figure(figsize=(12, 4))
+
+        ax1 = fig.add_subplot(1, 3, 1)
+        ax1.plot(x, np.sin(x))
+        ax1.set_title('sin(x)')
+
+        ax2 = fig.add_subplot(1, 3, 2)
+        ax2.plot(x, np.cos(x))
+        ax2.set_title('cos(x)')
+
+        ax3 = fig.add_subplot(1, 3, 3)
+        ax3.plot(x, np.tan(x))
+        ax3.set_ylim(-5, 5)
+        ax3.set_title('tan(x)')
+
+        plt.tight_layout()
+        plt.show()
+
+---
+
+**Exercise 2.**
+Recreate the same 1x3 layout from Exercise 1 using `plt.subplots(1, 3)` instead. Compare how you access the axes objects versus the `add_subplot` approach. Add a shared y-label using `fig.supylabel()`.
+
+??? success "Solution to Exercise 2"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(0, 2 * np.pi, 200)
+
+        fig, axes = plt.subplots(1, 3, figsize=(12, 4))
+
+        axes[0].plot(x, np.sin(x))
+        axes[0].set_title('sin(x)')
+
+        axes[1].plot(x, np.cos(x))
+        axes[1].set_title('cos(x)')
+
+        axes[2].plot(x, np.tan(x))
+        axes[2].set_ylim(-5, 5)
+        axes[2].set_title('tan(x)')
+
+        fig.supylabel('y')
+        plt.tight_layout()
+        plt.show()
+
+---
+
+**Exercise 3.**
+Create a figure where you mix both approaches: use `plt.subplots(2, 2)` for a 2x2 grid, remove the bottom-right subplot with `fig.delaxes()`, and then use `fig.add_subplot()` to add a wide subplot spanning the entire bottom row using `fig.add_subplot(2, 1, 2)`. Plot different data in each subplot.
+
+??? success "Solution to Exercise 3"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(0, 2 * np.pi, 200)
+
+        fig, axes = plt.subplots(2, 2, figsize=(10, 8))
+
+        axes[0, 0].plot(x, np.sin(x), color='blue')
+        axes[0, 0].set_title('sin(x)')
+
+        axes[0, 1].plot(x, np.cos(x), color='red')
+        axes[0, 1].set_title('cos(x)')
+
+        axes[1, 0].plot(x, np.exp(-x), color='green')
+        axes[1, 0].set_title('exp(-x)')
+
+        fig.delaxes(axes[1, 1])
+
+        ax_bottom = fig.add_subplot(2, 1, 2)
+        ax_bottom.plot(x, np.sin(x) * np.cos(x), color='purple', linewidth=2)
+        ax_bottom.set_title('sin(x) * cos(x)')
+
+        plt.tight_layout()
+        plt.show()

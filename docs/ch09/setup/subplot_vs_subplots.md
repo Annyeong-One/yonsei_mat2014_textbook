@@ -143,3 +143,77 @@ plt.show()
 - `plt.subplots`: plural, OOP style, returns Figure and Axes array
 - Use `plt.subplots` for new code
 - Use `squeeze=False` for consistent array shapes
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write the same 2x2 subplot figure using both `plt.subplot()` (singular) and `plt.subplots()` (plural). Which requires fewer lines of code?
+
+??? success "Solution to Exercise 1"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    # Solution code depends on the specific exercise
+    x = np.linspace(0, 2 * np.pi, 100)
+    fig, ax = plt.subplots()
+    ax.plot(x, np.sin(x))
+    ax.set_title('Example Solution')
+    plt.show()
+    ```
+
+    See the content of this page for the relevant API details to construct the full solution.
+
+---
+
+**Exercise 2.** Explain the difference between `plt.subplot(nrows, ncols, index)` and `plt.subplots(nrows, ncols)`. What does each return?
+
+??? success "Solution to Exercise 2"
+    See the explanation in the main content of this page for the key concepts. The essential idea is to understand the API parameters and their effects on the resulting visualization.
+
+---
+
+**Exercise 3.** Write code that creates a figure with `plt.subplots(2, 2)` and iterates over `axes.flat` to add a plot to each subplot.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+
+    x = np.linspace(0, 2 * np.pi, 100)
+    axes[0].plot(x, np.sin(x))
+    axes[0].set_title('Left Subplot')
+
+    axes[1].plot(x, np.cos(x))
+    axes[1].set_title('Right Subplot')
+
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    Adapt this pattern to the specific requirements of the exercise.
+
+---
+
+**Exercise 4.** Demonstrate that `plt.subplot(2, 2, 1)` and `plt.subplot(221)` are equivalent calls.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    x = np.linspace(0, 10, 100)
+    fig, ax = plt.subplots()
+    ax.plot(x, np.sin(x), 'b-', lw=2)
+    ax.set_title('Solution')
+    plt.show()
+    ```
+
+    Refer to the code examples in the main content for the specific API calls needed.

@@ -1286,3 +1286,71 @@ if __name__ == "__main__":
     print("Next: See PRACTICAL APPLICATIONS of these techniques!")
     print("=" * 70)
 ```
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Write a generator `flatten(nested)` that uses `yield from` to flatten a list of lists. For example, `list(flatten([[1,2],[3,4],[5]]))` should return `[1,2,3,4,5]`.
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        def flatten(nested):
+            for sublist in nested:
+                yield from sublist
+
+        print(list(flatten([[1, 2], [3, 4], [5]])))
+        # [1, 2, 3, 4, 5]
+        ```
+
+    `yield from sublist` delegates iteration to the sublist, yielding each element directly.
+
+---
+
+**Exercise 2.**
+Write two generators: `evens(n)` yields even numbers up to `n`, and `odds(n)` yields odd numbers up to `n`. Then write a generator `all_numbers(n)` that uses `yield from` to combine both.
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        def evens(n):
+            for i in range(0, n + 1, 2):
+                yield i
+
+        def odds(n):
+            for i in range(1, n + 1, 2):
+                yield i
+
+        def all_numbers(n):
+            yield from evens(n)
+            yield from odds(n)
+
+        print(list(all_numbers(6)))
+        # [0, 2, 4, 6, 1, 3, 5]
+        ```
+
+    `yield from` delegates to each sub-generator in sequence.
+
+---
+
+**Exercise 3.**
+Explain the difference between `yield from iterable` and looping with `for item in iterable: yield item`. Are they always equivalent?
+
+??? success "Solution to Exercise 3"
+
+    For simple iteration, they are equivalent:
+
+        ```python
+        # These produce identical output
+        def gen1(iterable):
+            yield from iterable
+
+        def gen2(iterable):
+            for item in iterable:
+                yield item
+        ```
+
+    However, `yield from` also handles `.send()`, `.throw()`, and `.close()` by forwarding them to the sub-generator. The `for` loop version does not propagate these methods. For coroutine-style generators, `yield from` is essential.

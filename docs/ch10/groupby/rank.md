@@ -140,3 +140,64 @@ df.groupby('dept')['salary'].rank(method='dense', ascending=False)
 ```python
 df.groupby('dept').cumcount() + 1
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a DataFrame with `'department'` and `'salary'` columns. Use `groupby('department')['salary'].rank(method='dense', ascending=False)` to assign dense rankings within each department. Show the top earner per department.
+
+??? success "Solution to Exercise 1"
+    Dense ranking within groups to find top earners.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'department': ['IT', 'IT', 'IT', 'HR', 'HR'],
+            'name': ['Alice', 'Bob', 'Carol', 'Dave', 'Eve'],
+            'salary': [70000, 65000, 72000, 50000, 55000]
+        })
+        df['rank'] = df.groupby('department')['salary'].rank(
+            method='dense', ascending=False
+        )
+        top = df[df['rank'] == 1]
+        print(top)
+
+---
+
+**Exercise 2.**
+Compare three ranking methods (`'average'`, `'min'`, `'dense'`) on the same data that contains ties. Create a DataFrame showing the original values alongside all three ranking columns.
+
+??? success "Solution to Exercise 2"
+    Compare average, min, and dense ranking on tied data.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'value': [100, 200, 200, 300, 300, 300]
+        })
+        df['rank_avg'] = df['value'].rank(method='average')
+        df['rank_min'] = df['value'].rank(method='min')
+        df['rank_dense'] = df['value'].rank(method='dense')
+        print(df)
+
+---
+
+**Exercise 3.**
+Use `.rank(pct=True)` to compute percentile ranks within groups. Given student scores grouped by class, compute the percentile rank and identify students in the top 25% of their class.
+
+??? success "Solution to Exercise 3"
+    Use percentile ranking to find top performers.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'class': ['A', 'A', 'A', 'A', 'B', 'B', 'B', 'B'],
+            'student': ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8'],
+            'score': [85, 92, 78, 95, 88, 76, 91, 84]
+        })
+        df['pct_rank'] = df.groupby('class')['score'].rank(pct=True)
+        top_25 = df[df['pct_rank'] >= 0.75]
+        print("Top 25% per class:")
+        print(top_25)

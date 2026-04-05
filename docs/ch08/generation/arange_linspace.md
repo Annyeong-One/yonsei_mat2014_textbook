@@ -172,3 +172,53 @@ indices = np.arange(len(data))
 ### 3. Grid Generation
 
 `np.linspace` combined with `np.meshgrid` creates 2D coordinate grids.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create an array of all odd numbers from 1 to 99 (inclusive) using `np.arange`. Verify the result has exactly 50 elements and the last element is 99.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        odds = np.arange(1, 100, 2)
+        print(f"Length: {len(odds)}")     # 50
+        print(f"Last element: {odds[-1]}") # 99
+
+---
+
+**Exercise 2.**
+Using `np.linspace`, create an array of 5 evenly spaced values from 0 to 1 (inclusive). Then create the same array using `np.arange` with an appropriate step size. Print both arrays and verify they are equal with `np.allclose`.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        a_linspace = np.linspace(0, 1, 5)
+        a_arange = np.arange(0, 1.25, 0.25)
+
+        print(f"linspace: {a_linspace}")
+        print(f"arange:   {a_arange}")
+        print(f"Equal: {np.allclose(a_linspace, a_arange)}")
+
+---
+
+**Exercise 3.**
+Demonstrate the floating-point issue with `np.arange(0, 1, 0.3)`. Print the resulting array and its length. Then produce an equivalent result using `np.linspace` that guarantees exactly 4 evenly spaced values from 0 to 0.9 (inclusive).
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        # arange with float step — unpredictable length
+        a = np.arange(0, 1, 0.3)
+        print(f"arange result: {a}")
+        print(f"Length: {len(a)}")  # may be 3 or 4
+
+        # linspace guarantees exact count
+        b = np.linspace(0, 0.9, 4)
+        print(f"linspace result: {b}")
+        print(f"Length: {len(b)}")  # always 4

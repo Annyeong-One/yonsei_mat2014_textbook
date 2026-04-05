@@ -251,3 +251,155 @@ class DataRecord:
 - External modification would break invariants
 - Expressing configuration or constants
 - Implementing immutable data structures
+
+---
+
+## Exercises
+
+**Exercise 1.** Create an immutable `Point` class with read-only `x` and `y` properties and a read-only `distance_from_origin` property that computes $\sqrt{x^2 + y^2}$. Show that attempting to set `x` or `y` raises an error.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import math
+
+    class Point:
+        def __init__(self, x, y):
+            self._x = x
+            self._y = y
+
+        @property
+        def x(self):
+            return self._x
+
+        @property
+        def y(self):
+            return self._y
+
+        @property
+        def distance_from_origin(self):
+            return math.sqrt(self._x ** 2 + self._y ** 2)
+
+    p = Point(3, 4)
+    print(p.x)                      # 3
+    print(p.y)                      # 4
+    print(p.distance_from_origin)   # 5.0
+
+    try:
+        p.x = 10
+    except AttributeError:
+        print("Cannot set x")  # Cannot set x
+    ```
+
+---
+
+**Exercise 2.** Predict the output of the following code:
+
+```python
+class Config:
+    @property
+    def max_retries(self):
+        return 3
+
+c = Config()
+print(c.max_retries)
+
+try:
+    c.max_retries = 5
+except AttributeError:
+    print("Cannot modify")
+```
+
+??? success "Solution to Exercise 2"
+    The output is:
+
+    ```
+    3
+    Cannot modify
+    ```
+
+    `max_retries` is a read-only property (no setter defined). Reading it returns `3`. Attempting to assign a new value raises `AttributeError`.
+
+---
+
+**Exercise 3.** Write a `Student` class with `first_name` and `last_name` as regular attributes, and read-only properties `full_name` and `email` (computed as `first_last@school.edu` in lowercase). Show that changing `first_name` automatically updates both derived properties.
+
+??? success "Solution to Exercise 3"
+    ```python
+    class Student:
+        def __init__(self, first_name, last_name):
+            self.first_name = first_name
+            self.last_name = last_name
+
+        @property
+        def full_name(self):
+            return f"{self.first_name} {self.last_name}"
+
+        @property
+        def email(self):
+            return f"{self.first_name}_{self.last_name}@school.edu".lower()
+
+    s = Student("Alice", "Smith")
+    print(s.full_name)  # Alice Smith
+    print(s.email)      # alice_smith@school.edu
+
+    s.first_name = "Bob"
+    print(s.full_name)  # Bob Smith
+    print(s.email)      # bob_smith@school.edu
+    ```
+
+---
+
+**Exercise 4.** Implement a `Document` class whose `content` property starts as writable but becomes read-only after calling `lock()`. Demonstrate both the writable and locked states.
+
+??? success "Solution to Exercise 4"
+    ```python
+    class Document:
+        def __init__(self, content=""):
+            self._content = content
+            self._locked = False
+
+        @property
+        def content(self):
+            return self._content
+
+        @content.setter
+        def content(self, value):
+            if self._locked:
+                raise AttributeError("Document is locked")
+            self._content = value
+
+        def lock(self):
+            self._locked = True
+
+    doc = Document()
+    doc.content = "Hello, world!"
+    print(doc.content)  # Hello, world!
+
+    doc.lock()
+    try:
+        doc.content = "New text"
+    except AttributeError as e:
+        print(e)  # Document is locked
+    ```
+
+---
+
+**Exercise 5.** Create an `ExpensiveResult` class with a lazy read-only property `result` that computes the sum of squares from 1 to 100,000 on first access and caches it. Show that the computation runs only once.
+
+??? success "Solution to Exercise 5"
+    ```python
+    class ExpensiveResult:
+        def __init__(self):
+            self._result = None
+
+        @property
+        def result(self):
+            if self._result is None:
+                print("Computing...")
+                self._result = sum(i ** 2 for i in range(1, 100_001))
+            return self._result
+
+    er = ExpensiveResult()
+    print(er.result)  # Computing... 333338333350000
+    print(er.result)  # 333338333350000 (no recomputation)
+    ```

@@ -55,3 +55,63 @@ else:
 ## Summary
 
 The p-value converts a test statistic into a probability that measures the strength of evidence against $H_0$. By comparing the p-value to a pre-specified significance level $\alpha$, we obtain a binary decision rule for hypothesis testing.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Generate 50 samples from $N(0.5, 1)$ and test $H_0: \mu = 0$ using a one-sample t-test. Compute the p-value and also manually compute it using the $t$-distribution CDF. Verify both methods give the same result.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        data = np.random.normal(0.5, 1, 50)
+        t_stat, p_auto = stats.ttest_1samp(data, 0)
+        p_manual = 2 * stats.t.sf(abs(t_stat), df=len(data)-1)
+        print(f"Auto p-value:   {p_auto:.6f}")
+        print(f"Manual p-value: {p_manual:.6f}")
+
+---
+
+**Exercise 2.**
+Simulate 10,000 one-sample t-tests under $H_0$ (samples from $N(0, 1)$, testing $\mu = 0$). Plot a histogram of the resulting p-values. Verify that the distribution is approximately uniform on $[0, 1]$.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy import stats
+        import matplotlib.pyplot as plt
+
+        np.random.seed(42)
+        p_values = []
+        for _ in range(10000):
+            data = np.random.normal(0, 1, 30)
+            _, p = stats.ttest_1samp(data, 0)
+            p_values.append(p)
+
+        plt.hist(p_values, bins=50, density=True)
+        plt.axhline(y=1, color='r', linestyle='--', label='Uniform')
+        plt.xlabel('p-value')
+        plt.title('P-value Distribution Under H0')
+        plt.legend()
+        plt.show()
+
+---
+
+**Exercise 3.**
+For a fixed sample of 30 observations from $N(0.3, 1)$, compute the p-value for testing $H_0: \mu = 0$ at sample sizes $n = 10, 30, 100, 300$. Show that the p-value decreases as $n$ increases for a fixed true effect.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        for n in [10, 30, 100, 300]:
+            data = np.random.normal(0.3, 1, n)
+            _, p = stats.ttest_1samp(data, 0)
+            print(f"n={n:3d}: p-value = {p:.4f}")

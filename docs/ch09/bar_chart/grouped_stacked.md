@@ -414,3 +414,97 @@ ax.grid(axis='y', alpha=0.3)
 plt.tight_layout()
 plt.show()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a stacked bar chart showing monthly sales of three products over four months. Use months `['Jan', 'Feb', 'Mar', 'Apr']` and values: Product A `[10, 15, 12, 18]`, Product B `[8, 12, 15, 10]`, Product C `[5, 8, 10, 12]`. Add a legend and value labels inside each bar segment.
+
+??? success "Solution to Exercise 1"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        months = ['Jan', 'Feb', 'Mar', 'Apr']
+        prod_a = [10, 15, 12, 18]
+        prod_b = [8, 12, 15, 10]
+        prod_c = [5, 8, 10, 12]
+
+        fig, ax = plt.subplots(figsize=(8, 6))
+        b1 = ax.bar(months, prod_a, label='Product A', color='steelblue')
+        b2 = ax.bar(months, prod_b, bottom=prod_a, label='Product B', color='coral')
+        bottom_c = [a + b for a, b in zip(prod_a, prod_b)]
+        b3 = ax.bar(months, prod_c, bottom=bottom_c, label='Product C', color='mediumseagreen')
+
+        ax.bar_label(b1, label_type='center', fontsize=9)
+        ax.bar_label(b2, label_type='center', fontsize=9)
+        ax.bar_label(b3, label_type='center', fontsize=9)
+
+        ax.legend()
+        ax.set_ylabel('Sales')
+        ax.set_title('Stacked Bar Chart')
+        plt.show()
+
+---
+
+**Exercise 2.**
+Create a 100% stacked bar chart (normalized) from the same data in Exercise 1. Convert each month's values to percentages of the total, so each bar reaches 100%. Use `ax.bar` with computed `bottom` offsets and percentage labels.
+
+??? success "Solution to Exercise 2"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        months = ['Jan', 'Feb', 'Mar', 'Apr']
+        prod_a = np.array([10, 15, 12, 18])
+        prod_b = np.array([8, 12, 15, 10])
+        prod_c = np.array([5, 8, 10, 12])
+        totals = prod_a + prod_b + prod_c
+
+        pct_a = prod_a / totals * 100
+        pct_b = prod_b / totals * 100
+        pct_c = prod_c / totals * 100
+
+        fig, ax = plt.subplots(figsize=(8, 6))
+        ax.bar(months, pct_a, label='Product A', color='steelblue')
+        ax.bar(months, pct_b, bottom=pct_a, label='Product B', color='coral')
+        ax.bar(months, pct_c, bottom=pct_a + pct_b, label='Product C', color='mediumseagreen')
+
+        ax.set_ylabel('Percentage (%)')
+        ax.set_title('100% Stacked Bar Chart')
+        ax.legend()
+        ax.set_ylim(0, 100)
+        plt.show()
+
+---
+
+**Exercise 3.**
+Create a grouped horizontal bar chart using `ax.barh` for comparing exam scores of three students across four subjects. Students: Alice `[85, 90, 78, 92]`, Bob `[70, 88, 95, 80]`, Carol `[92, 75, 82, 88]`. Subjects: `['Math', 'Science', 'English', 'History']`. Use `height=0.25` for grouping.
+
+??? success "Solution to Exercise 3"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        subjects = ['Math', 'Science', 'English', 'History']
+        alice = [85, 90, 78, 92]
+        bob = [70, 88, 95, 80]
+        carol = [92, 75, 82, 88]
+
+        y = np.arange(len(subjects))
+        height = 0.25
+
+        fig, ax = plt.subplots(figsize=(10, 6))
+        ax.barh(y - height, alice, height, label='Alice', color='steelblue')
+        ax.barh(y, bob, height, label='Bob', color='coral')
+        ax.barh(y + height, carol, height, label='Carol', color='mediumseagreen')
+
+        ax.set_yticks(y)
+        ax.set_yticklabels(subjects)
+        ax.set_xlabel('Score')
+        ax.set_title('Exam Scores by Student')
+        ax.legend()
+        plt.tight_layout()
+        plt.show()

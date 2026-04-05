@@ -648,3 +648,60 @@ if __name__ == "__main__":
     print("Next: Tutorial 07 - Practical Applications")
     print("="*70)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a regex using a positive lookahead to find all words that are followed by a comma. For example, in `"apple, banana, cherry and grape"`, match `"apple"` and `"banana"` but not `"cherry"` or `"grape"`.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    import re
+
+    pattern = r'\w+(?=,)'
+    text = "apple, banana, cherry and grape"
+    matches = re.findall(pattern, text)
+    print(matches)  # ['apple', 'banana']
+    ```
+
+---
+
+**Exercise 2.**
+Write a regex using a positive lookbehind to find all numbers that are preceded by a dollar sign `$`. For example, in `"Cost: $50, Tax: $7.50, Count: 100"`, match `"50"` and `"7.50"` but not `"100"`. Use `re.findall`.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    import re
+
+    pattern = r'(?<=\$)\d+\.?\d*'
+    text = "Cost: $50, Tax: $7.50, Count: 100"
+    matches = re.findall(pattern, text)
+    print(matches)  # ['50', '7.50']
+    ```
+
+---
+
+**Exercise 3.**
+Write a password validation regex that uses lookaheads to enforce all of these rules simultaneously: at least 8 characters, at least one uppercase letter, at least one lowercase letter, at least one digit, and at least one special character from `!@#$%`. Test with several passwords.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    import re
+
+    pattern = r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%]).{8,}$'
+
+    passwords = ["Abc123!x", "abc123!x", "ABCDEF1!", "Ab1!", "Password1!"]
+    for pw in passwords:
+        valid = bool(re.match(pattern, pw))
+        print(f"'{pw}': {'Valid' if valid else 'Invalid'}")
+    # 'Abc123!x': Valid
+    # 'abc123!x': Invalid (no uppercase)
+    # 'ABCDEF1!': Invalid (no lowercase)
+    # 'Ab1!': Invalid (too short)
+    # 'Password1!': Valid
+    ```

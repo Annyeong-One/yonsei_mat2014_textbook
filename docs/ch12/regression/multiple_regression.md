@@ -156,3 +156,80 @@ matrix formulation $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\var
 The OLS estimator $\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$
 provides the best linear unbiased estimates under the Gauss-Markov conditions. Adjusted
 $R^2$ and the $F$-test offer tools for model comparison and overall significance testing.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a design matrix with 3 predictors and 50 observations. Generate $Y = 2 + 3X_1 - X_2 + 0.5X_3 + \varepsilon$. Estimate the coefficients using `np.linalg.lstsq` and compare with the true values.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        np.random.seed(42)
+        n = 50
+        X123 = np.random.normal(size=(n, 3))
+        y = 2 + 3*X123[:,0] - X123[:,1] + 0.5*X123[:,2] + np.random.normal(0, 1, n)
+        X = np.column_stack([np.ones(n), X123])
+        beta, _, _, _ = np.linalg.lstsq(X, y, rcond=None)
+        print("Estimated:", np.round(beta, 3))
+        print("True:      [2.000, 3.000, -1.000, 0.500]")
+
+---
+
+**Exercise 2.**
+For the model in Exercise 1, compute $R^2$ and adjusted $R^2$. Add a fourth random (noise) predictor and show that $R^2$ increases but adjusted $R^2$ may decrease.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        np.random.seed(42)
+        n = 50
+        X123 = np.random.normal(size=(n, 3))
+        y = 2 + 3*X123[:,0] - X123[:,1] + 0.5*X123[:,2] + np.random.normal(0, 1, n)
+
+        def r2_adj(y, X_design):
+            beta = np.linalg.lstsq(X_design, y, rcond=None)[0]
+            yhat = X_design @ beta
+            ss_res = np.sum((y - yhat)**2)
+            ss_tot = np.sum((y - y.mean())**2)
+            r2 = 1 - ss_res / ss_tot
+            n, p = X_design.shape[0], X_design.shape[1] - 1
+            adj = 1 - (n-1)/(n-p-1)*(1-r2)
+            return r2, adj
+
+        X3 = np.column_stack([np.ones(n), X123])
+        r2_3, adj_3 = r2_adj(y, X3)
+
+        noise = np.random.normal(size=(n, 1))
+        X4 = np.column_stack([X3, noise])
+        r2_4, adj_4 = r2_adj(y, X4)
+
+        print(f"3 predictors: R2={r2_3:.4f}, Adj R2={adj_3:.4f}")
+        print(f"4 predictors: R2={r2_4:.4f}, Adj R2={adj_4:.4f}")
+
+---
+
+**Exercise 3.**
+Construct the F-statistic for overall significance of the model from Exercise 1. Compare with the critical value from `stats.f.ppf(0.95, p, n-p-1)` and verify using the p-value.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        n, p = 50, 3
+        X123 = np.random.normal(size=(n, p))
+        y = 2 + 3*X123[:,0] - X123[:,1] + 0.5*X123[:,2] + np.random.normal(0, 1, n)
+        X = np.column_stack([np.ones(n), X123])
+        beta = np.linalg.lstsq(X, y, rcond=None)[0]
+        yhat = X @ beta
+        ss_res = np.sum((y - yhat)**2)
+        ss_tot = np.sum((y - y.mean())**2)
+        F = ((ss_tot - ss_res)/p) / (ss_res/(n-p-1))
+        p_val = 1 - stats.f.cdf(F, p, n-p-1)
+        print(f"F = {F:.4f}, p = {p_val:.6f}")

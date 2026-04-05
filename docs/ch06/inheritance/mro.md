@@ -1099,3 +1099,86 @@ if __name__ == "__main__":
 
     print(f"\n" + "=" * 70)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a hierarchy: `A`, `B(A)`, `C(A)`, `D(B, C)`. Print `D.__mro__` and `D.mro()`. Add a `who_am_i()` method to each class. Call `D().who_am_i()` and predict which version runs. Then override only in `C` and call again --- predict which version runs based on MRO.
+
+??? success "Solution to Exercise 1"
+
+        class A:
+            def who_am_i(self):
+                return "A"
+
+        class B(A):
+            def who_am_i(self):
+                return "B"
+
+        class C(A):
+            def who_am_i(self):
+                return "C"
+
+        class D(B, C):
+            pass
+
+        print(D.__mro__)
+        # D -> B -> C -> A -> object
+
+        print(D().who_am_i())  # "B" — first in MRO after D
+
+        # Override only in C, remove from B
+        class B2(A):
+            pass
+
+        class D2(B2, C):
+            pass
+
+        print(D2().who_am_i())  # "C" — B2 doesn't have it, falls to C
+
+---
+
+**Exercise 2.**
+Create a diamond hierarchy where each class has a `describe()` method that returns its class name. In each `describe()`, also call `super().describe()` and concatenate the results. Show the full chain of method calls by printing the result of `Bottom().describe()`.
+
+??? success "Solution to Exercise 2"
+
+        class Base:
+            def describe(self):
+                return "Base"
+
+        class Left(Base):
+            def describe(self):
+                return f"Left -> {super().describe()}"
+
+        class Right(Base):
+            def describe(self):
+                return f"Right -> {super().describe()}"
+
+        class Bottom(Left, Right):
+            def describe(self):
+                return f"Bottom -> {super().describe()}"
+
+        print(Bottom().describe())
+        # Bottom -> Left -> Right -> Base
+
+---
+
+**Exercise 3.**
+Write a function `show_mro(cls)` that takes a class and prints its MRO in a formatted way, showing each class and its module. Use `cls.__mro__` to iterate. Test it with Python's built-in `bool` class to see its full MRO chain (`bool -> int -> object`).
+
+??? success "Solution to Exercise 3"
+
+        def show_mro(cls):
+            print(f"MRO for {cls.__name__}:")
+            for i, c in enumerate(cls.__mro__):
+                module = c.__module__
+                print(f"  {i}: {module}.{c.__name__}")
+
+        show_mro(bool)
+        # MRO for bool:
+        #   0: builtins.bool
+        #   1: builtins.int
+        #   2: builtins.object

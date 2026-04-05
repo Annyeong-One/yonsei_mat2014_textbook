@@ -110,6 +110,7 @@ def iterative_dfs(root):
 
 ---
 
+
 ## Runnable Example: `aliasing_via_mutable_parameters.py`
 
 ```python
@@ -557,3 +558,119 @@ if __name__ == "__main__":
        - Essential for reliable code
     """)
 ```
+
+
+## Exercises
+
+**Exercise 1.**
+Write a recursive function `count_down(n)` that counts from n to 0. Wrap the call in a `try/except RecursionError` block. Call it with increasing values of n (100, 500, 1000, 2000) and print which values succeed and which hit the recursion limit.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import sys
+
+        def count_down(n):
+            if n <= 0:
+                return
+            count_down(n - 1)
+
+        limit = sys.getrecursionlimit()
+        print(f"Recursion limit: {limit}")
+
+        for n in [100, 500, 1000, 2000]:
+            try:
+                count_down(n)
+                print(f"  count_down({n}): OK")
+            except RecursionError:
+                print(f"  count_down({n}): RecursionError!")
+        ```
+
+---
+
+**Exercise 2.**
+Implement a recursive depth-first search on a binary tree using a `Node` class. Then implement the same DFS using an explicit stack (a Python list). Build a tree of depth 20 and verify both approaches produce the same traversal order. Print the maximum stack depth used by the iterative version.
+
+??? success "Solution to Exercise 2"
+        ```python
+        class Node:
+            def __init__(self, val, left=None, right=None):
+                self.val = val
+                self.left = left
+                self.right = right
+
+        def build_tree(depth, counter=[0]):
+            if depth == 0:
+                return None
+            counter[0] += 1
+            return Node(
+                counter[0],
+                build_tree(depth - 1, counter),
+                build_tree(depth - 1, counter),
+            )
+
+        def dfs_recursive(node, result=None):
+            if result is None:
+                result = []
+            if node is None:
+                return result
+            result.append(node.val)
+            dfs_recursive(node.left, result)
+            dfs_recursive(node.right, result)
+            return result
+
+        def dfs_iterative(root):
+            if root is None:
+                return []
+            result = []
+            stack = [root]
+            max_depth = 0
+            while stack:
+                max_depth = max(max_depth, len(stack))
+                node = stack.pop()
+                result.append(node.val)
+                if node.right:
+                    stack.append(node.right)
+                if node.left:
+                    stack.append(node.left)
+            return result, max_depth
+
+        tree = build_tree(10)
+        r1 = dfs_recursive(tree)
+        r2, max_d = dfs_iterative(tree)
+
+        print(f"Same order: {r1 == r2}")
+        print(f"Max stack depth (iterative): {max_d}")
+        ```
+
+---
+
+**Exercise 3.**
+Write a script that temporarily increases the recursion limit with `sys.setrecursionlimit()`, runs a recursive function that requires depth 5000, then restores the original limit. Use `tracemalloc` to measure the peak memory used by the deep recursion.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import sys
+        import tracemalloc
+
+        original_limit = sys.getrecursionlimit()
+
+        def deep_recurse(n):
+            if n == 0:
+                return 0
+            return 1 + deep_recurse(n - 1)
+
+        sys.setrecursionlimit(6000)
+        tracemalloc.start()
+
+        result = deep_recurse(5000)
+
+        _, peak = tracemalloc.get_traced_memory()
+        tracemalloc.stop()
+        sys.setrecursionlimit(original_limit)
+
+        print(f"Depth reached: {result}")
+        print(f"Peak memory: {peak / 1024:.1f} KB")
+        print(f"Limit restored to: {sys.getrecursionlimit()}")
+        ```
+
+---

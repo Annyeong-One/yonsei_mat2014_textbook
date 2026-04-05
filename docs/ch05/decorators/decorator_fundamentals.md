@@ -735,3 +735,89 @@ if __name__ == "__main__":
     print("END OF EXAMPLES")
     print("=" * 70)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a decorator `uppercase_result` that converts the return value of a function to uppercase. Use `@wraps` to preserve metadata. Apply it to a function `def greet(name: str) -> str` that returns `f"hello, {name}"` and verify the output.
+
+??? success "Solution to Exercise 1"
+
+        from functools import wraps
+
+        def uppercase_result(func):
+            """Decorator that converts the return value to uppercase."""
+            @wraps(func)
+            def wrapper(*args, **kwargs):
+                result = func(*args, **kwargs)
+                return result.upper()
+            return wrapper
+
+        @uppercase_result
+        def greet(name: str) -> str:
+            """Return a greeting."""
+            return f"hello, {name}"
+
+        print(greet("alice"))       # HELLO, ALICE
+        print(greet.__name__)       # greet
+        print(greet.__doc__)        # Return a greeting.
+
+---
+
+**Exercise 2.**
+Create a decorator `call_counter` that tracks how many times a function has been called. Store the count as a function attribute `calls` on the wrapper so it can be inspected from outside. Demonstrate that calling the decorated function three times sets `func.calls` to `3`.
+
+??? success "Solution to Exercise 2"
+
+        from functools import wraps
+
+        def call_counter(func):
+            """Decorator that counts how many times the function is called."""
+            @wraps(func)
+            def wrapper(*args, **kwargs):
+                wrapper.calls += 1
+                return func(*args, **kwargs)
+            wrapper.calls = 0
+            return wrapper
+
+        @call_counter
+        def say_hi():
+            print("Hi!")
+
+        say_hi()
+        say_hi()
+        say_hi()
+        print(say_hi.calls)  # 3
+
+---
+
+**Exercise 3.**
+Write a decorator `require_positive` that inspects all positional arguments before calling the original function and raises a `ValueError` if any argument is a negative number. Non-numeric arguments should be ignored. Apply it to a function `def area(width, height)` and test with both valid and invalid inputs.
+
+??? success "Solution to Exercise 3"
+
+        from functools import wraps
+
+        def require_positive(func):
+            """Decorator that rejects negative numeric arguments."""
+            @wraps(func)
+            def wrapper(*args, **kwargs):
+                for arg in args:
+                    if isinstance(arg, (int, float)) and arg < 0:
+                        raise ValueError(
+                            f"Negative argument not allowed: {arg}"
+                        )
+                return func(*args, **kwargs)
+            return wrapper
+
+        @require_positive
+        def area(width, height):
+            return width * height
+
+        print(area(5, 10))   # 50
+        try:
+            area(-3, 10)     # ValueError
+        except ValueError as e:
+            print(e)

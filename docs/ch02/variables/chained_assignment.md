@@ -195,3 +195,56 @@ x = y = z = 0.0
 # Dangerous for lists
 # positions = velocities = [0, 0, 0]
 ```
+
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Use chained assignment to initialize three counter variables to zero. Increment only one of them and show the others remain unchanged. Explain why this is safe.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    wins = losses = draws = 0
+    wins += 1
+    print(f"{wins=}, {losses=}, {draws=}")
+    # wins=1, losses=0, draws=0
+    ```
+
+    This is safe because integers are immutable. `wins += 1` rebinds `wins` to a new integer object, leaving `losses` and `draws` bound to the original `0`.
+
+---
+
+**Exercise 2.**
+Demonstrate the danger of chained assignment with mutable objects. Assign `a = b = c = []`, then append to `a` and show that `b` and `c` are also affected.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    a = b = c = []
+    a.append(1)
+    print(f"{a=}")  # [1]
+    print(f"{b=}")  # [1] (same object!)
+    print(f"{c=}")  # [1] (same object!)
+    print(a is b is c)  # True
+    ```
+
+    All three names point to the same list object. Mutating through any name affects all of them.
+
+---
+
+**Exercise 3.**
+Write code that creates three independent empty lists (not sharing references) in a single line without chained assignment. Verify with `is` that they are different objects.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    a, b, c = [], [], []
+    print(a is b)  # False
+    print(b is c)  # False
+    ```
+
+    Each `[]` literal creates a new list object. Tuple unpacking assigns each name to a separate object.

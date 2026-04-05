@@ -749,3 +749,64 @@ if __name__ == "__main__":
     print("Next: Tutorial 03 - Quantifiers")
     print("="*70)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a regex pattern that matches any string containing only lowercase letters and digits (no spaces, uppercase, or special characters). Test it against `"hello123"`, `"Hello"`, `"test!"`, and `"abc"`.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    import re
+
+    pattern = r'^[a-z0-9]+$'
+
+    tests = ["hello123", "Hello", "test!", "abc"]
+    for t in tests:
+        match = re.fullmatch(pattern, t)
+        print(f"'{t}': {'Match' if match else 'No match'}")
+    # 'hello123': Match
+    # 'Hello': No match
+    # 'test!': No match
+    # 'abc': Match
+    ```
+
+---
+
+**Exercise 2.**
+Write a regex pattern using a negated character class to find all characters in a string that are NOT alphanumeric or whitespace. For example, in `"Hello, World! #2024"`, it should find `[',', '!', '#']`.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    import re
+
+    text = "Hello, World! #2024"
+    non_alnum = re.findall(r'[^\w\s]', text)
+    print(non_alnum)  # [',', '!', '#']
+    ```
+
+---
+
+**Exercise 3.**
+Write a regex pattern that matches a valid hex color code: `#` followed by exactly 6 hexadecimal characters (digits and letters a-f, case-insensitive). Test against `"#FF5733"`, `"#abc"`, `"#12345G"`, and `"#aabbcc"`.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    import re
+
+    pattern = r'^#[0-9a-fA-F]{6}$'
+
+    tests = ["#FF5733", "#abc", "#12345G", "#aabbcc"]
+    for t in tests:
+        match = re.fullmatch(pattern, t)
+        print(f"'{t}': {'Valid' if match else 'Invalid'}")
+    # '#FF5733': Valid
+    # '#abc': Invalid (only 3 chars)
+    # '#12345G': Invalid (G not hex)
+    # '#aabbcc': Valid
+    ```

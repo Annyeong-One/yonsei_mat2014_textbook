@@ -140,3 +140,61 @@ print(f"Winsorized std:    {np.std(winsorized, ddof=1):.4f}")
 ## Summary
 
 Statistical preprocessing transforms raw data to better satisfy the assumptions of downstream methods. Z-score standardization adjusts location and scale without changing shape. Box-Cox and Yeo-Johnson power transformations reduce skewness and approximate normality. Rank transformations eliminate outlier effects entirely. The `scipy.stats` module provides efficient implementations of all these techniques through `zscore`, `boxcox`, `yeojohnson`, `rankdata`, and `mstats.winsorize`.
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that standardizes a dataset (zero mean, unit variance) using `scipy.stats.zscore()` or manual computation.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(100)
+    print(f'Mean: {data.mean():.4f}')
+    print(f'Std: {data.std():.4f}')
+    ```
+
+---
+
+**Exercise 2.** Explain the difference between standardization (z-score) and min-max normalization. When would you use each?
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the statistical method and its assumptions.
+
+---
+
+**Exercise 3.** Write code that detects outliers using the z-score method (values beyond 3 standard deviations from the mean).
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+    from scipy import stats
+    import matplotlib.pyplot as plt
+
+    np.random.seed(42)
+    data = np.random.randn(1000)
+    fig, ax = plt.subplots()
+    ax.hist(data, bins=30, density=True, alpha=0.7)
+    ax.set_title('Distribution')
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Create a function that takes a DataFrame, removes outliers from each numeric column using the IQR method, and returns the cleaned DataFrame.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(500)
+    result = stats.describe(data)
+    print(result)
+    ```

@@ -236,3 +236,89 @@ plt.show()
 - `subplot2grid` and `GridSpec` handle complex layouts
 - Inset axes are created with multiple `add_axes` calls
 - Pandas plotting integrates via the `ax` parameter
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a figure and add three axes using three different methods: `fig.add_subplot(1, 3, 1)`, `fig.add_axes([0.4, 0.15, 0.25, 0.7])` for the second, and `plt.subplots` for the third. Plot a different function on each.
+
+??? success "Solution to Exercise 1"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(0, 2 * np.pi, 200)
+
+        fig = plt.figure(figsize=(12, 4))
+
+        ax1 = fig.add_subplot(1, 3, 1)
+        ax1.plot(x, np.sin(x))
+        ax1.set_title('add_subplot')
+
+        ax2 = fig.add_axes([0.4, 0.15, 0.25, 0.7])
+        ax2.plot(x, np.cos(x), color='red')
+        ax2.set_title('add_axes')
+
+        ax3 = fig.add_subplot(1, 3, 3)
+        ax3.plot(x, np.tan(x), color='green')
+        ax3.set_ylim(-5, 5)
+        ax3.set_title('add_subplot again')
+
+        plt.show()
+
+---
+
+**Exercise 2.**
+Create an inset axes inside a main plot. Plot `y = sin(x)` on the main axes over $[0, 4\pi]$, and add a small inset axes using `fig.add_axes([0.55, 0.55, 0.3, 0.3])` that zooms into the region $[0, \pi]$.
+
+??? success "Solution to Exercise 2"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(0, 4 * np.pi, 500)
+
+        fig, ax = plt.subplots(figsize=(10, 5))
+        ax.plot(x, np.sin(x), color='steelblue')
+        ax.set_title('sin(x) with Inset Zoom')
+        ax.set_xlabel('x')
+        ax.set_ylabel('y')
+
+        ax_inset = fig.add_axes([0.55, 0.55, 0.3, 0.3])
+        x_zoom = np.linspace(0, np.pi, 200)
+        ax_inset.plot(x_zoom, np.sin(x_zoom), color='red')
+        ax_inset.set_title('Zoom: [0, π]', fontsize=9)
+        ax_inset.set_xlim(0, np.pi)
+
+        plt.show()
+
+---
+
+**Exercise 3.**
+Use `fig.add_subplot` to create an irregular layout: one tall subplot on the left spanning 2 rows (`fig.add_subplot(1, 2, 1)`) and two small subplots stacked on the right (`fig.add_subplot(2, 2, 2)` and `fig.add_subplot(2, 2, 4)`). Plot different data in each.
+
+??? success "Solution to Exercise 3"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(0, 2 * np.pi, 200)
+
+        fig = plt.figure(figsize=(10, 6))
+
+        ax_left = fig.add_subplot(1, 2, 1)
+        ax_left.plot(x, np.sin(x), color='blue', linewidth=2)
+        ax_left.set_title('Tall Left Subplot')
+
+        ax_top_right = fig.add_subplot(2, 2, 2)
+        ax_top_right.bar(['A', 'B', 'C'], [3, 7, 5], color='coral')
+        ax_top_right.set_title('Top Right')
+
+        ax_bottom_right = fig.add_subplot(2, 2, 4)
+        ax_bottom_right.scatter(np.random.rand(20), np.random.rand(20), color='green')
+        ax_bottom_right.set_title('Bottom Right')
+
+        plt.tight_layout()
+        plt.show()

@@ -345,3 +345,81 @@ hex_rep = original.hex()
 recovered = float.fromhex(hex_rep)
 print(original == recovered)  # True
 ```
+
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Use Python's `struct` module to extract the sign, exponent, and mantissa bits of the float `−6.5`. Verify your result by reconstructing the value from the extracted components.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    import struct
+
+    def float_parts(x):
+        packed = struct.pack('>d', x)
+        bits = ''.join(f'{b:08b}' for b in packed)
+        sign = int(bits[0])
+        exponent = int(bits[1:12], 2)
+        mantissa = bits[12:]
+        return sign, exponent, mantissa
+
+    s, e, m = float_parts(-6.5)
+    print(f"Sign: {s}")       # 1 (negative)
+    print(f"Exponent: {e}")   # 1025
+    print(f"Mantissa: {m[:10]}...")
+
+    # Reconstruct: (-1)^1 * (1 + mantissa_fraction) * 2^(1025-1023)
+    # = -1 * 1.625 * 4 = -6.5
+    bias = 1023
+    mantissa_val = int(m, 2) / (2**52)
+    reconstructed = ((-1)**s) * (1 + mantissa_val) * (2**(e - bias))
+    print(f"Reconstructed: {reconstructed}")  # -6.5
+    ```
+
+    The sign bit is 1 (negative), the biased exponent gives an actual exponent of 2, and the mantissa encodes the fraction 0.625, so the value is `-(1.625) * 4 = -6.5`.
+
+---
+
+**Exercise 2.**
+Demonstrate that `float(2**53 + 1) == float(2**53)` is `True`. Explain why this happens in terms of IEEE 754 mantissa bits.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    a = 2**53
+    b = 2**53 + 1
+
+    print(float(a) == float(b))  # True
+    print(f"2^53     = {a}")
+    print(f"2^53 + 1 = {b}")
+    print(f"float(2^53)     = {float(a):.1f}")
+    print(f"float(2^53 + 1) = {float(b):.1f}")
+    ```
+
+    IEEE 754 double precision has 52 mantissa bits (plus one implicit bit), so it can represent integers exactly up to `2^53`. Beyond that, consecutive floats are spaced 2 apart, and `2^53 + 1` rounds down to `2^53`.
+
+---
+
+**Exercise 3.**
+Write a function `is_exact_float(x)` that checks whether a decimal string like `"0.375"` can be represented exactly as a Python float. Test it with `"0.5"`, `"0.1"`, and `"0.375"`.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    from decimal import Decimal
+
+    def is_exact_float(s):
+        float_val = float(s)
+        return Decimal(float_val) == Decimal(s)
+
+    print(is_exact_float("0.5"))    # True
+    print(is_exact_float("0.1"))    # False
+    print(is_exact_float("0.375"))  # True
+    ```
+
+    Values that are sums of powers of 2 (like 0.5 = 2^-1 and 0.375 = 2^-2 + 2^-3) are exact. Values like 0.1 have infinite binary expansions and cannot be stored exactly.

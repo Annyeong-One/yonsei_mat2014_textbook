@@ -529,6 +529,7 @@ Modern computers still follow the same basic model.
 
 ---
 
+
 ## 14. Summary
 
 | Concept                | Description                          |
@@ -546,3 +547,69 @@ Modern computers still follow the same basic model.
 | Roofline Model         | compute vs memory performance limits |
 
 The **von Neumann architecture** remains the conceptual framework underlying modern computing. Understanding it provides the foundation for reasoning about **program execution, memory behavior, and performance optimization**.
+
+
+## Exercises
+
+**Exercise 1.**
+The von Neumann bottleneck arises because instructions and data share the same memory bus. Consider a CPU running at 3 GHz (3 billion cycles per second) with RAM that has 100 ns latency.
+
+(a) How many CPU cycles elapse during a single RAM access?
+(b) If a program performs one memory access per instruction, what fraction of time does the CPU spend waiting for memory?
+(c) How do caches mitigate this bottleneck?
+
+??? success "Solution to Exercise 1"
+    **(a)** At 3 GHz, one cycle = 1/3 ns. RAM latency of 100 ns = 100 / (1/3) = **300 cycles**. The CPU sits idle for 300 cycles waiting for data.
+
+    **(b)** If every instruction requires a memory access, the CPU spends 300/(1+300) = ~99.7% of the time waiting. It executes useful work for only ~0.3% of the time. This is the von Neumann bottleneck in its extreme form.
+
+    **(c)** Caches store recently used data close to the CPU. An L1 cache hit takes ~4 cycles instead of 300. If 95% of accesses hit L1, the average access time is 0.95 * 4 + 0.05 * 300 = 3.8 + 15 = 18.8 cycles -- a 16x improvement over always going to RAM. The cache hierarchy transforms the bottleneck from "always slow" to "usually fast."
+
+---
+
+**Exercise 2.**
+The Modified Harvard architecture uses separate L1 instruction and data caches but unified main memory. Consider the instruction cycle (Fetch-Decode-Execute-Writeback).
+
+(a) Which step accesses the instruction cache?
+(b) Which step accesses the data cache?
+(c) Why does separating these caches improve pipeline throughput?
+(d) Why is it important that main memory remains unified (unlike pure Harvard)?
+
+??? success "Solution to Exercise 2"
+    **(a)** The **Fetch** step reads the next instruction from the instruction cache (L1-I).
+
+    **(b)** The **Execute** step (for load/store instructions) or **Writeback** step accesses the data cache (L1-D).
+
+    **(c)** With unified L1 cache, Fetch and Execute of different pipeline stages would compete for the same cache port, causing structural hazards (pipeline stalls). Separate caches allow the pipeline to fetch the next instruction while simultaneously loading/storing data for another instruction -- both happen in the same cycle without conflict.
+
+    **(d)** Unified main memory is essential for the **stored-program model**: programs can generate, modify, and execute code (JIT compilation, dynamic loading, self-modifying code). With pure Harvard, instructions and data would be in physically separate memories, making it impossible for a program to load new code into instruction memory. Unified memory with split caches provides the best of both worlds.
+
+---
+
+**Exercise 3.**
+Memory locality determines cache effectiveness. For each code pattern, identify whether it exhibits good or poor spatial/temporal locality, and predict the cache behavior:
+
+```python
+# Pattern A: Sequential array access
+for i in range(N):
+    total += array[i]
+
+# Pattern B: Random access
+for i in range(N):
+    total += array[random_index[i]]
+
+# Pattern C: Repeated access to same element
+for i in range(N):
+    total += array[0]
+```
+
+Which pattern benefits most from caching? Which defeats the cache?
+
+??? success "Solution to Exercise 3"
+    **Pattern A** (sequential): **Excellent** spatial and temporal locality. Accessing `array[i]` then `array[i+1]` means consecutive memory addresses. The first access loads a cache line (64 bytes = ~8 doubles), and the next 7 accesses are cache hits. Cache hit rate: ~97%+.
+
+    **Pattern B** (random): **Poor** spatial locality, no temporal locality. Each access jumps to an unpredictable location, likely missing the cache every time. If the array is larger than the cache, the hit rate approaches 0%.
+
+    **Pattern C** (repeated): **Excellent** temporal locality. The same address is accessed N times. After the first miss, every subsequent access is a cache hit. Hit rate: (N-1)/N, approaching 100%.
+
+    Pattern A benefits most from caching because both hardware prefetchers and spatial locality work together. Pattern B defeats the cache completely because each access is unpredictable. This explains why sorting data before processing it can improve performance -- sorted access patterns have better locality.

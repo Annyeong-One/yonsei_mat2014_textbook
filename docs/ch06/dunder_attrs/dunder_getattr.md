@@ -401,3 +401,79 @@ def __getattr__(self, name):
     # Handle dynamic attributes
     return self._handle_dynamic(name)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a `FlexibleConfig` class that uses `__getattr__` to return a default value of `None` for any attribute that has not been explicitly set. Set a few attributes in `__init__` and show that existing attributes return their values while missing attributes return `None` without raising `AttributeError`.
+
+??? success "Solution to Exercise 1"
+
+        class FlexibleConfig:
+            def __init__(self, **kwargs):
+                for k, v in kwargs.items():
+                    self.__dict__[k] = v
+
+            def __getattr__(self, name):
+                return None  # Default for missing attributes
+
+        cfg = FlexibleConfig(host="localhost", port=8080)
+        print(cfg.host)    # localhost
+        print(cfg.port)    # 8080
+        print(cfg.debug)   # None — missing, no error
+        print(cfg.timeout) # None
+
+---
+
+**Exercise 2.**
+Write a `Proxy` class that wraps another object. Use `__getattr__` to forward any attribute access to the wrapped object. Demonstrate by wrapping a list and accessing methods like `append`, `pop`, and `__len__` through the proxy.
+
+??? success "Solution to Exercise 2"
+
+        class Proxy:
+            def __init__(self, wrapped):
+                object.__setattr__(self, '_wrapped', wrapped)
+
+            def __getattr__(self, name):
+                return getattr(self._wrapped, name)
+
+        proxy = Proxy([1, 2, 3])
+        proxy.append(4)
+        print(proxy.pop())     # 4
+        print(len(proxy))      # 3 — __len__ forwarded
+        print(list(proxy))     # [1, 2, 3]
+
+---
+
+**Exercise 3.**
+Build a `DeprecatedAttributes` class where `__getattr__` checks a mapping of old attribute names to new ones. If a deprecated name is accessed, print a warning and return the value from the new attribute. If the name is not in the mapping, raise `AttributeError`. Demonstrate the deprecation warning.
+
+??? success "Solution to Exercise 3"
+
+        class DeprecatedAttributes:
+            _deprecated = {
+                "colour": "color",
+                "favourite": "favorite",
+            }
+
+            def __init__(self, **kwargs):
+                for k, v in kwargs.items():
+                    self.__dict__[k] = v
+
+            def __getattr__(self, name):
+                if name in self._deprecated:
+                    new_name = self._deprecated[name]
+                    print(f"Warning: '{name}' is deprecated, use '{new_name}'")
+                    return getattr(self, new_name)
+                raise AttributeError(f"'{type(self).__name__}' has no attribute '{name}'")
+
+        obj = DeprecatedAttributes(color="red", favorite="pizza")
+        print(obj.colour)    # Warning: 'colour' is deprecated... -> red
+        print(obj.favorite)  # pizza (direct access, no warning)
+
+        try:
+            obj.unknown
+        except AttributeError as e:
+            print(f"Error: {e}")

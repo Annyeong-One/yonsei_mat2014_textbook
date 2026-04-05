@@ -606,3 +606,75 @@ if __name__ == "__main__":
     print("Next: Practice with exercises in 03_legb_exercises.py")
     print("=" * 70)
 ```
+
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Write a nested function example that demonstrates all four LEGB scopes. Define a variable with the same name at each level and print which value is seen from the innermost function.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    x = "global"
+
+    def outer():
+        x = "enclosing"
+
+        def inner():
+            x = "local"
+            print(f"inner sees: {x}")  # local
+
+        inner()
+        print(f"outer sees: {x}")  # enclosing
+
+    outer()
+    print(f"module sees: {x}")  # global
+    print(f"built-in example: {len([1,2,3])}")  # 3 (built-in)
+    ```
+
+    Python searches Local first, then Enclosing, then Global, then Built-in. The first match wins.
+
+---
+
+**Exercise 2.**
+Use `locals()` and `globals()` inside a function to inspect the available namespaces. Define some local variables and print both dictionaries to see the difference.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    module_var = "I am global"
+
+    def example():
+        local_var = "I am local"
+        another = 42
+        print("Locals:", locals())
+        print("Globals contain 'module_var':", 'module_var' in globals())
+
+    example()
+    ```
+
+    `locals()` returns a snapshot of the local namespace. `globals()` returns the module-level namespace dictionary, which can be modified directly.
+
+---
+
+**Exercise 3.**
+Create a closure where the inner function captures a variable from the enclosing scope. After calling the outer function, use `__closure__` to inspect the captured value.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    def outer(value):
+        def inner():
+            return value
+        return inner
+
+    closure = outer(42)
+    print(closure())  # 42
+    print(closure.__closure__[0].cell_contents)  # 42
+    ```
+
+    The inner function captures `value` from the enclosing scope. The `__closure__` attribute contains cell objects holding the captured values.

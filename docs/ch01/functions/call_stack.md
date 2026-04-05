@@ -179,3 +179,100 @@ Because each call gets its own frame, local variables are fully isolated between
 Tracebacks are snapshots of the call stack at the moment an error occurs — learning to read them is one of the most practical debugging skills in Python.
 
 Understanding the call stack becomes especially important when learning **recursion**.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Each function call creates a new stack frame with its own local variables. Predict the output:
+
+```python
+def f(x):
+    x = x + 1
+    print(f"f: x = {x}")
+    return x
+
+x = 10
+result = f(x)
+print(f"main: x = {x}")
+print(f"main: result = {result}")
+```
+
+Why does the `x` in `main` remain `10` even though `f` changes `x` to `11`? How does the call stack explain this?
+
+??? success "Solution to Exercise 1"
+    Output:
+
+    ```text
+    f: x = 11
+    main: x = 10
+    main: result = 11
+    ```
+
+    The `x` in `main` and the `x` in `f` are **different variables in different stack frames**. When `f(x)` is called, a new stack frame is created for `f` with its own local `x`, initialized to the value `10`. The line `x = x + 1` inside `f` modifies `f`'s local `x` to `11`, but this has no effect on `main`'s `x`.
+
+    The call stack explains this: `main`'s frame has `x = 10`, and `f`'s frame has its own `x = 11`. When `f` returns, its frame is destroyed, and execution returns to `main`'s frame where `x` is still `10`. The returned value `11` is stored in `result`.
+
+---
+
+**Exercise 2.**
+When a recursive function calls itself, each call adds a new frame to the stack. Predict what happens:
+
+```python
+def countdown(n):
+    print(n)
+    countdown(n - 1)
+
+countdown(5)
+```
+
+Why does this eventually crash with `RecursionError`? What is Python's default recursion limit, and why does it exist? How would you fix this function?
+
+??? success "Solution to Exercise 2"
+    The function prints `5, 4, 3, 2, 1, 0, -1, -2, ...` and eventually crashes with:
+
+    ```text
+    RecursionError: maximum recursion depth exceeded
+    ```
+
+    Each call to `countdown(n - 1)` adds a new frame to the call stack. Since there is no base case to stop the recursion, the stack grows indefinitely. Python's default recursion limit is **1000** frames (checked via `sys.getrecursionlimit()`). This limit exists to prevent stack overflow, which would crash the entire Python process.
+
+    Fixed version:
+
+    ```python
+    def countdown(n):
+        if n < 0:    # base case
+            return
+        print(n)
+        countdown(n - 1)
+    ```
+
+    The base case `if n < 0: return` stops the recursion, ensuring the stack eventually unwinds.
+
+---
+
+**Exercise 3.**
+A programmer sees this traceback and must identify the bug:
+
+```text
+Traceback (most recent call last):
+  File "app.py", line 15, in <module>
+    result = process(data)
+  File "app.py", line 10, in process
+    return transform(item)
+  File "app.py", line 5, in transform
+    return int(value)
+ValueError: invalid literal for int() with base 10: 'hello'
+```
+
+Read the traceback and answer: which function raised the error? Which function called it? What was the original call that started the chain? Why does Python print the traceback in order from outermost to innermost call?
+
+??? success "Solution to Exercise 3"
+    - **Which function raised the error?** `transform` -- the error occurred at line 5, inside `transform`, when `int(value)` was called with the string `'hello'`.
+    - **Which function called it?** `process` -- line 10 in `process` called `transform(item)`.
+    - **What was the original call?** Line 15 in `<module>` (the main script) called `process(data)`.
+
+    The call chain is: `<module>` -> `process` -> `transform` -> `int()` (error).
+
+    Python prints the traceback from **outermost to innermost** (most recent call last) because the most useful information -- where the error actually occurred -- is at the bottom. This way, you see the immediate cause first when reading from the bottom up, and can trace the full call chain by reading upward.

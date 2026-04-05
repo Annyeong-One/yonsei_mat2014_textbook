@@ -316,3 +316,134 @@ count -= 1  # Decrement (rebinding for int)
 - Augmented assignment (`+=`) behavior depends on mutability
 - Use `id()` to check if you have the same object
 - Be careful when passing mutable objects to functions
+
+## Exercises
+
+**Exercise 1.**
+Predict the output and trace the object identity at each step:
+
+```python
+a = [1, 2, 3]
+b = a
+print(id(a) == id(b))
+
+a = a + [4]
+print(id(a) == id(b))
+print(a)
+print(b)
+```
+
+Now compare with:
+
+```python
+a = [1, 2, 3]
+b = a
+a += [4]
+print(id(a) == id(b))
+print(a)
+print(b)
+```
+
+Why does `a = a + [4]` give different aliasing behavior than `a += [4]`?
+
+??? success "Solution to Exercise 1"
+    **First version** (`a = a + [4]`):
+
+    ```text
+    True
+    False
+    [1, 2, 3, 4]
+    [1, 2, 3]
+    ```
+
+    `a + [4]` creates a **new list** object. `a = a + [4]` rebinds `a` to this new list. `b` still refers to the original. Different objects, different ids.
+
+    **Second version** (`a += [4]`):
+
+    ```text
+    True
+    [1, 2, 3, 4]
+    [1, 2, 3, 4]
+    ```
+
+    `a += [4]` calls `list.__iadd__`, which **mutates** the existing list in place and returns the same object. `a` and `b` still refer to the same (now modified) list. Same object, same id.
+
+    The difference: `a = a + [4]` always creates a new object (uses `__add__`). `a += [4]` tries `__iadd__` first (in-place if mutable). For mutable types, `+=` is fundamentally different from `= ... +`.
+
+---
+
+**Exercise 2.**
+A function receives a list and is supposed to return a sorted version without modifying the original:
+
+```python
+def get_sorted(items):
+    items.sort()
+    return items
+
+original = [3, 1, 2]
+result = get_sorted(original)
+print(original)
+print(result)
+print(original is result)
+```
+
+Predict the output. Explain why this function is buggy. What is the correct approach -- and why does understanding assignment vs. mutation matter here?
+
+??? success "Solution to Exercise 2"
+    Output:
+
+    ```text
+    [1, 2, 3]
+    [1, 2, 3]
+    True
+    ```
+
+    `items.sort()` **mutates** the list in place. Since `items` and `original` are aliases for the same list, `original` is modified. `result` is also the same object (`original is result` is `True`).
+
+    The bug: the function was supposed to return a sorted version **without modifying the original**, but `.sort()` mutates in place.
+
+    Correct approach:
+
+    ```python
+    def get_sorted(items):
+        return sorted(items)  # sorted() creates a NEW list
+    ```
+
+    `sorted()` returns a new list, leaving the original unchanged. Understanding mutation vs. new-object creation is essential for writing functions that do not have unintended side effects on their arguments.
+
+---
+
+**Exercise 3.**
+Explain why the following code produces different results for integers and lists:
+
+```python
+def increment(x):
+    x += 1
+
+def append_item(lst):
+    lst += [4]
+
+a = 10
+increment(a)
+print(a)
+
+b = [1, 2, 3]
+append_item(b)
+print(b)
+```
+
+Both functions use `+=`, but the effect on the caller's variable is different. Why?
+
+??? success "Solution to Exercise 3"
+    Output:
+
+    ```text
+    10
+    [1, 2, 3, 4]
+    ```
+
+    In `increment`: `x += 1` for an integer calls `int.__iadd__`, but integers are immutable. This creates a new `int` object `11` and rebinds the **local** name `x` to it. The caller's `a` is unaffected because rebinding a local name never affects the caller.
+
+    In `append_item`: `lst += [4]` for a list calls `list.__iadd__`, which **mutates** the list in place. The local name `lst` and the caller's `b` refer to the same list object. The mutation is visible through `b`.
+
+    The crucial difference: `+=` on immutable types **rebinds** (local effect only); `+=` on mutable types **mutates** (visible to all aliases). This asymmetry is one of the most important subtleties in Python's object model.

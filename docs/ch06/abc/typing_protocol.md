@@ -486,3 +486,128 @@ def timed_operation(cm: ContextManager[Timer]):
 - Runtime checks only verify method existence, not signatures
 - Protocols are ideal for type hints without tight coupling
 - Prefer Protocol for interfaces, ABC for enforced contracts
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Define a `Measurable` Protocol with a `length()` method that returns a `float`. Then create three classes---`Rope`, `River`, and `Road`---each with a `length()` method returning different values. Write a function `total_length(items: list[Measurable]) -> float` that sums the lengths. None of the classes should inherit from `Measurable`.
+
+??? success "Solution to Exercise 1"
+
+        from typing import Protocol
+
+        class Measurable(Protocol):
+            def length(self) -> float:
+                ...
+
+        class Rope:
+            def __init__(self, meters: float):
+                self._meters = meters
+
+            def length(self) -> float:
+                return self._meters
+
+        class River:
+            def __init__(self, km: float):
+                self._km = km
+
+            def length(self) -> float:
+                return self._km * 1000
+
+        class Road:
+            def __init__(self, miles: float):
+                self._miles = miles
+
+            def length(self) -> float:
+                return self._miles * 1609.34
+
+        def total_length(items: list[Measurable]) -> float:
+            return sum(item.length() for item in items)
+
+        items = [Rope(5.0), River(2.5), Road(1.0)]
+        print(f"Total length: {total_length(items):.2f} meters")
+        # Total length: 4114.34 meters
+
+---
+
+**Exercise 2.**
+Create a `Loggable` Protocol with two methods: `log(message: str) -> None` and a `name` property returning `str`. Mark it with `@runtime_checkable`. Implement two classes that satisfy the protocol (`ConsoleLogger` and `FileLogger`). Demonstrate that `isinstance()` checks pass for both, and also show a class that is missing the `name` property fails the `isinstance()` check.
+
+??? success "Solution to Exercise 2"
+
+        from typing import Protocol, runtime_checkable
+
+        @runtime_checkable
+        class Loggable(Protocol):
+            @property
+            def name(self) -> str:
+                ...
+
+            def log(self, message: str) -> None:
+                ...
+
+        class ConsoleLogger:
+            @property
+            def name(self) -> str:
+                return "console"
+
+            def log(self, message: str) -> None:
+                print(f"[{self.name}] {message}")
+
+        class FileLogger:
+            @property
+            def name(self) -> str:
+                return "file"
+
+            def log(self, message: str) -> None:
+                print(f"[{self.name}] Writing to file: {message}")
+
+        class IncompleteLogger:
+            def log(self, message: str) -> None:
+                print(message)
+            # Missing 'name' property
+
+        print(isinstance(ConsoleLogger(), Loggable))     # True
+        print(isinstance(FileLogger(), Loggable))        # True
+        print(isinstance(IncompleteLogger(), Loggable))  # False
+
+---
+
+**Exercise 3.**
+Define two Protocols: `Readable` with a `read() -> str` method, and `Writable` with a `write(data: str) -> None` method. Combine them into a `ReadWritable` Protocol. Create a `StringBuffer` class that satisfies `ReadWritable` without inheriting from any Protocol. Write a function that accepts a `ReadWritable` parameter and demonstrate that `StringBuffer` is compatible.
+
+??? success "Solution to Exercise 3"
+
+        from typing import Protocol
+
+        class Readable(Protocol):
+            def read(self) -> str:
+                ...
+
+        class Writable(Protocol):
+            def write(self, data: str) -> None:
+                ...
+
+        class ReadWritable(Readable, Writable, Protocol):
+            pass
+
+        class StringBuffer:
+            def __init__(self):
+                self._buffer = ""
+
+            def read(self) -> str:
+                return self._buffer
+
+            def write(self, data: str) -> None:
+                self._buffer += data
+
+        def process(rw: ReadWritable) -> str:
+            rw.write("Hello, ")
+            rw.write("World!")
+            return rw.read()
+
+        buf = StringBuffer()
+        result = process(buf)
+        print(result)  # Hello, World!

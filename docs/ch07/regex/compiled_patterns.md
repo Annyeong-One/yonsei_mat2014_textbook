@@ -190,3 +190,73 @@ def parse_log_line(line: str) -> LogEntry | None:
 | When to compile | Loops, module constants, complex patterns |
 | Internal cache | `re` caches ~512 patterns, so one-off use is fine without compiling |
 | `re.VERBOSE` | Pair with compilation for readable, documented patterns |
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Compile a regex pattern at module level that matches email addresses (simplified: `word_chars+@word_chars+.word_chars+`). Use this compiled pattern to find all emails in a text string and to validate a single email string.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    import re
+
+    EMAIL_PATTERN = re.compile(r'\w+@\w+\.\w+')
+
+    # Find all emails
+    text = "Contact alice@example.com or bob@test.org for info"
+    emails = EMAIL_PATTERN.findall(text)
+    print(emails)  # ['alice@example.com', 'bob@test.org']
+
+    # Validate
+    print(bool(EMAIL_PATTERN.fullmatch("user@domain.com")))  # True
+    print(bool(EMAIL_PATTERN.fullmatch("invalid")))           # False
+    ```
+
+---
+
+**Exercise 2.**
+Write a compiled verbose regex pattern (using `re.VERBOSE`) that matches a date in `YYYY-MM-DD` format. Add comments explaining each part of the pattern. Test it against valid and invalid date strings.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    import re
+
+    DATE_PATTERN = re.compile(r"""
+        ^               # Start of string
+        (\d{4})         # Year: exactly 4 digits
+        -               # Literal hyphen separator
+        (0[1-9]|1[0-2]) # Month: 01-12
+        -               # Literal hyphen separator
+        (0[1-9]|[12]\d|3[01])  # Day: 01-31
+        $               # End of string
+    """, re.VERBOSE)
+
+    tests = ["2024-12-25", "2024-13-01", "2024-00-15", "24-12-25"]
+    for t in tests:
+        match = DATE_PATTERN.match(t)
+        print(f"'{t}': {'Valid' if match else 'Invalid'}")
+    ```
+
+---
+
+**Exercise 3.**
+Write a function `create_word_finder` that takes a word and returns a compiled case-insensitive regex that matches that word as a whole word (using word boundaries `\b`). Use the returned pattern to find all occurrences of the word in a text.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    import re
+
+    def create_word_finder(word):
+        return re.compile(rf'\b{re.escape(word)}\b', re.IGNORECASE)
+
+    # Test
+    finder = create_word_finder("python")
+    text = "Python is great. I love PYTHON programming in python."
+    matches = finder.findall(text)
+    print(matches)  # ['Python', 'PYTHON', 'python']
+    ```

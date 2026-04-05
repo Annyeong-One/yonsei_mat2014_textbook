@@ -313,3 +313,98 @@ if __name__ == "__main__":
     print(cart.remove_item("Mouse"))
     print(cart.display_cart())
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a `Dog` class with instance attributes `name`, `breed`, and `age`. Add methods `bark()` (returns a string), `birthday()` (increments age), and `__str__`. Create two dogs and show they are independent instances with separate state.
+
+??? success "Solution to Exercise 1"
+
+        class Dog:
+            def __init__(self, name, breed, age):
+                self.name = name
+                self.breed = breed
+                self.age = age
+
+            def bark(self):
+                return f"{self.name} says: Woof!"
+
+            def birthday(self):
+                self.age += 1
+
+            def __str__(self):
+                return f"{self.name} ({self.breed}, {self.age} years)"
+
+        d1 = Dog("Buddy", "Lab", 3)
+        d2 = Dog("Max", "Poodle", 5)
+
+        print(d1)          # Buddy (Lab, 3 years)
+        print(d2.bark())   # Max says: Woof!
+        d1.birthday()
+        print(d1.age)      # 4
+        print(d2.age)      # 5 — independent
+
+---
+
+**Exercise 2.**
+Write a `BankAccount` class with `owner` and `balance` attributes. Add `deposit(amount)`, `withdraw(amount)` (raises `ValueError` if insufficient funds), and `__repr__` methods. Create two accounts, perform transactions, and show balances are independent.
+
+??? success "Solution to Exercise 2"
+
+        class BankAccount:
+            def __init__(self, owner, balance=0):
+                self.owner = owner
+                self.balance = balance
+
+            def deposit(self, amount):
+                self.balance += amount
+
+            def withdraw(self, amount):
+                if amount > self.balance:
+                    raise ValueError("Insufficient funds")
+                self.balance -= amount
+
+            def __repr__(self):
+                return f"BankAccount('{self.owner}', {self.balance})"
+
+        a1 = BankAccount("Alice", 1000)
+        a2 = BankAccount("Bob", 500)
+        a1.deposit(200)
+        a2.withdraw(100)
+        print(a1)  # BankAccount('Alice', 1200)
+        print(a2)  # BankAccount('Bob', 400)
+
+---
+
+**Exercise 3.**
+Build a `Classroom` class that stores a `name` and a list of `students`. Add `enroll(student_name)`, `drop(student_name)`, and `roster()` (returns sorted list) methods. Show that `isinstance()` confirms the type, and two classrooms maintain separate student lists.
+
+??? success "Solution to Exercise 3"
+
+        class Classroom:
+            def __init__(self, name):
+                self.name = name
+                self.students = []
+
+            def enroll(self, student_name):
+                if student_name not in self.students:
+                    self.students.append(student_name)
+
+            def drop(self, student_name):
+                self.students.remove(student_name)
+
+            def roster(self):
+                return sorted(self.students)
+
+        c1 = Classroom("Math 101")
+        c2 = Classroom("Physics 201")
+        c1.enroll("Alice")
+        c1.enroll("Bob")
+        c2.enroll("Charlie")
+
+        print(c1.roster())   # ['Alice', 'Bob']
+        print(c2.roster())   # ['Charlie'] — independent
+        print(isinstance(c1, Classroom))  # True

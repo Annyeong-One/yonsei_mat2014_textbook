@@ -145,3 +145,89 @@ if __name__ == "__main__":
 
     # Run with: pytest 08_pytest_basics.py -v
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.** Write a function `fizzbuzz(n)` that returns `"Fizz"` if `n` is divisible by 3, `"Buzz"` if divisible by 5, `"FizzBuzz"` if divisible by both, and `str(n)` otherwise. Write pytest tests for all four cases.
+
+??? success "Solution to Exercise 1"
+    ```python
+    def fizzbuzz(n):
+        if n % 15 == 0:
+            return "FizzBuzz"
+        if n % 3 == 0:
+            return "Fizz"
+        if n % 5 == 0:
+            return "Buzz"
+        return str(n)
+
+    def test_fizz():
+        assert fizzbuzz(9) == "Fizz"
+
+    def test_buzz():
+        assert fizzbuzz(10) == "Buzz"
+
+    def test_fizzbuzz():
+        assert fizzbuzz(15) == "FizzBuzz"
+
+    def test_number():
+        assert fizzbuzz(7) == "7"
+    ```
+
+---
+
+**Exercise 2.** Predict the output of running `pytest -v` on this file:
+
+```python
+def test_truthy():
+    assert [1, 2, 3]
+
+def test_falsy():
+    assert []
+```
+
+??? success "Solution to Exercise 2"
+    `test_truthy` passes because a non-empty list is truthy. `test_falsy` fails because an empty list is falsy, and `assert []` evaluates to `assert False`.
+
+---
+
+**Exercise 3.** Write a function `parse_int(s)` that converts a string to an integer or raises `ValueError`. Use `pytest.raises` to test the error case.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pytest
+
+    def parse_int(s):
+        return int(s)
+
+    def test_valid():
+        assert parse_int("42") == 42
+
+    def test_invalid():
+        with pytest.raises(ValueError):
+            parse_int("abc")
+    ```
+
+---
+
+**Exercise 4.** Use `@pytest.mark.parametrize` to test a `square(n)` function with at least five different inputs, including negative numbers and zero.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pytest
+
+    def square(n):
+        return n * n
+
+    @pytest.mark.parametrize("n,expected", [
+        (0, 0),
+        (1, 1),
+        (5, 25),
+        (-3, 9),
+        (100, 10000),
+    ])
+    def test_square(n, expected):
+        assert square(n) == expected
+    ```

@@ -417,3 +417,74 @@ if __name__ == "__main__":
     print("- Applications: mesh generation, interpolation, spatial indexing")
     print("=" * 70)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Given the edge list `[(0, 1), (1, 2), (2, 3), (3, 4), (4, 0)]` for an undirected graph with 5 nodes, construct the adjacency matrix as a sparse CSR matrix, compute the graph Laplacian $L = D - A$, and verify that the row sums of $L$ are all zero.
+
+??? success "Solution to Exercise 1"
+        import numpy as np
+        from scipy import sparse
+
+        edges = [(0, 1), (1, 2), (2, 3), (3, 4), (4, 0)]
+        n_nodes = 5
+        row = [e[0] for e in edges]
+        col = [e[1] for e in edges]
+        data = np.ones(len(edges))
+
+        A = sparse.csr_matrix((data, (row, col)), shape=(n_nodes, n_nodes))
+        A = A + A.T  # symmetrize for undirected graph
+
+        D = sparse.diags(np.array(A.sum(axis=1)).flatten())
+        L = D - A
+
+        row_sums = np.array(L.sum(axis=1)).flatten()
+        print("Row sums of Laplacian:", row_sums)
+        assert np.allclose(row_sums, 0), "Row sums should all be zero"
+
+---
+
+**Exercise 2.**
+Create a 2D grid of 20 random points using `np.random.seed(0)`, compute their Delaunay triangulation with `scipy.spatial.Delaunay`, and determine how many triangles are in the triangulation. Then use `find_simplex` to check whether the point `[0.5, 0.5]` lies inside the triangulation.
+
+??? success "Solution to Exercise 2"
+        import numpy as np
+        from scipy import spatial
+
+        np.random.seed(0)
+        points = np.random.rand(20, 2)
+
+        tri = spatial.Delaunay(points)
+        print(f"Number of triangles: {len(tri.simplices)}")
+
+        test_point = [0.5, 0.5]
+        simplex_idx = tri.find_simplex(test_point)
+        if simplex_idx >= 0:
+            print(f"Point {test_point} is inside triangle {simplex_idx}")
+        else:
+            print(f"Point {test_point} is outside the triangulation")
+
+---
+
+**Exercise 3.**
+Build the adjacency matrix of a complete graph $K_6$ (6 nodes, every pair connected) as a sparse matrix. Compute the graph Laplacian and find its two smallest eigenvalues using `scipy.sparse.linalg.eigsh`. Verify that the smallest eigenvalue is approximately zero and the second smallest (the algebraic connectivity) equals 6.
+
+??? success "Solution to Exercise 3"
+        import numpy as np
+        from scipy import sparse
+        from scipy.sparse import linalg as splinalg
+
+        n = 6
+        # Complete graph: all pairs connected
+        A = sparse.csr_matrix(np.ones((n, n)) - np.eye(n))
+
+        D = sparse.diags(np.array(A.sum(axis=1)).flatten())
+        L = D - A
+
+        vals, vecs = splinalg.eigsh(L.astype(float), k=2, which='SM')
+        print(f"Two smallest eigenvalues: {vals}")
+        print(f"Smallest eigenvalue ~ 0: {np.isclose(vals[0], 0, atol=1e-10)}")
+        print(f"Second smallest (algebraic connectivity) ~ 6: {np.isclose(vals[1], 6, atol=1e-6)}")

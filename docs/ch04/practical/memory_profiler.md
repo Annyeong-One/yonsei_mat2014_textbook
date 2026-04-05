@@ -84,3 +84,104 @@ def efficient():
 - Delete large objects explicitly when done: `del large_obj`
 - Profile before and after optimization
 - Monitor peak memory usage, not just line-by-line
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write two versions of a function that reads a range of 1,000,000 integers and returns only the even squares: one using list comprehensions (creating intermediate lists) and one using a single generator expression. Use `tracemalloc` to compare peak memory for each approach.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import tracemalloc
+
+        def with_lists():
+            nums = list(range(1_000_000))
+            evens = [x for x in nums if x % 2 == 0]
+            squares = [x ** 2 for x in evens]
+            return squares
+
+        def with_generator():
+            return list(
+                x ** 2 for x in range(1_000_000) if x % 2 == 0
+            )
+
+        tracemalloc.start()
+        with_lists()
+        _, peak_lists = tracemalloc.get_traced_memory()
+        tracemalloc.stop()
+
+        tracemalloc.start()
+        with_generator()
+        _, peak_gen = tracemalloc.get_traced_memory()
+        tracemalloc.stop()
+
+        print(f"List approach peak:      {peak_lists / 1024 / 1024:.1f} MB")
+        print(f"Generator approach peak: {peak_gen / 1024 / 1024:.1f} MB")
+        ```
+
+---
+
+**Exercise 2.**
+Write a function that builds a dictionary of 100,000 entries, then deletes it with `del` and calls `gc.collect()`. Use `tracemalloc` snapshots before creation, after creation, and after deletion to show the memory growth and reclamation.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import tracemalloc
+        import gc
+
+        tracemalloc.start()
+        snap1 = tracemalloc.take_snapshot()
+
+        d = {f"key_{i}": list(range(10)) for i in range(100_000)}
+        snap2 = tracemalloc.take_snapshot()
+
+        del d
+        gc.collect()
+        snap3 = tracemalloc.take_snapshot()
+
+        growth = snap2.compare_to(snap1, 'lineno')
+        reclaim = snap3.compare_to(snap2, 'lineno')
+
+        total_growth = sum(s.size_diff for s in growth if s.size_diff > 0)
+        total_freed = sum(s.size_diff for s in reclaim if s.size_diff < 0)
+
+        print(f"Growth:     +{total_growth / 1024 / 1024:.1f} MB")
+        print(f"Reclaimed:  {total_freed / 1024 / 1024:.1f} MB")
+        tracemalloc.stop()
+        ```
+
+---
+
+**Exercise 3.**
+Create a function `memory_report(func, *args)` that wraps any callable with `tracemalloc`, runs it, and returns a dictionary with keys `current_kb`, `peak_kb`, and `top_allocations` (a list of the top 3 allocation lines). Test it with a function that creates a nested list of 1,000 sublists with 1,000 elements each.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import tracemalloc
+
+        def memory_report(func, *args):
+            tracemalloc.start()
+            func(*args)
+            current, peak = tracemalloc.get_traced_memory()
+            snapshot = tracemalloc.take_snapshot()
+            top = snapshot.statistics('lineno')[:3]
+            tracemalloc.stop()
+            return {
+                "current_kb": current / 1024,
+                "peak_kb": peak / 1024,
+                "top_allocations": [str(s) for s in top],
+            }
+
+        def build_nested():
+            return [[i * j for j in range(1_000)]
+                    for i in range(1_000)]
+
+        report = memory_report(build_nested)
+        print(f"Current: {report['current_kb']:.1f} KB")
+        print(f"Peak:    {report['peak_kb']:.1f} KB")
+        print("Top allocations:")
+        for entry in report["top_allocations"]:
+            print(f"  {entry}")
+        ```

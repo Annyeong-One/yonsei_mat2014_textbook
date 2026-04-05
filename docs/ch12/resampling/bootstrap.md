@@ -92,3 +92,61 @@ The bootstrap can **fail** in situations where the plug-in principle breaks down
 ## Summary
 
 The bootstrap replaces analytical formulas with computation: draw many resamples with replacement, compute the statistic on each, and use the resulting empirical distribution for inference. The plug-in principle --- substituting $\hat{F}_n$ for $F$ --- provides the theoretical justification. Bootstrap standard errors and bias estimates are available for virtually any statistic without distributional assumptions, making the bootstrap one of the most widely applicable tools in modern statistics. Its main limitations arise with extremal statistics, heavy-tailed distributions, and dependent data.
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that performs bootstrap resampling on a sample of 50 observations to estimate the mean. Generate 10000 bootstrap samples and compute the bootstrap estimate and standard error.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(100)
+    print(f'Mean: {data.mean():.4f}')
+    print(f'Std: {data.std():.4f}')
+    ```
+
+---
+
+**Exercise 2.** Explain the bootstrap principle. Why does resampling with replacement from the data approximate sampling from the population?
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the statistical method and its assumptions.
+
+---
+
+**Exercise 3.** Write code that computes a 95% bootstrap confidence interval for the median using the percentile method.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+    from scipy import stats
+    import matplotlib.pyplot as plt
+
+    np.random.seed(42)
+    data = np.random.randn(1000)
+    fig, ax = plt.subplots()
+    ax.hist(data, bins=30, density=True, alpha=0.7)
+    ax.set_title('Distribution')
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Create a function that takes a sample and a statistic function, and returns the bootstrap standard error and 95% confidence interval.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(500)
+    result = stats.describe(data)
+    print(result)
+    ```

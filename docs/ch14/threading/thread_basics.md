@@ -1133,3 +1133,108 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a `SquareThread` class that subclasses `threading.Thread`. Its constructor takes a number, and its `run` method computes and stores the square. Create 5 instances (for numbers 1 through 5), start them all, join them all, and print each thread's result.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import threading
+
+        class SquareThread(threading.Thread):
+            def __init__(self, number):
+                super().__init__()
+                self.number = number
+                self.result = None
+
+            def run(self):
+                self.result = self.number ** 2
+
+        threads = [SquareThread(i) for i in range(1, 6)]
+        for t in threads:
+            t.start()
+        for t in threads:
+            t.join()
+        for t in threads:
+            print(f"{t.number}^2 = {t.result}")
+        ```
+
+---
+
+**Exercise 2.**
+Write a program that simulates downloading 8 files concurrently. Each "download" sleeps for a random duration between 0.5 and 1.5 seconds and returns the file name and byte count (a random integer). Use a `queue.Queue` to collect results from threads. After all threads finish, print the results sorted by file name.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import threading
+        import queue
+        import time
+        import random
+
+        def download(file_name, result_queue):
+            duration = random.uniform(0.5, 1.5)
+            time.sleep(duration)
+            byte_count = random.randint(1000, 100_000)
+            result_queue.put((file_name, byte_count))
+
+        result_queue = queue.Queue()
+        files = [f"file_{i}.dat" for i in range(8)]
+        threads = []
+        for f in files:
+            t = threading.Thread(target=download, args=(f, result_queue))
+            t.start()
+            threads.append(t)
+
+        for t in threads:
+            t.join()
+
+        results = []
+        while not result_queue.empty():
+            results.append(result_queue.get())
+
+        for name, size in sorted(results):
+            print(f"{name}: {size} bytes")
+        ```
+
+---
+
+**Exercise 3.**
+Implement a `SafeThread` wrapper class that catches exceptions raised inside thread targets and stores them. Launch 5 threads where some succeed and some raise `ValueError`. After joining, iterate over the threads and print which succeeded and which failed (with the exception message).
+
+??? success "Solution to Exercise 3"
+        ```python
+        import threading
+
+        class SafeThread(threading.Thread):
+            def __init__(self, *args, **kwargs):
+                super().__init__(*args, **kwargs)
+                self.exception = None
+
+            def run(self):
+                try:
+                    if self._target:
+                        self._target(*self._args, **self._kwargs)
+                except Exception as e:
+                    self.exception = e
+
+        def task(task_id):
+            if task_id % 2 == 0:
+                raise ValueError(f"Task {task_id} failed!")
+            return task_id
+
+        threads = [SafeThread(target=task, args=(i,)) for i in range(5)]
+        for t in threads:
+            t.start()
+        for t in threads:
+            t.join()
+
+        for i, t in enumerate(threads):
+            if t.exception:
+                print(f"Thread {i}: FAILED — {t.exception}")
+            else:
+                print(f"Thread {i}: succeeded")
+        ```

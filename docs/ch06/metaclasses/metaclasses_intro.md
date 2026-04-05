@@ -782,3 +782,76 @@ if __name__ == "__main__":
 
     print(f"\n" + "=" * 70)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Use `type()` as a function to dynamically create a class `Dog` with a `bark` method and a `species` class attribute. Create an instance and call `bark()`. Show that the dynamically created class behaves identically to one defined with the `class` keyword.
+
+??? success "Solution to Exercise 1"
+
+        def bark(self):
+            return f"{self.name} says Woof!"
+
+        Dog = type('Dog', (), {
+            'species': 'Canis familiaris',
+            'bark': bark,
+            '__init__': lambda self, name: setattr(self, 'name', name),
+        })
+
+        d = Dog("Buddy")
+        print(d.bark())      # Buddy says Woof!
+        print(Dog.species)   # Canis familiaris
+        print(type(d))       # <class 'Dog'>
+
+---
+
+**Exercise 2.**
+Write a metaclass `SingletonMeta` where `__call__` ensures only one instance of any class using this metaclass can exist. If an instance already exists, return it. Apply the metaclass to a `Database` class and show that multiple calls to `Database()` return the same object.
+
+??? success "Solution to Exercise 2"
+
+        class SingletonMeta(type):
+            _instances = {}
+
+            def __call__(cls, *args, **kwargs):
+                if cls not in cls._instances:
+                    cls._instances[cls] = super().__call__(*args, **kwargs)
+                return cls._instances[cls]
+
+        class Database(metaclass=SingletonMeta):
+            def __init__(self, url="default"):
+                self.url = url
+
+        db1 = Database("postgres://localhost")
+        db2 = Database("mysql://localhost")
+
+        print(db1 is db2)  # True — same instance
+        print(db1.url)     # postgres://localhost (first call wins)
+
+---
+
+**Exercise 3.**
+Create a metaclass `AutoReprMeta` that automatically adds a `__repr__` method to any class that uses it. The auto-generated `__repr__` should list all instance attributes. Apply it to a `Point` class with `x` and `y` attributes and show the auto-generated repr.
+
+??? success "Solution to Exercise 3"
+
+        class AutoReprMeta(type):
+            def __new__(mcs, name, bases, namespace):
+                cls = super().__new__(mcs, name, bases, namespace)
+                if '__repr__' not in namespace:
+                    def auto_repr(self):
+                        attrs = ', '.join(f'{k}={v!r}' for k, v in vars(self).items())
+                        return f"{name}({attrs})"
+                    cls.__repr__ = auto_repr
+                return cls
+
+        class Point(metaclass=AutoReprMeta):
+            def __init__(self, x, y):
+                self.x = x
+                self.y = y
+
+        p = Point(3, 4)
+        print(repr(p))  # Point(x=3, y=4)

@@ -45,3 +45,69 @@ a: ['apple', 'apricot']
 b: ['banana', 'blueberry']
 c: ['cherry']
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Given a sorted list of `(name, department)` tuples, use `groupby` to group employees by department and return a dictionary mapping each department to a list of employee names. For example, given `[("Alice", "eng"), ("Bob", "eng"), ("Carol", "sales")]`, return `{"eng": ["Alice", "Bob"], "sales": ["Carol"]}`.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    from itertools import groupby
+
+    employees = [("Alice", "eng"), ("Bob", "eng"), ("Carol", "sales")]
+    # Already sorted by department
+
+    result = {}
+    for dept, group in groupby(employees, key=lambda x: x[1]):
+        result[dept] = [name for name, _ in group]
+
+    print(result)
+    # {'eng': ['Alice', 'Bob'], 'sales': ['Carol']}
+    ```
+
+---
+
+**Exercise 2.**
+Write a function `compress_string` that uses `groupby` to perform run-length encoding on a string. For example, `compress_string("aaabbcccc")` should return `"a3b2c4"`.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    from itertools import groupby
+
+    def compress_string(s):
+        parts = []
+        for char, group in groupby(s):
+            count = sum(1 for _ in group)
+            parts.append(f"{char}{count}")
+        return "".join(parts)
+
+    # Test
+    print(compress_string("aaabbcccc"))  # a3b2c4
+    print(compress_string("aabba"))       # a2b2a1
+    ```
+
+---
+
+**Exercise 3.**
+Write a function `group_consecutive` that takes a list of integers and groups consecutive numbers together. For example, `group_consecutive([1, 2, 3, 5, 6, 8, 9, 10])` should return `[[1, 2, 3], [5, 6], [8, 9, 10]]`. Hint: use `enumerate` and `groupby` with a key based on the difference between value and index.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    from itertools import groupby
+
+    def group_consecutive(nums):
+        result = []
+        for _, group in groupby(enumerate(nums), lambda x: x[1] - x[0]):
+            result.append([val for _, val in group])
+        return result
+
+    # Test
+    print(group_consecutive([1, 2, 3, 5, 6, 8, 9, 10]))
+    # [[1, 2, 3], [5, 6], [8, 9, 10]]
+    ```

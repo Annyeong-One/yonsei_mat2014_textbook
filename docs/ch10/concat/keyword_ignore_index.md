@@ -140,3 +140,55 @@ result = pd.concat([df1, df2]).reset_index(drop=True)
 ### 3. Equivalent Results
 
 Both produce the same output; ignore_index is cleaner.
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that concatenates two DataFrames and shows the difference between `ignore_index=False` (default) and `ignore_index=True`.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+
+    df1 = pd.DataFrame({'A': [1, 2], 'B': [3, 4]})
+    df2 = pd.DataFrame({'A': [5, 6], 'B': [7, 8]})
+    result = pd.concat([df1, df2], ignore_index=True)
+    print(result)
+    ```
+
+---
+
+**Exercise 2.** Explain when `ignore_index=True` is useful. What problem does it solve?
+
+??? success "Solution to Exercise 2"
+    See the explanation in the main content. The key concept involves understanding how `pd.concat()` aligns data along the specified axis and handles mismatched indices or columns.
+
+---
+
+**Exercise 3.** Create two DataFrames with custom indices (e.g., starting from 100). Concatenate them with and without `ignore_index` and compare the index.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+
+    df1 = pd.DataFrame({'A': [1, 2], 'B': [3, 4]})
+    df2 = pd.DataFrame({'A': [5, 6], 'C': [7, 8]})
+    result = pd.concat([df1, df2], axis=0)
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Write code that concatenates DataFrames along `axis=1` with `ignore_index=True`. What gets reset in this case?
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+
+    df1 = pd.DataFrame({'A': [1, 2]}, index=[0, 1])
+    df2 = pd.DataFrame({'A': [3, 4]}, index=[2, 3])
+    result = pd.concat([df1, df2])
+    print(result)
+    ```

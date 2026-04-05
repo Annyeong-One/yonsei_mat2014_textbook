@@ -464,3 +464,95 @@ for ax, (Z, title) in zip(axes.flat, surfaces):
 plt.tight_layout()
 plt.show()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a surface plot of $z = \sin(x) \cdot \cos(y)$ and display it in a 2x2 grid of subplots, each with a different combination of elevation and azimuth: (10, 0), (30, 45), (60, 120), and (90, 0). Title each subplot with the angles used.
+
+??? success "Solution to Exercise 1"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(-np.pi, np.pi, 100)
+        y = np.linspace(-np.pi, np.pi, 100)
+        X, Y = np.meshgrid(x, y)
+        Z = np.sin(X) * np.cos(Y)
+
+        angles = [(10, 0), (30, 45), (60, 120), (90, 0)]
+
+        fig = plt.figure(figsize=(12, 10))
+        for i, (elev, azim) in enumerate(angles, 1):
+            ax = fig.add_subplot(2, 2, i, projection='3d')
+            ax.plot_surface(X, Y, Z, cmap='viridis', alpha=0.9)
+            ax.view_init(elev=elev, azim=azim)
+            ax.set_title(f'elev={elev}, azim={azim}')
+
+        plt.tight_layout()
+        plt.show()
+
+---
+
+**Exercise 2.**
+Plot the surface $z = x^2 - y^2$ (a saddle) and create three views: a front view (`elev=0, azim=0`), a top-down view (`elev=90, azim=0`), and an isometric view (`elev=35, azim=225`). Arrange the views side by side using `plt.subplots(1, 3)`.
+
+??? success "Solution to Exercise 2"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(-3, 3, 100)
+        y = np.linspace(-3, 3, 100)
+        X, Y = np.meshgrid(x, y)
+        Z = X**2 - Y**2
+
+        views = [
+            (0, 0, 'Front View'),
+            (90, 0, 'Top-Down View'),
+            (35, 225, 'Isometric View'),
+        ]
+
+        fig, axes = plt.subplots(1, 3, figsize=(15, 5),
+                                  subplot_kw={'projection': '3d'})
+
+        for ax, (elev, azim, title) in zip(axes, views):
+            ax.plot_surface(X, Y, Z, cmap='coolwarm', alpha=0.9)
+            ax.view_init(elev=elev, azim=azim)
+            ax.set_title(title)
+            ax.set_xlabel('X')
+            ax.set_ylabel('Y')
+
+        plt.tight_layout()
+        plt.show()
+
+---
+
+**Exercise 3.**
+Create a surface plot of $z = e^{-(x^2 + y^2)}$ and use `view_init` with `roll=30` in addition to `elev=30, azim=45` to tilt the camera. Compare this tilted view with the non-tilted version (`roll=0`) side by side.
+
+??? success "Solution to Exercise 3"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(-3, 3, 100)
+        y = np.linspace(-3, 3, 100)
+        X, Y = np.meshgrid(x, y)
+        Z = np.exp(-(X**2 + Y**2))
+
+        fig, axes = plt.subplots(1, 2, figsize=(14, 6),
+                                  subplot_kw={'projection': '3d'})
+
+        axes[0].plot_surface(X, Y, Z, cmap='plasma', alpha=0.9)
+        axes[0].view_init(elev=30, azim=45, roll=0)
+        axes[0].set_title('roll=0 (default)')
+
+        axes[1].plot_surface(X, Y, Z, cmap='plasma', alpha=0.9)
+        axes[1].view_init(elev=30, azim=45, roll=30)
+        axes[1].set_title('roll=30')
+
+        plt.tight_layout()
+        plt.show()

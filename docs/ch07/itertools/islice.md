@@ -58,3 +58,58 @@ Page 2: [6, 7, 8]
 Page 3: [9]
 ```
 
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a function `skip_header` that takes an iterator (e.g., lines from a file) and a number of header lines to skip, then returns the remaining items as a list. Use `islice`. For example, `skip_header(iter(["header1", "header2", "data1", "data2"]), 2)` should return `["data1", "data2"]`.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    from itertools import islice
+
+    def skip_header(iterator, n):
+        return list(islice(iterator, n, None))
+
+    # Test
+    lines = iter(["header1", "header2", "data1", "data2"])
+    print(skip_header(lines, 2))  # ['data1', 'data2']
+    ```
+
+---
+
+**Exercise 2.**
+Write a function `every_nth` that takes an iterable and an integer `n`, and returns every nth element using `islice`. For example, `every_nth(range(20), 5)` should return `[0, 5, 10, 15]`.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    from itertools import islice
+
+    def every_nth(iterable, n):
+        return list(islice(iterable, 0, None, n))
+
+    # Test
+    print(every_nth(range(20), 5))  # [0, 5, 10, 15]
+    print(every_nth("abcdefghij", 3))  # ['a', 'd', 'g', 'j']
+    ```
+
+---
+
+**Exercise 3.**
+Write a function `take_between` that takes an iterable, a start index, and an end index, and returns the elements between those indices (inclusive) using `islice`. For example, `take_between("abcdefgh", 2, 5)` should return `['c', 'd', 'e', 'f']`.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    from itertools import islice
+
+    def take_between(iterable, start, end):
+        return list(islice(iterable, start, end + 1))
+
+    # Test
+    print(take_between("abcdefgh", 2, 5))  # ['c', 'd', 'e', 'f']
+    print(take_between(range(100), 10, 13))  # [10, 11, 12, 13]
+    ```

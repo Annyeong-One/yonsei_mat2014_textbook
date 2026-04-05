@@ -253,3 +253,83 @@ if __name__ == "__main__":
 
     print("\nDone!")
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create sample data `x = [0, 1, 2, 3, 4, 5]` and `y = [0, 0.8, 0.9, 0.1, -0.8, -1.0]`. Build both a linear and a cubic `interp1d` interpolant. Evaluate both at `x_fine = np.linspace(0, 5, 100)` and print the maximum difference between the linear and cubic interpolations.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        from scipy.interpolate import interp1d
+
+        x = np.array([0, 1, 2, 3, 4, 5], dtype=float)
+        y = np.array([0, 0.8, 0.9, 0.1, -0.8, -1.0])
+
+        f_linear = interp1d(x, y, kind='linear')
+        f_cubic = interp1d(x, y, kind='cubic')
+
+        x_fine = np.linspace(0, 5, 100)
+        y_linear = f_linear(x_fine)
+        y_cubic = f_cubic(x_fine)
+
+        max_diff = np.max(np.abs(y_linear - y_cubic))
+        print(f"Max difference between linear and cubic: {max_diff:.4f}")
+
+---
+
+**Exercise 2.**
+Given tabulated data representing a probability density, use `interp1d` with `kind='cubic'` and `scipy.integrate.quad` to compute the mean of the distribution:
+
+```python
+x = np.array([0, 1, 2, 3, 4, 5])
+pdf = np.array([0.0, 0.2, 0.5, 0.2, 0.1, 0.0])
+```
+
+Compute `mean = integral(x * f(x)) / integral(f(x))` over `[0, 5]`.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy.interpolate import interp1d
+        from scipy.integrate import quad
+
+        x = np.array([0, 1, 2, 3, 4, 5], dtype=float)
+        pdf = np.array([0.0, 0.2, 0.5, 0.2, 0.1, 0.0])
+
+        f = interp1d(x, pdf, kind='cubic')
+
+        numerator = quad(lambda t: t * f(t), 0, 5)[0]
+        denominator = quad(f, 0, 5)[0]
+        mean = numerator / denominator
+        print(f"Mean of distribution: {mean:.4f}")
+
+---
+
+**Exercise 3.**
+Create a 5x5 grid of data points for `z = sin(x) * cos(y)` on `[0, pi] x [0, pi]`. Use `interp2d` with `kind='cubic'` to interpolate onto a 50x50 fine grid. Compute the maximum interpolation error by comparing with the true function values on the fine grid.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy.interpolate import interp2d
+
+        x = np.linspace(0, np.pi, 5)
+        y = np.linspace(0, np.pi, 5)
+        X, Y = np.meshgrid(x, y)
+        Z = np.sin(X) * np.cos(Y)
+
+        f = interp2d(x, y, Z, kind='cubic')
+
+        x_fine = np.linspace(0, np.pi, 50)
+        y_fine = np.linspace(0, np.pi, 50)
+        Z_interp = f(x_fine, y_fine)
+
+        Xf, Yf = np.meshgrid(x_fine, y_fine)
+        Z_exact = np.sin(Xf) * np.cos(Yf)
+
+        max_error = np.max(np.abs(Z_interp - Z_exact))
+        print(f"Max interpolation error: {max_error:.6f}")

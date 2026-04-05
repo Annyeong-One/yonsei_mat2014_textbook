@@ -480,3 +480,127 @@ weather = Weather()
 weather.temp = {'value': 77, 'unit': 'F'}
 print(weather.temp)  # 25.0 (Celsius)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a `RangeValidator` descriptor that ensures a value falls within a specified range. The descriptor should accept `min_val` and `max_val` in its `__init__`. Use it in a `Student` class with `grade` (0--100) and `age` (5--25) fields. Demonstrate that out-of-range values raise `ValueError`.
+
+??? success "Solution to Exercise 1"
+
+        class RangeValidator:
+            def __init__(self, min_val, max_val):
+                self.min_val = min_val
+                self.max_val = max_val
+
+            def __set_name__(self, owner, name):
+                self.name = name
+
+            def __get__(self, obj, objtype=None):
+                if obj is None:
+                    return self
+                return obj.__dict__.get(self.name)
+
+            def __set__(self, obj, value):
+                if not self.min_val <= value <= self.max_val:
+                    raise ValueError(
+                        f"{self.name} must be between {self.min_val} and {self.max_val}, got {value}"
+                    )
+                obj.__dict__[self.name] = value
+
+        class Student:
+            grade = RangeValidator(0, 100)
+            age = RangeValidator(5, 25)
+
+            def __init__(self, name, grade, age):
+                self.name = name
+                self.grade = grade
+                self.age = age
+
+        s = Student("Alice", 95, 20)
+        print(s.grade)  # 95
+
+        try:
+            s.grade = 105
+        except ValueError as e:
+            print(f"Error: {e}")
+
+---
+
+**Exercise 2.**
+Write a `TypeChecked` descriptor that enforces a specific type on assignment. It should accept the expected type in `__init__`. Use it in a `Config` class: `name` must be `str`, `port` must be `int`, `debug` must be `bool`. Show that assigning a wrong type raises `TypeError`.
+
+??? success "Solution to Exercise 2"
+
+        class TypeChecked:
+            def __init__(self, expected_type):
+                self.expected_type = expected_type
+
+            def __set_name__(self, owner, name):
+                self.name = name
+
+            def __get__(self, obj, objtype=None):
+                if obj is None:
+                    return self
+                return obj.__dict__.get(self.name)
+
+            def __set__(self, obj, value):
+                if not isinstance(value, self.expected_type):
+                    raise TypeError(
+                        f"{self.name} must be {self.expected_type.__name__}, got {type(value).__name__}"
+                    )
+                obj.__dict__[self.name] = value
+
+        class Config:
+            name = TypeChecked(str)
+            port = TypeChecked(int)
+            debug = TypeChecked(bool)
+
+            def __init__(self, name, port, debug):
+                self.name = name
+                self.port = port
+                self.debug = debug
+
+        c = Config("app", 8080, True)
+        print(c.name)  # app
+
+        try:
+            c.port = "not a number"
+        except TypeError as e:
+            print(f"Error: {e}")
+
+---
+
+**Exercise 3.**
+Build a `Cached` descriptor that computes a value on first access (using a provided callable) and caches the result. Subsequent accesses return the cached value without recomputation. Use it in a `DataLoader` class that has a `data` attribute whose computation is expensive (simulate with `time.sleep`). Show that the second access is instant.
+
+??? success "Solution to Exercise 3"
+
+        import time
+
+        class Cached:
+            def __init__(self, func):
+                self.func = func
+
+            def __set_name__(self, owner, name):
+                self.name = name
+
+            def __get__(self, obj, objtype=None):
+                if obj is None:
+                    return self
+                if self.name not in obj.__dict__:
+                    obj.__dict__[self.name] = self.func(obj)
+                return obj.__dict__[self.name]
+
+        class DataLoader:
+            @Cached
+            def data(self):
+                print("Computing (expensive)...")
+                time.sleep(0.1)  # Simulate expensive computation
+                return [1, 2, 3, 4, 5]
+
+        loader = DataLoader()
+        print(loader.data)  # Computing (expensive)... [1, 2, 3, 4, 5]
+        print(loader.data)  # [1, 2, 3, 4, 5] — cached, no recomputation

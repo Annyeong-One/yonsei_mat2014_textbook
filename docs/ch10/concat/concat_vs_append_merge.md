@@ -187,3 +187,55 @@ Use the following rules to choose between the three operations.
 - `DataFrame.append` was removed in pandas 2.0 — always use `pd.concat` instead
 - Collect DataFrames in a list and concat once to avoid quadratic copying overhead
 - Choose `merge` for database-style joins and `concat` for simple stacking operations
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Explain the difference between `pd.concat()`, `pd.merge()`, and `DataFrame.join()`. When would you use each?
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+
+    df1 = pd.DataFrame({'A': [1, 2], 'B': [3, 4]})
+    df2 = pd.DataFrame({'A': [5, 6], 'B': [7, 8]})
+    result = pd.concat([df1, df2], ignore_index=True)
+    print(result)
+    ```
+
+---
+
+**Exercise 2.** Write code that demonstrates the same result using both `pd.concat([df1, df2], axis=1)` and `df1.join(df2)`.
+
+??? success "Solution to Exercise 2"
+    See the explanation in the main content. The key concept involves understanding how `pd.concat()` aligns data along the specified axis and handles mismatched indices or columns.
+
+---
+
+**Exercise 3.** Create two DataFrames and show that `pd.merge()` performs a join on a common column while `pd.concat()` simply stacks rows or columns.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+
+    df1 = pd.DataFrame({'A': [1, 2], 'B': [3, 4]})
+    df2 = pd.DataFrame({'A': [5, 6], 'C': [7, 8]})
+    result = pd.concat([df1, df2], axis=0)
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Write code that combines rows from two DataFrames. First use `pd.concat()`, then achieve the same result using `pd.merge()` with `how='outer'`.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+
+    df1 = pd.DataFrame({'A': [1, 2]}, index=[0, 1])
+    df2 = pd.DataFrame({'A': [3, 4]}, index=[2, 3])
+    result = pd.concat([df1, df2])
+    print(result)
+    ```

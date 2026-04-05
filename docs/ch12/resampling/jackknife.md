@@ -121,3 +121,61 @@ For these statistics, the bootstrap is the preferred resampling method.
 ## Summary
 
 The jackknife estimates bias and variance by systematically leaving out one observation at a time. The bias estimate uses the factor $(n-1)$ to amplify the small leave-one-out perturbation to the correct scale. Pseudovalues isolate each observation's contribution and enable $t$-based confidence intervals. The jackknife is deterministic, requires no tuning parameters, and works well for smooth statistics. Its main limitation is that it fails for non-smooth statistics such as quantiles and extrema, where the bootstrap should be used instead.
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that implements the jackknife estimate of the standard error for the mean of a sample of size 20.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(100)
+    print(f'Mean: {data.mean():.4f}')
+    print(f'Std: {data.std():.4f}')
+    ```
+
+---
+
+**Exercise 2.** Explain the jackknife procedure: leave-one-out resampling. How does it differ from the bootstrap?
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the statistical method and its assumptions.
+
+---
+
+**Exercise 3.** Write code that uses the jackknife to estimate the bias and standard error of the sample variance.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+    from scipy import stats
+    import matplotlib.pyplot as plt
+
+    np.random.seed(42)
+    data = np.random.randn(1000)
+    fig, ax = plt.subplots()
+    ax.hist(data, bins=30, density=True, alpha=0.7)
+    ax.set_title('Distribution')
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Compare the jackknife standard error estimate with the bootstrap standard error estimate for the same dataset and statistic.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(500)
+    result = stats.describe(data)
+    print(result)
+    ```

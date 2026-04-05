@@ -420,3 +420,93 @@ def process_order():
 - Works for both sync and async code
 - Replaces `threading.local()` for async-aware context
 - Essential for request context, transactions, logging in async apps
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a `ContextVar` called `request_id`. Write an async function `handle_request(rid)` that sets the variable, awaits a helper coroutine `process()`, and prints the `request_id` after the helper returns. Run 3 concurrent `handle_request` calls with different IDs using `asyncio.gather()` and verify each task sees its own value.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import asyncio
+        import contextvars
+
+        request_id = contextvars.ContextVar("request_id", default=None)
+
+        async def process():
+            await asyncio.sleep(0.1)
+            return f"processed by {request_id.get()}"
+
+        async def handle_request(rid):
+            request_id.set(rid)
+            result = await process()
+            print(f"Request {rid}: {result}")
+
+        async def main():
+            await asyncio.gather(
+                handle_request("req-1"),
+                handle_request("req-2"),
+                handle_request("req-3"),
+            )
+
+        asyncio.run(main())
+        ```
+
+---
+
+**Exercise 2.**
+Demonstrate the token-based reset mechanism. Create a `ContextVar` with default `"initial"`. Set it to `"first"`, save the token, then set it to `"second"`. Reset using the token and verify the value is back to `"first"`. Reset again (if applicable) and verify it returns to `"initial"`.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import contextvars
+
+        var = contextvars.ContextVar("var", default="initial")
+
+        token1 = var.set("first")
+        print(f"After set 'first': {var.get()}")
+
+        token2 = var.set("second")
+        print(f"After set 'second': {var.get()}")
+
+        var.reset(token2)
+        print(f"After reset token2: {var.get()}")  # "first"
+
+        var.reset(token1)
+        print(f"After reset token1: {var.get()}")  # "initial"
+        ```
+
+---
+
+**Exercise 3.**
+Write a `request_context` context manager (using `contextlib.contextmanager`) that accepts `user` and `trace_id`, sets two `ContextVar` values on entry, and resets them on exit. Verify that after exiting the context, the variables return to their defaults.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import contextvars
+        from contextlib import contextmanager
+
+        current_user = contextvars.ContextVar("current_user", default=None)
+        trace_id = contextvars.ContextVar("trace_id", default=None)
+
+        @contextmanager
+        def request_context(user, tid):
+            token_user = current_user.set(user)
+            token_trace = trace_id.set(tid)
+            try:
+                yield
+            finally:
+                current_user.reset(token_user)
+                trace_id.reset(token_trace)
+
+        # Verify defaults before
+        print(f"Before: user={current_user.get()}, trace={trace_id.get()}")
+
+        with request_context("alice", "trace-123"):
+            print(f"Inside: user={current_user.get()}, trace={trace_id.get()}")
+
+        # Verify defaults restored
+        print(f"After: user={current_user.get()}, trace={trace_id.get()}")
+        ```

@@ -417,3 +417,130 @@ Parallelism:        Concurrent           True parallel
 - **Error isolation**: Process crashes are isolated; thread crashes can corrupt shared state
 - **Rule of thumb**: Threads for I/O, processes for CPU
 - **concurrent.futures** abstracts the choice with unified API
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a program that creates a shared list using threads and an isolated list using processes. In the thread version, two threads each append 5 items; print the shared list from the main thread. In the process version, do the same and print the list from the main process to show it remains empty (because processes have isolated memory).
+
+??? success "Solution to Exercise 1"
+        ```python
+        import threading
+        from multiprocessing import Process
+
+        # Thread version — shared memory
+        shared_list = []
+
+        def thread_worker(name, n):
+            for i in range(n):
+                shared_list.append(f"{name}-{i}")
+
+        t1 = threading.Thread(target=thread_worker, args=("A", 5))
+        t2 = threading.Thread(target=thread_worker, args=("B", 5))
+        t1.start(); t2.start()
+        t1.join(); t2.join()
+        print(f"Threads shared list ({len(shared_list)} items): {shared_list}")
+
+        # Process version — isolated memory
+        isolated_list = []
+
+        def process_worker(name, n):
+            for i in range(n):
+                isolated_list.append(f"{name}-{i}")
+            print(f"  Inside {name}: {isolated_list}")
+
+        if __name__ == "__main__":
+            p1 = Process(target=process_worker, args=("A", 5))
+            p2 = Process(target=process_worker, args=("B", 5))
+            p1.start(); p2.start()
+            p1.join(); p2.join()
+            print(f"Main process list (should be empty): {isolated_list}")
+        ```
+
+---
+
+**Exercise 2.**
+Benchmark the creation overhead of threads vs processes. Create and join 50 threads (each running a no-op function), then do the same with 50 processes. Measure and print the elapsed time for each. Compute how many times slower process creation is compared to thread creation.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import time
+        import threading
+        from multiprocessing import Process
+
+        def noop():
+            pass
+
+        if __name__ == "__main__":
+            # Threads
+            start = time.perf_counter()
+            threads = [threading.Thread(target=noop) for _ in range(50)]
+            for t in threads:
+                t.start()
+            for t in threads:
+                t.join()
+            thr_time = time.perf_counter() - start
+
+            # Processes
+            start = time.perf_counter()
+            procs = [Process(target=noop) for _ in range(50)]
+            for p in procs:
+                p.start()
+            for p in procs:
+                p.join()
+            proc_time = time.perf_counter() - start
+
+            print(f"50 threads:   {thr_time*1000:.1f}ms")
+            print(f"50 processes: {proc_time*1000:.1f}ms")
+            print(f"Processes are {proc_time/thr_time:.1f}x slower to create")
+        ```
+
+---
+
+**Exercise 3.**
+Write a program that uses `multiprocessing.Queue` to pass results from 4 worker processes back to the main process. Each worker computes the sum of squares from 0 to N (where N is passed as an argument) and puts the result in the queue. The main process collects all results and prints them. Compare with a threaded version using `queue.Queue`.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import time
+        import queue
+        import threading
+        from multiprocessing import Process, Queue as MPQueue
+
+        def mp_worker(n, q):
+            q.put(sum(i * i for i in range(n)))
+
+        def thr_worker(n, q):
+            q.put(sum(i * i for i in range(n)))
+
+        if __name__ == "__main__":
+            N = 2_000_000
+            args = [N] * 4
+
+            # multiprocessing version
+            mpq = MPQueue()
+            start = time.perf_counter()
+            procs = [Process(target=mp_worker, args=(n, mpq)) for n in args]
+            for p in procs:
+                p.start()
+            for p in procs:
+                p.join()
+            mp_results = [mpq.get() for _ in args]
+            mp_time = time.perf_counter() - start
+
+            # threading version
+            tq = queue.Queue()
+            start = time.perf_counter()
+            threads = [threading.Thread(target=thr_worker, args=(n, tq)) for n in args]
+            for t in threads:
+                t.start()
+            for t in threads:
+                t.join()
+            thr_results = [tq.get() for _ in args]
+            thr_time = time.perf_counter() - start
+
+            print(f"Processes: {mp_time:.2f}s, results={mp_results}")
+            print(f"Threads:   {thr_time:.2f}s, results={thr_results}")
+        ```

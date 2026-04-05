@@ -398,7 +398,7 @@ Typical results:
 - Parquet files are 2-10x smaller than CSV
 - Column selection in Parquet provides additional speedup
 
-## Common Pitfalls
+## Common Pitfalls (SQL)
 
 ### 1. Database Connection Not Closed
 
@@ -433,3 +433,86 @@ df = pd.read_parquet('data.parquet')
 # Convert categorical back if needed
 df['category'] = df['category'].astype('category')
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Using SQLite and `pd.read_sql`, create an in-memory database with a table named `products` that has columns `id`, `name`, and `price`. Insert three rows, then read the table into a DataFrame using a parameterized query that selects only products with `price > 10`.
+
+??? success "Solution to Exercise 1"
+    Create an in-memory SQLite database, insert rows, and query with parameters.
+
+        import pandas as pd
+        import sqlite3
+
+        conn = sqlite3.connect(':memory:')
+        conn.execute('''
+            CREATE TABLE products (id INTEGER, name TEXT, price REAL)
+        ''')
+        conn.executemany(
+            'INSERT INTO products VALUES (?, ?, ?)',
+            [(1, 'Widget', 9.99), (2, 'Gadget', 19.99), (3, 'Gizmo', 14.99)]
+        )
+        conn.commit()
+
+        query = "SELECT * FROM products WHERE price > ?"
+        df = pd.read_sql(query, conn, params=[10])
+        print(df)
+        conn.close()
+
+---
+
+**Exercise 2.**
+Create a DataFrame with columns `'date'`, `'ticker'`, and `'close'`. Save it to a Parquet file. Then read back only the `'ticker'` and `'close'` columns (without loading `'date'`) and verify the result has exactly two columns.
+
+??? success "Solution to Exercise 2"
+    Use the `columns` parameter of `read_parquet` to select specific columns.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'date': pd.date_range('2024-01-01', periods=5),
+            'ticker': ['AAPL'] * 5,
+            'close': [150.0, 151.0, 149.0, 152.0, 153.0]
+        })
+        df.to_parquet('stock_data.parquet', index=False)
+
+        df_subset = pd.read_parquet('stock_data.parquet', columns=['ticker', 'close'])
+        print(df_subset)
+        print(f"Number of columns: {len(df_subset.columns)}")  # 2
+
+---
+
+**Exercise 3.**
+Create a DataFrame with 10,000 rows. Save it as both CSV and Parquet. Read both files back and compare the read times using `time.time()`. Print the speedup factor.
+
+??? success "Solution to Exercise 3"
+    Time the read operations and compute the speedup ratio.
+
+        import pandas as pd
+        import numpy as np
+        import time
+
+        np.random.seed(42)
+        df = pd.DataFrame({
+            'id': range(10000),
+            'value': np.random.randn(10000),
+            'category': np.random.choice(['A', 'B', 'C', 'D'], 10000)
+        })
+
+        df.to_csv('bench.csv', index=False)
+        df.to_parquet('bench.parquet')
+
+        start = time.time()
+        _ = pd.read_csv('bench.csv')
+        csv_time = time.time() - start
+
+        start = time.time()
+        _ = pd.read_parquet('bench.parquet')
+        parquet_time = time.time() - start
+
+        print(f"CSV read: {csv_time:.4f}s")
+        print(f"Parquet read: {parquet_time:.4f}s")
+        print(f"Speedup: {csv_time / parquet_time:.1f}x")

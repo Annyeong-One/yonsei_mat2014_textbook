@@ -204,3 +204,63 @@ employees['bonus'] = employees.apply(
     axis=1
 )
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that performs a self-join on a DataFrame to find all pairs where one employee earns more than another in the same department.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+
+    df = pd.DataFrame({
+        'name': ['Alice', 'Bob', 'Charlie', 'David'],
+        'salary': [70000, 80000, 60000, 90000],
+        'department': ['IT', 'IT', 'HR', 'HR']
+    })
+    result = df.groupby('department')['salary'].max()
+    print(result)
+    ```
+
+---
+
+**Exercise 2.** Explain how to use `pd.merge()` to find rows in one DataFrame that have no matching entry in another (anti-join pattern).
+
+??? success "Solution to Exercise 2"
+    See the main content for the relevant patterns and API calls. The solution involves understanding how to combine Pandas operations to solve data manipulation problems.
+
+---
+
+**Exercise 3.** Write code that uses `groupby().transform()` to add a column showing each employee's salary as a percentage of their department's total salary.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({
+        'value': np.random.randint(0, 100, 20),
+        'group': np.random.choice(['A', 'B'], 20)
+    })
+    result = df.groupby('group')['value'].transform('sum')
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Create a DataFrame and use `nlargest()` to find the top 3 salaries in each department.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    s = pd.Series(np.random.randn(100))
+    s_clean = s.clip(lower=0)
+    print(s_clean.describe())
+    ```

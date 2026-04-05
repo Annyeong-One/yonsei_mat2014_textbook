@@ -54,3 +54,62 @@ The following table summarizes the four possible outcomes of a hypothesis test:
 ## Summary
 
 Type I errors (false positives, probability $\alpha$) and Type II errors (false negatives, probability $\beta$) represent the two fundamental mistakes in hypothesis testing. The power of a test, $1 - \beta$, measures its ability to detect a true effect, and the trade-off between $\alpha$ and $\beta$ is governed by sample size and effect size.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Simulate the Type I error rate: run 10,000 one-sample t-tests with data drawn from $N(0, 1)$ (i.e., $H_0$ is true, testing $\mu = 0$). Count how many reject at $\alpha = 0.01, 0.05, 0.10$ and verify the rejection rates match the nominal levels.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        p_values = []
+        for _ in range(10000):
+            data = np.random.normal(0, 1, 30)
+            _, p = stats.ttest_1samp(data, 0)
+            p_values.append(p)
+        p_values = np.array(p_values)
+
+        for alpha in [0.01, 0.05, 0.10]:
+            rate = np.mean(p_values < alpha)
+            print(f"alpha={alpha}: rejection rate={rate:.4f}")
+
+---
+
+**Exercise 2.**
+Simulate the Type II error rate: run 10,000 t-tests with data from $N(0.3, 1)$ and $n = 30$ (i.e., $H_0: \mu = 0$ is false). Compute the proportion of times $H_0$ is not rejected at $\alpha = 0.05$ (this is the Type II error rate $\beta$), and the power $1 - \beta$.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        not_rejected = 0
+        for _ in range(10000):
+            data = np.random.normal(0.3, 1, 30)
+            _, p = stats.ttest_1samp(data, 0)
+            if p >= 0.05:
+                not_rejected += 1
+        beta = not_rejected / 10000
+        print(f"Type II error rate (beta): {beta:.4f}")
+        print(f"Power (1-beta): {1-beta:.4f}")
+
+---
+
+**Exercise 3.**
+Show the trade-off between Type I and Type II errors by computing the power of a one-sample t-test ($n = 25$, true $\mu = 0.4$, $\sigma = 1$) at significance levels $\alpha = 0.001, 0.01, 0.05, 0.10$ using `statsmodels.stats.power.tt_solve_power()`.
+
+??? success "Solution to Exercise 3"
+
+        from statsmodels.stats.power import tt_solve_power
+
+        for alpha in [0.001, 0.01, 0.05, 0.10]:
+            power = tt_solve_power(effect_size=0.4, nobs=25, alpha=alpha,
+                                   alternative='two-sided')
+            print(f"alpha={alpha:.3f}: power={power:.4f}")

@@ -199,3 +199,56 @@ When building arrays that will be scaled or used as multiplicative identities.
 ### 3. Use np.empty
 
 When you will immediately overwrite all values and need maximum allocation speed.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a 3x4 array of zeros with `dtype=int`, then a 3x4 array of ones with `dtype=float64`. Add them together and print the resulting dtype (should be `float64` due to type promotion).
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        z = np.zeros((3, 4), dtype=int)
+        o = np.ones((3, 4), dtype=np.float64)
+        result = z + o
+        print(f"Result dtype: {result.dtype}")  # float64
+
+---
+
+**Exercise 2.**
+Given `x = np.array([1.5, 2.5, 3.5])`, use `np.zeros_like` and `np.ones_like` to create arrays that match `x`'s shape and dtype. Verify that the dtype of both matches `x.dtype`.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        x = np.array([1.5, 2.5, 3.5])
+        z = np.zeros_like(x)
+        o = np.ones_like(x)
+        print(f"x dtype: {x.dtype}")
+        print(f"zeros_like dtype: {z.dtype}")
+        print(f"ones_like dtype: {o.dtype}")
+        print(f"All match: {z.dtype == x.dtype == o.dtype}")
+
+---
+
+**Exercise 3.**
+Create a `(1000, 1000)` array using `np.empty` and then fill it with the value 7.0 using slice assignment (`a[:] = 7.0`). Verify that every element equals 7.0. Explain why using `np.empty` followed by a fill can be faster than `np.full` for very large arrays.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        import time
+
+        a = np.empty((1000, 1000))
+        a[:] = 7.0
+        print(f"All 7.0: {np.all(a == 7.0)}")
+
+        # np.empty does not initialize memory, so the allocation
+        # step is faster. The subsequent fill writes once.
+        # np.full also allocates and fills, but in some cases
+        # the two-step approach can be faster when combined
+        # with other initialization logic.

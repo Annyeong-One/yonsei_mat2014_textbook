@@ -182,3 +182,65 @@ a, b, c = 1, 2, 3
 
 # Both work the same
 ```
+
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Create a variable `x = [1, 2, 3]` and assign `y = x`. Modify `y` by appending `4`. Print both `x` and `y` and explain why `x` also changed.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    x = [1, 2, 3]
+    y = x
+    y.append(4)
+    print(x)  # [1, 2, 3, 4]
+    print(y)  # [1, 2, 3, 4]
+    ```
+
+    `y = x` does not copy the list. Both `x` and `y` are names pointing to the same object. Modifying through either name affects the shared object.
+
+---
+
+**Exercise 2.**
+Use tuple unpacking to swap two variables `a = 10` and `b = 20` without using a temporary variable. Then use starred unpacking to extract the first and last elements from a list of 10 numbers.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    a, b = 10, 20
+    a, b = b, a
+    print(f"{a=}, {b=}")  # a=20, b=10
+
+    numbers = list(range(10))
+    first, *middle, last = numbers
+    print(f"{first=}, {last=}")  # first=0, last=9
+    ```
+
+    Swap works by creating a tuple `(b, a)` on the right side and unpacking it. The starred expression `*middle` collects all elements between first and last.
+
+---
+
+**Exercise 3.**
+Demonstrate the difference between chained assignment (`a = b = [1,2,3]`) and separate assignment (`a = [1,2,3]; b = [1,2,3]`). Show that chained assignment creates shared references while separate assignment creates independent objects.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    # Chained: same object
+    a = b = [1, 2, 3]
+    a.append(4)
+    print(b)  # [1, 2, 3, 4] (shared reference)
+
+    # Separate: different objects
+    a = [1, 2, 3]
+    b = [1, 2, 3]
+    a.append(4)
+    print(b)  # [1, 2, 3] (independent)
+    ```
+
+    Chained assignment binds all names to the same object. Separate assignments create distinct objects, even if the values are identical.

@@ -210,3 +210,63 @@ re.findall(r'\d{4}-\d{2}-\d{2}', text)
 | `\` escape | Precede metacharacters with `\` to match literally |
 | `\d \w \s` | Shorthand for digit, word, whitespace classes |
 | `\b` | Word boundary (position, not character) |
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a regex pattern that matches a simple IP address format: four groups of 1-3 digits separated by dots (e.g., `192.168.1.1`). Use the dot metacharacter properly (escaped). Test against `"192.168.1.1"`, `"256.1.1.1"`, and `"10.0.0.1"`.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    import re
+
+    pattern = r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$'
+
+    tests = ["192.168.1.1", "256.1.1.1", "10.0.0.1", "1.2.3"]
+    for t in tests:
+        match = re.fullmatch(pattern, t)
+        print(f"'{t}': {'Match' if match else 'No match'}")
+    # Note: this matches format only, not valid ranges (0-255)
+    ```
+
+---
+
+**Exercise 2.**
+Write a regex using alternation (`|`) that matches either `"cat"`, `"dog"`, or `"bird"` as whole words only. Test it against `"I have a cat and a category"` -- it should match `"cat"` but not the `"cat"` in `"category"`.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    import re
+
+    pattern = r'\b(?:cat|dog|bird)\b'
+    text = "I have a cat and a category and a dog"
+    matches = re.findall(pattern, text)
+    print(matches)  # ['cat', 'dog']
+    ```
+
+---
+
+**Exercise 3.**
+Write a regex that matches a simple Python variable name: starts with a letter or underscore, followed by zero or more letters, digits, or underscores. Test against `"my_var"`, `"_private"`, `"2invalid"`, `"class"`, and `"hello_world_123"`.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    import re
+
+    pattern = r'^[a-zA-Z_]\w*$'
+
+    tests = ["my_var", "_private", "2invalid", "class", "hello_world_123"]
+    for t in tests:
+        match = re.fullmatch(pattern, t)
+        print(f"'{t}': {'Valid name' if match else 'Invalid'}")
+    # 'my_var': Valid name
+    # '_private': Valid name
+    # '2invalid': Invalid
+    # 'class': Valid name (syntactically valid, even if keyword)
+    # 'hello_world_123': Valid name
+    ```

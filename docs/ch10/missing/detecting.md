@@ -809,3 +809,65 @@ if __name__ == "__main__":
 
     print(summary)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a DataFrame with some `NaN` values scattered across multiple columns. Use `.isnull().sum()` to count missing values per column and `.isnull().sum().sum()` to count the total number of missing values.
+
+??? success "Solution to Exercise 1"
+    Count missing values per column and total.
+
+        import pandas as pd
+        import numpy as np
+
+        df = pd.DataFrame({
+            'A': [1, np.nan, 3, np.nan],
+            'B': [np.nan, 2, np.nan, 4],
+            'C': [1, 2, 3, 4]
+        })
+        print("Per column:\n", df.isnull().sum())
+        print("Total:", df.isnull().sum().sum())
+
+---
+
+**Exercise 2.**
+Create a DataFrame and use `.notnull()` to create a boolean mask. Use this mask to select only the rows where a specific column has no missing values.
+
+??? success "Solution to Exercise 2"
+    Filter rows using notnull mask.
+
+        import pandas as pd
+        import numpy as np
+
+        df = pd.DataFrame({
+            'name': ['Alice', 'Bob', None, 'Dave'],
+            'score': [90, np.nan, 85, 88]
+        })
+        mask = df['score'].notnull()
+        result = df[mask]
+        print(result)
+
+---
+
+**Exercise 3.**
+Create a DataFrame with 5 columns. Compute the percentage of missing values per column. Identify which columns have more than 50% missing data.
+
+??? success "Solution to Exercise 3"
+    Compute percentage of missing values per column.
+
+        import pandas as pd
+        import numpy as np
+
+        df = pd.DataFrame({
+            'A': [1, np.nan, np.nan, np.nan],
+            'B': [1, 2, np.nan, 4],
+            'C': [1, 2, 3, 4],
+            'D': [np.nan, np.nan, np.nan, 4],
+            'E': [np.nan, np.nan, np.nan, np.nan]
+        })
+        pct_missing = df.isnull().mean() * 100
+        print("Missing %:\n", pct_missing)
+        print("\nColumns >50% missing:", pct_missing[pct_missing > 50].index.tolist())

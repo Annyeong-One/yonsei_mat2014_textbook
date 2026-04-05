@@ -184,3 +184,56 @@ print(x.ravel(order='F'))  # [1 3 2 4]
 ```
 
 Column-major order (Fortran-style).
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create `a = np.arange(12).reshape(3, 4)`. Flatten it using both `a.ravel()` and `a.flatten()`. Modify the first element of each result and check which modification affects the original array `a`.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        a = np.arange(12).reshape(3, 4)
+        r = a.ravel()
+        f = a.flatten()
+
+        r[0] = 99
+        print(f"After ravel mod: a[0,0] = {a[0, 0]}")  # 99 (view)
+
+        a2 = np.arange(12).reshape(3, 4)
+        f = a2.flatten()
+        f[0] = 88
+        print(f"After flatten mod: a2[0,0] = {a2[0, 0]}")  # 0 (copy)
+
+---
+
+**Exercise 2.**
+Test `np.ravel` with both `order='C'` (row-major) and `order='F'` (column-major) on a 2x3 matrix. Print both results and explain why the element order differs.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        a = np.array([[1, 2, 3], [4, 5, 6]])
+        print(f"C order: {np.ravel(a, order='C')}")  # [1 2 3 4 5 6]
+        print(f"F order: {np.ravel(a, order='F')}")  # [1 4 2 5 3 6]
+        # C order reads row by row, F order reads column by column.
+
+---
+
+**Exercise 3.**
+Create a non-contiguous array `b = np.arange(20).reshape(4, 5)[:, ::2]`. Show that `b.ravel()` returns a copy (not a view) by checking `b.ravel().base`. Explain why `ravel` cannot return a view for non-contiguous arrays.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        b = np.arange(20).reshape(4, 5)[:, ::2]
+        r = b.ravel()
+        print(f"Is view: {r.base is b}")  # False (copy)
+        # ravel cannot return a view for non-contiguous arrays
+        # because the elements are not in a single contiguous
+        # memory block.

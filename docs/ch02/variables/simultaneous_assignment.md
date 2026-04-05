@@ -195,3 +195,61 @@ a, *b = [1, 2, 3, 4, 5]
 print(f"{a = }, {b = }")
 # a = 1, b = [2, 3, 4, 5]
 ```
+
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Use simultaneous assignment to swap three variables `a = 1, b = 2, c = 3` so that `a` gets `c`'s value, `b` gets `a`'s value, and `c` gets `b`'s value. Do it in one line.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    a, b, c = 1, 2, 3
+    a, b, c = c, a, b
+    print(f"{a=}, {b=}, {c=}")
+    # a=3, b=1, c=2
+    ```
+
+    The right side creates a tuple `(c, a, b)` = `(3, 1, 2)` before any assignments happen, then unpacks it to the left side.
+
+---
+
+**Exercise 2.**
+Write a function that returns three values (name, age, city). Use tuple unpacking to capture the results. Then use starred unpacking to capture only the first value and collect the rest.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    def get_info():
+        return "Alice", 30, "NYC"
+
+    # Full unpacking
+    name, age, city = get_info()
+    print(f"{name=}, {age=}, {city=}")
+
+    # Starred unpacking
+    name, *rest = get_info()
+    print(f"{name=}, {rest=}")  # rest=[30, 'NYC']
+    ```
+
+    Python functions return tuples implicitly when using comma-separated values. The caller unpacks them directly.
+
+---
+
+**Exercise 3.**
+Demonstrate nested unpacking by extracting values from the structure `((1, 2), (3, 4), (5, 6))` into six separate variables in a single assignment.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    data = ((1, 2), (3, 4), (5, 6))
+    (a, b), (c, d), (e, f) = data
+    print(f"{a=}, {b=}, {c=}, {d=}, {e=}, {f=}")
+    # a=1, b=2, c=3, d=4, e=5, f=6
+    ```
+
+    Nested parentheses on the left side match the structure of the nested tuples on the right, unpacking each level.

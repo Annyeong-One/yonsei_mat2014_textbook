@@ -418,3 +418,65 @@ if __name__ == "__main__":
 | `np.log10(x)` | Log base 10 |
 | `np.log2(x)` | Log base 2 |
 | `np.log1p(x)` | ln(1+x) (accurate for small x) |
+
+---
+
+## Exercises
+
+**Exercise 1.** Compute the element-wise square, cube, and square root of `np.array([1, 4, 9, 16, 25])` using `np.power` and `np.sqrt`.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+
+    arr = np.array([1, 4, 9, 16, 25])
+    print("Square:", np.power(arr, 2))
+    print("Cube:", np.power(arr, 3))
+    print("Sqrt:", np.sqrt(arr))
+    ```
+
+---
+
+**Exercise 2.** Compute $e^x$ for $x = [0, 1, 2, 3]$ using `np.exp`. Verify by comparing with `np.e ** x`.
+
+??? success "Solution to Exercise 2"
+    ```python
+    import numpy as np
+
+    x = np.array([0, 1, 2, 3])
+    print(np.exp(x))
+    print(np.e ** x)
+    # Both produce [1.0, 2.718..., 7.389..., 20.086...]
+    ```
+
+---
+
+**Exercise 3.** Given an array of positive values, compute the natural log, log base 10, and log base 2. Verify that `np.exp(np.log(x))` returns the original values.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+
+    x = np.array([1.0, 10.0, 100.0])
+    print("ln:", np.log(x))
+    print("log10:", np.log10(x))
+    print("log2:", np.log2(x))
+    print("Roundtrip:", np.exp(np.log(x)))  # [1. 10. 100.]
+    ```
+
+---
+
+**Exercise 4.** Implement the softmax function $\text{softmax}(x_i) = e^{x_i} / \sum_j e^{x_j}$ using NumPy. Apply it to `[1.0, 2.0, 3.0]` and verify the outputs sum to 1.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+
+    def softmax(x):
+        e_x = np.exp(x - np.max(x))  # subtract max for numerical stability
+        return e_x / e_x.sum()
+
+    result = softmax(np.array([1.0, 2.0, 3.0]))
+    print(result)
+    print(f"Sum: {result.sum():.10f}")  # 1.0
+    ```

@@ -609,3 +609,124 @@ print()
 if __name__ == '__main__':
     main()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Demonstrate the difference between a global variable and `threading.local()`. Create a global `request_id` and a `threading.local()` with a `request_id` attribute. Spawn 5 threads that each set both to their thread number, sleep for 0.1 seconds, then print both values. Show that the global variable is overwritten while the thread-local variable retains the correct value.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import threading
+        import time
+
+        global_req_id = None
+        local_data = threading.local()
+
+        def worker(tid):
+            global global_req_id
+            global_req_id = tid
+            local_data.request_id = tid
+            time.sleep(0.1)
+            print(f"Thread {tid}: global={global_req_id}, "
+                  f"local={local_data.request_id}")
+
+        threads = [threading.Thread(target=worker, args=(i,)) for i in range(5)]
+        for t in threads:
+            t.start()
+        for t in threads:
+            t.join()
+        # global_req_id may show wrong value; local always correct
+        ```
+
+---
+
+**Exercise 2.**
+Implement a `ThreadLocalDB` class that lazily creates one `sqlite3` in-memory connection per thread. Write a method `execute(sql, params)` that uses the thread's connection. Spawn 3 threads that each create a table with a unique name, insert a row, and query it back. Verify each thread only sees its own table.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import threading
+        import sqlite3
+
+        class ThreadLocalDB:
+            def __init__(self):
+                self._local = threading.local()
+
+            @property
+            def connection(self):
+                if not hasattr(self._local, 'conn'):
+                    self._local.conn = sqlite3.connect(':memory:')
+                return self._local.conn
+
+            def execute(self, sql, params=()):
+                cur = self.connection.cursor()
+                cur.execute(sql, params)
+                self.connection.commit()
+                return cur.fetchall()
+
+        db = ThreadLocalDB()
+
+        def worker(wid):
+            table = f"t_{wid}"
+            db.execute(f"CREATE TABLE {table} (val TEXT)")
+            db.execute(f"INSERT INTO {table} VALUES (?)", (f"data-{wid}",))
+            rows = db.execute(f"SELECT * FROM {table}")
+            print(f"Thread {wid}: {rows}")
+
+        threads = [threading.Thread(target=worker, args=(i,)) for i in range(3)]
+        for t in threads:
+            t.start()
+        for t in threads:
+            t.join()
+        ```
+
+---
+
+**Exercise 3.**
+Write a `request_context` context manager using `threading.local()` that stores `user_id` and `request_id`. Write helper functions `get_user()` and `get_request()` that read from the context. Spawn 4 threads that each enter a context with different values, call a `process()` function that reads and prints both values, then exit the context. Verify there is no cross-thread leakage.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import threading
+        from contextlib import contextmanager
+
+        _ctx = threading.local()
+
+        @contextmanager
+        def request_context(user_id, request_id):
+            _ctx.user_id = user_id
+            _ctx.request_id = request_id
+            try:
+                yield
+            finally:
+                del _ctx.user_id
+                del _ctx.request_id
+
+        def get_user():
+            return getattr(_ctx, 'user_id', None)
+
+        def get_request():
+            return getattr(_ctx, 'request_id', None)
+
+        def process():
+            print(f"  [{threading.current_thread().name}] "
+                  f"user={get_user()}, request={get_request()}")
+
+        def handler(uid, rid):
+            with request_context(uid, rid):
+                process()
+            assert get_user() is None  # cleaned up
+
+        threads = [
+            threading.Thread(target=handler, args=(f"user{i}", f"req{i}"))
+            for i in range(4)
+        ]
+        for t in threads:
+            t.start()
+        for t in threads:
+            t.join()
+        print("No cross-thread leakage.")
+        ```

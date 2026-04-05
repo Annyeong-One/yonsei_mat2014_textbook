@@ -341,3 +341,203 @@ if __name__ == "__main__":
     process_order(stripe, 100)
     process_order(paypal, 50)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.** Define an abstract base class `Vehicle` with abstract methods `start_engine()` and `stop_engine()`. Then create two concrete subclasses, `Car` and `Motorcycle`, each providing its own implementation. Instantiate both and call their methods.
+
+??? success "Solution to Exercise 1"
+    ```python
+    from abc import ABC, abstractmethod
+
+    class Vehicle(ABC):
+        @abstractmethod
+        def start_engine(self):
+            pass
+
+        @abstractmethod
+        def stop_engine(self):
+            pass
+
+    class Car(Vehicle):
+        def start_engine(self):
+            print("Car engine started: vroom!")
+
+        def stop_engine(self):
+            print("Car engine stopped.")
+
+    class Motorcycle(Vehicle):
+        def start_engine(self):
+            print("Motorcycle engine started: braaap!")
+
+        def stop_engine(self):
+            print("Motorcycle engine stopped.")
+
+    car = Car()
+    car.start_engine()    # Car engine started: vroom!
+    car.stop_engine()     # Car engine stopped.
+
+    moto = Motorcycle()
+    moto.start_engine()   # Motorcycle engine started: braaap!
+    moto.stop_engine()    # Motorcycle engine stopped.
+    ```
+
+---
+
+**Exercise 2.** Predict the output of the following code. Explain why it behaves the way it does.
+
+```python
+from abc import ABC, abstractmethod
+
+class Logger(ABC):
+    @abstractmethod
+    def log(self, message):
+        pass
+
+class FileLogger(Logger):
+    pass
+
+try:
+    f = FileLogger()
+except TypeError as e:
+    print(e)
+```
+
+??? success "Solution to Exercise 2"
+    The output is:
+
+    ```
+    Can't instantiate abstract class FileLogger without an implementation for abstract method 'log'
+    ```
+
+    `FileLogger` inherits from `Logger` but does not implement the abstract method `log`. Python enforces that all abstract methods must be implemented before a class can be instantiated. Attempting to create an instance of `FileLogger` raises a `TypeError` because the `log` method is still abstract.
+
+---
+
+**Exercise 3.** Create an abstract class `Converter` with an abstract class method `from_string(cls, s)` and an abstract property `unit`. Write a concrete subclass `TemperatureConverter` that implements both. The `from_string` method should parse a string like `"100C"` and return an instance, and the `unit` property should return `"Celsius"`.
+
+??? success "Solution to Exercise 3"
+    ```python
+    from abc import ABC, abstractmethod
+
+    class Converter(ABC):
+        @classmethod
+        @abstractmethod
+        def from_string(cls, s):
+            pass
+
+        @property
+        @abstractmethod
+        def unit(self):
+            pass
+
+    class TemperatureConverter(Converter):
+        def __init__(self, value):
+            self._value = value
+
+        @classmethod
+        def from_string(cls, s):
+            # Parse string like "100C"
+            numeric = float(s.rstrip("CcFf"))
+            return cls(numeric)
+
+        @property
+        def unit(self):
+            return "Celsius"
+
+    tc = TemperatureConverter.from_string("100C")
+    print(tc._value)  # 100.0
+    print(tc.unit)    # Celsius
+    ```
+
+---
+
+**Exercise 4.** Using the Template Method pattern, create an abstract class `DataPipeline` with abstract methods `extract()`, `transform(data)`, and `load(data)`, plus a concrete `run()` method that calls them in order. Implement a `CSVPipeline` subclass that prints a message at each step.
+
+??? success "Solution to Exercise 4"
+    ```python
+    from abc import ABC, abstractmethod
+
+    class DataPipeline(ABC):
+        @abstractmethod
+        def extract(self):
+            pass
+
+        @abstractmethod
+        def transform(self, data):
+            pass
+
+        @abstractmethod
+        def load(self, data):
+            pass
+
+        def run(self):
+            raw = self.extract()
+            cleaned = self.transform(raw)
+            self.load(cleaned)
+
+    class CSVPipeline(DataPipeline):
+        def extract(self):
+            print("Extracting data from CSV file...")
+            return ["Alice,30", "Bob,25"]
+
+        def transform(self, data):
+            print("Transforming CSV rows into dictionaries...")
+            result = []
+            for row in data:
+                name, age = row.split(",")
+                result.append({"name": name, "age": int(age)})
+            return result
+
+        def load(self, data):
+            print(f"Loading {len(data)} records into database...")
+            for record in data:
+                print(f"  Inserted: {record}")
+
+    pipeline = CSVPipeline()
+    pipeline.run()
+    ```
+
+---
+
+**Exercise 5.** Write a function `total_area(shapes)` that takes a list of objects and returns the sum of their areas. Use an abstract base class `Shape` with an abstract `area()` method. Create at least three different shape classes and demonstrate polymorphic behavior by passing a mixed list to your function.
+
+??? success "Solution to Exercise 5"
+    ```python
+    from abc import ABC, abstractmethod
+    import math
+
+    class Shape(ABC):
+        @abstractmethod
+        def area(self):
+            pass
+
+    class Circle(Shape):
+        def __init__(self, radius):
+            self.radius = radius
+        def area(self):
+            return math.pi * self.radius ** 2
+
+    class Rectangle(Shape):
+        def __init__(self, width, height):
+            self.width = width
+            self.height = height
+        def area(self):
+            return self.width * self.height
+
+    class Triangle(Shape):
+        def __init__(self, base, height):
+            self.base = base
+            self.height = height
+        def area(self):
+            return 0.5 * self.base * self.height
+
+    def total_area(shapes):
+        return sum(s.area() for s in shapes)
+
+    shapes = [Circle(5), Rectangle(3, 4), Triangle(6, 8)]
+    print(f"Total area: {total_area(shapes):.2f}")
+    # Total area: 78.54 + 12 + 24 = 114.54
+    ```

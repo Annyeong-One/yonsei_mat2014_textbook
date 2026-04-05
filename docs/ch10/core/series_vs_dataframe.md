@@ -491,3 +491,55 @@ if __name__ == '__main__':
     pandas_analysis()
     comparison_summary()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a DataFrame with 3 columns. Extract one column as a Series using `df['col']` and as a single-column DataFrame using `df[['col']]`. Print the type and shape of each.
+
+??? success "Solution to Exercise 1"
+    Compare Series vs single-column DataFrame.
+
+        import pandas as pd
+
+        df = pd.DataFrame({'A': [1, 2], 'B': [3, 4], 'C': [5, 6]})
+        series = df['A']
+        dataframe = df[['A']]
+        print(f"Series type: {type(series)}, shape: {series.shape}")
+        print(f"DataFrame type: {type(dataframe)}, shape: {dataframe.shape}")
+
+---
+
+**Exercise 2.**
+Create a Series and convert it to a DataFrame using `.to_frame()`. Then create a DataFrame and extract a row as a Series using `.loc[]`. Observe how the index of the resulting Series corresponds to the column names.
+
+??? success "Solution to Exercise 2"
+    Convert between Series and DataFrame.
+
+        import pandas as pd
+
+        s = pd.Series([10, 20, 30], index=['a', 'b', 'c'], name='values')
+        df_from_series = s.to_frame()
+        print(type(df_from_series))
+
+        df = pd.DataFrame({'x': [1, 2], 'y': [3, 4]}, index=['row0', 'row1'])
+        row_series = df.loc['row0']
+        print(row_series)
+        print("Index of row Series:", row_series.index.tolist())
+
+---
+
+**Exercise 3.**
+Demonstrate that a DataFrame can hold columns of different dtypes (int, float, string) while a Series has a single dtype. Create both and use `.dtypes` (DataFrame) and `.dtype` (Series) to verify.
+
+??? success "Solution to Exercise 3"
+    Compare dtypes in DataFrame vs dtype in Series.
+
+        import pandas as pd
+
+        df = pd.DataFrame({'ints': [1, 2], 'floats': [1.5, 2.5], 'strings': ['a', 'b']})
+        print("DataFrame dtypes:\n", df.dtypes)
+        s = df['ints']
+        print(f"\nSeries dtype: {s.dtype}")

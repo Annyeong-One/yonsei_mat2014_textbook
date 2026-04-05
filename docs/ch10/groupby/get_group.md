@@ -154,3 +154,65 @@ la = grouped.get_group('LA')
 ```python
 # Create GroupBy object once, reuse for multiple operations
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Group a DataFrame by `'department'` and use `get_group('Sales')` to extract all rows for the Sales department. Print descriptive statistics for that group.
+
+??? success "Solution to Exercise 1"
+    Extract a single group and compute statistics.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'department': ['Sales', 'IT', 'Sales', 'IT', 'Sales'],
+            'salary': [55000, 70000, 60000, 65000, 58000]
+        })
+        sales = df.groupby('department').get_group('Sales')
+        print(sales.describe())
+
+---
+
+**Exercise 2.**
+Group by two columns `['region', 'product']` and use `get_group(('East', 'A'))` with a tuple key to extract a specific combination. Handle the case where the group does not exist using a try/except block.
+
+??? success "Solution to Exercise 2"
+    Use a tuple key for multi-column groups with error handling.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'region': ['East', 'East', 'West', 'West'],
+            'product': ['A', 'B', 'A', 'B'],
+            'sales': [100, 200, 150, 250]
+        })
+        grouped = df.groupby(['region', 'product'])
+        try:
+            group = grouped.get_group(('East', 'A'))
+            print(group)
+        except KeyError:
+            print("Group not found")
+
+---
+
+**Exercise 3.**
+Use `get_group` to extract two different groups and compare their mean values side by side. Create a summary DataFrame showing the mean of each numeric column for both groups.
+
+??? success "Solution to Exercise 3"
+    Compare two groups side by side.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'team': ['A', 'A', 'A', 'B', 'B', 'B'],
+            'score': [85, 90, 78, 92, 88, 95],
+            'assists': [5, 8, 3, 7, 6, 9]
+        })
+        grouped = df.groupby('team')
+        a_mean = grouped.get_group('A')[['score', 'assists']].mean()
+        b_mean = grouped.get_group('B')[['score', 'assists']].mean()
+        comparison = pd.DataFrame({'Team_A': a_mean, 'Team_B': b_mean})
+        print(comparison)

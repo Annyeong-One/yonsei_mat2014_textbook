@@ -168,3 +168,53 @@ Choosing the right join type.
 - Need complete picture of both sources
 - Finding mismatches
 - Data reconciliation
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create two DataFrames with a shared `'id'` column (partial overlap). Perform all four merge types (`inner`, `left`, `right`, `outer`) and print the shape of each result.
+
+??? success "Solution to Exercise 1"
+    Compare shapes across all four join types.
+
+        import pandas as pd
+
+        df1 = pd.DataFrame({'id': [1, 2, 3, 4], 'val': ['a', 'b', 'c', 'd']})
+        df2 = pd.DataFrame({'id': [3, 4, 5, 6], 'score': [90, 80, 70, 60]})
+        for how in ['inner', 'left', 'right', 'outer']:
+            result = pd.merge(df1, df2, on='id', how=how)
+            print(f"{how}: {result.shape}")
+
+---
+
+**Exercise 2.**
+Create a `customers` DataFrame and an `orders` DataFrame. Perform a left merge on customer ID to find customers who have no orders (those with `NaN` in order columns).
+
+??? success "Solution to Exercise 2"
+    Find customers without orders using a left merge.
+
+        import pandas as pd
+
+        customers = pd.DataFrame({'cust_id': [1, 2, 3, 4], 'name': ['Alice', 'Bob', 'Carol', 'Dave']})
+        orders = pd.DataFrame({'cust_id': [1, 1, 3], 'amount': [100, 150, 200]})
+        result = pd.merge(customers, orders, on='cust_id', how='left')
+        no_orders = result[result['amount'].isna()]
+        print("Customers without orders:")
+        print(no_orders[['cust_id', 'name']])
+
+---
+
+**Exercise 3.**
+Using the same two DataFrames, perform an outer merge with `indicator=True`. Use the `_merge` column to count how many rows came from `'left_only'`, `'right_only'`, and `'both'`.
+
+??? success "Solution to Exercise 3"
+    Use the indicator column to analyze merge sources.
+
+        import pandas as pd
+
+        df1 = pd.DataFrame({'id': [1, 2, 3], 'val': ['a', 'b', 'c']})
+        df2 = pd.DataFrame({'id': [2, 3, 4], 'score': [80, 90, 70]})
+        result = pd.merge(df1, df2, on='id', how='outer', indicator=True)
+        print(result['_merge'].value_counts())

@@ -1560,3 +1560,111 @@ if __name__ == "__main__":
        - Handle conflicts clearly
     """)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a `@register` decorator that adds each decorated function to a dictionary keyed by function name. Then write a `dispatch(name, *args)` function that looks up a function by name in the registry and calls it. Register at least two functions and demonstrate dispatching by name.
+
+??? success "Solution to Exercise 1"
+
+        registry = {}
+
+        def register(func):
+            """Register a function by its name."""
+            registry[func.__name__] = func
+            return func
+
+        def dispatch(name, *args):
+            """Look up and call a registered function by name."""
+            if name not in registry:
+                raise KeyError(f"No function registered as '{name}'")
+            return registry[name](*args)
+
+        @register
+        def add(a, b):
+            return a + b
+
+        @register
+        def multiply(a, b):
+            return a * b
+
+        print(dispatch("add", 3, 4))       # 7
+        print(dispatch("multiply", 3, 4))   # 12
+
+---
+
+**Exercise 2.**
+Using `@singledispatch`, implement a `format_value` function that formats `int` values with commas (e.g., `1000` becomes `"1,000"`), `float` values to two decimal places (e.g., `3.1` becomes `"3.10"`), and `str` values with quotes (e.g., `hello` becomes `'"hello"'`). The base case should return `repr(obj)`.
+
+??? success "Solution to Exercise 2"
+
+        from functools import singledispatch
+
+        @singledispatch
+        def format_value(obj):
+            """Base case: use repr."""
+            return repr(obj)
+
+        @format_value.register(int)
+        def _(value):
+            return f"{value:,}"
+
+        @format_value.register(float)
+        def _(value):
+            return f"{value:.2f}"
+
+        @format_value.register(str)
+        def _(value):
+            return f'"{value}"'
+
+        print(format_value(1000))       # 1,000
+        print(format_value(3.1))        # 3.10
+        print(format_value("hello"))    # "hello"
+        print(format_value([1, 2]))     # [1, 2]
+
+---
+
+**Exercise 3.**
+Build a small plugin system using the registration pattern. Create a `PluginManager` class with a `register(name)` decorator factory and a `run_all()` method that calls every registered plugin function in order and collects their return values into a list. Demonstrate by registering three plugins.
+
+??? success "Solution to Exercise 3"
+
+        class PluginManager:
+            """Simple plugin system using the registration pattern."""
+
+            def __init__(self):
+                self.plugins = {}
+
+            def register(self, name):
+                """Decorator factory that registers a plugin by name."""
+                def decorator(func):
+                    self.plugins[name] = func
+                    return func
+                return decorator
+
+            def run_all(self):
+                """Run every registered plugin and collect results."""
+                results = []
+                for name, func in self.plugins.items():
+                    results.append((name, func()))
+                return results
+
+        pm = PluginManager()
+
+        @pm.register("greet")
+        def greet_plugin():
+            return "Hello from greet plugin"
+
+        @pm.register("stats")
+        def stats_plugin():
+            return {"users": 42, "active": 10}
+
+        @pm.register("cleanup")
+        def cleanup_plugin():
+            return "Cleanup complete"
+
+        for name, result in pm.run_all():
+            print(f"{name}: {result}")

@@ -450,6 +450,77 @@ if __name__ == "__main__":
     
     with timer_recorder:
         time.sleep(0.08)
-    
+
     print(f"\nAverage time: {timer_recorder.average():.4f}s")
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a `Multiplier` callable class. Its `__init__` takes a `factor`, and calling the instance multiplies the argument by that factor. For example, `double = Multiplier(2); double(5)` returns `10`. Also make it work with `map()`: `list(map(Multiplier(3), [1, 2, 3]))` returns `[3, 6, 9]`.
+
+??? success "Solution to Exercise 1"
+
+        class Multiplier:
+            def __init__(self, factor):
+                self.factor = factor
+
+            def __call__(self, x):
+                return x * self.factor
+
+        double = Multiplier(2)
+        print(double(5))   # 10
+        print(double(100)) # 200
+
+        triple = Multiplier(3)
+        print(list(map(triple, [1, 2, 3])))  # [3, 6, 9]
+
+---
+
+**Exercise 2.**
+Write a `CallCounter` callable class that wraps any function. Each time the instance is called, it forwards arguments to the wrapped function and increments a `count` attribute. Demonstrate by wrapping a `square` function and showing the call count after several invocations.
+
+??? success "Solution to Exercise 2"
+
+        class CallCounter:
+            def __init__(self, func):
+                self.func = func
+                self.count = 0
+
+            def __call__(self, *args, **kwargs):
+                self.count += 1
+                return self.func(*args, **kwargs)
+
+        def square(x):
+            return x ** 2
+
+        counted_square = CallCounter(square)
+        print(counted_square(5))  # 25
+        print(counted_square(3))  # 9
+        print(counted_square(7))  # 49
+        print(f"Called {counted_square.count} times")  # Called 3 times
+
+---
+
+**Exercise 3.**
+Build a `Pipeline` callable class that chains multiple functions together. Its `__init__` takes a list of functions. Calling the instance with a value passes it through each function in sequence. For example, `Pipeline([str.strip, str.lower, str.title])("  hello WORLD  ")` returns `"Hello World"`.
+
+??? success "Solution to Exercise 3"
+
+        class Pipeline:
+            def __init__(self, functions):
+                self.functions = functions
+
+            def __call__(self, value):
+                result = value
+                for func in self.functions:
+                    result = func(result)
+                return result
+
+        clean = Pipeline([str.strip, str.lower, str.title])
+        print(clean("  hello WORLD  "))  # Hello World
+
+        math_pipe = Pipeline([abs, float, lambda x: x ** 2])
+        print(math_pipe(-5))  # 25.0

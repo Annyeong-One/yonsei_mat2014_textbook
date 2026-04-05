@@ -253,3 +253,63 @@ print(df.head().T)
 ```python
 df_transposed = df.transpose()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a DataFrame with columns `'name'`, `'age'`, and `'salary'` (5 rows). Use `.shape`, `.columns`, and `.dtypes` to print the number of rows, the column names as a list, and the data type of each column.
+
+??? success "Solution to Exercise 1"
+    Use the attributes directly on the DataFrame.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'name': ['Alice', 'Bob', 'Carol', 'Dave', 'Eve'],
+            'age': [25, 30, 35, 40, 45],
+            'salary': [50000, 60000, 70000, 80000, 90000]
+        })
+        print("Shape:", df.shape)
+        print("Columns:", df.columns.tolist())
+        print("Dtypes:\n", df.dtypes)
+
+---
+
+**Exercise 2.**
+Given a DataFrame `df`, use `.size`, `len(df)`, and `.ndim` to show the difference between total elements, number of rows, and number of dimensions. Verify that `df.size == df.shape[0] * df.shape[1]`.
+
+??? success "Solution to Exercise 2"
+    Compare size, len, and ndim.
+
+        import pandas as pd
+        import numpy as np
+
+        df = pd.DataFrame(np.random.randn(10, 4), columns=['A', 'B', 'C', 'D'])
+        print("size:", df.size)            # 40
+        print("len:", len(df))             # 10
+        print("ndim:", df.ndim)            # 2
+        assert df.size == df.shape[0] * df.shape[1]
+        print("size == rows * cols: True")
+
+---
+
+**Exercise 3.**
+Create a DataFrame from a dictionary, then use `.values` (or `.to_numpy()`) to extract the underlying NumPy array. Use `.T` to transpose the DataFrame and print the transposed shape. Confirm the transposed shape is the reverse of the original shape.
+
+??? success "Solution to Exercise 3"
+    Extract the NumPy array and transpose the DataFrame.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'x': [1, 2, 3],
+            'y': [4, 5, 6]
+        })
+        arr = df.to_numpy()
+        print("Array:\n", arr)
+        print("Original shape:", df.shape)
+        print("Transposed shape:", df.T.shape)
+        assert df.shape == df.T.shape[::-1]
+        print("Transposed shape is reverse of original: True")

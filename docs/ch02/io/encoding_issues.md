@@ -108,3 +108,70 @@ Output:
 Replace: b'caf?'
 Ignore: b'caf'
 ```
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Write a script that writes the string `"Hello, world!"` to a file using UTF-8 encoding, then tries to read it back using ASCII encoding. What happens? Handle the error gracefully.
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        with open("/tmp/test.txt", "w", encoding="utf-8") as f:
+            f.write("Hello, \u4e16\u754c!")  # Hello, 世界!
+
+        try:
+            with open("/tmp/test.txt", "r", encoding="ascii") as f:
+                content = f.read()
+        except UnicodeDecodeError as e:
+            print(f"Error: {e}")
+
+        # Read correctly with UTF-8
+        with open("/tmp/test.txt", "r", encoding="utf-8") as f:
+            print(f.read())  # Hello, 世界!
+        ```
+
+    ASCII cannot decode multi-byte UTF-8 characters, raising `UnicodeDecodeError`.
+
+---
+
+**Exercise 2.**
+Write a function `detect_encoding(filepath)` that reads the first 100 bytes of a file and returns `"utf-8"` if they decode successfully as UTF-8, or `"unknown"` otherwise.
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        def detect_encoding(filepath):
+            with open(filepath, "rb") as f:
+                raw = f.read(100)
+            try:
+                raw.decode("utf-8")
+                return "utf-8"
+            except UnicodeDecodeError:
+                return "unknown"
+        ```
+
+    This is a simple heuristic. For production use, consider the `chardet` library for more reliable detection.
+
+---
+
+**Exercise 3.**
+Demonstrate the difference between `errors="ignore"`, `errors="replace"`, and `errors="strict"` when decoding bytes that contain invalid UTF-8 sequences.
+
+??? success "Solution to Exercise 3"
+
+        ```python
+        data = b"Hello \xff\xfe World"
+
+        print(data.decode("utf-8", errors="ignore"))   # Hello  World
+        print(data.decode("utf-8", errors="replace"))  # Hello �� World
+        try:
+            data.decode("utf-8", errors="strict")
+        except UnicodeDecodeError as e:
+            print(f"strict: {e}")
+        ```
+
+    `"ignore"` silently skips invalid bytes. `"replace"` inserts replacement characters. `"strict"` (the default) raises an exception.

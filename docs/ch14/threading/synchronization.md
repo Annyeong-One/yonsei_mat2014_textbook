@@ -1252,3 +1252,124 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a `BoundedSemaphore(3)` that limits access to a simulated resource. Spawn 10 threads that each acquire the semaphore, print their worker ID and a timestamp, sleep for 0.5 seconds, then release. Verify (by inspecting timestamps) that no more than 3 workers are active simultaneously.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import threading
+        import time
+
+        sem = threading.BoundedSemaphore(3)
+
+        def worker(wid):
+            sem.acquire()
+            try:
+                print(f"Worker {wid} entered at {time.perf_counter():.2f}")
+                time.sleep(0.5)
+                print(f"Worker {wid} leaving at {time.perf_counter():.2f}")
+            finally:
+                sem.release()
+
+        threads = [threading.Thread(target=worker, args=(i,)) for i in range(10)]
+        for t in threads:
+            t.start()
+        for t in threads:
+            t.join()
+        print("All workers done.")
+        ```
+
+---
+
+**Exercise 2.**
+Use a `threading.Barrier(4)` to coordinate 4 worker threads that each go through two phases: (1) "data loading" (random sleep 0.5-1.5s), barrier wait, (2) "processing" (random sleep 0.3-1.0s), barrier wait. Print start and finish messages for each phase so you can confirm all workers synchronize between phases.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import threading
+        import time
+        import random
+
+        barrier = threading.Barrier(4)
+
+        def worker(wid):
+            # Phase 1
+            print(f"Worker {wid}: loading data...")
+            time.sleep(random.uniform(0.5, 1.5))
+            print(f"Worker {wid}: data loaded, waiting at barrier")
+            barrier.wait()
+            print(f"Worker {wid}: Phase 1 complete for all")
+
+            # Phase 2
+            print(f"Worker {wid}: processing...")
+            time.sleep(random.uniform(0.3, 1.0))
+            print(f"Worker {wid}: processing done, waiting at barrier")
+            barrier.wait()
+            print(f"Worker {wid}: Phase 2 complete for all")
+
+        threads = [threading.Thread(target=worker, args=(i,)) for i in range(4)]
+        for t in threads:
+            t.start()
+        for t in threads:
+            t.join()
+        print("All phases done.")
+        ```
+
+---
+
+**Exercise 3.**
+Implement a thread-safe bounded buffer using `threading.Condition`. The buffer has a maximum size of 5. Write a producer that inserts 20 items and a consumer that removes 20 items. The producer waits when the buffer is full; the consumer waits when the buffer is empty. Print the buffer size after each operation and verify no items are lost.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import threading
+        import time
+
+        class BoundedBuffer:
+            def __init__(self, capacity):
+                self.capacity = capacity
+                self.buffer = []
+                self.condition = threading.Condition()
+
+            def put(self, item):
+                with self.condition:
+                    while len(self.buffer) >= self.capacity:
+                        self.condition.wait()
+                    self.buffer.append(item)
+                    print(f"  Produced {item}, size={len(self.buffer)}")
+                    self.condition.notify()
+
+            def get(self):
+                with self.condition:
+                    while len(self.buffer) == 0:
+                        self.condition.wait()
+                    item = self.buffer.pop(0)
+                    print(f"  Consumed {item}, size={len(self.buffer)}")
+                    self.condition.notify()
+                    return item
+
+        buf = BoundedBuffer(5)
+
+        def producer():
+            for i in range(20):
+                buf.put(i)
+                time.sleep(0.02)
+
+        def consumer():
+            for _ in range(20):
+                buf.get()
+                time.sleep(0.03)
+
+        t1 = threading.Thread(target=producer)
+        t2 = threading.Thread(target=consumer)
+        t1.start()
+        t2.start()
+        t1.join()
+        t2.join()
+        print(f"Buffer empty: {len(buf.buffer) == 0}")
+        ```

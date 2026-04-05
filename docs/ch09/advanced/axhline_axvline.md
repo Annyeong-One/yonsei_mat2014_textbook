@@ -199,3 +199,85 @@ plt.show()
 - `xmin/xmax` and `ymin/ymax` control partial line extent (0-1 range)
 - Use for reference lines, thresholds, and event markers
 - `hlines` and `vlines` use data coordinates for extent
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Plot the function `y = sin(x)` for `x` in $[0, 4\pi]$, then add a horizontal dashed line at `y = 0` in gray and two horizontal lines at `y = 0.5` (green) and `y = -0.5` (red). These represent upper and lower thresholds. Add a legend identifying each line.
+
+??? success "Solution to Exercise 1"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(0, 4 * np.pi, 500)
+        y = np.sin(x)
+
+        fig, ax = plt.subplots(figsize=(10, 5))
+        ax.plot(x, y, label='sin(x)')
+        ax.axhline(y=0, color='gray', linestyle='--', label='y = 0')
+        ax.axhline(y=0.5, color='green', linestyle='-', label='Upper threshold')
+        ax.axhline(y=-0.5, color='red', linestyle='-', label='Lower threshold')
+        ax.legend()
+        ax.set_title('Sine Wave with Thresholds')
+        plt.show()
+
+---
+
+**Exercise 2.**
+Generate 100 random samples from a standard normal distribution and plot them as a line. Add a vertical line at the index of the maximum value (red) and the minimum value (blue). Also add a horizontal line at the mean value (green, dashed). Use `ax.text` to label the max and min values near their respective vertical lines.
+
+??? success "Solution to Exercise 2"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        np.random.seed(42)
+        data = np.random.randn(100)
+
+        fig, ax = plt.subplots(figsize=(10, 5))
+        ax.plot(data, color='steelblue')
+
+        max_idx = np.argmax(data)
+        min_idx = np.argmin(data)
+        mean_val = data.mean()
+
+        ax.axvline(x=max_idx, color='red', linestyle='-', label='Max')
+        ax.axvline(x=min_idx, color='blue', linestyle='-', label='Min')
+        ax.axhline(y=mean_val, color='green', linestyle='--', label='Mean')
+
+        ax.text(max_idx + 1, data[max_idx], f'{data[max_idx]:.2f}', color='red')
+        ax.text(min_idx + 1, data[min_idx], f'{data[min_idx]:.2f}', color='blue')
+
+        ax.legend()
+        ax.set_title('Random Data with Max, Min, and Mean')
+        plt.show()
+
+---
+
+**Exercise 3.**
+Create a plot of `y = x^2` for `x` in $[-3, 3]$. Use `axvspan` to shade the region between `x = -1` and `x = 1` in light yellow, and use `axhline` to mark the minimum value at `y = 0`. Add `axvline` at `x = -1` and `x = 1` with dashed linestyle to show the boundaries of the shaded region.
+
+??? success "Solution to Exercise 3"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(-3, 3, 200)
+        y = x ** 2
+
+        fig, ax = plt.subplots(figsize=(8, 6))
+        ax.plot(x, y, color='navy', linewidth=2)
+
+        ax.axvspan(-1, 1, color='lightyellow', alpha=0.8, label='Region [-1, 1]')
+        ax.axhline(y=0, color='green', linestyle='-', linewidth=1)
+        ax.axvline(x=-1, color='gray', linestyle='--')
+        ax.axvline(x=1, color='gray', linestyle='--')
+
+        ax.set_xlabel('x')
+        ax.set_ylabel('y')
+        ax.set_title(r'$y = x^2$ with Highlighted Region')
+        ax.legend()
+        plt.show()

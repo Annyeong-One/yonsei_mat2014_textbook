@@ -1616,3 +1616,100 @@ if __name__ == "__main__":
     only when profiling shows it's needed for CPU-bound work.
     """)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Use `Pool.map()` with 4 workers to compute the factorial of numbers 1 through 20. Print each result. Compare the wall-clock time of the pool version against the sequential `map(math.factorial, range(1, 21))`.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import math
+        import time
+        from multiprocessing import Pool
+
+        if __name__ == "__main__":
+            nums = list(range(1, 21))
+
+            # Sequential
+            start = time.perf_counter()
+            seq = list(map(math.factorial, nums))
+            seq_t = time.perf_counter() - start
+
+            # Parallel
+            start = time.perf_counter()
+            with Pool(4) as pool:
+                par = pool.map(math.factorial, nums)
+            par_t = time.perf_counter() - start
+
+            for n, f in zip(nums, par):
+                print(f"{n}! = {f}")
+
+            print(f"\nSequential: {seq_t:.4f}s")
+            print(f"Pool:       {par_t:.4f}s")
+        ```
+
+---
+
+**Exercise 2.**
+Use `Pool.starmap()` to compute `base ** exponent` for 10 `(base, exponent)` pairs. Include a 0.2-second sleep in the worker to simulate heavy computation. Print each result and the total elapsed time.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import time
+        from multiprocessing import Pool
+
+        def power(base, exp):
+            time.sleep(0.2)
+            return base ** exp
+
+        if __name__ == "__main__":
+            pairs = [(2, 10), (3, 5), (5, 3), (7, 4), (10, 6),
+                     (2, 20), (3, 10), (4, 8), (6, 5), (9, 3)]
+
+            start = time.perf_counter()
+            with Pool(4) as pool:
+                results = pool.starmap(power, pairs)
+            elapsed = time.perf_counter() - start
+
+            for (b, e), r in zip(pairs, results):
+                print(f"{b}^{e} = {r}")
+            print(f"\nElapsed: {elapsed:.2f}s")
+        ```
+
+---
+
+**Exercise 3.**
+Write an error-tolerant pool pipeline. Define a `safe_divide(a, b)` function that returns `(result, None)` on success and `(None, error_message)` on failure. Use `Pool.starmap()` on a list of 10 `(a, b)` pairs where some have `b=0`. Print successes and failures separately, and report the count of each.
+
+??? success "Solution to Exercise 3"
+        ```python
+        from multiprocessing import Pool
+
+        def safe_divide(a, b):
+            try:
+                return (a / b, None)
+            except ZeroDivisionError as e:
+                return (None, str(e))
+
+        if __name__ == "__main__":
+            pairs = [(10, 2), (20, 0), (30, 5), (40, 0), (50, 10),
+                     (60, 3), (70, 0), (80, 4), (90, 9), (100, 0)]
+
+            with Pool(4) as pool:
+                results = pool.starmap(safe_divide, pairs)
+
+            successes = 0
+            failures = 0
+            for (a, b), (result, error) in zip(pairs, results):
+                if error:
+                    print(f"  {a}/{b}: FAIL — {error}")
+                    failures += 1
+                else:
+                    print(f"  {a}/{b}: OK — {result}")
+                    successes += 1
+
+            print(f"\nSuccesses: {successes}, Failures: {failures}")
+        ```

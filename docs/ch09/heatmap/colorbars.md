@@ -352,3 +352,81 @@ cbar.ax.tick_params(labelsize=10)
 plt.tight_layout()
 plt.show()
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that creates a heatmap from a 10x10 random array and adds a colorbar with a custom label. Use the `'viridis'` colormap.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    data = np.random.rand(10, 10)
+
+    fig, ax = plt.subplots()
+    im = ax.imshow(data, cmap='viridis')
+    cbar = fig.colorbar(im, ax=ax, label='Random Values')
+    ax.set_title('Heatmap with Colorbar')
+    plt.show()
+    ```
+
+---
+
+**Exercise 2.** Explain the difference between `fig.colorbar()` and `plt.colorbar()`. When would you use each?
+
+??? success "Solution to Exercise 2"
+    `fig.colorbar(mappable, ax=ax)` adds a colorbar to a specific axes within the figure. `plt.colorbar()` adds a colorbar to the current axes using the pyplot state machine. Use `fig.colorbar()` when working with the OOP style (explicit Figure and Axes objects), and `plt.colorbar()` only when using the pyplot style. The OOP version is preferred for multi-subplot figures because you can control exactly which axes the colorbar is associated with.
+
+---
+
+**Exercise 3.** Create a figure with two heatmaps side by side, each with its own colorbar. Use `shrink=0.8` to reduce the colorbar height.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    data1 = np.random.rand(8, 8)
+    data2 = np.random.randn(8, 8)
+
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+
+    im1 = ax1.imshow(data1, cmap='hot')
+    fig.colorbar(im1, ax=ax1, shrink=0.8, label='Values')
+    ax1.set_title('Uniform Random')
+
+    im2 = ax2.imshow(data2, cmap='coolwarm')
+    fig.colorbar(im2, ax=ax2, shrink=0.8, label='Values')
+    ax2.set_title('Normal Random')
+
+    plt.tight_layout()
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Write code that creates a heatmap and customizes the colorbar with discrete tick values using `cbar.set_ticks()` and `cbar.set_ticklabels()`.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    data = np.random.rand(10, 10) * 100
+
+    fig, ax = plt.subplots()
+    im = ax.imshow(data, cmap='YlOrRd')
+    cbar = fig.colorbar(im, ax=ax)
+    cbar.set_ticks([0, 25, 50, 75, 100])
+    cbar.set_ticklabels(['Low', '25%', 'Mid', '75%', 'High'])
+    cbar.set_label('Custom Scale')
+    ax.set_title('Heatmap with Custom Colorbar Ticks')
+    plt.show()
+    ```

@@ -471,3 +471,78 @@ process(0)      # Still returns 1 (cached!)
 - Arguments must be hashable — convert lists to tuples, dicts to frozensets
 - Thread-safe but beware of side effects in the cached function
 - For unlimited caching, use `@cache` (Python 3.9+) or `@lru_cache(maxsize=None)`
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a function `expensive_lookup(key)` that simulates a slow database call with `time.sleep(0.5)` and returns `key.upper()`. Decorate it with `@lru_cache(maxsize=32)`. Call it three times with the same key and verify that only the first call is slow. Print `cache_info()` to confirm the hit count.
+
+??? success "Solution to Exercise 1"
+
+        import time
+        from functools import lru_cache
+
+        @lru_cache(maxsize=32)
+        def expensive_lookup(key):
+            time.sleep(0.5)
+            return key.upper()
+
+        start = time.time()
+        print(expensive_lookup("hello"))  # Slow
+        print(f"First call: {time.time() - start:.2f}s")
+
+        start = time.time()
+        print(expensive_lookup("hello"))  # Fast (cached)
+        print(f"Second call: {time.time() - start:.2f}s")
+
+        print(expensive_lookup("hello"))  # Fast (cached)
+        print(expensive_lookup.cache_info())
+
+---
+
+**Exercise 2.**
+Demonstrate the effect of `typed=True`. Write a cached function `add_one(x)` decorated with `@lru_cache(maxsize=128, typed=True)`. Call it with `add_one(1)` and `add_one(1.0)`. Print `cache_info()` and verify that both are cache misses (two separate entries). Then repeat without `typed=True` and show that `1` and `1.0` share a cache entry.
+
+??? success "Solution to Exercise 2"
+
+        from functools import lru_cache
+
+        # With typed=True
+        @lru_cache(maxsize=128, typed=True)
+        def add_one_typed(x):
+            return x + 1
+
+        add_one_typed(1)
+        add_one_typed(1.0)
+        print(add_one_typed.cache_info())  # misses=2 (separate entries)
+
+        # Without typed (default False)
+        @lru_cache(maxsize=128)
+        def add_one_untyped(x):
+            return x + 1
+
+        add_one_untyped(1)
+        add_one_untyped(1.0)
+        print(add_one_untyped.cache_info())  # misses=1 (shared entry)
+
+---
+
+**Exercise 3.**
+Write a recursive `climb_stairs(n)` function (number of ways to climb `n` stairs taking 1 or 2 steps at a time) and decorate it with `@lru_cache(maxsize=64)`. Compute `climb_stairs(50)`, print the result and cache stats. Then call `cache_clear()` and verify the cache is reset.
+
+??? success "Solution to Exercise 3"
+
+        from functools import lru_cache
+
+        @lru_cache(maxsize=64)
+        def climb_stairs(n):
+            if n <= 1:
+                return 1
+            return climb_stairs(n - 1) + climb_stairs(n - 2)
+
+        print(climb_stairs(50))              # 20365011074
+        print(climb_stairs.cache_info())
+        climb_stairs.cache_clear()
+        print(climb_stairs.cache_info())     # hits=0, misses=0

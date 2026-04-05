@@ -399,3 +399,57 @@ Use reduced (economic) mode unless you need the full Q.
 ### 3. Pivoting for Rank
 
 Use pivoted QR when rank determination is important.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Compute the QR decomposition of `A = np.array([[1, 2], [3, 4], [5, 6]])`. Verify that `Q @ R` reconstructs `A` and that `Q` has orthonormal columns (`Q.T @ Q` is the identity).
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        A = np.array([[1, 2], [3, 4], [5, 6]], dtype=float)
+        Q, R = np.linalg.qr(A)
+        print(f"Q @ R matches A: {np.allclose(Q @ R, A)}")
+        print(f"Q orthonormal: {np.allclose(Q.T @ Q, np.eye(2))}")
+
+---
+
+**Exercise 2.**
+Use QR decomposition to solve the least squares problem `A @ x = b` where `A = np.array([[1, 1], [1, 2], [1, 3]])` and `b = np.array([1, 2, 2])`. Compute `Q, R = np.linalg.qr(A)` then solve `R @ x = Q.T @ b`. Compare with `np.linalg.lstsq`.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        A = np.array([[1, 1], [1, 2], [1, 3]], dtype=float)
+        b = np.array([1, 2, 2], dtype=float)
+
+        Q, R = np.linalg.qr(A)
+        x_qr = np.linalg.solve(R, Q.T @ b)
+        x_lstsq, _, _, _ = np.linalg.lstsq(A, b, rcond=None)
+
+        print(f"QR solution:    {x_qr}")
+        print(f"lstsq solution: {x_lstsq}")
+        print(f"Match: {np.allclose(x_qr, x_lstsq)}")
+
+---
+
+**Exercise 3.**
+Generate a random 5x3 matrix and compute its QR decomposition. Verify that `Q` has shape `(5, 3)` and `R` has shape `(3, 3)`. Check that `R` is upper triangular by verifying all elements below the diagonal are zero.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        A = np.random.randn(5, 3)
+        Q, R = np.linalg.qr(A)
+        print(f"Q shape: {Q.shape}")  # (5, 3)
+        print(f"R shape: {R.shape}")  # (3, 3)
+
+        # Check upper triangular
+        is_upper = np.allclose(R, np.triu(R))
+        print(f"R is upper triangular: {is_upper}")

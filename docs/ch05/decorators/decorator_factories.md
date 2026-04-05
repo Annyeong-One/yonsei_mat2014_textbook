@@ -438,3 +438,110 @@ if __name__ == '__main__':
     slow_function()   # Will print (over threshold)
     print("  fast_function: no output (under threshold)")
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a decorator factory `tag(tag_name)` that wraps the string return value of a function in an HTML tag. For example, `@tag("b")` applied to a function returning `"hello"` should produce `"<b>hello</b>"`. Use `@wraps` to preserve metadata.
+
+??? success "Solution to Exercise 1"
+
+        from functools import wraps
+
+        def tag(tag_name):
+            """Decorator factory that wraps return value in an HTML tag."""
+            def decorator(func):
+                @wraps(func)
+                def wrapper(*args, **kwargs):
+                    result = func(*args, **kwargs)
+                    return f"<{tag_name}>{result}</{tag_name}>"
+                return wrapper
+            return decorator
+
+        @tag("b")
+        def greet(name):
+            """Return a greeting."""
+            return f"Hello, {name}"
+
+        print(greet("Alice"))       # <b>Hello, Alice</b>
+        print(greet.__name__)       # greet
+        print(greet.__doc__)        # Return a greeting.
+
+---
+
+**Exercise 2.**
+Create a decorator factory `enforce_types` that reads a function's type annotations and raises a `TypeError` if any argument does not match its annotation at call time. It should silently ignore parameters without annotations. Demonstrate it on a function `def greet(name: str, times: int) -> str`.
+
+??? success "Solution to Exercise 2"
+
+        from functools import wraps
+        import inspect
+
+        def enforce_types(func):
+            """Decorator that enforces type annotations at call time."""
+            hints = func.__annotations__
+            sig = inspect.signature(func)
+
+            @wraps(func)
+            def wrapper(*args, **kwargs):
+                bound = sig.bind(*args, **kwargs)
+                bound.apply_defaults()
+                for name, value in bound.arguments.items():
+                    if name in hints and name != 'return':
+                        expected = hints[name]
+                        if not isinstance(value, expected):
+                            raise TypeError(
+                                f"Argument '{name}' must be {expected.__name__}, "
+                                f"got {type(value).__name__}"
+                            )
+                return func(*args, **kwargs)
+            return wrapper
+
+        @enforce_types
+        def greet(name: str, times: int) -> str:
+            return (name + "! ") * times
+
+        print(greet("Alice", 3))     # Alice! Alice! Alice!
+        try:
+            greet("Alice", "three")  # TypeError
+        except TypeError as e:
+            print(e)
+
+---
+
+**Exercise 3.**
+Write an optional-parameter decorator factory `debug(func=None, *, show_args=True, show_result=True)` that works both as `@debug` and `@debug(show_result=False)`. When `show_args` is `True`, print the arguments before the call. When `show_result` is `True`, print the return value after the call.
+
+??? success "Solution to Exercise 3"
+
+        from functools import wraps
+
+        def debug(func=None, *, show_args=True, show_result=True):
+            """Debug decorator that works with or without arguments."""
+            def decorator(fn):
+                @wraps(fn)
+                def wrapper(*args, **kwargs):
+                    if show_args:
+                        print(f"Calling {fn.__name__}({args}, {kwargs})")
+                    result = fn(*args, **kwargs)
+                    if show_result:
+                        print(f"{fn.__name__} returned {result!r}")
+                    return result
+                return wrapper
+
+            if func is not None:
+                return decorator(func)
+            return decorator
+
+        @debug
+        def add(a, b):
+            return a + b
+
+        @debug(show_result=False)
+        def multiply(a, b):
+            return a * b
+
+        add(2, 3)        # prints args and result
+        multiply(4, 5)   # prints args only

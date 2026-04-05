@@ -196,3 +196,58 @@ print(f"Required n (chi-square, w=0.3): {n_chi2:.0f}")
 ## Summary
 
 Power analysis determines the sample size needed to detect an effect of a specified magnitude with a given probability. The four key quantities — significance level $\alpha$, power $1 - \beta$, effect size, and sample size — are interrelated so that fixing any three determines the fourth. Conventional targets are $\alpha = 0.05$ and power $= 0.80$. Power curves visualize these trade-offs and help researchers choose an appropriate design. Power analysis should always be conducted before data collection, using a scientifically meaningful effect size rather than the observed effect.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Using `statsmodels.stats.power.tt_solve_power`, compute the required sample size to detect an effect size of $d = 0.3$ with 80% power at $\alpha = 0.05$ for a two-sided one-sample t-test.
+
+??? success "Solution to Exercise 1"
+
+        from statsmodels.stats.power import tt_solve_power
+
+        n = tt_solve_power(effect_size=0.3, alpha=0.05, power=0.8,
+                           alternative='two-sided')
+        print(f"Required sample size: {n:.0f}")
+
+---
+
+**Exercise 2.**
+Plot a power curve for a one-sample t-test with $n = 30$ at $\alpha = 0.05$: compute power for effect sizes $d = 0, 0.1, 0.2, \ldots, 1.0$ and plot power vs effect size.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        from statsmodels.stats.power import tt_solve_power
+
+        effect_sizes = np.arange(0, 1.05, 0.1)
+        powers = [tt_solve_power(effect_size=d, nobs=30, alpha=0.05,
+                                  alternative='two-sided') if d > 0 else 0.05
+                  for d in effect_sizes]
+
+        plt.plot(effect_sizes, powers, 'o-')
+        plt.axhline(0.8, ls='--', color='r', label='80% power')
+        plt.xlabel('Effect Size (d)')
+        plt.ylabel('Power')
+        plt.title('Power Curve (n=30)')
+        plt.legend()
+        plt.show()
+
+---
+
+**Exercise 3.**
+Compare the required sample sizes for 80% power at effect sizes $d = 0.2, 0.5, 0.8$ for both one-sided and two-sided tests. Show that the one-sided test always requires fewer subjects.
+
+??? success "Solution to Exercise 3"
+
+        from statsmodels.stats.power import tt_solve_power
+
+        for d in [0.2, 0.5, 0.8]:
+            n_two = tt_solve_power(effect_size=d, alpha=0.05, power=0.8,
+                                    alternative='two-sided')
+            n_one = tt_solve_power(effect_size=d, alpha=0.05, power=0.8,
+                                    alternative='larger')
+            print(f"d={d}: two-sided n={n_two:.0f}, one-sided n={n_one:.0f}")

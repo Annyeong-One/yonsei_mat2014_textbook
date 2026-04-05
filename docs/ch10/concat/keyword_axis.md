@@ -139,3 +139,55 @@ result = pd.concat([original, calculated], axis=1)
 prices = pd.concat([aapl, msft, googl], axis=1)
 prices.columns = ['AAPL', 'MSFT', 'GOOGL']
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that concatenates two DataFrames along `axis=0` (rows) and then along `axis=1` (columns). Print the shape of each result.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+
+    df1 = pd.DataFrame({'A': [1, 2], 'B': [3, 4]})
+    df2 = pd.DataFrame({'A': [5, 6], 'B': [7, 8]})
+    result = pd.concat([df1, df2], ignore_index=True)
+    print(result)
+    ```
+
+---
+
+**Exercise 2.** Predict the output shape when concatenating a (3, 2) DataFrame with a (4, 2) DataFrame along axis=0, and along axis=1.
+
+??? success "Solution to Exercise 2"
+    See the explanation in the main content. The key concept involves understanding how `pd.concat()` aligns data along the specified axis and handles mismatched indices or columns.
+
+---
+
+**Exercise 3.** Write code that concatenates two DataFrames with different column names along `axis=1`. Show the resulting column names.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+
+    df1 = pd.DataFrame({'A': [1, 2], 'B': [3, 4]})
+    df2 = pd.DataFrame({'A': [5, 6], 'C': [7, 8]})
+    result = pd.concat([df1, df2], axis=0)
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Create three DataFrames and concatenate them along axis=0 using a list comprehension inside `pd.concat()`.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+
+    df1 = pd.DataFrame({'A': [1, 2]}, index=[0, 1])
+    df2 = pd.DataFrame({'A': [3, 4]}, index=[2, 3])
+    result = pd.concat([df1, df2])
+    print(result)
+    ```

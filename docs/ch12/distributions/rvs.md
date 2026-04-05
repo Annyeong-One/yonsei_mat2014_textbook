@@ -95,3 +95,54 @@ Random sampling is fundamental to Monte Carlo methods in finance: simulating ass
 ## Summary
 
 The `.rvs()` method is the gateway to simulation-based analysis. Combined with the `random_state` parameter for reproducibility and NumPy's array infrastructure, it provides an efficient and consistent interface for generating random samples from any `scipy.stats` distribution.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Generate 500 samples from a normal distribution with $\mu = 100$ and $\sigma = 15$ using `random_state=42`. Compute the sample mean and standard deviation. Repeat with `random_state=42` and verify you get identical results.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        from scipy import stats
+
+        samples1 = stats.norm.rvs(loc=100, scale=15, size=500, random_state=42)
+        samples2 = stats.norm.rvs(loc=100, scale=15, size=500, random_state=42)
+
+        print(f"Mean: {np.mean(samples1):.4f}, Std: {np.std(samples1, ddof=1):.4f}")
+        print(f"Identical results: {np.array_equal(samples1, samples2)}")
+
+---
+
+**Exercise 2.**
+Generate a $5 \times 4$ array of random samples from a uniform distribution on $[2, 7]$ using a single `.rvs()` call with the `size` parameter. Print the array shape and verify all values fall within $[2, 7]$.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy import stats
+
+        samples = stats.uniform.rvs(loc=2, scale=5, size=(5, 4), random_state=42)
+        print(f"Shape: {samples.shape}")
+        print(f"Min: {samples.min():.4f}, Max: {samples.max():.4f}")
+        print(f"All in [2, 7]: {(samples >= 2).all() and (samples <= 7).all()}")
+
+---
+
+**Exercise 3.**
+Draw 10,000 samples from both a $t$-distribution with 3 degrees of freedom and a standard normal. Compare the fraction of samples with $|x| > 3$ for each distribution to demonstrate heavier tails in the $t$-distribution.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        t_samples = stats.t.rvs(df=3, size=10000)
+        norm_samples = stats.norm.rvs(size=10000)
+
+        t_frac = np.mean(np.abs(t_samples) > 3)
+        n_frac = np.mean(np.abs(norm_samples) > 3)
+        print(f"Fraction |x|>3 — t(3): {t_frac:.4f}, Normal: {n_frac:.4f}")

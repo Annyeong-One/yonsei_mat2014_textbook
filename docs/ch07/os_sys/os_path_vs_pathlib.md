@@ -68,3 +68,74 @@ exists: True
 is_file: True
 ```
 
+---
+
+## Exercises
+
+**Exercise 1.**
+Write two versions of a function `build_output_path` -- one using `os.path` and one using `pathlib` -- that takes a base directory, a subdirectory name, and a filename, and returns the full path with a `.csv` extension. Compare the readability of both approaches.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    import os
+    from pathlib import Path
+
+    # os.path version
+    def build_output_path_os(base, subdir, filename):
+        return os.path.join(base, subdir, filename + ".csv")
+
+    # pathlib version
+    def build_output_path_pathlib(base, subdir, filename):
+        return Path(base) / subdir / (filename + ".csv")
+
+    # Test
+    print(build_output_path_os("/data", "output", "results"))
+    # /data/output/results.csv
+    print(build_output_path_pathlib("/data", "output", "results"))
+    # /data/output/results.csv
+    ```
+
+---
+
+**Exercise 2.**
+Using `pathlib.Path`, write a function `find_all_python_files` that takes a directory path and recursively finds all `.py` files. Return a list of `Path` objects sorted by name. Use the `rglob` method.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    from pathlib import Path
+
+    def find_all_python_files(directory):
+        return sorted(Path(directory).rglob("*.py"), key=lambda p: p.name)
+
+    # Test
+    # files = find_all_python_files(".")
+    # for f in files[:5]:
+    #     print(f)
+    ```
+
+---
+
+**Exercise 3.**
+Write a function `path_components` that takes a file path string and returns a dictionary with `"parent"`, `"name"`, `"stem"`, and `"suffix"` using `pathlib.Path`. For example, `path_components("/home/user/data.csv")` should return `{"parent": "/home/user", "name": "data.csv", "stem": "data", "suffix": ".csv"}`.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    from pathlib import Path
+
+    def path_components(path_str):
+        p = Path(path_str)
+        return {
+            "parent": str(p.parent),
+            "name": p.name,
+            "stem": p.stem,
+            "suffix": p.suffix,
+        }
+
+    # Test
+    print(path_components("/home/user/data.csv"))
+    # {'parent': '/home/user', 'name': 'data.csv',
+    #  'stem': 'data', 'suffix': '.csv'}
+    ```

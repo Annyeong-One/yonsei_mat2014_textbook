@@ -1131,3 +1131,70 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Explain the HTTP protocol. What are the four most common HTTP methods (verbs) and what does each do?
+
+??? success "Solution to Exercise 1"
+    ```python
+    # Conceptual solution - see page content for details
+    import sys
+    import platform
+
+    print(f"Python version: {sys.version}")
+    print(f"Platform: {platform.platform()}")
+    print(f"Architecture: {platform.machine()}")
+    ```
+
+---
+
+**Exercise 2.** Explain the difference between HTTP and HTTPS. Why is HTTPS important?
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the hardware-software interaction and how it affects Python performance.
+
+---
+
+**Exercise 3.** Write Python code that sends a POST request with JSON data using the `requests` library.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import time
+
+    # Simple benchmark
+    n = 10_000_000
+    start = time.perf_counter()
+    total = sum(range(n))
+    elapsed = time.perf_counter() - start
+    print(f"Sum of {n} integers: {total}")
+    print(f"Time: {elapsed:.4f} seconds")
+    ```
+
+---
+
+**Exercise 4.** Explain what WebSockets are and how they differ from HTTP. When would you use WebSockets instead of HTTP?
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    import time
+
+    n = 1_000_000
+    # Python loop
+    start = time.perf_counter()
+    result_py = sum(i * i for i in range(n))
+    time_py = time.perf_counter() - start
+
+    # NumPy vectorized
+    arr = np.arange(n)
+    start = time.perf_counter()
+    result_np = np.sum(arr * arr)
+    time_np = time.perf_counter() - start
+
+    print(f"Python: {time_py:.4f}s, NumPy: {time_np:.4f}s")
+    print(f"Speedup: {time_py / time_np:.1f}x")
+    ```

@@ -641,3 +641,85 @@ if __name__ == '__main__':
     demo_iterator_vs_generator()
     demo_itertools()
 ```
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Write an iterator class `RepeatN` that yields a given value exactly `n` times, then raises `StopIteration`.
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        class RepeatN:
+            def __init__(self, value, n):
+                self.value = value
+                self.n = n
+                self.count = 0
+
+            def __iter__(self):
+                return self
+
+            def __next__(self):
+                if self.count >= self.n:
+                    raise StopIteration
+                self.count += 1
+                return self.value
+
+        print(list(RepeatN("hello", 3)))  # ['hello', 'hello', 'hello']
+        ```
+
+    `StopIteration` signals that the iterator has no more values. The `for` loop and `list()` catch it automatically.
+
+---
+
+**Exercise 2.**
+Show what happens when you call `next()` on an exhausted iterator. Demonstrate using both an explicit `next()` call and a `for` loop (which handles `StopIteration` automatically).
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        it = iter([1, 2])
+
+        print(next(it))  # 1
+        print(next(it))  # 2
+
+        try:
+            next(it)  # StopIteration
+        except StopIteration:
+            print("Iterator exhausted")
+
+        # for loop handles it silently
+        for val in iter([1, 2]):
+            print(val)
+        # 1
+        # 2
+        # (no error)
+        ```
+
+    `next()` raises `StopIteration` on an exhausted iterator. `for` loops catch it internally as the signal to stop.
+
+---
+
+**Exercise 3.**
+Write a function `take(n, iterable)` that returns a list of the first `n` elements from an iterable. Handle the case where the iterable has fewer than `n` elements.
+
+??? success "Solution to Exercise 3"
+
+        ```python
+        def take(n, iterable):
+            result = []
+            for i, item in enumerate(iterable):
+                if i >= n:
+                    break
+                result.append(item)
+            return result
+
+        print(take(3, range(10)))      # [0, 1, 2]
+        print(take(5, [1, 2]))         # [1, 2] (fewer than 5)
+        print(take(3, (x*x for x in range(100))))  # [0, 1, 4]
+        ```
+
+    The function stops at `n` elements or when the iterable is exhausted, whichever comes first.

@@ -290,3 +290,58 @@ df['adjusted'] = np.select(conditions, choices, default=df['value'])
 | itertuples() | ~50-200x slower | Need row access, can't vectorize |
 | iterrows() | ~500-2000x slower | Avoid |
 | Python for loop | ~1000-5000x slower | Never for data ops |
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Explain why growing a DataFrame row-by-row in a loop with `pd.concat()` inside the loop is slow. What is the correct alternative?
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    # Solution for the specific exercise
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(10), 'B': np.random.randn(10)})
+    print(df.head())
+    ```
+
+---
+
+**Exercise 2.** Write code showing the performance difference between `iterrows()` and vectorized operations for computing a column.
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the Pandas API and its behavior for this specific operation.
+
+---
+
+**Exercise 3.** Explain why `apply()` with a Python function is slower than using built-in Pandas/NumPy vectorized methods.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(20), 'B': np.random.randn(20)})
+    result = df.describe()
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Write code that collects results in a list and creates a DataFrame at the end, instead of appending to a DataFrame in a loop.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(50), 'group': np.random.choice(['X', 'Y'], 50)})
+    result = df.groupby('group').mean()
+    print(result)
+    ```

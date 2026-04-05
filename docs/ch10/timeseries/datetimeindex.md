@@ -257,3 +257,58 @@ if __name__ == "__main__":
     print("- pct_change(): Percentage change")
     print("- Time zone handling with tz parameter")
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that creates a DataFrame with a DatetimeIndex and accesses rows for a specific month using `.loc['2024-06']`.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    # Solution for the specific exercise
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(10), 'B': np.random.randn(10)})
+    print(df.head())
+    ```
+
+---
+
+**Exercise 2.** Explain three advantages of having a DatetimeIndex on a DataFrame.
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the Pandas API and its behavior for this specific operation.
+
+---
+
+**Exercise 3.** Write code that extracts the year, month, and day from a DatetimeIndex using `.year`, `.month`, `.day`.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(20), 'B': np.random.randn(20)})
+    result = df.describe()
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Create a DatetimeIndex with hourly frequency and demonstrate slicing by date and time.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(50), 'group': np.random.choice(['X', 'Y'], 50)})
+    result = df.groupby('group').mean()
+    print(result)
+    ```

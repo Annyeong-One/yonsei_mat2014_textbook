@@ -130,3 +130,88 @@ Output:
 ```
 Theme: dark
 ```
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Use `shelve` to create a persistent key-value store. Store three records with string keys and dictionary values. Close the shelf, reopen it, and verify the data persists.
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        import shelve
+
+        with shelve.open("/tmp/mydata") as db:
+            db["alice"] = {"age": 30, "city": "Seoul"}
+            db["bob"] = {"age": 25, "city": "Tokyo"}
+            db["carol"] = {"age": 35, "city": "NYC"}
+
+        with shelve.open("/tmp/mydata") as db:
+            print(db["alice"])  # {'age': 30, 'city': 'Seoul'}
+            print(list(db.keys()))  # ['alice', 'bob', 'carol']
+        ```
+
+    `shelve` provides a dictionary-like interface to persistent storage. Data survives between program runs.
+
+---
+
+**Exercise 2.**
+Demonstrate the writeback problem: open a shelf without `writeback=True`, modify a mutable value, and show that the change is lost. Then fix it using `writeback=True`.
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        import shelve
+
+        # Without writeback - changes lost
+        with shelve.open("/tmp/test_shelf") as db:
+            db["data"] = [1, 2, 3]
+
+        with shelve.open("/tmp/test_shelf") as db:
+            db["data"].append(4)  # Modifies a temporary copy
+
+        with shelve.open("/tmp/test_shelf") as db:
+            print(db["data"])  # [1, 2, 3] - append was lost!
+
+        # With writeback - changes preserved
+        with shelve.open("/tmp/test_shelf", writeback=True) as db:
+            db["data"].append(4)
+
+        with shelve.open("/tmp/test_shelf") as db:
+            print(db["data"])  # [1, 2, 3, 4]
+        ```
+
+    Without `writeback=True`, accessing `db["data"]` returns a deserialized copy. Mutations to this copy are not automatically saved back.
+
+---
+
+**Exercise 3.**
+Write a simple address book using `shelve` with functions `add_contact(name, phone)`, `get_contact(name)`, and `list_contacts()`.
+
+??? success "Solution to Exercise 3"
+
+        ```python
+        import shelve
+
+        DB_PATH = "/tmp/addressbook"
+
+        def add_contact(name, phone):
+            with shelve.open(DB_PATH) as db:
+                db[name] = phone
+
+        def get_contact(name):
+            with shelve.open(DB_PATH) as db:
+                return db.get(name, "Not found")
+
+        def list_contacts():
+            with shelve.open(DB_PATH) as db:
+                return dict(db)
+
+        add_contact("Alice", "555-1234")
+        add_contact("Bob", "555-5678")
+        print(get_contact("Alice"))   # 555-1234
+        print(list_contacts())        # {'Alice': '555-1234', 'Bob': '555-5678'}
+        ```

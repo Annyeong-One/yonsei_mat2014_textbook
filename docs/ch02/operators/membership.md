@@ -182,3 +182,70 @@ print(5 in evens)   # False
 - Dict membership checks **keys** by default
 - Sets have O(1) lookup — use for frequent checks
 - Use `__contains__` for custom membership logic
+
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Write a function `find_missing(required, provided)` that takes two sets and returns a sorted list of items in `required` but not in `provided`. Use the `not in` operator.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    def find_missing(required, provided):
+        return sorted(item for item in required if item not in provided)
+
+    required = {'name', 'email', 'phone', 'address'}
+    provided = {'name', 'email'}
+    print(find_missing(required, provided))  # ['address', 'phone']
+    ```
+
+    The function iterates over `required` and filters items absent from `provided`. Using sets for `provided` ensures O(1) lookup per check.
+
+---
+
+**Exercise 2.**
+Demonstrate the performance difference between membership testing in a list versus a set. Create a list and set each containing numbers 0 to 99999, and time how long it takes to check if `99999` is in each.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    import timeit
+
+    setup_list = "lst = list(range(100000))"
+    setup_set = "s = set(range(100000))"
+
+    list_time = timeit.timeit("99999 in lst", setup=setup_list, number=1000)
+    set_time = timeit.timeit("99999 in s", setup=setup_set, number=1000)
+
+    print(f"List: {list_time:.4f}s")
+    print(f"Set:  {set_time:.6f}s")
+    print(f"Set is {list_time / set_time:.0f}x faster")
+    ```
+
+    List membership is O(n) because Python checks each element sequentially. Set membership is O(1) on average because sets use hash tables.
+
+---
+
+**Exercise 3.**
+Given a dictionary `person = {'name': 'Alice', 'age': 30, 'city': 'NYC'}`, show three different membership tests: checking if a key exists, checking if a value exists, and checking if a key-value pair exists.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    person = {'name': 'Alice', 'age': 30, 'city': 'NYC'}
+
+    # Check key
+    print('name' in person)                        # True
+
+    # Check value
+    print('Alice' in person.values())              # True
+
+    # Check key-value pair
+    print(('name', 'Alice') in person.items())     # True
+    ```
+
+    By default, `in` checks dictionary keys. Use `.values()` to check values and `.items()` to check key-value pairs.

@@ -329,3 +329,99 @@ if __name__ == '__main__':
     for n in range(4, 11):
         print(f"  {n}-Queens: {n_queens(n)} solutions")
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a backtracking function `generate_parentheses(n)` that returns all combinations of `n` pairs of well-formed parentheses. For example, `generate_parentheses(3)` should return `["((()))", "(()())", "(())()", "()(())", "()()()"]`.
+
+??? success "Solution to Exercise 1"
+
+        def generate_parentheses(n):
+            result = []
+
+            def backtrack(current, open_count, close_count):
+                if len(current) == 2 * n:
+                    result.append(current)
+                    return
+                if open_count < n:
+                    backtrack(current + "(", open_count + 1, close_count)
+                if close_count < open_count:
+                    backtrack(current + ")", open_count, close_count + 1)
+
+            backtrack("", 0, 0)
+            return result
+
+        print(generate_parentheses(3))
+        # ['((()))', '(()())', '(())()', '()(())', '()()()']
+
+---
+
+**Exercise 2.**
+Implement a `solve_sudoku(board)` function using backtracking that fills in zeros on a 9x9 board (represented as a list of lists). It should return `True` if the board is solvable (modifying it in place) and `False` otherwise. Test with a simple partially-filled board.
+
+??? success "Solution to Exercise 2"
+
+        def solve_sudoku(board):
+            def is_valid(board, row, col, num):
+                for i in range(9):
+                    if board[row][i] == num or board[i][col] == num:
+                        return False
+                box_r, box_c = 3 * (row // 3), 3 * (col // 3)
+                for i in range(box_r, box_r + 3):
+                    for j in range(box_c, box_c + 3):
+                        if board[i][j] == num:
+                            return False
+                return True
+
+            for row in range(9):
+                for col in range(9):
+                    if board[row][col] == 0:
+                        for num in range(1, 10):
+                            if is_valid(board, row, col, num):
+                                board[row][col] = num
+                                if solve_sudoku(board):
+                                    return True
+                                board[row][col] = 0  # Backtrack
+                        return False
+            return True
+
+        board = [
+            [5,3,0,0,7,0,0,0,0],
+            [6,0,0,1,9,5,0,0,0],
+            [0,9,8,0,0,0,0,6,0],
+            [8,0,0,0,6,0,0,0,3],
+            [4,0,0,8,0,3,0,0,1],
+            [7,0,0,0,2,0,0,0,6],
+            [0,6,0,0,0,0,2,8,0],
+            [0,0,0,4,1,9,0,0,5],
+            [0,0,0,0,8,0,0,7,9],
+        ]
+        print(solve_sudoku(board))  # True
+        print(board[0])  # [5, 3, 4, 6, 7, 8, 9, 1, 2]
+
+---
+
+**Exercise 3.**
+Write a backtracking function `find_subsets(nums)` that returns all possible subsets of a list of distinct integers. For example, `find_subsets([1, 2, 3])` should return `[[], [1], [1, 2], [1, 2, 3], [1, 3], [2], [2, 3], [3]]` (order may vary).
+
+??? success "Solution to Exercise 3"
+
+        def find_subsets(nums):
+            result = []
+
+            def backtrack(start, current):
+                result.append(current[:])
+                for i in range(start, len(nums)):
+                    current.append(nums[i])
+                    backtrack(i + 1, current)
+                    current.pop()  # Backtrack
+
+            backtrack(0, [])
+            return result
+
+        subsets = find_subsets([1, 2, 3])
+        print(subsets)
+        # [[], [1], [1, 2], [1, 2, 3], [1, 3], [2], [2, 3], [3]]

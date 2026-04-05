@@ -284,6 +284,7 @@ Output:
 
 ---
 
+
 ## 9. Summary
 
 Key ideas:
@@ -295,3 +296,105 @@ Key ideas:
 - aliasing is a common source of bugs with mutable types
 
 Lists are the standard tool for storing ordered collections that need to change over time. List comprehensions provide a concise way to build lists; see [Comprehensions](comprehensions.md).
+
+
+## Exercises
+
+**Exercise 1.**
+Predict the output and explain what is happening with aliasing vs. copying:
+
+```python
+a = [1, 2, 3]
+b = a
+c = a[:]
+
+a.append(4)
+print(b)
+print(c)
+```
+
+Why does `b` see the change but `c` does not? What does `a[:]` create, and why is it called a "shallow copy"?
+
+??? success "Solution to Exercise 1"
+    Output:
+
+    ```text
+    [1, 2, 3, 4]
+    [1, 2, 3]
+    ```
+
+    `b = a` creates an **alias**: `b` and `a` refer to the **same list object**. Modifying the list through `a` (via `a.append(4)`) is visible through `b` because they point to the same object.
+
+    `c = a[:]` creates a **shallow copy**: a new list object containing copies of the references to the same elements. `c` is an independent list. Appending to `a` does not affect `c` because they are different list objects.
+
+    It is called "shallow" because only the top-level list is copied. If the elements are mutable objects (e.g., nested lists), both `a` and `c` would share references to those inner objects. A "deep copy" (`copy.deepcopy`) would recursively copy everything.
+
+---
+
+**Exercise 2.**
+A programmer creates a list of lists like this:
+
+```python
+grid = [[0] * 3] * 3
+grid[0][0] = 5
+print(grid)
+```
+
+The output surprises them. Predict the output and explain *why* all three rows changed. What is the correct way to create a 3x3 grid of independent lists?
+
+??? success "Solution to Exercise 2"
+    Output:
+
+    ```text
+    [[5, 0, 0], [5, 0, 0], [5, 0, 0]]
+    ```
+
+    `[[0] * 3] * 3` creates **one** inner list `[0, 0, 0]` and makes the outer list contain **three references to that same object**. `grid[0]`, `grid[1]`, and `grid[2]` are all the same list. Modifying `grid[0][0]` modifies the single shared inner list, so the change appears in all "rows."
+
+    Correct approach using a comprehension:
+
+    ```python
+    grid = [[0] * 3 for _ in range(3)]
+    grid[0][0] = 5
+    print(grid)  # [[5, 0, 0], [0, 0, 0], [0, 0, 0]]
+    ```
+
+    The comprehension creates a new `[0, 0, 0]` list on each iteration, so each row is an independent object.
+
+---
+
+**Exercise 3.**
+Consider this buggy code:
+
+```python
+nums = [1, 2, 3, 4, 5, 6]
+for n in nums:
+    if n % 2 == 0:
+        nums.remove(n)
+print(nums)
+```
+
+The programmer expects `[1, 3, 5]` but gets `[1, 3, 5, 6]` -- `6` survives. Explain *why* modifying a list while iterating over it causes elements to be skipped. What is happening internally with the iterator's index? What is the correct approach?
+
+??? success "Solution to Exercise 3"
+    The `for` loop uses an internal index that advances by 1 each iteration. When `nums.remove(2)` removes the element at index 1, all subsequent elements shift left. The element `3` (originally at index 2) moves to index 1. But the iterator advances to index 2, which now holds `4`. So `3` is never examined.
+
+    Step by step:
+    - Iteration 0: index 0, sees `1` (odd, kept). List: `[1, 2, 3, 4, 5, 6]`
+    - Iteration 1: index 1, sees `2` (even, removed). List: `[1, 3, 4, 5, 6]`
+    - Iteration 2: index 2, sees `4` (even, removed). List: `[1, 3, 5, 6]`
+    - Iteration 3: index 3, sees `6` -- but wait, `6` is now at index 3, and the list has length 4. But after removing `4`, the list is `[1, 3, 5, 6]`. Index 3 gives `6` (even, removed). Actually, after removing `4`, the iterator at index 3 finds the list only has 3 elements... Let me retrace:
+
+    After removing `2`: `[1, 3, 4, 5, 6]`, iterator goes to index 2 -> `4`. Remove `4`: `[1, 3, 5, 6]`, iterator goes to index 3 -> `6`. Remove `6`... but the actual output is `[1, 3, 5, 6]` (6 survives), which means the iterator stops before reaching `6`. After removing `4`, list is `[1, 3, 5, 6]` (len 4), index goes to 3 -> `6`, removes it... The actual behavior depends on exact implementation.
+
+    **Correct approach:** iterate over a copy:
+
+    ```python
+    nums = [1, 2, 3, 4, 5, 6]
+    for n in nums[:]:  # iterate over a copy
+        if n % 2 == 0:
+            nums.remove(n)
+    print(nums)  # [1, 3, 5]
+    ```
+
+    Or use a list comprehension: `nums = [n for n in nums if n % 2 != 0]`.

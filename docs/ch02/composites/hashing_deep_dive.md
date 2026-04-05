@@ -817,3 +817,77 @@ if __name__ == "__main__":
    - But when it is, slowdown is dramatic
     """)
 ```
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Verify the hash consistency rule: if `a == b`, then `hash(a) == hash(b)`. Test this with `1` and `1.0`, with `True` and `1`, and with two identical tuples.
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        # int and float
+        print(1 == 1.0)                # True
+        print(hash(1) == hash(1.0))    # True
+
+        # bool and int
+        print(True == 1)               # True
+        print(hash(True) == hash(1))   # True
+
+        # identical tuples
+        t1 = (1, 2, 3)
+        t2 = (1, 2, 3)
+        print(t1 == t2)               # True
+        print(hash(t1) == hash(t2))   # True
+        ```
+
+    The hash consistency rule is fundamental: equal objects must have equal hashes. This is required for correct behavior in sets and dictionaries.
+
+---
+
+**Exercise 2.**
+Write a class `Color` with attributes `r`, `g`, `b` that is both hashable and supports equality comparison. Two `Color` objects should be equal if their RGB values match. Use it as a dictionary key.
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        class Color:
+            def __init__(self, r, g, b):
+                self.r = r
+                self.g = g
+                self.b = b
+
+            def __eq__(self, other):
+                return (self.r, self.g, self.b) == (other.r, other.g, other.b)
+
+            def __hash__(self):
+                return hash((self.r, self.g, self.b))
+
+        palette = {Color(255, 0, 0): "red", Color(0, 255, 0): "green"}
+        print(palette[Color(255, 0, 0)])  # red
+        ```
+
+    Both `__eq__` and `__hash__` must be implemented. The hash is based on the same fields used for equality.
+
+---
+
+**Exercise 3.**
+Explain why lists are not hashable. Demonstrate the error that occurs when you try to use a list as a dictionary key, and show how converting it to a tuple solves the problem.
+
+??? success "Solution to Exercise 3"
+
+        ```python
+        try:
+            d = {[1, 2]: "value"}
+        except TypeError as e:
+            print(f"Error: {e}")  # unhashable type: 'list'
+
+        # Convert to tuple
+        d = {(1, 2): "value"}
+        print(d[(1, 2)])  # value
+        ```
+
+    Lists are mutable, so their contents can change after insertion into a set or dict, which would break the hash consistency rule. Tuples are immutable and therefore hashable.

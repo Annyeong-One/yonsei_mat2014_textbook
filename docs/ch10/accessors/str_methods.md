@@ -329,3 +329,58 @@ print(result)
 2. **Avoid chaining** too many operations; intermediate Series are created
 3. **Use `regex=False`** when not needed for better performance
 4. **Consider `str.contains(..., regex=False)`** for literal string search
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Given a Series of product descriptions, use `.str.extract()` with a regex pattern to pull out all numeric values (prices) embedded in strings like `'Widget costs 29.99 dollars'` and `'Gadget is 14.50 on sale'`.
+
+??? success "Solution to Exercise 1"
+    Use `.str.extract()` with a pattern for decimal numbers.
+
+        import pandas as pd
+
+        descriptions = pd.Series([
+            'Widget costs 29.99 dollars',
+            'Gadget is 14.50 on sale',
+            'Tool priced at 5.00'
+        ])
+        prices = descriptions.str.extract(r'(\d+\.\d+)')[0].astype(float)
+        print(prices)
+
+---
+
+**Exercise 2.**
+Given a Series of full addresses like `'123 Main St, New York, NY 10001'`, use `.str.split(',')` to break each address into parts. Then use `.str.get()` or bracket indexing to extract only the city (second element) and strip whitespace from it.
+
+??? success "Solution to Exercise 2"
+    Split on comma and extract the second element.
+
+        import pandas as pd
+
+        addresses = pd.Series([
+            '123 Main St, New York, NY 10001',
+            '456 Oak Ave, Los Angeles, CA 90001',
+            '789 Pine Rd, Chicago, IL 60601'
+        ])
+        cities = addresses.str.split(',').str[1].str.strip()
+        print(cities)
+
+---
+
+**Exercise 3.**
+Given a Series of filenames like `['report_2024.pdf', 'data_2023.csv', 'notes_2024.txt']`, use `.str.endswith()` to filter only `.csv` files, and use `.str.replace()` with regex to extract the year from each filename.
+
+??? success "Solution to Exercise 3"
+    Combine `.str.endswith()` for filtering and `.str.extract()` for the year.
+
+        import pandas as pd
+
+        filenames = pd.Series(['report_2024.pdf', 'data_2023.csv', 'notes_2024.txt'])
+        csv_files = filenames[filenames.str.endswith('.csv')]
+        print("CSV files:", csv_files.tolist())
+
+        years = filenames.str.extract(r'(\d{4})')[0]
+        print("Years:", years.tolist())

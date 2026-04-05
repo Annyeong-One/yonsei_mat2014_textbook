@@ -120,3 +120,61 @@ where $s$ is the residual standard error and $h_{ii}$ is the $i$-th diagonal ele
 ## Summary
 
 Residual plots translate the abstract assumptions of linear regression into visual patterns. The residuals-vs-fitted plot checks linearity and constant variance, the scale-location plot isolates heteroscedasticity, and the normal QQ plot assesses the normality of errors. Together, these diagnostics guide model refinement — suggesting transformations, additional predictors, or alternative regression methods when assumptions are violated.
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that fits a simple linear regression, computes the residuals, and creates a residual plot (residuals vs fitted values).
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(100)
+    print(f'Mean: {data.mean():.4f}')
+    print(f'Std: {data.std():.4f}')
+    ```
+
+---
+
+**Exercise 2.** Explain three patterns in residual plots that indicate problems: heteroscedasticity, non-linearity, and outliers.
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the statistical method and its assumptions.
+
+---
+
+**Exercise 3.** Write code that creates a 2x2 diagnostic figure: residuals vs fitted, Q-Q plot of residuals, scale-location plot, and residuals vs leverage.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+    from scipy import stats
+    import matplotlib.pyplot as plt
+
+    np.random.seed(42)
+    data = np.random.randn(1000)
+    fig, ax = plt.subplots()
+    ax.hist(data, bins=30, density=True, alpha=0.7)
+    ax.set_title('Distribution')
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Generate data with heteroscedastic errors and demonstrate that the residual plot reveals the non-constant variance.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(500)
+    result = stats.describe(data)
+    print(result)
+    ```

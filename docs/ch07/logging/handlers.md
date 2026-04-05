@@ -692,3 +692,94 @@ if __name__ == "__main__":
     print("✓ Handler best practices")
     print("\nNext: Study 06_logger_hierarchy.py to understand logger organization!")
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Configure a logger with two handlers: a `StreamHandler` that only shows WARNING and above, and a second `StreamHandler` (simulating a file) that shows all messages from DEBUG and above. Demonstrate that a DEBUG message appears in the second handler but not the first.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    import logging
+
+    logger = logging.getLogger("dual_handler")
+    logger.setLevel(logging.DEBUG)
+
+    # Console handler: WARNING+
+    console = logging.StreamHandler()
+    console.setLevel(logging.WARNING)
+    console.setFormatter(logging.Formatter("CONSOLE: %(levelname)s - %(message)s"))
+
+    # "File" handler: DEBUG+
+    file_sim = logging.StreamHandler()
+    file_sim.setLevel(logging.DEBUG)
+    file_sim.setFormatter(logging.Formatter("FILE: %(levelname)s - %(message)s"))
+
+    logger.addHandler(console)
+    logger.addHandler(file_sim)
+
+    logger.debug("Debug detail")    # Only in file_sim
+    logger.warning("Important!")     # In both
+    ```
+
+---
+
+**Exercise 2.**
+Write a function `create_rotating_logger` that sets up a `RotatingFileHandler` with configurable `maxBytes` and `backupCount`. Return the logger. Include comments explaining when rotation occurs.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    import logging
+    from logging.handlers import RotatingFileHandler
+
+    def create_rotating_logger(name, filename, max_bytes=5000, backup_count=3):
+        logger = logging.getLogger(name)
+        logger.setLevel(logging.DEBUG)
+        # Rotation: when file exceeds max_bytes, it is renamed
+        # to filename.1, and a new file is created. Up to
+        # backup_count old files are kept.
+        handler = RotatingFileHandler(
+            filename, maxBytes=max_bytes, backupCount=backup_count
+        )
+        handler.setFormatter(
+            logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+        )
+        logger.addHandler(handler)
+        return logger
+
+    # Usage:
+    # logger = create_rotating_logger("myapp", "app.log")
+    ```
+
+---
+
+**Exercise 3.**
+Write a function `add_handler_safely` that adds a handler to a logger only if a handler of the same type is not already attached (to prevent duplicate handlers). Test by calling it twice and verifying only one handler is added.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    import logging
+
+    def add_handler_safely(logger, handler):
+        handler_type = type(handler)
+        for existing in logger.handlers:
+            if isinstance(existing, handler_type):
+                return  # Already has this type
+        logger.addHandler(handler)
+
+    # Test
+    logger = logging.getLogger("safe_logger")
+    logger.setLevel(logging.DEBUG)
+
+    h1 = logging.StreamHandler()
+    h2 = logging.StreamHandler()
+
+    add_handler_safely(logger, h1)
+    add_handler_safely(logger, h2)  # Skipped
+    print(f"Handler count: {len(logger.handlers)}")  # 1
+    ```

@@ -481,3 +481,88 @@ def __setattr__(self, name, value):
         # Logic here
         super().__setattr__(name, value)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a class `TypeEnforced` that uses `__setattr__` to enforce types based on a class-level `_types` dictionary. For example, `_types = {"name": str, "age": int}` means `name` must always be a string and `age` must always be an int. Raise `TypeError` on violation. Allow attributes not in `_types` to be set freely.
+
+??? success "Solution to Exercise 1"
+
+        class TypeEnforced:
+            _types = {"name": str, "age": int}
+
+            def __setattr__(self, name, value):
+                if name in self._types:
+                    expected = self._types[name]
+                    if not isinstance(value, expected):
+                        raise TypeError(
+                            f"'{name}' must be {expected.__name__}, got {type(value).__name__}"
+                        )
+                super().__setattr__(name, value)
+
+        obj = TypeEnforced()
+        obj.name = "Alice"  # OK
+        obj.age = 30        # OK
+        obj.other = [1, 2]  # OK — not in _types
+
+        try:
+            obj.age = "thirty"
+        except TypeError as e:
+            print(f"Error: {e}")
+            # Error: 'age' must be int, got str
+
+---
+
+**Exercise 2.**
+Write a class `HistoryTracked` where `__setattr__` keeps a history of all values assigned to each attribute. Store the history in a `_history` dictionary. Provide a `get_history(attr_name)` method that returns the list of past values. Use `object.__setattr__` to avoid recursion.
+
+??? success "Solution to Exercise 2"
+
+        class HistoryTracked:
+            def __init__(self, **kwargs):
+                object.__setattr__(self, '_history', {})
+                for k, v in kwargs.items():
+                    setattr(self, k, v)
+
+            def __setattr__(self, name, value):
+                history = object.__getattribute__(self, '_history')
+                if name not in history:
+                    history[name] = []
+                history[name].append(value)
+                object.__setattr__(self, name, value)
+
+            def get_history(self, attr_name):
+                return self._history.get(attr_name, [])
+
+        obj = HistoryTracked(x=1)
+        obj.x = 2
+        obj.x = 3
+        print(obj.x)               # 3
+        print(obj.get_history("x")) # [1, 2, 3]
+
+---
+
+**Exercise 3.**
+Build a class `WriteOnce` where `__setattr__` allows an attribute to be set only if it does not already exist. If the attribute already exists, raise `AttributeError`. Use this to create objects whose attributes can be set in `__init__` but never changed afterward.
+
+??? success "Solution to Exercise 3"
+
+        class WriteOnce:
+            def __setattr__(self, name, value):
+                if hasattr(self, name):
+                    raise AttributeError(f"'{name}' already set and cannot be changed")
+                super().__setattr__(name, value)
+
+        obj = WriteOnce()
+        obj.name = "Alice"
+        obj.age = 30
+        print(obj.name)  # Alice
+
+        try:
+            obj.name = "Bob"
+        except AttributeError as e:
+            print(f"Error: {e}")
+            # Error: 'name' already set and cannot be changed

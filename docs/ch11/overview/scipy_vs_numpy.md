@@ -200,3 +200,76 @@ from scipy import linalg
 
 # Use scipy.linalg as default for comprehensive functionality
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Solve the upper triangular system $Ux = b$ where $U = \begin{pmatrix} 3 & 1 & 2 \\ 0 & 5 & 4 \\ 0 & 0 & 2 \end{pmatrix}$ and $b = (10, 13, 4)^T$ using `scipy.linalg.solve_triangular`. Verify the solution by comparing with `np.linalg.solve`. The specialized solver should give the same result but is more efficient for triangular systems.
+
+??? success "Solution to Exercise 1"
+        import numpy as np
+        from scipy import linalg
+
+        U = np.array([[3, 1, 2],
+                       [0, 5, 4],
+                       [0, 0, 2]], dtype=float)
+        b = np.array([10, 13, 4], dtype=float)
+
+        x_tri = linalg.solve_triangular(U, b)
+        x_gen = np.linalg.solve(U, b)
+
+        print(f"Triangular solver: {x_tri}")
+        print(f"General solver:    {x_gen}")
+        print(f"Match: {np.allclose(x_tri, x_gen)}")
+
+---
+
+**Exercise 2.**
+Compare the eigenvalue computation of a $100 \times 100$ symmetric matrix using both `np.linalg.eigh` and `scipy.linalg.eigh` (use `np.random.seed(15)` to create $A + A^T$). Verify that both return the same eigenvalues (up to $10^{-10}$) and measure the execution time of each.
+
+??? success "Solution to Exercise 2"
+        import numpy as np
+        from scipy import linalg
+        import time
+
+        np.random.seed(15)
+        B = np.random.randn(100, 100)
+        A = B + B.T
+
+        start = time.perf_counter()
+        vals_np = np.linalg.eigh(A)[0]
+        time_np = time.perf_counter() - start
+
+        start = time.perf_counter()
+        vals_sp = linalg.eigh(A)[0]
+        time_sp = time.perf_counter() - start
+
+        diff = np.max(np.abs(vals_np - vals_sp))
+        print(f"Max eigenvalue difference: {diff:.2e}")
+        print(f"NumPy time:  {time_np:.4f} sec")
+        print(f"SciPy time:  {time_sp:.4f} sec")
+
+---
+
+**Exercise 3.**
+Demonstrate a function available only in SciPy: compute the matrix exponential `expm` and the Schur decomposition of a $4 \times 4$ random matrix (use `np.random.seed(20)`). Print the Schur form $T$ and verify that `expm(A)` can be computed as $Z \cdot \text{expm}(T) \cdot Z^H$.
+
+??? success "Solution to Exercise 3"
+        import numpy as np
+        from scipy import linalg
+
+        np.random.seed(20)
+        A = np.random.randn(4, 4)
+
+        # Schur decomposition (SciPy only)
+        T, Z = linalg.schur(A, output='complex')
+        print(f"Schur form T:\n{T.round(4)}")
+
+        # Matrix exponential (SciPy only)
+        exp_A_direct = linalg.expm(A)
+        exp_A_schur = Z @ linalg.expm(T) @ Z.conj().T
+
+        error = np.linalg.norm(exp_A_direct - exp_A_schur.real)
+        print(f"\nexpm(A) via Schur matches direct: {error:.2e}")

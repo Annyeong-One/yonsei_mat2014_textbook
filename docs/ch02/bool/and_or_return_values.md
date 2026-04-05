@@ -145,3 +145,75 @@ Output:
 ['default']
 [1, 2, 3]
 ```
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Without running the code, predict the value of each expression. Then verify.
+
+```python
+a = 0 or "" or [] or "hello" or 42
+b = 1 and "yes" and [] and "no"
+c = None or 0 or False or "found"
+```
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        a = 0 or "" or [] or "hello" or 42
+        print(a)  # "hello"
+
+        b = 1 and "yes" and [] and "no"
+        print(b)  # []
+
+        c = None or 0 or False or "found"
+        print(c)  # "found"
+        ```
+
+    `or` returns the first truthy operand (or the last if all are falsy). `and` returns the first falsy operand (or the last if all are truthy). In `b`, the empty list `[]` is falsy, so `and` stops and returns it.
+
+---
+
+**Exercise 2.**
+Write a function `first_truthy(*args)` that returns the first truthy value from its arguments, or `None` if all are falsy. Use `or` chaining or a loop with short-circuit logic.
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        def first_truthy(*args):
+            for arg in args:
+                if arg:
+                    return arg
+            return None
+
+        print(first_truthy(0, "", [], "hello", 42))  # "hello"
+        print(first_truthy(0, "", [], None))          # None
+        ```
+
+    The loop returns the first truthy value immediately. If none are found, `None` is returned. This is equivalent to chaining `or` but works with any number of arguments.
+
+---
+
+**Exercise 3.**
+Explain why `x = a or b` is not the same as `x = a if a else b` in all cases. Provide a concrete example where they produce different results, or explain why they are always equivalent.
+
+??? success "Solution to Exercise 3"
+
+    They are always equivalent for the purpose of choosing between `a` and `b`. Both expressions evaluate `a` for truthiness: if truthy, `a` is the result; otherwise `b` is the result.
+
+        ```python
+        a = 0
+        b = 42
+
+        x1 = a or b
+        x2 = a if a else b
+
+        print(x1)  # 42
+        print(x2)  # 42
+        print(x1 == x2)  # True
+        ```
+
+    The expressions `a or b` and `a if a else b` always produce the same result because `or` returns the first truthy value or the last value, which is exactly the behavior of the conditional expression.

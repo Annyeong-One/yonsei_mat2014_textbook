@@ -326,3 +326,87 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a figure with a single 3D axes using `fig.add_subplot(111, projection='3d')`. Plot a helix defined by `x = cos(t)`, `y = sin(t)`, `z = t` for `t` in $[0, 4\pi]$. Add axis labels and a title.
+
+??? success "Solution to Exercise 1"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        t = np.linspace(0, 4 * np.pi, 500)
+        x = np.cos(t)
+        y = np.sin(t)
+        z = t
+
+        fig = plt.figure(figsize=(8, 6))
+        ax = fig.add_subplot(111, projection='3d')
+        ax.plot(x, y, z)
+        ax.set_xlabel('X')
+        ax.set_ylabel('Y')
+        ax.set_zlabel('Z')
+        ax.set_title('Helix')
+        plt.show()
+
+---
+
+**Exercise 2.**
+Create a 1x3 grid of 3D subplots using `plt.subplots(1, 3, subplot_kw={'projection': '3d'})`. In each subplot, plot the surface $z = \sin(\sqrt{x^2 + y^2})$ but from three different viewing angles using `view_init`. Use elevations of 10, 45, and 80 degrees, all with azimuth 45. Title each subplot with its elevation angle.
+
+??? success "Solution to Exercise 2"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(-5, 5, 100)
+        y = np.linspace(-5, 5, 100)
+        X, Y = np.meshgrid(x, y)
+        Z = np.sin(np.sqrt(X**2 + Y**2))
+
+        fig, axes = plt.subplots(1, 3, figsize=(15, 5),
+                                  subplot_kw={'projection': '3d'})
+
+        for ax, elev in zip(axes, [10, 45, 80]):
+            ax.plot_surface(X, Y, Z, cmap='viridis', alpha=0.9)
+            ax.view_init(elev=elev, azim=45)
+            ax.set_title(f'Elevation = {elev}°')
+
+        plt.tight_layout()
+        plt.show()
+
+---
+
+**Exercise 3.**
+Use `fig.add_subplot` with a 2x2 grid layout to create four 3D axes. In each axes, plot a different 3D surface: a paraboloid ($z = x^2 + y^2$), a saddle ($z = x^2 - y^2$), a plane ($z = x + y$), and a cone ($z = \sqrt{x^2 + y^2}$). Use a different colormap for each and add titles.
+
+??? success "Solution to Exercise 3"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(-3, 3, 100)
+        y = np.linspace(-3, 3, 100)
+        X, Y = np.meshgrid(x, y)
+
+        surfaces = [
+            (X**2 + Y**2, 'Paraboloid', 'viridis'),
+            (X**2 - Y**2, 'Saddle', 'coolwarm'),
+            (X + Y, 'Plane', 'plasma'),
+            (np.sqrt(X**2 + Y**2), 'Cone', 'inferno'),
+        ]
+
+        fig = plt.figure(figsize=(12, 10))
+        for i, (Z, title, cmap) in enumerate(surfaces, 1):
+            ax = fig.add_subplot(2, 2, i, projection='3d')
+            ax.plot_surface(X, Y, Z, cmap=cmap, alpha=0.9)
+            ax.set_title(title)
+            ax.set_xlabel('X')
+            ax.set_ylabel('Y')
+
+        plt.tight_layout()
+        plt.show()

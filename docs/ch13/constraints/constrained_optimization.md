@@ -438,3 +438,82 @@ print(f"Result: {result.x}")
 7. **Check feasibility** before optimizing (infeasible constraints = no solution)
 
 Next sections cover specialized optimization for fitting curves to data and finding roots of functions.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Minimize $f(x, y) = x^2 + y^2$ subject to the equality constraint $x + y = 4$ using SLSQP. Print the optimal point and verify that the constraint is satisfied. Also solve analytically (using Lagrange multipliers, the answer is $(2, 2)$) and compare.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import numpy as np
+        from scipy import optimize
+
+        def objective(x):
+            return x[0]**2 + x[1]**2
+
+        constraints = {'type': 'eq', 'fun': lambda x: x[0] + x[1] - 4}
+
+        result = optimize.minimize(objective, x0=[0, 0],
+                                   constraints=constraints, method='SLSQP')
+
+        print(f"Optimal point: ({result.x[0]:.4f}, {result.x[1]:.4f})")
+        print(f"Objective value: {result.fun:.4f}")
+        print(f"Constraint x+y = {result.x[0] + result.x[1]:.4f} (should be 4)")
+        print(f"Close to (2, 2): {np.allclose(result.x, [2, 2], atol=1e-4)}")
+        ```
+
+---
+
+**Exercise 2.**
+Solve a simple resource allocation problem: minimize $f(x_1, x_2, x_3) = x_1^2 + 2x_2^2 + 3x_3^2$ subject to $x_1 + x_2 + x_3 = 10$ (equality) and $x_i \geq 0$ for all $i$ (bounds). Use SLSQP and print the optimal allocation and objective value.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import numpy as np
+        from scipy import optimize
+
+        def objective(x):
+            return x[0]**2 + 2*x[1]**2 + 3*x[2]**2
+
+        constraints = {'type': 'eq', 'fun': lambda x: x[0] + x[1] + x[2] - 10}
+        bounds = [(0, None), (0, None), (0, None)]
+
+        result = optimize.minimize(objective, x0=[3, 3, 4],
+                                   constraints=constraints,
+                                   bounds=bounds, method='SLSQP')
+
+        print(f"Allocation: x1={result.x[0]:.4f}, x2={result.x[1]:.4f}, x3={result.x[2]:.4f}")
+        print(f"Objective: {result.fun:.4f}")
+        print(f"Sum: {np.sum(result.x):.4f} (should be 10)")
+        ```
+
+---
+
+**Exercise 3.**
+Use `NonlinearConstraint` to minimize $f(x, y) = (x - 3)^2 + (y - 3)^2$ subject to $1 \leq x^2 + y^2 \leq 10$. Start from `x0 = [1, 1]`. Print the optimal point and verify the constraint is within bounds.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import numpy as np
+        from scipy import optimize
+
+        def objective(x):
+            return (x[0] - 3)**2 + (x[1] - 3)**2
+
+        def constraint_func(x):
+            return x[0]**2 + x[1]**2
+
+        constraint = optimize.NonlinearConstraint(constraint_func, 1, 10)
+
+        result = optimize.minimize(objective, x0=[1, 1],
+                                   constraints=constraint, method='SLSQP')
+
+        c_val = constraint_func(result.x)
+        print(f"Optimal point: ({result.x[0]:.4f}, {result.x[1]:.4f})")
+        print(f"Objective: {result.fun:.4f}")
+        print(f"Constraint value: {c_val:.4f} (should be in [1, 10])")
+        print(f"Constraint satisfied: {1 <= c_val <= 10}")
+        ```

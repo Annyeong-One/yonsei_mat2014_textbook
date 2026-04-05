@@ -277,6 +277,7 @@ python3 --version   # Explicitly Python 3
 
 ---
 
+
 ## Summary
 
 | Aspect | Details |
@@ -621,3 +622,97 @@ if __name__ == '__main__':
     demo_code_flags()
     demo_code_comparison()
 ```
+
+
+## Exercises
+
+**Exercise 1.**
+Python compiles source code to bytecode before executing it. Predict the output:
+
+```python
+import dis
+
+def greet(name):
+    return "Hello, " + name + "!"
+
+print(type(greet.__code__))
+print(greet.__code__.co_varnames)
+print(greet.__code__.co_consts)
+dis.dis(greet)
+```
+
+What is a code object? Why does Python compile to bytecode rather than interpreting source text directly or compiling to machine code?
+
+??? success "Solution to Exercise 1"
+    The output shows:
+
+    ```text
+    <class 'code'>
+    ('name',)
+    (None, 'Hello, ', '!')
+    ```
+
+    Followed by the bytecode disassembly showing `LOAD_CONST`, `LOAD_FAST`, `BINARY_ADD`, and `RETURN_VALUE` instructions.
+
+    A **code object** (`types.CodeType`) is the compiled representation of a block of Python code. It contains: the bytecode instructions (`co_code`), constants used (`co_consts`), variable names (`co_varnames`), and metadata like line numbers.
+
+    Python compiles to bytecode as a middle ground: interpreting raw source text would require re-parsing every execution (slow), while compiling to machine code would sacrifice portability and dynamic features (no runtime `eval`, no dynamic typing). Bytecode is platform-independent and faster to interpret than raw text, while preserving Python's dynamic nature.
+
+---
+
+**Exercise 2.**
+Python executes top-to-bottom, and `def` is an executable statement. Predict the output:
+
+```python
+print(type(f))  # Line 1
+
+def f():
+    return 42
+
+print(type(f))  # Line 2
+print(f())      # Line 3
+```
+
+Why does Line 1 raise a `NameError`? In what sense is `def` not a "declaration" but an "assignment statement"? How does this differ from languages like C or Java where functions exist before execution begins?
+
+??? success "Solution to Exercise 2"
+    Line 1 raises `NameError: name 'f' is not defined`.
+
+    In Python, `def f():` is an **executable statement** that creates a function object and binds it to the name `f` in the current namespace. Before that statement executes, the name `f` simply does not exist. Python executes statements sequentially from top to bottom.
+
+    This differs fundamentally from C/Java where the compiler processes the entire source file before execution begins, making all function definitions available everywhere (in C, with forward declarations; in Java, unconditionally). Python has no "declaration phase" -- everything happens at runtime.
+
+    This is why `def` is really just syntactic sugar for assignment: `def f(): return 42` is essentially `f = <create function object>`. The name binding happens at the exact moment the `def` statement is reached during execution.
+
+---
+
+**Exercise 3.**
+`.pyc` files cache compiled bytecode. Predict what happens:
+
+```python
+# Scenario: you have module.py
+# Step 1: import module  (creates __pycache__/module.cpython-311.pyc)
+# Step 2: edit module.py  (modify a function)
+# Step 3: import module  (in a new Python session)
+
+# Question: does Step 3 use the old .pyc or recompile?
+# What timestamp mechanism does Python use?
+
+import py_compile
+import importlib
+import os
+
+py_compile.compile('__init__.py')  # Manually compile
+print(os.path.exists('__pycache__'))
+```
+
+Why does Python cache bytecode in `.pyc` files but not cache the final execution results? What problem does the `__pycache__` directory solve?
+
+??? success "Solution to Exercise 3"
+    Step 3 **recompiles** `module.py` because Python checks if the source file's modification timestamp is newer than the `.pyc` file's recorded timestamp. If the source is newer, Python recompiles and overwrites the `.pyc`.
+
+    Python caches **bytecode** (the compilation result) because compilation is a fixed cost: parsing and compiling are deterministic -- the same source always produces the same bytecode. Caching avoids repeating this work on every import.
+
+    Python does **not** cache execution results because execution depends on runtime state: user input, global variables, database contents, time of day, etc. The same bytecode can produce different results on each run.
+
+    The `__pycache__` directory solves the version-collision problem: multiple Python versions can coexist because each `.pyc` file includes the version tag (e.g., `cpython-311`). This prevents Python 3.11 from accidentally loading bytecode compiled by Python 3.10.

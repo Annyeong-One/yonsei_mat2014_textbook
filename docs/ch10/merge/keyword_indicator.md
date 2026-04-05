@@ -200,3 +200,52 @@ deleted_records = merged[merged['_merge'] == 'left_only']
 if merged['_merge'].value_counts().get('left_only', 0) > expected:
     print("Investigate: too many unmatched left rows")
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create two DataFrames and perform an outer merge with `indicator=True`. Filter the result to show only rows that appear in the left DataFrame but not the right (i.e., `_merge == 'left_only'`).
+
+??? success "Solution to Exercise 1"
+    Find left-only rows using the indicator column.
+
+        import pandas as pd
+
+        df1 = pd.DataFrame({'key': ['a', 'b', 'c'], 'val1': [1, 2, 3]})
+        df2 = pd.DataFrame({'key': ['b', 'c', 'd'], 'val2': [4, 5, 6]})
+        result = pd.merge(df1, df2, on='key', how='outer', indicator=True)
+        left_only = result[result['_merge'] == 'left_only']
+        print(left_only)
+
+---
+
+**Exercise 2.**
+Use `indicator=True` with an inner merge. Verify that all rows in the result have `_merge == 'both'` (since inner join only keeps matches).
+
+??? success "Solution to Exercise 2"
+    Verify inner merge indicator values are all 'both'.
+
+        import pandas as pd
+
+        df1 = pd.DataFrame({'key': ['a', 'b', 'c'], 'val1': [1, 2, 3]})
+        df2 = pd.DataFrame({'key': ['b', 'c', 'd'], 'val2': [4, 5, 6]})
+        result = pd.merge(df1, df2, on='key', how='inner', indicator=True)
+        assert (result['_merge'] == 'both').all()
+        print("All inner join rows are 'both'.")
+
+---
+
+**Exercise 3.**
+Use `indicator='source'` (custom column name) in an outer merge. Use `value_counts()` on the indicator column to summarize how many rows came from each source.
+
+??? success "Solution to Exercise 3"
+    Use a custom indicator column name and summarize.
+
+        import pandas as pd
+
+        df1 = pd.DataFrame({'id': [1, 2, 3], 'name': ['A', 'B', 'C']})
+        df2 = pd.DataFrame({'id': [2, 3, 4], 'score': [80, 90, 70]})
+        result = pd.merge(df1, df2, on='id', how='outer', indicator='source')
+        print(result['source'].value_counts())

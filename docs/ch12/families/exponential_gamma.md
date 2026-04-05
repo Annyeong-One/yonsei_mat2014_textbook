@@ -79,3 +79,54 @@ In finance, the gamma distribution is used in insurance claim modeling (aggregat
 ## Summary
 
 The exponential and gamma distributions form a natural family for modeling durations and waiting times. The key practical point when using `scipy.stats` is the scale parametrization: always pass `scale=1/λ` when working with rate parameters.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Verify the memoryless property of the exponential distribution numerically. For $X \sim \text{Exp}(\lambda=1)$, compute $P(X > 3 \mid X > 1)$ using the survival function and compare it to $P(X > 2)$.
+
+??? success "Solution to Exercise 1"
+
+        from scipy import stats
+
+        rv = stats.expon(scale=1)
+        p_conditional = rv.sf(3) / rv.sf(1)
+        p_direct = rv.sf(2)
+        print(f"P(X>3 | X>1) = {p_conditional:.6f}")
+        print(f"P(X>2)       = {p_direct:.6f}")
+        print(f"Equal: {abs(p_conditional - p_direct) < 1e-10}")
+
+---
+
+**Exercise 2.**
+Show that the sum of $n$ independent $\text{Exp}(\lambda)$ random variables follows a $\text{Gamma}(n, 1/\lambda)$ distribution. Generate 10,000 sums of 5 exponential samples with $\lambda = 2$ and compare the sample mean/variance with $\text{Gamma}(5, 0.5)$ theoretical values.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        exp_samples = stats.expon.rvs(scale=0.5, size=(10000, 5))
+        sums = exp_samples.sum(axis=1)
+
+        gamma_rv = stats.gamma(a=5, scale=0.5)
+        print(f"Sample mean: {np.mean(sums):.4f}, Theoretical: {gamma_rv.mean():.4f}")
+        print(f"Sample var:  {np.var(sums, ddof=1):.4f}, Theoretical: {gamma_rv.var():.4f}")
+
+---
+
+**Exercise 3.**
+Fit a gamma distribution to 500 samples generated from $\text{Gamma}(a=4, \text{scale}=3)$. Use `stats.gamma.fit()` with `floc=0` and compare the estimated parameters with the true values.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        data = stats.gamma.rvs(a=4, scale=3, size=500)
+        a_hat, loc_hat, scale_hat = stats.gamma.fit(data, floc=0)
+        print(f"Estimated a={a_hat:.4f} (true 4), scale={scale_hat:.4f} (true 3)")

@@ -360,3 +360,90 @@ if __name__ == "__main__":
     🔜 NEXT: 02_array_creation.py
     """)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.** Create a Python list and a NumPy array, each containing integers 1 through 1,000,000. Measure the time to compute the element-wise square of each. Report the speedup.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+    import time
+
+    n = 1_000_000
+    py_list = list(range(1, n + 1))
+    np_arr = np.arange(1, n + 1)
+
+    start = time.perf_counter()
+    result_list = [x ** 2 for x in py_list]
+    list_time = time.perf_counter() - start
+
+    start = time.perf_counter()
+    result_np = np_arr ** 2
+    np_time = time.perf_counter() - start
+
+    print(f"List: {list_time:.4f}s, NumPy: {np_time:.6f}s")
+    print(f"Speedup: {list_time / np_time:.0f}x")
+    ```
+
+---
+
+**Exercise 2.** Compare the memory usage of a Python list of 10,000 floats versus a NumPy array of the same. Use `sys.getsizeof` for the list and `.nbytes` for the array.
+
+??? success "Solution to Exercise 2"
+    ```python
+    import sys
+    import numpy as np
+
+    py_list = [float(i) for i in range(10_000)]
+    np_arr = np.arange(10_000, dtype=np.float64)
+
+    list_size = sys.getsizeof(py_list) + len(py_list) * sys.getsizeof(1.0)
+    np_size = np_arr.nbytes
+
+    print(f"Python list: {list_size:,} bytes")
+    print(f"NumPy array: {np_size:,} bytes")
+    print(f"Ratio: {list_size / np_size:.1f}x")
+    ```
+
+---
+
+**Exercise 3.** Predict the output:
+
+```python
+import numpy as np
+py_list = [1, 2, 3]
+np_arr = np.array([1, 2, 3])
+print(py_list * 3)
+print(np_arr * 3)
+```
+
+??? success "Solution to Exercise 3"
+    ```
+    [1, 2, 3, 1, 2, 3, 1, 2, 3]
+    [3 6 9]
+    ```
+
+    For lists, `*` repeats the list. For NumPy arrays, `*` performs element-wise multiplication.
+
+---
+
+**Exercise 4.** Write a function that accepts either a list or a NumPy array and returns the sum of squares. Test it with both and compare performance for large inputs.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+
+    def sum_of_squares(data):
+        if isinstance(data, np.ndarray):
+            return np.sum(data ** 2)
+        return sum(x ** 2 for x in data)
+
+    data_list = list(range(100_000))
+    data_np = np.arange(100_000)
+
+    print(sum_of_squares(data_list))
+    print(sum_of_squares(data_np))
+    ```

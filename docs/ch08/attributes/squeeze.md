@@ -123,3 +123,57 @@ Neural network outputs often have extra batch or channel dimensions.
 ### 3. Broadcasting Result
 
 Broadcasting may introduce size-1 dimensions that need removal.
+
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create an array `a = np.zeros((1, 5, 1, 3, 1))`. Use `np.squeeze` to remove all size-1 dimensions and print the resulting shape. Then use selective squeeze to remove only the dimension at axis 0, and print that shape.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        a = np.zeros((1, 5, 1, 3, 1))
+        b = np.squeeze(a)
+        print(b.shape)  # (5, 3)
+
+        c = np.squeeze(a, axis=0)
+        print(c.shape)  # (5, 1, 3, 1)
+
+---
+
+**Exercise 2.**
+Compute the sum of rows of `a = np.array([[1, 2, 3], [4, 5, 6]])` using `a.sum(axis=1, keepdims=True)`. Print the shape of the result. Then squeeze it and verify the shape becomes `(2,)`.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        a = np.array([[1, 2, 3], [4, 5, 6]])
+        row_sums = a.sum(axis=1, keepdims=True)
+        print(row_sums.shape)  # (2, 1)
+
+        squeezed = row_sums.squeeze()
+        print(squeezed.shape)  # (2,)
+        print(squeezed)         # [ 6 15]
+
+---
+
+**Exercise 3.**
+Create `a = np.array([[42]])` (shape `(1, 1)`). Squeeze it completely and check the resulting `ndim`. Then extract the Python scalar using `.item()` and verify its type is `int`.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        a = np.array([[42]])
+        b = a.squeeze()
+        print(b.ndim)   # 0 (scalar array)
+        print(b.shape)  # ()
+
+        val = b.item()
+        print(val)           # 42
+        print(type(val))     # <class 'int'>

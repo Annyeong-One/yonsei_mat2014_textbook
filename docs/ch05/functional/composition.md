@@ -574,3 +574,106 @@ result = app.calc.add(2, 3)
 output = app.display.show(result)
 assert output == "Result: 5"
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a `Computer` class that owns an `CPU` and a `Memory` component (composition). The `CPU` has a `process(data)` method, and `Memory` has `read()` and `write(data)` methods. The `Computer`'s `run(data)` method should write data to memory, process it with the CPU, and return the result. Demonstrate that the components do not exist independently.
+
+??? success "Solution to Exercise 1"
+
+        class CPU:
+            def process(self, data):
+                return data * 2
+
+        class Memory:
+            def __init__(self):
+                self._data = None
+
+            def write(self, data):
+                self._data = data
+
+            def read(self):
+                return self._data
+
+        class Computer:
+            def __init__(self):
+                self.cpu = CPU()       # Composition: Computer owns CPU
+                self.memory = Memory() # Composition: Computer owns Memory
+
+            def run(self, data):
+                self.memory.write(data)
+                stored = self.memory.read()
+                return self.cpu.process(stored)
+
+        pc = Computer()
+        print(pc.run(21))  # 42
+
+---
+
+**Exercise 2.**
+Implement a `House` class that is composed of `Room` objects. Each `Room` has a `name` and `area`. The `House` should provide a `total_area()` method that sums all room areas, and an `add_room(name, area)` method. Demonstrate that rooms are created by the house and cannot outlive it.
+
+??? success "Solution to Exercise 2"
+
+        class Room:
+            def __init__(self, name, area):
+                self.name = name
+                self.area = area
+
+        class House:
+            def __init__(self):
+                self._rooms = []
+
+            def add_room(self, name, area):
+                room = Room(name, area)  # House creates the Room
+                self._rooms.append(room)
+
+            def total_area(self):
+                return sum(r.area for r in self._rooms)
+
+        house = House()
+        house.add_room("Kitchen", 20)
+        house.add_room("Bedroom", 15)
+        house.add_room("Living Room", 30)
+        print(f"Total area: {house.total_area()} sqm")  # 65
+
+---
+
+**Exercise 3.**
+Build a `ReportBuilder` using the builder pattern with composition. The `ReportBuilder` should have `add_title(text)`, `add_paragraph(text)`, and `build()` methods. Each call to `add_title` or `add_paragraph` stores a component internally. `build()` returns the full report as a single string with titles in uppercase and paragraphs as-is, separated by newlines.
+
+??? success "Solution to Exercise 3"
+
+        class ReportBuilder:
+            def __init__(self):
+                self._parts = []
+
+            def add_title(self, text):
+                self._parts.append(("title", text))
+                return self
+
+            def add_paragraph(self, text):
+                self._parts.append(("paragraph", text))
+                return self
+
+            def build(self):
+                lines = []
+                for kind, text in self._parts:
+                    if kind == "title":
+                        lines.append(text.upper())
+                    else:
+                        lines.append(text)
+                return "\n".join(lines)
+
+        report = (
+            ReportBuilder()
+            .add_title("Introduction")
+            .add_paragraph("This is the first paragraph.")
+            .add_title("Conclusion")
+            .add_paragraph("This wraps up the report.")
+            .build()
+        )
+        print(report)

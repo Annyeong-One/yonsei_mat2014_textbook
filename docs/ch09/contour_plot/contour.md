@@ -369,3 +369,92 @@ ax.set_aspect('equal')
 plt.tight_layout()
 plt.show()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create contour plots of $z = \sin(x) + \cos(y)$ over $[-2\pi, 2\pi] \times [-2\pi, 2\pi]$ with 15 levels. Use the `coolwarm` colormap and add a colorbar. Set equal aspect ratio.
+
+??? success "Solution to Exercise 1"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(-2 * np.pi, 2 * np.pi, 200)
+        y = np.linspace(-2 * np.pi, 2 * np.pi, 200)
+        X, Y = np.meshgrid(x, y)
+        Z = np.sin(X) + np.cos(Y)
+
+        fig, ax = plt.subplots(figsize=(8, 6))
+        cs = ax.contour(X, Y, Z, levels=15, cmap='coolwarm')
+        plt.colorbar(cs, ax=ax)
+        ax.set_xlabel('x')
+        ax.set_ylabel('y')
+        ax.set_title(r'$z = \sin(x) + \cos(y)$')
+        ax.set_aspect('equal')
+        plt.show()
+
+---
+
+**Exercise 2.**
+Plot contour lines for the function $z = x \cdot e^{-x^2 - y^2}$ over $[-2, 2] \times [-2, 2]$ using both positive and negative levels. Use solid lines for positive contours and dashed lines for negative contours by plotting two separate `contour` calls with different `linestyles`.
+
+??? success "Solution to Exercise 2"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(-2, 2, 200)
+        y = np.linspace(-2, 2, 200)
+        X, Y = np.meshgrid(x, y)
+        Z = X * np.exp(-X**2 - Y**2)
+
+        fig, ax = plt.subplots(figsize=(8, 6))
+
+        pos_levels = np.linspace(0.01, Z.max(), 8)
+        neg_levels = np.linspace(Z.min(), -0.01, 8)
+
+        ax.contour(X, Y, Z, levels=pos_levels, colors='blue', linestyles='solid')
+        ax.contour(X, Y, Z, levels=neg_levels, colors='red', linestyles='dashed')
+        ax.contour(X, Y, Z, levels=[0], colors='black', linewidths=2)
+
+        ax.set_xlabel('x')
+        ax.set_ylabel('y')
+        ax.set_title(r'$z = x \cdot e^{-x^2 - y^2}$')
+        ax.set_aspect('equal')
+        plt.show()
+
+---
+
+**Exercise 3.**
+Overlay contour lines on a scatter plot. Generate 500 random (x, y) points from a bivariate normal distribution and plot them as a scatter. Then compute the theoretical density on a grid using `scipy.stats.multivariate_normal` and overlay contour lines showing the density levels.
+
+??? success "Solution to Exercise 3"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+        from scipy.stats import multivariate_normal
+
+        np.random.seed(42)
+        mean = [0, 0]
+        cov = [[1, 0.5], [0.5, 1]]
+        points = np.random.multivariate_normal(mean, cov, 500)
+
+        x = np.linspace(-4, 4, 200)
+        y = np.linspace(-4, 4, 200)
+        X, Y = np.meshgrid(x, y)
+        pos = np.dstack((X, Y))
+        rv = multivariate_normal(mean, cov)
+        Z = rv.pdf(pos)
+
+        fig, ax = plt.subplots(figsize=(8, 6))
+        ax.scatter(points[:, 0], points[:, 1], alpha=0.3, s=10, color='steelblue')
+        cs = ax.contour(X, Y, Z, levels=6, colors='red', linewidths=1.5)
+        ax.clabel(cs, inline=True, fontsize=8, fmt='%.3f')
+        ax.set_xlabel('x')
+        ax.set_ylabel('y')
+        ax.set_title('Scatter with Density Contours')
+        ax.set_aspect('equal')
+        plt.show()

@@ -161,3 +161,55 @@ print(df_reset.index)
 ### 3. Memory Efficiency
 
 RangeIndex stores only start, stop, and step, not individual values.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a `pd.Index` from a list of strings. Demonstrate that the Index is immutable by attempting to modify an element (it should raise a `TypeError`).
+
+??? success "Solution to Exercise 1"
+    Verify Index immutability.
+
+        import pandas as pd
+
+        idx = pd.Index(['a', 'b', 'c'])
+        print(idx)
+        try:
+            idx[0] = 'z'
+        except TypeError as e:
+            print(f"TypeError: {e}")
+
+---
+
+**Exercise 2.**
+Create two Index objects with overlapping values. Use `.intersection()`, `.union()`, and `.difference()` to perform set operations on them.
+
+??? success "Solution to Exercise 2"
+    Perform set operations on Index objects.
+
+        import pandas as pd
+
+        idx1 = pd.Index([1, 2, 3, 4])
+        idx2 = pd.Index([3, 4, 5, 6])
+        print("Intersection:", idx1.intersection(idx2).tolist())
+        print("Union:", idx1.union(idx2).tolist())
+        print("Difference:", idx1.difference(idx2).tolist())
+
+---
+
+**Exercise 3.**
+Create a DataFrame and use `.set_index()` to set a column as the index. Then use `.reset_index()` to move the index back to a column. Verify the DataFrame is the same as the original.
+
+??? success "Solution to Exercise 3"
+    Round-trip set_index and reset_index.
+
+        import pandas as pd
+
+        df = pd.DataFrame({'id': [1, 2, 3], 'val': [10, 20, 30]})
+        df_indexed = df.set_index('id')
+        print("Indexed:\n", df_indexed)
+        df_reset = df_indexed.reset_index()
+        print("Reset:\n", df_reset)
+        assert df.equals(df_reset)

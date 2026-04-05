@@ -268,3 +268,111 @@ result = a and b  # b is never evaluated because a is falsy
 ## Conclusion
 
 In Python, logical operations with integers leverage implicit truthiness conversion. The `or` operator returns the first truthy value, `and` checks if both are truthy, and `not` inverts truthiness. These operations are essential for making decisions and controlling logic flow, all while using Python's treatment of integers as Boolean values.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+`and` and `or` return one of their operands, not necessarily `True`/`False`. `not` always returns a `bool`. Predict the output:
+
+```python
+print(type(5 or 0))
+print(type(5 and 0))
+print(type(not 5))
+
+print([] or {} or 0 or "hello" or None)
+print(1 and 2 and 3)
+print(1 and 0 and 3)
+```
+
+Why do `or` and `and` return an operand while `not` returns a `bool`? What practical use does this enable?
+
+??? success "Solution to Exercise 1"
+    Output:
+
+    ```text
+    <class 'int'>
+    <class 'int'>
+    <class 'bool'>
+    hello
+    3
+    0
+    ```
+
+    `or` returns the **first truthy operand** (or the last operand if all are falsy). `and` returns the **first falsy operand** (or the last operand if all are truthy). Both return the actual operand object, preserving its type.
+
+    `not` is different: it always returns `True` or `False` because its purpose is logical negation, not value selection.
+
+    The practical use: `or` provides default values (`name = user_input or "Anonymous"`), and `and` provides guard patterns (`x and x[0]` returns `x` if empty, otherwise the first element).
+
+---
+
+**Exercise 2.**
+Short-circuit evaluation means the second operand may never be evaluated. Predict the output:
+
+```python
+def explode():
+    raise RuntimeError("boom!")
+
+print(True or explode())
+print(False and explode())
+print(0 or 0 or 42 or explode())
+```
+
+What happens if you change the first line to `print(False or explode())`? Why is short-circuiting more than just a performance optimization -- how does it enable safe guard patterns like `x != 0 and y / x`?
+
+??? success "Solution to Exercise 2"
+    Output:
+
+    ```text
+    True
+    False
+    42
+    ```
+
+    `explode()` is never called in any of these cases. `True or explode()`: `or` finds `True` and stops. `False and explode()`: `and` finds `False` and stops. `0 or 0 or 42 or explode()`: `or` finds `42` (truthy) and stops.
+
+    `False or explode()` would raise `RuntimeError` because `or` must evaluate the second operand when the first is falsy.
+
+    Short-circuiting enables **safe guard patterns**: `x != 0 and y / x` never divides by zero because if `x == 0`, the `and` short-circuits before evaluating `y / x`. Similarly, `lst and lst[0]` safely handles empty lists. Without short-circuiting, both operands would always be evaluated, making such patterns impossible.
+
+---
+
+**Exercise 3.**
+Operator precedence: `not` binds tighter than `and`, which binds tighter than `or`. Predict the output:
+
+```python
+print(not 0 or 1)
+print(not (0 or 1))
+
+print(1 or 2 and 3)
+print((1 or 2) and 3)
+
+print(not 0 and not 0)
+print(not (0 and not 0))
+```
+
+Why does `not 0 or 1` differ from `not (0 or 1)`? Trace the evaluation step by step.
+
+??? success "Solution to Exercise 3"
+    Output:
+
+    ```text
+    True
+    False
+    1
+    3
+    True
+    True
+    ```
+
+    `not 0 or 1`: Precedence is `(not 0) or 1` = `True or 1` = `True`. The `not` binds to `0` first, giving `True`, then `True or 1` short-circuits to `True`.
+
+    `not (0 or 1)`: Parentheses force `0 or 1` = `1` first, then `not 1` = `False`.
+
+    `1 or 2 and 3`: `and` binds tighter, so `(1 or (2 and 3))` = `1 or 3` = `1`. But `or` short-circuits: since `1` is truthy, `2 and 3` is never evaluated.
+
+    `(1 or 2) and 3`: `1 or 2` = `1`, then `1 and 3` = `3`.
+
+    The precedence order `not > and > or` matches mathematical logic where NOT > AND > OR.

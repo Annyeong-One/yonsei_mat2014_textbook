@@ -1105,3 +1105,60 @@ if __name__ == "__main__":
     print("Now apply these patterns to the exercises!")
     print("=" * 70)
 ```
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Use `itertools.chain` to combine three lists `[1, 2]`, `[3, 4]`, `[5, 6]` into a single iterable and print all elements.
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        from itertools import chain
+
+        result = list(chain([1, 2], [3, 4], [5, 6]))
+        print(result)  # [1, 2, 3, 4, 5, 6]
+        ```
+
+    `chain` lazily concatenates iterables without creating intermediate lists.
+
+---
+
+**Exercise 2.**
+Use `itertools.islice` to get elements 5 through 10 from an infinite counter created with `itertools.count`.
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        from itertools import count, islice
+
+        result = list(islice(count(0), 5, 11))
+        print(result)  # [5, 6, 7, 8, 9, 10]
+        ```
+
+    `count(0)` generates 0, 1, 2, ... infinitely. `islice` selects a range without materializing the entire sequence.
+
+---
+
+**Exercise 3.**
+Write a pipeline using `map`, `filter`, and `itertools.chain` that takes multiple lists of numbers, combines them, filters out negatives, and squares the remaining values.
+
+??? success "Solution to Exercise 3"
+
+        ```python
+        from itertools import chain
+
+        lists = [[-1, 2, 3], [4, -5, 6], [-7, 8]]
+
+        result = list(
+            map(lambda x: x ** 2,
+                filter(lambda x: x >= 0,
+                       chain(*lists)))
+        )
+        print(result)  # [4, 9, 16, 36, 64]
+        ```
+
+    The pipeline processes lazily: `chain` combines, `filter` removes negatives, `map` squares -- all without intermediate lists.

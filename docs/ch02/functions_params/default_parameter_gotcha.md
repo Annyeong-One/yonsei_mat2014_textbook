@@ -240,3 +240,87 @@ class Logger:
 Default parameter values are evaluated once when the `def` statement runs, not each time the function is called.
 Any mutable default — list, dict, set, or custom object — will be shared and mutated across all calls that omit that argument.
 The fix is always the same: default to `None` and create the mutable object inside the function body.
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Explain why the following function has a bug. What happens when you call `add_item("a")` twice? Fix the function.
+
+```python
+def add_item(item, lst=[]):
+    lst.append(item)
+    return lst
+```
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        # Buggy version
+        def add_item_buggy(item, lst=[]):
+            lst.append(item)
+            return lst
+
+        print(add_item_buggy("a"))  # ['a']
+        print(add_item_buggy("b"))  # ['a', 'b'] (unexpected!)
+
+        # Fixed version
+        def add_item(item, lst=None):
+            if lst is None:
+                lst = []
+            lst.append(item)
+            return lst
+
+        print(add_item("a"))  # ['a']
+        print(add_item("b"))  # ['b']
+        ```
+
+    Default mutable arguments are created once when the function is defined, not on each call. Use `None` as the default and create the mutable object inside the function.
+
+---
+
+**Exercise 2.**
+Write a function `make_record(name, tags=None)` that creates a dictionary `{"name": name, "tags": tags}` where `tags` defaults to an empty list. Ensure that each call gets its own list.
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        def make_record(name, tags=None):
+            if tags is None:
+                tags = []
+            return {"name": name, "tags": tags}
+
+        r1 = make_record("Alice")
+        r2 = make_record("Bob")
+        r1["tags"].append("admin")
+
+        print(r1)  # {'name': 'Alice', 'tags': ['admin']}
+        print(r2)  # {'name': 'Bob', 'tags': []} (independent)
+        ```
+
+    Each call creates a new empty list, so records do not share the same tags list.
+
+---
+
+**Exercise 3.**
+Show that the default mutable argument is shared by examining the function's `__defaults__` attribute before and after calling the buggy function from Exercise 1.
+
+??? success "Solution to Exercise 3"
+
+        ```python
+        def add_item(item, lst=[]):
+            lst.append(item)
+            return lst
+
+        print(add_item.__defaults__)  # ([],)
+
+        add_item("a")
+        print(add_item.__defaults__)  # (['a'],)
+
+        add_item("b")
+        print(add_item.__defaults__)  # (['a', 'b'],)
+        ```
+
+    `__defaults__` reveals that the default list is a single object that accumulates changes across calls.

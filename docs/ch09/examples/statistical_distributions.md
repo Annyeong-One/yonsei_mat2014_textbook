@@ -561,3 +561,120 @@ plt.show()
 | Binomial | `binom(n, p)` | n, p | {0,...,n} |
 | Poisson | `poisson(mu)` | λ | {0,1,2,...} |
 | Geometric | `geom(p)` | p | {1,2,3,...} |
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that plots the probability density function (PDF) of a standard normal distribution $N(0, 1)$ and shades the area for $|x| > 1.96$ (the 95% confidence region tails).
+
+??? success "Solution to Exercise 1"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
+
+    x = np.linspace(-4, 4, 500)
+    y = stats.norm.pdf(x)
+
+    fig, ax = plt.subplots(figsize=(10, 5))
+    ax.plot(x, y, 'b-', lw=2)
+
+    x_left = x[x < -1.96]
+    x_right = x[x > 1.96]
+    ax.fill_between(x_left, stats.norm.pdf(x_left), alpha=0.4, color='red')
+    ax.fill_between(x_right, stats.norm.pdf(x_right), alpha=0.4, color='red')
+
+    ax.set_xlabel('$x$')
+    ax.set_ylabel('Density')
+    ax.set_title('Standard Normal PDF with 95% Confidence Tails')
+    plt.show()
+    ```
+
+---
+
+**Exercise 2.** Create a figure with 2x2 subplots showing the PDFs of four distributions: Normal(0, 1), Exponential(1), Uniform(0, 1), and Chi-squared(3). Label each subplot with the distribution name.
+
+??? success "Solution to Exercise 2"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
+
+    fig, axes = plt.subplots(2, 2, figsize=(10, 8))
+
+    x1 = np.linspace(-4, 4, 200)
+    axes[0, 0].plot(x1, stats.norm.pdf(x1), 'b-', lw=2)
+    axes[0, 0].set_title('Normal(0, 1)')
+    axes[0, 0].grid(True, alpha=0.3)
+
+    x2 = np.linspace(0, 6, 200)
+    axes[0, 1].plot(x2, stats.expon.pdf(x2), 'r-', lw=2)
+    axes[0, 1].set_title('Exponential(1)')
+    axes[0, 1].grid(True, alpha=0.3)
+
+    x3 = np.linspace(-0.5, 1.5, 200)
+    axes[1, 0].plot(x3, stats.uniform.pdf(x3), 'g-', lw=2)
+    axes[1, 0].set_title('Uniform(0, 1)')
+    axes[1, 0].grid(True, alpha=0.3)
+
+    x4 = np.linspace(0, 12, 200)
+    axes[1, 1].plot(x4, stats.chi2.pdf(x4, df=3), 'm-', lw=2)
+    axes[1, 1].set_title('Chi-squared(df=3)')
+    axes[1, 1].grid(True, alpha=0.3)
+
+    plt.tight_layout()
+    plt.show()
+    ```
+
+---
+
+**Exercise 3.** Write code that generates 10000 samples from a normal distribution, plots a histogram with `density=True`, and overlays the theoretical PDF curve. Include a legend distinguishing the histogram from the theoretical curve.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    samples = np.random.randn(10000)
+
+    fig, ax = plt.subplots(figsize=(10, 5))
+    ax.hist(samples, bins=50, density=True, alpha=0.7, label='Histogram')
+
+    x = np.linspace(-4, 4, 200)
+    ax.plot(x, stats.norm.pdf(x), 'r-', lw=2, label='Theoretical PDF')
+
+    ax.set_xlabel('$x$')
+    ax.set_ylabel('Density')
+    ax.set_title('Histogram vs Theoretical Normal PDF')
+    ax.legend()
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Create a plot comparing three normal distributions with different parameters: $N(0, 1)$, $N(0, 2)$, and $N(2, 1)$. Use different colors and line styles for each, and add a legend.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
+
+    x = np.linspace(-6, 8, 500)
+
+    fig, ax = plt.subplots(figsize=(10, 5))
+    ax.plot(x, stats.norm(0, 1).pdf(x), 'b-', lw=2, label='$N(0, 1)$')
+    ax.plot(x, stats.norm(0, 2).pdf(x), 'r--', lw=2, label='$N(0, 2)$')
+    ax.plot(x, stats.norm(2, 1).pdf(x), 'g-.', lw=2, label='$N(2, 1)$')
+
+    ax.set_xlabel('$x$')
+    ax.set_ylabel('Density')
+    ax.set_title('Comparison of Normal Distributions')
+    ax.legend()
+    ax.grid(True, alpha=0.3)
+    plt.show()
+    ```

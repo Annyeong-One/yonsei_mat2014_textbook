@@ -181,3 +181,63 @@ Create random indices for selecting subsets of data.
 ### 3. A/B Testing
 
 Randomly assign subjects to control and treatment groups.
+
+---
+
+## Exercises
+
+**Exercise 1.** Generate 1,000 samples from this distribution using NumPy. Compute the sample mean and variance and compare with the theoretical values.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(42)
+    # Adjust parameters based on the specific distribution
+    samples = rng.standard_normal(1000)  # example
+    print(f"Sample mean: {samples.mean():.4f}")
+    print(f"Sample var: {samples.var():.4f}")
+    ```
+
+---
+
+**Exercise 2.** Create a histogram of 10,000 samples from this distribution using `np.histogram`. Print the bin edges and counts for the first 5 bins.
+
+??? success "Solution to Exercise 2"
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(42)
+    samples = rng.standard_normal(10000)
+    counts, edges = np.histogram(samples, bins=20)
+    for i in range(5):
+        print(f"[{edges[i]:.2f}, {edges[i+1]:.2f}): {counts[i]}")
+    ```
+
+---
+
+**Exercise 3.** Write a function that generates `n` samples from this distribution and returns the proportion that fall below the mean. Verify it approaches the expected proportion as `n` grows.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(42)
+    for n in [100, 1000, 10000, 100000]:
+        samples = rng.standard_normal(n)
+        below_mean = np.mean(samples < samples.mean())
+        print(f"n={n:>7d}: {below_mean:.4f}")
+    ```
+
+---
+
+**Exercise 4.** Simulate a real-world scenario that uses this distribution. Generate data, compute summary statistics, and explain why this distribution is appropriate for the scenario.
+
+??? success "Solution to Exercise 4"
+    The specific scenario depends on the distribution. For example, a Poisson distribution models the number of events per time interval (e.g., customers arriving at a store).
+
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(42)
+    # Example: Poisson arrivals
+    arrivals = rng.poisson(lam=5, size=365)
+    print(f"Mean daily arrivals: {arrivals.mean():.2f}")
+    print(f"Max in a day: {arrivals.max()}")
+    ```

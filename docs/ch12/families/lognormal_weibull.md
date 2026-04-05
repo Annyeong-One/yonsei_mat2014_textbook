@@ -144,3 +144,60 @@ In finance, the Weibull distribution models time-to-default for bonds, operation
 ## Summary
 
 The lognormal and Weibull distributions are both flexible models for positive, right-skewed data. The key practical point for `scipy.stats` is the parametrization: use `stats.lognorm(s=σ, scale=exp(μ))` for lognormal and `stats.weibull_min(c=k, scale=λ)` for Weibull.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Generate 5000 samples from a lognormal distribution with $\mu = 0$ and $\sigma = 0.5$ (in log-space). Compute the sample mean and compare with the theoretical mean $e^{\mu + \sigma^2/2}$.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        from scipy import stats
+
+        rv = stats.lognorm(s=0.5, scale=np.exp(0))
+        samples = rv.rvs(size=5000, random_state=42)
+        theo_mean = np.exp(0 + 0.5**2 / 2)
+        print(f"Sample mean: {np.mean(samples):.4f}")
+        print(f"Theoretical mean: {theo_mean:.4f}")
+
+---
+
+**Exercise 2.**
+Plot the Weibull PDF for shape parameters $c = 0.5, 1.0, 2.0, 5.0$ on the same axes. Identify which shapes correspond to decreasing, constant, and increasing hazard rates.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy import stats
+        import matplotlib.pyplot as plt
+
+        x = np.linspace(0.01, 3, 200)
+        for c in [0.5, 1.0, 2.0, 5.0]:
+            plt.plot(x, stats.weibull_min.pdf(x, c), label=f'c={c}')
+        plt.legend()
+        plt.title('Weibull PDF for Various Shape Parameters')
+        plt.xlabel('x')
+        plt.ylabel('f(x)')
+        plt.ylim(0, 3)
+        plt.show()
+        # c < 1: decreasing hazard, c = 1: constant, c > 1: increasing
+
+---
+
+**Exercise 3.**
+Fit a lognormal distribution to the following data: take 1000 samples from $\text{Lognormal}(\mu=2, \sigma=0.8)$, use `stats.lognorm.fit()`, and recover the underlying $\mu$ and $\sigma$ parameters. Recall that `scipy` parametrizes lognormal with shape $s = \sigma$, `scale` $= e^\mu$.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        data = stats.lognorm.rvs(s=0.8, scale=np.exp(2), size=1000)
+        s_hat, loc_hat, scale_hat = stats.lognorm.fit(data, floc=0)
+        mu_hat = np.log(scale_hat)
+        print(f"Estimated sigma (s): {s_hat:.4f} (true: 0.8)")
+        print(f"Estimated mu: {mu_hat:.4f} (true: 2.0)")

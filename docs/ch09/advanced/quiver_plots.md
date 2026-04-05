@@ -136,3 +136,116 @@ plt.show()
 - Wind patterns
 - Gradient visualization
 - Force diagrams
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Visualize the gradient field of the function $f(x, y) = x^2 + y^2$ using a quiver plot. Compute the partial derivatives analytically ($\nabla f = (2x, 2y)$) on a grid over $[-3, 3] \times [-3, 3]$. Color the arrows by their magnitude.
+
+??? success "Solution to Exercise 1"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(-3, 3, 15)
+        y = np.linspace(-3, 3, 15)
+        X, Y = np.meshgrid(x, y)
+
+        U = 2 * X
+        V = 2 * Y
+        M = np.hypot(U, V)
+
+        fig, ax = plt.subplots(figsize=(8, 6))
+        q = ax.quiver(X, Y, U, V, M, cmap='viridis')
+        plt.colorbar(q, ax=ax, label='Gradient Magnitude')
+        ax.set_xlabel('x')
+        ax.set_ylabel('y')
+        ax.set_title(r'Gradient Field of $f(x, y) = x^2 + y^2$')
+        ax.set_aspect('equal')
+        plt.show()
+
+---
+
+**Exercise 2.**
+Create a quiver plot of a rotational vector field $\vec{F} = (-y, x)$ on the grid $[-3, 3] \times [-3, 3]$. Normalize all arrows to unit length using the `np.hypot` function and display the magnitude using a colormap on the arrows.
+
+??? success "Solution to Exercise 2"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(-3, 3, 15)
+        y = np.linspace(-3, 3, 15)
+        X, Y = np.meshgrid(x, y)
+
+        U = -Y
+        V = X
+        M = np.hypot(U, V)
+        U_norm = U / M
+        V_norm = V / M
+
+        fig, ax = plt.subplots(figsize=(8, 6))
+        q = ax.quiver(X, Y, U_norm, V_norm, M, cmap='plasma')
+        plt.colorbar(q, ax=ax, label='Magnitude')
+        ax.set_xlabel('x')
+        ax.set_ylabel('y')
+        ax.set_title('Rotational Field F = (-y, x)')
+        ax.set_aspect('equal')
+        plt.show()
+
+---
+
+**Exercise 3.**
+Plot the electric field of two point charges: a positive charge at $(-1, 0)$ and a negative charge at $(1, 0)$. The field from each charge is $\vec{E} = q \cdot \frac{\vec{r}}{|\vec{r}|^3}$ where $\vec{r}$ is the displacement vector. Use a grid over $[-3, 3] \times [-3, 3]$ and overlay a `streamplot` on top of the quiver plot.
+
+??? success "Solution to Exercise 3"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(-3, 3, 20)
+        y = np.linspace(-3, 3, 20)
+        X, Y = np.meshgrid(x, y)
+
+        # Positive charge at (-1, 0), negative at (1, 0)
+        charges = [(1, -1, 0), (-1, 1, 0)]
+        Ex, Ey = np.zeros_like(X), np.zeros_like(Y)
+
+        for q, cx, cy in charges:
+            dx = X - cx
+            dy = Y - cy
+            r = np.hypot(dx, dy)
+            r = np.maximum(r, 0.3)
+            Ex += q * dx / r**3
+            Ey += q * dy / r**3
+
+        M = np.hypot(Ex, Ey)
+        Ex_n = Ex / M
+        Ey_n = Ey / M
+
+        fig, ax = plt.subplots(figsize=(8, 8))
+        ax.quiver(X, Y, Ex_n, Ey_n, M, cmap='inferno', alpha=0.6)
+
+        x_s = np.linspace(-3, 3, 100)
+        y_s = np.linspace(-3, 3, 100)
+        Xs, Ys = np.meshgrid(x_s, y_s)
+        Exs, Eys = np.zeros_like(Xs), np.zeros_like(Ys)
+        for q, cx, cy in charges:
+            dx = Xs - cx
+            dy = Ys - cy
+            r = np.hypot(dx, dy)
+            r = np.maximum(r, 0.3)
+            Exs += q * dx / r**3
+            Eys += q * dy / r**3
+
+        ax.streamplot(x_s, y_s, Exs, Eys, color='gray', density=1.5, linewidth=0.5)
+        ax.plot(-1, 0, 'ro', ms=10, label='+q')
+        ax.plot(1, 0, 'bo', ms=10, label='-q')
+        ax.set_xlabel('x')
+        ax.set_ylabel('y')
+        ax.set_title('Electric Dipole Field')
+        ax.legend()
+        ax.set_aspect('equal')
+        plt.show()

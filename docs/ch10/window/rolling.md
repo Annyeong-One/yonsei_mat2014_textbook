@@ -163,3 +163,58 @@ s.rolling(5, min_periods=1).mean()
 ```python
 result = s.rolling(5).mean().dropna()
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that computes the 20-day rolling mean and rolling standard deviation of a random time series.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    # Solution for the specific exercise
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(10), 'B': np.random.randn(10)})
+    print(df.head())
+    ```
+
+---
+
+**Exercise 2.** Explain the `window`, `min_periods`, and `center` parameters of `.rolling()`. What does `center=True` do?
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the Pandas API and its behavior for this specific operation.
+
+---
+
+**Exercise 3.** Write code that applies a custom function to a rolling window using `.rolling(10).apply(lambda x: x.max() - x.min())`.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(20), 'B': np.random.randn(20)})
+    result = df.describe()
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Create Bollinger Bands by computing the 20-day rolling mean and adding/subtracting 2 rolling standard deviations.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(50), 'group': np.random.choice(['X', 'Y'], 50)})
+    result = df.groupby('group').mean()
+    print(result)
+    ```

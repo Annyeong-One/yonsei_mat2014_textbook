@@ -136,3 +136,51 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** What is the standard convention for importing NumPy? Write the import statement and explain why the alias `np` is used.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+    ```
+
+    The alias `np` is a universally recognized convention that keeps code concise while making it clear that NumPy functions are being used. Nearly all NumPy documentation, tutorials, and codebases use this convention.
+
+---
+
+**Exercise 2.** Predict the output:
+
+```python
+import numpy as np
+a = np.arange(5)
+print(a)
+print(type(a))
+```
+
+??? success "Solution to Exercise 2"
+    ```
+    [0 1 2 3 4]
+    <class 'numpy.ndarray'>
+    ```
+
+---
+
+**Exercise 3.** Some code uses `from numpy import array, zeros, ones`. Explain why this is less preferred than `import numpy as np` in most projects.
+
+??? success "Solution to Exercise 3"
+    Importing specific names (`from numpy import array`) pollutes the namespace and makes it unclear where functions come from. With `np.array`, readers immediately know it is a NumPy function. It also avoids name collisions with built-in `array` or other libraries.
+
+---
+
+**Exercise 4.** Write a one-liner using the `np` convention that creates a 3x3 identity matrix and prints it.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    print(np.eye(3))
+    ```

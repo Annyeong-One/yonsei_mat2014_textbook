@@ -246,3 +246,86 @@ def calculate_stats(numbers: list) -> tuple:
 - When in doubt, use `sorted()`, `.copy()`, or similar non-mutating alternatives to protect the caller's data.
 
 Next: [Default Parameter Gotcha](default_parameter_gotcha.md).
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Write a function `swap(a, b)` that attempts to swap two integers. Explain why the swap is not visible to the caller. Then write a version using a list to achieve a visible swap.
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        def swap(a, b):
+            a, b = b, a  # Only swaps local names
+
+        x, y = 1, 2
+        swap(x, y)
+        print(x, y)  # 1 2 (unchanged)
+
+        # Visible swap using a list
+        def swap_list(pair):
+            pair[0], pair[1] = pair[1], pair[0]
+
+        pair = [1, 2]
+        swap_list(pair)
+        print(pair)  # [2, 1]
+        ```
+
+    Integers are immutable. `swap` only rebinds local names. The list version works because it mutates the mutable container.
+
+---
+
+**Exercise 2.**
+Write a function `extend_and_return(lst, items)` that extends `lst` with `items` and returns the modified list. Show that the caller's list is also modified. Then write a version that does not modify the original.
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        # Modifies original
+        def extend_and_return(lst, items):
+            lst.extend(items)
+            return lst
+
+        a = [1, 2]
+        b = extend_and_return(a, [3, 4])
+        print(a)  # [1, 2, 3, 4] (modified)
+
+        # Does not modify original
+        def extend_copy(lst, items):
+            return lst + items
+
+        c = [1, 2]
+        d = extend_copy(c, [3, 4])
+        print(c)  # [1, 2] (unchanged)
+        print(d)  # [1, 2, 3, 4]
+        ```
+
+    `lst.extend(items)` mutates the list. `lst + items` creates a new list.
+
+---
+
+**Exercise 3.**
+Given `def f(x): x = x + [4]` and `def g(x): x += [4]`, explain why `f` and `g` behave differently when passed a list. Demonstrate with code.
+
+??? success "Solution to Exercise 3"
+
+        ```python
+        def f(x):
+            x = x + [4]  # Rebinds x to new list
+
+        def g(x):
+            x += [4]     # Calls x.__iadd__([4]) -> mutates in place
+
+        a = [1, 2, 3]
+        f(a)
+        print(a)  # [1, 2, 3] (unchanged)
+
+        b = [1, 2, 3]
+        g(b)
+        print(b)  # [1, 2, 3, 4] (modified)
+        ```
+
+    `x = x + [4]` creates a new list and rebinds the local `x`. `x += [4]` calls `list.__iadd__`, which extends the list in place.

@@ -534,3 +534,84 @@ if __name__ == '__main__':
     demo_isinstance()
     demo_metaclass_chain()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a base class `Plugin` that uses `__init_subclass__` to automatically register all subclasses into a class-level `_registry` dictionary (mapping the class name to the class). Create three plugin subclasses and print the registry without any manual registration code.
+
+??? success "Solution to Exercise 1"
+
+        class Plugin:
+            _registry = {}
+
+            def __init_subclass__(cls, **kwargs):
+                super().__init_subclass__(**kwargs)
+                Plugin._registry[cls.__name__] = cls
+
+        class AuthPlugin(Plugin):
+            pass
+
+        class CachePlugin(Plugin):
+            pass
+
+        class LogPlugin(Plugin):
+            pass
+
+        print(Plugin._registry)
+        # {'AuthPlugin': <class 'AuthPlugin'>, 'CachePlugin': ..., 'LogPlugin': ...}
+
+---
+
+**Exercise 2.**
+Write a base class `ValidatedModel` where `__init_subclass__` checks that every subclass defines a `required_fields` class attribute (a list of strings). If missing, raise `TypeError`. Create a valid subclass and an invalid one to demonstrate the validation.
+
+??? success "Solution to Exercise 2"
+
+        class ValidatedModel:
+            def __init_subclass__(cls, **kwargs):
+                super().__init_subclass__(**kwargs)
+                if not hasattr(cls, 'required_fields'):
+                    raise TypeError(f"{cls.__name__} must define 'required_fields'")
+
+        class User(ValidatedModel):
+            required_fields = ["name", "email"]
+
+        print(User.required_fields)  # ['name', 'email']
+
+        try:
+            class BadModel(ValidatedModel):
+                pass  # Missing required_fields
+        except TypeError as e:
+            print(f"Error: {e}")
+            # Error: BadModel must define 'required_fields'
+
+---
+
+**Exercise 3.**
+Build a `Serializable` base class where `__init_subclass__` accepts a `format` keyword argument (e.g., `class MyData(Serializable, format="json")`). Store the format on the subclass as `_format`. Add a `serialize()` method that prints the format. Show that different subclasses can declare different formats.
+
+??? success "Solution to Exercise 3"
+
+        class Serializable:
+            def __init_subclass__(cls, format="text", **kwargs):
+                super().__init_subclass__(**kwargs)
+                cls._format = format
+
+            def serialize(self):
+                print(f"Serializing {self.__class__.__name__} as {self._format}")
+
+        class JsonData(Serializable, format="json"):
+            pass
+
+        class XmlData(Serializable, format="xml"):
+            pass
+
+        class PlainData(Serializable):  # Uses default "text"
+            pass
+
+        JsonData().serialize()   # Serializing JsonData as json
+        XmlData().serialize()    # Serializing XmlData as xml
+        PlainData().serialize()  # Serializing PlainData as text

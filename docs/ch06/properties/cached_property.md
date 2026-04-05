@@ -226,3 +226,157 @@ class Matrix:
 - Value is constant after creation
 - Computation is expensive
 - Multiple accesses expected
+
+---
+
+## Exercises
+
+**Exercise 1.** Write a `DataSet` class that accepts a list of numbers. Add a `@cached_property` called `stats` that returns a dictionary with `"mean"`, `"min"`, and `"max"`. Verify that the computation runs only once across multiple accesses.
+
+??? success "Solution to Exercise 1"
+    ```python
+    from functools import cached_property
+
+    class DataSet:
+        def __init__(self, numbers):
+            self.numbers = numbers
+
+        @cached_property
+        def stats(self):
+            print("Computing stats...")
+            return {
+                "mean": sum(self.numbers) / len(self.numbers),
+                "min": min(self.numbers),
+                "max": max(self.numbers),
+            }
+
+    ds = DataSet([10, 20, 30, 40, 50])
+    print(ds.stats)  # Computing stats... {'mean': 30.0, 'min': 10, 'max': 50}
+    print(ds.stats)  # {'mean': 30.0, 'min': 10, 'max': 50} (no recomputation)
+    ```
+
+---
+
+**Exercise 2.** Predict the output of the following code:
+
+```python
+from functools import cached_property
+
+class Greeter:
+    def __init__(self, name):
+        self.name = name
+
+    @cached_property
+    def message(self):
+        print("Computing message")
+        return f"Hello, {self.name}!"
+
+g = Greeter("Alice")
+print(g.message)
+g.name = "Bob"
+print(g.message)
+```
+
+??? success "Solution to Exercise 2"
+    The output is:
+
+    ```
+    Computing message
+    Hello, Alice!
+    Hello, Alice!
+    ```
+
+    The `message` cached property computes once on first access using `name = "Alice"`. Even though `name` is later changed to `"Bob"`, the cached value is never recomputed. `cached_property` stores the result in the instance's `__dict__`, and subsequent accesses return the cached string. This is a key difference from `@property`, which would recompute each time.
+
+---
+
+**Exercise 3.** Implement a custom `CachedProperty` descriptor class (without using `functools.cached_property`). It should compute the value on first access, store it in the instance's `__dict__`, and return the cached value on subsequent accesses. Test it with a class that computes the factorial of a stored number.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import math
+
+    class CachedProperty:
+        def __init__(self, func):
+            self.func = func
+            self.name = func.__name__
+
+        def __get__(self, instance, owner):
+            if instance is None:
+                return self
+            if self.name not in instance.__dict__:
+                instance.__dict__[self.name] = self.func(instance)
+            return instance.__dict__[self.name]
+
+    class FactorialComputer:
+        def __init__(self, n):
+            self.n = n
+
+        @CachedProperty
+        def factorial(self):
+            print(f"Computing {self.n}!")
+            return math.factorial(self.n)
+
+    fc = FactorialComputer(10)
+    print(fc.factorial)  # Computing 10! -> 3628800
+    print(fc.factorial)  # 3628800 (cached)
+    ```
+
+---
+
+**Exercise 4.** Using `functools.cached_property`, create a `FileAnalyzer` class that takes a file path and has cached properties `line_count` and `word_count`. Demonstrate that deleting the cached property forces recomputation on next access.
+
+??? success "Solution to Exercise 4"
+    ```python
+    from functools import cached_property
+
+    class FileAnalyzer:
+        def __init__(self, path):
+            self.path = path
+
+        @cached_property
+        def line_count(self):
+            print("Counting lines...")
+            with open(self.path) as f:
+                return sum(1 for _ in f)
+
+        @cached_property
+        def word_count(self):
+            print("Counting words...")
+            with open(self.path) as f:
+                return sum(len(line.split()) for line in f)
+
+    # Demonstration (assuming a file exists):
+    # fa = FileAnalyzer("example.txt")
+    # print(fa.line_count)    # Counting lines... 42
+    # print(fa.line_count)    # 42 (cached)
+    # del fa.line_count       # Clear cache
+    # print(fa.line_count)    # Counting lines... 42 (recomputed)
+    ```
+
+---
+
+**Exercise 5.** Explain the key difference between `@property` and `@cached_property` in terms of when computation happens. Give a concrete example of when using `@property` would be more appropriate than `@cached_property`.
+
+??? success "Solution to Exercise 5"
+    `@property` recomputes the value every time the attribute is accessed. `@cached_property` computes the value once on first access and caches it in the instance's `__dict__`.
+
+    Use `@property` when the value depends on mutable state that may change between accesses:
+
+    ```python
+    class Rectangle:
+        def __init__(self, width, height):
+            self.width = width
+            self.height = height
+
+        @property
+        def area(self):
+            return self.width * self.height
+
+    r = Rectangle(3, 4)
+    print(r.area)     # 12
+    r.width = 10
+    print(r.area)     # 40 (correctly recomputed)
+    ```
+
+    If `area` were a `@cached_property`, it would still return `12` after changing `width`, which would be incorrect. Use `@cached_property` only when the underlying data is immutable after construction.

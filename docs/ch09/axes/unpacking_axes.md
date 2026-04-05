@@ -205,3 +205,90 @@ plt.show()
 - Use unpacking for fixed layouts with distinct content
 - Use array indexing for dynamic or looped operations
 - `axes.flat` flattens any shape for iteration
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Use tuple unpacking to create a 1x2 subplot layout: `fig, (ax_left, ax_right) = plt.subplots(1, 2)`. Plot a histogram on the left and a box plot on the right using 1000 samples from a normal distribution.
+
+??? success "Solution to Exercise 1"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        np.random.seed(42)
+        data = np.random.randn(1000)
+
+        fig, (ax_left, ax_right) = plt.subplots(1, 2, figsize=(10, 4))
+
+        ax_left.hist(data, bins=30, color='steelblue', edgecolor='white')
+        ax_left.set_title('Histogram')
+
+        ax_right.boxplot(data)
+        ax_right.set_title('Box Plot')
+
+        plt.tight_layout()
+        plt.show()
+
+---
+
+**Exercise 2.**
+Create a 2x2 subplot grid and use nested unpacking: `fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2)`. Plot `sin`, `cos`, `tan`, and `exp` on the four axes respectively. Add titles and use `plt.tight_layout()`.
+
+??? success "Solution to Exercise 2"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(0, 2 * np.pi, 200)
+
+        fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(10, 8))
+
+        ax1.plot(x, np.sin(x))
+        ax1.set_title('sin(x)')
+
+        ax2.plot(x, np.cos(x), color='red')
+        ax2.set_title('cos(x)')
+
+        ax3.plot(x, np.tan(x), color='green')
+        ax3.set_ylim(-5, 5)
+        ax3.set_title('tan(x)')
+
+        ax4.plot(x, np.exp(x / 3), color='orange')
+        ax4.set_title('exp(x/3)')
+
+        plt.tight_layout()
+        plt.show()
+
+---
+
+**Exercise 3.**
+Create a 3x1 layout and unpack as `fig, (ax_top, ax_mid, ax_bot) = plt.subplots(3, 1, figsize=(8, 10), sharex=True)`. Plot a stock-like random walk on the top, its daily returns on the middle, and a cumulative return on the bottom. Use descriptive y-labels for each.
+
+??? success "Solution to Exercise 3"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        np.random.seed(42)
+        returns = np.random.randn(200) * 0.02
+        prices = 100 * np.cumprod(1 + returns)
+        cum_returns = np.cumprod(1 + returns) - 1
+
+        fig, (ax_top, ax_mid, ax_bot) = plt.subplots(3, 1, figsize=(8, 10), sharex=True)
+
+        ax_top.plot(prices, color='navy')
+        ax_top.set_ylabel('Price')
+        ax_top.set_title('Stock Dashboard')
+
+        ax_mid.bar(range(len(returns)), returns, color=['green' if r > 0 else 'red' for r in returns], width=1)
+        ax_mid.set_ylabel('Daily Return')
+
+        ax_bot.plot(cum_returns, color='purple')
+        ax_bot.set_ylabel('Cumulative Return')
+        ax_bot.set_xlabel('Day')
+
+        plt.tight_layout()
+        plt.show()

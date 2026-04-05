@@ -199,3 +199,85 @@ plt.show()
 - `tight_layout()` automatically adjusts spacing
 - `autofmt_xdate()` formats date labels
 - `savefig()` exports the figure to a file
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that creates a figure, adds two subplots side by side using `fig.add_subplot()`, plots different data on each, and uses `fig.suptitle()` to add an overall title.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    fig = plt.figure(figsize=(12, 4))
+    fig.suptitle('Two Subplots Example', fontsize=16)
+
+    ax1 = fig.add_subplot(1, 2, 1)
+    x = np.linspace(0, 2 * np.pi, 100)
+    ax1.plot(x, np.sin(x), 'b-')
+    ax1.set_title('Sine')
+
+    ax2 = fig.add_subplot(1, 2, 2)
+    ax2.plot(x, np.cos(x), 'r-')
+    ax2.set_title('Cosine')
+
+    plt.tight_layout()
+    plt.show()
+    ```
+
+---
+
+**Exercise 2.** Explain the difference between `ax.set_title()` and `fig.suptitle()`. When would you use each?
+
+??? success "Solution to Exercise 2"
+    `ax.set_title()` adds a title to a specific Axes (subplot), appearing directly above that subplot. `fig.suptitle()` adds a "super title" to the entire Figure, appearing above all subplots.
+
+    Use `ax.set_title()` when you want to label individual subplots with their own titles. Use `fig.suptitle()` when you want an overarching title for the whole figure, especially when you have multiple subplots that share a common theme.
+
+---
+
+**Exercise 3.** Write code that creates a figure and uses `fig.text()` to add text at the center-bottom of the figure (coordinates `(0.5, 0.02)`). Plot a simple line on the axes above.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    fig, ax = plt.subplots(figsize=(8, 5))
+    x = np.linspace(0, 10, 100)
+    ax.plot(x, np.sin(x), 'b-', lw=2)
+    ax.set_title('Sine Wave')
+
+    fig.text(0.5, 0.02, 'This text is placed at the bottom center of the figure',
+             ha='center', fontsize=12, style='italic')
+
+    plt.subplots_adjust(bottom=0.12)
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Create a figure with `fig.add_axes()` to place two overlapping axes at custom positions. The first axes should fill most of the figure, and the second should be a small inset in the top-right corner.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    x = np.linspace(0, 10, 200)
+
+    fig = plt.figure(figsize=(8, 6))
+
+    ax_main = fig.add_axes([0.1, 0.1, 0.85, 0.85])
+    ax_main.plot(x, np.sin(x), 'b-', lw=2)
+    ax_main.set_title('Main Plot')
+
+    ax_inset = fig.add_axes([0.6, 0.6, 0.3, 0.25])
+    ax_inset.plot(x, np.cos(x), 'r-', lw=1.5)
+    ax_inset.set_title('Inset', fontsize=9)
+
+    plt.show()
+    ```

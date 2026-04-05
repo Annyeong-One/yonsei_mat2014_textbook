@@ -147,3 +147,76 @@ The following table connects each regression assumption to the diagnostic that r
 ## Summary
 
 Residuals $e_i = y_i - \hat{y}_i$ are the primary tool for evaluating whether a fitted regression model meets its assumptions. OLS residuals have zero mean and are orthogonal to the predictor space. Standardized and studentized forms make residuals comparable across observations with different leverages. Four standard diagnostic plots -- residuals versus fitted values, the Q-Q plot, the scale-location plot, and the residuals-versus-leverage plot -- each target a specific assumption. When violations are found, they guide the modeler toward corrective actions such as variance-stabilizing transformations, non-linear terms, or the removal of influential outliers.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Fit a linear regression to 50 samples from $Y = 2X + \varepsilon$ where $\varepsilon \sim N(0, 1)$. Compute the raw residuals and verify they sum to zero and are orthogonal to $X$.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        x = np.random.uniform(0, 10, 50)
+        y = 2*x + np.random.normal(0, 1, 50)
+        result = stats.linregress(x, y)
+        residuals = y - (result.intercept + result.slope * x)
+
+        print(f"Sum of residuals: {np.sum(residuals):.10f}")
+        print(f"Dot product with x: {np.dot(residuals, x):.10f}")
+
+---
+
+**Exercise 2.**
+Generate data with heteroscedasticity: $Y = 3X + X \cdot \varepsilon$ where $\varepsilon \sim N(0, 1)$ (variance increases with $X$). Fit a linear model and plot residuals vs fitted values to visualize the funnel shape.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy import stats
+        import matplotlib.pyplot as plt
+
+        np.random.seed(42)
+        x = np.random.uniform(1, 10, 100)
+        y = 3*x + x * np.random.normal(0, 1, 100)
+        result = stats.linregress(x, y)
+        fitted = result.intercept + result.slope * x
+        resid = y - fitted
+
+        plt.scatter(fitted, resid, alpha=0.5)
+        plt.axhline(0, color='r', ls='--')
+        plt.xlabel('Fitted values')
+        plt.ylabel('Residuals')
+        plt.title('Heteroscedasticity: Funnel Pattern')
+        plt.show()
+
+---
+
+**Exercise 3.**
+Fit a linear model to quadratic data ($Y = X^2$) and compute standardized residuals. Plot the residuals vs fitted values and the Q-Q plot to show both non-linearity and non-normality of residuals.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+        import matplotlib.pyplot as plt
+
+        x = np.linspace(1, 10, 50)
+        y = x**2
+        result = stats.linregress(x, y)
+        fitted = result.intercept + result.slope * x
+        resid = y - fitted
+        std_resid = resid / np.std(resid, ddof=2)
+
+        fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+        axes[0].scatter(fitted, std_resid)
+        axes[0].axhline(0, color='r', ls='--')
+        axes[0].set_title('Residuals vs Fitted')
+        stats.probplot(std_resid, plot=axes[1])
+        axes[1].set_title('Q-Q Plot of Residuals')
+        plt.tight_layout()
+        plt.show()

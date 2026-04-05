@@ -144,6 +144,7 @@ End program
 
 We will explore how Python tracks these jumps in [Runtime Model (Call Stack)](call_stack.md).
 
+
 ## Key Ideas
 
 Functions let us name a block of code and reuse it throughout a program.
@@ -151,3 +152,85 @@ The `def` keyword creates a function, and parentheses after the name call it.
 Remember that defining a function only registers it — no code runs until the function is called.
 
 Next: [Parameters](parameters.md).
+
+
+## Exercises
+
+**Exercise 1.**
+When Python encounters a `def` statement, it does NOT execute the function body. Explain what `def` actually does at runtime. What object does it create, and what name does it bind? Predict the output:
+
+```python
+def broken():
+    return 1 / 0
+
+print("Function defined")
+print(type(broken))
+```
+
+Why does this code NOT raise a `ZeroDivisionError`?
+
+??? success "Solution to Exercise 1"
+    `def` is an **executable statement** that creates a **function object** and binds it to the name `broken` in the current scope. The function body is compiled into bytecode and stored inside the function object, but it is NOT executed.
+
+    Output:
+
+    ```text
+    Function defined
+    <class 'function'>
+    ```
+
+    No `ZeroDivisionError` occurs because `1 / 0` is inside the function body, which only executes when the function is **called**. `def` merely registers the function -- it says "when someone calls `broken()`, execute this body." Since `broken()` is never called, the division by zero never happens.
+
+---
+
+**Exercise 2.**
+In Python, functions are "first-class objects." This means they can be assigned to variables, passed as arguments, and stored in data structures. Predict the output:
+
+```python
+def greet():
+    return "hello"
+
+f = greet
+print(f())
+print(type(f))
+```
+
+What is the difference between `greet` (no parentheses) and `greet()` (with parentheses)?
+
+??? success "Solution to Exercise 2"
+    Output:
+
+    ```text
+    hello
+    <class 'function'>
+    ```
+
+    `greet` (no parentheses) is a reference to the **function object** itself. It can be assigned to another variable: `f = greet` makes `f` refer to the same function object.
+
+    `greet()` (with parentheses) **calls** the function and evaluates to its return value (`"hello"`).
+
+    This distinction is fundamental: the function name is just a variable that happens to refer to a function object. The parentheses are the "call operator." `f()` calls the same function because `f` and `greet` refer to the same object.
+
+---
+
+**Exercise 3.**
+A student writes:
+
+```python
+def add(a, b):
+    a + b
+
+result = add(3, 4)
+print(result)
+```
+
+They expect `7` but get `None`. Explain why. What is the difference between *computing* a value and *returning* it?
+
+??? success "Solution to Exercise 3"
+    Output is `None`.
+
+    The function computes `a + b` (which evaluates to `7`) but does not **return** it. Without a `return` statement, the function implicitly returns `None`. The computed value `7` is discarded.
+
+    Computing a value (evaluating an expression) and returning it (sending it back to the caller) are separate actions. `a + b` computes `7` but the result exists only temporarily. `return a + b` both computes `7` AND sends it back to the caller as the function's result.
+
+    The fix: `return a + b`.

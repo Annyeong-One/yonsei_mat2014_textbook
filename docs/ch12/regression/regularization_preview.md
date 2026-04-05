@@ -135,3 +135,75 @@ zero, while Lasso uses an $L^1$ penalty that can drive coefficients to
 exactly zero, performing variable selection. The regularization parameter
 $\lambda$ balances bias and variance, and is typically chosen by
 cross-validation.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Generate a dataset with 20 observations and 15 predictors (more features than useful). Fit OLS and Ridge ($\lambda = 1$) using the closed-form solution. Compare the coefficient magnitudes (L2 norms).
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        np.random.seed(42)
+        n, p = 20, 15
+        X = np.random.normal(size=(n, p))
+        y = X[:, 0] + 0.5*X[:, 1] + np.random.normal(0, 1, n)
+
+        beta_ols = np.linalg.lstsq(X, y, rcond=None)[0]
+        lam = 1.0
+        beta_ridge = np.linalg.solve(X.T @ X + lam * np.eye(p), X.T @ y)
+
+        print(f"OLS L2 norm:   {np.linalg.norm(beta_ols):.4f}")
+        print(f"Ridge L2 norm: {np.linalg.norm(beta_ridge):.4f}")
+
+---
+
+**Exercise 2.**
+Vary $\lambda$ from 0.001 to 100 (logarithmic grid) for Ridge regression on the dataset from Exercise 1. Plot the L2 norm of the coefficient vector vs $\lambda$ to show the shrinkage path.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+
+        np.random.seed(42)
+        n, p = 20, 15
+        X = np.random.normal(size=(n, p))
+        y = X[:, 0] + 0.5*X[:, 1] + np.random.normal(0, 1, n)
+
+        lambdas = np.logspace(-3, 2, 50)
+        norms = []
+        for lam in lambdas:
+            beta = np.linalg.solve(X.T @ X + lam * np.eye(p), X.T @ y)
+            norms.append(np.linalg.norm(beta))
+
+        plt.semilogx(lambdas, norms)
+        plt.xlabel('Lambda')
+        plt.ylabel('L2 Norm of Coefficients')
+        plt.title('Ridge Shrinkage Path')
+        plt.show()
+
+---
+
+**Exercise 3.**
+For a simple 2-predictor model with correlated features ($\rho = 0.95$), fit OLS and Ridge ($\lambda = 0.5$). Show that Ridge produces more stable (smaller magnitude) coefficients.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        n = 50
+        data = stats.multivariate_normal.rvs(mean=[0,0], cov=[[1,0.95],[0.95,1]], size=n)
+        X = data
+        y = 2*X[:,0] + 3*X[:,1] + np.random.normal(0, 1, n)
+
+        beta_ols = np.linalg.lstsq(X, y, rcond=None)[0]
+        beta_ridge = np.linalg.solve(X.T @ X + 0.5*np.eye(2), X.T @ y)
+
+        print(f"OLS:   {np.round(beta_ols, 3)}")
+        print(f"Ridge: {np.round(beta_ridge, 3)}")

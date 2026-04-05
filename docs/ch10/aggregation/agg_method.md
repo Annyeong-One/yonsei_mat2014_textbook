@@ -191,3 +191,58 @@ print(type(result))  # DataFrame
 result = df.agg({'A': 'mean', 'B': 'std'})
 print(type(result))  # Series (single value per column)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a DataFrame with columns `'revenue'` and `'cost'`. Use `.agg()` with a list of functions `['sum', 'mean', 'max']` to compute multiple aggregations on the `'revenue'` column in a single call.
+
+??? success "Solution to Exercise 1"
+    Pass a list of function names to `.agg()`.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'revenue': [100, 200, 300, 150],
+            'cost': [80, 150, 200, 100]
+        })
+        result = df['revenue'].agg(['sum', 'mean', 'max'])
+        print(result)
+
+---
+
+**Exercise 2.**
+Use `.agg()` with a dictionary to apply different functions to different columns: compute the `'sum'` of `'quantity'` and the `'mean'` of `'price'` in a DataFrame with those two columns.
+
+??? success "Solution to Exercise 2"
+    Pass a dictionary mapping column names to functions.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'quantity': [10, 20, 30, 40],
+            'price': [5.0, 7.5, 3.0, 6.0]
+        })
+        result = df.agg({'quantity': 'sum', 'price': 'mean'})
+        print(result)
+
+---
+
+**Exercise 3.**
+Write a custom aggregation function that computes the range (max minus min) of a column. Apply it to a DataFrame using `.agg()` alongside built-in aggregation functions `'mean'` and `'std'`.
+
+??? success "Solution to Exercise 3"
+    Define a custom range function and mix with built-in functions.
+
+        import pandas as pd
+
+        def value_range(x):
+            return x.max() - x.min()
+
+        df = pd.DataFrame({
+            'values': [10, 25, 15, 40, 30]
+        })
+        result = df['values'].agg(['mean', 'std', value_range])
+        print(result)

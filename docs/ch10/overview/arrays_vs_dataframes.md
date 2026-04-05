@@ -115,3 +115,61 @@ df = pd.DataFrame({
 temps = df['temperature'].values
 ma = np.convolve(temps, np.ones(5)/5, mode='valid')
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Create a NumPy 2D array and a Pandas DataFrame with the same data. Demonstrate one operation that is easier with DataFrame (e.g., column selection by name).
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    arr = np.array([[1, 2, 3], [4, 5, 6]])
+    df = pd.DataFrame(arr, columns=['a', 'b', 'c'])
+    print(df['b'])  # Easy column selection by name
+    ```
+
+---
+
+**Exercise 2.** Explain three advantages of Pandas DataFrames over NumPy arrays for tabular data analysis.
+
+??? success "Solution to Exercise 2"
+    1. **Named columns**: DataFrames allow accessing columns by name rather than integer index.
+    2. **Mixed types**: Each column can have a different dtype (int, float, string, etc.).
+    3. **Built-in methods**: DataFrames provide `groupby`, `merge`, `pivot`, and other high-level data manipulation methods not available in NumPy.
+
+---
+
+**Exercise 3.** Write code that converts a NumPy array to a DataFrame with named columns, and then converts a DataFrame back to a NumPy array using `.to_numpy()`.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    arr = np.array([[1, 2], [3, 4], [5, 6]])
+    df = pd.DataFrame(arr, columns=['x', 'y'])
+    print(df)
+    arr_back = df.to_numpy()
+    print(arr_back)
+    ```
+
+---
+
+**Exercise 4.** Create a DataFrame with mixed types (int, float, string) and show that `df.dtypes` reports different dtypes per column, while a NumPy array would coerce all to one type.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    df = pd.DataFrame({'int_col': [1, 2], 'float_col': [1.5, 2.5], 'str_col': ['a', 'b']})
+    print(df.dtypes)
+    # int64, float64, object -- different types per column
+    arr = np.array([[1, 1.5, 'a'], [2, 2.5, 'b']])
+    print(arr.dtype)  # All coerced to '<U32' (string)
+    ```

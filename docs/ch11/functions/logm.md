@@ -178,3 +178,67 @@ if __name__ == "__main__":
 | `linalg.logm(A)` | Matrix logarithm |
 
 Key: Requires nonsingular A. May be complex for matrices with negative eigenvalues.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Compute the matrix logarithm of the identity matrix $I_3$. Verify that `logm(I)` returns the zero matrix (all entries below $10^{-14}$ in absolute value).
+
+??? success "Solution to Exercise 1"
+        import numpy as np
+        from scipy import linalg
+
+        I = np.eye(3)
+        log_I = linalg.logm(I)
+
+        print(f"logm(I) =\n{log_I}")
+        print(f"All entries ~ 0: {np.all(np.abs(log_I) < 1e-14)}")
+
+---
+
+**Exercise 2.**
+For the SPD matrix $A = \begin{pmatrix} 3 & 1 \\ 1 & 2 \end{pmatrix}$, verify the round-trip property: compute `logm(A)`, then `expm(logm(A))`, and check that the result matches $A$ with Frobenius norm error below $10^{-12}$.
+
+??? success "Solution to Exercise 2"
+        import numpy as np
+        from scipy import linalg
+
+        A = np.array([[3, 1],
+                       [1, 2]], dtype=float)
+
+        log_A = linalg.logm(A)
+        exp_log_A = linalg.expm(log_A)
+
+        error = np.linalg.norm(exp_log_A.real - A)
+        print(f"logm(A) =\n{log_A.real.round(8)}")
+        print(f"expm(logm(A)) =\n{exp_log_A.real.round(10)}")
+        print(f"Round-trip error: {error:.2e}")
+        assert error < 1e-12
+
+---
+
+**Exercise 3.**
+Create two rotation matrices $R_1$ (30 degrees) and $R_2$ (75 degrees). Use the matrix logarithm to interpolate between them at $t = 0.5$: compute $R(t) = R_1 \cdot \exp\bigl(t \cdot \log(R_1^T R_2)\bigr)$. Verify that the interpolated rotation angle is approximately 52.5 degrees (the midpoint).
+
+??? success "Solution to Exercise 3"
+        import numpy as np
+        from scipy import linalg
+
+        def rotation_matrix(deg):
+            rad = np.radians(deg)
+            return np.array([[np.cos(rad), -np.sin(rad)],
+                              [np.sin(rad), np.cos(rad)]])
+
+        R1 = rotation_matrix(30)
+        R2 = rotation_matrix(75)
+
+        log_diff = linalg.logm(R1.T @ R2)
+        t = 0.5
+        R_mid = R1 @ linalg.expm(t * log_diff)
+
+        angle = np.degrees(np.arctan2(R_mid[1, 0].real, R_mid[0, 0].real))
+        print(f"Interpolated rotation matrix:\n{R_mid.real.round(6)}")
+        print(f"Interpolated angle: {angle:.1f} degrees")
+        print(f"Expected: 52.5 degrees")

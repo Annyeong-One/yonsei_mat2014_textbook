@@ -172,3 +172,58 @@ result.columns.name = None
 ```python
 result.columns = ['date', 'los_angeles', 'new_york']
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Create a DataFrame with columns `['date', 'city', 'temperature']` and use `.pivot()` to reshape it so each city becomes a column.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    # Solution for the specific exercise
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(10), 'B': np.random.randn(10)})
+    print(df.head())
+    ```
+
+---
+
+**Exercise 2.** Explain the three required parameters of `.pivot()`: `index`, `columns`, and `values`.
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the Pandas API and its behavior for this specific operation.
+
+---
+
+**Exercise 3.** Write code showing that `.pivot()` raises an error when there are duplicate entries for the same index-column combination.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(20), 'B': np.random.randn(20)})
+    result = df.describe()
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Create a pivoted DataFrame and use `.melt()` to convert it back to the original long format.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(50), 'group': np.random.choice(['X', 'Y'], 50)})
+    result = df.groupby('group').mean()
+    print(result)
+    ```

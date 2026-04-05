@@ -363,3 +363,55 @@ if __name__ == "__main__":
     🔜 NEXT: 03_array_indexing.py
     """)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a 0D array containing the value 42. Print its `ndim`, `shape`, and `size`. Then create a 1D array containing just `[42]` and compare all three attributes with the 0D version.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        a_0d = np.array(42)
+        a_1d = np.array([42])
+
+        print(f"0D: ndim={a_0d.ndim}, shape={a_0d.shape}, size={a_0d.size}")
+        print(f"1D: ndim={a_1d.ndim}, shape={a_1d.shape}, size={a_1d.size}")
+
+---
+
+**Exercise 2.**
+Create a 3D array from nested lists representing a 2x3x4 block (2 layers, 3 rows, 4 columns). Verify its shape is `(2, 3, 4)` and print the total number of elements using `a.size`.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        a = np.array([[[1,  2,  3,  4],
+                        [5,  6,  7,  8],
+                        [9, 10, 11, 12]],
+                       [[13, 14, 15, 16],
+                        [17, 18, 19, 20],
+                        [21, 22, 23, 24]]])
+        print(f"Shape: {a.shape}")  # (2, 3, 4)
+        print(f"Total elements: {a.size}")  # 24
+
+---
+
+**Exercise 3.**
+Create two arrays from the same list `[1, 2, 3]`: one with `dtype=np.float32` and one with `dtype=np.int8`. Print the `nbytes` of each and compute the memory savings ratio.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        data = [1, 2, 3]
+        a_f32 = np.array(data, dtype=np.float32)
+        a_i8 = np.array(data, dtype=np.int8)
+
+        print(f"float32 nbytes: {a_f32.nbytes}")  # 12
+        print(f"int8 nbytes:    {a_i8.nbytes}")    # 3
+        print(f"Memory ratio: {a_f32.nbytes / a_i8.nbytes:.1f}x")

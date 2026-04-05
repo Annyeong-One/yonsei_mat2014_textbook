@@ -367,3 +367,107 @@ def add_multiple(self, *courses):
 - Access instance attributes via `self`.
 - Call methods via instance: `obj.method()`.
 - Use `_method` for internal helpers.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a `Stack` class with instance methods `push(item)`, `pop()`, `peek()` (returns top without removing), and `is_empty()`. All methods operate on `self._items` (a list). Demonstrate the full lifecycle: push several items, peek, pop, check empty.
+
+??? success "Solution to Exercise 1"
+
+        class Stack:
+            def __init__(self):
+                self._items = []
+
+            def push(self, item):
+                self._items.append(item)
+
+            def pop(self):
+                if self.is_empty():
+                    raise IndexError("pop from empty stack")
+                return self._items.pop()
+
+            def peek(self):
+                if self.is_empty():
+                    raise IndexError("peek at empty stack")
+                return self._items[-1]
+
+            def is_empty(self):
+                return len(self._items) == 0
+
+        s = Stack()
+        s.push("a")
+        s.push("b")
+        s.push("c")
+        print(s.peek())      # c
+        print(s.pop())       # c
+        print(s.pop())       # b
+        print(s.is_empty())  # False
+
+---
+
+**Exercise 2.**
+Write a `StringProcessor` class with `self.text`. Add instance methods `to_upper()`, `to_lower()`, `reverse()`, and `word_count()`. Each method should return a new `StringProcessor` so methods can be chained: `StringProcessor("Hello World").to_upper().reverse()`.
+
+??? success "Solution to Exercise 2"
+
+        class StringProcessor:
+            def __init__(self, text):
+                self.text = text
+
+            def to_upper(self):
+                return StringProcessor(self.text.upper())
+
+            def to_lower(self):
+                return StringProcessor(self.text.lower())
+
+            def reverse(self):
+                return StringProcessor(self.text[::-1])
+
+            def word_count(self):
+                return len(self.text.split())
+
+            def __repr__(self):
+                return f"StringProcessor({self.text!r})"
+
+        result = StringProcessor("Hello World").to_upper().reverse()
+        print(result)  # StringProcessor('DLROW OLLEH')
+        print(StringProcessor("one two three").word_count())  # 3
+
+---
+
+**Exercise 3.**
+Build a `Rectangle` class with `width` and `height`. Add instance methods `area()`, `perimeter()`, `is_square()`, and `scale(factor)` (returns a new Rectangle). Show that `scale` returns a new object while the original is unchanged. Also show the difference between calling via instance (`r.area()`) and via class (`Rectangle.area(r)`).
+
+??? success "Solution to Exercise 3"
+
+        class Rectangle:
+            def __init__(self, width, height):
+                self.width = width
+                self.height = height
+
+            def area(self):
+                return self.width * self.height
+
+            def perimeter(self):
+                return 2 * (self.width + self.height)
+
+            def is_square(self):
+                return self.width == self.height
+
+            def scale(self, factor):
+                return Rectangle(self.width * factor, self.height * factor)
+
+            def __repr__(self):
+                return f"Rectangle({self.width}, {self.height})"
+
+        r = Rectangle(4, 6)
+        r2 = r.scale(2)
+        print(r)    # Rectangle(4, 6) — unchanged
+        print(r2)   # Rectangle(8, 12)
+
+        # Two ways to call
+        print(r.area())              # 24
+        print(Rectangle.area(r))     # 24 — explicit self

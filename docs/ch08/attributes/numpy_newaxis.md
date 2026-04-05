@@ -316,3 +316,57 @@ arr[..., np.newaxis]
 - Use for outer products, row/column operations, distance matrices
 - Position in index determines where axis is inserted
 - Equivalent to `np.expand_dims()` but more concise inline
+
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Given `a = np.array([2, 4, 6])`, use `np.newaxis` to reshape it into a column vector of shape `(3, 1)`. Then multiply it with `b = np.array([1, 10, 100])` (shape `(3,)`) using broadcasting to produce a `(3, 3)` outer product. Print the result.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        a = np.array([2, 4, 6])
+        b = np.array([1, 10, 100])
+
+        col = a[:, np.newaxis]  # shape (3, 1)
+        result = col * b        # broadcasting: (3, 1) * (3,) -> (3, 3)
+        print(result)
+        # [[  2  20 200]
+        #  [  4  40 400]
+        #  [  6  60 600]]
+
+---
+
+**Exercise 2.**
+Create a 1D array `x = np.linspace(0, 1, 5)`. Use `None` (equivalent to `np.newaxis`) to compute the pairwise absolute difference matrix `|x_i - x_j|` for all pairs `(i, j)`. The result should have shape `(5, 5)`.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        x = np.linspace(0, 1, 5)
+
+        # x[:, None] has shape (5, 1), x[None, :] has shape (1, 5)
+        diff_matrix = np.abs(x[:, None] - x[None, :])
+        print(diff_matrix.shape)  # (5, 5)
+        print(diff_matrix)
+
+---
+
+**Exercise 3.**
+Given a 2D array `a = np.arange(6).reshape(2, 3)`, add a new axis using `np.newaxis` so that the result has shape `(2, 1, 3)`. Then broadcast-add this with `b = np.ones((4, 3))` to produce a result of shape `(2, 4, 3)`. Print the shape of the result.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        a = np.arange(6).reshape(2, 3)
+        a_expanded = a[:, np.newaxis, :]  # shape (2, 1, 3)
+
+        b = np.ones((4, 3))
+        result = a_expanded + b  # (2, 1, 3) + (4, 3) -> (2, 4, 3)
+        print(result.shape)  # (2, 4, 3)

@@ -323,8 +323,124 @@ if (condition_one
 | Style | Follow PEP 8, consistent formatting, organized imports |
 
 Key principles:
-- Code is read more than written—optimize for readability
+- Code is read more than written--optimize for readability
 - Test your code thoroughly
 - Follow established conventions
 - Keep functions focused and small
 - Document public APIs
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Mutable default arguments are a common source of bugs. Predict the output:
+
+```python
+def add_item(item, lst=[]):
+    lst.append(item)
+    return lst
+
+r1 = add_item("a")
+r2 = add_item("b")
+r3 = add_item("c", [])
+
+print(r1)
+print(r2)
+print(r3)
+print(r1 is r2)
+```
+
+Why does `r2` contain both `"a"` and `"b"`? Why is `r1 is r2` `True`? Write the corrected version of this function.
+
+??? success "Solution to Exercise 1"
+    Output:
+
+    ```text
+    ['a', 'b']
+    ['a', 'b']
+    ['c']
+    True
+    ```
+
+    The default argument `lst=[]` is evaluated **once** at function definition time, not on each call. Every call that uses the default shares the **same list object**. `add_item("a")` appends to this shared list, and `add_item("b")` appends to the same list. `r1` and `r2` are the same object (`r1 is r2` is `True`).
+
+    `r3` gets a fresh list because `[]` was passed explicitly, bypassing the default.
+
+    Corrected version:
+
+    ```python
+    def add_item(item, lst=None):
+        if lst is None:
+            lst = []
+        lst.append(item)
+        return lst
+    ```
+
+    Using `None` as a sentinel and creating a new list inside the function body ensures each call gets its own list.
+
+---
+
+**Exercise 2.**
+Late binding in closures created inside loops is a classic Python pitfall. Predict the output:
+
+```python
+funcs = [lambda: i for i in range(4)]
+print([f() for f in funcs])
+
+funcs2 = [lambda i=i: i for i in range(4)]
+print([f() for f in funcs2])
+```
+
+Why do all functions in `funcs` return `3`? How does the default argument trick in `funcs2` fix the problem? What is the underlying mechanism?
+
+??? success "Solution to Exercise 2"
+    Output:
+
+    ```text
+    [3, 3, 3, 3]
+    [0, 1, 2, 3]
+    ```
+
+    All lambdas in `funcs` capture the **variable** `i` by reference, not its value. By the time any lambda is called, the loop has finished and `i` is `3`. All four functions look up the same `i` and find `3`.
+
+    `lambda i=i: i` fixes this by capturing the **current value** of `i` as a default argument. Default arguments are evaluated at function definition time (during each loop iteration), so each lambda gets a snapshot: `i=0`, `i=1`, `i=2`, `i=3`.
+
+    The underlying mechanism: closures hold references to **cell objects** (shared mutable containers), while default arguments store **values** directly in the function object's `__defaults__` tuple.
+
+---
+
+**Exercise 3.**
+Exception handling has subtleties around variable scope. Predict the output:
+
+```python
+try:
+    x = 1 / 0
+except ZeroDivisionError as e:
+    error = e
+    print(type(error))
+
+try:
+    print(e)
+except NameError:
+    print("e is gone")
+
+print(error)
+```
+
+Why is `e` deleted after the `except` block but `error` survives? What Python design decision explains this behavior?
+
+??? success "Solution to Exercise 3"
+    Output:
+
+    ```text
+    <class 'ZeroDivisionError'>
+    e is gone
+    division by zero
+    ```
+
+    Python **deletes** the exception variable `e` at the end of the `except` block. This is by design (PEP 3110): exception objects hold references to the traceback, which holds references to all local variables in the stack frames. If `e` survived, it would create a reference cycle preventing garbage collection of those frames.
+
+    However, `error = e` creates a separate binding to the same exception object. Since `error` is a normal variable (not the `as` target), Python does not delete it. The exception object itself survives as long as `error` references it.
+
+    This is equivalent to Python implicitly running `del e` at the end of the `except` block.

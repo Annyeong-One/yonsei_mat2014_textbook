@@ -379,3 +379,63 @@ df['group_mean'] = df.groupby('group')['value'].transform('mean')
 # Rank within groups
 df['rank'] = df.groupby('group')['value'].rank(method='dense', ascending=False)
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Create a DataFrame with columns `'name'`, `'salary'`, and `'department'`. Write code to find the highest salary in each department.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+
+    df = pd.DataFrame({
+        'name': ['Alice', 'Bob', 'Charlie', 'David'],
+        'salary': [70000, 80000, 60000, 90000],
+        'department': ['IT', 'IT', 'HR', 'HR']
+    })
+    result = df.groupby('department')['salary'].max()
+    print(result)
+    ```
+
+---
+
+**Exercise 2.** Write code to find all duplicate rows in a DataFrame based on a specific column using `duplicated()`.
+
+??? success "Solution to Exercise 2"
+    See the main content for the relevant patterns and API calls. The solution involves understanding how to combine Pandas operations to solve data manipulation problems.
+
+---
+
+**Exercise 3.** Create a DataFrame and write code to rank employees by salary within each department using `groupby()` and `rank()`.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({
+        'value': np.random.randint(0, 100, 20),
+        'group': np.random.choice(['A', 'B'], 20)
+    })
+    result = df.groupby('group')['value'].transform('sum')
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Write code that deletes rows where a specific column has null values, then resets the index.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    s = pd.Series(np.random.randn(100))
+    s_clean = s.clip(lower=0)
+    print(s_clean.describe())
+    ```

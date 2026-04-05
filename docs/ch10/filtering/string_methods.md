@@ -279,3 +279,58 @@ valid_phone = df[df['phone'].str.match(r'^\d{3}-\d{3}-\d{4}$')]
 # Names with Jr. or Sr.
 suffix = df[df['name'].str.contains(r'\b(Jr\.|Sr\.)\b', regex=True)]
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Given a DataFrame with a `'name'` column, use `.str.contains()` to find all names that contain the substring `'son'` (case-insensitive). Print the matching rows.
+
+??? success "Solution to Exercise 1"
+    Use `case=False` for case-insensitive search.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'name': ['Johnson', 'Smith', 'Jackson', 'Wilson', 'Lee']
+        })
+        result = df[df['name'].str.contains('son', case=False)]
+        print(result)
+
+---
+
+**Exercise 2.**
+Use `.str.startswith()` and `.str.endswith()` together to filter product codes that start with `'PRD'` and end with a digit. Use a regex pattern with `.str.match()` as an alternative.
+
+??? success "Solution to Exercise 2"
+    Combine `startswith` and regex matching.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'code': ['PRD001', 'PRD002', 'SKU-10', 'PRD-AB', 'PRD999']
+        })
+        # Method 1: startswith + regex endswith
+        mask = df['code'].str.startswith('PRD') & df['code'].str.match(r'.*\d$')
+        print(df[mask])
+
+---
+
+**Exercise 3.**
+Use `.str.len()` to filter a DataFrame of descriptions, keeping only rows where the description is between 10 and 100 characters long. Print the count of rows before and after filtering.
+
+??? success "Solution to Exercise 3"
+    Use `.str.len()` with `.between()` for length filtering.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'description': ['Short', 'A medium-length description here',
+                          'X' * 150, 'Another valid description']
+        })
+        print(f"Before: {len(df)} rows")
+        mask = df['description'].str.len().between(10, 100)
+        result = df[mask]
+        print(f"After: {len(result)} rows")
+        print(result)

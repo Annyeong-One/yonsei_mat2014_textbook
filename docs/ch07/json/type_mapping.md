@@ -73,3 +73,85 @@ list: list
 dict: dict
 ```
 
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a function `python_to_json_types` that takes a Python dictionary and returns a new dictionary showing the JSON type each value will become. Map `int`/`float` to `"number"`, `str` to `"string"`, `bool` to `"boolean"`, `None` to `"null"`, `list` to `"array"`, and `dict` to `"object"`.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    def python_to_json_types(d):
+        type_map = {
+            int: "number", float: "number",
+            str: "string", bool: "boolean",
+            type(None): "null", list: "array",
+            dict: "object",
+        }
+        return {
+            key: type_map.get(type(val), "unknown")
+            for key, val in d.items()
+        }
+
+    # Test
+    data = {"name": "Alice", "age": 30, "active": True, "data": None}
+    print(python_to_json_types(data))
+    # {'name': 'string', 'age': 'number', 'active': 'boolean', 'data': 'null'}
+    ```
+
+---
+
+**Exercise 2.**
+Write a function `find_type_mismatches` that takes a Python dictionary before and after a JSON round-trip (`dumps` then `loads`) and returns a list of keys where the type changed. For example, tuples become lists in JSON, so `{"data": (1, 2)}` would flag `"data"`.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    import json
+
+    def find_type_mismatches(original):
+        json_str = json.dumps(original)
+        loaded = json.loads(json_str)
+        mismatches = []
+        for key in original:
+            if type(original[key]) != type(loaded[key]):
+                mismatches.append(key)
+        return mismatches
+
+    # Test
+    data = {"nums": (1, 2, 3), "name": "Alice", "count": 5}
+    print(find_type_mismatches(data))  # ['nums'] (tuple -> list)
+    ```
+
+---
+
+**Exercise 3.**
+Write a function `ensure_json_compatible` that takes a Python dictionary and replaces any non-serializable values with their string representation. It should handle `set`, `tuple`, `bytes`, and other common types that JSON cannot serialize directly.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    import json
+
+    def ensure_json_compatible(d):
+        result = {}
+        for key, value in d.items():
+            try:
+                json.dumps(value)
+                result[key] = value
+            except (TypeError, ValueError):
+                result[key] = str(value)
+        return result
+
+    # Test
+    data = {
+        "name": "Alice",
+        "tags": {"python", "coding"},
+        "data": b"bytes",
+        "scores": [95, 87],
+    }
+    safe = ensure_json_compatible(data)
+    print(json.dumps(safe))
+    ```

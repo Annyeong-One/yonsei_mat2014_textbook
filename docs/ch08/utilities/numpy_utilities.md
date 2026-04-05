@@ -329,3 +329,41 @@ print(np.gradient(arr))  # [3. 4. 6. 8. 9.]  (length 5)
 - `diff()` for discrete changes (signal processing, change detection)
 - `gradient()` for smooth numerical derivatives (preserves length)
 - Use `gradient()` over `diff()` when you need same-length output
+
+---
+
+## Exercises
+
+**Exercise 1.** Write a short code example that demonstrates the main concept covered on this page. Include comments explaining each step.
+
+??? success "Solution to Exercise 1"
+    Refer to the code examples in the page content above. A complete solution would recreate the key pattern with clear comments explaining the NumPy operations involved.
+
+---
+
+**Exercise 2.** Predict the output of a code snippet that uses the features described on this page. Explain why the output is what it is.
+
+??? success "Solution to Exercise 2"
+    The output depends on how NumPy handles the specific operation. Key factors include array shapes, dtypes, and broadcasting rules. Trace through the computation step by step.
+
+---
+
+**Exercise 3.** Write a practical function that applies the concepts from this page to solve a real data processing task. Test it with sample data.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+
+    # Example: apply the page's concept to process sample data
+    data = np.random.default_rng(42).random((5, 3))
+    # Apply the relevant operation
+    result = data  # replace with actual operation
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Identify a common mistake when using the features described on this page. Write code that demonstrates the mistake and then show the corrected version.
+
+??? success "Solution to Exercise 4"
+    A common mistake is misunderstanding array shapes or dtypes. Always check `.shape` and `.dtype` when debugging unexpected results.

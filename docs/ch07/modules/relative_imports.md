@@ -304,3 +304,73 @@ Every directory in the import chain needs `__init__.py` for relative imports.
 - Each directory in the chain needs `__init__.py`
 - Use relative imports for internal package code
 - Use absolute imports for external packages
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Given a package `mypackage` with `mypackage/utils.py` and `mypackage/core.py`, write the import statement in `core.py` that imports the `helper` function from `utils.py` using a relative import. Then write the equivalent absolute import.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    # mypackage/core.py
+
+    # Relative import (preferred for internal imports)
+    from .utils import helper
+
+    # Equivalent absolute import
+    from mypackage.utils import helper
+
+    # Both achieve the same result, but relative imports
+    # make the package more portable (rename-friendly).
+    ```
+
+---
+
+**Exercise 2.**
+Given a package structure `pkg/sub1/mod_a.py` and `pkg/sub2/mod_b.py`, write the relative import in `mod_a.py` to import `func_b` from `mod_b.py`. Explain why `..sub2.mod_b` is needed (two dots to go up to `pkg`, then down to `sub2`).
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    # pkg/sub1/mod_a.py
+
+    # Two dots (..) go up to the parent package 'pkg'
+    # Then navigate down to sub2.mod_b
+    from ..sub2.mod_b import func_b
+
+    # Breakdown:
+    # . = current package (sub1)
+    # .. = parent package (pkg)
+    # ..sub2 = sibling package sub2
+    # ..sub2.mod_b = module mod_b inside sub2
+    ```
+
+---
+
+**Exercise 3.**
+Write a script that demonstrates the common error when running a module with relative imports directly (e.g., `python mypackage/core.py` fails) versus correctly (e.g., `python -m mypackage.core` works). Explain why the `-m` flag is necessary.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    # mypackage/core.py
+    from .utils import helper  # Relative import
+
+    def main():
+        helper()
+
+    if __name__ == "__main__":
+        main()
+
+    # Running directly FAILS:
+    #   python mypackage/core.py
+    #   ImportError: attempted relative import with no known parent package
+    #
+    # Running with -m flag WORKS:
+    #   python -m mypackage.core
+    #   The -m flag tells Python to treat it as a package module,
+    #   so it sets __package__ correctly and relative imports resolve.
+    ```

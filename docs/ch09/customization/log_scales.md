@@ -450,3 +450,98 @@ bins = np.logspace(np.log10(data.min()), np.log10(data.max()), 50)
 ax.hist(data, bins=bins)
 ax.set_xscale('log')
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Plot the function $y = x^3$ for `x` in $[1, 1000]$ using four scale combinations in a 2x2 grid: linear-linear, log-linear (log x, linear y), linear-log (linear x, log y), and log-log. Title each subplot with its scale type.
+
+??? success "Solution to Exercise 1"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(1, 1000, 500)
+        y = x ** 3
+
+        fig, axes = plt.subplots(2, 2, figsize=(10, 8))
+
+        axes[0, 0].plot(x, y)
+        axes[0, 0].set_title('Linear-Linear')
+
+        axes[0, 1].plot(x, y)
+        axes[0, 1].set_xscale('log')
+        axes[0, 1].set_title('Log-Linear')
+
+        axes[1, 0].plot(x, y)
+        axes[1, 0].set_yscale('log')
+        axes[1, 0].set_title('Linear-Log')
+
+        axes[1, 1].plot(x, y)
+        axes[1, 1].set_xscale('log')
+        axes[1, 1].set_yscale('log')
+        axes[1, 1].set_title('Log-Log')
+
+        for ax in axes.flat:
+            ax.grid(True, alpha=0.3)
+
+        plt.tight_layout()
+        plt.show()
+
+---
+
+**Exercise 2.**
+Create a semilogy plot of three exponential decays: $y = e^{-x}$, $y = e^{-2x}$, and $y = e^{-3x}$ for `x` in $[0, 5]$. On a log scale y-axis, these should appear as straight lines. Add a legend and grid.
+
+??? success "Solution to Exercise 2"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(0, 5, 200)
+
+        fig, ax = plt.subplots(figsize=(8, 5))
+        for k in [1, 2, 3]:
+            ax.semilogy(x, np.exp(-k * x), label=f'exp(-{k}x)')
+
+        ax.set_xlabel('x')
+        ax.set_ylabel('y (log scale)')
+        ax.set_title('Exponential Decays on Semilogy')
+        ax.legend()
+        ax.grid(True, alpha=0.3)
+        plt.show()
+
+---
+
+**Exercise 3.**
+Use `ax.set_xscale('symlog', linthresh=1)` to plot the function $y = x^3$ over $[-100, 100]$. The symmetric log scale handles both positive and negative values. Compare this with a standard linear plot side by side, and shade the linear region $[-1, 1]$ with `axvspan`.
+
+??? success "Solution to Exercise 3"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(-100, 100, 1000)
+        y = x ** 3
+
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
+
+        ax1.plot(x, y, color='navy')
+        ax1.set_title('Linear Scale')
+        ax1.set_xlabel('x')
+        ax1.set_ylabel(r'$x^3$')
+        ax1.grid(True, alpha=0.3)
+
+        ax2.plot(x, y, color='navy')
+        ax2.set_xscale('symlog', linthresh=1)
+        ax2.set_title('Symmetric Log Scale (linthresh=1)')
+        ax2.set_xlabel('x (symlog)')
+        ax2.set_ylabel(r'$x^3$')
+        ax2.axvspan(-1, 1, color='yellow', alpha=0.3, label='Linear region')
+        ax2.legend()
+        ax2.grid(True, alpha=0.3)
+
+        plt.tight_layout()
+        plt.show()

@@ -185,6 +185,7 @@ show_frame()
 
 ---
 
+
 ## Runnable Example: `stack_vs_heap.py`
 
 ```python
@@ -276,3 +277,94 @@ if __name__ == "__main__":
 
     print("\nSee exercises.py for practice!")
 ```
+
+
+## Exercises
+
+**Exercise 1.**
+Write a script that creates 5 nested function calls (a calls b calls c calls d calls e). In function `e`, use `inspect.stack()` to print the entire call stack, showing each frame's function name and line number. Explain in comments which parts are on the stack vs the heap.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import inspect
+
+        def a():
+            b()
+
+        def b():
+            c()
+
+        def c():
+            d()
+
+        def d():
+            e()
+
+        def e():
+            # Stack frames are on the stack; the frame objects
+            # and their local namespaces are Python objects on the heap
+            print("Call stack (innermost first):")
+            for info in inspect.stack():
+                print(f"  {info.function}() at line {info.lineno}")
+
+        a()
+        ```
+
+---
+
+**Exercise 2.**
+Demonstrate that objects outlive their creating frame: write a function `create_data()` that creates a list, stores a `weakref.ref` to it in a global variable, and returns the list. After the function returns, verify that the weak reference is still alive (because the caller holds a strong reference to the returned value).
+
+??? success "Solution to Exercise 2"
+        ```python
+        import weakref
+
+        global_ref = None
+
+        def create_data():
+            global global_ref
+            data = list(range(1000))
+            global_ref = weakref.ref(data)
+            return data
+
+        result = create_data()
+        print(f"Weak ref alive: {global_ref() is not None}")  # True
+        print(f"Same object: {global_ref() is result}")        # True
+
+        del result
+        print(f"After del: {global_ref() is not None}")        # False
+        ```
+
+---
+
+**Exercise 3.**
+Write a function that creates a local variable referencing a large list, then reassigns that variable to `None`. Use `tracemalloc` snapshots before and after the reassignment to show that the heap memory is freed even though the stack frame is still active.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import tracemalloc
+
+        def free_in_scope():
+            tracemalloc.start()
+            snap1 = tracemalloc.take_snapshot()
+
+            data = list(range(500_000))  # Allocate on heap
+
+            snap2 = tracemalloc.take_snapshot()
+            growth = snap2.compare_to(snap1, 'lineno')
+            alloc = sum(s.size_diff for s in growth if s.size_diff > 0)
+            print(f"After allocation: +{alloc / 1024:.1f} KB")
+
+            data = None  # Free the heap object
+
+            snap3 = tracemalloc.take_snapshot()
+            shrink = snap3.compare_to(snap2, 'lineno')
+            freed = sum(s.size_diff for s in shrink if s.size_diff < 0)
+            print(f"After reassignment: {freed / 1024:.1f} KB freed")
+
+            tracemalloc.stop()
+
+        free_in_scope()
+        ```
+
+---

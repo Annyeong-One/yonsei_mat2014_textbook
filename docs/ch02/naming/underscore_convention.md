@@ -116,3 +116,63 @@ def process(type_=None):
 | `__var` | Strong private | `__password` |
 | `__method__` | Magic | `__init__` |
 | `var_` | Avoid keyword | `class_` |
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Explain the meaning of each underscore convention: `_var`, `var_`, `__var`, `__var__`, and `_`. Give an example use case for each.
+
+??? success "Solution to Exercise 1"
+
+    | Convention | Meaning | Example |
+    |-----------|---------|---------|
+    | `_var` | Internal/private by convention | `_helper_function()` |
+    | `var_` | Avoids conflict with keyword | `class_`, `type_` |
+    | `__var` | Name mangling in classes | `self.__balance` |
+    | `__var__` | Dunder/magic methods | `__init__`, `__str__` |
+    | `_` | Throwaway variable | `for _ in range(5)` |
+
+---
+
+**Exercise 2.**
+Demonstrate Python's name mangling for `__var` inside a class. Create a class with a `__secret` attribute and show how to access it from outside the class.
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        class BankAccount:
+            def __init__(self, balance):
+                self.__balance = balance  # Name-mangled
+
+            def get_balance(self):
+                return self.__balance
+
+        acc = BankAccount(100)
+        # print(acc.__balance)           # AttributeError
+        print(acc._BankAccount__balance)  # 100 (mangled name)
+        print(acc.get_balance())          # 100
+        ```
+
+    Python mangles `__balance` to `_BankAccount__balance` to avoid accidental overrides in subclasses.
+
+---
+
+**Exercise 3.**
+Write a loop that uses `_` as a throwaway variable and a function that uses `_` in the interactive interpreter convention.
+
+??? success "Solution to Exercise 3"
+
+        ```python
+        # Throwaway variable in loop
+        for _ in range(3):
+            print("Hello")
+
+        # Ignoring values in unpacking
+        name, _, age = ("Alice", "ignored", 30)
+        print(f"{name}, {age}")  # Alice, 30
+        ```
+
+    `_` signals to readers that the value is intentionally unused.

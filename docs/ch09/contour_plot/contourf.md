@@ -542,3 +542,88 @@ ax.set_ylabel('y')
 plt.colorbar(cf, ax=ax, label='Temperature (°C)')
 plt.show()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a filled contour plot of the Rosenbrock function $z = (1 - x)^2 + 100(y - x^2)^2$ over $[-2, 2] \times [-1, 3]$. Use `np.log10` of the values for better visualization (since the range is huge). Use 20 levels and the `hot` colormap. Add a colorbar with label "log10(z)".
+
+??? success "Solution to Exercise 1"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(-2, 2, 300)
+        y = np.linspace(-1, 3, 300)
+        X, Y = np.meshgrid(x, y)
+        Z = (1 - X)**2 + 100 * (Y - X**2)**2
+        Z_log = np.log10(Z + 1)
+
+        fig, ax = plt.subplots(figsize=(8, 6))
+        cf = ax.contourf(X, Y, Z_log, levels=20, cmap='hot')
+        plt.colorbar(cf, ax=ax, label='log10(z)')
+        ax.set_xlabel('x')
+        ax.set_ylabel('y')
+        ax.set_title('Rosenbrock Function (log scale)')
+        plt.show()
+
+---
+
+**Exercise 2.**
+Compare `contour` and `contourf` side by side for the function $z = \sin(x^2 + y^2)$ over $[-3, 3] \times [-3, 3]$. Create a 1x2 subplot layout with contour lines on the left (with labels) and filled contour on the right. Use the same 15 levels and `coolwarm` colormap for both.
+
+??? success "Solution to Exercise 2"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(-3, 3, 200)
+        y = np.linspace(-3, 3, 200)
+        X, Y = np.meshgrid(x, y)
+        Z = np.sin(X**2 + Y**2)
+
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
+
+        cs = ax1.contour(X, Y, Z, levels=15, cmap='coolwarm')
+        ax1.clabel(cs, inline=True, fontsize=8)
+        ax1.set_title('contour (lines)')
+        ax1.set_aspect('equal')
+
+        cf = ax2.contourf(X, Y, Z, levels=15, cmap='coolwarm')
+        plt.colorbar(cf, ax=ax2)
+        ax2.set_title('contourf (filled)')
+        ax2.set_aspect('equal')
+
+        plt.tight_layout()
+        plt.show()
+
+---
+
+**Exercise 3.**
+Create a filled contour plot with a custom discrete colormap using `BoundaryNorm`. Plot $z = x^2 + y^2$ over $[-3, 3] \times [-3, 3]$ with boundaries at `[0, 2, 4, 6, 8, 10, 15, 20]`. Use the `RdYlGn_r` colormap and add a colorbar showing the discrete boundaries.
+
+??? success "Solution to Exercise 3"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+        from matplotlib.colors import BoundaryNorm
+
+        x = np.linspace(-3, 3, 200)
+        y = np.linspace(-3, 3, 200)
+        X, Y = np.meshgrid(x, y)
+        Z = X**2 + Y**2
+
+        bounds = [0, 2, 4, 6, 8, 10, 15, 20]
+        cmap = plt.cm.RdYlGn_r
+        norm = BoundaryNorm(bounds, cmap.N)
+
+        fig, ax = plt.subplots(figsize=(8, 6))
+        cf = ax.contourf(X, Y, Z, levels=bounds, cmap=cmap, norm=norm)
+        plt.colorbar(cf, ax=ax, label='Value', ticks=bounds)
+        ax.set_xlabel('x')
+        ax.set_ylabel('y')
+        ax.set_title(r'$z = x^2 + y^2$ with Discrete Colormap')
+        ax.set_aspect('equal')
+        plt.show()

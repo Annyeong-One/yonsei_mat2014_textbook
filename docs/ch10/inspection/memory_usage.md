@@ -259,3 +259,70 @@ Best practices:
 - Monitor memory after each major transformation
 - Optimize dtypes for large datasets
 - Convert string columns to categorical when appropriate
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a DataFrame with 100,000 rows containing an `int64` column, a `float64` column, and a `string` (object) column. Use `.memory_usage(deep=True)` to find the total memory. Compare it with `.memory_usage()` (without `deep=True`) to see the difference for object columns.
+
+??? success "Solution to Exercise 1"
+    Compare shallow vs deep memory measurement.
+
+        import pandas as pd
+        import numpy as np
+
+        df = pd.DataFrame({
+            'ints': np.random.randint(0, 100, 100000),
+            'floats': np.random.randn(100000),
+            'strings': ['item_' + str(i % 10) for i in range(100000)]
+        })
+        shallow = df.memory_usage().sum()
+        deep = df.memory_usage(deep=True).sum()
+        print(f"Shallow: {shallow / 1e6:.2f} MB")
+        print(f"Deep:    {deep / 1e6:.2f} MB")
+        print(f"Difference: {(deep - shallow) / 1e6:.2f} MB")
+
+---
+
+**Exercise 2.**
+Take a DataFrame with a string column that has low cardinality (few unique values). Convert it to `'category'` dtype using `.astype('category')`. Compare memory usage before and after the conversion using `.memory_usage(deep=True)`.
+
+??? success "Solution to Exercise 2"
+    Convert low-cardinality string column to categorical.
+
+        import pandas as pd
+        import numpy as np
+
+        df = pd.DataFrame({
+            'status': np.random.choice(['active', 'inactive', 'pending'], 100000)
+        })
+        before = df.memory_usage(deep=True).sum()
+        df['status'] = df['status'].astype('category')
+        after = df.memory_usage(deep=True).sum()
+        print(f"Before: {before / 1e6:.2f} MB")
+        print(f"After:  {after / 1e6:.2f} MB")
+        print(f"Reduction: {(1 - after / before) * 100:.1f}%")
+
+---
+
+**Exercise 3.**
+Create a DataFrame with an `int64` column where all values fit in `int8` range (-128 to 127). Downcast it to `int8` using `.astype('int8')`. Measure the memory reduction and verify the values are unchanged.
+
+??? success "Solution to Exercise 3"
+    Downcast int64 to int8 and verify values.
+
+        import pandas as pd
+        import numpy as np
+
+        df = pd.DataFrame({'values': np.random.randint(-128, 128, 100000).astype('int64')})
+        before = df.memory_usage(deep=True).sum()
+        original_values = df['values'].copy()
+        df['values'] = df['values'].astype('int8')
+        after = df.memory_usage(deep=True).sum()
+        print(f"Before: {before / 1e6:.2f} MB")
+        print(f"After:  {after / 1e6:.2f} MB")
+        print(f"Reduction: {(1 - after / before) * 100:.1f}%")
+        assert (df['values'] == original_values).all()
+        print("Values unchanged after downcast: True")

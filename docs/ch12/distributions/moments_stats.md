@@ -147,3 +147,53 @@ Higher entropy indicates greater spread or uncertainty in the distribution.
 ## Summary
 
 The moments of a distribution — mean, variance, skewness, and kurtosis — summarize its center, spread, asymmetry, and tail behavior. In `scipy.stats`, the `.mean()`, `.var()`, `.std()`, and `.stats()` methods compute these analytically from the distribution parameters, while `.moment(n)` provides arbitrary non-central moments. These exact values serve as benchmarks when comparing against sample estimates computed from data.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+For an exponential distribution with $\lambda = 0.5$ (i.e., `scale=2`), compute the mean, variance, skewness, and kurtosis using `.stats(moments='mvsk')`. Verify the mean equals $1/\lambda$.
+
+??? success "Solution to Exercise 1"
+
+        from scipy import stats
+
+        rv = stats.expon(scale=2)
+        m, v, s, k = rv.stats(moments='mvsk')
+        print(f"Mean: {float(m):.4f} (expected {1/0.5:.4f})")
+        print(f"Variance: {float(v):.4f}")
+        print(f"Skewness: {float(s):.4f}")
+        print(f"Kurtosis: {float(k):.4f}")
+
+---
+
+**Exercise 2.**
+Compute the differential entropy of a normal distribution for $\sigma = 1, 2, 5$ using the `.entropy()` method. Verify that the entropy of $N(0, \sigma^2)$ equals $\frac{1}{2}\ln(2\pi e \sigma^2)$.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy import stats
+
+        for sigma in [1, 2, 5]:
+            rv = stats.norm(scale=sigma)
+            entropy = rv.entropy()
+            expected = 0.5 * np.log(2 * np.pi * np.e * sigma**2)
+            print(f"sigma={sigma}: entropy={entropy:.4f}, expected={expected:.4f}, "
+                  f"match={np.isclose(entropy, expected)}")
+
+---
+
+**Exercise 3.**
+Use `.moment(n)` to compute the 1st through 4th non-central moments of a standard normal distribution. Verify that odd moments are zero and the 2nd moment equals 1.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+
+        rv = stats.norm()
+        for n in range(1, 5):
+            moment_val = rv.moment(n)
+            print(f"E[X^{n}] = {moment_val:.4f}")

@@ -279,6 +279,7 @@ tracemalloc.stop()
 
 ---
 
+
 ## Runnable Example: `time_complexity.py`
 
 ```python
@@ -935,3 +936,136 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+
+## Exercises
+
+**Exercise 1.**
+Write a benchmark comparing four ways to sum a list of 1,000,000 integers: (a) a `for` loop with `+=`, (b) the built-in `sum()`, (c) `functools.reduce` with `operator.add`, and (d) a generator expression inside `sum()`. Use `timeit` to measure each and print a ranked table from fastest to slowest.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import timeit
+        import functools
+        import operator
+
+        data = list(range(1_000_000))
+
+        def sum_loop():
+            total = 0
+            for x in data:
+                total += x
+            return total
+
+        def sum_builtin():
+            return sum(data)
+
+        def sum_reduce():
+            return functools.reduce(operator.add, data)
+
+        def sum_genexpr():
+            return sum(x for x in data)
+
+        methods = [
+            ("for loop", sum_loop),
+            ("sum()", sum_builtin),
+            ("reduce", sum_reduce),
+            ("sum(gen)", sum_genexpr),
+        ]
+
+        results = []
+        for name, func in methods:
+            t = min(timeit.repeat(func, repeat=3, number=10))
+            results.append((name, t))
+
+        results.sort(key=lambda x: x[1])
+        print(f"{'Method':<12} {'Time (s)':>10}")
+        print("-" * 24)
+        for name, t in results:
+            print(f"{name:<12} {t:>10.4f}")
+        ```
+
+---
+
+**Exercise 2.**
+Create a class `Point` with and without `__slots__`, each having `x` and `y` attributes. Create 500,000 instances of each, measure total memory using `tracemalloc`, and print the memory used and savings percentage from using `__slots__`.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import tracemalloc
+
+        class PointRegular:
+            def __init__(self, x, y):
+                self.x = x
+                self.y = y
+
+        class PointSlots:
+            __slots__ = ('x', 'y')
+            def __init__(self, x, y):
+                self.x = x
+                self.y = y
+
+        n = 500_000
+
+        tracemalloc.start()
+        regular = [PointRegular(i, i) for i in range(n)]
+        _, peak_regular = tracemalloc.get_traced_memory()
+        tracemalloc.stop()
+
+        tracemalloc.start()
+        slotted = [PointSlots(i, i) for i in range(n)]
+        _, peak_slotted = tracemalloc.get_traced_memory()
+        tracemalloc.stop()
+
+        savings = (1 - peak_slotted / peak_regular) * 100
+        print(f"Regular: {peak_regular / 1024 / 1024:.1f} MB")
+        print(f"Slotted: {peak_slotted / 1024 / 1024:.1f} MB")
+        print(f"Savings: {savings:.1f}%")
+        ```
+
+---
+
+**Exercise 3.**
+Write a generator-based version and a list-based version of a function that yields/returns the first n Fibonacci numbers. For n = 1,000,000, use `tracemalloc` to compare peak memory of iterating through all values (consuming but not storing them) for both versions.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import tracemalloc
+
+        def fib_generator(n):
+            a, b = 0, 1
+            for _ in range(n):
+                yield a
+                a, b = b, a + b
+
+        def fib_list(n):
+            result = []
+            a, b = 0, 1
+            for _ in range(n):
+                result.append(a)
+                a, b = b, a + b
+            return result
+
+        n = 1_000_000
+
+        # Generator version
+        tracemalloc.start()
+        total = 0
+        for x in fib_generator(n):
+            total += x
+        _, peak_gen = tracemalloc.get_traced_memory()
+        tracemalloc.stop()
+
+        # List version
+        tracemalloc.start()
+        total = 0
+        for x in fib_list(n):
+            total += x
+        _, peak_list = tracemalloc.get_traced_memory()
+        tracemalloc.stop()
+
+        print(f"Generator peak: {peak_gen / 1024 / 1024:.1f} MB")
+        print(f"List peak:      {peak_list / 1024 / 1024:.1f} MB")
+        ```
+
+---

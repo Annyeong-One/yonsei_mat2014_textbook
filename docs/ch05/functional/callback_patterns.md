@@ -570,3 +570,86 @@ def fetch_data(url, callback):
 - Progress callbacks should support cancellation
 - Type hints document expected callback signatures
 - Consider `async/await` for complex async patterns
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a `download_file(url, on_progress, on_complete)` function that simulates downloading by iterating 10 times. On each iteration, call `on_progress(percent)` with the current percentage (10, 20, ..., 100). After the loop, call `on_complete(url)`. Demonstrate with callbacks that print progress and a completion message.
+
+??? success "Solution to Exercise 1"
+
+        def download_file(url, on_progress, on_complete):
+            for i in range(1, 11):
+                percent = i * 10
+                on_progress(percent)
+            on_complete(url)
+
+        download_file(
+            "https://example.com/file.zip",
+            on_progress=lambda p: print(f"  Progress: {p}%"),
+            on_complete=lambda url: print(f"  Download complete: {url}"),
+        )
+
+---
+
+**Exercise 2.**
+Create a simple `EventEmitter` class with `on(event, callback)` to register callbacks and `emit(event, *args)` to trigger all callbacks for that event. Register multiple callbacks for a `"data"` event and demonstrate that emitting the event calls all of them in order.
+
+??? success "Solution to Exercise 2"
+
+        class EventEmitter:
+            def __init__(self):
+                self.listeners = {}
+
+            def on(self, event, callback):
+                if event not in self.listeners:
+                    self.listeners[event] = []
+                self.listeners[event].append(callback)
+
+            def emit(self, event, *args):
+                for callback in self.listeners.get(event, []):
+                    callback(*args)
+
+        emitter = EventEmitter()
+        emitter.on("data", lambda d: print(f"Logger: {d}"))
+        emitter.on("data", lambda d: print(f"Processor: {d}"))
+        emitter.on("data", lambda d: print(f"Archiver: {d}"))
+
+        emitter.emit("data", {"temperature": 22.5})
+
+---
+
+**Exercise 3.**
+Write a `retry_with_callback(func, max_attempts, on_failure, on_success)` function that calls `func()` up to `max_attempts` times. On each failure, call `on_failure(attempt, exception)`. On success, call `on_success(result)` and return the result. If all attempts fail, raise the last exception.
+
+??? success "Solution to Exercise 3"
+
+        def retry_with_callback(func, max_attempts, on_failure, on_success):
+            last_exc = None
+            for attempt in range(1, max_attempts + 1):
+                try:
+                    result = func()
+                    on_success(result)
+                    return result
+                except Exception as e:
+                    last_exc = e
+                    on_failure(attempt, e)
+            raise last_exc
+
+        call_count = 0
+
+        def flaky_operation():
+            global call_count
+            call_count += 1
+            if call_count < 3:
+                raise ConnectionError("Timeout")
+            return "OK"
+
+        retry_with_callback(
+            flaky_operation,
+            max_attempts=5,
+            on_failure=lambda a, e: print(f"  Attempt {a} failed: {e}"),
+            on_success=lambda r: print(f"  Success: {r}"),
+        )

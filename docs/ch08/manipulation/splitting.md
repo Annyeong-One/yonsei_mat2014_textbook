@@ -407,3 +407,56 @@ if __name__ == "__main__":
 | `np.hsplit(a, n)` | `np.split(a, n, axis=1)` |
 | `np.vsplit(a, n)` | `np.split(a, n, axis=0)` |
 | `np.dsplit(a, n)` | `np.split(a, n, axis=2)` |
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create `a = np.arange(12)`. Split it into 3 equal parts using `np.split` and into parts of sizes 2, 5, 5 using `np.split` with explicit indices.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        a = np.arange(12)
+        parts_equal = np.split(a, 3)
+        for i, p in enumerate(parts_equal):
+            print(f"Part {i}: {p}")
+
+        parts_custom = np.split(a, [2, 7])
+        for i, p in enumerate(parts_custom):
+            print(f"Custom part {i}: {p}")
+
+---
+
+**Exercise 2.**
+Create a 4x6 matrix. Use `np.hsplit` to split it into 3 equal column blocks and `np.vsplit` to split it into 2 equal row blocks. Print the shapes of each resulting block.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        M = np.arange(24).reshape(4, 6)
+        col_blocks = np.hsplit(M, 3)
+        for i, b in enumerate(col_blocks):
+            print(f"Col block {i}: shape {b.shape}")
+
+        row_blocks = np.vsplit(M, 2)
+        for i, b in enumerate(row_blocks):
+            print(f"Row block {i}: shape {b.shape}")
+
+---
+
+**Exercise 3.**
+Create `a = np.arange(10)`. Use `np.array_split` to split it into 3 parts (which handles uneven division). Print the lengths of each part and verify they sum to 10.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        a = np.arange(10)
+        parts = np.array_split(a, 3)
+        lengths = [len(p) for p in parts]
+        print(f"Lengths: {lengths}")  # [4, 3, 3]
+        print(f"Sum: {sum(lengths)}")  # 10

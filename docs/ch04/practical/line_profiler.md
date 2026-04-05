@@ -73,3 +73,98 @@ profiler.print_stats()
 For a complete picture, use both tools:
 - **cProfile** identifies which functions are slow
 - **line_profiler** identifies which lines within those functions are slow
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a function `process_data(n)` that (a) creates a list of n random floats, (b) sorts the list, (c) computes the sum, and (d) finds the median by indexing. Use `LineProfiler` programmatically (without the `@profile` decorator) to profile it, print the stats, and identify which line takes the most time.
+
+??? success "Solution to Exercise 1"
+        ```python
+        from line_profiler import LineProfiler
+        import random
+
+        def process_data(n):
+            data = [random.random() for _ in range(n)]
+            data.sort()
+            total = sum(data)
+            median = data[n // 2]
+            return total, median
+
+        profiler = LineProfiler()
+        profiler.add_function(process_data)
+        profiler.enable()
+        process_data(500_000)
+        profiler.disable()
+        profiler.print_stats()
+        ```
+
+---
+
+**Exercise 2.**
+Create two versions of a function that counts word frequencies in a large string: one using a manual dictionary loop and one using `collections.Counter`. Profile both with `LineProfiler` and compare which lines are hotspots in each version.
+
+??? success "Solution to Exercise 2"
+        ```python
+        from line_profiler import LineProfiler
+        from collections import Counter
+
+        text = " ".join(["word"] * 100_000 + ["hello"] * 50_000)
+
+        def count_manual(text):
+            freq = {}
+            for word in text.split():
+                if word in freq:
+                    freq[word] += 1
+                else:
+                    freq[word] = 1
+            return freq
+
+        def count_counter(text):
+            return Counter(text.split())
+
+        for func in [count_manual, count_counter]:
+            lp = LineProfiler()
+            lp.add_function(func)
+            lp.enable()
+            func(text)
+            lp.disable()
+            lp.print_stats()
+        ```
+
+---
+
+**Exercise 3.**
+Write a matrix multiplication function `matmul(A, B)` using nested loops. Profile it with `LineProfiler` on two 100x100 matrices. Identify the innermost loop line and compute what percentage of total time it consumes.
+
+??? success "Solution to Exercise 3"
+        ```python
+        from line_profiler import LineProfiler
+
+        def matmul(A, B):
+            n = len(A)
+            m = len(B[0])
+            k = len(B)
+            C = [[0] * m for _ in range(n)]
+            for i in range(n):
+                for j in range(m):
+                    total = 0
+                    for p in range(k):
+                        total += A[i][p] * B[p][j]
+                    C[i][j] = total
+            return C
+
+        import random
+        n = 100
+        A = [[random.random() for _ in range(n)] for _ in range(n)]
+        B = [[random.random() for _ in range(n)] for _ in range(n)]
+
+        lp = LineProfiler()
+        lp.add_function(matmul)
+        lp.enable()
+        matmul(A, B)
+        lp.disable()
+        lp.print_stats()
+        ```

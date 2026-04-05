@@ -44,3 +44,68 @@ Value: 1
 Value: 2
 Doubled: [0, 2, 4]
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Use `tee` to compute both the sum and the product of an iterator in a single pass. Write a function `sum_and_product` that takes an iterable of numbers and returns a tuple `(total_sum, total_product)`. For example, `sum_and_product([1, 2, 3, 4])` should return `(10, 24)`.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    from itertools import tee
+    from functools import reduce
+    import operator
+
+    def sum_and_product(iterable):
+        it1, it2 = tee(iterable)
+        total_sum = sum(it1)
+        total_product = reduce(operator.mul, it2, 1)
+        return (total_sum, total_product)
+
+    # Test
+    print(sum_and_product([1, 2, 3, 4]))  # (10, 24)
+    ```
+
+---
+
+**Exercise 2.**
+Use `tee` to create a function `pairwise_diff` that takes an iterable of numbers and returns a list of the differences between consecutive elements. For example, `pairwise_diff([10, 7, 3, 8])` should return `[-3, -4, 5]`.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    from itertools import tee
+
+    def pairwise_diff(iterable):
+        a, b = tee(iterable)
+        next(b, None)
+        return [y - x for x, y in zip(a, b)]
+
+    # Test
+    print(pairwise_diff([10, 7, 3, 8]))  # [-3, -4, 5]
+    ```
+
+---
+
+**Exercise 3.**
+Use `tee` with `n=3` to compute the mean, minimum, and maximum of an iterator in a single pass. Write a function `stats` that returns `(mean, min_val, max_val)`. For example, `stats([4, 1, 7, 3])` should return `(3.75, 1, 7)`.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    from itertools import tee
+
+    def stats(iterable):
+        it1, it2, it3 = tee(iterable, 3)
+        values = list(it1)
+        mean = sum(it2) / len(values)
+        min_val = min(it3)
+        max_val = max(values)
+        return (mean, min_val, max_val)
+
+    # Test
+    print(stats([4, 1, 7, 3]))  # (3.75, 1, 7)
+    ```

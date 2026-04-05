@@ -193,3 +193,55 @@ df.replace(-999, np.nan, limit=10)  # Max 10 replacements
 # method parameter was used for forward/backward fill
 # Now deprecated; use fillna instead
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a DataFrame where `-999` is used as a sentinel for missing data. Use `.replace(-999, np.nan)` to convert these to proper `NaN` values. Then count the resulting `NaN` values.
+
+??? success "Solution to Exercise 1"
+    Replace sentinel values with NaN.
+
+        import pandas as pd
+        import numpy as np
+
+        df = pd.DataFrame({
+            'temp': [21, -999, 25, -999],
+            'humidity': [65, 68, -999, 75]
+        })
+        df = df.replace(-999, np.nan)
+        print(df)
+        print(f"Total NaN: {df.isna().sum().sum()}")
+
+---
+
+**Exercise 2.**
+Create a Series with inconsistent string values (e.g., `'yes'`, `'Yes'`, `'YES'`, `'no'`, `'No'`). Use `.replace()` with a dictionary to standardize them to `'Yes'` and `'No'`.
+
+??? success "Solution to Exercise 2"
+    Standardize inconsistent string values.
+
+        import pandas as pd
+
+        s = pd.Series(['yes', 'Yes', 'YES', 'no', 'No', 'NO'])
+        s = s.replace({'yes': 'Yes', 'YES': 'Yes', 'no': 'No', 'NO': 'No'})
+        print(s)
+        print(s.value_counts())
+
+---
+
+**Exercise 3.**
+Create a DataFrame and use `.replace()` with `regex=True` to replace all strings matching a pattern (e.g., replace any value starting with `'old_'` with `'new_'`).
+
+??? success "Solution to Exercise 3"
+    Use regex replacement to transform matching values.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'code': ['old_abc', 'old_def', 'new_ghi', 'old_jkl']
+        })
+        df['code'] = df['code'].replace(r'^old_', 'new_', regex=True)
+        print(df)

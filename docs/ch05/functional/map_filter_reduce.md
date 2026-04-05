@@ -127,3 +127,66 @@ print(total)  # 56 (4 + 16 + 36)
 - filter: select
 - reduce: accumulate
 - Comprehensions often better
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Given a list of dictionaries `[{"name": "Alice", "score": 85}, {"name": "Bob", "score": 42}, {"name": "Charlie", "score": 91}]`, use `filter()` to keep only entries with `score >= 60`, then use `map()` to extract just the names. Print the resulting list.
+
+??? success "Solution to Exercise 1"
+
+        students = [
+            {"name": "Alice", "score": 85},
+            {"name": "Bob", "score": 42},
+            {"name": "Charlie", "score": 91},
+        ]
+
+        passing = filter(lambda s: s["score"] >= 60, students)
+        names = list(map(lambda s: s["name"], passing))
+        print(names)  # ['Alice', 'Charlie']
+
+---
+
+**Exercise 2.**
+Use `functools.reduce` to implement a function `my_max(numbers)` that finds the maximum value in a list without using the built-in `max()`. Handle the empty-list case by raising `ValueError`.
+
+??? success "Solution to Exercise 2"
+
+        from functools import reduce
+
+        def my_max(numbers):
+            if not numbers:
+                raise ValueError("my_max() arg is an empty sequence")
+            return reduce(lambda a, b: a if a > b else b, numbers)
+
+        print(my_max([3, 1, 4, 1, 5, 9, 2, 6]))  # 9
+        print(my_max([-5, -2, -8]))                 # -2
+        try:
+            my_max([])
+        except ValueError as e:
+            print(e)
+
+---
+
+**Exercise 3.**
+Rewrite the following pipeline using list comprehensions instead of `map` and `filter`:
+```python
+result = list(map(str, filter(lambda x: x % 2 == 0, map(lambda x: x ** 2, range(10)))))
+```
+Verify both versions produce the same output.
+
+??? success "Solution to Exercise 3"
+
+        # Original with map/filter
+        result1 = list(
+            map(str, filter(lambda x: x % 2 == 0, map(lambda x: x ** 2, range(10))))
+        )
+
+        # Comprehension version
+        result2 = [str(x ** 2) for x in range(10) if (x ** 2) % 2 == 0]
+
+        print(result1)
+        print(result2)
+        print(result1 == result2)  # True

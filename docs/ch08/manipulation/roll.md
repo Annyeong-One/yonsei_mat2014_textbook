@@ -308,3 +308,60 @@ for ax, shift in zip(axes[1], shifts):
 plt.tight_layout()
 plt.show()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create `a = np.arange(10)`. Roll it by 3 positions and by -2 positions. Verify that rolling by `n` then by `-n` returns the original array.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        a = np.arange(10)
+        rolled = np.roll(a, 3)
+        unrolled = np.roll(rolled, -3)
+        print(f"Original: {a}")
+        print(f"Rolled +3: {rolled}")
+        print(f"Rolled back: {unrolled}")
+        print(f"Match: {np.array_equal(a, unrolled)}")
+
+---
+
+**Exercise 2.**
+Create a 4x4 matrix and roll it by 1 along axis 0 (shift rows down) and by -1 along axis 1 (shift columns left). Print the results.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        M = np.arange(16).reshape(4, 4)
+        print(f"Original:\n{M}")
+        print(f"Roll rows +1:\n{np.roll(M, 1, axis=0)}")
+        print(f"Roll cols -1:\n{np.roll(M, -1, axis=1)}")
+
+---
+
+**Exercise 3.**
+Implement a circular convolution of two 1D arrays using `np.roll`: given `a = np.array([1, 2, 3, 0, 0])` and `b = np.array([1, 1, 0, 0, 0])`, compute the circular convolution by summing `a * np.roll(b, k)` for each shift `k`. Compare with `np.fft.ifft(np.fft.fft(a) * np.fft.fft(b)).real`.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        a = np.array([1, 2, 3, 0, 0], dtype=float)
+        b = np.array([1, 1, 0, 0, 0], dtype=float)
+
+        # Circular convolution via roll
+        result = np.zeros(len(a))
+        for k in range(len(a)):
+            result += a[k] * np.roll(b, k)
+
+        # FFT-based circular convolution
+        result_fft = np.fft.ifft(np.fft.fft(a) * np.fft.fft(b)).real
+
+        print(f"Roll method: {result}")
+        print(f"FFT method:  {result_fft}")
+        print(f"Match: {np.allclose(result, result_fft)}")

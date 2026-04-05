@@ -330,3 +330,60 @@ def safe_normalize(arr):
 - MATLAB and R use copy-on-write; NumPy uses explicit views
 - Check with `np.shares_memory()` or `.base` attribute
 - Defensive copying in functions prevents accidental mutation
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create `a = np.arange(12).reshape(3, 4)`. Create a view `v = a[1:3, 1:3]` and a copy `c = a[1:3, 1:3].copy()`. Modify both and check which changes propagate back to `a`.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        a = np.arange(12).reshape(3, 4)
+        v = a[1:3, 1:3]
+        c = a[1:3, 1:3].copy()
+
+        v[0, 0] = 99
+        print(f"a after view mod: a[1,1] = {a[1, 1]}")  # 99
+
+        c[0, 0] = 88
+        print(f"a after copy mod: a[1,1] = {a[1, 1]}")  # still 99
+
+---
+
+**Exercise 2.**
+Write a function that takes an array and returns `True` if it is a view (has a base) and `False` if it owns its data. Test it on a slice, a reshape result, a `.copy()`, and a boolean-indexed result.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        def is_view(arr):
+            return arr.base is not None
+
+        a = np.arange(12).reshape(3, 4)
+        print(f"Slice: {is_view(a[1:3])}")       # True
+        print(f"Reshape: {is_view(a.reshape(4, 3))}") # True
+        print(f"Copy: {is_view(a.copy())}")       # False
+        print(f"Boolean: {is_view(a[a > 5])}")    # False
+
+---
+
+**Exercise 3.**
+Create a large array `a = np.random.randn(10000)`. Create a view `v = a[::2]` and a copy `c = a[::2].copy()`. Compare their `nbytes` and verify that the view shares memory with `a` by checking `np.shares_memory(a, v)`.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        a = np.random.randn(10000)
+        v = a[::2]
+        c = a[::2].copy()
+
+        print(f"View nbytes: {v.nbytes}")
+        print(f"Copy nbytes: {c.nbytes}")
+        print(f"Shares memory (view): {np.shares_memory(a, v)}")
+        print(f"Shares memory (copy): {np.shares_memory(a, c)}")

@@ -107,3 +107,63 @@ print(f"p(roots) ≈ {poly(roots)}")  # Close to [0. 0. 0. 0.]
 - `scipy.linalg.companion` expects coefficients in descending power order (highest power first)
 - This eigenvalue-based approach is how `np.roots` computes polynomial roots internally
 - The characteristic polynomial of the companion matrix equals the original polynomial
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Use `linalg.companion` to find the roots of the polynomial $p(x) = x^3 + 2x^2 - 5x - 6$. Verify that the roots are $-3, -1, 2$ by evaluating the polynomial at each root (should be approximately zero).
+
+??? success "Solution to Exercise 1"
+        import numpy as np
+        from scipy import linalg
+
+        coeffs = [1, 2, -5, -6]
+        C = linalg.companion(coeffs)
+        roots = np.sort(np.linalg.eigvals(C).real)
+
+        print(f"Roots: {roots.round(10)}")
+
+        poly = np.poly1d(coeffs)
+        print(f"p(roots) = {poly(roots).round(10)}")
+        print(f"Expected roots: [-3, -1, 2]")
+
+---
+
+**Exercise 2.**
+Create the companion matrix for $p(x) = x^5 - 15x^4 + 85x^3 - 225x^2 + 274x - 120$, which factors as $(x-1)(x-2)(x-3)(x-4)(x-5)$. Compute its eigenvalues and verify they are the integers 1 through 5. Print the maximum absolute error from the expected roots.
+
+??? success "Solution to Exercise 2"
+        import numpy as np
+        from scipy import linalg
+
+        coeffs = [1, -15, 85, -225, 274, -120]
+        C = linalg.companion(coeffs)
+        roots = np.sort(np.linalg.eigvals(C).real)
+
+        expected = np.array([1, 2, 3, 4, 5], dtype=float)
+        max_error = np.max(np.abs(roots - expected))
+        print(f"Roots: {roots.round(10)}")
+        print(f"Max error from integers: {max_error:.2e}")
+
+---
+
+**Exercise 3.**
+Generate a polynomial with known roots $[0.5, 1.5, 2.5, 3.5]$ using `np.poly`. Construct its companion matrix, compute the eigenvalues, sort them, and verify they match the original roots. Also verify that `np.roots` gives the same result as the companion matrix eigenvalue approach.
+
+??? success "Solution to Exercise 3"
+        import numpy as np
+        from scipy import linalg
+
+        original_roots = [0.5, 1.5, 2.5, 3.5]
+        coeffs = np.poly(original_roots)
+
+        C = linalg.companion(coeffs)
+        eig_roots = np.sort(np.linalg.eigvals(C).real)
+        np_roots = np.sort(np.roots(coeffs).real)
+
+        print(f"Original roots:   {sorted(original_roots)}")
+        print(f"Companion roots:  {eig_roots.round(10)}")
+        print(f"np.roots:         {np_roots.round(10)}")
+        print(f"Match: {np.allclose(eig_roots, np_roots)}")

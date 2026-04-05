@@ -1013,3 +1013,115 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a benchmark that compares `ThreadPoolExecutor` and `ProcessPoolExecutor` on a CPU-bound task (sum of squares up to 5,000,000, repeated 4 times). Print the elapsed time for sequential, threaded, and process-based execution, along with the speedup ratios. Verify that processes outperform threads for this workload.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import time
+        from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+
+        def cpu_task(n):
+            return sum(i * i for i in range(n))
+
+        data = [5_000_000] * 4
+
+        # Sequential
+        start = time.perf_counter()
+        [cpu_task(n) for n in data]
+        seq = time.perf_counter() - start
+
+        # Threads
+        start = time.perf_counter()
+        with ThreadPoolExecutor(max_workers=4) as ex:
+            list(ex.map(cpu_task, data))
+        thr = time.perf_counter() - start
+
+        # Processes
+        start = time.perf_counter()
+        with ProcessPoolExecutor(max_workers=4) as ex:
+            list(ex.map(cpu_task, data))
+        proc = time.perf_counter() - start
+
+        print(f"Sequential: {seq:.2f}s (1.0x)")
+        print(f"Threads:    {thr:.2f}s ({seq/thr:.2f}x)")
+        print(f"Processes:  {proc:.2f}s ({seq/proc:.2f}x)")
+        ```
+
+---
+
+**Exercise 2.**
+Write a benchmark for an I/O-bound task: simulate 20 network requests (each `time.sleep(0.3)`). Compare sequential, `ThreadPoolExecutor(max_workers=10)`, and `ProcessPoolExecutor(max_workers=4)`. Print times and confirm threads are the best choice.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import time
+        from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+
+        def io_task(task_id):
+            time.sleep(0.3)
+            return task_id
+
+        data = list(range(20))
+
+        start = time.perf_counter()
+        [io_task(x) for x in data]
+        seq = time.perf_counter() - start
+
+        start = time.perf_counter()
+        with ThreadPoolExecutor(max_workers=10) as ex:
+            list(ex.map(io_task, data))
+        thr = time.perf_counter() - start
+
+        start = time.perf_counter()
+        with ProcessPoolExecutor(max_workers=4) as ex:
+            list(ex.map(io_task, data))
+        proc = time.perf_counter() - start
+
+        print(f"Sequential: {seq:.2f}s")
+        print(f"Threads:    {thr:.2f}s ({seq/thr:.1f}x)")
+        print(f"Processes:  {proc:.2f}s ({seq/proc:.1f}x)")
+        ```
+
+---
+
+**Exercise 3.**
+Implement a hybrid two-stage pipeline. Stage 1 (I/O-bound): use `ThreadPoolExecutor` to "fetch" 8 items (each `time.sleep(0.3)`). Stage 2 (CPU-bound): use `ProcessPoolExecutor` to process the fetched data (compute `sum(i*i for i in range(500_000))` per item). Print the time for each stage and the total.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import time
+        from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+
+        def fetch(item_id):
+            time.sleep(0.3)
+            return item_id
+
+        def process(item):
+            return sum(i * i for i in range(500_000))
+
+        if __name__ == "__main__":
+            total_start = time.perf_counter()
+
+            # Stage 1: I/O with threads
+            start = time.perf_counter()
+            with ThreadPoolExecutor(max_workers=8) as ex:
+                fetched = list(ex.map(fetch, range(8)))
+            stage1 = time.perf_counter() - start
+
+            # Stage 2: CPU with processes
+            start = time.perf_counter()
+            with ProcessPoolExecutor() as ex:
+                results = list(ex.map(process, fetched))
+            stage2 = time.perf_counter() - start
+
+            total = time.perf_counter() - total_start
+            print(f"Stage 1 (I/O, threads):   {stage1:.2f}s")
+            print(f"Stage 2 (CPU, processes): {stage2:.2f}s")
+            print(f"Total:                    {total:.2f}s")
+        ```

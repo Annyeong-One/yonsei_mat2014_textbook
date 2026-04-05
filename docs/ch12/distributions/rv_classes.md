@@ -485,3 +485,50 @@ if __name__ == "__main__":
     print("5. rvs() generates random samples from the distribution")
     print("6. Distribution objects have methods for mean, variance, and other statistics")
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Use `scipy.stats` to create a frozen standard normal distribution and a frozen Poisson distribution with $\mu = 4$. For each, compute the mean and variance using the `.stats(moments='mv')` method and print the results.
+
+??? success "Solution to Exercise 1"
+
+        from scipy import stats
+
+        norm_rv = stats.norm(loc=0, scale=1)
+        pois_rv = stats.poisson(mu=4)
+
+        print("Normal:", norm_rv.stats(moments='mv'))
+        print("Poisson:", pois_rv.stats(moments='mv'))
+
+---
+
+**Exercise 2.**
+Write a short script that counts how many continuous and how many discrete distributions are available in `scipy.stats` by checking which names are instances of `rv_continuous` and `rv_discrete`. Print both counts.
+
+??? success "Solution to Exercise 2"
+
+        from scipy import stats
+        from scipy.stats import rv_continuous, rv_discrete
+
+        n_cont = sum(1 for name in dir(stats) if isinstance(getattr(stats, name), rv_continuous))
+        n_disc = sum(1 for name in dir(stats) if isinstance(getattr(stats, name), rv_discrete))
+        print(f"Continuous: {n_cont}, Discrete: {n_disc}")
+
+---
+
+**Exercise 3.**
+Create a frozen chi-square distribution with 5 degrees of freedom. Draw 1000 samples with `.rvs()`, then compare the sample mean and variance to the theoretical values from `.mean()` and `.var()`.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+
+        chi2_rv = stats.chi2(df=5)
+        samples = chi2_rv.rvs(size=1000, random_state=42)
+
+        print(f"Theoretical mean: {chi2_rv.mean():.4f}, Sample mean: {np.mean(samples):.4f}")
+        print(f"Theoretical var:  {chi2_rv.var():.4f}, Sample var:  {np.var(samples, ddof=1):.4f}")

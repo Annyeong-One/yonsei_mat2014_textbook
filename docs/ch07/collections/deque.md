@@ -279,3 +279,82 @@ d.clear()           # Empty deque
 - `rotate()` for circular operations
 - Essential for BFS and efficient queue implementations
 - Trade-off: O(n) random access (use list if needed)
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a function `is_palindrome_deque` that takes a string and uses a `deque` to check if it is a palindrome (ignoring spaces and case). Pop from both ends simultaneously and compare characters. For example, `is_palindrome_deque("race car")` should return `True`.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    from collections import deque
+
+    def is_palindrome_deque(text):
+        cleaned = deque(text.lower().replace(" ", ""))
+        while len(cleaned) > 1:
+            if cleaned.popleft() != cleaned.pop():
+                return False
+        return True
+
+    # Test
+    print(is_palindrome_deque("race car"))   # True
+    print(is_palindrome_deque("hello"))      # False
+    print(is_palindrome_deque("A man a plan a canal Panama"))  # True
+    ```
+
+---
+
+**Exercise 2.**
+Write a function `sliding_window_avg` that takes a list of numbers and a window size `k`, and returns a list of the average of each sliding window. Use a `deque` with `maxlen=k`. For example, `sliding_window_avg([1, 3, 5, 7, 9], 3)` should return `[3.0, 5.0, 7.0]`.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    from collections import deque
+
+    def sliding_window_avg(nums, k):
+        window = deque(maxlen=k)
+        result = []
+        for num in nums:
+            window.append(num)
+            if len(window) == k:
+                result.append(sum(window) / k)
+        return result
+
+    # Test
+    print(sliding_window_avg([1, 3, 5, 7, 9], 3))
+    # [3.0, 5.0, 7.0]
+    print(sliding_window_avg([10, 20, 30, 40], 2))
+    # [15.0, 25.0, 35.0]
+    ```
+
+---
+
+**Exercise 3.**
+Write a function `interleave_queues` that takes two lists, creates a `deque` from each, and returns a single list produced by alternately popping from the left of each deque until both are empty. For example, `interleave_queues([1, 2, 3], ['a', 'b'])` should return `[1, 'a', 2, 'b', 3]`.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    from collections import deque
+
+    def interleave_queues(list1, list2):
+        q1 = deque(list1)
+        q2 = deque(list2)
+        result = []
+        while q1 or q2:
+            if q1:
+                result.append(q1.popleft())
+            if q2:
+                result.append(q2.popleft())
+        return result
+
+    # Test
+    print(interleave_queues([1, 2, 3], ['a', 'b']))
+    # [1, 'a', 2, 'b', 3]
+    print(interleave_queues([1], [10, 20, 30]))
+    # [1, 10, 20, 30]
+    ```

@@ -489,3 +489,94 @@ print(f"curve_fit result: {params2}")
 8. **Compare models** using R², AIC, or residual analysis
 
 Next section covers root finding: finding where functions equal zero.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Generate synthetic data from the model $y = A \sin(\omega x + \phi)$ with $A=3$, $\omega=2$, $\phi=0.5$, plus Gaussian noise with $\sigma=0.3$. Use `curve_fit` with an initial guess of `p0=[1, 1, 0]` to recover the parameters. Print the fitted values and their uncertainties from the covariance matrix.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import numpy as np
+        from scipy.optimize import curve_fit
+
+        np.random.seed(42)
+        x = np.linspace(0, 2 * np.pi, 50)
+        y_true = 3 * np.sin(2 * x + 0.5)
+        y_data = y_true + np.random.normal(0, 0.3, len(x))
+
+        def sine_model(x, A, omega, phi):
+            return A * np.sin(omega * x + phi)
+
+        params, cov = curve_fit(sine_model, x, y_data, p0=[1, 1, 0])
+        sigma = np.sqrt(np.diag(cov))
+
+        names = ['A', 'omega', 'phi']
+        true_vals = [3, 2, 0.5]
+        for name, p, s, t in zip(names, params, sigma, true_vals):
+            print(f"{name}: {p:.4f} +/- {s:.4f} (true: {t})")
+        ```
+
+---
+
+**Exercise 2.**
+Fit a Gaussian function $f(x) = A \exp\left(-\frac{(x - \mu)^2}{2\sigma^2}\right)$ to the data points `x = [-3, -2, -1, 0, 1, 2, 3]`, `y = [0.05, 0.4, 1.5, 2.8, 1.6, 0.35, 0.04]`. Use bounds to enforce $A > 0$ and $\sigma > 0$. Compute the $R^2$ value of the fit.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import numpy as np
+        from scipy.optimize import curve_fit
+
+        x = np.array([-3, -2, -1, 0, 1, 2, 3])
+        y = np.array([0.05, 0.4, 1.5, 2.8, 1.6, 0.35, 0.04])
+
+        def gaussian(x, A, mu, sigma):
+            return A * np.exp(-((x - mu)**2) / (2 * sigma**2))
+
+        bounds = ([0, -5, 0.01], [10, 5, 10])
+        params, cov = curve_fit(gaussian, x, y, p0=[3, 0, 1], bounds=bounds)
+
+        y_fit = gaussian(x, *params)
+        ss_res = np.sum((y - y_fit)**2)
+        ss_tot = np.sum((y - np.mean(y))**2)
+        r_squared = 1 - ss_res / ss_tot
+
+        print(f"A={params[0]:.4f}, mu={params[1]:.4f}, sigma={params[2]:.4f}")
+        print(f"R^2 = {r_squared:.6f}")
+        ```
+
+---
+
+**Exercise 3.**
+Fit both an exponential decay $y = a e^{-bx}$ and a power law $y = a x^{-b}$ to the data `x = [1, 2, 3, 4, 5, 6, 7, 8]`, `y = [10.0, 5.1, 2.4, 1.3, 0.6, 0.35, 0.18, 0.09]`. Compare the two models using their AIC values and print which model is preferred.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import numpy as np
+        from scipy.optimize import curve_fit
+
+        x = np.array([1, 2, 3, 4, 5, 6, 7, 8])
+        y = np.array([10.0, 5.1, 2.4, 1.3, 0.6, 0.35, 0.18, 0.09])
+        n = len(x)
+
+        def exp_decay(x, a, b):
+            return a * np.exp(-b * x)
+
+        def power_law(x, a, b):
+            return a * x**(-b)
+
+        params_exp, _ = curve_fit(exp_decay, x, y, p0=[10, 0.5])
+        params_pow, _ = curve_fit(power_law, x, y, p0=[10, 2])
+
+        rss_exp = np.sum((y - exp_decay(x, *params_exp))**2)
+        rss_pow = np.sum((y - power_law(x, *params_pow))**2)
+
+        aic_exp = 2 * 2 + n * np.log(rss_exp / n)
+        aic_pow = 2 * 2 + n * np.log(rss_pow / n)
+
+        print(f"Exponential: a={params_exp[0]:.4f}, b={params_exp[1]:.4f}, AIC={aic_exp:.2f}")
+        print(f"Power law: a={params_pow[0]:.4f}, b={params_pow[1]:.4f}, AIC={aic_pow:.2f}")
+        print(f"Preferred: {'Exponential' if aic_exp < aic_pow else 'Power law'} (lower AIC)")
+        ```

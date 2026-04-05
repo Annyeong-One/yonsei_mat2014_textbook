@@ -345,3 +345,151 @@ KEY TAKEAWAYS:
 6. Encapsulation makes code safer and more maintainable
 """
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.** Create a class `Password` that stores a password in a private attribute `__password`. Provide a `set_password(new_pw)` method that only accepts passwords of at least 8 characters and a `check_password(pw)` method that returns `True` if the given password matches. Do not provide a getter that reveals the stored password.
+
+??? success "Solution to Exercise 1"
+    ```python
+    class Password:
+        def __init__(self, password):
+            self.__password = None
+            self.set_password(password)
+
+        def set_password(self, new_pw):
+            if len(new_pw) < 8:
+                raise ValueError("Password must be at least 8 characters")
+            self.__password = new_pw
+
+        def check_password(self, pw):
+            return pw == self.__password
+
+    p = Password("secure123")
+    print(p.check_password("secure123"))  # True
+    print(p.check_password("wrong"))      # False
+
+    try:
+        p.set_password("short")
+    except ValueError as e:
+        print(e)  # Password must be at least 8 characters
+    ```
+
+---
+
+**Exercise 2.** Predict the output of the following code. Explain how name mangling works.
+
+```python
+class Secret:
+    def __init__(self):
+        self.__value = 42
+
+s = Secret()
+print(hasattr(s, '__value'))
+print(hasattr(s, '_Secret__value'))
+print(s._Secret__value)
+```
+
+??? success "Solution to Exercise 2"
+    The output is:
+
+    ```
+    False
+    True
+    42
+    ```
+
+    Python's name mangling transforms any attribute starting with double underscores (e.g., `__value`) into `_ClassName__value`. Therefore `s.__value` does not exist as a direct attribute (so `hasattr` returns `False`), but `s._Secret__value` does exist. This mechanism discourages accidental access to private attributes but does not make them truly inaccessible.
+
+---
+
+**Exercise 3.** Write a class `Temperature` with a private attribute `__celsius`. Provide a `set_celsius(value)` method that rejects values below absolute zero ($-273.15$). Add a `get_fahrenheit()` method that computes and returns the equivalent Fahrenheit temperature using the formula $F = C \times 9/5 + 32$.
+
+??? success "Solution to Exercise 3"
+    ```python
+    class Temperature:
+        def __init__(self, celsius):
+            self.__celsius = None
+            self.set_celsius(celsius)
+
+        def set_celsius(self, value):
+            if value < -273.15:
+                raise ValueError("Temperature below absolute zero")
+            self.__celsius = value
+
+        def get_fahrenheit(self):
+            return self.__celsius * 9 / 5 + 32
+
+    t = Temperature(100)
+    print(t.get_fahrenheit())  # 212.0
+
+    try:
+        t.set_celsius(-300)
+    except ValueError as e:
+        print(e)  # Temperature below absolute zero
+    ```
+
+---
+
+**Exercise 4.** A developer writes the following class and claims it uses encapsulation. Identify the flaw and rewrite the class with proper encapsulation.
+
+```python
+class Counter:
+    def __init__(self):
+        self.count = 0
+
+    def increment(self):
+        self.count += 1
+```
+
+??? success "Solution to Exercise 4"
+    The flaw is that `self.count` is a public attribute, so any external code can set it to an arbitrary value (e.g., `c.count = -100`), bypassing any validation. A properly encapsulated version uses a private attribute and controlled methods:
+
+    ```python
+    class Counter:
+        def __init__(self):
+            self.__count = 0
+
+        def increment(self):
+            self.__count += 1
+
+        def get_count(self):
+            return self.__count
+
+    c = Counter()
+    c.increment()
+    c.increment()
+    print(c.get_count())  # 2
+    # c.__count = -100  # AttributeError — cannot access directly
+    ```
+
+---
+
+**Exercise 5.** Create a class `ReadOnlyList` that wraps a regular Python list in a private attribute. Expose `get(index)` and `length()` methods but do not provide any way to modify the list after construction. Demonstrate that external code cannot add or remove elements.
+
+??? success "Solution to Exercise 5"
+    ```python
+    class ReadOnlyList:
+        def __init__(self, items):
+            self.__items = list(items)  # defensive copy
+
+        def get(self, index):
+            return self.__items[index]
+
+        def length(self):
+            return len(self.__items)
+
+    rol = ReadOnlyList([10, 20, 30])
+    print(rol.get(0))     # 10
+    print(rol.length())   # 3
+
+    # No way to modify:
+    try:
+        rol.__items.append(40)
+    except AttributeError:
+        print("Cannot access private attribute")
+
+    # Even the returned values don't expose the internal list
+    ```

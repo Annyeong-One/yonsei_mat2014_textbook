@@ -93,3 +93,97 @@ ax2.set_title('Box Plot')
 plt.tight_layout()
 plt.show()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a box plot from 100 samples of a normal distribution and manually annotate the five key components (minimum, Q1, median, Q3, maximum) using `ax.annotate` with arrows pointing to each part. Print the actual values of Q1, median, Q3, and the IQR.
+
+??? success "Solution to Exercise 1"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        np.random.seed(42)
+        data = np.random.randn(100)
+
+        q1 = np.percentile(data, 25)
+        median = np.median(data)
+        q3 = np.percentile(data, 75)
+        iqr = q3 - q1
+        whisker_low = max(data.min(), q1 - 1.5 * iqr)
+        whisker_high = min(data.max(), q3 + 1.5 * iqr)
+
+        print(f"Q1={q1:.3f}, Median={median:.3f}, Q3={q3:.3f}, IQR={iqr:.3f}")
+
+        fig, ax = plt.subplots(figsize=(6, 8))
+        ax.boxplot(data)
+
+        annotations = [
+            (whisker_low, 'Min (whisker)'),
+            (q1, 'Q1 (25th percentile)'),
+            (median, 'Median'),
+            (q3, 'Q3 (75th percentile)'),
+            (whisker_high, 'Max (whisker)'),
+        ]
+
+        for val, label in annotations:
+            ax.annotate(f'{label}: {val:.2f}', xy=(1, val), xytext=(1.4, val),
+                        fontsize=8, arrowprops=dict(arrowstyle='->', color='red'))
+
+        ax.set_title('Box Plot Anatomy')
+        ax.set_xlim(0.5, 2.5)
+        plt.show()
+
+---
+
+**Exercise 2.**
+Generate data with known outliers: 100 samples from `N(0, 1)` plus 5 manually added outliers at values `[-4, -3.5, 3.5, 4, 5]`. Create a box plot and use the returned dictionary to access the outlier points (`fliers`). Print the number of detected outliers and their values.
+
+??? success "Solution to Exercise 2"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        np.random.seed(42)
+        data = np.concatenate([np.random.randn(100), [-4, -3.5, 3.5, 4, 5]])
+
+        fig, ax = plt.subplots(figsize=(6, 6))
+        bp = ax.boxplot(data)
+
+        fliers = bp['fliers'][0]
+        outlier_values = fliers.get_ydata()
+        print(f"Number of outliers: {len(outlier_values)}")
+        print(f"Outlier values: {outlier_values}")
+
+        ax.set_title(f'Box Plot with {len(outlier_values)} Outliers')
+        plt.show()
+
+---
+
+**Exercise 3.**
+Create a side-by-side comparison showing the same data with `whis=1.5` (default) and `whis=3.0`. Use 500 samples from a standard normal distribution. Annotate the whisker extents on each plot and explain how changing `whis` affects outlier detection.
+
+??? success "Solution to Exercise 3"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        np.random.seed(42)
+        data = np.random.randn(500)
+
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 6))
+
+        bp1 = ax1.boxplot(data, whis=1.5)
+        n_outliers_1 = len(bp1['fliers'][0].get_ydata())
+        ax1.set_title(f'whis=1.5 (default)\n{n_outliers_1} outliers')
+
+        bp2 = ax2.boxplot(data, whis=3.0)
+        n_outliers_2 = len(bp2['fliers'][0].get_ydata())
+        ax2.set_title(f'whis=3.0\n{n_outliers_2} outliers')
+
+        plt.suptitle('Effect of whis Parameter on Outlier Detection')
+        plt.tight_layout()
+        plt.show()

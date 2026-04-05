@@ -373,3 +373,98 @@ Use class method if you need class reference.
 - Modify class-level attributes.
 - Create alternative constructors.
 - Affect all instances of the class.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a `Date` class with `year`, `month`, `day` attributes. Add a class method `from_string(date_str)` that parses a date string in `"YYYY-MM-DD"` format and returns a `Date` instance. Add another class method `today()` that returns today's date. Demonstrate both alternative constructors.
+
+??? success "Solution to Exercise 1"
+
+        from datetime import date
+
+        class Date:
+            def __init__(self, year, month, day):
+                self.year = year
+                self.month = month
+                self.day = day
+
+            @classmethod
+            def from_string(cls, date_str):
+                year, month, day = map(int, date_str.split("-"))
+                return cls(year, month, day)
+
+            @classmethod
+            def today(cls):
+                t = date.today()
+                return cls(t.year, t.month, t.day)
+
+            def __repr__(self):
+                return f"Date({self.year}, {self.month}, {self.day})"
+
+        d1 = Date.from_string("2024-03-15")
+        d2 = Date.today()
+        print(d1)  # Date(2024, 3, 15)
+        print(d2)  # Date(today's date)
+
+---
+
+**Exercise 2.**
+Write an `Employee` class with a class attribute `company_name` and a class method `set_company(name)` that changes it for all instances. Create instances before and after changing the company name and show that the class attribute change affects all instances.
+
+??? success "Solution to Exercise 2"
+
+        class Employee:
+            company_name = "Acme Corp"
+
+            def __init__(self, name):
+                self.name = name
+
+            @classmethod
+            def set_company(cls, name):
+                cls.company_name = name
+
+        e1 = Employee("Alice")
+        print(e1.company_name)  # Acme Corp
+
+        Employee.set_company("New Corp")
+        e2 = Employee("Bob")
+
+        print(e1.company_name)  # New Corp — changed for all
+        print(e2.company_name)  # New Corp
+
+---
+
+**Exercise 3.**
+Build a `Currency` class with `amount` and `code`. Add class methods `from_usd(amount)`, `from_eur(amount)`, and `from_gbp(amount)` that create instances with the appropriate code. Make the class method use `cls(...)` instead of `Currency(...)` so that subclasses inherit the constructors correctly. Demonstrate with a `Crypto` subclass.
+
+??? success "Solution to Exercise 3"
+
+        class Currency:
+            def __init__(self, amount, code):
+                self.amount = amount
+                self.code = code
+
+            @classmethod
+            def from_usd(cls, amount):
+                return cls(amount, "USD")
+
+            @classmethod
+            def from_eur(cls, amount):
+                return cls(amount, "EUR")
+
+            @classmethod
+            def from_gbp(cls, amount):
+                return cls(amount, "GBP")
+
+            def __repr__(self):
+                return f"{self.__class__.__name__}({self.amount}, '{self.code}')"
+
+        class Crypto(Currency):
+            pass
+
+        c = Crypto.from_usd(100)
+        print(c)            # Crypto(100, 'USD')
+        print(type(c))      # <class 'Crypto'> — cls works correctly

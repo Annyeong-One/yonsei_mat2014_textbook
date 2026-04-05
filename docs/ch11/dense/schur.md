@@ -336,3 +336,67 @@ if __name__ == "__main__":
 - T is quasi-triangular (real) or triangular (complex)
 - Eigenvalues on diagonal of T
 - Useful for matrix functions and equations
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Compute the complex Schur decomposition of $A = \begin{pmatrix} 0 & -2 \\ 1 & 0 \end{pmatrix}$. Extract the eigenvalues from the diagonal of $T$ and verify they match the eigenvalues from `np.linalg.eigvals`. Print the eigenvalues and confirm they are purely imaginary.
+
+??? success "Solution to Exercise 1"
+        import numpy as np
+        from scipy import linalg
+
+        A = np.array([[0, -2],
+                       [1, 0]])
+
+        T, Z = linalg.schur(A, output='complex')
+        schur_eigs = np.diag(T)
+        direct_eigs = np.linalg.eigvals(A)
+
+        print(f"Eigenvalues from Schur: {schur_eigs}")
+        print(f"Eigenvalues direct:     {direct_eigs}")
+        print(f"Purely imaginary: {np.allclose(schur_eigs.real, 0)}")
+
+---
+
+**Exercise 2.**
+Solve the Sylvester equation $AX + XB = C$ where $A = \begin{pmatrix} 1 & 3 \\ 0 & 2 \end{pmatrix}$, $B = \begin{pmatrix} -1 & 0 \\ 0 & -3 \end{pmatrix}$, and $C = \begin{pmatrix} 5 & 5 \\ 5 & 5 \end{pmatrix}$ using `linalg.solve_sylvester`. Verify the solution by checking that $\|AX + XB - C\|_F < 10^{-12}$.
+
+??? success "Solution to Exercise 2"
+        import numpy as np
+        from scipy import linalg
+
+        A = np.array([[1, 3],
+                       [0, 2]])
+        B = np.array([[-1, 0],
+                       [0, -3]])
+        C = np.array([[5, 5],
+                       [5, 5]])
+
+        X = linalg.solve_sylvester(A, B, C)
+        residual = np.linalg.norm(A @ X + X @ B - C)
+        print(f"Solution X:\n{X}")
+        print(f"Residual: {residual:.2e}")
+        assert residual < 1e-12
+
+---
+
+**Exercise 3.**
+Generate a random $6 \times 6$ matrix with `np.random.seed(99)`. Use the sorted Schur decomposition to separate eigenvalues with negative real part from those with positive real part (use `sort=lambda x: x.real < 0`). Print the diagonal of the sorted $T$ and identify which eigenvalues have negative real part.
+
+??? success "Solution to Exercise 3"
+        import numpy as np
+        from scipy import linalg
+
+        np.random.seed(99)
+        A = np.random.randn(6, 6)
+
+        T, Z = linalg.schur(A, output='complex',
+                             sort=lambda x: x.real < 0)
+        eigs = np.diag(T)
+        print("Sorted eigenvalues (negative real part first):")
+        for i, e in enumerate(eigs):
+            sign = "negative" if e.real < 0 else "positive"
+            print(f"  {e:.4f}  ({sign} real part)")

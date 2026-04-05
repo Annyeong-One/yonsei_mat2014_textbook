@@ -256,3 +256,72 @@ The `key` function transforms each element for comparison only — the original 
 | `def f(a, /, b, *args, c, **kwargs)` | Full parameter order |
 | `f(*list)` | Unpack iterable at call site |
 | `f(**dict)` | Unpack dictionary at call site |
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Write a function that accepts positional-only parameters, keyword-only parameters, and a mix of both. Use the `/` and `*` separators. Demonstrate valid and invalid ways to call it.
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        def example(a, b, /, c, *, d, e=10):
+            print(f"a={a}, b={b}, c={c}, d={d}, e={e}")
+
+        example(1, 2, 3, d=4)         # Valid
+        example(1, 2, c=3, d=4, e=5)  # Valid
+
+        # example(a=1, b=2, c=3, d=4)  # TypeError: positional-only
+        # example(1, 2, 3, 4)           # TypeError: d is keyword-only
+        ```
+
+    `a` and `b` are positional-only (before `/`). `d` and `e` are keyword-only (after `*`). `c` can be either.
+
+---
+
+**Exercise 2.**
+Write a function `tag(name, /, *children, **attrs)` that builds an HTML-like tag string. For example, `tag("div", "hello", "world", id="main")` should return `'<div id="main">helloworld</div>'`.
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        def tag(name, /, *children, **attrs):
+            attr_str = " ".join(f'{k}="{v}"' for k, v in attrs.items())
+            opening = f"<{name} {attr_str}>" if attrs else f"<{name}>"
+            content = "".join(str(c) for c in children)
+            return f"{opening}{content}</{name}>"
+
+        print(tag("div", "hello", "world", id="main"))
+        # <div id="main">helloworld</div>
+
+        print(tag("br"))
+        # <br></br>
+        ```
+
+    `name` is positional-only, `*children` collects content, and `**attrs` collects HTML attributes.
+
+---
+
+**Exercise 3.**
+Explain the difference between `*args` and `**kwargs`. Write a function `debug_call(func, *args, **kwargs)` that prints the function name, positional arguments, and keyword arguments, then calls the function.
+
+??? success "Solution to Exercise 3"
+
+        ```python
+        def debug_call(func, *args, **kwargs):
+            print(f"Calling: {func.__name__}")
+            print(f"  args: {args}")
+            print(f"  kwargs: {kwargs}")
+            return func(*args, **kwargs)
+
+        def greet(name, greeting="Hello"):
+            return f"{greeting}, {name}!"
+
+        result = debug_call(greet, "Alice", greeting="Hi")
+        print(f"  result: {result}")
+        ```
+
+    `*args` captures extra positional arguments as a tuple. `**kwargs` captures extra keyword arguments as a dictionary.

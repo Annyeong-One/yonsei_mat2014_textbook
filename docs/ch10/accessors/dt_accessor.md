@@ -376,3 +376,56 @@ print(df['duration'].dt.components)       # Days, hours, minutes, etc.
 | `dt.is_month_end` | Boolean | True/False |
 | `dt.date` | Date only | 2024-01-15 |
 | `dt.time` | Time only | 14:30:45 |
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a DataFrame with a `'date'` column containing 90 consecutive dates starting from `'2024-01-01'`. Add a new column `'day_name'` using the `.dt.day_name()` method. Then count how many rows fall on each day of the week using `value_counts()`.
+
+??? success "Solution to Exercise 1"
+    Use `.dt.day_name()` and `value_counts()`.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'date': pd.date_range('2024-01-01', periods=90)
+        })
+        df['day_name'] = df['date'].dt.day_name()
+        print(df['day_name'].value_counts())
+
+---
+
+**Exercise 2.**
+Given a Series of datetime values spanning multiple years, use the `.dt` accessor to extract the year and quarter. Create a new string column in the format `'2024-Q1'` by combining these extracted components.
+
+??? success "Solution to Exercise 2"
+    Combine `.dt.year` and `.dt.quarter` with string formatting.
+
+        import pandas as pd
+
+        dates = pd.Series(pd.date_range('2023-01-15', periods=8, freq='2ME'))
+        year_quarter = dates.dt.year.astype(str) + '-Q' + dates.dt.quarter.astype(str)
+        print(year_quarter)
+
+---
+
+**Exercise 3.**
+Create a Series of timestamps at irregular intervals. Use `.dt.floor('h')` to round all timestamps down to the nearest hour. Then verify that all resulting timestamps have zero minutes and seconds.
+
+??? success "Solution to Exercise 3"
+    Use `.dt.floor('h')` and check minutes/seconds are zero.
+
+        import pandas as pd
+
+        timestamps = pd.Series(pd.to_datetime([
+            '2024-01-01 10:23:45',
+            '2024-01-01 14:59:01',
+            '2024-01-01 08:00:30'
+        ]))
+        floored = timestamps.dt.floor('h')
+        print(floored)
+        assert (floored.dt.minute == 0).all()
+        assert (floored.dt.second == 0).all()
+        print("All timestamps rounded to the hour.")

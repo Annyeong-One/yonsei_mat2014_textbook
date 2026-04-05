@@ -464,3 +464,96 @@ with ProcessPoolExecutor() as executor:
 - Process overhead is higher than threads — batch work
 - Use context manager for automatic cleanup
 - For I/O-bound tasks, use `ThreadPoolExecutor` instead
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Use `ProcessPoolExecutor.map()` with `chunksize=100` to compute the sum of cubes for each number in `range(10_000)`. Compare the elapsed time with `chunksize=1` and `chunksize=100`. Print both times and the speedup.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import time
+        from concurrent.futures import ProcessPoolExecutor
+
+        def sum_cubes(n):
+            return sum(i ** 3 for i in range(n))
+
+        if __name__ == "__main__":
+            data = list(range(10_000))
+
+            for cs in [1, 100]:
+                start = time.perf_counter()
+                with ProcessPoolExecutor() as ex:
+                    list(ex.map(sum_cubes, data, chunksize=cs))
+                elapsed = time.perf_counter() - start
+                print(f"chunksize={cs:3d}: {elapsed:.2f}s")
+        ```
+
+---
+
+**Exercise 2.**
+Write a Monte Carlo estimation of pi using `ProcessPoolExecutor`. Each of 8 workers generates 1,000,000 random `(x, y)` points and counts how many fall inside the unit circle. Combine results to estimate pi and print the estimate with the elapsed time.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import time
+        import random
+        from concurrent.futures import ProcessPoolExecutor
+
+        def monte_carlo(n_samples):
+            inside = 0
+            for _ in range(n_samples):
+                x, y = random.random(), random.random()
+                if x * x + y * y <= 1:
+                    inside += 1
+            return inside
+
+        if __name__ == "__main__":
+            workers = 8
+            samples = 1_000_000
+
+            start = time.perf_counter()
+            with ProcessPoolExecutor(max_workers=workers) as ex:
+                counts = list(ex.map(monte_carlo, [samples] * workers))
+            elapsed = time.perf_counter() - start
+
+            pi = 4 * sum(counts) / (workers * samples)
+            print(f"Pi estimate: {pi:.6f} (elapsed {elapsed:.2f}s)")
+        ```
+
+---
+
+**Exercise 3.**
+Use `ProcessPoolExecutor` with `submit()` and `as_completed()` to factorize 10 large numbers. Map each future back to its input using a dictionary. Print results in completion order, showing the input number and its smallest factor (or "prime" if none found below its square root).
+
+??? success "Solution to Exercise 3"
+        ```python
+        import math
+        from concurrent.futures import ProcessPoolExecutor, as_completed
+
+        def smallest_factor(n):
+            if n < 2:
+                return (n, None)
+            for i in range(2, int(math.sqrt(n)) + 1):
+                if n % i == 0:
+                    return (n, i)
+            return (n, None)
+
+        if __name__ == "__main__":
+            numbers = [
+                104729, 1000003, 999983, 7919 * 7919,
+                1299827, 15485863, 49979687, 67867979,
+                104395303, 982451653,
+            ]
+
+            with ProcessPoolExecutor() as ex:
+                futs = {ex.submit(smallest_factor, n): n for n in numbers}
+                for f in as_completed(futs):
+                    n, factor = f.result()
+                    if factor:
+                        print(f"{n}: smallest factor = {factor}")
+                    else:
+                        print(f"{n}: prime")
+        ```

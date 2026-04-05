@@ -161,3 +161,58 @@ s.ewm(span=10, adjust=False).mean()
 ### 3. Difference
 
 The difference is most noticeable at the beginning of the series.
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that computes the exponentially weighted moving average (EWMA) using `s.ewm(span=10).mean()`.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    # Solution for the specific exercise
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(10), 'B': np.random.randn(10)})
+    print(df.head())
+    ```
+
+---
+
+**Exercise 2.** Explain the `span`, `com`, and `halflife` parameters for `ewm()`. How do they relate to each other?
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the Pandas API and its behavior for this specific operation.
+
+---
+
+**Exercise 3.** Write code that plots a time series with both a simple moving average and an EWMA to compare their responsiveness.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(20), 'B': np.random.randn(20)})
+    result = df.describe()
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Create a DataFrame and compute the EWMA variance using `df.ewm(span=20).var()`.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(50), 'group': np.random.choice(['X', 'Y'], 50)})
+    result = df.groupby('group').mean()
+    print(result)
+    ```

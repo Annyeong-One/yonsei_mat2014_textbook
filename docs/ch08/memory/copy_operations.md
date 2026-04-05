@@ -164,3 +164,58 @@ Operations that create copies.
 ### 3. Best Practice
 
 When in doubt, use `.copy()` explicitly for clarity.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create an array `a = np.arange(10)`. Make a copy using `b = a.copy()`. Modify `b[0] = 999` and verify that `a` is unchanged. Check that `b.base is None` (confirming it owns its data).
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        a = np.arange(10)
+        b = a.copy()
+        b[0] = 999
+        print(f"a[0] = {a[0]}")  # 0 (unchanged)
+        print(f"b.base is None: {b.base is None}")  # True
+
+---
+
+**Exercise 2.**
+Given `a = np.arange(12).reshape(3, 4)`, create three copies using `a.copy()`, `np.array(a, copy=True)`, and `np.copy(a)`. Modify each copy and verify all are independent from `a`.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        a = np.arange(12).reshape(3, 4)
+        c1 = a.copy()
+        c2 = np.array(a, copy=True)
+        c3 = np.copy(a)
+
+        c1[0, 0] = 100
+        c2[0, 0] = 200
+        c3[0, 0] = 300
+
+        print(f"a[0, 0] = {a[0, 0]}")  # 0 (unchanged)
+
+---
+
+**Exercise 3.**
+Demonstrate that boolean indexing always returns a copy: create `a = np.arange(10)`, extract `b = a[a > 5]`, modify `b`, and show `a` is not affected. Contrast this with slice indexing which returns a view.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        a = np.arange(10)
+        b = a[a > 5]  # boolean indexing -> copy
+        b[0] = 999
+        print(f"a after boolean mod: {a}")  # unchanged
+
+        c = a[2:5]  # slice -> view
+        c[0] = 888
+        print(f"a after slice mod: {a}")  # a[2] changed to 888

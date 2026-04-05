@@ -401,3 +401,69 @@ GRINNING FACE
 * `chr()` converts a code point → character.
 * Unicode code points range from **U+0000 to U+10FFFF**.
 * Encodings such as **UTF-8** convert code points into **bytes**.
+
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Use `ord()` and `chr()` to convert the character `'A'` to its code point and back. Then do the same for a non-ASCII character like `'\u4e16'` (world in Chinese).
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    # ASCII character
+    print(ord('A'))    # 65
+    print(chr(65))     # A
+
+    # Non-ASCII character
+    print(ord('\u4e16'))  # 19990
+    print(chr(19990))      # 世
+    ```
+
+    `ord()` converts a character to its Unicode code point (an integer). `chr()` converts a code point back to a character.
+
+---
+
+**Exercise 2.**
+Write a function `char_info(c)` that takes a single character and prints its Unicode code point (decimal and hex), its UTF-8 byte representation, and the number of UTF-8 bytes it uses.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    def char_info(c):
+        code_point = ord(c)
+        utf8_bytes = c.encode("utf-8")
+        print(f"Character: {c}")
+        print(f"Code point: {code_point} (U+{code_point:04X})")
+        print(f"UTF-8 bytes: {utf8_bytes}")
+        print(f"Byte count: {len(utf8_bytes)}")
+
+    char_info('A')    # 1 byte
+    char_info('\u00f1')  # 2 bytes (ñ)
+    char_info('\u4e16')  # 3 bytes (世)
+    char_info('\U0001F600')  # 4 bytes (emoji)
+    ```
+
+    Each character uses 1 to 4 bytes in UTF-8 depending on its code point range.
+
+---
+
+**Exercise 3.**
+Demonstrate that `len("Hello")` counts characters while `len("Hello".encode("utf-8"))` counts bytes. Then show a string where these two values differ significantly.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    s = "Hello"
+    print(f"Characters: {len(s)}, Bytes: {len(s.encode('utf-8'))}")
+    # Characters: 5, Bytes: 5
+
+    s = "\u4f60\u597d\u4e16\u754c"  # 你好世界
+    print(f"Characters: {len(s)}, Bytes: {len(s.encode('utf-8'))}")
+    # Characters: 4, Bytes: 12
+    ```
+
+    ASCII characters use 1 byte each in UTF-8, so character count equals byte count. Chinese characters use 3 bytes each, so 4 characters produce 12 bytes.

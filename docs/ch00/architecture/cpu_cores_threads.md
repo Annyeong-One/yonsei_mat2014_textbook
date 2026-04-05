@@ -389,6 +389,7 @@ Here threads overlap network latency.
 
 ---
 
+
 ## 12. Summary
 
 | Concept      | Explanation                                       |
@@ -411,3 +412,70 @@ However, achieving high performance requires understanding:
 * how parallel algorithms scale
 
 By structuring programs to minimize serial work and using appropriate parallel tools, developers can effectively utilize modern multi-core processors.
+
+
+## Exercises
+
+**Exercise 1.**
+The GIL prevents Python threads from achieving true parallelism for CPU-bound tasks. Consider two scenarios:
+
+```python
+# Scenario A: CPU-bound (summing numbers)
+def compute():
+    return sum(range(10_000_000))
+
+# Scenario B: I/O-bound (downloading web pages)
+def fetch(url):
+    return urllib.request.urlopen(url).read()
+```
+
+For each scenario, will running 4 threads on a 4-core CPU be faster than running sequentially? Why or why not? What is the recommended tool for each (threading, multiprocessing, or asyncio)?
+
+??? success "Solution to Exercise 1"
+    **Scenario A (CPU-bound):** Threading provides **no speedup** due to the GIL. Only one thread runs Python bytecode at a time, so 4 CPU-bound threads on 4 cores take roughly the same time as sequential execution (possibly slower due to context-switching overhead). Use **multiprocessing** -- each process gets its own GIL and can run on a separate core.
+
+    **Scenario B (I/O-bound):** Threading provides **~4x speedup**. When a thread blocks on I/O (network request), the GIL is released, allowing other threads to run. Four threads each waiting for a 1-second network response complete in ~1 second total. Use **threading** or **asyncio**.
+
+    The GIL is released during I/O system calls and many C extension operations (NumPy, database drivers), which is why threading remains useful for I/O-bound Python programs.
+
+---
+
+**Exercise 2.**
+Amdahl's Law states that if 20% of a program is serial (cannot be parallelized), the maximum speedup with infinite cores is:
+
+$$S_{max} = \frac{1}{0.20} = 5$$
+
+(a) If you have 8 cores, what is the actual speedup?
+(b) If you reduce the serial fraction to 5%, what is the maximum speedup?
+(c) Why does this law explain the diminishing returns of adding more CPU cores?
+
+??? success "Solution to Exercise 2"
+    Using Amdahl's Law: $S(n) = \frac{1}{s + \frac{1-s}{n}}$
+
+    **(a)** With s=0.20 and n=8: $S(8) = \frac{1}{0.20 + \frac{0.80}{8}} = \frac{1}{0.20 + 0.10} = \frac{1}{0.30} \approx 3.33$. Only 3.33x speedup from 8 cores.
+
+    **(b)** With s=0.05: $S_{max} = \frac{1}{0.05} = 20$. Reducing the serial fraction from 20% to 5% quadruples the maximum speedup.
+
+    **(c)** Diminishing returns occur because as you add more cores, the parallel portion speeds up but the serial portion remains constant. With 20% serial code, going from 1 to 4 cores gives 2.5x speedup, 4 to 8 cores adds only 0.83x more, and 8 to 16 cores adds only 0.42x more. The serial portion increasingly dominates total runtime. This is why optimizing the serial bottleneck often matters more than adding cores.
+
+---
+
+**Exercise 3.**
+Processes and threads have different sharing characteristics. For each resource below, state whether it is shared between threads in the same process, or isolated between separate processes:
+
+- (a) Heap memory (global variables, objects)
+- (b) Stack (local variables)
+- (c) Open file descriptors
+- (d) Python's GIL
+- (e) CPU registers
+
+Why does shared heap memory make threads faster to communicate with but also more dangerous?
+
+??? success "Solution to Exercise 3"
+    - **(a) Heap memory:** **Shared** between threads, **isolated** between processes. This is the key difference.
+    - **(b) Stack:** **Isolated** in both cases. Each thread and each process has its own stack.
+    - **(c) Open file descriptors:** **Shared** between threads (they can read/write the same files), **isolated** between processes (though file descriptors can be explicitly passed).
+    - **(d) Python's GIL:** **Shared** between threads in one process (this is why it limits parallelism), **irrelevant** between processes (each process has its own GIL).
+    - **(e) CPU registers:** **Isolated** -- each thread/process gets its own register state (saved and restored on context switch).
+
+    Shared heap memory makes threads faster for communication because they can directly read and write the same data structures without copying. But this is also dangerous: two threads modifying the same list simultaneously can corrupt it (race condition). This is why threads often require locks, while processes (with isolated memory) are naturally safe but slower to communicate (must serialize/deserialize data).

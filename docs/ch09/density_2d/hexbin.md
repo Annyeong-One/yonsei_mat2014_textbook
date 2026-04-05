@@ -325,3 +325,89 @@ cbar = fig.colorbar(hb, ax=ax, label='Point Count')
 plt.tight_layout()
 plt.show()
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that generates 5000 random points from a bivariate normal distribution with mean `[1, 2]` and covariance `[[2, 0.5], [0.5, 1]]`, then creates a hexbin plot with `gridsize=25`, the `'viridis'` colormap, and a colorbar.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    mean = [1, 2]
+    cov = [[2, 0.5], [0.5, 1]]
+    data = np.random.multivariate_normal(mean, cov, 5000)
+
+    fig, ax = plt.subplots(figsize=(8, 6))
+    hb = ax.hexbin(data[:, 0], data[:, 1], gridsize=25, cmap='viridis')
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set_title('Hexbin Plot of Bivariate Normal Data')
+    fig.colorbar(hb, ax=ax, label='Count')
+    plt.tight_layout()
+    plt.show()
+    ```
+
+---
+
+**Exercise 2.** Predict what happens when you pass `bins='log'` to `ax.hexbin()`. What does the colorbar represent in this case compared to the default?
+
+??? success "Solution to Exercise 2"
+    When `bins='log'` is passed to `ax.hexbin()`, the color mapping uses a logarithmic scale instead of a linear scale. The colorbar represents `log10(count)` rather than the raw count in each hexagonal bin. This is useful when the distribution of counts spans several orders of magnitude, as it prevents high-density bins from dominating the color range and makes lower-density regions more visible.
+
+---
+
+**Exercise 3.** Create a 1x3 subplot figure that shows the same dataset with three different `gridsize` values: 10, 25, and 50. Add a colorbar and title to each subplot. Explain how gridsize affects the visualization.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    data = np.random.multivariate_normal([0, 0], [[1, 0.5], [0.5, 1]], 5000)
+
+    fig, axes = plt.subplots(1, 3, figsize=(15, 4))
+    gridsizes = [10, 25, 50]
+
+    for ax, gs in zip(axes, gridsizes):
+        hb = ax.hexbin(data[:, 0], data[:, 1], gridsize=gs, cmap='Blues')
+        ax.set_title(f'gridsize={gs}')
+        fig.colorbar(hb, ax=ax, shrink=0.8)
+
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    A smaller `gridsize` produces fewer, larger hexagons that aggregate more points per bin, giving a coarser view. A larger `gridsize` produces many smaller hexagons that reveal finer spatial detail but may have noisier counts per bin.
+
+---
+
+**Exercise 4.** Write code that uses the `C` parameter and `reduce_C_function=np.mean` to visualize the average value of a third variable `z = np.sin(x) + np.cos(y)` across hexagonal bins. Use `gridsize=20` and add a colorbar with an appropriate label.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    n = 10000
+    x = np.random.randn(n)
+    y = np.random.randn(n)
+    z = np.sin(x) + np.cos(y)
+
+    fig, ax = plt.subplots(figsize=(8, 6))
+    hb = ax.hexbin(x, y, C=z, gridsize=20, cmap='coolwarm',
+                   reduce_C_function=np.mean)
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set_title('Mean of sin(x) + cos(y) per Hexagonal Bin')
+    fig.colorbar(hb, ax=ax, label='Mean value of z')
+    plt.tight_layout()
+    plt.show()
+    ```

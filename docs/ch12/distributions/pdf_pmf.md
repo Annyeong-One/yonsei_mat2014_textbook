@@ -178,3 +178,61 @@ if __name__ == "__main__":
     # Detailed explanation continues...
     print("="*80)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Evaluate the PDF of a normal distribution with $\mu = 10$ and $\sigma = 3$ at the points $x = 7, 10, 13$. Verify that the PDF at the mean is $1/(\sigma\sqrt{2\pi})$.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        from scipy import stats
+
+        rv = stats.norm(loc=10, scale=3)
+        for x in [7, 10, 13]:
+            print(f"PDF at x={x}: {rv.pdf(x):.6f}")
+
+        expected_peak = 1 / (3 * np.sqrt(2 * np.pi))
+        print(f"1/(sigma*sqrt(2pi)) = {expected_peak:.6f}")
+        print(f"Match: {np.isclose(rv.pdf(10), expected_peak)}")
+
+---
+
+**Exercise 2.**
+Compute the PMF of a Poisson distribution with $\lambda = 5$ for $k = 0, 1, \ldots, 15$. Find the value of $k$ that maximizes the PMF and verify that the PMF values sum to approximately 1.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy import stats
+
+        rv = stats.poisson(mu=5)
+        k_vals = np.arange(0, 16)
+        pmf_vals = rv.pmf(k_vals)
+
+        print(f"k with max PMF: {k_vals[np.argmax(pmf_vals)]}")
+        print(f"Sum of PMF (k=0..15): {pmf_vals.sum():.6f}")
+
+---
+
+**Exercise 3.**
+Generate 10,000 samples from a standard normal distribution with `.rvs()`. Plot a normalized histogram of the samples and overlay the theoretical PDF using `.pdf()`. Visually confirm that they match.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+        import matplotlib.pyplot as plt
+
+        rv = stats.norm()
+        samples = rv.rvs(size=10000, random_state=42)
+        x = np.linspace(-4, 4, 200)
+
+        plt.hist(samples, bins=50, density=True, alpha=0.6, label='Histogram')
+        plt.plot(x, rv.pdf(x), 'r-', lw=2, label='PDF')
+        plt.legend()
+        plt.title('Standard Normal: Histogram vs PDF')
+        plt.show()

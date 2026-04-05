@@ -507,3 +507,73 @@ if __name__ == "__main__":
 | `\|` | `np.logical_or` | Element-wise OR |
 | `~` | `np.logical_not` | Element-wise NOT |
 | `^` | `np.logical_xor` | Element-wise XOR |
+
+---
+
+## Exercises
+
+**Exercise 1.** Create an array of 10 random integers between 0 and 100. Use comparison operators to find which elements are greater than 50. Print both the boolean mask and the filtered values.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(42)
+    arr = rng.integers(0, 101, size=10)
+    mask = arr > 50
+    print("Array:", arr)
+    print("Mask:", mask)
+    print("Filtered:", arr[mask])
+    ```
+
+---
+
+**Exercise 2.** Predict the output:
+
+```python
+import numpy as np
+a = np.array([1, 2, 3, 4, 5])
+print(a[a > 3])
+print(np.where(a > 3, a, -1))
+```
+
+??? success "Solution to Exercise 2"
+    ```
+    [4 5]
+    [-1 -1 -1  4  5]
+    ```
+
+---
+
+**Exercise 3.** Write a function `count_in_range(arr, lo, hi)` that counts how many elements satisfy `lo <= x <= hi` using NumPy comparison operators and `np.sum()`.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+
+    def count_in_range(arr, lo, hi):
+        return np.sum((arr >= lo) & (arr <= hi))
+
+    data = np.array([5, 15, 25, 35, 45])
+    print(count_in_range(data, 10, 30))  # 2
+    ```
+
+---
+
+**Exercise 4.** Given an array, replace all negative values with 0 and all values greater than 100 with 100 (clamping). Use `np.clip` and also implement it manually with boolean indexing.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+
+    arr = np.array([-10, 50, 120, 30, -5, 200])
+
+    # Using np.clip
+    print(np.clip(arr, 0, 100))  # [0 50 100 30 0 100]
+
+    # Manual boolean indexing
+    result = arr.copy()
+    result[result < 0] = 0
+    result[result > 100] = 100
+    print(result)  # [0 50 100 30 0 100]
+    ```

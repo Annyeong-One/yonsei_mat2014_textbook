@@ -80,3 +80,93 @@ Calling greet
 Hello Alice
 ```
 
+
+---
+
+## Exercises
+
+**Exercise 1.** Annotate a decorator `retry(func)` that takes a function with any signature and returns a function with the same signature. Use `Callable` and `TypeVar` (or `ParamSpec` if targeting Python 3.10+).
+
+??? success "Solution to Exercise 1"
+    ```python
+    from typing import Callable, TypeVar
+    from functools import wraps
+
+    F = TypeVar("F", bound=Callable)
+
+    def retry(func: F) -> F:
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            for attempt in range(3):
+                try:
+                    return func(*args, **kwargs)
+                except Exception:
+                    if attempt == 2:
+                        raise
+        return wrapper  # type: ignore
+
+    @retry
+    def fetch(url: str) -> str:
+        return f"data from {url}"
+    ```
+
+---
+
+**Exercise 2.** Write a `@dataclass` with type annotations for a `Product` with `name: str`, `price: float`, and `quantity: int`. Add a property `total` with a return type annotation.
+
+??? success "Solution to Exercise 2"
+    ```python
+    from dataclasses import dataclass
+
+    @dataclass
+    class Product:
+        name: str
+        price: float
+        quantity: int
+
+        @property
+        def total(self) -> float:
+            return self.price * self.quantity
+
+    p = Product("Widget", 9.99, 3)
+    print(p.total)  # 29.97
+    ```
+
+---
+
+**Exercise 3.** Create a `TypedDict` called `UserProfile` with keys `name` (str), `age` (int), and `email` (str). Write a function that accepts this TypedDict and returns a formatted string.
+
+??? success "Solution to Exercise 3"
+    ```python
+    from typing import TypedDict
+
+    class UserProfile(TypedDict):
+        name: str
+        age: int
+        email: str
+
+    def format_profile(user: UserProfile) -> str:
+        return f"{user['name']} (age {user['age']}) - {user['email']}"
+
+    profile: UserProfile = {"name": "Alice", "age": 30, "email": "alice@test.com"}
+    print(format_profile(profile))
+    ```
+
+---
+
+**Exercise 4.** Write a function `process_items(items: Iterable[T]) -> list[T]` using a `TypeVar` so that it preserves the element type. Demonstrate with both `int` and `str` inputs.
+
+??? success "Solution to Exercise 4"
+    ```python
+    from typing import TypeVar, Iterable
+
+    T = TypeVar("T")
+
+    def process_items(items: Iterable[T]) -> list[T]:
+        return sorted(items)
+
+    ints: list[int] = process_items([3, 1, 2])
+    strs: list[str] = process_items(["c", "a", "b"])
+    print(ints)  # [1, 2, 3]
+    print(strs)  # ['a', 'b', 'c']
+    ```

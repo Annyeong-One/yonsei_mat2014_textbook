@@ -538,3 +538,109 @@ plt.show()
 | Exponential($\lambda$) | $\frac{\lambda}{\lambda - it}$ | Complex rational |
 | Cauchy | $e^{-\|t\|}$ | Real-valued |
 | Uniform$(a,b)$ | $\frac{e^{itb} - e^{ita}}{it(b-a)}$ | Sinc-like |
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Visualize the complex function $f(z) = z^3$ as a 3D surface plot. Create a grid of complex numbers over the square $[-2, 2] \times [-2, 2]$, compute the magnitude $|f(z)|$ for the height and the phase $\arg(f(z))$ for the facecolor using the `hsv` colormap. Add a colorbar labeled "Phase (radians)" and set a descriptive title.
+
+??? success "Solution to Exercise 1"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+        from matplotlib.colors import Normalize
+
+        x = np.linspace(-2, 2, 200)
+        y = np.linspace(-2, 2, 200)
+        X, Y = np.meshgrid(x, y)
+        Z = X + 1j * Y
+
+        W = Z ** 3
+        magnitude = np.abs(W)
+        phase = np.angle(W)
+
+        fig = plt.figure(figsize=(10, 7))
+        ax = fig.add_subplot(111, projection='3d')
+
+        norm = Normalize(vmin=-np.pi, vmax=np.pi)
+        colors = plt.cm.hsv(norm(phase))
+
+        ax.plot_surface(X, Y, magnitude, facecolors=colors, shade=False)
+        ax.set_xlabel('Re(z)')
+        ax.set_ylabel('Im(z)')
+        ax.set_zlabel('|f(z)|')
+        ax.set_title(r'$f(z) = z^3$: Magnitude Surface with Phase Coloring')
+
+        mappable = plt.cm.ScalarMappable(cmap='hsv', norm=norm)
+        plt.colorbar(mappable, ax=ax, shrink=0.6, label='Phase (radians)')
+        plt.show()
+
+---
+
+**Exercise 2.**
+Create a domain coloring plot for the function $f(z) = \frac{1}{z}$ over the region $[-2, 2] \times [-2, 2]$ using `imshow`. Map the phase angle to the `twilight` colormap and use the magnitude to modulate the brightness. Clip the magnitude to a maximum of 5 to avoid extreme values near the singularity at $z = 0$.
+
+??? success "Solution to Exercise 2"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(-2, 2, 500)
+        y = np.linspace(-2, 2, 500)
+        X, Y = np.meshgrid(x, y)
+        Z = X + 1j * Y
+
+        W = 1 / Z
+        phase = np.angle(W)
+        magnitude = np.abs(W)
+        magnitude_clipped = np.clip(magnitude, 0, 5)
+
+        brightness = magnitude_clipped / 5.0
+        colors = plt.cm.twilight((phase + np.pi) / (2 * np.pi))
+        colors[..., :3] *= brightness[..., np.newaxis]
+
+        fig, ax = plt.subplots(figsize=(8, 8))
+        ax.imshow(colors, extent=[-2, 2, -2, 2], origin='lower')
+        ax.set_xlabel('Re(z)')
+        ax.set_ylabel('Im(z)')
+        ax.set_title(r'Domain Coloring of $f(z) = 1/z$')
+        plt.show()
+
+---
+
+**Exercise 3.**
+Plot the real and imaginary parts of $f(z) = e^z$ as two separate 3D surface plots side by side using `plt.subplots(1, 2, subplot_kw={'projection': '3d'})`. Over the domain $[-2, 2] \times [-2, 2]$, show the real part $e^x \cos(y)$ on the left and the imaginary part $e^x \sin(y)$ on the right. Use different colormaps for each surface and include titles.
+
+??? success "Solution to Exercise 3"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(-2, 2, 200)
+        y = np.linspace(-2, 2, 200)
+        X, Y = np.meshgrid(x, y)
+        Z = X + 1j * Y
+
+        W = np.exp(Z)
+        real_part = W.real
+        imag_part = W.imag
+
+        fig, axes = plt.subplots(1, 2, figsize=(14, 6),
+                                  subplot_kw={'projection': '3d'})
+
+        axes[0].plot_surface(X, Y, real_part, cmap='viridis', alpha=0.9)
+        axes[0].set_xlabel('Re(z)')
+        axes[0].set_ylabel('Im(z)')
+        axes[0].set_zlabel('Re(f)')
+        axes[0].set_title(r'Real Part of $e^z$: $e^x \cos(y)$')
+
+        axes[1].plot_surface(X, Y, imag_part, cmap='plasma', alpha=0.9)
+        axes[1].set_xlabel('Re(z)')
+        axes[1].set_ylabel('Im(z)')
+        axes[1].set_zlabel('Im(f)')
+        axes[1].set_title(r'Imaginary Part of $e^z$: $e^x \sin(y)$')
+
+        plt.tight_layout()
+        plt.show()

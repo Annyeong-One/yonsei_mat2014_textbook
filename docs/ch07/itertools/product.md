@@ -40,3 +40,58 @@ print(triples)
 [(1, 1), (1, 2), (1, 3), (2, 1), (2, 2), (2, 3), (3, 1), (3, 2), (3, 3)]
 [('A', 'A', 'A'), ('A', 'A', 'B'), ('A', 'B', 'A'), ('A', 'B', 'B'), ('B', 'A', 'A'), ('B', 'A', 'B'), ('B', 'B', 'A'), ('B', 'B', 'B')]
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Use `product` to generate all possible outcomes of rolling two six-sided dice (numbers 1-6). Return the results as a list of tuples. How many outcomes are there in total?
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    from itertools import product
+
+    dice = list(product(range(1, 7), repeat=2))
+    print(f"Total outcomes: {len(dice)}")  # 36
+    print(dice[:6])  # First 6: (1,1) through (1,6)
+    ```
+
+---
+
+**Exercise 2.**
+Use `product` with `repeat=4` to generate all 4-digit binary strings (using characters `"0"` and `"1"`). Convert each tuple to a string and return the list. For example, the list should include `"0000"`, `"0001"`, ..., `"1111"`.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    from itertools import product
+
+    binary_strings = [
+        "".join(bits) for bits in product("01", repeat=4)
+    ]
+    print(binary_strings)
+    # ['0000', '0001', '0010', ..., '1111']
+    print(f"Total: {len(binary_strings)}")  # 16
+    ```
+
+---
+
+**Exercise 3.**
+Write a function `grid_coordinates` that takes two ranges (rows and columns) and uses `product` to generate all `(row, col)` coordinates. For example, `grid_coordinates(range(3), range(4))` should return 12 tuples from `(0, 0)` to `(2, 3)`.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    from itertools import product
+
+    def grid_coordinates(rows, cols):
+        return list(product(rows, cols))
+
+    # Test
+    coords = grid_coordinates(range(3), range(4))
+    print(coords)
+    # [(0, 0), (0, 1), ..., (2, 3)]
+    print(f"Total: {len(coords)}")  # 12
+    ```

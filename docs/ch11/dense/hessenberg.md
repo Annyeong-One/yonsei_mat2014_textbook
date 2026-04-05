@@ -316,3 +316,76 @@ if __name__ == "__main__":
 - Preserves eigenvalues
 - Symmetric A → Tridiagonal H
 - Speeds up QR iteration: $O(n^2)$ vs $O(n^3)$ per step
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a random $6 \times 6$ matrix with `np.random.seed(10)`. Compute its Hessenberg form $H$ with the transformation matrix $Q$. Verify that $Q$ is orthogonal (i.e., $\|Q^TQ - I\|_F < 10^{-12}$) and that $\|QHQ^T - A\|_F < 10^{-12}$.
+
+??? success "Solution to Exercise 1"
+        import numpy as np
+        from scipy import linalg
+
+        np.random.seed(10)
+        A = np.random.randn(6, 6)
+
+        H, Q = linalg.hessenberg(A, calc_q=True)
+
+        orth_error = np.linalg.norm(Q.T @ Q - np.eye(6))
+        recon_error = np.linalg.norm(Q @ H @ Q.T - A)
+        print(f"Orthogonality error: {orth_error:.2e}")
+        print(f"Reconstruction error: {recon_error:.2e}")
+        assert orth_error < 1e-12
+        assert recon_error < 1e-12
+
+---
+
+**Exercise 2.**
+Construct a $5 \times 5$ symmetric tridiagonal matrix with 4 on the diagonal and 1 on the sub/super-diagonals. Compute its Hessenberg form and verify that the result is tridiagonal (all entries below the first subdiagonal are effectively zero, i.e., below $10^{-12}$ in absolute value).
+
+??? success "Solution to Exercise 2"
+        import numpy as np
+        from scipy import linalg
+
+        A = np.diag([4]*5) + np.diag([1]*4, 1) + np.diag([1]*4, -1)
+        H = linalg.hessenberg(A)
+
+        # Check entries below first subdiagonal
+        is_tridiagonal = True
+        for i in range(2, 5):
+            for j in range(0, i - 1):
+                if abs(H[i, j]) > 1e-12:
+                    is_tridiagonal = False
+
+        print("Hessenberg of symmetric matrix:")
+        print(H.round(10))
+        print(f"Is tridiagonal: {is_tridiagonal}")
+
+---
+
+**Exercise 3.**
+Generate a random $8 \times 8$ matrix with `np.random.seed(7)`. Reduce it to Hessenberg form $H$, then run 50 iterations of the QR algorithm on $H$ (at each step compute $Q, R = $ QR of $H_k$, then set $H_{k+1} = RQ$). Compare the diagonal of the final matrix with the eigenvalues from `np.linalg.eigvals` and print the maximum absolute error after sorting by real part.
+
+??? success "Solution to Exercise 3"
+        import numpy as np
+        from scipy import linalg
+
+        np.random.seed(7)
+        A = np.random.randn(8, 8)
+
+        H = linalg.hessenberg(A)
+        Hk = H.copy()
+        for _ in range(50):
+            Q, R = np.linalg.qr(Hk)
+            Hk = R @ Q
+
+        qr_eigs = np.sort_complex(np.diag(Hk))
+        true_eigs = np.sort_complex(np.linalg.eigvals(A))
+
+        # Sort by real part for comparison
+        qr_sorted = sorted(qr_eigs, key=lambda x: (x.real, x.imag))
+        true_sorted = sorted(true_eigs, key=lambda x: (x.real, x.imag))
+        max_error = max(abs(a - b) for a, b in zip(qr_sorted, true_sorted))
+        print(f"Max eigenvalue error: {max_error:.6f}")

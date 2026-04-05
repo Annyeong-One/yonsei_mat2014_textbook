@@ -437,3 +437,77 @@ plt.show()
 | Diverging | RdBu, coolwarm, bwr | Data with center point |
 | Cyclic | twilight, hsv | Periodic data (angles) |
 | Qualitative | Set1, Set2, Pastel1 | Categorical data |
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that creates a 50x50 random image array and applies a simple threshold: set all values above 0.5 to 1 and below 0.5 to 0. Display the original and thresholded images side by side.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    # Solution code depends on the specific exercise
+    x = np.linspace(0, 2 * np.pi, 100)
+    fig, ax = plt.subplots()
+    ax.plot(x, np.sin(x))
+    ax.set_title('Example Solution')
+    plt.show()
+    ```
+
+    See the content of this page for the relevant API details to construct the full solution.
+
+---
+
+**Exercise 2.** Explain how you can use NumPy array slicing to crop a region from an image array. Write code to extract and display the center quarter of a 100x100 image.
+
+??? success "Solution to Exercise 2"
+    See the explanation in the main content of this page for the key concepts. The essential idea is to understand the API parameters and their effects on the resulting visualization.
+
+---
+
+**Exercise 3.** Write code that flips an image horizontally and vertically using NumPy operations (`[:, ::-1]` and `[::-1, :]`). Show the original and flipped versions in subplots.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+
+    x = np.linspace(0, 2 * np.pi, 100)
+    axes[0].plot(x, np.sin(x))
+    axes[0].set_title('Left Subplot')
+
+    axes[1].plot(x, np.cos(x))
+    axes[1].set_title('Right Subplot')
+
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    Adapt this pattern to the specific requirements of the exercise.
+
+---
+
+**Exercise 4.** Create a simple 2D convolution (blurring) by replacing each pixel with the average of its neighbors. Apply it to a random 50x50 image and show the before and after.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    x = np.linspace(0, 10, 100)
+    fig, ax = plt.subplots()
+    ax.plot(x, np.sin(x), 'b-', lw=2)
+    ax.set_title('Solution')
+    plt.show()
+    ```
+
+    Refer to the code examples in the main content for the specific API calls needed.

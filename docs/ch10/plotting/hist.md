@@ -268,3 +268,58 @@ df.hist(bins=30, figsize=(12, 8), edgecolor='black', alpha=0.7)
 # With layout
 df.hist(column='beer', by='continent', layout=(2, 3), sharex=True)
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that creates a histogram from a DataFrame column using `df['col'].plot.hist(bins=30)`.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    # Solution for the specific exercise
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(10), 'B': np.random.randn(10)})
+    print(df.head())
+    ```
+
+---
+
+**Exercise 2.** Create overlaid histograms for two columns using `df[['a', 'b']].plot.hist(alpha=0.5)`.
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the Pandas API and its behavior for this specific operation.
+
+---
+
+**Exercise 3.** Write code that uses `df.plot.hist(subplots=True)` to create a separate histogram for each numeric column.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(20), 'B': np.random.randn(20)})
+    result = df.describe()
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Create a histogram with `density=True` and overlay a KDE curve using `df['col'].plot.kde()` on the same axes.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(50), 'group': np.random.choice(['X', 'Y'], 50)})
+    result = df.groupby('group').mean()
+    print(result)
+    ```

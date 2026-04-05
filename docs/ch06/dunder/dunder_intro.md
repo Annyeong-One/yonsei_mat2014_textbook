@@ -143,3 +143,96 @@ if __name__ == "__main__":
     points = [Point(1, 2), Point(3, 4), Point(5, 6)]
     print(f"List of points: {points}")
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a `Color` class with `r`, `g`, `b` attributes. Implement `__repr__` (returns `Color(r, g, b)`), `__str__` (returns the hex string like `#FF0000`), and `__eq__` (compares RGB values). Demonstrate the difference between `repr()` and `str()` output.
+
+??? success "Solution to Exercise 1"
+
+        class Color:
+            def __init__(self, r, g, b):
+                self.r = r
+                self.g = g
+                self.b = b
+
+            def __repr__(self):
+                return f"Color({self.r}, {self.g}, {self.b})"
+
+            def __str__(self):
+                return f"#{self.r:02X}{self.g:02X}{self.b:02X}"
+
+            def __eq__(self, other):
+                return (self.r, self.g, self.b) == (other.r, other.g, other.b)
+
+        red = Color(255, 0, 0)
+        print(repr(red))  # Color(255, 0, 0)
+        print(str(red))   # #FF0000
+        print(red == Color(255, 0, 0))  # True
+
+---
+
+**Exercise 2.**
+Write a `Duration` class representing time in seconds. Implement `__init__` (accepts seconds), `__repr__`, `__str__` (formats as `"Xh Ym Zs"`), `__add__` (adds two durations), and `__bool__` (returns `False` for zero duration). Demonstrate all methods.
+
+??? success "Solution to Exercise 2"
+
+        class Duration:
+            def __init__(self, seconds):
+                self.seconds = seconds
+
+            def __repr__(self):
+                return f"Duration({self.seconds})"
+
+            def __str__(self):
+                h = self.seconds // 3600
+                m = (self.seconds % 3600) // 60
+                s = self.seconds % 60
+                return f"{h}h {m}m {s}s"
+
+            def __add__(self, other):
+                return Duration(self.seconds + other.seconds)
+
+            def __bool__(self):
+                return self.seconds != 0
+
+        d1 = Duration(3661)
+        print(str(d1))            # 1h 1m 1s
+        print(d1 + Duration(1800)) # 1h 31m 1s
+        print(bool(Duration(0)))   # False
+
+---
+
+**Exercise 3.**
+Build a `Bag` class (a multiset/counter). Implement `__init__` (accepts a list of items), `__contains__` (checks if an item is in the bag), `__len__` (returns total count of all items), `__repr__`, and `__add__` (merges two bags). Show that `"apple" in bag` and `len(bag)` work as expected.
+
+??? success "Solution to Exercise 3"
+
+        from collections import Counter
+
+        class Bag:
+            def __init__(self, items=None):
+                self._counter = Counter(items or [])
+
+            def __contains__(self, item):
+                return self._counter[item] > 0
+
+            def __len__(self):
+                return sum(self._counter.values())
+
+            def __add__(self, other):
+                new_bag = Bag()
+                new_bag._counter = self._counter + other._counter
+                return new_bag
+
+            def __repr__(self):
+                return f"Bag({dict(self._counter)})"
+
+        bag1 = Bag(["apple", "banana", "apple"])
+        print("apple" in bag1)  # True
+        print(len(bag1))        # 3
+        merged = bag1 + Bag(["banana", "cherry"])
+        print(merged)  # Bag({'apple': 2, 'banana': 2, 'cherry': 1})

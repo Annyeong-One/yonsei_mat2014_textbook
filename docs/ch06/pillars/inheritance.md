@@ -453,3 +453,174 @@ COMMON PATTERNS:
 - parent_result = super().method() - Get parent's result and extend it
 """
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.** Create a base class `Shape` with a method `describe()` that returns `"I am a shape"`. Then create subclasses `Square` and `Triangle` that override `describe()` to return their specific descriptions. Verify that `isinstance(Square(...), Shape)` returns `True`.
+
+??? success "Solution to Exercise 1"
+    ```python
+    class Shape:
+        def describe(self):
+            return "I am a shape"
+
+    class Square(Shape):
+        def __init__(self, side):
+            self.side = side
+
+        def describe(self):
+            return f"I am a square with side {self.side}"
+
+    class Triangle(Shape):
+        def __init__(self, base, height):
+            self.base = base
+            self.height = height
+
+        def describe(self):
+            return f"I am a triangle with base {self.base} and height {self.height}"
+
+    sq = Square(5)
+    tr = Triangle(3, 4)
+
+    print(sq.describe())                  # I am a square with side 5
+    print(tr.describe())                  # I am a triangle with base 3 and height 4
+    print(isinstance(sq, Shape))          # True
+    print(isinstance(tr, Shape))          # True
+    ```
+
+---
+
+**Exercise 2.** Predict the output of the following code and explain the role of `super()`.
+
+```python
+class A:
+    def greet(self):
+        return "Hello from A"
+
+class B(A):
+    def greet(self):
+        parent = super().greet()
+        return f"{parent} and B"
+
+class C(B):
+    def greet(self):
+        parent = super().greet()
+        return f"{parent} and C"
+
+print(C().greet())
+```
+
+??? success "Solution to Exercise 2"
+    The output is:
+
+    ```
+    Hello from A and B and C
+    ```
+
+    When `C().greet()` is called, `C.greet` calls `super().greet()`, which resolves to `B.greet` via the MRO (`C -> B -> A`). Inside `B.greet`, `super().greet()` resolves to `A.greet`, which returns `"Hello from A"`. Then `B.greet` appends `" and B"`, and finally `C.greet` appends `" and C"`. The chain builds the full string through cooperative `super()` calls.
+
+---
+
+**Exercise 3.** Write a class `Employee` with attributes `name` and `salary`, and a method `annual_pay()` that returns 12 times the salary. Then write a subclass `Manager` that adds a `bonus` attribute and overrides `annual_pay()` to include the bonus. Use `super()` to call the parent method.
+
+??? success "Solution to Exercise 3"
+    ```python
+    class Employee:
+        def __init__(self, name, salary):
+            self.name = name
+            self.salary = salary
+
+        def annual_pay(self):
+            return 12 * self.salary
+
+    class Manager(Employee):
+        def __init__(self, name, salary, bonus):
+            super().__init__(name, salary)
+            self.bonus = bonus
+
+        def annual_pay(self):
+            return super().annual_pay() + self.bonus
+
+    emp = Employee("Alice", 5000)
+    mgr = Manager("Bob", 7000, 10000)
+
+    print(emp.annual_pay())  # 60000
+    print(mgr.annual_pay())  # 94000
+    ```
+
+---
+
+**Exercise 4.** Given the following classes, determine the Method Resolution Order (MRO) of `D` without running the code. Then verify by printing `D.__mro__`.
+
+```python
+class A:
+    pass
+
+class B(A):
+    pass
+
+class C(A):
+    pass
+
+class D(B, C):
+    pass
+```
+
+??? success "Solution to Exercise 4"
+    The MRO of `D` is: `D -> B -> C -> A -> object`.
+
+    Python uses C3 linearization. Since `D` inherits from `B` then `C`, and both `B` and `C` inherit from `A`, the order is determined by preserving the local precedence order (`B` before `C`) and ensuring that `A` appears after both its children.
+
+    ```python
+    class A:
+        pass
+
+    class B(A):
+        pass
+
+    class C(A):
+        pass
+
+    class D(B, C):
+        pass
+
+    print([cls.__name__ for cls in D.__mro__])
+    # ['D', 'B', 'C', 'A', 'object']
+    ```
+
+---
+
+**Exercise 5.** Explain why the following code raises an error. Fix it so that the `Student` class properly initializes both `name` (from `Person`) and `student_id`.
+
+```python
+class Person:
+    def __init__(self, name):
+        self.name = name
+
+class Student(Person):
+    def __init__(self, student_id):
+        self.student_id = student_id
+
+s = Student("S001")
+print(s.name)  # AttributeError
+```
+
+??? success "Solution to Exercise 5"
+    The error occurs because `Student.__init__` never calls `Person.__init__`, so `self.name` is never set. The fix is to accept `name` as a parameter and pass it to `super().__init__`:
+
+    ```python
+    class Person:
+        def __init__(self, name):
+            self.name = name
+
+    class Student(Person):
+        def __init__(self, name, student_id):
+            super().__init__(name)
+            self.student_id = student_id
+
+    s = Student("Alice", "S001")
+    print(s.name)        # Alice
+    print(s.student_id)  # S001
+    ```

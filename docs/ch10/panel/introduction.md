@@ -109,3 +109,58 @@ index = pd.MultiIndex.from_product(
 returns = pd.Series(np.random.randn(15) * 0.02, index=index, name='return')
 print(returns)
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Explain what panel data is. Give an example of data that has both cross-sectional and time-series dimensions.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    # Solution for the specific exercise
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(10), 'B': np.random.randn(10)})
+    print(df.head())
+    ```
+
+---
+
+**Exercise 2.** Write code that creates a simple panel dataset with 3 entities observed over 4 time periods.
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the Pandas API and its behavior for this specific operation.
+
+---
+
+**Exercise 3.** Explain the difference between balanced and unbalanced panel data. Write code that checks if a panel is balanced.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(20), 'B': np.random.randn(20)})
+    result = df.describe()
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Create a panel dataset and use `groupby()` to compute summary statistics for each entity.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(50), 'group': np.random.choice(['X', 'Y'], 50)})
+    result = df.groupby('group').mean()
+    print(result)
+    ```

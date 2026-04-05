@@ -689,3 +689,96 @@ if __name__ == "__main__":
         os.remove('test.txt')
         print("Cleaned up test file")
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a `FileHandler` class whose `__init__` takes a filename and opens it in write mode. Add a `write(text)` method. Implement `__del__` to close the file and print a message. Show the lifecycle by creating an instance, writing, and deleting it. Discuss why `__del__` is unreliable compared to context managers.
+
+??? success "Solution to Exercise 1"
+
+        class FileHandler:
+            def __init__(self, filename):
+                self.filename = filename
+                self.file = open(filename, 'w')
+                print(f"Opened {filename}")
+
+            def write(self, text):
+                self.file.write(text)
+
+            def __del__(self):
+                if not self.file.closed:
+                    self.file.close()
+                    print(f"Closed {self.filename}")
+
+        # Lifecycle demo
+        fh = FileHandler("/tmp/test_lifecycle.txt")
+        fh.write("Hello")
+        del fh  # Closed /tmp/test_lifecycle.txt
+
+        # __del__ is unreliable because:
+        # 1. Timing of garbage collection is unpredictable
+        # 2. May not run if interpreter crashes
+        # 3. Context managers provide deterministic cleanup
+
+---
+
+**Exercise 2.**
+Write a `ConnectionPool` class whose `__init__` creates a list of N simulated connections (just strings). Add a `get_connection()` method (pops from the list) and `__del__` that prints how many connections were not returned. Create a pool of 3, take 2, and delete the pool.
+
+??? success "Solution to Exercise 2"
+
+        class ConnectionPool:
+            def __init__(self, size):
+                self.connections = [f"conn_{i}" for i in range(size)]
+                self.total = size
+                print(f"Pool created with {size} connections")
+
+            def get_connection(self):
+                if self.connections:
+                    return self.connections.pop()
+                raise RuntimeError("No connections available")
+
+            def __del__(self):
+                unreturned = self.total - len(self.connections)
+                if unreturned:
+                    print(f"Warning: {unreturned} connections were not returned")
+
+        pool = ConnectionPool(3)
+        c1 = pool.get_connection()
+        c2 = pool.get_connection()
+        del pool  # Warning: 2 connections were not returned
+
+---
+
+**Exercise 3.**
+Design a `Timer` class where `__init__` records the start time. Add an `elapsed()` method returning seconds since creation. Implement the class as a context manager (`__enter__` returns self, `__exit__` prints elapsed time). Show both usage patterns: manual `elapsed()` calls and `with` statement.
+
+??? success "Solution to Exercise 3"
+
+        import time
+
+        class Timer:
+            def __init__(self):
+                self.start = time.time()
+
+            def elapsed(self):
+                return time.time() - self.start
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                print(f"Elapsed: {self.elapsed():.4f}s")
+                return False
+
+        # Manual usage
+        t = Timer()
+        time.sleep(0.1)
+        print(f"Manual: {t.elapsed():.4f}s")
+
+        # Context manager usage
+        with Timer() as t:
+            time.sleep(0.1)

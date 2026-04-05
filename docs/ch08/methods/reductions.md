@@ -377,3 +377,50 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a 3D array of shape `(2, 3, 4)`. Compute `np.sum` along axis 0, axis 1, and axis 2. Print the resulting shape for each and verify they are `(3, 4)`, `(2, 4)`, and `(2, 3)` respectively.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        a = np.arange(24).reshape(2, 3, 4)
+        print(f"sum axis=0 shape: {np.sum(a, axis=0).shape}")  # (3, 4)
+        print(f"sum axis=1 shape: {np.sum(a, axis=1).shape}")  # (2, 4)
+        print(f"sum axis=2 shape: {np.sum(a, axis=2).shape}")  # (2, 3)
+
+---
+
+**Exercise 2.**
+Compute the column means of a `(100, 5)` matrix using `np.mean(axis=0)`. Then use `keepdims=True` and verify the result has shape `(1, 5)` so it can be subtracted from the original matrix via broadcasting.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        M = np.random.randn(100, 5)
+        means = np.mean(M, axis=0, keepdims=True)
+        print(f"means shape: {means.shape}")  # (1, 5)
+        centered = M - means
+        print(f"Column means after centering: {centered.mean(axis=0).round(10)}")
+
+---
+
+**Exercise 3.**
+Use `np.prod(axis=1)` to compute the row-wise product of a 4x3 matrix. Then use `np.cumsum(axis=0)` to compute the cumulative sum along columns. Print both results.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        a = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12]])
+        row_prod = np.prod(a, axis=1)
+        print(f"Row products: {row_prod}")
+
+        col_cumsum = np.cumsum(a, axis=0)
+        print(f"Column cumsum:\n{col_cumsum}")

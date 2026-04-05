@@ -149,3 +149,102 @@ print(valid)   # ['user@example.com', 'test@test.org']
 `map()` transforms every element; `filter()` selects elements. Both are lazy — they produce one result at a time without building the full list in memory. List comprehensions are usually clearer for simple cases; `map()` and `filter()` shine when a named function is already available to pass directly.
 
 We return to `map()` and `filter()` as functional programming tools — alongside `reduce()` and function composition — in [map(), filter(), reduce()](../../ch05/functional/map_filter_reduce.md).
+
+---
+
+## Exercises
+
+**Exercise 1.**
+`map()` and `filter()` return lazy iterators, not lists. Predict the output:
+
+```python
+numbers = [1, 2, 3, 4, 5]
+result = map(lambda x: x**2, numbers)
+print(result)
+print(list(result))
+print(list(result))
+```
+
+Why does the second `list(result)` return an empty list? How does this laziness behavior compare to list comprehensions?
+
+??? success "Solution to Exercise 1"
+    Output:
+
+    ```text
+    <map object at 0x...>
+    [1, 4, 9, 16, 25]
+    []
+    ```
+
+    `map()` returns a **lazy iterator**, not a list. Printing it shows the object representation. The first `list(result)` consumes the iterator, producing all values. The second `list(result)` returns `[]` because the iterator is **exhausted** -- it has already produced all its values and cannot restart.
+
+    List comprehensions `[x**2 for x in numbers]` return a list that can be iterated multiple times. The trade-off: comprehensions use memory (all values stored at once), while `map()` uses constant memory (values produced one at a time).
+
+---
+
+**Exercise 2.**
+`filter(None, iterable)` removes falsy values. Predict the output:
+
+```python
+values = [0, 1, "", "hello", None, [], [0], False, True, {}, {"a": 1}]
+print(list(filter(None, values)))
+```
+
+Why does `filter(None, ...)` use `None` as a function? What does Python do internally when the function argument is `None`? Is `[0]` truthy even though it contains a falsy element?
+
+??? success "Solution to Exercise 2"
+    Output:
+
+    ```text
+    [1, 'hello', [0], True, {'a': 1}]
+    ```
+
+    When `None` is passed as the function argument, `filter()` uses the **truthiness** of each element as the filter criterion. Internally, it is equivalent to `filter(bool, values)` -- it keeps only elements where `bool(element)` is `True`.
+
+    `[0]` is truthy because truthiness for containers depends on **length**, not contents. `bool([0])` is `True` because the list is non-empty (it has one element). The value of that element (`0`) does not matter for the container's truthiness.
+
+    Removed values: `0`, `""`, `None`, `[]`, `False`, `{}` -- all are falsy because they represent "empty" or "zero" values.
+
+---
+
+**Exercise 3.**
+A programmer converts `map`/`filter` chains to a list comprehension:
+
+```python
+# Original
+result = list(map(str.upper, filter(lambda s: len(s) > 3, words)))
+
+# Equivalent comprehension
+result = [s.upper() for s in words if len(s) > 3]
+```
+
+Are these exactly equivalent? Which is more readable? Give one case where `map()` is genuinely cleaner than a comprehension, and one case where a comprehension is clearly better.
+
+??? success "Solution to Exercise 3"
+    Yes, these are exactly equivalent in behavior. Both filter words longer than 3 characters and convert them to uppercase.
+
+    The comprehension is more readable in this case because:
+    - It reads left to right: "for each `s` in `words`, if length > 3, give me `s.upper()`."
+    - The `map`/`filter` chain reads inside-out: you must parse `filter(...)` first, then `map(...)`.
+
+    Case where `map()` is cleaner:
+
+    ```python
+    # map with an existing function -- no lambda needed
+    cleaned = list(map(str.strip, raw_lines))
+    # vs comprehension
+    cleaned = [line.strip() for line in raw_lines]
+    ```
+
+    When you already have a named function that matches exactly, `map(func, iterable)` is concise.
+
+    Case where comprehension is clearly better:
+
+    ```python
+    # comprehension with complex expression
+    result = [x**2 + 1 for x in data if x > 0 and x % 2 == 0]
+    # vs map/filter
+    result = list(map(lambda x: x**2 + 1, filter(lambda x: x > 0 and x % 2 == 0, data)))
+    ```
+
+    When both transform and filter are needed with non-trivial logic, the comprehension is far more readable.

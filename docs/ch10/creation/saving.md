@@ -227,3 +227,75 @@ Choose the right format.
 
 - Pros: Fast, compressed, columnar
 - Cons: Less universal
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a DataFrame with columns `'ticker'`, `'date'`, and `'close'` containing three rows of sample stock data. Save it to a CSV file without the index, then read it back and verify the data matches the original.
+
+??? success "Solution to Exercise 1"
+    Save with `index=False` and read back with `pd.read_csv`.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'ticker': ['AAPL', 'MSFT', 'GOOGL'],
+            'date': ['2024-01-01', '2024-01-01', '2024-01-01'],
+            'close': [150.0, 350.0, 140.0]
+        })
+        df.to_csv('stocks.csv', index=False)
+        df_loaded = pd.read_csv('stocks.csv')
+        print(df_loaded)
+        print(df.equals(df_loaded))  # True
+
+---
+
+**Exercise 2.**
+Given a dictionary of three DataFrames (one per ticker), write them to a single Excel file where each ticker has its own sheet. Use `pd.ExcelWriter` as a context manager.
+
+??? success "Solution to Exercise 2"
+    Use `pd.ExcelWriter` with each DataFrame written to a named sheet.
+
+        import pandas as pd
+        import numpy as np
+
+        dfs = {
+            'AAPL': pd.DataFrame({'close': np.random.uniform(140, 160, 5)}),
+            'MSFT': pd.DataFrame({'close': np.random.uniform(340, 360, 5)}),
+            'GOOGL': pd.DataFrame({'close': np.random.uniform(130, 150, 5)}),
+        }
+
+        with pd.ExcelWriter('portfolio.xlsx') as writer:
+            for ticker, df in dfs.items():
+                df.to_excel(writer, sheet_name=ticker, index=False)
+
+---
+
+**Exercise 3.**
+Create a DataFrame with 1000 rows and columns `'id'` (int), `'value'` (float), and `'category'` (string). Save it as both CSV and Parquet. Compare the file sizes and explain why Parquet is typically smaller.
+
+??? success "Solution to Exercise 3"
+    Create sample data, save in both formats, and compare sizes.
+
+        import pandas as pd
+        import numpy as np
+        import os
+
+        np.random.seed(42)
+        df = pd.DataFrame({
+            'id': range(1000),
+            'value': np.random.randn(1000),
+            'category': np.random.choice(['A', 'B', 'C'], 1000)
+        })
+
+        df.to_csv('data.csv', index=False)
+        df.to_parquet('data.parquet')
+
+        csv_size = os.path.getsize('data.csv')
+        parquet_size = os.path.getsize('data.parquet')
+        print(f"CSV size: {csv_size / 1e3:.1f} KB")
+        print(f"Parquet size: {parquet_size / 1e3:.1f} KB")
+        # Parquet is smaller because it uses columnar storage
+        # with built-in compression and schema encoding.

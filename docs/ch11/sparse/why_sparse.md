@@ -197,3 +197,77 @@ if __name__ == "__main__":
 - Matrix is small
 - High density (> 30%)
 - Need all dense operations
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a $5000 \times 5000$ sparse matrix with density 0.002 and its dense equivalent (use `np.random.seed(0)`). Compare the memory usage of both representations by computing the byte sizes of the internal arrays. Print the compression ratio (dense bytes / sparse bytes).
+
+??? success "Solution to Exercise 1"
+        import numpy as np
+        from scipy import sparse
+
+        np.random.seed(0)
+        n = 5000
+        A_sparse = sparse.random(n, n, density=0.002, format='csr')
+        A_dense = A_sparse.toarray()
+
+        dense_bytes = A_dense.nbytes
+        sparse_bytes = (A_sparse.data.nbytes + A_sparse.indices.nbytes
+                        + A_sparse.indptr.nbytes)
+
+        print(f"Dense memory:  {dense_bytes / 1e6:.1f} MB")
+        print(f"Sparse memory: {sparse_bytes / 1e6:.3f} MB")
+        print(f"Compression ratio: {dense_bytes / sparse_bytes:.0f}x")
+
+---
+
+**Exercise 2.**
+Benchmark sparse vs. dense matrix-vector multiplication for a $3000 \times 3000$ matrix with density 0.01 (use `np.random.seed(1)`). Perform 50 multiplications with each representation and print the total time for each. Compute the speedup factor.
+
+??? success "Solution to Exercise 2"
+        import numpy as np
+        from scipy import sparse
+        import time
+
+        np.random.seed(1)
+        n = 3000
+        A_sparse = sparse.random(n, n, density=0.01, format='csr')
+        A_dense = A_sparse.toarray()
+        x = np.random.randn(n)
+
+        start = time.perf_counter()
+        for _ in range(50):
+            y = A_dense @ x
+        t_dense = time.perf_counter() - start
+
+        start = time.perf_counter()
+        for _ in range(50):
+            y = A_sparse @ x
+        t_sparse = time.perf_counter() - start
+
+        print(f"Dense (50 matvecs):  {t_dense:.4f} sec")
+        print(f"Sparse (50 matvecs): {t_sparse:.4f} sec")
+        print(f"Speedup: {t_dense / t_sparse:.1f}x")
+
+---
+
+**Exercise 3.**
+Investigate the crossover density at which sparse storage becomes more expensive than dense. For a $500 \times 500$ matrix, compute the theoretical memory for CSR format and dense format at densities 0.01, 0.05, 0.1, 0.2, 0.3, and 0.5. Print a table showing the density, dense memory, sparse memory, and which is smaller.
+
+??? success "Solution to Exercise 3"
+        import numpy as np
+
+        n = 500
+        print(f"{'Density':>8} {'Dense (KB)':>10} {'Sparse (KB)':>12} {'Winner':>8}")
+        print("-" * 42)
+
+        for density in [0.01, 0.05, 0.1, 0.2, 0.3, 0.5]:
+            k = int(n * n * density)
+            dense_mem = n * n * 8  # float64
+            sparse_mem = k * 8 + k * 4 + (n + 1) * 4  # data + indices + indptr
+            winner = "Sparse" if sparse_mem < dense_mem else "Dense"
+            print(f"{density:>8.2f} {dense_mem/1024:>10.0f} "
+                  f"{sparse_mem/1024:>12.0f} {winner:>8}")

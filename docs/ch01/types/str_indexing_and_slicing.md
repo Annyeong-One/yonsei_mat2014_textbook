@@ -210,6 +210,7 @@ Slicing is more forgiving than indexing.
 
 ---
 
+
 ## 9. Summary
 
 Key ideas:
@@ -221,3 +222,97 @@ Key ideas:
 * all results are new strings
 
 Indexing and slicing are essential for analyzing and transforming text.
+
+
+## Exercises
+
+**Exercise 1.**
+Indexing a string out of range raises `IndexError`, but slicing out of range does not. Predict the output:
+
+```python
+s = "hello"
+print(s[1:100])
+print(s[-100:3])
+print(s[10:20])
+# print(s[10])
+```
+
+Why does slicing silently clamp to valid bounds while indexing raises an error? What design philosophy does this difference reflect?
+
+??? success "Solution to Exercise 1"
+    Output:
+
+    ```text
+    ello
+    hel
+
+    ```
+
+    (The third output is an empty string.)
+
+    `s[1:100]` returns `"ello"` -- the slice start is 1, and the stop is clamped to `len(s)` = 5. `s[-100:3]` returns `"hel"` -- the start is clamped to 0, stop is 3. `s[10:20]` returns `""` -- both bounds are beyond the string, so the result is empty. But `s[10]` raises `IndexError`.
+
+    The design philosophy: indexing asks "give me the element at this exact position" -- if the position does not exist, that is an error (you probably have a bug). Slicing asks "give me elements in this range" -- an empty range is a valid, useful result (not an error). This follows Python's general principle that operations should succeed when there is a reasonable interpretation, and fail only when the request is genuinely nonsensical.
+
+---
+
+**Exercise 2.**
+Predict the output of each slice expression and explain the pattern:
+
+```python
+s = "abcdefgh"
+print(s[::2])
+print(s[1::2])
+print(s[::-1])
+print(s[5:1:-1])
+print(s[::-2])
+```
+
+Then explain: when the step is negative, what are the default values for `start` and `stop`? Why does `s[5:1:-1]` not include the character at index `1`?
+
+??? success "Solution to Exercise 2"
+    Output:
+
+    ```text
+    aceg
+    bdfh
+    hgfedcba
+    fedc
+    hfdb
+    ```
+
+    - `s[::2]`: start at 0, take every 2nd character: indices 0, 2, 4, 6.
+    - `s[1::2]`: start at 1, take every 2nd character: indices 1, 3, 5, 7.
+    - `s[::-1]`: reverse the entire string.
+    - `s[5:1:-1]`: start at index 5, step backward, stop before index 1: indices 5, 4, 3, 2.
+    - `s[::-2]`: start at end, take every 2nd character going backward: indices 7, 5, 3, 1.
+
+    When step is negative, the defaults are: `start` defaults to `len(s) - 1` (the last element), `stop` defaults to "before the beginning" (i.e., include index 0). The stop index is always **excluded** regardless of step direction, so `s[5:1:-1]` includes indices 5, 4, 3, 2 but NOT 1.
+
+---
+
+**Exercise 3.**
+A programmer writes a palindrome checker:
+
+```python
+def is_palindrome(s):
+    return s == s[::-1]
+```
+
+This works but creates a reversed copy of the entire string. For a 1 GB string, this uses 1 GB of additional memory. Explain why this memory cost is unavoidable given string immutability. Then write a version that checks for a palindrome without creating a reversed copy, using only indexing.
+
+??? success "Solution to Exercise 3"
+    `s[::-1]` creates a completely new string containing all characters in reverse order. Because strings are immutable, Python cannot reverse a string in place -- it must allocate a new string object. For a 1 GB string, this means 1 GB of additional memory.
+
+    A memory-efficient palindrome checker using only indexing:
+
+    ```python
+    def is_palindrome(s):
+        n = len(s)
+        for i in range(n // 2):
+            if s[i] != s[n - 1 - i]:
+                return False
+        return True
+    ```
+
+    This compares characters from both ends, moving inward. It uses O(1) extra memory (just the index variable) and can return `False` early as soon as a mismatch is found, without ever examining the rest of the string. For large strings, this is both more memory-efficient and potentially faster (if the mismatch is near the beginning).

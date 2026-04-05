@@ -417,3 +417,61 @@ Lower triangular storage uses half the memory.
 ### 3. Numerical Stability
 
 Cholesky is numerically stable for PD matrices.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a 3x3 symmetric positive definite matrix by computing `A = B.T @ B + np.eye(3)` where `B = np.random.randn(3, 3)`. Compute the Cholesky decomposition `L` and verify that `L @ L.T` reconstructs `A` within floating-point tolerance.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        np.random.seed(42)
+        B = np.random.randn(3, 3)
+        A = B.T @ B + np.eye(3)
+        L = np.linalg.cholesky(A)
+        reconstructed = L @ L.T
+        print(f"Match: {np.allclose(A, reconstructed)}")
+
+---
+
+**Exercise 2.**
+Use Cholesky decomposition to solve the system `A @ x = b` where `A` is a symmetric positive definite matrix. First compute `L = np.linalg.cholesky(A)`, then solve `L @ y = b` followed by `L.T @ x = y` using `np.linalg.solve`. Verify the result matches `np.linalg.solve(A, b)`.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        A = np.array([[4, 2, 1], [2, 5, 2], [1, 2, 6]], dtype=float)
+        b = np.array([1, 2, 3], dtype=float)
+
+        L = np.linalg.cholesky(A)
+        y = np.linalg.solve(L, b)
+        x_chol = np.linalg.solve(L.T, y)
+
+        x_direct = np.linalg.solve(A, b)
+        print(f"Cholesky: {x_chol}")
+        print(f"Direct:   {x_direct}")
+        print(f"Match: {np.allclose(x_chol, x_direct)}")
+
+---
+
+**Exercise 3.**
+Given a matrix that is symmetric but NOT positive definite (e.g., `A = np.array([[1, 2], [2, 1]])`), show that `np.linalg.cholesky` raises a `LinAlgError`. Catch the exception and print the error message. Then verify the matrix is not positive definite by checking that it has a negative eigenvalue.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        A = np.array([[1, 2], [2, 1]], dtype=float)
+        try:
+            L = np.linalg.cholesky(A)
+        except np.linalg.LinAlgError as e:
+            print(f"Error: {e}")
+
+        eigvals = np.linalg.eigvalsh(A)
+        print(f"Eigenvalues: {eigvals}")
+        print(f"Has negative eigenvalue: {np.any(eigvals < 0)}")

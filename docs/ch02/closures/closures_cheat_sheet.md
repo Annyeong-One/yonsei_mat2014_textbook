@@ -951,3 +951,75 @@ if __name__ == "__main__":
     print("END OF MINI-PROJECT")
     print("=" * 70)
 ```
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Write a closure `make_filter(threshold)` that returns a function. The returned function takes a list of numbers and returns only those greater than `threshold`.
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        def make_filter(threshold):
+            def filter_func(numbers):
+                return [n for n in numbers if n > threshold]
+            return filter_func
+
+        above_10 = make_filter(10)
+        print(above_10([5, 15, 8, 20, 3]))  # [15, 20]
+        ```
+
+    The closure captures `threshold` and uses it in the list comprehension filter.
+
+---
+
+**Exercise 2.**
+Write a closure `make_logger(prefix)` that returns a function. The returned function takes a message and prints `f"[{prefix}] {message}"`. Also include a counter using `nonlocal` that tracks how many messages have been logged.
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        def make_logger(prefix):
+            count = 0
+            def log(message):
+                nonlocal count
+                count += 1
+                print(f"[{prefix}] ({count}) {message}")
+            return log
+
+        info = make_logger("INFO")
+        info("Server started")    # [INFO] (1) Server started
+        info("Request received")  # [INFO] (2) Request received
+        ```
+
+    The closure captures both `prefix` (read-only) and `count` (modified via `nonlocal`).
+
+---
+
+**Exercise 3.**
+Identify the bug in the following code. Fix it so that each function in the list returns its index (0, 1, 2, 3).
+
+```python
+funcs = []
+for i in range(4):
+    funcs.append(lambda: i)
+
+print([f() for f in funcs])  # Expected: [0, 1, 2, 3]
+```
+
+??? success "Solution to Exercise 3"
+
+    The bug is late binding: all lambdas capture the variable `i` by reference, and by the time they are called, `i` is `3`. Fix it by using a default argument to capture the current value:
+
+        ```python
+        funcs = []
+        for i in range(4):
+            funcs.append(lambda i=i: i)
+
+        print([f() for f in funcs])  # [0, 1, 2, 3]
+        ```
+
+    The default argument `i=i` captures the value of `i` at the time each lambda is created, rather than referencing the loop variable.

@@ -398,3 +398,54 @@ When arrays have different numbers of dimensions, NumPy prepends size-1 dimensio
 | 1D + 3D | `(4,) + (2, 3, 4)` | `(1, 1, 4)` | `(2, 3, 4)` |
 | 2D + 3D | `(3, 4) + (5, 3, 4)` | `(1, 3, 4)` | `(5, 3, 4)` |
 | 2D + 4D | `(4, 5) + (2, 3, 4, 5)` | `(1, 1, 4, 5)` | `(2, 3, 4, 5)` |
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Given a 3D array `A` of shape `(4, 3, 5)` and a 1D array `v` of shape `(3,)`, reshape `v` so that it broadcasts along axis 1 of `A`. Compute `A + v_reshaped` and verify the result shape is `(4, 3, 5)`.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        A = np.random.randn(4, 3, 5)
+        v = np.array([10, 20, 30])
+        v_reshaped = v[np.newaxis, :, np.newaxis]  # (1, 3, 1)
+        result = A + v_reshaped
+        print(result.shape)  # (4, 3, 5)
+
+---
+
+**Exercise 2.**
+Explain, without running the code, why `np.ones((3, 4)) + np.ones((4, 3))` raises a `ValueError`. Then fix it by reshaping one of the arrays so the addition succeeds and produces a shape `(3, 4)` result.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        # np.ones((3, 4)) + np.ones((4, 3)) fails because:
+        # Right-aligned: (3, 4) vs (4, 3)
+        # axis 1: 4 != 3, neither is 1 -> failure
+
+        # Fix: transpose one array so shapes match
+        A = np.ones((3, 4))
+        B = np.ones((4, 3))
+        result = A + B.T  # (3, 4) + (3, 4)
+        print(result.shape)  # (3, 4)
+
+---
+
+**Exercise 3.**
+A batch of 16 RGB images is stored as a 4D array of shape `(16, 3, 32, 32)` (batch, channels, height, width). Given per-channel means `mu = np.array([0.485, 0.456, 0.406])` of shape `(3,)`, subtract `mu` from each image by reshaping `mu` to align with the channels dimension. Verify that the result shape is `(16, 3, 32, 32)`.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        images = np.random.randn(16, 3, 32, 32)
+        mu = np.array([0.485, 0.456, 0.406])
+        mu_reshaped = mu[np.newaxis, :, np.newaxis, np.newaxis]  # (1, 3, 1, 1)
+        result = images - mu_reshaped
+        print(result.shape)  # (16, 3, 32, 32)

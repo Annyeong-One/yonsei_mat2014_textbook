@@ -289,3 +289,120 @@ class TestMerge(unittest.TestCase):
 if __name__ == '__main__':
     unittest.main(verbosity=2)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.** Write a `TestCase` that tests a `clamp(value, lo, hi)` function using `assertEqual`, `assertGreaterEqual`, and `assertLessEqual`. The function should return `lo` if `value < lo`, `hi` if `value > hi`, and `value` otherwise.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import unittest
+
+    def clamp(value, lo, hi):
+        if value < lo:
+            return lo
+        if value > hi:
+            return hi
+        return value
+
+    class TestClamp(unittest.TestCase):
+        def test_within_range(self):
+            self.assertEqual(clamp(5, 0, 10), 5)
+
+        def test_below_range(self):
+            result = clamp(-5, 0, 10)
+            self.assertEqual(result, 0)
+            self.assertGreaterEqual(result, 0)
+
+        def test_above_range(self):
+            result = clamp(15, 0, 10)
+            self.assertEqual(result, 10)
+            self.assertLessEqual(result, 10)
+
+    if __name__ == "__main__":
+        unittest.main()
+    ```
+
+---
+
+**Exercise 2.** Use `assertAlmostEqual` to test that `math.sin(math.pi)` is approximately zero. Why would `assertEqual` fail here?
+
+??? success "Solution to Exercise 2"
+    ```python
+    import unittest
+    import math
+
+    class TestSin(unittest.TestCase):
+        def test_sin_pi(self):
+            self.assertAlmostEqual(math.sin(math.pi), 0, places=10)
+
+    if __name__ == "__main__":
+        unittest.main()
+    ```
+
+    `assertEqual` would fail because `math.sin(math.pi)` returns a tiny floating-point number like `1.2246e-16` due to floating-point precision, not exactly `0`. `assertAlmostEqual` checks within a tolerance.
+
+---
+
+**Exercise 3.** Write tests for a `Stack` class using `assertRaises` for popping from an empty stack, `assertIn` for checking membership after push, and `assertIsNone` for checking the return value of push.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import unittest
+
+    class Stack:
+        def __init__(self):
+            self._items = []
+        def push(self, item):
+            self._items.append(item)
+        def pop(self):
+            if not self._items:
+                raise IndexError("Pop from empty stack")
+            return self._items.pop()
+        def __contains__(self, item):
+            return item in self._items
+
+    class TestStack(unittest.TestCase):
+        def test_pop_empty(self):
+            s = Stack()
+            with self.assertRaises(IndexError):
+                s.pop()
+
+        def test_push_contains(self):
+            s = Stack()
+            s.push(42)
+            self.assertIn(42, s)
+
+        def test_push_returns_none(self):
+            s = Stack()
+            result = s.push(1)
+            self.assertIsNone(result)
+
+    if __name__ == "__main__":
+        unittest.main()
+    ```
+
+---
+
+**Exercise 4.** Use `assertCountEqual` to verify that a function `unique_chars(s)` returns the correct set of characters regardless of order.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import unittest
+
+    def unique_chars(s):
+        return list(set(s))
+
+    class TestUniqueChars(unittest.TestCase):
+        def test_unique(self):
+            result = unique_chars("banana")
+            self.assertCountEqual(result, ["b", "a", "n"])
+
+        def test_empty(self):
+            self.assertCountEqual(unique_chars(""), [])
+
+    if __name__ == "__main__":
+        unittest.main()
+    ```

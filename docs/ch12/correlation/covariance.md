@@ -95,3 +95,64 @@ print(np.round(corr_matrix, 4))
 ## Summary
 
 Covariance measures the joint variability of two random variables in their original scale, with positive values indicating co-movement and negative values indicating inverse movement. The covariance matrix generalizes this to $p$ variables, encoding all pairwise covariances in a symmetric positive semi-definite matrix. Because covariance is scale-dependent, standardizing by the standard deviations yields the Pearson correlation, which is bounded to $[-1, 1]$ and more suitable for comparing relationships across different units.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Generate 200 samples from a bivariate normal with $\mu = [0, 0]$ and $\Sigma = \begin{pmatrix} 4 & 3 \\ 3 & 9 \end{pmatrix}$. Compute the sample covariance matrix using `np.cov()` and verify it is close to $\Sigma$.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        cov_true = [[4, 3], [3, 9]]
+        data = stats.multivariate_normal.rvs(mean=[0, 0], cov=cov_true, size=200)
+        sample_cov = np.cov(data, rowvar=False)
+        print("Sample covariance:")
+        print(np.round(sample_cov, 2))
+
+---
+
+**Exercise 2.**
+Compute the covariance and correlation between $X$ and $Y$ for 100 samples where $Y = 2X + \varepsilon$, $X \sim N(0, 1)$, and $\varepsilon \sim N(0, 0.5^2)$. Verify that $r = \text{Cov}(X,Y) / (s_X s_Y)$.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        np.random.seed(42)
+        x = np.random.normal(0, 1, 100)
+        eps = np.random.normal(0, 0.5, 100)
+        y = 2 * x + eps
+
+        cov_xy = np.cov(x, y)[0, 1]
+        r = cov_xy / (np.std(x, ddof=1) * np.std(y, ddof=1))
+        r_check = np.corrcoef(x, y)[0, 1]
+        print(f"Cov(X,Y): {cov_xy:.4f}")
+        print(f"r (manual): {r:.4f}, r (corrcoef): {r_check:.4f}")
+
+---
+
+**Exercise 3.**
+Show that covariance depends on scale: compute $\text{Cov}(X, Y)$ and $\text{Cov}(10X, Y)$ for 200 standard normal pairs with correlation 0.6. Verify that multiplying $X$ by 10 multiplies the covariance by 10 while the correlation remains unchanged.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        data = stats.multivariate_normal.rvs(mean=[0,0], cov=[[1,0.6],[0.6,1]], size=200)
+        x, y = data[:, 0], data[:, 1]
+
+        cov1 = np.cov(x, y)[0, 1]
+        cov2 = np.cov(10*x, y)[0, 1]
+        r1 = np.corrcoef(x, y)[0, 1]
+        r2 = np.corrcoef(10*x, y)[0, 1]
+
+        print(f"Cov(X,Y):    {cov1:.4f}, Cov(10X,Y): {cov2:.4f}, ratio: {cov2/cov1:.1f}")
+        print(f"Corr(X,Y):   {r1:.4f}, Corr(10X,Y): {r2:.4f}")

@@ -225,3 +225,95 @@ def outer():
 - First match wins
 - Can skip levels
 - Classes separate
+
+## Exercises
+
+**Exercise 1.**
+Predict the output and trace the LEGB lookup for each `print(x)`:
+
+```python
+x = "global"
+
+def outer():
+    x = "enclosing"
+
+    def inner():
+        print(x)
+
+    inner()
+    print(x)
+
+outer()
+print(x)
+```
+
+Which namespace does each `print(x)` resolve from? What would change if `inner()` had `x = "local"` as its first line?
+
+??? success "Solution to Exercise 1"
+    Output:
+
+    ```text
+    enclosing
+    enclosing
+    global
+    ```
+
+    - `inner()` prints `x`: `inner` has no local `x`. LEGB lookup: Local (none) -> Enclosing (`outer`'s `x = "enclosing"`) -> found. Prints `"enclosing"`.
+    - `outer()` prints `x`: `outer` has local `x = "enclosing"`. LEGB: Local (found). Prints `"enclosing"`.
+    - Top-level `print(x)`: Global `x = "global"`. Prints `"global"`.
+
+    If `inner()` had `x = "local"` as its first line, the first `print(x)` would show `"local"` (local scope found first). The other two prints would be unchanged because each function's local scope is independent.
+
+---
+
+**Exercise 2.**
+Explain why this code raises an `UnboundLocalError` instead of printing `10`:
+
+```python
+x = 10
+
+def f():
+    print(x)
+    x = 20
+
+f()
+```
+
+Python does not execute functions line-by-line for scoping decisions. When does Python decide that `x` is local? Why does the `print(x)` fail even though it comes before `x = 20`?
+
+??? success "Solution to Exercise 2"
+    Python determines variable scope at **compile time** (when the function is defined), not at runtime. Because `x = 20` appears anywhere in `f`, Python classifies `x` as a **local variable** for the entire function body. This decision is made before any code executes.
+
+    When `print(x)` runs, Python looks for `x` in the local scope (because it was classified as local). But `x = 20` has not executed yet, so the local `x` has no value. This raises `UnboundLocalError: local variable 'x' referenced before assignment`.
+
+    The key insight: scope is determined by the presence of assignment **anywhere** in the function, not by the order of statements. If `x` is assigned anywhere in the function, it is local everywhere in that function -- even on lines before the assignment.
+
+    To read the global `x` while also assigning a local `x`, you would need `global x` declaration.
+
+---
+
+**Exercise 3.**
+The `global` and `nonlocal` keywords explicitly change which namespace a name binds to. Predict the output:
+
+```python
+count = 0
+
+def increment():
+    global count
+    count += 1
+
+increment()
+increment()
+print(count)
+```
+
+What would happen without the `global` declaration? Why does Python require explicit `global` instead of allowing functions to modify global variables by default?
+
+??? success "Solution to Exercise 3"
+    Output: `2`
+
+    The `global count` declaration tells Python that `count` inside `increment` refers to the **global** variable, not a local one. Without it, `count += 1` would try to read and assign a local `count`, raising `UnboundLocalError` (same issue as Exercise 2 -- the assignment makes `count` local, but it is read before being assigned locally).
+
+    Python requires explicit `global` because **implicit global mutation would be dangerous**. If functions could silently modify global variables, it would be nearly impossible to reason about program state -- any function call could change any global variable. The explicit `global` declaration makes the intent clear and makes global modification grep-able and auditable.
+
+    This is a deliberate design choice favoring explicitness: Python wants you to know when a function modifies state outside its local scope.

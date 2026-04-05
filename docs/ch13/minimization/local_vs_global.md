@@ -456,3 +456,97 @@ Choose based on:
 - Computational budget (function evaluation cost)
 - Need for accuracy vs speed
 - Whether you can provide bounds or initial guesses
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Define the Rastrigin function $f(\mathbf{x}) = 10n + \sum_{i=1}^{n}[x_i^2 - 10\cos(2\pi x_i)]$ for $n = 2$. Use `differential_evolution` with bounds $[-5.12, 5.12]$ for each variable to find its global minimum (which is 0 at the origin). Compare the result to a local `minimize` call from `x0 = [3, 3]`.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import numpy as np
+        from scipy import optimize
+
+        def rastrigin(x):
+            n = len(x)
+            return 10 * n + np.sum(x**2 - 10 * np.cos(2 * np.pi * x))
+
+        # Global optimization
+        result_global = optimize.differential_evolution(
+            rastrigin, bounds=[(-5.12, 5.12)] * 2, seed=42
+        )
+        print(f"Global (DE): f = {result_global.fun:.6f}, x = {result_global.x}")
+
+        # Local optimization from a poor starting point
+        result_local = optimize.minimize(rastrigin, x0=[3, 3], method='BFGS')
+        print(f"Local (BFGS from [3,3]): f = {result_local.fun:.6f}, x = {result_local.x}")
+        ```
+
+---
+
+**Exercise 2.**
+Use `basinhopping` with 200 iterations to minimize $f(x) = \sin(5x) \cdot (1 - \tanh(x^2))$ over the real line, starting from `x0 = 2`. Use L-BFGS-B as the local minimizer. Print the found minimum and compare it against 50 random multi-start local optimizations.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import numpy as np
+        from scipy import optimize
+
+        def f(x):
+            return np.sin(5 * x) * (1 - np.tanh(x**2))
+
+        # Basin-hopping
+        result_bh = optimize.basinhopping(
+            f, x0=2, niter=200,
+            minimizer_kwargs={"method": "L-BFGS-B"}, seed=42
+        )
+        print(f"Basin-hopping: f = {result_bh.fun:.6f}, x = {result_bh.x[0]:.6f}")
+
+        # Multi-start comparison
+        np.random.seed(42)
+        best_val = float('inf')
+        best_x = None
+        for _ in range(50):
+            x0 = np.random.uniform(-5, 5)
+            res = optimize.minimize(f, x0=x0, method='L-BFGS-B')
+            if res.fun < best_val:
+                best_val = res.fun
+                best_x = res.x[0]
+
+        print(f"Multi-start (50 trials): f = {best_val:.6f}, x = {best_x:.6f}")
+        ```
+
+---
+
+**Exercise 3.**
+Implement the "coarse grid + local refinement" strategy for the 2D function $f(x, y) = \cos(x)\sin(y) + 0.05(x^2 + y^2)$ on the domain $[-5, 5] \times [-5, 5]$. Evaluate on a 20x20 grid, pick the best grid point, then refine with `minimize`. Print the grid-best value and the refined value.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import numpy as np
+        from scipy import optimize
+
+        def f(x):
+            return np.cos(x[0]) * np.sin(x[1]) + 0.05 * (x[0]**2 + x[1]**2)
+
+        # Coarse grid search
+        grid_x = np.linspace(-5, 5, 20)
+        grid_y = np.linspace(-5, 5, 20)
+        best_val = float('inf')
+        best_point = None
+
+        for xi in grid_x:
+            for yi in grid_y:
+                val = f([xi, yi])
+                if val < best_val:
+                    best_val = val
+                    best_point = [xi, yi]
+
+        print(f"Grid best: f = {best_val:.6f} at {best_point}")
+
+        # Local refinement
+        result = optimize.minimize(f, x0=best_point, method='L-BFGS-B')
+        print(f"Refined: f = {result.fun:.6f} at {result.x}")
+        ```

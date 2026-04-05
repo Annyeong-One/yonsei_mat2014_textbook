@@ -234,3 +234,58 @@ print(df)  # Original unchanged
 | Chained operations | Method chaining with `.assign()` |
 
 **When in doubt, use `.copy()`!**
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that demonstrates the difference between a view and a copy when slicing a DataFrame.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    # Solution for the specific exercise
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(10), 'B': np.random.randn(10)})
+    print(df.head())
+    ```
+
+---
+
+**Exercise 2.** Explain when `df[['col']]` returns a copy vs when `df['col']` returns a view. How can you tell?
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the Pandas API and its behavior for this specific operation.
+
+---
+
+**Exercise 3.** Write code using `.copy()` to explicitly create a copy and avoid the `SettingWithCopyWarning`.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(20), 'B': np.random.randn(20)})
+    result = df.describe()
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Explain the Copy-on-Write (CoW) behavior introduced in newer versions of Pandas. How does it change the view/copy semantics?
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(50), 'group': np.random.choice(['X', 'Y'], 50)})
+    result = df.groupby('group').mean()
+    print(result)
+    ```

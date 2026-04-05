@@ -813,3 +813,173 @@ if __name__ == "__main__":
         usually don't need them.
     """)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.** Create a class `BankAccount` with a private `_balance` attribute. Use `@property` to provide read-only access to the balance. Add `deposit(amount)` and `withdraw(amount)` methods that modify `_balance` with validation (no negative deposits, no overdrafts). Show that assigning to `account.balance` raises an error.
+
+??? success "Solution to Exercise 1"
+    ```python
+    class BankAccount:
+        def __init__(self, initial_balance=0):
+            self._balance = initial_balance
+
+        @property
+        def balance(self):
+            return self._balance
+
+        def deposit(self, amount):
+            if amount <= 0:
+                raise ValueError("Deposit must be positive")
+            self._balance += amount
+
+        def withdraw(self, amount):
+            if amount <= 0:
+                raise ValueError("Withdrawal must be positive")
+            if amount > self._balance:
+                raise ValueError("Insufficient funds")
+            self._balance -= amount
+
+    account = BankAccount(1000)
+    print(account.balance)    # 1000
+    account.deposit(500)
+    print(account.balance)    # 1500
+    account.withdraw(200)
+    print(account.balance)    # 1300
+
+    try:
+        account.balance = 9999
+    except AttributeError as e:
+        print(e)  # property 'balance' of 'BankAccount' object has no setter
+    ```
+
+---
+
+**Exercise 2.** Predict the output of the following code:
+
+```python
+class Box:
+    def __init__(self, length, width, height):
+        self.length = length
+        self.width = width
+        self.height = height
+
+    @property
+    def volume(self):
+        return self.length * self.width * self.height
+
+b = Box(2, 3, 4)
+print(b.volume)
+b.length = 10
+print(b.volume)
+```
+
+??? success "Solution to Exercise 2"
+    The output is:
+
+    ```
+    24
+    120
+    ```
+
+    The `volume` property is computed from `length * width * height`. On first access it returns `2 * 3 * 4 = 24`. After changing `length` to 10, the property recomputes as `10 * 3 * 4 = 120`. Since it is a regular property (not cached), it recalculates every time it is accessed.
+
+---
+
+**Exercise 3.** Write a `Person` class where `name` is a property with both a getter and setter. The setter should strip leading/trailing whitespace and raise `ValueError` if the name is empty after stripping. Demonstrate both valid and invalid usage.
+
+??? success "Solution to Exercise 3"
+    ```python
+    class Person:
+        def __init__(self, name):
+            self.name = name  # uses the setter
+
+        @property
+        def name(self):
+            return self._name
+
+        @name.setter
+        def name(self, value):
+            cleaned = value.strip()
+            if not cleaned:
+                raise ValueError("Name cannot be empty")
+            self._name = cleaned
+
+    p = Person("  Alice  ")
+    print(repr(p.name))  # 'Alice'
+
+    p.name = "Bob"
+    print(p.name)        # Bob
+
+    try:
+        p.name = "   "
+    except ValueError as e:
+        print(e)  # Name cannot be empty
+    ```
+
+---
+
+**Exercise 4.** Implement a `Thermostat` class with a `celsius` property (getter and setter) and a read-only `fahrenheit` property that computes the conversion. Setting `celsius` should reject values below $-273.15$. Setting `fahrenheit` directly should raise `AttributeError`.
+
+??? success "Solution to Exercise 4"
+    ```python
+    class Thermostat:
+        def __init__(self, celsius=20.0):
+            self.celsius = celsius  # uses the setter
+
+        @property
+        def celsius(self):
+            return self._celsius
+
+        @celsius.setter
+        def celsius(self, value):
+            if value < -273.15:
+                raise ValueError("Temperature below absolute zero")
+            self._celsius = value
+
+        @property
+        def fahrenheit(self):
+            return self._celsius * 9 / 5 + 32
+
+    t = Thermostat(100)
+    print(t.celsius)      # 100
+    print(t.fahrenheit)   # 212.0
+
+    t.celsius = 0
+    print(t.fahrenheit)   # 32.0
+
+    try:
+        t.fahrenheit = 50
+    except AttributeError:
+        print("Cannot set fahrenheit directly")
+
+    try:
+        t.celsius = -300
+    except ValueError as e:
+        print(e)  # Temperature below absolute zero
+    ```
+
+---
+
+**Exercise 5.** Create a class `LazyLoader` with a property `data` that simulates an expensive computation on first access and caches the result in a private attribute. Verify that the expensive computation runs only once, even when `data` is accessed multiple times.
+
+??? success "Solution to Exercise 5"
+    ```python
+    class LazyLoader:
+        def __init__(self):
+            self._data = None
+
+        @property
+        def data(self):
+            if self._data is None:
+                print("Performing expensive computation...")
+                self._data = sum(i ** 2 for i in range(10000))
+            return self._data
+
+    loader = LazyLoader()
+    print(loader.data)  # Performing expensive computation... 333283335000
+    print(loader.data)  # 333283335000 (no recomputation)
+    print(loader.data)  # 333283335000 (still cached)
+    ```

@@ -196,3 +196,86 @@ for method in methods:
 ## Summary
 
 Multiple testing corrections prevent the inflation of false positive rates when many hypotheses are tested simultaneously. FWER-controlling methods (Bonferroni, Holm, Sidak) ensure the probability of any false positive stays below $\alpha$, while FDR-controlling methods (Benjamini-Hochberg) allow a controlled proportion of false positives among rejections. The Holm method dominates Bonferroni for FWER control, and the BH procedure is the standard choice for FDR control in high-dimensional settings.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Generate 20 p-values from t-tests where all null hypotheses are true ($H_0$ is true for all). Apply the Bonferroni correction using `multipletests` and verify that no tests are rejected.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        from scipy import stats
+        from statsmodels.stats.multitest import multipletests
+
+        np.random.seed(42)
+        p_values = []
+        for _ in range(20):
+            x = np.random.normal(0, 1, 30)
+            y = np.random.normal(0, 1, 30)
+            _, p = stats.ttest_ind(x, y)
+            p_values.append(p)
+
+        reject, pvals_adj, _, _ = multipletests(p_values, alpha=0.05, method='bonferroni')
+        print(f"Rejections (Bonferroni): {sum(reject)}")
+
+---
+
+**Exercise 2.**
+Create 50 p-values: 10 from tests with real effects ($N(0, 1)$ vs $N(1, 1)$) and 40 from null tests. Apply both Bonferroni and Benjamini-Hochberg corrections. Compare the number of true positives and false positives for each.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy import stats
+        from statsmodels.stats.multitest import multipletests
+
+        np.random.seed(42)
+        p_vals, true_null = [], []
+        for i in range(50):
+            x = np.random.normal(0, 1, 30)
+            if i < 10:
+                y = np.random.normal(1, 1, 30)
+                true_null.append(False)
+            else:
+                y = np.random.normal(0, 1, 30)
+                true_null.append(True)
+            _, p = stats.ttest_ind(x, y)
+            p_vals.append(p)
+
+        p_vals = np.array(p_vals)
+        true_null = np.array(true_null)
+
+        for method in ['bonferroni', 'fdr_bh']:
+            reject, _, _, _ = multipletests(p_vals, alpha=0.05, method=method)
+            tp = sum(reject & ~true_null)
+            fp = sum(reject & true_null)
+            print(f"{method:12s}: TP={tp}, FP={fp}, Total rejected={sum(reject)}")
+
+---
+
+**Exercise 3.**
+For the same 50 p-values from Exercise 2, apply the Holm correction. Compare its rejections with Bonferroni and verify that Holm rejects at least as many hypotheses as Bonferroni.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+        from statsmodels.stats.multitest import multipletests
+
+        np.random.seed(42)
+        p_vals, true_null = [], []
+        for i in range(50):
+            x = np.random.normal(0, 1, 30)
+            y = np.random.normal(1 if i < 10 else 0, 1, 30)
+            true_null.append(i >= 10)
+            _, p = stats.ttest_ind(x, y)
+            p_vals.append(p)
+
+        p_vals = np.array(p_vals)
+        for method in ['bonferroni', 'holm']:
+            reject, _, _, _ = multipletests(p_vals, alpha=0.05, method=method)
+            print(f"{method:12s}: rejections={sum(reject)}")
+        print("Holm always rejects >= Bonferroni")

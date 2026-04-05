@@ -173,3 +173,61 @@ df = df.rename(columns={'city': 'location'})
 ```python
 df = df[['city', 'temperature', 'humidity']]
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create two DataFrames where the key column is named `'emp_id'` in one and `'employee_id'` in the other. Use `left_on` and `right_on` to merge them. Drop the duplicate key column afterward.
+
+??? success "Solution to Exercise 1"
+    Merge on differently named key columns.
+
+        import pandas as pd
+
+        df1 = pd.DataFrame({'emp_id': [1, 2, 3], 'salary': [50000, 60000, 70000]})
+        df2 = pd.DataFrame({'employee_id': [1, 2, 3], 'dept': ['HR', 'IT', 'Sales']})
+        result = pd.merge(df1, df2, left_on='emp_id', right_on='employee_id')
+        result = result.drop(columns='employee_id')
+        print(result)
+
+---
+
+**Exercise 2.**
+Create a DataFrame with a `'manager_id'` column and another with `'id'` and `'name'`. Use `left_on='manager_id'` and `right_on='id'` to look up each person's manager name.
+
+??? success "Solution to Exercise 2"
+    Look up manager names via left_on and right_on.
+
+        import pandas as pd
+
+        employees = pd.DataFrame({
+            'id': [1, 2, 3],
+            'name': ['Alice', 'Bob', 'Carol'],
+            'manager_id': [None, 1, 1]
+        })
+        result = pd.merge(
+            employees, employees[['id', 'name']],
+            left_on='manager_id', right_on='id',
+            suffixes=('', '_manager'), how='left'
+        )
+        print(result[['name', 'name_manager']])
+
+---
+
+**Exercise 3.**
+Merge two DataFrames where one has the key in a column and the other has the key as its index. Use `left_on='key_col'` and `right_index=True` to perform the merge.
+
+??? success "Solution to Exercise 3"
+    Merge column key against index key.
+
+        import pandas as pd
+
+        orders = pd.DataFrame({'order_id': [1, 2, 3], 'product_id': [101, 102, 101]})
+        products = pd.DataFrame(
+            {'product_name': ['Widget', 'Gadget']},
+            index=pd.Index([101, 102], name='product_id')
+        )
+        result = pd.merge(orders, products, left_on='product_id', right_index=True)
+        print(result)

@@ -490,3 +490,203 @@ __get__, __set__, __delete__
 - Document descriptor behavior clearly
 - Test edge cases (class access, None checks)
 - Consider using `__set_name__` for automatic naming
+
+---
+
+## Exercises
+
+**Exercise 1.** Implement a simplified `Property` descriptor class with `__get__` and `__set__` methods that mimics the behavior of Python's built-in `property`. Test it by creating a `Circle` class with a `radius` managed by your custom descriptor that rejects negative values.
+
+??? success "Solution to Exercise 1"
+    ```python
+    class Property:
+        def __init__(self, fget=None, fset=None):
+            self.fget = fget
+            self.fset = fset
+
+        def __get__(self, instance, owner):
+            if instance is None:
+                return self
+            if self.fget is None:
+                raise AttributeError("unreadable attribute")
+            return self.fget(instance)
+
+        def __set__(self, instance, value):
+            if self.fset is None:
+                raise AttributeError("can't set attribute")
+            self.fset(instance, value)
+
+        def setter(self, fset):
+            return Property(self.fget, fset)
+
+    class Circle:
+        def __init__(self, radius):
+            self.radius = radius
+
+        @Property
+        def radius(self):
+            return self._radius
+
+        @radius.setter
+        def radius(self, value):
+            if value < 0:
+                raise ValueError("Radius must be non-negative")
+            self._radius = value
+
+    c = Circle(5)
+    print(c.radius)  # 5
+
+    c.radius = 10
+    print(c.radius)  # 10
+
+    try:
+        c.radius = -1
+    except ValueError as e:
+        print(e)  # Radius must be non-negative
+    ```
+
+---
+
+**Exercise 2.** Predict the output:
+
+```python
+class MyProp:
+    def __set_name__(self, owner, name):
+        self.name = f"_{name}"
+
+    def __get__(self, instance, owner):
+        if instance is None:
+            return self
+        return getattr(instance, self.name, None)
+
+    def __set__(self, instance, value):
+        setattr(instance, self.name, value)
+
+class Demo:
+    x = MyProp()
+
+d = Demo()
+d.x = 42
+print(d.x)
+print(d.__dict__)
+```
+
+??? success "Solution to Exercise 2"
+    The output is:
+
+    ```
+    42
+    {'_x': 42}
+    ```
+
+    The `__set_name__` method sets `self.name` to `"_x"`. When `d.x = 42` is called, the descriptor's `__set__` stores the value via `setattr(instance, '_x', 42)`, placing `_x` in the instance dictionary. The `__get__` method retrieves it via `getattr(instance, '_x')`.
+
+---
+
+**Exercise 3.** Create a reusable `TypedProperty` descriptor that enforces a specific type. Use it to build a `Product` class where `name` must be a `str` and `price` must be a `float` or `int`. Demonstrate that assigning a wrong type raises `TypeError`.
+
+??? success "Solution to Exercise 3"
+    ```python
+    class TypedProperty:
+        def __init__(self, expected_type):
+            self.expected_type = expected_type
+
+        def __set_name__(self, owner, name):
+            self.name = f"_{name}"
+
+        def __get__(self, instance, owner):
+            if instance is None:
+                return self
+            return getattr(instance, self.name, None)
+
+        def __set__(self, instance, value):
+            if not isinstance(value, self.expected_type):
+                raise TypeError(
+                    f"Expected {self.expected_type.__name__}, "
+                    f"got {type(value).__name__}"
+                )
+            setattr(instance, self.name, value)
+
+    class Product:
+        name = TypedProperty(str)
+        price = TypedProperty((int, float))
+
+    p = Product()
+    p.name = "Widget"
+    p.price = 19.99
+    print(p.name, p.price)  # Widget 19.99
+
+    try:
+        p.name = 123
+    except TypeError as e:
+        print(e)  # Expected str, got int
+    ```
+
+---
+
+**Exercise 4.** Explain why a property with a setter is a "data descriptor" and why this matters for attribute lookup. Write a short example showing that a data descriptor takes priority over an entry in `instance.__dict__`.
+
+??? success "Solution to Exercise 4"
+    A **data descriptor** defines both `__get__` and `__set__` (or `__delete__`). Python's attribute lookup gives data descriptors priority over instance `__dict__` entries.
+
+    ```python
+    class DataDesc:
+        def __get__(self, instance, owner):
+            if instance is None:
+                return self
+            return "from descriptor"
+
+        def __set__(self, instance, value):
+            print(f"Descriptor intercepted: {value}")
+
+    class Example:
+        attr = DataDesc()
+
+    obj = Example()
+    obj.__dict__['attr'] = "from instance dict"
+    print(obj.attr)  # "from descriptor" — descriptor wins
+    obj.attr = 99    # "Descriptor intercepted: 99"
+    ```
+
+    Because the descriptor defines `__set__`, it is a data descriptor and always takes priority over any same-named key in `instance.__dict__`.
+
+---
+
+**Exercise 5.** Build a `ValidatedProperty` descriptor that accepts a validator function. Use `__set_name__` for automatic naming. Apply it to a `Person` class where `age` must be between 0 and 150, and `name` must be a non-empty string.
+
+??? success "Solution to Exercise 5"
+    ```python
+    class ValidatedProperty:
+        def __init__(self, validator):
+            self.validator = validator
+
+        def __set_name__(self, owner, name):
+            self.name = f"_{name}"
+            self.public_name = name
+
+        def __get__(self, instance, owner):
+            if instance is None:
+                return self
+            return getattr(instance, self.name, None)
+
+        def __set__(self, instance, value):
+            if not self.validator(value):
+                raise ValueError(
+                    f"Validation failed for '{self.public_name}': {value!r}"
+                )
+            setattr(instance, self.name, value)
+
+    class Person:
+        age = ValidatedProperty(lambda x: isinstance(x, int) and 0 <= x <= 150)
+        name = ValidatedProperty(lambda x: isinstance(x, str) and len(x.strip()) > 0)
+
+    p = Person()
+    p.name = "Alice"
+    p.age = 30
+    print(p.name, p.age)  # Alice 30
+
+    try:
+        p.age = 200
+    except ValueError as e:
+        print(e)  # Validation failed for 'age': 200
+    ```

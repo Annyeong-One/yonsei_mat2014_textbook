@@ -164,3 +164,77 @@ if __name__ == "__main__":
 | `linalg.eig(A, B)` | General Av = λBv |
 | `linalg.eigh(A, B)` | Symmetric A, SPD B |
 | `linalg.qz(A, B)` | QZ decomposition |
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Solve the generalized eigenvalue problem $Av = \lambda Bv$ for $A = \begin{pmatrix} 6 & 2 \\ 2 & 4 \end{pmatrix}$ and $B = \begin{pmatrix} 2 & 0 \\ 0 & 1 \end{pmatrix}$ using `linalg.eigh(A, B)`. Verify that $V^T B V = I$ (B-orthogonality) and that $Av_i = \lambda_i B v_i$ for each eigenpair.
+
+??? success "Solution to Exercise 1"
+        import numpy as np
+        from scipy import linalg
+
+        A = np.array([[6, 2],
+                       [2, 4]])
+        B = np.array([[2, 0],
+                       [0, 1]])
+
+        eigenvalues, V = linalg.eigh(A, B)
+
+        # B-orthogonality
+        b_orth = V.T @ B @ V
+        print(f"V^T B V:\n{b_orth.round(10)}")
+        print(f"B-orthogonal: {np.allclose(b_orth, np.eye(2))}")
+
+        # Verify Av = lambda Bv
+        for i in range(len(eigenvalues)):
+            lam = eigenvalues[i]
+            v = V[:, i]
+            print(f"lambda={lam:.4f}, Av=lBv: {np.allclose(A @ v, lam * B @ v)}")
+
+---
+
+**Exercise 2.**
+Model a 3-mass spring system with stiffness matrix $K = \begin{pmatrix} 5 & -2 & 0 \\ -2 & 4 & -2 \\ 0 & -2 & 3 \end{pmatrix}$ and mass matrix $M = \begin{pmatrix} 1 & 0 & 0 \\ 0 & 2 & 0 \\ 0 & 0 & 1 \end{pmatrix}$. Find the natural frequencies $\omega_i = \sqrt{\lambda_i}$ by solving the generalized eigenvalue problem $Kx = \lambda M x$.
+
+??? success "Solution to Exercise 2"
+        import numpy as np
+        from scipy import linalg
+
+        K = np.array([[5, -2, 0],
+                       [-2, 4, -2],
+                       [0, -2, 3]])
+        M = np.array([[1, 0, 0],
+                       [0, 2, 0],
+                       [0, 0, 1]])
+
+        eigenvalues, modes = linalg.eigh(K, M)
+        frequencies = np.sqrt(eigenvalues)
+
+        print("Eigenvalues (omega^2):", eigenvalues)
+        print("Natural frequencies (omega):", frequencies)
+
+---
+
+**Exercise 3.**
+Generate two random $4 \times 4$ matrices with `np.random.seed(42)`. Make $A$ symmetric ($A = B_1 + B_1^T$) and $B$ symmetric positive definite ($B = B_2^T B_2 + 4I$). Solve the generalized problem with `linalg.eigh(A, B)` and verify the result by checking $\|A V - B V \Lambda\|_F < 10^{-10}$ where $\Lambda = \text{diag}(\lambda)$.
+
+??? success "Solution to Exercise 3"
+        import numpy as np
+        from scipy import linalg
+
+        np.random.seed(42)
+        B1 = np.random.randn(4, 4)
+        B2 = np.random.randn(4, 4)
+        A = B1 + B1.T
+        B = B2.T @ B2 + 4 * np.eye(4)
+
+        eigenvalues, V = linalg.eigh(A, B)
+        Lambda = np.diag(eigenvalues)
+
+        error = np.linalg.norm(A @ V - B @ V @ Lambda)
+        print(f"Eigenvalues: {eigenvalues}")
+        print(f"Verification error: {error:.2e}")
+        assert error < 1e-10

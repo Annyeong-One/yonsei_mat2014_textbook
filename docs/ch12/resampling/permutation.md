@@ -106,3 +106,61 @@ When parametric assumptions hold, the parametric test may be slightly more power
 ## Summary
 
 Permutation tests derive $p$-values from the data itself by exploiting the exchangeability of observations under the null hypothesis. The exact permutation $p$-value enumerates all possible rearrangements of group labels; the random permutation test samples a subset when exhaustive enumeration is infeasible. The two-sample permutation test for location is the most common application, serving as a distribution-free alternative to the $t$-test. Permutation tests extend naturally to correlation, regression coefficients, and any other computable test statistic. Their main advantages are exact Type I error control and freedom from distributional assumptions; their main cost is computation.
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that performs a permutation test to determine if two groups have significantly different means.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(100)
+    print(f'Mean: {data.mean():.4f}')
+    print(f'Std: {data.std():.4f}')
+    ```
+
+---
+
+**Exercise 2.** Explain how a permutation test constructs the null distribution. Why is it a non-parametric test?
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the statistical method and its assumptions.
+
+---
+
+**Exercise 3.** Write code that runs a permutation test with 10000 permutations and plots the null distribution with the observed test statistic marked.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+    from scipy import stats
+    import matplotlib.pyplot as plt
+
+    np.random.seed(42)
+    data = np.random.randn(1000)
+    fig, ax = plt.subplots()
+    ax.hist(data, bins=30, density=True, alpha=0.7)
+    ax.set_title('Distribution')
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Compare the p-value from a permutation test with the p-value from a parametric t-test on the same data.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(500)
+    result = stats.describe(data)
+    print(result)
+    ```

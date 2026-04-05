@@ -505,3 +505,80 @@ def __delattr__(self, name):
         del self.y  # If y's deletion tries to delete x... infinite loop!
     super().__delattr__(name)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a class `ProtectedAttributes` that prevents deletion of attributes whose names start with an underscore. Override `__delattr__` to raise `AttributeError` for protected attributes while allowing deletion of others. Demonstrate both cases.
+
+??? success "Solution to Exercise 1"
+
+        class ProtectedAttributes:
+            def __init__(self, **kwargs):
+                for k, v in kwargs.items():
+                    object.__setattr__(self, k, v)
+
+            def __delattr__(self, name):
+                if name.startswith("_"):
+                    raise AttributeError(f"Cannot delete protected attribute '{name}'")
+                super().__delattr__(name)
+
+        obj = ProtectedAttributes(_secret="hidden", public="visible")
+
+        del obj.public  # Works
+        try:
+            del obj._secret
+        except AttributeError as e:
+            print(f"Error: {e}")
+            # Error: Cannot delete protected attribute '_secret'
+
+---
+
+**Exercise 2.**
+Write a class `AuditLog` where `__delattr__` logs every attribute deletion (printing the attribute name and its value before deletion) and then proceeds with the deletion using `super().__delattr__()`. Show the audit output for several deletions.
+
+??? success "Solution to Exercise 2"
+
+        class AuditLog:
+            def __init__(self, **kwargs):
+                for k, v in kwargs.items():
+                    object.__setattr__(self, k, v)
+
+            def __delattr__(self, name):
+                value = getattr(self, name, "<not found>")
+                print(f"AUDIT: Deleting '{name}' (was: {value!r})")
+                super().__delattr__(name)
+
+        obj = AuditLog(x=10, y="hello", z=[1, 2, 3])
+        del obj.x  # AUDIT: Deleting 'x' (was: 10)
+        del obj.y  # AUDIT: Deleting 'y' (was: 'hello')
+
+---
+
+**Exercise 3.**
+Build a class `Immutable` where `__delattr__` always raises `AttributeError` with the message "Cannot delete attributes from immutable object". Set attributes in `__init__` using `object.__setattr__`. Show that attributes exist and can be read but never deleted.
+
+??? success "Solution to Exercise 3"
+
+        class Immutable:
+            def __init__(self, **kwargs):
+                for k, v in kwargs.items():
+                    object.__setattr__(self, k, v)
+
+            def __delattr__(self, name):
+                raise AttributeError("Cannot delete attributes from immutable object")
+
+            def __setattr__(self, name, value):
+                raise AttributeError("Cannot modify attributes of immutable object")
+
+        obj = Immutable(x=10, y=20)
+        print(obj.x)  # 10
+        print(obj.y)  # 20
+
+        try:
+            del obj.x
+        except AttributeError as e:
+            print(f"Error: {e}")
+            # Error: Cannot delete attributes from immutable object

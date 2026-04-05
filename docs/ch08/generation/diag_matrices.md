@@ -215,3 +215,49 @@ The eigenvalues of a diagonal matrix are its diagonal elements.
 ### 3. Matrix Powers
 
 $D^n$ is computed by raising each diagonal element to the $n$-th power.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a 5x5 tridiagonal matrix with `[1, 2, 3, 4, 5]` on the main diagonal, `[10, 20, 30, 40]` on the first upper diagonal (`k=1`), and `[-1, -2, -3, -4]` on the first lower diagonal (`k=-1`). Use `np.diag` three times and add the results.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        main = np.diag([1, 2, 3, 4, 5])
+        upper = np.diag([10, 20, 30, 40], k=1)
+        lower = np.diag([-1, -2, -3, -4], k=-1)
+        tridiag = main + upper + lower
+        print(tridiag)
+
+---
+
+**Exercise 2.**
+Given a 4x4 matrix `A = np.arange(16).reshape(4, 4)`, extract the main diagonal, the first upper diagonal (`k=1`), and the first lower diagonal (`k=-1`). Print all three and verify that the main diagonal has 4 elements while the off-diagonals have 3 each.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        A = np.arange(16).reshape(4, 4)
+        print(f"Main diagonal (k=0): {np.diag(A)}")       # 4 elements
+        print(f"Upper diagonal (k=1): {np.diag(A, k=1)}")  # 3 elements
+        print(f"Lower diagonal (k=-1): {np.diag(A, k=-1)}")# 3 elements
+
+---
+
+**Exercise 3.**
+Create a 6x6 diagonal matrix `D` with diagonal values `[2, 4, 6, 8, 10, 12]`. Compute its inverse by taking the reciprocal of each diagonal element (using `np.diag` to extract and reconstruct). Verify that `D @ D_inv` equals the identity matrix.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        diag_vals = np.array([2, 4, 6, 8, 10, 12], dtype=float)
+        D = np.diag(diag_vals)
+        D_inv = np.diag(1.0 / diag_vals)
+        product = D @ D_inv
+        print(f"D @ D_inv is identity: {np.allclose(product, np.eye(6))}")

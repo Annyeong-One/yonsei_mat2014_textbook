@@ -555,3 +555,57 @@ if __name__ == "__main__":
     print("- swaplevel(): Swap index levels")
     print("- Aggregate by specific levels")
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a DataFrame with a MultiIndex from tuples (e.g., `('US', 'NYC')`, `('US', 'LA')`, `('UK', 'London')`). Use `.loc[]` to select all rows for a specific level-0 value (e.g., `'US'`).
+
+??? success "Solution to Exercise 1"
+    Select from a MultiIndex using loc.
+
+        import pandas as pd
+
+        idx = pd.MultiIndex.from_tuples([
+            ('US', 'NYC'), ('US', 'LA'), ('UK', 'London'), ('UK', 'Manchester')
+        ], names=['country', 'city'])
+        df = pd.DataFrame({'pop': [8, 4, 9, 3]}, index=idx)
+        print(df.loc['US'])
+
+---
+
+**Exercise 2.**
+Create a MultiIndex DataFrame and use `.xs()` (cross-section) to select data at a specific level. Compare `.xs('US', level=0)` with `.loc['US']`.
+
+??? success "Solution to Exercise 2"
+    Use xs for cross-section selection.
+
+        import pandas as pd
+
+        idx = pd.MultiIndex.from_tuples([
+            ('US', 'NYC'), ('US', 'LA'), ('UK', 'London')
+        ], names=['country', 'city'])
+        df = pd.DataFrame({'val': [100, 200, 300]}, index=idx)
+        print(df.xs('US', level='country'))
+        print(df.loc['US'])
+
+---
+
+**Exercise 3.**
+Create a DataFrame with a MultiIndex. Use `.unstack()` to pivot one level of the index into columns, then `.stack()` to reverse the operation. Verify you get back the original structure.
+
+??? success "Solution to Exercise 3"
+    Stack and unstack a MultiIndex DataFrame.
+
+        import pandas as pd
+
+        idx = pd.MultiIndex.from_tuples([
+            ('A', 'x'), ('A', 'y'), ('B', 'x'), ('B', 'y')
+        ], names=['group', 'sub'])
+        df = pd.DataFrame({'val': [1, 2, 3, 4]}, index=idx)
+        unstacked = df.unstack()
+        print("Unstacked:\n", unstacked)
+        restacked = unstacked.stack()
+        print("\nRestacked:\n", restacked)

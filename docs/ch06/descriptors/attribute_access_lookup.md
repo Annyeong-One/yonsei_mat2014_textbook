@@ -448,3 +448,75 @@ print(Example.__dict__)    # {..., 'class_var': 'class', ...}
 - Always use `super().__getattribute__()` inside `__getattribute__` to avoid recursion
 - `__getattr__` is only called when attribute is not found normally
 - Properties are simpler than `__getattribute__` for specific attributes
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a class `LoggedAccess` that implements `__getattribute__` to print a message every time any attribute is accessed. Use `super().__getattribute__()` to avoid infinite recursion. Demonstrate it with a simple class that has `name` and `value` attributes.
+
+??? success "Solution to Exercise 1"
+
+        class LoggedAccess:
+            def __getattribute__(self, name):
+                print(f"Accessing attribute: {name}")
+                return super().__getattribute__(name)
+
+        class Item(LoggedAccess):
+            def __init__(self, name, value):
+                self.name = name
+                self.value = value
+
+        item = Item("widget", 42)
+        print(item.name)   # prints "Accessing attribute: name" then "widget"
+        print(item.value)  # prints "Accessing attribute: value" then "42"
+
+---
+
+**Exercise 2.**
+Write a class `DefaultDict` that uses `__getattr__` to return a default value (`"N/A"`) for any attribute that does not exist, instead of raising `AttributeError`. Set a few attributes in `__init__` and show that existing attributes return their values while missing attributes return the default.
+
+??? success "Solution to Exercise 2"
+
+        class DefaultDict:
+            def __init__(self, **kwargs):
+                for k, v in kwargs.items():
+                    self.__dict__[k] = v
+
+            def __getattr__(self, name):
+                return "N/A"  # Default for missing attributes
+
+        d = DefaultDict(name="Alice", age=30)
+        print(d.name)      # Alice
+        print(d.age)       # 30
+        print(d.email)     # N/A — does not exist
+        print(d.phone)     # N/A — does not exist
+
+---
+
+**Exercise 3.**
+Build a class `Frozen` that allows attributes to be set in `__init__` but prevents any attribute modification after initialization. Use a flag `_initialized` and override `__setattr__` to raise `AttributeError` if `_initialized` is `True`. Demonstrate that attributes can be set during construction but not after.
+
+??? success "Solution to Exercise 3"
+
+        class Frozen:
+            def __init__(self, **kwargs):
+                for k, v in kwargs.items():
+                    object.__setattr__(self, k, v)
+                object.__setattr__(self, '_initialized', True)
+
+            def __setattr__(self, name, value):
+                if getattr(self, '_initialized', False):
+                    raise AttributeError(f"Cannot modify attribute '{name}' on frozen object")
+                super().__setattr__(name, value)
+
+        f = Frozen(x=10, y=20)
+        print(f.x)  # 10
+        print(f.y)  # 20
+
+        try:
+            f.x = 99
+        except AttributeError as e:
+            print(f"Error: {e}")
+            # Error: Cannot modify attribute 'x' on frozen object

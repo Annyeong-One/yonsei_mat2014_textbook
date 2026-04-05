@@ -177,3 +177,55 @@ print(f"t critical (df=9, 97.5%): {t_crit:.4f}")
 ## Summary
 
 Percentiles and quantiles characterize how data values distribute across the range of observations. The **quantile function** $Q(p)$ generalizes the median to arbitrary probability levels, while **percentile ranks** perform the inverse mapping from values to probabilities. NumPy provides flexible computation with multiple interpolation methods, and SciPy extends this with `mquantiles` for alternative estimation approaches and `.ppf()` for theoretical distribution quantiles. These tools form the foundation for box plots, outlier fences, confidence intervals, and distribution diagnostics throughout statistical analysis.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Generate 200 samples from an exponential distribution with $\lambda = 0.5$. Compute the 10th, 25th, 50th, 75th, and 90th percentiles. Compare the 50th percentile with `np.median()`.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        data = stats.expon.rvs(scale=2, size=200)
+        percs = np.percentile(data, [10, 25, 50, 75, 90])
+        print(f"Percentiles: {percs.round(4)}")
+        print(f"Median (np.median): {np.median(data):.4f}")
+        print(f"50th percentile:    {percs[2]:.4f}")
+
+---
+
+**Exercise 2.**
+Compute the five-number summary (min, Q1, median, Q3, max) for 300 samples from a $t$-distribution with 5 degrees of freedom. Compute the IQR and identify the lower and upper fence values for outlier detection.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        data = stats.t.rvs(df=5, size=300)
+        q1, median, q3 = np.percentile(data, [25, 50, 75])
+        iqr = q3 - q1
+        lower_fence = q1 - 1.5 * iqr
+        upper_fence = q3 + 1.5 * iqr
+        print(f"Five-number: {data.min():.3f}, {q1:.3f}, {median:.3f}, {q3:.3f}, {data.max():.3f}")
+        print(f"IQR: {iqr:.3f}, Fences: [{lower_fence:.3f}, {upper_fence:.3f}]")
+
+---
+
+**Exercise 3.**
+Compare the `linear` and `lower` interpolation methods in `np.percentile()` for a small dataset of 10 values. Show that the methods produce different results for quantiles that fall between observed values.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        data = np.array([2, 5, 7, 8, 12, 15, 18, 22, 25, 30])
+        for method in ['linear', 'lower']:
+            p = np.percentile(data, 37, interpolation=method)
+            print(f"37th percentile ({method}): {p}")

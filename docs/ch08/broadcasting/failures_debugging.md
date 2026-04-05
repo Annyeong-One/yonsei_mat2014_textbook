@@ -387,3 +387,90 @@ if __name__ == "__main__":
 ## Summary
 
 Broadcasting failures follow predictable patterns. The key debugging strategy is to right-align the shapes and check each axis pair: both sizes must be equal or one must be 1. Use `np.broadcast_shapes` to test compatibility without creating arrays, and always verify output shapes to catch silent bugs where broadcasting succeeds but produces unintended results.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Use `np.broadcast_shapes` to test whether the following pairs are compatible. For each incompatible pair, explain which axis fails and suggest a fix:
+
+- `(5, 3)` and `(5,)`
+- `(2, 1, 4)` and `(3, 4)`
+- `(6, 4)` and `(6, 1)`
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        # Pair 1: (5, 3) and (5,)
+        try:
+            print(np.broadcast_shapes((5, 3), (5,)))
+        except ValueError as e:
+            print(f"Incompatible: {e}")
+            # axis 1: 3 != 5. Fix: use (3,) or reshape to (5, 1)
+
+        # Pair 2: (2, 1, 4) and (3, 4)
+        print(np.broadcast_shapes((2, 1, 4), (3, 4)))  # (2, 3, 4) — compatible
+
+        # Pair 3: (6, 4) and (6, 1)
+        print(np.broadcast_shapes((6, 4), (6, 1)))  # (6, 4) — compatible
+
+---
+
+**Exercise 2.**
+The following code intends to subtract the row means from a `(4, 5)` matrix but contains a silent broadcasting bug. Identify the bug, explain why it does not raise an error, and fix it.
+
+```python
+M = np.random.randn(4, 5)
+row_means = M.mean(axis=1)  # shape (4,)
+centered = M - row_means
+```
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        M = np.random.randn(4, 5)
+        row_means = M.mean(axis=1)  # shape (4,)
+
+        # Bug: (4, 5) - (4,) right-aligns as:
+        #   (4, 5)
+        #      (4,) -> (1, 4)
+        # axis 1: 5 != 4 -> this actually raises ValueError if shapes mismatch.
+        # But if M were (4, 4), it would silently subtract column-wise.
+        # The fix: use keepdims=True so row_means has shape (4, 1).
+
+        row_means_fixed = M.mean(axis=1, keepdims=True)  # shape (4, 1)
+        centered = M - row_means_fixed
+        print(centered.mean(axis=1))  # all near zero
+
+---
+
+**Exercise 3.**
+Write a helper function `check_broadcast(a, b)` that prints both shapes right-aligned, marks each axis as "OK" or "FAIL", and returns `True` if they are compatible. Test it on shapes `(8, 1, 6)` and `(7, 1)`.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        def check_broadcast(shape_a, shape_b):
+            max_ndim = max(len(shape_a), len(shape_b))
+            a_padded = (1,) * (max_ndim - len(shape_a)) + shape_a
+            b_padded = (1,) * (max_ndim - len(shape_b)) + shape_b
+
+            compatible = True
+            for i, (sa, sb) in enumerate(zip(a_padded, b_padded)):
+                status = "OK" if (sa == sb or sa == 1 or sb == 1) else "FAIL"
+                if status == "FAIL":
+                    compatible = False
+                print(f"  axis {i}: {sa} vs {sb} -> {status}")
+
+            return compatible
+
+        result = check_broadcast((8, 1, 6), (7, 1))
+        print(f"Compatible: {result}")
+        # axis 0: 8 vs 1 -> OK
+        # axis 1: 1 vs 7 -> OK
+        # axis 2: 6 vs 1 -> OK
+        # Compatible: True

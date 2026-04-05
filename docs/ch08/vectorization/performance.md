@@ -250,3 +250,92 @@ if __name__ == "__main__":
     5. Profile before optimizing!
     """)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.** Write a vectorized NumPy solution and a pure Python loop solution for the same computation. Measure and compare their performance using `time.perf_counter()`.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+    import time
+
+    n = 1_000_000
+    data = np.random.default_rng(42).random(n)
+
+    # Python loop
+    start = time.perf_counter()
+    result_py = [x ** 2 for x in data]
+    py_time = time.perf_counter() - start
+
+    # NumPy vectorized
+    start = time.perf_counter()
+    result_np = data ** 2
+    np_time = time.perf_counter() - start
+
+    print(f"Python: {py_time:.4f}s, NumPy: {np_time:.6f}s")
+    print(f"Speedup: {py_time / np_time:.0f}x")
+    ```
+
+---
+
+**Exercise 2.** Identify a potential performance pitfall in the following code and rewrite it using NumPy vectorization:
+
+```python
+result = []
+for i in range(len(data)):
+    result.append(data[i] ** 2 + 2 * data[i] + 1)
+```
+
+??? success "Solution to Exercise 2"
+    ```python
+    import numpy as np
+
+    data = np.random.default_rng(42).random(100000)
+
+    # Vectorized (fast)
+    result = data ** 2 + 2 * data + 1
+    ```
+
+    The loop version creates Python objects for each element and calls `append` repeatedly. The vectorized version computes everything in compiled C code on contiguous memory.
+
+---
+
+**Exercise 3.** Explain why NumPy vectorized operations are faster than Python loops. Reference memory layout, type checking overhead, and SIMD instructions in your answer.
+
+??? success "Solution to Exercise 3"
+    NumPy vectorized operations are faster because:
+
+    1. **Contiguous memory**: NumPy arrays store elements in a contiguous block, enabling efficient CPU cache usage.
+    2. **No type checking**: Python loops check types at each iteration; NumPy knows the dtype in advance.
+    3. **Compiled C loops**: The actual computation runs in compiled C/Fortran code, not interpreted Python.
+    4. **SIMD instructions**: Modern CPUs can process multiple array elements simultaneously using SIMD (Single Instruction, Multiple Data).
+
+---
+
+**Exercise 4.** Apply the concepts from this page to a practical problem: given a large array of temperatures in Celsius, convert them all to Fahrenheit and find the maximum. Compare vectorized and loop approaches.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    import time
+
+    rng = np.random.default_rng(42)
+    celsius = rng.uniform(-40, 50, 1_000_000)
+
+    # Vectorized
+    start = time.perf_counter()
+    fahrenheit = celsius * 9/5 + 32
+    max_f = fahrenheit.max()
+    vec_time = time.perf_counter() - start
+
+    # Loop
+    start = time.perf_counter()
+    max_f_loop = max(c * 9/5 + 32 for c in celsius)
+    loop_time = time.perf_counter() - start
+
+    print(f"Vectorized: {vec_time:.6f}s, max={max_f:.1f}F")
+    print(f"Loop: {loop_time:.4f}s, max={max_f_loop:.1f}F")
+    ```

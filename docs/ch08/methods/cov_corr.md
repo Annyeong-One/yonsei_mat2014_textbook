@@ -353,3 +353,55 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Generate two correlated random variables: `x = np.random.randn(1000)` and `y = 0.8 * x + 0.2 * np.random.randn(1000)`. Compute the covariance matrix using `np.cov(x, y)` and the correlation matrix using `np.corrcoef(x, y)`. Verify that the correlation is close to the expected value.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        np.random.seed(42)
+        x = np.random.randn(1000)
+        y = 0.8 * x + 0.2 * np.random.randn(1000)
+
+        cov = np.cov(x, y)
+        corr = np.corrcoef(x, y)
+        print(f"Covariance matrix:\n{cov.round(3)}")
+        print(f"Correlation: {corr[0, 1]:.4f}")
+
+---
+
+**Exercise 2.**
+Create a 3-variable dataset `X = np.random.randn(3, 100)` and compute the 3x3 covariance matrix. Verify that it is symmetric and that the diagonal elements equal the variances of each variable.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        X = np.random.randn(3, 100)
+        cov = np.cov(X)
+        print(f"Symmetric: {np.allclose(cov, cov.T)}")
+        for i in range(3):
+            print(f"Var(X[{i}]) = {X[i].var(ddof=1):.4f}, cov[{i},{i}] = {cov[i,i]:.4f}")
+
+---
+
+**Exercise 3.**
+Generate two uncorrelated variables `x` and `y` (independent standard normals, 500 samples). Compute their correlation coefficient and verify it is close to 0. Then transform `y_corr = x + y` and verify the correlation between `x` and `y_corr` is close to `1/sqrt(2)`.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        np.random.seed(42)
+        x = np.random.randn(500)
+        y = np.random.randn(500)
+        print(f"corr(x, y): {np.corrcoef(x, y)[0, 1]:.4f}")  # ~0
+
+        y_corr = x + y
+        print(f"corr(x, x+y): {np.corrcoef(x, y_corr)[0, 1]:.4f}")  # ~0.707

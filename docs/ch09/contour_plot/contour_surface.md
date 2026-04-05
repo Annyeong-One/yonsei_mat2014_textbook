@@ -470,3 +470,101 @@ plt.show()
 | Surface + Contour projection | 3D context with 2D precision |
 | Wireframe + Contour | Structure visualization |
 | Dashboard (multiple views) | Complete exploration |
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a side-by-side figure (1x2) showing a filled contour plot on the left and a 3D surface plot on the right for the function $z = \cos(\sqrt{x^2 + y^2})$ over $[-5, 5] \times [-5, 5]$. Use the same colormap for both.
+
+??? success "Solution to Exercise 1"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(-5, 5, 200)
+        y = np.linspace(-5, 5, 200)
+        X, Y = np.meshgrid(x, y)
+        Z = np.cos(np.sqrt(X**2 + Y**2))
+
+        fig = plt.figure(figsize=(14, 5))
+
+        ax1 = fig.add_subplot(1, 2, 1)
+        cf = ax1.contourf(X, Y, Z, levels=20, cmap='viridis')
+        plt.colorbar(cf, ax=ax1)
+        ax1.set_title('Filled Contour')
+        ax1.set_aspect('equal')
+
+        ax2 = fig.add_subplot(1, 2, 2, projection='3d')
+        ax2.plot_surface(X, Y, Z, cmap='viridis', alpha=0.9)
+        ax2.set_title('3D Surface')
+
+        plt.tight_layout()
+        plt.show()
+
+---
+
+**Exercise 2.**
+Create a 3D surface plot of $z = \sin(x) \cdot \cos(y)$ and project contour lines onto the z-axis floor of the 3D axes using `ax.contour` with the `zdir='z'` and `offset` parameters. Set the offset to the minimum z value.
+
+??? success "Solution to Exercise 2"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(-np.pi, np.pi, 100)
+        y = np.linspace(-np.pi, np.pi, 100)
+        X, Y = np.meshgrid(x, y)
+        Z = np.sin(X) * np.cos(Y)
+
+        fig = plt.figure(figsize=(10, 7))
+        ax = fig.add_subplot(111, projection='3d')
+
+        ax.plot_surface(X, Y, Z, cmap='coolwarm', alpha=0.8)
+        ax.contour(X, Y, Z, zdir='z', offset=Z.min(), cmap='coolwarm', levels=15)
+
+        ax.set_zlim(Z.min() - 0.3, Z.max())
+        ax.set_xlabel('X')
+        ax.set_ylabel('Y')
+        ax.set_zlabel('Z')
+        ax.set_title('Surface with Projected Contours')
+        plt.show()
+
+---
+
+**Exercise 3.**
+Build a three-panel figure: top-left shows `contour` (line), top-right shows `contourf` (filled), and bottom (spanning full width) shows the 3D `plot_surface`. Use the function $z = x^2 - y^2$ over $[-2, 2] \times [-2, 2]$. Use `gridspec` for the layout.
+
+??? success "Solution to Exercise 3"
+
+        import matplotlib.pyplot as plt
+        import matplotlib.gridspec as gridspec
+        import numpy as np
+
+        x = np.linspace(-2, 2, 100)
+        y = np.linspace(-2, 2, 100)
+        X, Y = np.meshgrid(x, y)
+        Z = X**2 - Y**2
+
+        fig = plt.figure(figsize=(12, 10))
+        gs = gridspec.GridSpec(2, 2, height_ratios=[1, 1.2])
+
+        ax1 = fig.add_subplot(gs[0, 0])
+        cs = ax1.contour(X, Y, Z, levels=15, cmap='RdBu')
+        ax1.clabel(cs, inline=True, fontsize=8)
+        ax1.set_title('Contour Lines')
+        ax1.set_aspect('equal')
+
+        ax2 = fig.add_subplot(gs[0, 1])
+        cf = ax2.contourf(X, Y, Z, levels=15, cmap='RdBu')
+        plt.colorbar(cf, ax=ax2)
+        ax2.set_title('Filled Contour')
+        ax2.set_aspect('equal')
+
+        ax3 = fig.add_subplot(gs[1, :], projection='3d')
+        ax3.plot_surface(X, Y, Z, cmap='RdBu', alpha=0.9)
+        ax3.set_title('3D Surface')
+
+        plt.tight_layout()
+        plt.show()

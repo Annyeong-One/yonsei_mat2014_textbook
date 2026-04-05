@@ -228,3 +228,90 @@ plt.show()
 - `ax.set_xscale()` and `ax.set_yscale()` set axis scaling
 - `ax.axis()` provides quick access to common configurations
 - `ax.set_aspect()` controls the aspect ratio
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a plot of `y = sin(x)` and configure the grid with major grid lines (solid, alpha=0.5) and minor grid lines (dashed, alpha=0.2). Enable minor ticks using `ax.minorticks_on()` and apply grid to both major and minor ticks.
+
+??? success "Solution to Exercise 1"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(0, 4 * np.pi, 500)
+        y = np.sin(x)
+
+        fig, ax = plt.subplots(figsize=(10, 5))
+        ax.plot(x, y, color='steelblue', linewidth=2)
+
+        ax.minorticks_on()
+        ax.grid(which='major', linestyle='-', alpha=0.5)
+        ax.grid(which='minor', linestyle='--', alpha=0.2)
+
+        ax.set_title('Major and Minor Grid Lines')
+        plt.show()
+
+---
+
+**Exercise 2.**
+Create a 2x2 subplot grid demonstrating four different grid configurations: (1) no grid, (2) only x-axis grid, (3) only y-axis grid, (4) both axes with different styles. Plot the same sine wave in each.
+
+??? success "Solution to Exercise 2"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(0, 2 * np.pi, 200)
+        y = np.sin(x)
+
+        fig, axes = plt.subplots(2, 2, figsize=(10, 8))
+
+        axes[0, 0].plot(x, y)
+        axes[0, 0].set_title('No Grid')
+
+        axes[0, 1].plot(x, y)
+        axes[0, 1].grid(axis='x', alpha=0.5)
+        axes[0, 1].set_title('X Grid Only')
+
+        axes[1, 0].plot(x, y)
+        axes[1, 0].grid(axis='y', alpha=0.5)
+        axes[1, 0].set_title('Y Grid Only')
+
+        axes[1, 1].plot(x, y)
+        axes[1, 1].grid(axis='x', color='blue', linestyle='--', alpha=0.3)
+        axes[1, 1].grid(axis='y', color='red', linestyle=':', alpha=0.3)
+        axes[1, 1].set_title('Both Axes, Different Styles')
+
+        plt.tight_layout()
+        plt.show()
+
+---
+
+**Exercise 3.**
+Plot `y = exp(x)` for `x` in $[0, 5]$ and turn off the top and right axis lines using `ax.spines`. Show grid lines only on the y-axis with a log scale. Customize the grid color to light blue and set `ax.set_axisbelow(True)` so grid lines appear behind the data.
+
+??? success "Solution to Exercise 3"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        x = np.linspace(0, 5, 200)
+        y = np.exp(x)
+
+        fig, ax = plt.subplots(figsize=(8, 5))
+        ax.plot(x, y, color='darkred', linewidth=2)
+        ax.set_yscale('log')
+
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+
+        ax.grid(axis='y', color='lightblue', linestyle='-', alpha=0.7)
+        ax.set_axisbelow(True)
+
+        ax.set_xlabel('x')
+        ax.set_ylabel('exp(x)')
+        ax.set_title('Exponential with Log Scale Grid')
+        plt.show()

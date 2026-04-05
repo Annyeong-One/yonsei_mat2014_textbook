@@ -620,3 +620,76 @@ if __name__ == "__main__":
     print("TUTORIAL 04 COMPLETE!")
     print("="*80)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a vertical bar chart showing the populations (in millions) of five countries: China (1412), India (1408), USA (332), Indonesia (276), and Brazil (215). Add value labels on top of each bar using `ax.bar_label()`.
+
+??? success "Solution to Exercise 1"
+
+        import matplotlib.pyplot as plt
+
+        countries = ['China', 'India', 'USA', 'Indonesia', 'Brazil']
+        populations = [1412, 1408, 332, 276, 215]
+
+        fig, ax = plt.subplots(figsize=(8, 5))
+        bars = ax.bar(countries, populations, color='steelblue', edgecolor='navy')
+        ax.bar_label(bars, padding=3)
+        ax.set_ylabel('Population (millions)')
+        ax.set_title('Population by Country')
+        plt.tight_layout()
+        plt.show()
+
+---
+
+**Exercise 2.**
+Create a horizontal bar chart of the same data from Exercise 1 using `ax.barh()`. Sort the bars by population in ascending order (smallest at top) and use a different color for each bar.
+
+??? success "Solution to Exercise 2"
+
+        import matplotlib.pyplot as plt
+
+        countries = ['China', 'India', 'USA', 'Indonesia', 'Brazil']
+        populations = [1412, 1408, 332, 276, 215]
+
+        sorted_pairs = sorted(zip(populations, countries))
+        sorted_pops, sorted_countries = zip(*sorted_pairs)
+
+        colors = ['#e74c3c', '#3498db', '#2ecc71', '#f39c12', '#9b59b6']
+
+        fig, ax = plt.subplots(figsize=(8, 5))
+        ax.barh(sorted_countries, sorted_pops, color=colors)
+        ax.set_xlabel('Population (millions)')
+        ax.set_title('Population by Country (Sorted)')
+        plt.tight_layout()
+        plt.show()
+
+---
+
+**Exercise 3.**
+Create side-by-side vertical and horizontal bar charts in a 1x2 subplot layout. Use fruit sales data: categories `['Apples', 'Bananas', 'Cherries', 'Dates']` with values `[45, 62, 28, 51]`. Style the vertical chart with `color='coral'` and the horizontal chart with `color='steelblue'`. Add grid lines on the value axis for both.
+
+??? success "Solution to Exercise 3"
+
+        import matplotlib.pyplot as plt
+
+        categories = ['Apples', 'Bananas', 'Cherries', 'Dates']
+        values = [45, 62, 28, 51]
+
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+
+        ax1.bar(categories, values, color='coral', edgecolor='black')
+        ax1.set_ylabel('Sales')
+        ax1.set_title('Vertical Bar Chart')
+        ax1.grid(axis='y', alpha=0.3)
+
+        ax2.barh(categories, values, color='steelblue', edgecolor='black')
+        ax2.set_xlabel('Sales')
+        ax2.set_title('Horizontal Bar Chart')
+        ax2.grid(axis='x', alpha=0.3)
+
+        plt.tight_layout()
+        plt.show()

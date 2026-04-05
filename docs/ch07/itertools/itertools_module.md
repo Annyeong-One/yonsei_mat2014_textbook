@@ -484,3 +484,70 @@ test_cases = list(product([True, False], repeat=3))
 - Memory efficient for large datasets
 - `groupby` requires sorted input
 - Use `chain.from_iterable` to flatten nested structures
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a function `powerset` that takes a list and returns a list of all subsets (the power set) using `chain.from_iterable` and `combinations`. For example, `powerset([1, 2, 3])` should return `[(), (1,), (2,), (3,), (1, 2), (1, 3), (2, 3), (1, 2, 3)]`.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    from itertools import chain, combinations
+
+    def powerset(items):
+        return list(chain.from_iterable(
+            combinations(items, r) for r in range(len(items) + 1)
+        ))
+
+    # Test
+    print(powerset([1, 2, 3]))
+    # [(), (1,), (2,), (3,), (1, 2), (1, 3), (2, 3), (1, 2, 3)]
+    ```
+
+---
+
+**Exercise 2.**
+Write a function `sliding_pairs` that takes an iterable and returns a list of consecutive pairs using `tee` and `islice` (or `zip`). For example, `sliding_pairs([1, 2, 3, 4])` should return `[(1, 2), (2, 3), (3, 4)]`.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    from itertools import tee
+
+    def sliding_pairs(iterable):
+        a, b = tee(iterable)
+        next(b, None)
+        return list(zip(a, b))
+
+    # Test
+    print(sliding_pairs([1, 2, 3, 4]))
+    # [(1, 2), (2, 3), (3, 4)]
+    ```
+
+---
+
+**Exercise 3.**
+Write a function `batched_accumulate` that takes a list of numbers and a batch size, groups the numbers into batches using `islice`, sums each batch, and returns a list of the cumulative batch sums using `accumulate`. For example, `batched_accumulate([1, 2, 3, 4, 5, 6], 2)` should group as `[3, 7, 11]` (sums of `[1,2]`, `[3,4]`, `[5,6]`) then accumulate to `[3, 10, 21]`.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    from itertools import accumulate, islice
+
+    def batched_accumulate(numbers, batch_size):
+        it = iter(numbers)
+        batch_sums = []
+        while True:
+            batch = list(islice(it, batch_size))
+            if not batch:
+                break
+            batch_sums.append(sum(batch))
+        return list(accumulate(batch_sums))
+
+    # Test
+    print(batched_accumulate([1, 2, 3, 4, 5, 6], 2))
+    # [3, 10, 21]
+    ```

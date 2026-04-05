@@ -388,3 +388,51 @@ Freq: D, Name: AAPL, dtype: float64
 | From NumPy | Numerical computing | `pd.Series(np.array([...]))` |
 | From scalar | Constant fill | `pd.Series(0, index=[...])` |
 | From range | Sequential integers | `pd.Series(range(10))` |
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a pandas Series from a dictionary where the keys are stock tickers `'AAPL'`, `'MSFT'`, `'GOOGL'` and the values are their closing prices `150.0`, `350.0`, `140.0`. Name the Series `'close_price'`. Print the Series and verify its `dtype` is `float64`.
+
+??? success "Solution to Exercise 1"
+    Create the Series from a dictionary and assign a name.
+
+        import pandas as pd
+
+        data = {'AAPL': 150.0, 'MSFT': 350.0, 'GOOGL': 140.0}
+        s = pd.Series(data, name='close_price')
+        print(s)
+        print(f"dtype: {s.dtype}")  # float64
+
+---
+
+**Exercise 2.**
+Create a Series of five daily portfolio values `[10000, 10250, 10100, 10400, 10350]` with a `DatetimeIndex` starting from `'2024-06-01'`. Name the Series `'portfolio_value'`. Then compute the daily percentage change using `pct_change()` and print it.
+
+??? success "Solution to Exercise 2"
+    Use `pd.date_range` for the index and `pct_change()` for returns.
+
+        import pandas as pd
+
+        values = [10000, 10250, 10100, 10400, 10350]
+        index = pd.date_range(start='2024-06-01', periods=5)
+        s = pd.Series(values, index=index, name='portfolio_value')
+        print(s)
+        print(s.pct_change())
+
+---
+
+**Exercise 3.**
+Create a Series from the list `[10, 20, None, 40, 50]` using the nullable integer type `'Int64'`. Confirm that the dtype is `Int64` (not `float64`) and that the missing value displays as `<NA>` rather than `NaN`.
+
+??? success "Solution to Exercise 3"
+    Use the capital-I `'Int64'` nullable integer dtype.
+
+        import pandas as pd
+
+        s = pd.Series([10, 20, None, 40, 50], dtype='Int64')
+        print(s)
+        print(f"dtype: {s.dtype}")  # Int64
+        print(f"Missing value: {s[2]}")  # <NA>

@@ -389,3 +389,60 @@ print(f"\nData types:\n{portfolio.dtypes}")
 | float → int | `s.astype(int)` | Truncates decimals |
 | object → category | `s.astype('category')` | Memory efficient |
 | int64 → Int64 | `s.astype('Int64')` | Nullable integer |
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a DataFrame with a column of string numbers (e.g., `['1', '2', '3']`). Convert it to `int` using `.astype(int)`. Then convert it to `float64` and verify the dtype changed.
+
+??? success "Solution to Exercise 1"
+    Convert string numbers to int then float.
+
+        import pandas as pd
+
+        df = pd.DataFrame({'nums': ['1', '2', '3']})
+        print("Original dtype:", df['nums'].dtype)
+        df['nums'] = df['nums'].astype(int)
+        print("After int:", df['nums'].dtype)
+        df['nums'] = df['nums'].astype('float64')
+        print("After float64:", df['nums'].dtype)
+
+---
+
+**Exercise 2.**
+Create a DataFrame with an `int64` column where values range from 0 to 100. Convert it to `int8` using `.astype('int8')` to save memory. Use `.memory_usage()` to compare memory before and after.
+
+??? success "Solution to Exercise 2"
+    Downcast int64 to int8 and compare memory.
+
+        import pandas as pd
+        import numpy as np
+
+        df = pd.DataFrame({'values': np.random.randint(0, 101, 10000).astype('int64')})
+        mem_before = df['values'].memory_usage(deep=True)
+        df['values'] = df['values'].astype('int8')
+        mem_after = df['values'].memory_usage(deep=True)
+        print(f"Before: {mem_before} bytes")
+        print(f"After:  {mem_after} bytes")
+
+---
+
+**Exercise 3.**
+Create a DataFrame with a column containing mixed values including some that cannot be converted to numeric (e.g., `'N/A'`). Demonstrate that `.astype(float)` raises an error, then use `pd.to_numeric()` with `errors='coerce'` as an alternative to convert valid values and set invalid ones to `NaN`.
+
+??? success "Solution to Exercise 3"
+    Handle conversion errors with pd.to_numeric.
+
+        import pandas as pd
+
+        df = pd.DataFrame({'col': ['1.5', '2.0', 'N/A', '4.0']})
+        try:
+            df['col'].astype(float)
+        except ValueError as e:
+            print(f"astype error: {e}")
+
+        df['col'] = pd.to_numeric(df['col'], errors='coerce')
+        print(df)
+        print(df.dtypes)

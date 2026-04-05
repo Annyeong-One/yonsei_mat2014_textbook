@@ -156,3 +156,81 @@ Function factories produce specialized functions from a common template. The inn
 When the inner function needs to *modify* a captured variable (not just read it), use `nonlocal`. When your factory grows complex enough to need multiple methods or shared mutable state, consider using a class instead.
 
 For more on the decorator pattern — a close relative of function factories — see the decorators chapter.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a function factory `make_validator(min_val, max_val)` that returns a function accepting a single number and returning `True` if it is within the range `[min_val, max_val]`, or `False` otherwise. Create validators for percentages (0--100) and temperatures (-40--50) and test them.
+
+??? success "Solution to Exercise 1"
+
+        def make_validator(min_val, max_val):
+            def validate(value):
+                return min_val <= value <= max_val
+            return validate
+
+        is_percentage = make_validator(0, 100)
+        is_temperature = make_validator(-40, 50)
+
+        print(is_percentage(50))     # True
+        print(is_percentage(150))    # False
+        print(is_temperature(-30))   # True
+        print(is_temperature(60))    # False
+
+---
+
+**Exercise 2.**
+Create a `make_counter(start=0)` factory that returns a function. Each call to the returned function increments the counter by 1 and returns the new value. Use `nonlocal` to update the captured variable. Demonstrate that two counters created from the factory maintain independent state.
+
+??? success "Solution to Exercise 2"
+
+        def make_counter(start=0):
+            count = start
+            def counter():
+                nonlocal count
+                count += 1
+                return count
+            return counter
+
+        counter_a = make_counter()
+        counter_b = make_counter(10)
+
+        print(counter_a())  # 1
+        print(counter_a())  # 2
+        print(counter_b())  # 11
+        print(counter_b())  # 12
+        print(counter_a())  # 3  (independent from counter_b)
+
+---
+
+**Exercise 3.**
+Write a factory `make_formatter(template)` that accepts a format string with a single `{}` placeholder and returns a function that inserts its argument into the template. For example, `make_formatter("Hello, {}!")("Alice")` should return `"Hello, Alice!"`. Then demonstrate the late-binding pitfall by creating formatters in a loop and show how to fix it with a default argument.
+
+??? success "Solution to Exercise 3"
+
+        def make_formatter(template):
+            def formatter(value):
+                return template.format(value)
+            return formatter
+
+        hello = make_formatter("Hello, {}!")
+        print(hello("Alice"))  # Hello, Alice!
+
+        # Late-binding pitfall
+        formatters_buggy = []
+        for prefix in ["INFO", "WARN", "ERROR"]:
+            formatters_buggy.append(lambda msg: f"[{prefix}] {msg}")
+
+        # All use "ERROR" because prefix is captured by reference
+        print(formatters_buggy[0]("test"))  # [ERROR] test  (bug!)
+
+        # Fix with default argument
+        formatters_fixed = []
+        for prefix in ["INFO", "WARN", "ERROR"]:
+            formatters_fixed.append(lambda msg, p=prefix: f"[{p}] {msg}")
+
+        print(formatters_fixed[0]("test"))  # [INFO] test
+        print(formatters_fixed[1]("test"))  # [WARN] test
+        print(formatters_fixed[2]("test"))  # [ERROR] test

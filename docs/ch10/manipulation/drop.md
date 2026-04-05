@@ -278,3 +278,56 @@ result = (
     .reset_index(drop=True)
 )
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a DataFrame with 5 columns. Drop two columns using `drop(columns=[...])`. Verify the resulting DataFrame has 3 columns.
+
+??? success "Solution to Exercise 1"
+    Drop columns and verify the result.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'A': [1], 'B': [2], 'C': [3], 'D': [4], 'E': [5]
+        })
+        result = df.drop(columns=['B', 'D'])
+        print(result.columns.tolist())
+        assert len(result.columns) == 3
+
+---
+
+**Exercise 2.**
+Create a DataFrame with rows indexed `[0, 1, 2, 3, 4]`. Drop rows at indices 1 and 3 using `drop([1, 3])`. Verify the remaining indices are `[0, 2, 4]`.
+
+??? success "Solution to Exercise 2"
+    Drop rows by index label.
+
+        import pandas as pd
+
+        df = pd.DataFrame({'val': [10, 20, 30, 40, 50]})
+        result = df.drop([1, 3])
+        print(result)
+        assert result.index.tolist() == [0, 2, 4]
+
+---
+
+**Exercise 3.**
+Create a DataFrame and attempt to drop a non-existent column. Use the `errors='ignore'` parameter to suppress the `KeyError`. Then drop the column without `errors='ignore'` to see the error.
+
+??? success "Solution to Exercise 3"
+    Use errors='ignore' to handle missing labels gracefully.
+
+        import pandas as pd
+
+        df = pd.DataFrame({'A': [1], 'B': [2]})
+        result = df.drop(columns=['C'], errors='ignore')
+        print(result)  # No error, df unchanged
+
+        try:
+            df.drop(columns=['C'])
+        except KeyError as e:
+            print(f"KeyError: {e}")

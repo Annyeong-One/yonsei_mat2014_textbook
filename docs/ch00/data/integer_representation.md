@@ -662,6 +662,109 @@ This equals **−116**, showing overflow.
 
 ---
 
+**Exercise 9.**
+In two’s complement, there is an asymmetry: an 8-bit signed integer can represent $-128$ but only $+127$. Explain *why* this asymmetry exists by reasoning about the bit patterns. What happens if you try to negate $-128$ using the "invert bits and add 1" rule? What bit pattern do you get, and what does it mean? Why is there no positive counterpart to the most negative value?
+
+??? success "Solution to Exercise 9"
+    In 8-bit two's complement, the bit patterns `00000000` through `01111111` represent $0$ through $127$ (128 non-negative values), and `10000000` through `11111111` represent $-128$ through $-1$ (128 negative values). The total is $256 = 2^8$ patterns.
+
+    The asymmetry arises because zero uses one of the non-negative patterns (`00000000`), leaving only 127 positive values but 128 negative values.
+
+    Negating $-128$ (`10000000`): invert bits gives `01111111`, add 1 gives `10000000` -- which is $-128$ again. The negation maps $-128$ back to itself. This means $-(-128) = -128$ in 8-bit arithmetic, which is an overflow -- the mathematical result $+128$ is outside the representable range $[-128, 127]$.
+
+    There is no positive counterpart because $+128$ requires 8 bits for the magnitude alone (`10000000`), but the sign bit occupies that position. The most negative value is "alone" at the extreme end of the range.
+
+---
+
+**Exercise 10.**
+Python integers never overflow because they have arbitrary precision. But this comes at a cost. Consider this comparison:
+
+```python
+import sys
+import numpy as np
+
+py_int = 42
+np_int = np.int64(42)
+print(sys.getsizeof(py_int))  # ?
+print(np_int.itemsize)         # ?
+```
+
+Predict the output. Then explain: *why* does a Python `int` storing the value `42` need so much more memory than a NumPy `int64`? What extra information does the Python object store beyond the numeric value? How does this relate to Python’s "everything is an object" philosophy?
+
+??? success "Solution to Exercise 10"
+    Typical output:
+
+    ```text
+    28
+    8
+    ```
+
+    A Python `int` storing `42` uses **28 bytes** while a NumPy `int64` uses only **8 bytes**.
+
+    The Python `int` requires more memory because it is a full Python object. Every Python object carries:
+
+    - **Reference count** (8 bytes) -- for garbage collection
+    - **Type pointer** (8 bytes) -- pointer to the `int` type object
+    - **Object size/digit count** (variable) -- for arbitrary-precision support
+    - **The actual numeric data** (at least 4 bytes for small values)
+
+    This overhead exists because Python treats *everything* as an object. The integer `42` is not just a value -- it is an object with an identity, a type, a reference count, and methods. This enables Python's uniform object model (you can call `(42).bit_length()`, pass integers to generic functions, etc.) but costs substantial memory per value.
+
+    NumPy's `int64` stores only the raw 8-byte value with no per-element object overhead, which is why NumPy arrays are dramatically more memory-efficient for large datasets.
+
+---
+
+**Exercise 11.**
+A programmer writing C-style code in Python does the following to extract the sign of a number:
+
+```python
+def sign_bit(x):
+    return (x >> 31) & 1
+```
+
+This works in C for 32-bit signed integers (the sign bit is bit 31). Explain why this approach is **fundamentally broken** in Python, even for numbers that fit in 32 bits. What does Python’s `>>` operator do with negative numbers, and how does Python’s model of "infinite-width two’s complement" affect the result of right-shifting?
+
+??? success "Solution to Exercise 11"
+    In C, a 32-bit signed integer has exactly 32 bits, so bit 31 is the sign bit. Right-shifting by 31 positions brings the sign bit to position 0, and masking with `& 1` extracts it.
+
+    In Python, integers have **no fixed bit width**. Python models negative numbers as having infinitely many leading 1-bits (conceptual infinite-width two's complement). So for `-1`:
+
+    ```python
+    print((-1) >> 31)  # -1, not 1!
+    ```
+
+    Right-shifting a negative Python integer by any amount still produces a negative number, because Python performs **arithmetic right shift** -- it fills from the left with the sign bit (which is `1` for negative numbers). Shifting `-1` right by 31 gives `-1` (all 1-bits, shifted, still all 1-bits). Then `(-1) & 1` gives `1`, which happens to be correct for `-1` but the intermediate value is wrong.
+
+    For `-5`, `(-5) >> 31` gives `-1` (not `0` or `1`), and `(-1) & 1` gives `1`. But for `5`, `(5) >> 31` gives `0`, and `0 & 1` gives `0`. The function seems to "work" for some cases by coincidence, but it is conceptually wrong -- it returns `1` for **all** negative numbers and `0` for **all** non-negative numbers, which is not the same as extracting "bit 31" (a concept that does not exist for arbitrary-precision integers).
+
+---
+
+**Exercise 12.**
+Consider the expression `-5 & 0xFF` in Python, which produces `251`. Explain step by step what Python is doing internally. Why does masking a negative Python integer with `0xFF` give the same result as the 8-bit unsigned two’s complement representation? How does Python’s "conceptually infinite leading 1-bits" model for negative integers make this work?
+
+??? success "Solution to Exercise 12"
+    Python models negative integers as if they have infinitely many leading 1-bits. Conceptually, `-5` in Python behaves as:
+
+    ```text
+    ...11111111111111111111111111111011
+    ```
+
+    The operation `& 0xFF` masks all bits except the lowest 8:
+
+    ```text
+    ...11111111111111111111111111111011
+    &  00000000000000000000000011111111
+    =  00000000000000000000000011111011
+    ```
+
+    The result `11111011` in binary is `251` in unsigned decimal.
+
+    This gives the same result as 8-bit two's complement because that is exactly how two's complement works: $-5$ in 8-bit two's complement is $256 - 5 = 251$, stored as `11111011`. Python's infinite-width model is simply the limit of $n$-bit two's complement as $n \to \infty$. Masking with `0xFF` "truncates" the infinite representation to 8 bits, recovering the standard 8-bit two's complement pattern.
+
+    This is why `value & 0xFF` is the standard Python idiom for converting a signed integer to its unsigned $n$-bit representation.
+
+---
+
 ## 14. Short Answers
 
 1. (0) to (4095)
@@ -672,8 +775,6 @@ This equals **−116**, showing overflow.
 6. Python integers expand dynamically
 7. 4 bytes
 8. Addition hardware works for both positive and negative numbers
-
----
 
 ## 15. Summary
 

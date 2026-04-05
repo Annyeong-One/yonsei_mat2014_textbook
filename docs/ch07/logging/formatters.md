@@ -681,3 +681,88 @@ if __name__ == "__main__":
     print("✓ Professional logging formats")
     print("\nNext: Study 05_handlers.py to learn about different output handlers!")
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a custom formatter that outputs log records in CSV format: `timestamp,level,logger_name,message`. Configure a logger with this formatter and log a few test messages.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    import logging
+
+    logger = logging.getLogger("csv_logger")
+    logger.setLevel(logging.DEBUG)
+
+    handler = logging.StreamHandler()
+    formatter = logging.Formatter("%(asctime)s,%(levelname)s,%(name)s,%(message)s")
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+
+    logger.info("Application started")
+    logger.warning("Low memory")
+    logger.error("Connection failed")
+    ```
+
+---
+
+**Exercise 2.**
+Create a formatter that includes the source file name and line number in the format `"[filename:lineno] LEVEL - message"`. Use the `%(filename)s` and `%(lineno)d` format attributes.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    import logging
+
+    logger = logging.getLogger("source_logger")
+    logger.setLevel(logging.DEBUG)
+
+    handler = logging.StreamHandler()
+    formatter = logging.Formatter(
+        "[%(filename)s:%(lineno)d] %(levelname)s - %(message)s"
+    )
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+
+    logger.info("This shows the source location")
+    # [script.py:12] INFO - This shows the source location
+    ```
+
+---
+
+**Exercise 3.**
+Write a custom `logging.Formatter` subclass that adds a `[DURATION]` field showing the time elapsed since the logger was first used. Override the `format` method to include this computed field.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    import logging
+    import time
+
+    class DurationFormatter(logging.Formatter):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.start_time = time.time()
+
+        def format(self, record):
+            elapsed = time.time() - self.start_time
+            record.duration = f"{elapsed:.3f}s"
+            return super().format(record)
+
+    logger = logging.getLogger("duration_logger")
+    logger.setLevel(logging.DEBUG)
+
+    handler = logging.StreamHandler()
+    formatter = DurationFormatter(
+        "[%(duration)s] %(levelname)s - %(message)s"
+    )
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+
+    logger.info("First message")
+    time.sleep(0.1)
+    logger.info("Second message")
+    ```

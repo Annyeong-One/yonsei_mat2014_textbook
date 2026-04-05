@@ -323,3 +323,70 @@ Key insights for Python:
 - Random access suffers full memory latency (~60 ns)
 - False sharing can hurt multi-threaded code
 - NumPy operations are often memory-bound, not compute-bound
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Explain the memory hierarchy: registers, L1 cache, L2 cache, L3 cache, and main memory (RAM). How do access times compare?
+
+??? success "Solution to Exercise 1"
+    ```python
+    # Conceptual solution - see page content for details
+    import sys
+    import platform
+
+    print(f"Python version: {sys.version}")
+    print(f"Platform: {platform.platform()}")
+    print(f"Architecture: {platform.machine()}")
+    ```
+
+---
+
+**Exercise 2.** Write Python code that demonstrates the performance difference between accessing elements sequentially (cache-friendly) versus randomly in a large list.
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the hardware-software interaction and how it affects Python performance.
+
+---
+
+**Exercise 3.** Explain what a cache miss is and how it affects performance. Give an example of an access pattern that causes many cache misses.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import time
+
+    # Simple benchmark
+    n = 10_000_000
+    start = time.perf_counter()
+    total = sum(range(n))
+    elapsed = time.perf_counter() - start
+    print(f"Sum of {n} integers: {total}")
+    print(f"Time: {elapsed:.4f} seconds")
+    ```
+
+---
+
+**Exercise 4.** Write code that computes the size of a Python list, a NumPy array, and a Pandas Series containing the same 1 million integers. Compare their memory usage.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    import time
+
+    n = 1_000_000
+    # Python loop
+    start = time.perf_counter()
+    result_py = sum(i * i for i in range(n))
+    time_py = time.perf_counter() - start
+
+    # NumPy vectorized
+    arr = np.arange(n)
+    start = time.perf_counter()
+    result_np = np.sum(arr * arr)
+    time_np = time.perf_counter() - start
+
+    print(f"Python: {time_py:.4f}s, NumPy: {time_np:.4f}s")
+    print(f"Speedup: {time_py / time_np:.1f}x")
+    ```

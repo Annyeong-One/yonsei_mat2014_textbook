@@ -146,3 +146,58 @@ df[['value1', 'value2']] = df.groupby('group')[['value1', 'value2']].transform('
 # Create new columns instead of overwriting
 df['value_mean'] = df.groupby('group')['value'].transform('mean')
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Given a DataFrame with `'department'` and `'salary'` columns, use `groupby().transform('mean')` to add a new column `'dept_avg_salary'` that shows each department's average salary on every row.
+
+??? success "Solution to Exercise 1"
+    Use `transform('mean')` to broadcast the group mean to every row.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'department': ['IT', 'IT', 'HR', 'HR', 'IT'],
+            'salary': [70000, 65000, 50000, 55000, 72000]
+        })
+        df['dept_avg_salary'] = df.groupby('department')['salary'].transform('mean')
+        print(df)
+
+---
+
+**Exercise 2.**
+Use `transform` to normalize values within each group: for each group, compute `(x - mean) / std`. Add the result as a `'normalized'` column.
+
+??? success "Solution to Exercise 2"
+    Apply a lambda that computes z-scores within each group.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'group': ['A', 'A', 'A', 'B', 'B', 'B'],
+            'value': [10, 20, 30, 100, 200, 300]
+        })
+        df['normalized'] = df.groupby('group')['value'].transform(
+            lambda x: (x - x.mean()) / x.std()
+        )
+        print(df)
+
+---
+
+**Exercise 3.**
+Use `transform('sum')` to compute each row's value as a percentage of its group total. Add a column `'pct_of_group'` that shows what fraction each row contributes to its group's total.
+
+??? success "Solution to Exercise 3"
+    Divide each value by the group sum using transform.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'region': ['East', 'East', 'West', 'West'],
+            'sales': [100, 300, 200, 200]
+        })
+        df['pct_of_group'] = df['sales'] / df.groupby('region')['sales'].transform('sum')
+        print(df)

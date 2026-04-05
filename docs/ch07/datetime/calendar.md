@@ -60,3 +60,67 @@ Mo Tu We Th Fr Sa Su
 30 31
 ```
 
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a function `count_leap_years` that takes a start year and an end year (inclusive) and returns the number of leap years in that range. Use `calendar.isleap()`. For example, `count_leap_years(2000, 2024)` should return `7`.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    import calendar
+
+    def count_leap_years(start, end):
+        return sum(1 for year in range(start, end + 1)
+                   if calendar.isleap(year))
+
+    # Test
+    print(count_leap_years(2000, 2024))  # 7
+    print(count_leap_years(1900, 1900))  # 0 (1900 is not a leap year)
+    print(count_leap_years(2000, 2000))  # 1
+    ```
+
+---
+
+**Exercise 2.**
+Write a function `fridays_in_month` that takes a year and month and returns the number of Fridays in that month. Use `calendar.monthcalendar()` to get the weeks. For example, `fridays_in_month(2024, 11)` should return `5`.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    import calendar
+
+    def fridays_in_month(year, month):
+        count = 0
+        for week in calendar.monthcalendar(year, month):
+            if week[calendar.FRIDAY] != 0:
+                count += 1
+        return count
+
+    # Test
+    print(fridays_in_month(2024, 11))  # 5
+    print(fridays_in_month(2024, 12))  # 4
+    ```
+
+---
+
+**Exercise 3.**
+Write a function `last_day_of_month` that takes a year and month and returns the last day of that month as a `date` object. Use `calendar.monthrange()`. For example, `last_day_of_month(2024, 2)` should return `date(2024, 2, 29)`.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    import calendar
+    from datetime import date
+
+    def last_day_of_month(year, month):
+        _, last_day = calendar.monthrange(year, month)
+        return date(year, month, last_day)
+
+    # Test
+    print(last_day_of_month(2024, 2))   # 2024-02-29
+    print(last_day_of_month(2025, 2))   # 2025-02-28
+    print(last_day_of_month(2024, 12))  # 2024-12-31
+    ```

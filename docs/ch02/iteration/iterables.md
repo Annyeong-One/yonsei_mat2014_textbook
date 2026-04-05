@@ -835,3 +835,82 @@ if __name__ == "__main__":
     print("Next: Learn about GENERATORS for easier iterator creation!")
     print("=" * 70)
 ```
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Write a class `Countdown` that implements the iterator protocol (`__iter__` and `__next__`). It should count down from a given number to 1.
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        class Countdown:
+            def __init__(self, start):
+                self.current = start
+
+            def __iter__(self):
+                return self
+
+            def __next__(self):
+                if self.current < 1:
+                    raise StopIteration
+                value = self.current
+                self.current -= 1
+                return value
+
+        for n in Countdown(5):
+            print(n, end=" ")
+        # 5 4 3 2 1
+        ```
+
+    `__iter__` returns the iterator (itself), and `__next__` returns the next value or raises `StopIteration`.
+
+---
+
+**Exercise 2.**
+Show that a list is iterable but not an iterator. Demonstrate by calling `iter()` on it to get an iterator, then calling `next()` on the iterator.
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        lst = [1, 2, 3]
+
+        # List is iterable but not an iterator
+        print(hasattr(lst, "__iter__"))    # True
+        print(hasattr(lst, "__next__"))    # False
+
+        # Get an iterator from the list
+        it = iter(lst)
+        print(hasattr(it, "__next__"))     # True
+        print(next(it))  # 1
+        print(next(it))  # 2
+        print(next(it))  # 3
+        ```
+
+    An iterable has `__iter__`. An iterator has both `__iter__` and `__next__`. `iter()` converts an iterable to an iterator.
+
+---
+
+**Exercise 3.**
+Write a function `is_iterable(obj)` that returns `True` if `obj` is iterable and `False` otherwise. Test it with a list, an integer, a string, and a generator.
+
+??? success "Solution to Exercise 3"
+
+        ```python
+        def is_iterable(obj):
+            try:
+                iter(obj)
+                return True
+            except TypeError:
+                return False
+
+        print(is_iterable([1, 2]))       # True
+        print(is_iterable(42))           # False
+        print(is_iterable("hello"))      # True
+        print(is_iterable(x for x in []))  # True
+        ```
+
+    Using `try`/`except` with `iter()` is the most reliable way to check iterability, following the EAFP (Easier to Ask Forgiveness than Permission) principle.

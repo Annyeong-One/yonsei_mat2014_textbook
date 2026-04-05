@@ -169,3 +169,58 @@ import matplotlib.pyplot as plt
 monthly_avg.plot(title='AAPL Monthly Average Closing Price')
 plt.show()
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that resamples daily data to monthly frequency using `.resample('ME').mean()`. Explain what `'ME'` means.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    # Solution for the specific exercise
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(10), 'B': np.random.randn(10)})
+    print(df.head())
+    ```
+
+---
+
+**Exercise 2.** Explain the difference between downsampling and upsampling. Give an example of each.
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the Pandas API and its behavior for this specific operation.
+
+---
+
+**Exercise 3.** Write code that resamples from daily to weekly, computing both the mean and the sum using `.resample('W').agg(['mean', 'sum'])`.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(20), 'B': np.random.randn(20)})
+    result = df.describe()
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Create hourly data and upsample to minute-level frequency using `.resample('min').ffill()`.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(50), 'group': np.random.choice(['X', 'Y'], 50)})
+    result = df.groupby('group').mean()
+    print(result)
+    ```

@@ -628,3 +628,101 @@ if __name__ == '__main__':
     demo_composable()
     demo_best_practices()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create `Animal` with `name` in `__init__`. Create `Pet(Animal)` that adds `owner`. Show what happens if `Pet.__init__` forgets to call `super().__init__()` (the `name` attribute is missing). Then fix it.
+
+??? success "Solution to Exercise 1"
+
+        class Animal:
+            def __init__(self, name):
+                self.name = name
+
+        # Broken: forgets super()
+        class PetBroken(Animal):
+            def __init__(self, name, owner):
+                self.owner = owner
+                # Forgot super().__init__(name)
+
+        try:
+            p = PetBroken("Buddy", "Alice")
+            print(p.name)
+        except AttributeError as e:
+            print(f"Error: {e}")  # 'PetBroken' has no attribute 'name'
+
+        # Fixed
+        class Pet(Animal):
+            def __init__(self, name, owner):
+                super().__init__(name)
+                self.owner = owner
+
+        p = Pet("Buddy", "Alice")
+        print(p.name)   # Buddy
+        print(p.owner)  # Alice
+
+---
+
+**Exercise 2.**
+Build a mixin pattern: `TimestampMixin` (adds `created_at` in `__init__`), `LogMixin` (adds a `log(msg)` method), and `Document(TimestampMixin, LogMixin)` with a `title`. All `__init__` methods should use `super().__init__(**kwargs)` for cooperative initialization. Show that all attributes are correctly set.
+
+??? success "Solution to Exercise 2"
+
+        from datetime import datetime
+
+        class TimestampMixin:
+            def __init__(self, **kwargs):
+                super().__init__(**kwargs)
+                self.created_at = datetime.now()
+
+        class LogMixin:
+            def __init__(self, **kwargs):
+                super().__init__(**kwargs)
+                self._logs = []
+
+            def log(self, msg):
+                self._logs.append(msg)
+
+        class Document(TimestampMixin, LogMixin):
+            def __init__(self, title, **kwargs):
+                super().__init__(**kwargs)
+                self.title = title
+
+        doc = Document("Report")
+        doc.log("Created")
+        print(doc.title)       # Report
+        print(doc.created_at)  # timestamp
+        print(doc._logs)       # ['Created']
+
+---
+
+**Exercise 3.**
+Create a diamond: `Base(__init__(self, value, **kwargs))`, `Left(Base)` and `Right(Base)` each add their own attribute, and `Bottom(Left, Right)`. Use `super().__init__(**kwargs)` everywhere. Show that `Bottom(value=1, left_attr="L", right_attr="R")` correctly initializes all attributes by passing `**kwargs` up the MRO.
+
+??? success "Solution to Exercise 3"
+
+        class Base:
+            def __init__(self, value, **kwargs):
+                super().__init__(**kwargs)
+                self.value = value
+
+        class Left(Base):
+            def __init__(self, left_attr="", **kwargs):
+                super().__init__(**kwargs)
+                self.left_attr = left_attr
+
+        class Right(Base):
+            def __init__(self, right_attr="", **kwargs):
+                super().__init__(**kwargs)
+                self.right_attr = right_attr
+
+        class Bottom(Left, Right):
+            pass
+
+        b = Bottom(value=1, left_attr="L", right_attr="R")
+        print(b.value)       # 1
+        print(b.left_attr)   # L
+        print(b.right_attr)  # R

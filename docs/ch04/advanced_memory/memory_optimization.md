@@ -317,3 +317,111 @@ Key points:
 - Choose appropriate data structures
 - Watch for memory leaks and circular references
 - Delete large objects when no longer needed
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write two functions that each produce the sum of squares for numbers 0 through 999,999: one using a list comprehension and one using a generator expression. Use `tracemalloc` to measure peak memory for each approach and print the results. Verify that both return the same answer.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import tracemalloc
+
+        def sum_squares_list():
+            return sum([x ** 2 for x in range(1_000_000)])
+
+        def sum_squares_gen():
+            return sum(x ** 2 for x in range(1_000_000))
+
+        tracemalloc.start()
+        result1 = sum_squares_list()
+        _, peak1 = tracemalloc.get_traced_memory()
+        tracemalloc.stop()
+
+        tracemalloc.start()
+        result2 = sum_squares_gen()
+        _, peak2 = tracemalloc.get_traced_memory()
+        tracemalloc.stop()
+
+        print(f"List comprehension: result={result1}, peak={peak1 / 1024:.1f} KB")
+        print(f"Generator:          result={result2}, peak={peak2 / 1024:.1f} KB")
+        print(f"Same result: {result1 == result2}")
+        print(f"Memory saved: {(peak1 - peak2) / 1024:.1f} KB")
+        ```
+
+---
+
+**Exercise 2.**
+Create a class `Record` with five attributes (`a`, `b`, `c`, `d`, `e`) using `__slots__`, and an equivalent `RecordDict` without slots. Instantiate 200,000 of each. Use `tracemalloc` to compare total memory, then print per-instance savings and total savings in MB.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import tracemalloc
+
+        class Record:
+            __slots__ = ('a', 'b', 'c', 'd', 'e')
+            def __init__(self, a, b, c, d, e):
+                self.a = a
+                self.b = b
+                self.c = c
+                self.d = d
+                self.e = e
+
+        class RecordDict:
+            def __init__(self, a, b, c, d, e):
+                self.a = a
+                self.b = b
+                self.c = c
+                self.d = d
+                self.e = e
+
+        n = 200_000
+
+        tracemalloc.start()
+        slots_list = [Record(i, i+1, i+2, i+3, i+4) for i in range(n)]
+        _, peak_slots = tracemalloc.get_traced_memory()
+        tracemalloc.stop()
+
+        tracemalloc.start()
+        dict_list = [RecordDict(i, i+1, i+2, i+3, i+4) for i in range(n)]
+        _, peak_dict = tracemalloc.get_traced_memory()
+        tracemalloc.stop()
+
+        print(f"With __slots__:    {peak_slots / 1024 / 1024:.2f} MB")
+        print(f"Without __slots__: {peak_dict / 1024 / 1024:.2f} MB")
+        print(f"Savings: {(peak_dict - peak_slots) / 1024 / 1024:.2f} MB "
+              f"({(1 - peak_slots / peak_dict) * 100:.1f}%)")
+        ```
+
+---
+
+**Exercise 3.**
+Write a function `find_memory_hog()` that uses `tracemalloc` snapshots to identify the top 3 memory-consuming lines in a block of code. The block should create a list of 100,000 random strings, a dictionary mapping integers to their squares (50,000 entries), and a set of 80,000 floats. Print the top 3 allocations with file, line number, and size.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import tracemalloc
+        import random
+        import string
+
+        def find_memory_hog():
+            tracemalloc.start()
+
+            strings = [''.join(random.choices(string.ascii_letters, k=20))
+                       for _ in range(100_000)]
+            squares = {i: i ** 2 for i in range(50_000)}
+            floats = {random.random() for _ in range(80_000)}
+
+            snapshot = tracemalloc.take_snapshot()
+            top_stats = snapshot.statistics('lineno')
+
+            print("Top 3 memory allocations:")
+            for stat in top_stats[:3]:
+                print(f"  {stat}")
+
+            tracemalloc.stop()
+
+        find_memory_hog()
+        ```

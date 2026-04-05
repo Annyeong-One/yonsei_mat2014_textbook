@@ -203,3 +203,55 @@ print(f"Two-sided test: p = {result_two.pvalue:.4f}")
 ## Summary
 
 Two-sided tests distribute the rejection probability equally in both tails and are appropriate when effects in either direction are of interest. One-sided tests concentrate all rejection probability in one tail, providing greater power for detecting effects in the pre-specified direction at the cost of being unable to detect effects in the opposite direction. The one-sided p-value is exactly half the two-sided p-value when the observed effect is in the hypothesized direction. The choice must always be justified by the research question and made before analyzing the data.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Generate 25 samples from $N(52, 10^2)$ and test $H_0: \mu = 50$ using both a two-sided test and a right-tailed test via the `alternative` parameter of `ttest_1samp`. Compare the p-values and explain the relationship.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        data = np.random.normal(52, 10, 25)
+        result_two = stats.ttest_1samp(data, 50)
+        result_right = stats.ttest_1samp(data, 50, alternative='greater')
+        print(f"Two-sided p-value:   {result_two.pvalue:.4f}")
+        print(f"Right-tailed p-value:{result_right.pvalue:.4f}")
+        print("Right-tailed p = two-sided p / 2 (when t > 0)")
+
+---
+
+**Exercise 2.**
+Compute the critical values for a two-sided and a one-sided (right-tailed) $t$-test at $\alpha = 0.05$ with 20 degrees of freedom. Show that the one-sided critical value is less extreme.
+
+??? success "Solution to Exercise 2"
+
+        from scipy import stats
+
+        df = 20
+        t_two = stats.t.ppf(1 - 0.05/2, df)
+        t_one = stats.t.ppf(1 - 0.05, df)
+        print(f"Two-sided critical value:  +/- {t_two:.4f}")
+        print(f"One-sided critical value:  {t_one:.4f}")
+        print(f"Difference: {t_two - t_one:.4f}")
+
+---
+
+**Exercise 3.**
+Using `statsmodels.stats.power.tt_solve_power`, compute the power of a one-sample t-test with $n = 20$ and effect size $d = 0.5$ for both one-sided (`'larger'`) and two-sided alternatives. Confirm that the one-sided test is more powerful.
+
+??? success "Solution to Exercise 3"
+
+        from statsmodels.stats.power import tt_solve_power
+
+        power_two = tt_solve_power(effect_size=0.5, nobs=20, alpha=0.05,
+                                    alternative='two-sided')
+        power_one = tt_solve_power(effect_size=0.5, nobs=20, alpha=0.05,
+                                    alternative='larger')
+        print(f"Two-sided power: {power_two:.4f}")
+        print(f"One-sided power: {power_one:.4f}")

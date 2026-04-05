@@ -216,3 +216,67 @@ result = df.groupby('Group').agg('sum').reset_index()
 ```python
 df.groupby('Group', dropna=False).agg('mean')
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a DataFrame with columns `'department'`, `'salary'`, and `'bonus'`. Use `groupby('department').agg()` with named aggregations to compute `total_salary=('salary', 'sum')`, `avg_bonus=('bonus', 'mean')`, and `headcount=('salary', 'count')`.
+
+??? success "Solution to Exercise 1"
+    Use named aggregation syntax for readable column names.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'department': ['HR', 'HR', 'IT', 'IT', 'Sales'],
+            'salary': [50000, 55000, 70000, 65000, 60000],
+            'bonus': [5000, 6000, 8000, 7500, 5500]
+        })
+        result = df.groupby('department').agg(
+            total_salary=('salary', 'sum'),
+            avg_bonus=('bonus', 'mean'),
+            headcount=('salary', 'count')
+        )
+        print(result)
+
+---
+
+**Exercise 2.**
+Apply multiple aggregation functions `['min', 'max', 'mean']` to two numeric columns simultaneously using `.agg()`. Then flatten the resulting MultiIndex columns into single-level column names using a list comprehension.
+
+??? success "Solution to Exercise 2"
+    Apply multiple functions and flatten the MultiIndex.
+
+        import pandas as pd
+        import numpy as np
+
+        df = pd.DataFrame({
+            'group': ['A', 'A', 'B', 'B'],
+            'x': [10, 20, 30, 40],
+            'y': [1.5, 2.5, 3.5, 4.5]
+        })
+        result = df.groupby('group')[['x', 'y']].agg(['min', 'max', 'mean'])
+        result.columns = ['_'.join(col) for col in result.columns]
+        print(result)
+
+---
+
+**Exercise 3.**
+Group a sales DataFrame by `'region'` and apply a lambda function inside `.agg()` that computes the coefficient of variation (std / mean) for the `'sales'` column. Name the result `'cv'`.
+
+??? success "Solution to Exercise 3"
+    Use a lambda for coefficient of variation inside `.agg()`.
+
+        import pandas as pd
+        import numpy as np
+
+        df = pd.DataFrame({
+            'region': ['East', 'East', 'West', 'West', 'West'],
+            'sales': [100, 150, 200, 180, 220]
+        })
+        result = df.groupby('region').agg(
+            cv=('sales', lambda x: x.std() / x.mean())
+        )
+        print(result)

@@ -290,6 +290,7 @@ Math.add(2, 3)                  # 5
 
 ---
 
+
 ## Key Takeaways
 
 - **Attributes**: Properties/values (`x.real`, `x.imag`)
@@ -299,3 +300,121 @@ Math.add(2, 3)                  # 5
 - `int`: Arbitrary precision, no overflow
 - `str`: UTF-8 encoded, 1-4 bytes per character
 - Python has instance methods, class methods (`@classmethod`), and static methods (`@staticmethod`)
+
+
+## Exercises
+
+**Exercise 1.**
+Even "primitive" types have methods and attributes in Python. Predict the output:
+
+```python
+x = 7
+print(x.bit_length())
+print((255).bit_length())
+print((0).bit_length())
+
+y = 3.14
+print(y.is_integer())
+print((4.0).is_integer())
+print(y.as_integer_ratio())
+```
+
+Why can you call methods on integer and float literals? What does this reveal about how Python treats "primitive" types compared to languages like C or Java?
+
+??? success "Solution to Exercise 1"
+    Output:
+
+    ```text
+    3
+    8
+    0
+    False
+    True
+    (7070651414971679, 2251799813685248)
+    ```
+
+    In Python, integers, floats, and strings are all **full objects** with methods and attributes. There are no "primitives" in the C/Java sense. `7` is an instance of `int`, and `int` is a class with methods like `.bit_length()`, `.to_bytes()`, etc.
+
+    You can call methods on literals because the literal syntax creates an object just like `int(7)` would. `(255).bit_length()` returns 8 because 255 = 11111111 in binary (8 bits). `(0).bit_length()` returns 0 because zero needs zero bits.
+
+    `as_integer_ratio()` returns the exact numerator and denominator that represent the float's stored value. For `3.14`, this is not `314/100` but the exact binary fraction, revealing floating-point representation.
+
+---
+
+**Exercise 2.**
+`dir()` reveals the full method set of any object. Predict the output:
+
+```python
+print("__add__" in dir(int))
+print("__add__" in dir(str))
+print("__add__" in dir(list))
+
+print(int.__add__(5, 3))
+print(str.__add__("hello", " world"))
+```
+
+Why do `int`, `str`, and `list` all have `__add__`? What is the relationship between the `+` operator and the `__add__` method? How does Python use these "dunder" methods to implement operators?
+
+??? success "Solution to Exercise 2"
+    Output:
+
+    ```text
+    True
+    True
+    True
+    8
+    hello world
+    ```
+
+    `int`, `str`, and `list` all define `__add__` because the `+` operator is syntactic sugar for calling `__add__`. When Python evaluates `5 + 3`, it calls `(5).__add__(3)`. When it evaluates `"hello" + " world"`, it calls `"hello".__add__(" world")`.
+
+    This is Python's **operator overloading** via the **data model** (also called the "dunder protocol"). Every operator maps to a dunder method: `+` → `__add__`, `-` → `__sub__`, `*` → `__mul__`, `[]` → `__getitem__`, `len()` → `__len__`, etc. This is why custom classes can support `+` by defining `__add__`.
+
+---
+
+**Exercise 3.**
+Instance methods, class methods, and static methods receive different first arguments. Predict the output:
+
+```python
+class Demo:
+    class_var = "shared"
+
+    def instance_method(self):
+        return type(self).__name__
+
+    @classmethod
+    def class_method(cls):
+        return cls.class_var
+
+    @staticmethod
+    def static_method():
+        return "no self, no cls"
+
+d = Demo()
+print(d.instance_method())
+print(Demo.class_method())
+print(Demo.static_method())
+print(d.class_method())
+print(d.static_method())
+```
+
+Why can you call `class_method` and `static_method` on both the class and the instance? What does each decorator actually do to the function?
+
+??? success "Solution to Exercise 3"
+    Output:
+
+    ```text
+    Demo
+    shared
+    no self, no cls
+    shared
+    no self, no cls
+    ```
+
+    All three method types can be called on instances. The difference is what gets passed as the first argument:
+
+    - **Instance method**: Python automatically passes the instance as `self`. Must be called on an instance (or explicitly: `Demo.instance_method(d)`).
+    - **Class method** (`@classmethod`): Python automatically passes the **class** as `cls`, regardless of whether called on the class or an instance. Useful for alternative constructors.
+    - **Static method** (`@staticmethod`): Python passes **nothing** automatically. It is a plain function that lives inside the class namespace for organizational purposes.
+
+    `@classmethod` and `@staticmethod` are **descriptors** -- they wrap the function and intercept the attribute access to modify how arguments are passed. This is part of Python's descriptor protocol.

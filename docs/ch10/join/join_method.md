@@ -152,3 +152,55 @@ join aligns on index, not columns.
 # Join left's column to right's index
 df1.join(df2, on='key_column')
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create two DataFrames with overlapping string indices. Use `.join()` with the default left join to combine them. Observe which rows have `NaN` and explain why.
+
+??? success "Solution to Exercise 1"
+    Join two DataFrames with partial index overlap.
+
+        import pandas as pd
+
+        df1 = pd.DataFrame({'A': [10, 20, 30]}, index=['x', 'y', 'z'])
+        df2 = pd.DataFrame({'B': [40, 50, 60]}, index=['x', 'y', 'w'])
+        result = df1.join(df2)
+        print(result)
+        # Row 'z' has NaN for column B because 'z' is not in df2's index
+
+---
+
+**Exercise 2.**
+Create two DataFrames that share a column name `'value'`. Use `.join()` with `lsuffix='_left'` and `rsuffix='_right'` to resolve the name collision. Verify both columns appear in the result.
+
+??? success "Solution to Exercise 2"
+    Use lsuffix and rsuffix for overlapping column names.
+
+        import pandas as pd
+
+        df1 = pd.DataFrame({'value': [1, 2, 3]}, index=['a', 'b', 'c'])
+        df2 = pd.DataFrame({'value': [4, 5, 6]}, index=['a', 'b', 'c'])
+        result = df1.join(df2, lsuffix='_left', rsuffix='_right')
+        print(result)
+        assert 'value_left' in result.columns
+        assert 'value_right' in result.columns
+
+---
+
+**Exercise 3.**
+Create three DataFrames with different index ranges. Use `.join()` with a list of DataFrames and `how='outer'` to combine all three. Count the total number of `NaN` values in the result.
+
+??? success "Solution to Exercise 3"
+    Outer join a list of DataFrames and count NaN values.
+
+        import pandas as pd
+
+        df1 = pd.DataFrame({'A': [1, 2]}, index=[0, 1])
+        df2 = pd.DataFrame({'B': [3, 4]}, index=[1, 2])
+        df3 = pd.DataFrame({'C': [5, 6]}, index=[2, 3])
+        result = df1.join([df2, df3], how='outer')
+        print(result)
+        print(f"Total NaN values: {result.isna().sum().sum()}")

@@ -334,3 +334,82 @@ If most values are zero, sparse matrices (`scipy.sparse`) are more memory-effici
 ## Summary
 
 Broadcasting provides substantial speedups (100-1000x over Python loops) and avoids unnecessary data copies through zero-stride expansion. The main performance risk is temporary array explosion, where an intermediate result is far larger than either input. Estimate output sizes before broadcasting, use in-place operations when possible, and fall back to chunked processing or specialized libraries for very large pairwise computations.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Use `np.broadcast_shapes` and `np.prod` to estimate the memory in megabytes of the result of broadcasting arrays with shapes `(500, 1, 200)` and `(1, 300, 200)` assuming `float64` dtype. Would this fit in 1 GB of RAM?
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        shape = np.broadcast_shapes((500, 1, 200), (1, 300, 200))
+        n_elements = np.prod(shape)
+        memory_bytes = n_elements * 8  # float64
+        memory_mb = memory_bytes / 1e6
+        print(f"Result shape: {shape}")            # (500, 300, 200)
+        print(f"Memory: {memory_mb:.1f} MB")       # 240.0 MB
+        print(f"Fits in 1 GB: {memory_mb < 1000}") # True
+
+---
+
+**Exercise 2.**
+Given `M = np.random.randn(5000, 5000)` and `v = np.random.randn(5000)`, compare the memory usage of `M + v` (which allocates a new array) versus `M += v` (in-place). Measure the wall-clock time of each approach over 5 repetitions and print the speedup factor.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        import time
+
+        M = np.random.randn(5000, 5000)
+        v = np.random.randn(5000)
+
+        # Out-of-place
+        start = time.perf_counter()
+        for _ in range(5):
+            result = M + v
+        t_copy = time.perf_counter() - start
+
+        # In-place
+        M2 = M.copy()
+        start = time.perf_counter()
+        for _ in range(5):
+            M2 += v
+        t_inplace = time.perf_counter() - start
+
+        print(f"Out-of-place: {t_copy:.4f} sec")
+        print(f"In-place:     {t_inplace:.4f} sec")
+        print(f"Speedup:      {t_copy / t_inplace:.2f}x")
+
+---
+
+**Exercise 3.**
+Implement a chunked pairwise Euclidean distance computation for `X = np.random.randn(5000, 3)` using chunks of size 500 along axis 0. Concatenate the chunks vertically to form the full `(5000, 5000)` distance matrix. Print the total memory saved compared to creating the full `(5000, 5000, 3)` intermediate in one step.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        X = np.random.randn(5000, 3)
+        chunk_size = 500
+        n = len(X)
+
+        chunks = []
+        for i in range(0, n, chunk_size):
+            diff = X[i:i+chunk_size, np.newaxis, :] - X[np.newaxis, :, :]
+            dist_chunk = np.sqrt((diff ** 2).sum(axis=2))
+            chunks.append(dist_chunk)
+
+        dist_full = np.concatenate(chunks, axis=0)
+        print(f"Distance matrix shape: {dist_full.shape}")  # (5000, 5000)
+
+        # Memory comparison
+        full_intermediate = 5000 * 5000 * 3 * 8  # bytes
+        chunk_intermediate = chunk_size * 5000 * 3 * 8
+        saved_bytes = full_intermediate - chunk_intermediate
+        print(f"Full intermediate:  {full_intermediate / 1e6:.1f} MB")
+        print(f"Chunk intermediate: {chunk_intermediate / 1e6:.1f} MB")
+        print(f"Memory saved:       {saved_bytes / 1e6:.1f} MB")

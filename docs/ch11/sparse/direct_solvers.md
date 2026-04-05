@@ -140,3 +140,78 @@ if __name__ == "__main__":
 | `spilu(A)` | Incomplete LU (preconditioner) |
 
 Use CSC format for direct solvers.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a $500 \times 500$ sparse tridiagonal SPD matrix (2 on diagonal, -1 on off-diagonals) and a random right-hand side vector. Solve the system using `spsolve` and verify the residual norm is below $10^{-10}$.
+
+??? success "Solution to Exercise 1"
+        import numpy as np
+        from scipy import sparse
+        from scipy.sparse import linalg as splinalg
+
+        n = 500
+        A = sparse.diags([-1, 2, -1], [-1, 0, 1], shape=(n, n), format='csr')
+        b = np.random.randn(n)
+
+        x = splinalg.spsolve(A, b)
+        residual = np.linalg.norm(A @ x - b)
+        print(f"Residual norm: {residual:.2e}")
+        assert residual < 1e-10
+
+---
+
+**Exercise 2.**
+Use `splu` to factor a $1000 \times 1000$ sparse tridiagonal matrix (in CSC format). Solve the system for 10 different random right-hand sides using the pre-computed factorization. Print the average residual norm across all 10 solves.
+
+??? success "Solution to Exercise 2"
+        import numpy as np
+        from scipy import sparse
+        from scipy.sparse import linalg as splinalg
+
+        n = 1000
+        A = sparse.diags([-1, 2, -1], [-1, 0, 1], shape=(n, n), format='csc')
+        lu = splinalg.splu(A)
+
+        residuals = []
+        for _ in range(10):
+            b = np.random.randn(n)
+            x = lu.solve(b)
+            residuals.append(np.linalg.norm(A @ x - b))
+
+        avg_residual = np.mean(residuals)
+        print(f"Average residual norm: {avg_residual:.2e}")
+
+---
+
+**Exercise 3.**
+Compare `spsolve` and `splu` + `lu.solve` for a $2000 \times 2000$ sparse tridiagonal system. Factor the matrix once with `splu`, then solve for 5 right-hand sides with both approaches. Measure and print the total time for each approach (including the factorization time for `splu`).
+
+??? success "Solution to Exercise 3"
+        import numpy as np
+        from scipy import sparse
+        from scipy.sparse import linalg as splinalg
+        import time
+
+        n = 2000
+        A = sparse.diags([-1, 2, -1], [-1, 0, 1], shape=(n, n), format='csc')
+        bs = [np.random.randn(n) for _ in range(5)]
+
+        # spsolve approach
+        start = time.perf_counter()
+        for b in bs:
+            x = splinalg.spsolve(A, b)
+        time_spsolve = time.perf_counter() - start
+
+        # splu approach
+        start = time.perf_counter()
+        lu = splinalg.splu(A)
+        for b in bs:
+            x = lu.solve(b)
+        time_splu = time.perf_counter() - start
+
+        print(f"spsolve (5 solves):     {time_spsolve:.4f} sec")
+        print(f"splu + solve (5 solves): {time_splu:.4f} sec")

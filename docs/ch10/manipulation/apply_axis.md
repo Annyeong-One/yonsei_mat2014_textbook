@@ -214,3 +214,56 @@ df['A'] + df['B']
 - Complex conditional logic
 - Operations requiring multiple columns
 - Non-vectorizable custom functions
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a numeric DataFrame with 4 columns. Use `apply(np.mean, axis=0)` to compute the mean of each column, then `apply(np.mean, axis=1)` to compute the mean of each row. Verify the column means match `df.mean()`.
+
+??? success "Solution to Exercise 1"
+    Apply mean along both axes.
+
+        import pandas as pd
+        import numpy as np
+
+        df = pd.DataFrame(np.random.randn(5, 4), columns=['A', 'B', 'C', 'D'])
+        col_means = df.apply(np.mean, axis=0)
+        row_means = df.apply(np.mean, axis=1)
+        print("Column means:\n", col_means)
+        print("Row means:\n", row_means)
+        assert (col_means == df.mean()).all()
+
+---
+
+**Exercise 2.**
+Create a DataFrame with columns `'math'`, `'science'`, and `'english'`. Use `apply()` with `axis=1` to add a new column `'highest_subject'` that contains the name of the column with the highest score for each row (use `idxmax()`).
+
+??? success "Solution to Exercise 2"
+    Find the column name of the max value per row.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'math': [85, 92, 78],
+            'science': [90, 88, 95],
+            'english': [88, 85, 80]
+        })
+        df['highest_subject'] = df.apply(lambda row: row.idxmax(), axis=1)
+        print(df)
+
+---
+
+**Exercise 3.**
+Create a DataFrame and use `apply()` with `axis=0` to return a Series with the count of values above the column mean for each column. Compare using a custom function vs a vectorized approach.
+
+??? success "Solution to Exercise 3"
+    Count values above the column mean using apply.
+
+        import pandas as pd
+        import numpy as np
+
+        df = pd.DataFrame(np.random.randn(100, 3), columns=['A', 'B', 'C'])
+        above_mean = df.apply(lambda col: (col > col.mean()).sum(), axis=0)
+        print(above_mean)

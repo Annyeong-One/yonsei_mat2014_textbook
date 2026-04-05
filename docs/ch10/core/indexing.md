@@ -160,3 +160,57 @@ df[0]         # Ambiguous
 print(df.index)       # Understand your index
 print(type(df.index)) # Know the index type
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a DataFrame with a string index. Use `.loc[]` to select a single row, a range of rows (slice), and specific rows and columns simultaneously.
+
+??? success "Solution to Exercise 1"
+    Use loc for label-based selection.
+
+        import pandas as pd
+
+        df = pd.DataFrame(
+            {'A': [10, 20, 30, 40], 'B': [50, 60, 70, 80]},
+            index=['w', 'x', 'y', 'z']
+        )
+        print("Single row:\n", df.loc['x'])
+        print("\nSlice:\n", df.loc['x':'z'])
+        print("\nRows and cols:\n", df.loc[['w', 'z'], ['A']])
+
+---
+
+**Exercise 2.**
+Create a DataFrame with a default numeric index. Use `.iloc[]` to select the first 3 rows, every other row, and the last row. Verify each result.
+
+??? success "Solution to Exercise 2"
+    Use iloc for position-based selection.
+
+        import pandas as pd
+
+        df = pd.DataFrame({'val': [10, 20, 30, 40, 50]})
+        print("First 3:\n", df.iloc[:3])
+        print("\nEvery other:\n", df.iloc[::2])
+        print("\nLast row:\n", df.iloc[-1])
+
+---
+
+**Exercise 3.**
+Create a DataFrame and demonstrate the difference between `df['col']` (column access), `df.loc[row_label]` (row by label), and `df.iloc[row_pos]` (row by position). Show that `df.loc['label', 'col']` accesses a scalar value.
+
+??? success "Solution to Exercise 3"
+    Demonstrate different selection methods.
+
+        import pandas as pd
+
+        df = pd.DataFrame(
+            {'price': [100, 200, 300], 'qty': [5, 3, 7]},
+            index=['a', 'b', 'c']
+        )
+        print("Column:", type(df['price']))
+        print("Row by label:", type(df.loc['a']))
+        print("Row by position:", type(df.iloc[0]))
+        print("Scalar:", df.loc['b', 'price'])

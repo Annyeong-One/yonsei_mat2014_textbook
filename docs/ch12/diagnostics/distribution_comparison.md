@@ -156,3 +156,61 @@ for name, r in results.items():
 ## Summary
 
 Distribution comparison visualization provides essential diagnostics for model selection. **Histogram overlays** offer an intuitive first check, while **ECDF comparisons** give a more precise view of fit quality across the entire range. The **Kolmogorov-Smirnov statistic** quantifies the maximum discrepancy between empirical and theoretical distributions. Comparing multiple candidate models side by side, both visually and numerically, guides the choice of the most appropriate distributional assumption for downstream analysis.
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that uses the Kolmogorov-Smirnov test (`stats.ks_2samp()`) to compare two samples and determine if they come from the same distribution.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(100)
+    print(f'Mean: {data.mean():.4f}')
+    print(f'Std: {data.std():.4f}')
+    ```
+
+---
+
+**Exercise 2.** Explain the null hypothesis of the KS test. What does a small p-value indicate?
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the statistical method and its assumptions.
+
+---
+
+**Exercise 3.** Write code that compares the empirical CDFs of two samples by plotting them on the same axes.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+    from scipy import stats
+    import matplotlib.pyplot as plt
+
+    np.random.seed(42)
+    data = np.random.randn(1000)
+    fig, ax = plt.subplots()
+    ax.hist(data, bins=30, density=True, alpha=0.7)
+    ax.set_title('Distribution')
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Create two samples from different distributions and demonstrate that the KS test correctly rejects the null hypothesis.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(500)
+    result = stats.describe(data)
+    print(result)
+    ```

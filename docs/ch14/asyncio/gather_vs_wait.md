@@ -420,3 +420,99 @@ async def main():
 if __name__ == "__main__":
     asyncio.run(main())
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Use `asyncio.gather()` with `return_exceptions=True` to run 5 tasks where tasks 2 and 4 raise `ValueError`. Separate the results into a list of successes and a list of errors, then print both lists.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import asyncio
+
+        async def task(n):
+            await asyncio.sleep(0.1)
+            if n in (2, 4):
+                raise ValueError(f"Error in task {n}")
+            return n * 10
+
+        async def main():
+            results = await asyncio.gather(
+                *[task(i) for i in range(1, 6)],
+                return_exceptions=True,
+            )
+
+            successes = [r for r in results if not isinstance(r, Exception)]
+            errors = [r for r in results if isinstance(r, Exception)]
+
+            print(f"Successes: {successes}")
+            print(f"Errors: {errors}")
+
+        asyncio.run(main())
+        ```
+
+---
+
+**Exercise 2.**
+Use `asyncio.wait()` with `return_when=asyncio.FIRST_COMPLETED` in a loop to process 5 tasks (each with a random sleep of 0.1-0.5s) one at a time as they finish. Print each result along with its completion order number (1st, 2nd, etc.).
+
+??? success "Solution to Exercise 2"
+        ```python
+        import asyncio
+        import random
+
+        async def task(task_id):
+            delay = random.uniform(0.1, 0.5)
+            await asyncio.sleep(delay)
+            return (task_id, delay)
+
+        async def main():
+            pending = {asyncio.create_task(task(i)) for i in range(5)}
+            order = 1
+
+            while pending:
+                done, pending = await asyncio.wait(
+                    pending, return_when=asyncio.FIRST_COMPLETED
+                )
+                for t in done:
+                    tid, delay = t.result()
+                    print(f"#{order}: task {tid} ({delay:.2f}s)")
+                    order += 1
+
+        asyncio.run(main())
+        ```
+
+---
+
+**Exercise 3.**
+Use `asyncio.wait()` with a `timeout=0.3` to run 5 tasks that each sleep for 0.1 to 0.5 seconds. Print how many completed within the deadline and how many were still pending. Cancel all pending tasks and confirm they are cancelled.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import asyncio
+
+        async def task(task_id):
+            delay = 0.1 * (task_id + 1)
+            await asyncio.sleep(delay)
+            return task_id
+
+        async def main():
+            tasks = {asyncio.create_task(task(i)) for i in range(5)}
+
+            done, pending = await asyncio.wait(tasks, timeout=0.3)
+
+            print(f"Completed: {len(done)}")
+            print(f"Pending: {len(pending)}")
+
+            for t in pending:
+                t.cancel()
+
+            await asyncio.gather(*pending, return_exceptions=True)
+
+            for t in pending:
+                print(f"  Cancelled: {t.cancelled()}")
+
+        asyncio.run(main())
+        ```

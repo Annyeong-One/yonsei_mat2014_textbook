@@ -254,6 +254,7 @@ Use parentheses when clarity matters.
 
 ---
 
+
 ## 8. Summary
 
 Key ideas:
@@ -265,3 +266,107 @@ Key ideas:
 * `and` and `or` may return operands, not just Booleans
 
 Boolean operators let programs express complex logic clearly and efficiently.
+
+
+## Exercises
+
+**Exercise 1.**
+Python's `and` and `or` return one of their operands, not necessarily `True` or `False`. Predict the output:
+
+```python
+print(0 and "hello")
+print(1 and "hello")
+print("" or "default")
+print("value" or "default")
+print(None and 42)
+print([] or {} or "fallback")
+```
+
+State the exact rule: what does `and` return? What does `or` return? Why is `[] or {} or "fallback"` equal to `"fallback"` and not `{}`?
+
+??? success "Solution to Exercise 1"
+    Output:
+
+    ```text
+    0
+    hello
+    default
+    value
+    None
+    fallback
+    ```
+
+    The rules:
+
+    - `and` returns the **first falsy operand**, or the **last operand** if all are truthy. It stops at the first falsy value because once one operand is false, the whole `and` is false.
+    - `or` returns the **first truthy operand**, or the **last operand** if all are falsy. It stops at the first truthy value because once one operand is true, the whole `or` is true.
+
+    For `[] or {} or "fallback"`: `[]` is falsy, so `or` moves to `{}`. `{}` is also falsy, so `or` moves to `"fallback"`. `"fallback"` is truthy, so it is returned. `{}` is not returned because it is falsy -- `or` keeps searching for a truthy value.
+
+---
+
+**Exercise 2.**
+Short-circuit evaluation means Python may not evaluate the right operand. Predict whether the function `boom()` is called in each case:
+
+```python
+def boom():
+    raise ValueError("BOOM!")
+
+result1 = False and boom()
+result2 = True or boom()
+result3 = True and boom()
+result4 = False or boom()
+```
+
+Which of these four lines raises `ValueError`? Explain the short-circuit rule for each operator. Then show a practical example where short-circuiting prevents an error.
+
+??? success "Solution to Exercise 2"
+    - `result1 = False and boom()` -- `boom()` is **NOT called**. `and` short-circuits: `False` is falsy, so the result is already `False` without evaluating the right side.
+    - `result2 = True or boom()` -- `boom()` is **NOT called**. `or` short-circuits: `True` is truthy, so the result is already `True`.
+    - `result3 = True and boom()` -- `boom()` **IS called**, raises `ValueError`. `True` is truthy, so `and` must evaluate the right side.
+    - `result4 = False or boom()` -- `boom()` **IS called**, raises `ValueError`. `False` is falsy, so `or` must evaluate the right side.
+
+    Lines 3 and 4 raise `ValueError`.
+
+    Practical example of short-circuiting preventing an error:
+
+    ```python
+    data = None
+    if data is not None and len(data) > 0:
+        process(data)
+    ```
+
+    If `data` is `None`, the `and` short-circuits after `data is not None` is `False`, and `len(data)` is never called. Without short-circuiting, `len(None)` would raise `TypeError`.
+
+---
+
+**Exercise 3.**
+Operator precedence for boolean operators is: `not` > `and` > `or`. Predict the output without adding parentheses:
+
+```python
+print(True or False and False)
+print(not True or True)
+print(not False and not False)
+print(True or True and False)
+```
+
+Then add explicit parentheses to each expression to show the actual evaluation order. Why does Python give `and` higher precedence than `or`?
+
+??? success "Solution to Exercise 3"
+    Output:
+
+    ```text
+    True
+    True
+    True
+    True
+    ```
+
+    With explicit parentheses:
+
+    - `True or (False and False)` = `True or False` = `True`
+    - `(not True) or True` = `False or True` = `True`
+    - `(not False) and (not False)` = `True and True` = `True`
+    - `True or (True and False)` = `True or False` = `True`
+
+    Python gives `and` higher precedence than `or` because this matches how logical expressions are naturally read and how they work in Boolean algebra. In everyday language, "A or B and C" usually means "A or (B and C)" -- the `and` binds more tightly, just as multiplication binds more tightly than addition in arithmetic. This parallel (`and` is like `*`, `or` is like `+`) is a deliberate design choice.

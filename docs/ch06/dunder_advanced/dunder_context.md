@@ -1123,3 +1123,100 @@ if __name__ == "__main__":
     -specific resources (database transactions, API sessions, etc.).
     """)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a `Timer` context manager that measures elapsed time. `__enter__` records the start time and returns `self`. `__exit__` computes the elapsed time and stores it in `self.elapsed`. Demonstrate with a `with` block that sleeps briefly, then print the elapsed time.
+
+??? success "Solution to Exercise 1"
+
+        import time
+
+        class Timer:
+            def __enter__(self):
+                self.start = time.time()
+                return self
+
+            def __exit__(self, exc_type, exc_val, exc_tb):
+                self.elapsed = time.time() - self.start
+                return False
+
+        with Timer() as t:
+            time.sleep(0.1)
+
+        print(f"Elapsed: {t.elapsed:.3f}s")  # ~0.100s
+
+---
+
+**Exercise 2.**
+Write an `Indenter` context manager that tracks indentation level. Each nested `with Indenter()` block increases the indent level. Provide a `print(text)` method that prints text with the current indentation. Show nested usage producing indented output.
+
+??? success "Solution to Exercise 2"
+
+        class Indenter:
+            _level = 0
+
+            def __enter__(self):
+                Indenter._level += 1
+                return self
+
+            def __exit__(self, exc_type, exc_val, exc_tb):
+                Indenter._level -= 1
+                return False
+
+            def print(self, text):
+                print("    " * Indenter._level + text)
+
+        with Indenter() as i1:
+            i1.print("Level 1")
+            with Indenter() as i2:
+                i2.print("Level 2")
+                with Indenter() as i3:
+                    i3.print("Level 3")
+            i1.print("Back to level 1")
+        #     Level 1
+        #         Level 2
+        #             Level 3
+        #     Back to level 1
+
+---
+
+**Exercise 3.**
+Build a `Transaction` context manager for a simple in-memory database (a dictionary). `__enter__` saves a snapshot of the data. If the block completes without exception, changes are kept. If an exception occurs, `__exit__` rolls back to the snapshot. Demonstrate both successful and rolled-back transactions.
+
+??? success "Solution to Exercise 3"
+
+        class Transaction:
+            def __init__(self, database):
+                self.database = database
+
+            def __enter__(self):
+                self._snapshot = dict(self.database)
+                return self.database
+
+            def __exit__(self, exc_type, exc_val, exc_tb):
+                if exc_type is not None:
+                    self.database.clear()
+                    self.database.update(self._snapshot)
+                    print("Transaction rolled back")
+                    return True  # Suppress exception
+                print("Transaction committed")
+                return False
+
+        db = {"name": "Alice", "balance": 100}
+
+        # Successful transaction
+        with Transaction(db) as data:
+            data["balance"] = 200
+
+        print(db)  # {'name': 'Alice', 'balance': 200}
+
+        # Failed transaction
+        with Transaction(db) as data:
+            data["balance"] = 9999
+            raise ValueError("Something went wrong")
+
+        print(db)  # {'name': 'Alice', 'balance': 200} — rolled back

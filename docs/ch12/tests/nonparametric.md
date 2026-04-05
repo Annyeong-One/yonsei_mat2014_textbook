@@ -111,3 +111,56 @@ Non-parametric tests are less powerful than their parametric counterparts when t
 ## Summary
 
 Non-parametric tests provide distribution-free alternatives to common parametric tests. The Mann-Whitney U, Wilcoxon signed-rank, and Kruskal-Wallis tests handle two-sample, paired, and multi-group comparisons respectively, using ranks rather than raw values. They are the preferred choice when normality assumptions are questionable, when working with ordinal data, or when samples are too small for the central limit theorem to provide adequate approximation.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Two groups of pain ratings (ordinal 1-10): Group A = [3, 5, 4, 6, 3, 5], Group B = [7, 8, 6, 9, 7, 8]. Perform a Mann-Whitney U test and interpret the result.
+
+??? success "Solution to Exercise 1"
+
+        from scipy import stats
+
+        a = [3, 5, 4, 6, 3, 5]
+        b = [7, 8, 6, 9, 7, 8]
+        u_stat, p = stats.mannwhitneyu(a, b, alternative='two-sided')
+        print(f"U={u_stat:.4f}, p={p:.4f}")
+        print(f"{'Significant' if p < 0.05 else 'Not significant'} difference")
+
+---
+
+**Exercise 2.**
+Before and after treatment ratings: before = [8, 7, 9, 6, 8, 7], after = [5, 6, 7, 4, 5, 5]. Perform both a Wilcoxon signed-rank test and a paired t-test. Compare the p-values.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy import stats
+
+        before = [8, 7, 9, 6, 8, 7]
+        after = [5, 6, 7, 4, 5, 5]
+
+        w_stat, p_wilcox = stats.wilcoxon(before, after)
+        t_stat, p_ttest = stats.ttest_rel(before, after)
+
+        print(f"Wilcoxon: W={w_stat:.4f}, p={p_wilcox:.4f}")
+        print(f"Paired t: t={t_stat:.4f}, p={p_ttest:.4f}")
+
+---
+
+**Exercise 3.**
+Three groups of customer satisfaction scores: Store A = [4, 5, 3, 4, 5], Store B = [7, 8, 6, 7, 8], Store C = [5, 6, 5, 4, 6]. Perform a Kruskal-Wallis test and, if significant, explain what follow-up analysis is needed.
+
+??? success "Solution to Exercise 3"
+
+        from scipy import stats
+
+        a = [4, 5, 3, 4, 5]
+        b = [7, 8, 6, 7, 8]
+        c = [5, 6, 5, 4, 6]
+        h_stat, p = stats.kruskal(a, b, c)
+        print(f"H={h_stat:.4f}, p={p:.4f}")
+        if p < 0.05:
+            print("Significant — follow up with Dunn's test for pairwise comparisons")

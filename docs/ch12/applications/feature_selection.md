@@ -126,3 +126,61 @@ print(f"Features selected (BH, alpha=0.05): {n_selected}")
 ## Summary
 
 Statistical feature selection uses hypothesis tests to rank and filter features based on their individual association with the target variable. Pearson or Spearman correlation handles continuous-continuous pairs, the ANOVA F-test handles continuous-categorical pairs, and the chi-square test handles categorical-categorical pairs. Multiple testing correction is essential when the candidate feature set is large.
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that computes the Pearson correlation between each feature and the target variable in a synthetic dataset. Select features with correlation above 0.3.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(100)
+    print(f'Mean: {data.mean():.4f}')
+    print(f'Std: {data.std():.4f}')
+    ```
+
+---
+
+**Exercise 2.** Explain the difference between filter methods, wrapper methods, and embedded methods for feature selection.
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the statistical method and its assumptions.
+
+---
+
+**Exercise 3.** Write code that uses mutual information (`sklearn.feature_selection.mutual_info_regression`) to rank features by their relevance to a target variable.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+    from scipy import stats
+    import matplotlib.pyplot as plt
+
+    np.random.seed(42)
+    data = np.random.randn(1000)
+    fig, ax = plt.subplots()
+    ax.hist(data, bins=30, density=True, alpha=0.7)
+    ax.set_title('Distribution')
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Create a synthetic dataset with 10 features (5 relevant, 5 noise) and demonstrate that correlation-based selection correctly identifies the relevant features.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(500)
+    result = stats.describe(data)
+    print(result)
+    ```

@@ -244,3 +244,108 @@ Key points:
 - Useful for caches and avoiding circular references
 - Not all types support weak references
 - Add `__weakref__` to `__slots__` if needed
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a class `Trackable` and demonstrate the lifecycle of a `weakref.ref` with a callback. Create an instance, make a weak reference with a callback that prints `"Collected!"`, verify `weak_ref()` returns the object, then delete the object and verify `weak_ref()` returns `None`.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import weakref
+
+        class Trackable:
+            def __init__(self, name):
+                self.name = name
+
+        def on_collect(ref):
+            print("Collected!")
+
+        obj = Trackable("test")
+        weak = weakref.ref(obj, on_collect)
+
+        print(f"Before del: {weak()}")       # <Trackable object>
+        print(f"Is None: {weak() is None}")  # False
+
+        del obj  # Prints: Collected!
+        print(f"After del: {weak()}")        # None
+        print(f"Is None: {weak() is None}")  # True
+        ```
+
+---
+
+**Exercise 2.**
+Write a `WeakCache` class using `WeakValueDictionary` that caches the results of an expensive function. Call the function 5 times with the same key (showing cache hits), then delete the external reference and call again (showing the entry was evicted and recomputed).
+
+??? success "Solution to Exercise 2"
+        ```python
+        import weakref
+
+        class WeakCache:
+            def __init__(self, factory):
+                self._cache = weakref.WeakValueDictionary()
+                self._factory = factory
+
+            def get(self, key):
+                obj = self._cache.get(key)
+                if obj is None:
+                    print(f"  Cache miss for '{key}', computing...")
+                    obj = self._factory(key)
+                    self._cache[key] = obj
+                else:
+                    print(f"  Cache hit for '{key}'")
+                return obj
+
+        class Result:
+            def __init__(self, value):
+                self.value = value
+
+        cache = WeakCache(lambda k: Result(k.upper()))
+
+        # First call: cache miss
+        r = cache.get("hello")
+        # Next 4 calls: cache hits
+        for _ in range(4):
+            cache.get("hello")
+
+        # Delete external reference
+        del r
+
+        # Next call: cache miss (evicted)
+        r2 = cache.get("hello")
+        ```
+
+---
+
+**Exercise 3.**
+Create a slotted class `SlottedNode` with `__slots__ = ('value', '__weakref__')`. Demonstrate that (a) you can create a `weakref.ref` to it, (b) a `weakref.proxy` works transparently, and (c) after deleting the object, accessing the proxy raises `ReferenceError`.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import weakref
+
+        class SlottedNode:
+            __slots__ = ('value', '__weakref__')
+
+            def __init__(self, value):
+                self.value = value
+
+        node = SlottedNode(42)
+
+        # (a) weakref.ref works
+        ref = weakref.ref(node)
+        print(f"ref() value: {ref().value}")  # 42
+
+        # (b) proxy works transparently
+        proxy = weakref.proxy(node)
+        print(f"proxy.value: {proxy.value}")  # 42
+
+        # (c) After deletion, proxy raises ReferenceError
+        del node
+        try:
+            print(proxy.value)
+        except ReferenceError as e:
+            print(f"ReferenceError: {e}")
+        ```

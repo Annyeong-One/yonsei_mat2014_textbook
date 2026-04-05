@@ -657,6 +657,7 @@ Result
 
 ---
 
+
 ## 17. Summary
 
 Python provides a variety of built-in types for representing different forms of data.
@@ -679,3 +680,101 @@ Key ideas:
 Understanding these data types is essential for writing correct and expressive Python programs. 
 
 
+## Exercises
+
+**Exercise 1.**
+The `+` operator behaves differently depending on the types of its operands. Predict the output of each expression and explain how Python decides what `+` means in each case:
+
+```python
+print(1 + 2)
+print(1.0 + 2)
+print("1" + "2")
+print([1] + [2])
+print(True + True)
+```
+
+What mechanism does Python use to dispatch `+` to the correct implementation? What happens if you try `"1" + 2`?
+
+??? success "Solution to Exercise 1"
+    Output:
+
+    ```text
+    3
+    3.0
+    12
+    [1, 2]
+    2
+    ```
+
+    Python uses **method dispatch** to determine what `+` means. Each expression `a + b` is translated to `type(a).__add__(a, b)`. So `1 + 2` calls `int.__add__`, `"1" + "2"` calls `str.__add__`, and `[1] + [2]` calls `list.__add__`. Each type defines its own behavior for `+`.
+
+    For `1.0 + 2`, Python promotes the `int` to `float` via implicit numeric coercion, so the result is `float`. For `True + True`, since `bool` is a subclass of `int`, `True` behaves as `1`, giving `2`.
+
+    `"1" + 2` raises `TypeError` because `str.__add__` does not know how to add a string and an integer -- Python does not implicitly convert between unrelated types.
+
+---
+
+**Exercise 2.**
+Python types are divided into mutable and immutable. A programmer writes:
+
+```python
+a = [1, 2, 3]
+b = a
+b.append(4)
+print(a)
+
+x = "hello"
+y = x
+y = y.upper()
+print(x)
+```
+
+Predict the output of both `print` statements. Explain why mutation of `b` affects `a`, but the operation on `y` does not affect `x`. What fundamental property of the type determines this difference?
+
+??? success "Solution to Exercise 2"
+    Output:
+
+    ```text
+    [1, 2, 3, 4]
+    hello
+    ```
+
+    `a = [1, 2, 3]` creates a list object. `b = a` makes `b` refer to the **same object** (not a copy). Since lists are **mutable**, `b.append(4)` modifies the object in place, and `a` sees the change because both names point to the same object.
+
+    `x = "hello"` creates a string object. `y = x` makes `y` refer to the same string. But strings are **immutable** -- `y.upper()` does not modify the original string. Instead, it creates a **new** string `"HELLO"`, and `y = y.upper()` rebinds `y` to this new object. The original string `"hello"` that `x` points to is unchanged.
+
+    The fundamental property is **mutability**: mutable types (list, dict, set) can be changed in place, so aliasing matters. Immutable types (int, str, tuple) cannot be changed, so aliasing is harmless.
+
+---
+
+**Exercise 3.**
+Every Python object has identity, type, and value. For each of the following, state what `type()` returns and whether the object is mutable or immutable:
+
+```python
+42
+3.14
+"hello"
+True
+None
+[1, 2]
+(1, 2)
+{1, 2}
+{"a": 1}
+```
+
+Why is it important to know whether an object is mutable or immutable when passing it to a function?
+
+??? success "Solution to Exercise 3"
+    | Value | `type()` | Mutable? |
+    |-------|----------|----------|
+    | `42` | `int` | Immutable |
+    | `3.14` | `float` | Immutable |
+    | `"hello"` | `str` | Immutable |
+    | `True` | `bool` | Immutable |
+    | `None` | `NoneType` | Immutable |
+    | `[1, 2]` | `list` | Mutable |
+    | `(1, 2)` | `tuple` | Immutable |
+    | `{1, 2}` | `set` | Mutable |
+    | `{"a": 1}` | `dict` | Mutable |
+
+    Mutability matters when passing objects to functions because Python uses **pass-by-assignment** (pass-by-object-reference). If you pass a mutable object to a function, the function receives a reference to the same object. Any mutations the function makes (e.g., `lst.append(x)`) will affect the caller's object. With immutable objects, the function cannot modify the original -- any "changes" create new objects, leaving the caller's value intact.

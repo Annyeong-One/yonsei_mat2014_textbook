@@ -576,3 +576,49 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create `a = np.array([1.234, 2.567, 3.891])`. Round to 1 decimal place with `np.round`, apply `np.floor` and `np.ceil`. Print all three results and explain the difference.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        a = np.array([1.234, 2.567, 3.891])
+        print(f"Round: {np.round(a, 1)}")  # [1.2 2.6 3.9]
+        print(f"Floor: {np.floor(a)}")      # [1. 2. 3.]
+        print(f"Ceil:  {np.ceil(a)}")       # [2. 3. 4.]
+
+---
+
+**Exercise 2.**
+Use `np.unique` to find the unique elements and their counts in `a = np.array([1, 2, 2, 3, 3, 3, 4, 4, 4, 4])`. Print both the unique values and their counts.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        a = np.array([1, 2, 2, 3, 3, 3, 4, 4, 4, 4])
+        vals, counts = np.unique(a, return_counts=True)
+        print(f"Unique: {vals}")
+        print(f"Counts: {counts}")
+
+---
+
+**Exercise 3.**
+Use `np.diff` to compute the first and second differences of `a = np.array([1, 4, 9, 16, 25])` (perfect squares). Verify that the first differences are odd numbers and the second differences are all 2.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        a = np.array([1, 4, 9, 16, 25])
+        d1 = np.diff(a)
+        d2 = np.diff(a, n=2)
+        print(f"First differences: {d1}")   # [3 5 7 9]
+        print(f"Second differences: {d2}")  # [2 2 2]
+        print(f"All second diffs are 2: {np.all(d2 == 2)}")

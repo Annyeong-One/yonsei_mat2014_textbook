@@ -213,3 +213,132 @@ OOP provides more mechanisms for extension.
 - OOP provides better encapsulation and reuse.
 - Choose based on problem complexity.
 - Modern code often uses both paradigms.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a procedural solution for managing a to-do list (using functions and a list of dicts). Then rewrite it using OOP with `Task` and `TodoList` classes. Compare the two approaches in terms of code organization and extensibility.
+
+??? success "Solution to Exercise 1"
+
+        # Procedural
+        def create_task(title):
+            return {"title": title, "done": False}
+
+        def complete_task(tasks, title):
+            for t in tasks:
+                if t["title"] == title:
+                    t["done"] = True
+
+        tasks = [create_task("Buy milk"), create_task("Write code")]
+        complete_task(tasks, "Buy milk")
+        print(tasks)
+
+        # OOP
+        class Task:
+            def __init__(self, title):
+                self.title = title
+                self.done = False
+
+            def complete(self):
+                self.done = True
+
+        class TodoList:
+            def __init__(self):
+                self.tasks = []
+
+            def add(self, title):
+                self.tasks.append(Task(title))
+
+            def complete(self, title):
+                for t in self.tasks:
+                    if t.title == title:
+                        t.complete()
+
+        todo = TodoList()
+        todo.add("Buy milk")
+        todo.add("Write code")
+        todo.complete("Buy milk")
+
+---
+
+**Exercise 2.**
+Implement a simple calculator both ways: procedurally (functions `add`, `subtract`, `multiply`, `divide` plus a `history` list) and with OOP (a `Calculator` class with methods and a history attribute). Show how the OOP version encapsulates state more cleanly.
+
+??? success "Solution to Exercise 2"
+
+        # Procedural
+        history = []
+        def add(a, b):
+            result = a + b
+            history.append(f"{a} + {b} = {result}")
+            return result
+
+        print(add(2, 3))  # 5
+
+        # OOP
+        class Calculator:
+            def __init__(self):
+                self.history = []
+
+            def add(self, a, b):
+                result = a + b
+                self.history.append(f"{a} + {b} = {result}")
+                return result
+
+            def subtract(self, a, b):
+                result = a - b
+                self.history.append(f"{a} - {b} = {result}")
+                return result
+
+        calc = Calculator()
+        print(calc.add(2, 3))       # 5
+        print(calc.subtract(10, 4)) # 6
+        print(calc.history)  # Encapsulated — each Calculator has its own
+
+---
+
+**Exercise 3.**
+Model a library checkout system. Procedurally: use dictionaries and functions. OOP: use `Book` and `Library` classes. The system should support `checkout(title)`, `return_book(title)`, and `available()`. Show that the OOP version handles multiple libraries naturally while the procedural version requires passing state explicitly.
+
+??? success "Solution to Exercise 3"
+
+        # OOP version
+        class Book:
+            def __init__(self, title, author):
+                self.title = title
+                self.author = author
+                self.checked_out = False
+
+        class Library:
+            def __init__(self, name):
+                self.name = name
+                self.books = []
+
+            def add_book(self, title, author):
+                self.books.append(Book(title, author))
+
+            def checkout(self, title):
+                for b in self.books:
+                    if b.title == title and not b.checked_out:
+                        b.checked_out = True
+                        return True
+                return False
+
+            def return_book(self, title):
+                for b in self.books:
+                    if b.title == title and b.checked_out:
+                        b.checked_out = False
+                        return True
+                return False
+
+            def available(self):
+                return [b.title for b in self.books if not b.checked_out]
+
+        lib = Library("City Library")
+        lib.add_book("Python 101", "Author A")
+        lib.add_book("Data Science", "Author B")
+        lib.checkout("Python 101")
+        print(lib.available())  # ['Data Science']

@@ -312,3 +312,59 @@ print(df.groupby(level='category').sum())
 | Replace | ⚠️ Limited | Use rename_categories |
 | Filtering | ✅ Good | Remember to clean unused |
 | Aggregation | ✅ Excellent | All standard functions |
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that adds and removes categories from a categorical Series using `.cat.add_categories()` and `.cat.remove_categories()`.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+
+    # See page content for relevant API details
+    s = pd.Series(['a', 'b', 'c', 'a', 'b'], dtype='category')
+    print(s)
+    print(s.cat.categories)
+    print(s.cat.codes)
+    ```
+
+---
+
+**Exercise 2.** Explain what happens when you try to assign a value to a categorical Series that is not in the current categories.
+
+??? success "Solution to Exercise 2"
+    See the explanation in the main content of this page. The key concept involves understanding the categorical data type and its internal representation in Pandas.
+
+---
+
+**Exercise 3.** Write code that renames categories using `.cat.rename_categories()`. Change `['a', 'b', 'c']` to `['Alpha', 'Beta', 'Gamma']`.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'col': np.random.choice(['A', 'B', 'C'], 1000)})
+    df['col'] = df['col'].astype('category')
+    print(df.dtypes)
+    print(df['col'].value_counts())
+    ```
+
+---
+
+**Exercise 4.** Create a categorical Series and use `.cat.reorder_categories()` to change the category ordering. Show that comparison operators reflect the new order.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+
+    s = pd.Categorical(['low', 'medium', 'high', 'low'],
+                        categories=['low', 'medium', 'high'],
+                        ordered=True)
+    print(s)
+    print(s > 'low')
+    ```

@@ -978,6 +978,7 @@ Those topics build directly on the ideas introduced here: place value, fixed-wid
 
 ---
 
+
 ## 18. Summary
 
 * A **bit** is the smallest unit of digital information and has value 0 or 1.
@@ -994,3 +995,210 @@ Those topics build directly on the ideas introduced here: place value, fixed-wid
 A solid understanding of bits and bytes is the foundation for understanding data types, memory, machine arithmetic, and low-level programming.
 
 
+## Exercises
+
+**Exercise 1.**
+Write a Python function `twos_complement(value, bits)` that takes a signed integer and a bit width and returns the two's complement binary string (zero-padded to the specified width). Test it with `twos_complement(-42, 8)`, `twos_complement(42, 8)`, and `twos_complement(-1, 16)`. Verify your results by converting back using the two's complement weight formula.
+
+??? success "Solution to Exercise 1"
+    ```python
+    def twos_complement(value, bits):
+        if value >= 0:
+            return format(value, f'0{bits}b')
+        else:
+            # Two's complement: (2^bits) + value
+            unsigned = (1 << bits) + value
+            return format(unsigned, f'0{bits}b')
+
+    # Tests
+    tests = [(-42, 8), (42, 8), (-1, 16)]
+    for val, bits in tests:
+        binary = twos_complement(val, bits)
+        print(f"twos_complement({val:>4}, {bits:>2}) = {binary}")
+
+    # Verification: convert 11010110 back to signed 8-bit
+    # MSB weight is -128
+    b = "11010110"
+    weights = [-128, 64, 32, 16, 8, 4, 2, 1]
+    result = sum(int(bit) * w for bit, w in zip(b, weights))
+    print(f"Verify {b} = {result}")  # should be -42
+    ```
+
+    Output:
+
+    ```text
+    twos_complement( -42,  8) = 11010110
+    twos_complement(  42,  8) = 00101010
+    twos_complement(  -1, 16) = 1111111111111111
+    Verify 11010110 = -42
+    ```
+
+---
+
+**Exercise 2.**
+Write a Python script that demonstrates endianness by storing the 32-bit integer `0xDEADBEEF` in both big-endian and little-endian byte order using `int.to_bytes()`. Print the resulting byte sequences in hexadecimal. Then read them back using `int.from_bytes()` and verify that the original value is recovered.
+
+??? success "Solution to Exercise 2"
+    ```python
+    value = 0xDEADBEEF
+
+    big = value.to_bytes(4, byteorder="big")
+    little = value.to_bytes(4, byteorder="little")
+
+    print(f"Original:     0x{value:08X}")
+    print(f"Big-endian:   {big.hex(' ')}")
+    print(f"Little-endian: {little.hex(' ')}")
+
+    # Read back
+    recovered_big = int.from_bytes(big, byteorder="big")
+    recovered_little = int.from_bytes(little, byteorder="little")
+
+    print(f"Recovered (big):    0x{recovered_big:08X}")
+    print(f"Recovered (little): 0x{recovered_little:08X}")
+    print(f"Both match: {recovered_big == value == recovered_little}")
+    ```
+
+    Output:
+
+    ```text
+    Original:     0xDEADBEEF
+    Big-endian:   de ad be ef
+    Little-endian: ef be ad de
+    Recovered (big):    0xDEADBEEF
+    Recovered (little): 0xDEADBEEF
+    Both match: True
+    ```
+
+---
+
+**Exercise 3.**
+Implement a simple permission system using bitmasks. Define four flags: `READ = 0b1000`, `WRITE = 0b0100`, `EXECUTE = 0b0010`, `DELETE = 0b0001`. Write functions `set_permission(perms, flag)`, `remove_permission(perms, flag)`, `has_permission(perms, flag)`, and `display_permissions(perms)` that prints the names of all active flags. Test by creating a permission value with READ and WRITE, then adding EXECUTE, then removing WRITE.
+
+??? success "Solution to Exercise 3"
+    ```python
+    READ    = 0b1000
+    WRITE   = 0b0100
+    EXECUTE = 0b0010
+    DELETE  = 0b0001
+
+    FLAG_NAMES = {READ: "READ", WRITE: "WRITE",
+                  EXECUTE: "EXECUTE", DELETE: "DELETE"}
+
+    def set_permission(perms, flag):
+        return perms | flag
+
+    def remove_permission(perms, flag):
+        return perms & ~flag
+
+    def has_permission(perms, flag):
+        return bool(perms & flag)
+
+    def display_permissions(perms):
+        active = [name for flag, name in FLAG_NAMES.items()
+                  if has_permission(perms, flag)]
+        print(f"  {bin(perms):>8} -> {', '.join(active)}")
+
+    # Test
+    perms = set_permission(0, READ)
+    perms = set_permission(perms, WRITE)
+    print("After setting READ and WRITE:")
+    display_permissions(perms)
+
+    perms = set_permission(perms, EXECUTE)
+    print("After adding EXECUTE:")
+    display_permissions(perms)
+
+    perms = remove_permission(perms, WRITE)
+    print("After removing WRITE:")
+    display_permissions(perms)
+    ```
+
+    Output:
+
+    ```text
+    After setting READ and WRITE:
+      0b1100 -> READ, WRITE
+    After adding EXECUTE:
+      0b1110 -> READ, WRITE, EXECUTE
+    After removing WRITE:
+      0b1010 -> READ, EXECUTE
+    ```
+
+---
+
+**Exercise 4.**
+Two's complement uses the same binary addition circuitry for both signed and unsigned integers. Explain why this is a profound engineering advantage. Specifically: if a CPU ALU has a single ADD instruction, why does two's complement allow it to work correctly regardless of whether the programmer interprets the bit pattern as signed or unsigned? Give a concrete 8-bit example where the same binary addition produces the correct result under both interpretations.
+
+??? success "Solution to Exercise 4"
+    Two's complement is designed so that binary addition modulo $2^n$ produces the correct result whether the operands are interpreted as signed or unsigned. This means the CPU needs only one ADD circuit -- it performs the same bit-level operation regardless of signedness.
+
+    **8-bit example:** Consider adding 250 (unsigned) or -6 (signed, same bit pattern `11111010`) to 10 (`00001010`):
+
+    ```
+      11111010   (250 unsigned, or -6 signed)
+    + 00001010   (10)
+    ----------
+    1 00000100   (result: 260 unsigned mod 256 = 4, or -6 + 10 = 4 signed)
+    ```
+
+    The carry out of bit 7 is discarded (modular arithmetic). The 8-bit result `00000100` = 4 is correct under **both** interpretations:
+
+    - Unsigned: 250 + 10 = 260 mod 256 = 4
+    - Signed: -6 + 10 = 4
+
+    This works because two's complement defines $-x$ as $2^n - x$, so signed arithmetic is just unsigned arithmetic modulo $2^n$. The ALU does not need to know whether it is doing signed or unsigned addition -- the same circuit handles both. This halves the hardware complexity for addition and subtraction.
+
+---
+
+**Exercise 5.**
+Python integers have arbitrary precision (no fixed bit width), while C and NumPy integers have fixed widths (8, 16, 32, or 64 bits). Explain what overflow means in the context of fixed-width arithmetic and why Python integers can never overflow. What is the trade-off? Why would anyone choose fixed-width integers if Python's arbitrary-precision integers are "safer"? Think in terms of memory layout, CPU instructions, and performance.
+
+??? success "Solution to Exercise 5"
+    **Overflow** in fixed-width arithmetic occurs when the mathematical result of an operation exceeds the range representable in the given number of bits. For 8-bit signed integers, the range is [-128, 127], so 127 + 1 wraps to -128.
+
+    Python integers cannot overflow because they have no fixed bit width. Python's `int` internally stores the number using as many machine words as needed, dynamically allocating more memory for larger values. `2 ** 1000` works correctly because Python allocates enough memory to hold all the digits.
+
+    **The trade-off:**
+
+    1. **Memory**: A Python integer `42` uses 28 bytes (object header, reference count, type pointer, value). A C `int32` uses 4 bytes. A NumPy array of 1 million `int64` values uses 8 MB; a Python list of 1 million integers uses ~28 MB (plus 8 MB for the pointer array).
+
+    2. **CPU instructions**: Fixed-width integers map directly to CPU hardware. `a + b` for two `int64` values is one machine instruction (`ADD`). For Python integers, `a + b` requires type checking, method dispatch, multi-word arithmetic if the numbers are large, and memory allocation for the result.
+
+    3. **SIMD**: Fixed-width integers enable vectorized operations (one instruction adding 4 or 8 integers at once). Python's variable-width integers cannot be packed into SIMD registers.
+
+    Fixed-width integers are chosen when maximum performance is needed and the programmer can guarantee values stay within range. Python's arbitrary-precision integers are chosen when correctness and convenience matter more than raw speed.
+
+---
+
+**Exercise 6.**
+Bitwise operations like AND, OR, XOR, and shift work on individual bits. Explain why `x << 1` is equivalent to multiplying `x` by 2, and `x >> 1` is equivalent to integer division by 2 (for non-negative `x`). Use the positional value system ($d_i \cdot 2^i$) to prove this algebraically. Then explain why right-shifting a negative two's complement number is more subtle than simply dividing by 2 -- what is "arithmetic shift" versus "logical shift"?
+
+??? success "Solution to Exercise 6"
+    A binary number is represented as:
+
+    $$
+    x = d_{n-1} \cdot 2^{n-1} + d_{n-2} \cdot 2^{n-2} + \cdots + d_1 \cdot 2^1 + d_0 \cdot 2^0
+    $$
+
+    **Left shift** (`x << 1`): Each bit $d_i$ moves to position $i+1$, and a 0 is inserted at position 0:
+
+    $$
+    x \ll 1 = d_{n-1} \cdot 2^n + d_{n-2} \cdot 2^{n-1} + \cdots + d_0 \cdot 2^1 + 0 \cdot 2^0 = 2x
+    $$
+
+    Every term is multiplied by 2, so the result is $2x$.
+
+    **Right shift** (`x >> 1`): Each bit $d_i$ moves to position $i-1$, and the lowest bit $d_0$ is discarded:
+
+    $$
+    x \gg 1 = d_{n-1} \cdot 2^{n-2} + \cdots + d_1 \cdot 2^0 = \lfloor x/2 \rfloor
+    $$
+
+    Every term is divided by 2, giving $\lfloor x/2 \rfloor$ (the floor division discards the lost bit $d_0$).
+
+    **Negative numbers and arithmetic vs. logical shift:**
+
+    - **Logical shift right** inserts a 0 in the most significant bit. For the two's complement representation of -2 (`11111110` in 8-bit), logical right shift gives `01111111` = 127, which is wrong as a division by 2.
+    - **Arithmetic shift right** copies the sign bit (MSB) into the vacated position. For -2 (`11111110`), arithmetic right shift gives `11111111` = -1, which is the correct $\lfloor -2/2 \rfloor = -1$.
+
+    Python uses arithmetic right shift for negative numbers (`-2 >> 1 == -1`), which preserves the floor-division semantics. The distinction matters because the sign bit has a negative weight ($-2^{n-1}$) in two's complement, so inserting a 0 there dramatically changes the value.

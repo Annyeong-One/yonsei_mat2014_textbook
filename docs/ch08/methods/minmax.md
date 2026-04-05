@@ -394,3 +394,50 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a 2D array `a = np.random.randn(4, 5)`. Find the global min and max, then find the min and max along each axis (rows and columns).
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        a = np.random.randn(4, 5)
+        print(f"Global min: {a.min():.4f}, max: {a.max():.4f}")
+        print(f"Column min: {a.min(axis=0)}")
+        print(f"Row max: {a.max(axis=1)}")
+
+---
+
+**Exercise 2.**
+Use `np.argmin` and `np.argmax` to find the indices of the minimum and maximum elements in a 1D array. Then use `np.unravel_index` to find the 2D indices of the min/max in a 3x4 matrix.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        a = np.random.randn(12)
+        print(f"argmin: {np.argmin(a)}, argmax: {np.argmax(a)}")
+
+        M = np.random.randn(3, 4)
+        flat_idx = np.argmin(M)
+        idx_2d = np.unravel_index(flat_idx, M.shape)
+        print(f"2D argmin: {idx_2d}, value: {M[idx_2d]:.4f}")
+
+---
+
+**Exercise 3.**
+Compute the range (max - min) of each row in a `(100, 5)` array using `axis=1` in a single expression. Verify by computing manually with a loop.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        a = np.random.randn(100, 5)
+        ranges = a.max(axis=1) - a.min(axis=1)
+        ranges_manual = np.array([row.max() - row.min() for row in a])
+        print(f"Match: {np.allclose(ranges, ranges_manual)}")

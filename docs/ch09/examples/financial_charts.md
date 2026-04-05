@@ -208,3 +208,109 @@ if __name__ == "__main__":
 - Normalize prices for multi-asset comparison
 - Use `DateFormatter` for proper date display
 - `autofmt_xdate()` prevents label overlap
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that creates a stock price chart with a secondary y-axis for volume using `ax.twinx()`. Use synthetic data: generate 100 dates, a random-walk price series starting at 100, and random volume data.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    n = 100
+    dates = np.arange(n)
+    price = 100 + np.cumsum(np.random.randn(n) * 0.5)
+    volume = np.random.randint(1000, 5000, n)
+
+    fig, ax1 = plt.subplots(figsize=(12, 5))
+    ax1.plot(dates, price, 'b-', label='Price')
+    ax1.set_xlabel('Day')
+    ax1.set_ylabel('Price', color='blue')
+
+    ax2 = ax1.twinx()
+    ax2.fill_between(dates, volume, color='gray', alpha=0.3, label='Volume')
+    ax2.set_ylabel('Volume', color='gray')
+
+    ax1.set_title('Price and Volume Chart')
+    ax1.legend(loc='upper left')
+    plt.tight_layout()
+    plt.show()
+    ```
+
+---
+
+**Exercise 2.** Explain the purpose of `fill_between()` in a moving average crossover chart. When is the filled region green versus red?
+
+??? success "Solution to Exercise 2"
+    `fill_between()` fills the area between two moving average lines (e.g., a short-term MA and a long-term MA). The filled region is **green** when the short-term MA is above the long-term MA, signaling a **bullish** (upward) trend. The filled region is **red** when the short-term MA is below the long-term MA, signaling a **bearish** (downward) trend. The `where` parameter controls which condition determines the fill, and `interpolate=True` ensures smooth transitions at crossover points.
+
+---
+
+**Exercise 3.** Create a figure that plots three synthetic "stock" series (random walks), normalizes each to start at 100, and plots them on the same axes with a legend. Add appropriate labels and title.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    n = 200
+    days = np.arange(n)
+
+    stocks = {}
+    for name in ['Stock A', 'Stock B', 'Stock C']:
+        raw = 100 + np.cumsum(np.random.randn(n) * 1.5)
+        normalized = raw / raw[0] * 100
+        stocks[name] = normalized
+
+    fig, ax = plt.subplots(figsize=(12, 5))
+    for name, values in stocks.items():
+        ax.plot(days, values, label=name)
+
+    ax.set_xlabel('Day')
+    ax.set_ylabel('Normalized Price (Base=100)')
+    ax.set_title('Multi-Asset Comparison')
+    ax.legend()
+    ax.grid(True, alpha=0.3)
+    plt.tight_layout()
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Write code that plots a synthetic price series and marks a specific point on the chart using `ax.annotate()` with an arrow. Add a title and axis labels.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    n = 100
+    days = np.arange(n)
+    price = 100 + np.cumsum(np.random.randn(n) * 0.8)
+
+    event_day = 60
+    event_price = price[event_day]
+
+    fig, ax = plt.subplots(figsize=(12, 5))
+    ax.plot(days, price, 'b-')
+
+    ax.plot(event_day, event_price, 'ro', markersize=10)
+    ax.annotate(f'Event at day {event_day}',
+                xy=(event_day, event_price),
+                xytext=(event_day + 10, event_price + 3),
+                fontsize=10, ha='left',
+                arrowprops=dict(arrowstyle='->', color='red'))
+
+    ax.set_xlabel('Day')
+    ax.set_ylabel('Price')
+    ax.set_title('Price Chart with Annotated Event')
+    plt.tight_layout()
+    plt.show()
+    ```

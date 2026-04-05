@@ -438,3 +438,81 @@ def update(frame):
 fig.tight_layout()  # Call once before animation
 ani = animation.FuncAnimation(...)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a `FuncAnimation` that animates a sine wave scrolling across the screen. Initialize a line plot of `y = sin(x)` for `x` in $[0, 2\pi]$, then in each frame shift the phase by `0.1 * frame_number`. Use 100 frames and an interval of 50 ms.
+
+??? success "Solution to Exercise 1"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+        from matplotlib.animation import FuncAnimation
+
+        fig, ax = plt.subplots()
+        x = np.linspace(0, 2 * np.pi, 200)
+        line, = ax.plot(x, np.sin(x))
+        ax.set_ylim(-1.5, 1.5)
+
+        def update(frame):
+            line.set_ydata(np.sin(x + 0.1 * frame))
+            return line,
+
+        ani = FuncAnimation(fig, update, frames=100, interval=50, blit=True)
+        plt.show()
+
+---
+
+**Exercise 2.**
+Create an `ArtistAnimation` that shows a sequence of 20 random heatmaps. In each frame, generate a 10x10 random matrix with `np.random.rand(10, 10)` and display it using `imshow`. Set a title that updates to show the frame number.
+
+??? success "Solution to Exercise 2"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+        from matplotlib.animation import ArtistAnimation
+
+        fig, ax = plt.subplots()
+        artists = []
+
+        for i in range(20):
+            data = np.random.rand(10, 10)
+            im = ax.imshow(data, cmap='viridis', animated=True)
+            title = ax.text(0.5, 1.05, f'Frame {i}', transform=ax.transAxes,
+                            ha='center', fontsize=12)
+            artists.append([im, title])
+
+        ani = ArtistAnimation(fig, artists, interval=200, blit=True)
+        plt.show()
+
+---
+
+**Exercise 3.**
+Create a `FuncAnimation` of a growing scatter plot. Start with an empty scatter plot and in each frame add a new random point with `np.random.randn(2)`. Accumulate points so that all previously added points remain visible. Use 100 frames and save the animation as a GIF using `PillowWriter`.
+
+??? success "Solution to Exercise 3"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+        from matplotlib.animation import FuncAnimation, PillowWriter
+
+        fig, ax = plt.subplots()
+        ax.set_xlim(-5, 5)
+        ax.set_ylim(-5, 5)
+        scat = ax.scatter([], [])
+
+        xs, ys = [], []
+
+        def update(frame):
+            point = np.random.randn(2)
+            xs.append(point[0])
+            ys.append(point[1])
+            scat.set_offsets(np.column_stack([xs, ys]))
+            return scat,
+
+        ani = FuncAnimation(fig, update, frames=100, interval=100, blit=True)
+        ani.save('growing_scatter.gif', writer=PillowWriter(fps=10))
+        plt.show()

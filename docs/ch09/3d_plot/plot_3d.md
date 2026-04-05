@@ -526,3 +526,94 @@ plt.show()
 | Label | `ax.plot(x, y, z, label='curve')` |
 | View angle | `ax.view_init(elev=30, azim=-60)` |
 | Pane color | `ax.w_xaxis.set_pane_color((1,1,1,1))` |
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Plot two intertwined helices in 3D. The first helix uses `x = cos(t)`, `y = sin(t)`, `z = t`, and the second uses `x = cos(t + pi)`, `y = sin(t + pi)`, `z = t` for `t` in $[0, 6\pi]$. Color them differently, add a legend, and label all axes.
+
+??? success "Solution to Exercise 1"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        t = np.linspace(0, 6 * np.pi, 1000)
+
+        fig = plt.figure(figsize=(8, 6))
+        ax = fig.add_subplot(111, projection='3d')
+
+        ax.plot(np.cos(t), np.sin(t), t, label='Helix 1', color='blue')
+        ax.plot(np.cos(t + np.pi), np.sin(t + np.pi), t, label='Helix 2', color='red')
+
+        ax.set_xlabel('X')
+        ax.set_ylabel('Y')
+        ax.set_zlabel('Z')
+        ax.set_title('Intertwined Helices')
+        ax.legend()
+        plt.show()
+
+---
+
+**Exercise 2.**
+Create a 3D Lissajous curve with `x = sin(3t)`, `y = sin(4t)`, `z = sin(5t)` for `t` in $[0, 2\pi]$. Color the line by `t` using a colormap (use `LineCollection` or plot segments with varying color). Add a colorbar showing the parameter `t`.
+
+??? success "Solution to Exercise 2"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+        from mpl_toolkits.mplot3d.art3d import Line3DCollection
+
+        t = np.linspace(0, 2 * np.pi, 1000)
+        x = np.sin(3 * t)
+        y = np.sin(4 * t)
+        z = np.sin(5 * t)
+
+        points = np.array([x, y, z]).T.reshape(-1, 1, 3)
+        segments = np.concatenate([points[:-1], points[1:]], axis=1)
+
+        fig = plt.figure(figsize=(8, 6))
+        ax = fig.add_subplot(111, projection='3d')
+
+        norm = plt.Normalize(t.min(), t.max())
+        lc = Line3DCollection(segments, cmap='viridis', norm=norm)
+        lc.set_array(t[:-1])
+        ax.add_collection3d(lc)
+
+        ax.set_xlim(-1, 1)
+        ax.set_ylim(-1, 1)
+        ax.set_zlim(-1, 1)
+        ax.set_xlabel('X')
+        ax.set_ylabel('Y')
+        ax.set_zlabel('Z')
+        ax.set_title('3D Lissajous Curve')
+
+        sm = plt.cm.ScalarMappable(cmap='viridis', norm=norm)
+        plt.colorbar(sm, ax=ax, label='t')
+        plt.show()
+
+---
+
+**Exercise 3.**
+Plot the trefoil knot in 3D using parametric equations `x = sin(t) + 2*sin(2t)`, `y = cos(t) - 2*cos(2t)`, `z = -sin(3t)` for `t` in $[0, 2\pi]$. Use `linewidth=3` and set a viewing angle of `elev=30, azim=60`. Add a title and axis labels.
+
+??? success "Solution to Exercise 3"
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        t = np.linspace(0, 2 * np.pi, 1000)
+        x = np.sin(t) + 2 * np.sin(2 * t)
+        y = np.cos(t) - 2 * np.cos(2 * t)
+        z = -np.sin(3 * t)
+
+        fig = plt.figure(figsize=(8, 6))
+        ax = fig.add_subplot(111, projection='3d')
+        ax.plot(x, y, z, linewidth=3, color='purple')
+        ax.view_init(elev=30, azim=60)
+        ax.set_xlabel('X')
+        ax.set_ylabel('Y')
+        ax.set_zlabel('Z')
+        ax.set_title('Trefoil Knot')
+        plt.show()

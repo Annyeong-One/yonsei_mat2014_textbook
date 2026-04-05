@@ -144,3 +144,104 @@ print(col2)  # ExtendedCollection(items=[], metadata={})  # Independent
 - Place required fields in parent, optional in child
 - Call `super().__post_init__()` when overriding
 - Consider composition over inheritance for complex cases
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a parent dataclass `Vehicle` with fields `make` (str) and `year` (int). Create a child dataclass `Car` that adds `doors` (int, default `4`) and `electric` (bool, default `False`). Create instances of both and print them. Show that `Car` inherits fields from `Vehicle`.
+
+??? success "Solution to Exercise 1"
+
+        from dataclasses import dataclass
+
+        @dataclass
+        class Vehicle:
+            make: str
+            year: int
+
+        @dataclass
+        class Car(Vehicle):
+            doors: int = 4
+            electric: bool = False
+
+        v = Vehicle("Toyota", 2023)
+        c = Car("Tesla", 2024, doors=4, electric=True)
+
+        print(v)  # Vehicle(make='Toyota', year=2023)
+        print(c)  # Car(make='Tesla', year=2024, doors=4, electric=True)
+        print(c.make)  # Tesla — inherited from Vehicle
+
+---
+
+**Exercise 2.**
+Define a base dataclass `Shape` with a `color` field (str, default `"black"`). Create child dataclasses `Circle` (adds `radius`) and `Rectangle` (adds `width` and `height`). Add `area()` methods to each child. Be careful with field ordering: required fields must come before fields with defaults. Show a working solution.
+
+??? success "Solution to Exercise 2"
+
+        from dataclasses import dataclass
+        import math
+
+        @dataclass
+        class Shape:
+            color: str = "black"
+
+        @dataclass
+        class Circle(Shape):
+            radius: float = 1.0  # Must have default (parent has default)
+
+            def area(self):
+                return math.pi * self.radius ** 2
+
+        @dataclass
+        class Rectangle(Shape):
+            width: float = 1.0
+            height: float = 1.0
+
+            def area(self):
+                return self.width * self.height
+
+        c = Circle(color="red", radius=5)
+        r = Rectangle(color="blue", width=3, height=4)
+
+        print(f"{c} -> area={c.area():.2f}")
+        # Circle(color='red', radius=5) -> area=78.54
+        print(f"{r} -> area={r.area():.2f}")
+        # Rectangle(color='blue', width=3, height=4) -> area=12.00
+
+---
+
+**Exercise 3.**
+Create a parent dataclass `Employee` with `name` (str) and `department` (str). Create a child `Manager` that adds `team_size` (int) and overrides `__post_init__` to validate that `team_size` is positive (calling `super().__post_init__()` if the parent has one). Demonstrate that creating a `Manager` with `team_size=0` raises a `ValueError`.
+
+??? success "Solution to Exercise 3"
+
+        from dataclasses import dataclass
+
+        @dataclass
+        class Employee:
+            name: str
+            department: str
+
+            def __post_init__(self):
+                if not self.name:
+                    raise ValueError("Name cannot be empty")
+
+        @dataclass
+        class Manager(Employee):
+            team_size: int = 1
+
+            def __post_init__(self):
+                super().__post_init__()
+                if self.team_size <= 0:
+                    raise ValueError(f"team_size must be positive, got {self.team_size}")
+
+        m = Manager("Alice", "Engineering", team_size=5)
+        print(m)  # Manager(name='Alice', department='Engineering', team_size=5)
+
+        try:
+            bad = Manager("Bob", "Sales", team_size=0)
+        except ValueError as e:
+            print(f"Error: {e}")
+            # Error: team_size must be positive, got 0

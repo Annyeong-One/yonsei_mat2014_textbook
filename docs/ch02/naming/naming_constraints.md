@@ -317,3 +317,70 @@ None            ❌ Reserved keyword
    class UserAccount:
        pass
    ```
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Which of the following are valid Python identifiers? Test each with `str.isidentifier()`.
+
+```python
+names = ["my_var", "2things", "_private", "__dunder__", "class", "my-var", "café"]
+```
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        names = ["my_var", "2things", "_private", "__dunder__", "class", "my-var", "café"]
+
+        for name in names:
+            print(f"{name:>12}: {name.isidentifier()}")
+        ```
+
+    `my_var`, `_private`, `__dunder__`, `class`, and `café` are valid identifiers. `2things` (starts with digit) and `my-var` (contains hyphen) are not. Note that `class` is a valid identifier but is a reserved keyword.
+
+---
+
+**Exercise 2.**
+Explain the rules for valid Python identifiers: what characters can they start with, and what characters can follow?
+
+??? success "Solution to Exercise 2"
+
+    Python identifiers must:
+
+    - Start with a letter (a-z, A-Z) or underscore (`_`)
+    - Followed by zero or more letters, digits (0-9), or underscores
+    - Not be a keyword (though `isidentifier()` returns `True` for keywords)
+    - Unicode letters are allowed (e.g., `café`, `变量`)
+
+---
+
+**Exercise 3.**
+Write a function `sanitize_name(s)` that converts an arbitrary string into a valid Python identifier by replacing invalid characters with underscores and prepending `_` if it starts with a digit.
+
+??? success "Solution to Exercise 3"
+
+        ```python
+        import keyword
+
+        def sanitize_name(s):
+            result = ""
+            for i, ch in enumerate(s):
+                if i == 0 and ch.isdigit():
+                    result += "_" + ch
+                elif ch.isalnum() or ch == "_":
+                    result += ch
+                else:
+                    result += "_"
+            if not result:
+                result = "_"
+            if keyword.iskeyword(result):
+                result += "_"
+            return result
+
+        print(sanitize_name("2things"))    # _2things
+        print(sanitize_name("my-var"))     # my_var
+        print(sanitize_name("class"))      # class_
+        ```

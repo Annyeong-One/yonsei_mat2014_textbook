@@ -379,3 +379,64 @@ if __name__ == '__main__':
     multi_level_grouping(df)
     group_transform_rank(df)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Group a DataFrame by `'department'` and apply named aggregations to compute `total_sales=('sales', 'sum')` and `avg_sales=('sales', 'mean')`. Reset the index to get a flat DataFrame.
+
+??? success "Solution to Exercise 1"
+    Use named aggregations for clean column names.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'department': ['Sales', 'Sales', 'IT', 'IT'],
+            'sales': [100, 200, 150, 250]
+        })
+        result = df.groupby('department').agg(
+            total_sales=('sales', 'sum'),
+            avg_sales=('sales', 'mean')
+        ).reset_index()
+        print(result)
+
+---
+
+**Exercise 2.**
+Use the dictionary syntax of `.agg()` to apply different functions to different columns after a groupby: sum the `'quantity'` column and compute the mean of the `'price'` column per group.
+
+??? success "Solution to Exercise 2"
+    Use a dictionary mapping columns to functions.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'group': ['A', 'A', 'B', 'B'],
+            'quantity': [10, 20, 30, 40],
+            'price': [5.0, 7.5, 3.0, 6.0]
+        })
+        result = df.groupby('group').agg({
+            'quantity': 'sum',
+            'price': 'mean'
+        })
+        print(result)
+
+---
+
+**Exercise 3.**
+Group by `'customer_id'` and count the number of orders per customer using `.count()`. Then filter to find customers with more than 3 orders using boolean indexing on the result.
+
+??? success "Solution to Exercise 3"
+    Count per group and filter using boolean indexing.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'customer_id': [1, 1, 1, 1, 2, 2, 3, 3, 3, 3, 3],
+            'order_id': range(11)
+        })
+        counts = df.groupby('customer_id')['order_id'].count()
+        frequent = counts[counts > 3]
+        print(frequent)

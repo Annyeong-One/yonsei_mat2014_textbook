@@ -101,3 +101,58 @@ May cause problems with:
 ### 3. Typing
 
 Difficult to type special characters
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Create variables using non-ASCII Unicode names (e.g., Greek letters, CJK characters). Verify they work as expected.
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        # Greek letters for math
+        pi = 3.14159
+
+        # CJK characters
+        name = "Python"
+
+        print(pi)
+        print(name)
+        ```
+
+    Python 3 supports Unicode identifiers, allowing mathematical notation and localized variable names.
+
+---
+
+**Exercise 2.**
+Explain why using Unicode identifiers can be both useful and problematic. Give one good use case and one potential pitfall.
+
+??? success "Solution to Exercise 2"
+
+    **Good use case**: Mathematical code where Greek letters match the formulas:
+
+        ```python
+        delta = x1 - x0
+        ```
+
+    **Pitfall**: Team members may not be able to type the characters, and visually similar characters (e.g., Latin `a` vs Cyrillic `a`) can create confusing bugs.
+
+---
+
+**Exercise 3.**
+Test whether emoji characters are valid Python identifiers using `str.isidentifier()`.
+
+??? success "Solution to Exercise 3"
+
+        ```python
+        print("hello".isidentifier())  # True
+        print("变量".isidentifier())    # True
+
+        # Most emoji are NOT valid identifiers
+        print("\U0001F600".isidentifier())  # False (😀)
+        ```
+
+    Emoji are classified as symbols, not letters, so they cannot be used as identifiers.

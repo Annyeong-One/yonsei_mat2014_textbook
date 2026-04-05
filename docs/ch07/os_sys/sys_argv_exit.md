@@ -62,3 +62,74 @@ Result: 5.0
 Program completed successfully
 ```
 
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a script that uses `sys.argv` to accept a filename and an optional `--count` flag. If `--count` is provided, print the number of characters in the filename string (not the file content). Otherwise, print the filename. Simulate by setting `sys.argv` manually.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    import sys
+
+    # Simulate command line args
+    sys.argv = ["script.py", "data.txt", "--count"]
+
+    filename = sys.argv[1] if len(sys.argv) > 1 else None
+    count_flag = "--count" in sys.argv
+
+    if filename:
+        if count_flag:
+            print(f"Character count: {len(filename)}")
+        else:
+            print(f"Filename: {filename}")
+    # Character count: 8
+    ```
+
+---
+
+**Exercise 2.**
+Write a function `parse_key_value_args` that takes `sys.argv[1:]` and parses arguments in the format `key=value`. Return a dictionary of the parsed pairs. For example, `["host=localhost", "port=8080"]` should return `{"host": "localhost", "port": "8080"}`.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    def parse_key_value_args(args):
+        result = {}
+        for arg in args:
+            if "=" in arg:
+                key, value = arg.split("=", 1)
+                result[key] = value
+        return result
+
+    # Test
+    args = ["host=localhost", "port=8080", "debug=true"]
+    print(parse_key_value_args(args))
+    # {'host': 'localhost', 'port': '8080', 'debug': 'true'}
+    ```
+
+---
+
+**Exercise 3.**
+Write a function `validate_and_exit` that takes an integer exit code and an optional error message. If the exit code is non-zero, print the error message to `sys.stderr` and call `sys.exit(code)`. Otherwise, print `"Success"` to `sys.stdout`. Use `sys.stderr.write()` for errors.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    import sys
+
+    def validate_and_exit(code, message=None):
+        if code != 0:
+            if message:
+                sys.stderr.write(f"Error: {message}\n")
+            # sys.exit(code)  # Uncomment in real usage
+            print(f"Would exit with code {code}")
+        else:
+            print("Success")
+
+    # Test
+    validate_and_exit(0)          # Success
+    validate_and_exit(1, "Failed")  # Error: Failed
+    ```

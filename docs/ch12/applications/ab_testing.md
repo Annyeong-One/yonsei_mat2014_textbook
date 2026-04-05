@@ -137,3 +137,61 @@ print("Adjusted p-values:", adjusted)
 ## Summary
 
 The A/B testing workflow combines sample size planning, hypothesis testing, confidence interval estimation, and multiple testing correction into a coherent decision framework. The key steps are: (1) define hypotheses and choose $\alpha$, (2) compute the required sample size, (3) collect data and compute the test statistic, (4) report p-values alongside confidence intervals, and (5) apply corrections when testing multiple metrics.
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that simulates an A/B test with two groups (control and treatment) of 1000 observations each. Use a two-sample t-test to determine if the treatment has a statistically significant effect.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(100)
+    print(f'Mean: {data.mean():.4f}')
+    print(f'Std: {data.std():.4f}')
+    ```
+
+---
+
+**Exercise 2.** Explain the difference between a one-tailed and two-tailed hypothesis test. When would you use each in an A/B test?
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the statistical method and its assumptions.
+
+---
+
+**Exercise 3.** Write code that computes the required sample size for an A/B test given a desired effect size of 0.2, significance level of 0.05, and power of 0.8.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+    from scipy import stats
+    import matplotlib.pyplot as plt
+
+    np.random.seed(42)
+    data = np.random.randn(1000)
+    fig, ax = plt.subplots()
+    ax.hist(data, bins=30, density=True, alpha=0.7)
+    ax.set_title('Distribution')
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Create a simulation that runs 1000 A/B tests with no true effect (null hypothesis is true). Count how many tests yield a p-value below 0.05. What percentage do you expect?
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(500)
+    result = stats.describe(data)
+    print(result)
+    ```

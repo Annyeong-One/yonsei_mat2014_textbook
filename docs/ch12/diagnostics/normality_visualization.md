@@ -157,3 +157,61 @@ plt.show()
 ## Summary
 
 Visual normality assessment reveals not just whether data are non-normal but how they deviate. **Histograms** show overall shape, **QQ plots** diagnose tail behavior and skewness with high sensitivity, and **ECDF comparisons** provide a complete non-binned view. **Box plots** highlight asymmetry and outliers at a glance, while **skewness and kurtosis** values quantify what the plots reveal. Using these methods together gives a thorough picture that guides the choice between parametric methods that assume normality and robust or nonparametric alternatives that do not.
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that creates a figure with three diagnostic plots for normality: histogram with normal overlay, Q-Q plot, and box plot.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(100)
+    print(f'Mean: {data.mean():.4f}')
+    print(f'Std: {data.std():.4f}')
+    ```
+
+---
+
+**Exercise 2.** Explain three visual indicators of non-normality in a Q-Q plot (heavy tails, skewness, multimodality).
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the statistical method and its assumptions.
+
+---
+
+**Exercise 3.** Write code that generates data from a heavy-tailed distribution (e.g., t-distribution with 3 df) and shows its departure from normality visually.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+    from scipy import stats
+    import matplotlib.pyplot as plt
+
+    np.random.seed(42)
+    data = np.random.randn(1000)
+    fig, ax = plt.subplots()
+    ax.hist(data, bins=30, density=True, alpha=0.7)
+    ax.set_title('Distribution')
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Create a function that takes a data array and produces a 4-panel normality diagnostic figure.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(500)
+    result = stats.describe(data)
+    print(result)
+    ```

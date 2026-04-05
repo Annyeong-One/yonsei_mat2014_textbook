@@ -141,3 +141,70 @@ Summary of join types.
 # Outer join for data completeness check
 # Left join for preserving benchmark dates
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create two DataFrames with partially overlapping indices (e.g., 5 indices each with 3 in common). Perform all four join types (`left`, `right`, `inner`, `outer`) and print the row count of each result. Verify that inner gives the fewest rows and outer gives the most.
+
+??? success "Solution to Exercise 1"
+    Compare row counts across all four join types.
+
+        import pandas as pd
+
+        df1 = pd.DataFrame({'A': range(5)}, index=['a', 'b', 'c', 'd', 'e'])
+        df2 = pd.DataFrame({'B': range(5)}, index=['c', 'd', 'e', 'f', 'g'])
+        for how in ['left', 'right', 'inner', 'outer']:
+            result = df1.join(df2, how=how)
+            print(f"{how}: {len(result)} rows")
+
+---
+
+**Exercise 2.**
+Create two DataFrames representing monthly sales data for different regions, where some months are missing in each. Use an inner join to get only the months with data in both regions. Confirm there are no `NaN` values in the result.
+
+??? success "Solution to Exercise 2"
+    Inner join to get months with data in both regions.
+
+        import pandas as pd
+
+        region_a = pd.DataFrame(
+            {'sales_a': [100, 200, 300]},
+            index=pd.Index(['Jan', 'Feb', 'Mar'], name='month')
+        )
+        region_b = pd.DataFrame(
+            {'sales_b': [150, 250, 350]},
+            index=pd.Index(['Feb', 'Mar', 'Apr'], name='month')
+        )
+        result = region_a.join(region_b, how='inner')
+        print(result)
+        assert result.isna().sum().sum() == 0
+        print("No NaN values in inner join result.")
+
+---
+
+**Exercise 3.**
+Using the same two DataFrames from Exercise 2, perform an outer join. Count the `NaN` values per column and use `.fillna(0)` to replace them. Print the result before and after filling.
+
+??? success "Solution to Exercise 3"
+    Outer join with NaN counting and filling.
+
+        import pandas as pd
+
+        region_a = pd.DataFrame(
+            {'sales_a': [100, 200, 300]},
+            index=pd.Index(['Jan', 'Feb', 'Mar'], name='month')
+        )
+        region_b = pd.DataFrame(
+            {'sales_b': [150, 250, 350]},
+            index=pd.Index(['Feb', 'Mar', 'Apr'], name='month')
+        )
+        result = region_a.join(region_b, how='outer')
+        print("Before fillna:")
+        print(result)
+        print("\nNaN per column:", result.isna().sum().to_dict())
+        result = result.fillna(0)
+        print("\nAfter fillna:")
+        print(result)

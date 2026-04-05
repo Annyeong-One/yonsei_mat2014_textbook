@@ -484,3 +484,87 @@ with ThreadPoolExecutor() as executor:
 - `wait()` waits for specific conditions (first, all, exception)
 - Always handle exceptions in `result()` or use `exception()`
 - Map futures to inputs for result tracking
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Submit 10 tasks using `executor.submit()` where each task sleeps for a random duration (0.1-1.0s) and returns its task ID. Add a `done_callback` to each future that prints a message when the task completes. Use `as_completed()` to collect and print all results in completion order.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import time
+        import random
+        from concurrent.futures import ThreadPoolExecutor, as_completed
+
+        def task(tid):
+            time.sleep(random.uniform(0.1, 1.0))
+            return tid
+
+        def on_done(future):
+            print(f"  Callback: task {future.result()} finished")
+
+        with ThreadPoolExecutor(max_workers=4) as ex:
+            futures = {}
+            for i in range(10):
+                f = ex.submit(task, i)
+                f.add_done_callback(on_done)
+                futures[f] = i
+
+            for f in as_completed(futures):
+                print(f"  Completed: task {f.result()}")
+        ```
+
+---
+
+**Exercise 2.**
+Write a progress tracker. Submit 20 tasks to a `ThreadPoolExecutor` (each sleeping 0.2-0.8s). Use `as_completed()` to print progress like "5/20 complete (25%)" as each task finishes.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import time
+        import random
+        from concurrent.futures import ThreadPoolExecutor, as_completed
+
+        def work(x):
+            time.sleep(random.uniform(0.2, 0.8))
+            return x
+
+        total = 20
+        with ThreadPoolExecutor(max_workers=5) as ex:
+            futs = [ex.submit(work, i) for i in range(total)]
+            done_count = 0
+            for f in as_completed(futs):
+                done_count += 1
+                pct = 100 * done_count / total
+                print(f"{done_count}/{total} complete ({pct:.0f}%)")
+        ```
+
+---
+
+**Exercise 3.**
+Demonstrate `future.cancel()`. Submit 5 tasks to an executor with `max_workers=1` (so only 1 runs at a time, others are queued). Immediately try to cancel the last 3. Print which cancellations succeeded, then collect results for the tasks that ran.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import time
+        from concurrent.futures import ThreadPoolExecutor
+
+        def slow(x):
+            time.sleep(1)
+            return x * 10
+
+        with ThreadPoolExecutor(max_workers=1) as ex:
+            futures = [ex.submit(slow, i) for i in range(5)]
+
+            for i in range(2, 5):
+                ok = futures[i].cancel()
+                print(f"Cancel task {i}: {'success' if ok else 'failed'}")
+
+            for i, f in enumerate(futures):
+                if f.cancelled():
+                    print(f"Task {i}: cancelled")
+                else:
+                    print(f"Task {i}: result = {f.result()}")
+        ```

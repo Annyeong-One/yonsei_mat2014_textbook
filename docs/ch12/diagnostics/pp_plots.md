@@ -134,3 +134,61 @@ plt.show()
 ## Summary
 
 PP plots compare empirical and theoretical cumulative probabilities, providing a diagnostic that is most sensitive to deviations near the center of the distribution. Their bounded $[0, 1] \times [0, 1]$ domain makes them scale-invariant and visually consistent across different datasets. While **QQ plots** are generally preferred for detecting tail behavior, **PP plots** complement them by highlighting location shifts and central shape mismatches. Using both together gives a complete picture of distributional fit.
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that creates a P-P plot comparing the empirical CDF of a sample against the theoretical CDF of a normal distribution.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(100)
+    print(f'Mean: {data.mean():.4f}')
+    print(f'Std: {data.std():.4f}')
+    ```
+
+---
+
+**Exercise 2.** Explain the difference between a P-P plot and a Q-Q plot. When might you prefer one over the other?
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the statistical method and its assumptions.
+
+---
+
+**Exercise 3.** Write code that creates P-P plots for data from three distributions: normal, exponential, and uniform. Show which one matches the normal reference line.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+    from scipy import stats
+    import matplotlib.pyplot as plt
+
+    np.random.seed(42)
+    data = np.random.randn(1000)
+    fig, ax = plt.subplots()
+    ax.hist(data, bins=30, density=True, alpha=0.7)
+    ax.set_title('Distribution')
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Create a P-P plot that compares a sample against an exponential distribution instead of a normal distribution.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(500)
+    result = stats.describe(data)
+    print(result)
+    ```

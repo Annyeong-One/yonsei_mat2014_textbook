@@ -355,3 +355,55 @@ The most common broadcasting patterns share the same underlying mechanism: align
 | Pairwise distance | `(m, 1, d) - (1, n, d)` | 3D broadcasting |
 | Row/column scaling | `(m, n) * (n,)` or `(m, 1)` | Weight vector alignment |
 | Boolean masking | `(m, n) > (n,)` | Threshold per column |
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Given a matrix `X` of shape `(50, 4)`, write a single expression that performs min-max scaling on each column so that every column's values lie in `[0, 1]`. Use `keepdims` where appropriate.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        X = np.random.randn(50, 4)
+        X_min = X.min(axis=0, keepdims=True)   # (1, 4)
+        X_max = X.max(axis=0, keepdims=True)   # (1, 4)
+        X_scaled = (X - X_min) / (X_max - X_min)
+        print(X_scaled.min(axis=0))  # [0. 0. 0. 0.]
+        print(X_scaled.max(axis=0))  # [1. 1. 1. 1.]
+
+---
+
+**Exercise 2.**
+Using only broadcasting (no `np.outer`), compute the outer product of two 1D arrays `u = np.array([1, 2, 3, 4])` and `v = np.array([10, 20, 30])` to produce a `(4, 3)` result.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        u = np.array([1, 2, 3, 4])
+        v = np.array([10, 20, 30])
+        outer = u[:, np.newaxis] * v[np.newaxis, :]
+        print(outer)
+        # [[10 20 30]
+        #  [20 40 60]
+        #  [30 60 90]
+        #  [40 80 120]]
+        print(outer.shape)  # (4, 3)
+
+---
+
+**Exercise 3.**
+Given a set of 6 points in 2D stored as `points = np.random.randn(6, 2)`, compute the full `(6, 6)` pairwise Euclidean distance matrix using broadcasting. Verify that the diagonal is all zeros and the matrix is symmetric.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        points = np.random.randn(6, 2)
+        diff = points[:, np.newaxis, :] - points[np.newaxis, :, :]  # (6, 6, 2)
+        dist = np.sqrt((diff ** 2).sum(axis=2))                     # (6, 6)
+        print("Diagonal all zero:", np.allclose(np.diag(dist), 0))
+        print("Symmetric:", np.allclose(dist, dist.T))

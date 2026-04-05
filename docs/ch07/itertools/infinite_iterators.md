@@ -68,3 +68,57 @@ print(limited2)
 ['hello', 'hello', 'hello']
 ```
 
+---
+
+## Exercises
+
+**Exercise 1.**
+Use `count` and `islice` to generate the first 10 even numbers starting from 0 (i.e., 0, 2, 4, ..., 18). Do not use a list comprehension; use only itertools functions.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    from itertools import count, islice
+
+    evens = list(islice(count(0, 2), 10))
+    print(evens)  # [0, 2, 4, 6, 8, 10, 12, 14, 16, 18]
+    ```
+
+---
+
+**Exercise 2.**
+Use `cycle` to assign colors from `["red", "green", "blue"]` to a list of 7 items. Return a list of `(item, color)` tuples. For example, given items `["a", "b", "c", "d", "e", "f", "g"]`, the result should pair each item with the cycling colors.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    from itertools import cycle
+
+    items = ["a", "b", "c", "d", "e", "f", "g"]
+    colors = cycle(["red", "green", "blue"])
+    result = [(item, next(colors)) for item in items]
+    print(result)
+    # [('a', 'red'), ('b', 'green'), ('c', 'blue'),
+    #  ('d', 'red'), ('e', 'green'), ('f', 'blue'), ('g', 'red')]
+    ```
+
+---
+
+**Exercise 3.**
+Use `repeat` and `map` to create a list of 5 dictionaries, each initialized as `{"count": 0, "active": True}`. Ensure each dictionary is a separate object (not the same reference). Hint: use `repeat` with a lambda or function.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    from itertools import repeat
+
+    dicts = list(map(
+        lambda _: {"count": 0, "active": True},
+        repeat(None, 5)
+    ))
+    print(dicts)
+    # Each dict is independent
+    dicts[0]["count"] = 10
+    print(dicts[0])  # {'count': 10, 'active': True}
+    print(dicts[1])  # {'count': 0, 'active': True}
+    ```

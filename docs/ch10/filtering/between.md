@@ -250,3 +250,54 @@ result = df[
     (df['salary'].between(50000, 80000))
 ]
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a Series of daily temperatures and use `.between(15, 25)` to find days with comfortable temperatures. Print the filtered Series and the count of comfortable days.
+
+??? success "Solution to Exercise 1"
+    Use `.between()` to create a boolean mask for range filtering.
+
+        import pandas as pd
+
+        temps = pd.Series([10, 18, 22, 30, 15, 25, 8], name='temp')
+        comfortable = temps[temps.between(15, 25)]
+        print(comfortable)
+        print(f"Comfortable days: {len(comfortable)}")
+
+---
+
+**Exercise 2.**
+Given a DataFrame with a `'date'` column, use `.between()` to filter rows where dates fall in Q1 2024 (January 1 to March 31). Demonstrate that `between` works with string dates.
+
+??? success "Solution to Exercise 2"
+    The `.between()` method works with date strings.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'date': pd.date_range('2024-01-01', periods=120),
+            'value': range(120)
+        })
+        q1 = df[df['date'].between('2024-01-01', '2024-03-31')]
+        print(f"Q1 rows: {len(q1)}")
+        print(q1.head())
+
+---
+
+**Exercise 3.**
+Use `.between()` with `inclusive='neither'` to find stock prices strictly between two thresholds (excluding the boundaries). Compare the result count with `inclusive='both'` (the default).
+
+??? success "Solution to Exercise 3"
+    Compare `inclusive` parameter options.
+
+        import pandas as pd
+
+        prices = pd.Series([95, 100, 105, 110, 115, 120, 125])
+        both = prices[prices.between(100, 120, inclusive='both')]
+        neither = prices[prices.between(100, 120, inclusive='neither')]
+        print(f"inclusive='both': {len(both)} values")
+        print(f"inclusive='neither': {len(neither)} values")

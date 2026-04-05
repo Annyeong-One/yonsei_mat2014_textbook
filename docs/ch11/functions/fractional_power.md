@@ -198,3 +198,71 @@ if __name__ == "__main__":
 | `linalg.fractional_matrix_power(A, p)` | Compute $A^p$ |
 
 Key: Works for any real $p$. Uses principal branch for non-integer powers.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Compute $A^{1/3}$ (the cube root) for $A = \begin{pmatrix} 8 & 0 \\ 0 & 27 \end{pmatrix}$ using `fractional_matrix_power`. Verify the result by cubing it: check that $(A^{1/3})^3 \approx A$ with Frobenius norm error below $10^{-10}$.
+
+??? success "Solution to Exercise 1"
+        import numpy as np
+        from scipy import linalg
+
+        A = np.array([[8, 0],
+                       [0, 27]], dtype=float)
+
+        A_third = linalg.fractional_matrix_power(A, 1/3)
+        A_cubed = A_third @ A_third @ A_third
+
+        error = np.linalg.norm(A_cubed.real - A)
+        print(f"A^(1/3) =\n{A_third.real.round(6)}")
+        print(f"(A^(1/3))^3 =\n{A_cubed.real.round(6)}")
+        print(f"Error: {error:.2e}")
+        assert error < 1e-10
+
+---
+
+**Exercise 2.**
+For the matrix $A = \begin{pmatrix} 2 & 1 \\ 1 & 3 \end{pmatrix}$, verify the power law $A^p \cdot A^q = A^{p+q}$ for $p = 0.4$ and $q = 0.6$. Print the Frobenius norm of the difference between the two sides.
+
+??? success "Solution to Exercise 2"
+        import numpy as np
+        from scipy import linalg
+
+        A = np.array([[2, 1],
+                       [1, 3]], dtype=float)
+        p, q = 0.4, 0.6
+
+        Ap = linalg.fractional_matrix_power(A, p)
+        Aq = linalg.fractional_matrix_power(A, q)
+        Apq = linalg.fractional_matrix_power(A, p + q)
+
+        product = Ap @ Aq
+        error = np.linalg.norm(product.real - Apq.real)
+        print(f"A^{p} @ A^{q} =\n{product.real.round(8)}")
+        print(f"A^{p+q} =\n{Apq.real.round(8)}")
+        print(f"Difference norm: {error:.2e}")
+
+---
+
+**Exercise 3.**
+Create a $3 \times 3$ transition matrix $P = \begin{pmatrix} 0.8 & 0.1 & 0.1 \\ 0.2 & 0.7 & 0.1 \\ 0.1 & 0.2 & 0.7 \end{pmatrix}$. Compute $P^{0.5}$ (the "half-step" transition matrix) and verify that each row sums to 1 and all entries are non-negative (a valid stochastic matrix).
+
+??? success "Solution to Exercise 3"
+        import numpy as np
+        from scipy import linalg
+
+        P = np.array([[0.8, 0.1, 0.1],
+                       [0.2, 0.7, 0.1],
+                       [0.1, 0.2, 0.7]])
+
+        P_half = linalg.fractional_matrix_power(P, 0.5).real
+
+        row_sums = P_half.sum(axis=1)
+        all_nonneg = np.all(P_half >= -1e-10)
+        print(f"P^0.5 =\n{P_half.round(6)}")
+        print(f"Row sums: {row_sums.round(10)}")
+        print(f"All rows sum to 1: {np.allclose(row_sums, 1)}")
+        print(f"All entries non-negative: {all_nonneg}")

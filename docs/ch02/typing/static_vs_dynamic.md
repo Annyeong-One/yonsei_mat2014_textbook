@@ -208,3 +208,66 @@ Python doesn't care about the **declared type** — only about **what the object
 | Type hints | N/A | Optional (3.5+) |
 
 Python's dynamic typing makes it beginner-friendly and great for rapid development, while type hints offer the benefits of static typing when needed.
+
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Demonstrate Python's dynamic typing by creating a variable, assigning it an integer, then a string, then a list. Print the type at each step.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    x = 42
+    print(f"{x}, type: {type(x)}")   # 42, type: <class 'int'>
+
+    x = "hello"
+    print(f"{x}, type: {type(x)}")   # hello, type: <class 'str'>
+
+    x = [1, 2, 3]
+    print(f"{x}, type: {type(x)}")   # [1, 2, 3], type: <class 'list'>
+    ```
+
+    Python variables are names that can be rebound to objects of any type. The type is determined at runtime based on the current object.
+
+---
+
+**Exercise 2.**
+Write a function with type hints: `def add(a: int, b: int) -> int`. Show that Python does not enforce the hints at runtime by passing strings instead of integers.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    def add(a: int, b: int) -> int:
+        return a + b
+
+    # Works with correct types
+    print(add(1, 2))         # 3
+
+    # Also works with strings (no runtime enforcement)
+    print(add("Hello", " World"))  # Hello World
+    ```
+
+    Type hints are documentation for developers and tools like `mypy`. Python ignores them at runtime, so any type that supports `+` will work.
+
+---
+
+**Exercise 3.**
+Demonstrate duck typing by writing a function `get_length(obj)` that calls `len()` on its argument. Show that it works with strings, lists, tuples, and dictionaries without any type checking.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    def get_length(obj):
+        return len(obj)
+
+    print(get_length("hello"))       # 5
+    print(get_length([1, 2, 3]))     # 3
+    print(get_length((1, 2)))        # 2
+    print(get_length({'a': 1}))      # 1
+    ```
+
+    Python does not check the type of `obj`. It only checks whether the object supports `len()` (i.e., has a `__len__` method). This is duck typing: if it supports the operation, it works.

@@ -459,3 +459,93 @@ def demo():
 if __name__ == '__main__':
     demo()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write both a naive recursive and a memoized version of a function `tribonacci(n)` that computes the n-th Tribonacci number (defined as `T(n) = T(n-1) + T(n-2) + T(n-3)`, with `T(0)=0, T(1)=0, T(2)=1`). Compare the number of calls for `n=20` using a call counter.
+
+??? success "Solution to Exercise 1"
+
+        # Naive version
+        naive_calls = 0
+
+        def tribonacci_naive(n):
+            global naive_calls
+            naive_calls += 1
+            if n == 0 or n == 1:
+                return 0
+            if n == 2:
+                return 1
+            return tribonacci_naive(n-1) + tribonacci_naive(n-2) + tribonacci_naive(n-3)
+
+        # Memoized version
+        memo_calls = 0
+
+        def tribonacci_memo(n, cache=None):
+            global memo_calls
+            memo_calls += 1
+            if cache is None:
+                cache = {}
+            if n in cache:
+                return cache[n]
+            if n == 0 or n == 1:
+                return 0
+            if n == 2:
+                return 1
+            cache[n] = (tribonacci_memo(n-1, cache)
+                        + tribonacci_memo(n-2, cache)
+                        + tribonacci_memo(n-3, cache))
+            return cache[n]
+
+        print(tribonacci_naive(20), f"({naive_calls} calls)")
+        print(tribonacci_memo(20), f"({memo_calls} calls)")
+
+---
+
+**Exercise 2.**
+Implement the Tower of Hanoi solution as a recursive function `hanoi(n, source, target, auxiliary)` that prints each move (e.g., `"Move disk 1 from A to C"`). Verify the number of moves for `n=4` equals `2^4 - 1 = 15`.
+
+??? success "Solution to Exercise 2"
+
+        move_count = 0
+
+        def hanoi(n, source="A", target="C", auxiliary="B"):
+            global move_count
+            if n == 1:
+                move_count += 1
+                print(f"Move disk 1 from {source} to {target}")
+                return
+            hanoi(n - 1, source, auxiliary, target)
+            move_count += 1
+            print(f"Move disk {n} from {source} to {target}")
+            hanoi(n - 1, auxiliary, target, source)
+
+        hanoi(4)
+        print(f"Total moves: {move_count}")  # 15
+
+---
+
+**Exercise 3.**
+Write an indirect recursion example: function `is_even(n)` calls `is_odd(n - 1)`, and `is_odd(n)` calls `is_even(n - 1)`. The base case for both is `n == 0` (`is_even(0)` returns `True`, `is_odd(0)` returns `False`). Test with several inputs and verify correctness.
+
+??? success "Solution to Exercise 3"
+
+        def is_even(n):
+            if n == 0:
+                return True
+            return is_odd(n - 1)
+
+        def is_odd(n):
+            if n == 0:
+                return False
+            return is_even(n - 1)
+
+        for i in range(6):
+            print(f"{i}: even={is_even(i)}, odd={is_odd(i)}")
+        # 0: even=True,  odd=False
+        # 1: even=False, odd=True
+        # 2: even=True,  odd=False
+        # ...

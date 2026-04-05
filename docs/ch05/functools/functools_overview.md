@@ -227,3 +227,76 @@ Each function has a dedicated page with detailed coverage:
 - `partial` creates cleaner specialized functions than lambdas
 - `reduce` is powerful but often less readable than built-in alternatives
 - `total_ordering` and `singledispatch` reduce boilerplate in OOP code
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a decorator using `functools.wraps` that logs the name and arguments of any function call to a list called `log`. Apply it to two different functions, call each once, and print the log.
+
+??? success "Solution to Exercise 1"
+
+        from functools import wraps
+
+        log = []
+
+        def logger(func):
+            @wraps(func)
+            def wrapper(*args, **kwargs):
+                log.append(f"{func.__name__}({args}, {kwargs})")
+                return func(*args, **kwargs)
+            return wrapper
+
+        @logger
+        def add(a, b):
+            return a + b
+
+        @logger
+        def greet(name):
+            return f"Hello, {name}"
+
+        add(3, 4)
+        greet("Alice")
+        print(log)
+        # ["add((3, 4), {})", "greet(('Alice',), {})"]
+
+---
+
+**Exercise 2.**
+Use `functools.partial` to create a `json_dumps_pretty` function from `json.dumps` that always uses `indent=2` and `sort_keys=True`. Demonstrate by serializing a dictionary with nested data.
+
+??? success "Solution to Exercise 2"
+
+        import json
+        from functools import partial
+
+        json_dumps_pretty = partial(json.dumps, indent=2, sort_keys=True)
+
+        data = {"name": "Alice", "scores": [95, 87, 91], "active": True}
+        print(json_dumps_pretty(data))
+
+---
+
+**Exercise 3.**
+Combine three `functools` features in one example: use `@lru_cache` to memoize a recursive function, `functools.reduce` to aggregate results, and `functools.partial` to create a specialized version of the aggregation. Specifically, memoize a `fibonacci(n)` function, then use `reduce` with `operator.add` to sum the first 20 Fibonacci numbers, and use `partial` to create a `sum_fibs` function that always sums a fixed range.
+
+??? success "Solution to Exercise 3"
+
+        from functools import lru_cache, partial, reduce
+        import operator
+
+        @lru_cache(maxsize=None)
+        def fibonacci(n):
+            if n < 2:
+                return n
+            return fibonacci(n - 1) + fibonacci(n - 2)
+
+        # Sum first 20 Fibonacci numbers using reduce
+        fibs = [fibonacci(i) for i in range(20)]
+        total = reduce(operator.add, fibs)
+        print(f"Sum of first 20 fibs: {total}")  # 10945
+
+        # Create a reusable partial for summing any list
+        sum_list = partial(reduce, operator.add)
+        print(sum_list(fibs))  # 10945

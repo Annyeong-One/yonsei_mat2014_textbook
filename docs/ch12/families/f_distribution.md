@@ -114,3 +114,49 @@ In finance, the F-distribution appears in testing whether portfolio risk models 
 ## Summary
 
 The F-distribution is the sampling distribution of the ratio of two independent chi-square variables scaled by their degrees of freedom. In `scipy.stats`, use `stats.f(dfn, dfd)` to create a frozen distribution for computing PDFs, CDFs, critical values, and generating random samples.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Compute the 95th percentile of the $F$-distribution with $d_1 = 3$ and $d_2 = 20$. This is the critical value for an ANOVA F-test with 3 groups and 20 residual degrees of freedom.
+
+??? success "Solution to Exercise 1"
+
+        from scipy import stats
+
+        crit = stats.f.ppf(0.95, dfn=3, dfd=20)
+        print(f"F(3,20) 95th percentile: {crit:.4f}")
+
+---
+
+**Exercise 2.**
+Generate 10,000 samples from an $F(5, 30)$ distribution. Compute the sample mean and verify it is close to the theoretical value $d_2 / (d_2 - 2)$.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy import stats
+
+        samples = stats.f.rvs(dfn=5, dfd=30, size=10000, random_state=42)
+        theo_mean = 30 / (30 - 2)
+        print(f"Sample mean: {np.mean(samples):.4f}")
+        print(f"Theoretical mean: {theo_mean:.4f}")
+
+---
+
+**Exercise 3.**
+Demonstrate the relationship between $F$ and $t$: generate 10,000 samples from $t(10)$, square them, and show the resulting distribution matches $F(1, 10)$ by comparing means and variances.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+
+        t_samples = stats.t.rvs(df=10, size=10000, random_state=42)
+        f_samples = t_samples ** 2
+
+        f_rv = stats.f(dfn=1, dfd=10)
+        print(f"t^2 mean: {np.mean(f_samples):.4f}, F(1,10) mean: {f_rv.mean():.4f}")
+        print(f"t^2 var:  {np.var(f_samples, ddof=1):.4f}, F(1,10) var:  {f_rv.var():.4f}")

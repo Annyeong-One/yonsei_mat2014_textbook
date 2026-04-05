@@ -434,3 +434,49 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Given `a = np.array([1, 5, 3, 8, 2])` and `b = np.array([3, 2, 7, 4, 6])`, compute the element-wise minimum and maximum using `np.minimum` and `np.maximum`. Verify the results manually.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        a = np.array([1, 5, 3, 8, 2])
+        b = np.array([3, 2, 7, 4, 6])
+        print(f"min: {np.minimum(a, b)}")  # [1 2 3 4 2]
+        print(f"max: {np.maximum(a, b)}")  # [3 5 7 8 6]
+
+---
+
+**Exercise 2.**
+Use `np.clip` (which combines minimum and maximum) to clamp all values in `a = np.array([-5, 3, 12, -1, 7, 20])` to the range `[0, 10]`. Implement the same operation using `np.maximum(np.minimum(a, 10), 0)`.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        a = np.array([-5, 3, 12, -1, 7, 20])
+        clipped = np.clip(a, 0, 10)
+        manual = np.maximum(np.minimum(a, 10), 0)
+        print(f"Clipped: {clipped}")
+        print(f"Manual:  {manual}")
+        print(f"Match: {np.array_equal(clipped, manual)}")
+
+---
+
+**Exercise 3.**
+Given a 2D array of random values, use `np.minimum` with broadcasting to clamp each column to a different maximum value. Specifically, clamp columns of a `(5, 3)` array to max values `[1.0, 2.0, 3.0]`.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        a = np.random.randn(5, 3) * 5
+        max_vals = np.array([1.0, 2.0, 3.0])
+        result = np.minimum(a, max_vals)  # broadcasts (5,3) with (3,)
+        print(f"Max per column: {result.max(axis=0)}")

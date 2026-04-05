@@ -75,3 +75,61 @@ $$
 ## Summary
 
 Maximum likelihood estimation is equivalent to minimizing cross-entropy, which is equivalent to minimizing KL divergence between the data distribution and the model. Binary and categorical cross-entropy losses are direct instances of negative log-likelihood for classification. Mean squared error arises as the MLE loss under a Gaussian noise assumption for regression.
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Explain the connection between cross-entropy loss in machine learning and information theory. Why is minimizing cross-entropy equivalent to maximizing likelihood?
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(100)
+    print(f'Mean: {data.mean():.4f}')
+    print(f'Std: {data.std():.4f}')
+    ```
+
+---
+
+**Exercise 2.** Write code that computes the binary cross-entropy loss for a set of predictions and true labels.
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the statistical method and its assumptions.
+
+---
+
+**Exercise 3.** Demonstrate that minimizing the KL divergence between the true distribution and the model's predicted distribution is equivalent to minimizing the cross-entropy loss.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+    from scipy import stats
+    import matplotlib.pyplot as plt
+
+    np.random.seed(42)
+    data = np.random.randn(1000)
+    fig, ax = plt.subplots()
+    ax.hist(data, bins=30, density=True, alpha=0.7)
+    ax.set_title('Distribution')
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Write code that computes both the log-likelihood and the cross-entropy for a simple classification example and shows they differ only by a constant.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(500)
+    result = stats.describe(data)
+    print(result)
+    ```

@@ -174,4 +174,120 @@ For each exercise, write test cases that verify:
 3. Type checking works appropriately
 4. Error messages are clear and helpful
 
-Good luck! 🚀
+Good luck!
+
+---
+
+## Quick Practice Exercises
+
+**Exercise 1.**
+Create a `Counter` class that supports `+` (add counts), `-` (subtract counts, minimum 0), `==` (compare counts), and `str()` (display as `"Counter(N)"`). Implement `__add__`, `__sub__`, `__eq__`, `__str__`, and `__repr__`. Show all operations.
+
+??? success "Solution to Exercise 1"
+
+        class Counter:
+            def __init__(self, count=0):
+                self.count = max(0, count)
+
+            def __add__(self, other):
+                return Counter(self.count + other.count)
+
+            def __sub__(self, other):
+                return Counter(max(0, self.count - other.count))
+
+            def __eq__(self, other):
+                return self.count == other.count
+
+            def __str__(self):
+                return f"Counter({self.count})"
+
+            def __repr__(self):
+                return f"Counter({self.count})"
+
+        a = Counter(5)
+        b = Counter(3)
+        print(a + b)  # Counter(8)
+        print(a - b)  # Counter(2)
+        print(b - a)  # Counter(0) — floors at 0
+        print(a == Counter(5))  # True
+
+---
+
+**Exercise 2.**
+Write a `Percentage` class that stores a value between 0 and 100. Implement `__init__` (validates range), `__repr__`, `__str__` (shows `"45.0%"`), `__add__` (caps at 100), `__sub__` (floors at 0), and `__float__` (returns the decimal, e.g., 0.45). Demonstrate all methods.
+
+??? success "Solution to Exercise 2"
+
+        class Percentage:
+            def __init__(self, value):
+                if not 0 <= value <= 100:
+                    raise ValueError("Value must be between 0 and 100")
+                self.value = float(value)
+
+            def __repr__(self):
+                return f"Percentage({self.value})"
+
+            def __str__(self):
+                return f"{self.value}%"
+
+            def __add__(self, other):
+                return Percentage(min(100, self.value + other.value))
+
+            def __sub__(self, other):
+                return Percentage(max(0, self.value - other.value))
+
+            def __float__(self):
+                return self.value / 100
+
+        p = Percentage(45)
+        print(str(p))         # 45.0%
+        print(float(p))       # 0.45
+        print(p + Percentage(60))  # 100.0% (capped)
+        print(p - Percentage(50))  # 0.0% (floored)
+
+---
+
+**Exercise 3.**
+Build a `Stack` class using a list internally. Implement `__len__`, `__bool__`, `__contains__`, `__iter__`, and `__repr__`. Add `push(item)` and `pop()` methods. Show that `len(stack)`, `item in stack`, `bool(empty_stack)`, and `for item in stack` all work.
+
+??? success "Solution to Exercise 3"
+
+        class Stack:
+            def __init__(self):
+                self._items = []
+
+            def push(self, item):
+                self._items.append(item)
+
+            def pop(self):
+                if not self._items:
+                    raise IndexError("pop from empty stack")
+                return self._items.pop()
+
+            def __len__(self):
+                return len(self._items)
+
+            def __bool__(self):
+                return len(self._items) > 0
+
+            def __contains__(self, item):
+                return item in self._items
+
+            def __iter__(self):
+                return iter(reversed(self._items))
+
+            def __repr__(self):
+                return f"Stack({self._items})"
+
+        s = Stack()
+        print(bool(s))    # False (empty)
+
+        s.push("a")
+        s.push("b")
+        s.push("c")
+        print(len(s))      # 3
+        print("b" in s)    # True
+        print(bool(s))     # True
+
+        for item in s:
+            print(item, end=" ")  # c b a (LIFO order)

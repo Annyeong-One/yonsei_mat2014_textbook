@@ -900,3 +900,94 @@ NEXT STEPS:
 - Explore concurrent patterns (intermediate/)
 """
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write an async program that uses `loop.call_later()` to schedule three callbacks at 0.1s, 0.2s, and 0.3s. Each callback should append its scheduled time to a shared list. After sleeping long enough for all callbacks to fire, print the list to confirm the order.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import asyncio
+
+        async def main():
+            loop = asyncio.get_running_loop()
+            results = []
+
+            loop.call_later(0.1, lambda: results.append("0.1s"))
+            loop.call_later(0.2, lambda: results.append("0.2s"))
+            loop.call_later(0.3, lambda: results.append("0.3s"))
+
+            await asyncio.sleep(0.5)
+            print(f"Callback order: {results}")
+
+        asyncio.run(main())
+        ```
+
+---
+
+**Exercise 2.**
+Write an async function that uses `loop.run_in_executor()` to run a blocking function (`time.sleep(1)` that returns a value) in a thread pool without blocking the event loop. While the blocking call is running, concurrently run an async countdown from 5 to 1 (printing each number with `await asyncio.sleep(0.2)`). Print the executor result and confirm both ran concurrently.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import asyncio
+        import time
+
+        def blocking_work():
+            time.sleep(1)
+            return "blocking result"
+
+        async def countdown():
+            for i in range(5, 0, -1):
+                print(f"  Countdown: {i}")
+                await asyncio.sleep(0.2)
+
+        async def main():
+            loop = asyncio.get_running_loop()
+
+            executor_task = loop.run_in_executor(None, blocking_work)
+            countdown_task = asyncio.create_task(countdown())
+
+            result = await executor_task
+            await countdown_task
+
+            print(f"Executor returned: {result}")
+
+        asyncio.run(main())
+        ```
+
+---
+
+**Exercise 3.**
+Measure the performance difference between sequential and concurrent execution of 10 simulated I/O tasks (each `await asyncio.sleep(0.2)`). Print the sequential time, concurrent time, and the speedup factor.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import asyncio
+        import time
+
+        async def io_task(task_id):
+            await asyncio.sleep(0.2)
+            return task_id
+
+        async def main():
+            # Sequential
+            start = time.perf_counter()
+            for i in range(10):
+                await io_task(i)
+            seq_time = time.perf_counter() - start
+
+            # Concurrent
+            start = time.perf_counter()
+            await asyncio.gather(*[io_task(i) for i in range(10)])
+            con_time = time.perf_counter() - start
+
+            print(f"Sequential: {seq_time:.2f}s")
+            print(f"Concurrent: {con_time:.2f}s")
+            print(f"Speedup: {seq_time / con_time:.1f}x")
+
+        asyncio.run(main())
+        ```

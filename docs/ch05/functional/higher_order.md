@@ -55,3 +55,62 @@ evens = filter(lambda x: x % 2 == 0, range(10))
 - Return functions
 - Enable abstraction
 - Powerful pattern
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a higher-order function `apply_n(func, value, n)` that applies `func` to `value` exactly `n` times. For example, `apply_n(lambda x: x + 1, 0, 5)` returns `5`. Test with several functions and counts.
+
+??? success "Solution to Exercise 1"
+
+        def apply_n(func, value, n):
+            for _ in range(n):
+                value = func(value)
+            return value
+
+        print(apply_n(lambda x: x + 1, 0, 5))     # 5
+        print(apply_n(lambda x: x * 2, 1, 10))     # 1024
+        print(apply_n(str.upper, "hello", 1))       # HELLO
+
+---
+
+**Exercise 2.**
+Write a higher-order function `make_repeater(func, n)` that returns a new function. The returned function takes a value and applies `func` to it `n` times. For example, `doubler = make_repeater(lambda x: x * 2, 3)` creates a function that doubles three times, so `doubler(5)` returns `40`.
+
+??? success "Solution to Exercise 2"
+
+        def make_repeater(func, n):
+            def repeated(value):
+                for _ in range(n):
+                    value = func(value)
+                return value
+            return repeated
+
+        doubler = make_repeater(lambda x: x * 2, 3)
+        print(doubler(5))   # 40
+        print(doubler(1))   # 8
+
+        increment_5 = make_repeater(lambda x: x + 1, 5)
+        print(increment_5(0))  # 5
+
+---
+
+**Exercise 3.**
+Write a higher-order function `compose(f, g)` that returns a new function representing the composition `f(g(x))`. Then use `compose` to build a pipeline that first squares a number and then adds 10. Verify with several inputs.
+
+??? success "Solution to Exercise 3"
+
+        def compose(f, g):
+            def composed(x):
+                return f(g(x))
+            return composed
+
+        square = lambda x: x ** 2
+        add_ten = lambda x: x + 10
+
+        square_then_add = compose(add_ten, square)
+        print(square_then_add(3))    # 19 (3² + 10)
+        print(square_then_add(5))    # 35 (5² + 10)
+        print(square_then_add(0))    # 10 (0² + 10)

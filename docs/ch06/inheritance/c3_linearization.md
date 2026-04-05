@@ -864,3 +864,81 @@ if __name__ == "__main__":
     print("="*70)
     print("\nNext: Learn about complex real-world hierarchies!")
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Given classes `A`, `B(A)`, `C(A)`, `D(B, C)`, manually compute the MRO for `D` using C3 linearization. Then verify your answer using `D.__mro__`. Show each merge step.
+
+??? success "Solution to Exercise 1"
+
+        class A: pass
+        class B(A): pass
+        class C(A): pass
+        class D(B, C): pass
+
+        # Manual C3:
+        # L(A) = [A, O]
+        # L(B) = [B] + merge(L(A), [A]) = [B, A, O]
+        # L(C) = [C] + merge(L(A), [A]) = [C, A, O]
+        # L(D) = [D] + merge(L(B), L(C), [B, C])
+        #       = [D] + merge([B, A, O], [C, A, O], [B, C])
+        #       = [D, B] + merge([A, O], [C, A, O], [C])
+        #       = [D, B, C] + merge([A, O], [A, O])
+        #       = [D, B, C, A, O]
+
+        print(D.__mro__)
+        # (<class 'D'>, <class 'B'>, <class 'C'>, <class 'A'>, <class 'object'>)
+
+---
+
+**Exercise 2.**
+Create a class hierarchy that would fail C3 linearization. For example, try `class X(A, B)` and `class Y(B, A)`, then `class Z(X, Y)`. Show that Python raises `TypeError` and explain why the ordering is inconsistent.
+
+??? success "Solution to Exercise 2"
+
+        class A: pass
+        class B: pass
+
+        class X(A, B): pass
+        class Y(B, A): pass
+
+        try:
+            class Z(X, Y): pass
+        except TypeError as e:
+            print(f"TypeError: {e}")
+        # Cannot create a consistent method resolution order
+        # X says A before B, Y says B before A — contradiction!
+
+---
+
+**Exercise 3.**
+Build a diamond hierarchy: `Base`, `Left(Base)`, `Right(Base)`, `Bottom(Left, Right)`. Add a `greet()` method to each class that calls `super().greet()`. Show how C3 linearization ensures each class's `greet()` is called exactly once, in MRO order.
+
+??? success "Solution to Exercise 3"
+
+        class Base:
+            def greet(self):
+                print("Base.greet")
+
+        class Left(Base):
+            def greet(self):
+                print("Left.greet")
+                super().greet()
+
+        class Right(Base):
+            def greet(self):
+                print("Right.greet")
+                super().greet()
+
+        class Bottom(Left, Right):
+            def greet(self):
+                print("Bottom.greet")
+                super().greet()
+
+        Bottom().greet()
+        # Bottom.greet -> Left.greet -> Right.greet -> Base.greet
+        # Each called exactly once, following MRO
+        print(Bottom.__mro__)

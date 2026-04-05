@@ -50,3 +50,63 @@ Name: Bob
 Active: True
 ```
 
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a function `dict_to_json_sorted` that takes a dictionary and returns a JSON string with keys sorted alphabetically. For example, `dict_to_json_sorted({"banana": 2, "apple": 1})` should return `'{"apple": 1, "banana": 2}'`.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    import json
+
+    def dict_to_json_sorted(d):
+        return json.dumps(d, sort_keys=True)
+
+    # Test
+    print(dict_to_json_sorted({"banana": 2, "apple": 1}))
+    # {"apple": 1, "banana": 2}
+    ```
+
+---
+
+**Exercise 2.**
+Write a function `safe_parse` that takes a string and attempts to parse it as JSON. If parsing fails, return a default dictionary `{"error": "invalid JSON"}`. Test with both valid and invalid JSON strings.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    import json
+
+    def safe_parse(text):
+        try:
+            return json.loads(text)
+        except (json.JSONDecodeError, TypeError):
+            return {"error": "invalid JSON"}
+
+    # Test
+    print(safe_parse('{"name": "Alice"}'))  # {'name': 'Alice'}
+    print(safe_parse('not json'))            # {'error': 'invalid JSON'}
+    print(safe_parse(''))                    # {'error': 'invalid JSON'}
+    ```
+
+---
+
+**Exercise 3.**
+Write a function `json_deep_equal` that takes two JSON strings, parses them both, and returns `True` if they represent the same data structure (regardless of key ordering in the JSON strings). For example, `json_deep_equal('{"a":1,"b":2}', '{"b":2,"a":1}')` should return `True`.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    import json
+
+    def json_deep_equal(json_str1, json_str2):
+        return json.loads(json_str1) == json.loads(json_str2)
+
+    # Test
+    print(json_deep_equal('{"a":1,"b":2}', '{"b":2,"a":1}'))  # True
+    print(json_deep_equal('{"a":1}', '{"a":2}'))                # False
+    print(json_deep_equal('[1,2,3]', '[1,2,3]'))                 # True
+    ```

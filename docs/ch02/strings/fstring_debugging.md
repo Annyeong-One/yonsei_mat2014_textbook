@@ -224,3 +224,54 @@ f"{x=}" requires Python 3.8+
 * `!s`, `!r`, and `!a` control string representation.
 * The feature is available **only in Python 3.8+**.
 * It provides a concise way to add debugging output.
+
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Use the `=` specifier in an f-string to debug-print the values of `x = 10`, `y = 20`, and their sum `x + y` in a single print statement.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    x = 10
+    y = 20
+    print(f"{x=}, {y=}, {x + y=}")
+    # x=10, y=20, x + y=30
+    ```
+
+    The `=` specifier automatically includes both the expression text and its value, which is ideal for quick debugging.
+
+---
+
+**Exercise 2.**
+Combine the `=` specifier with a format specifier to print a float variable with 2 decimal places in debug format. For example, `pi = 3.14159` should output something like `pi=3.14`.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    pi = 3.14159
+    print(f"{pi=:.2f}")
+    # pi=3.14
+    ```
+
+    The format specifier (`.2f`) is placed after the `=` to control how the value is displayed while still showing the variable name.
+
+---
+
+**Exercise 3.**
+Show the difference between `f"{name=}"`, `f"{name=!s}"`, and `f"{name=!r}"` when `name = "Alice"`. Explain when you would use each form.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    name = "Alice"
+    print(f"{name=}")     # name='Alice'  (repr by default)
+    print(f"{name=!s}")   # name=Alice    (str conversion)
+    print(f"{name=!r}")   # name='Alice'  (explicit repr)
+    ```
+
+    By default, `=` uses `repr()`, which adds quotes around strings. Use `!s` for human-readable output (no quotes) and `!r` for unambiguous representation (with quotes).

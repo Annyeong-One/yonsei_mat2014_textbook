@@ -495,3 +495,82 @@ if __name__ == "__main__":
         print(f"  scipy.fft:        {t_fft:.4f} sec")
         print(f"  Speedup:          {t_manual / t_fft:.1f}x")
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a signal composed of three sine waves at 5 Hz, 20 Hz, and 50 Hz with amplitudes 1.0, 0.5, and 0.3 respectively, sampled at 200 Hz for 2 seconds. Use `np.fft.rfft` and `np.fft.rfftfreq` to find the three peak frequencies and their magnitudes. Verify that the detected frequencies match the inputs.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        fs = 200
+        t = np.arange(0, 2, 1/fs)
+        signal = 1.0 * np.sin(2*np.pi*5*t) + 0.5 * np.sin(2*np.pi*20*t) + 0.3 * np.sin(2*np.pi*50*t)
+
+        fft_result = np.fft.rfft(signal)
+        freqs = np.fft.rfftfreq(len(signal), 1/fs)
+        magnitudes = np.abs(fft_result)
+
+        # Find top 3 peaks
+        peak_indices = np.argsort(magnitudes)[-3:]
+        for idx in sorted(peak_indices):
+            print(f"Frequency: {freqs[idx]:.1f} Hz, Magnitude: {magnitudes[idx]:.1f}")
+
+---
+
+**Exercise 2.**
+Write a band-pass filter function that keeps only frequencies between `low_freq` and `high_freq`. Test it on a signal that mixes a 5 Hz sine, a 50 Hz sine, and a 120 Hz sine (sampled at 500 Hz). Apply a 30--80 Hz band-pass and verify that only the 50 Hz component survives.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        def bandpass_filter(signal, fs, low_freq, high_freq):
+            fft = np.fft.rfft(signal)
+            freqs = np.fft.rfftfreq(len(signal), 1/fs)
+            mask = (freqs >= low_freq) & (freqs <= high_freq)
+            fft_filtered = fft * mask
+            return np.fft.irfft(fft_filtered, n=len(signal))
+
+        fs = 500
+        t = np.arange(0, 2, 1/fs)
+        signal = np.sin(2*np.pi*5*t) + np.sin(2*np.pi*50*t) + np.sin(2*np.pi*120*t)
+
+        filtered = bandpass_filter(signal, fs, 30, 80)
+
+        # Check: only 50 Hz should remain
+        fft_out = np.fft.rfft(filtered)
+        freqs_out = np.fft.rfftfreq(len(filtered), 1/fs)
+        peak_idx = np.argmax(np.abs(fft_out))
+        print(f"Dominant frequency after band-pass: {freqs_out[peak_idx]:.1f} Hz")
+
+---
+
+**Exercise 3.**
+Demonstrate that the FFT is faster when the signal length is a power of 2. Time `np.fft.fft` on signals of length 1000 and length 1024 (each repeated 1000 times) and print the speedup factor.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        import time
+
+        signal_1000 = np.random.randn(1000)
+        signal_1024 = np.random.randn(1024)
+
+        start = time.perf_counter()
+        for _ in range(1000):
+            np.fft.fft(signal_1000)
+        t_1000 = time.perf_counter() - start
+
+        start = time.perf_counter()
+        for _ in range(1000):
+            np.fft.fft(signal_1024)
+        t_1024 = time.perf_counter() - start
+
+        print(f"Length 1000: {t_1000:.4f} sec")
+        print(f"Length 1024: {t_1024:.4f} sec")
+        print(f"Speedup (power of 2): {t_1000 / t_1024:.2f}x")

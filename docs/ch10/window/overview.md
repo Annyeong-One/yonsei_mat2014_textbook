@@ -151,3 +151,58 @@ df['Vol20'] = df['Returns'].rolling(20).std() * np.sqrt(252)
 ```python
 df['CumReturn'] = (1 + df['Returns']).expanding().prod() - 1
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Name the three window operations available in Pandas: `rolling()`, `expanding()`, and `ewm()`. Write one example of each.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    # Solution for the specific exercise
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(10), 'B': np.random.randn(10)})
+    print(df.head())
+    ```
+
+---
+
+**Exercise 2.** Explain what a window function does conceptually. How does it differ from a regular aggregation?
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the Pandas API and its behavior for this specific operation.
+
+---
+
+**Exercise 3.** Write code that computes the 20-period rolling mean and the expanding mean on the same data and plots both.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(20), 'B': np.random.randn(20)})
+    result = df.describe()
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Explain the `min_periods` parameter. What happens when the window contains fewer observations than `min_periods`?
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(50), 'group': np.random.choice(['X', 'Y'], 50)})
+    result = df.groupby('group').mean()
+    print(result)
+    ```

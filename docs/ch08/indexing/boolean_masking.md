@@ -491,3 +491,54 @@ if __name__ == "__main__":
 ### 2. Chained np.where
 
 Apply multiple conditions sequentially to enforce bounds.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create an array `a = np.arange(1, 21)`. Use boolean masking to extract all elements divisible by 3. Then use mask assignment to replace all elements greater than 15 with -1. Print the modified array.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        a = np.arange(1, 21)
+        divisible_by_3 = a[a % 3 == 0]
+        print(f"Divisible by 3: {divisible_by_3}")
+
+        a[a > 15] = -1
+        print(f"After replacement: {a}")
+
+---
+
+**Exercise 2.**
+Given a 2D array `M = np.random.randint(0, 100, size=(5, 5))`, create a combined mask that selects elements that are both greater than 25 AND less than 75. Count how many elements satisfy this condition using `np.sum` on the mask.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        np.random.seed(42)
+        M = np.random.randint(0, 100, size=(5, 5))
+        mask = (M > 25) & (M < 75)
+        count = np.sum(mask)
+        print(f"Elements in (25, 75): {count}")
+        print(f"Values: {M[mask]}")
+
+---
+
+**Exercise 3.**
+Simulate 1000 coin flips with probability `p = 0.7` using `np.random.rand` and boolean masking (set values where `rand < p` to 1, else 0). Print the empirical probability (mean of the result) and verify it is close to 0.7.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        np.random.seed(42)
+        p = 0.7
+        flips = np.zeros(1000)
+        flips[np.random.rand(1000) < p] = 1
+        empirical_p = flips.mean()
+        print(f"Empirical probability: {empirical_p:.3f}")
+        print(f"Close to 0.7: {abs(empirical_p - 0.7) < 0.05}")

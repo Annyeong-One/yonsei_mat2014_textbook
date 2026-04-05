@@ -146,3 +146,84 @@ a = 1000
 b = 1000
 # a is b may be True or False
 ```
+
+## Exercises
+
+**Exercise 1.**
+Classify each of the following as "language-level guarantee" or "CPython implementation detail":
+
+1. Lists are ordered and mutable
+2. `sys.getrefcount(x)` returns the reference count of `x`
+3. Small integers (-5 to 256) are cached and reused
+4. `dict` maintains insertion order (Python 3.7+)
+5. Objects are destroyed immediately when their reference count reaches zero
+
+Explain why the distinction matters for writing portable Python code.
+
+??? success "Solution to Exercise 1"
+    1. **Language-level guarantee** -- the Python language specification defines lists as ordered, mutable sequences.
+    2. **CPython implementation detail** -- `sys.getrefcount` only exists because CPython uses reference counting. PyPy does not use reference counting, and while it provides `sys.getrefcount` for compatibility, the values may differ.
+    3. **CPython implementation detail** -- the language says nothing about caching integers. This is a CPython memory optimization.
+    4. **Language-level guarantee** (as of Python 3.7) -- dict insertion order is guaranteed by the language spec. (In 3.6, it was a CPython implementation detail.)
+    5. **CPython implementation detail** -- the language does not specify when objects are destroyed, only that they will eventually be garbage-collected. CPython's reference counting gives immediate destruction, but other implementations may delay it.
+
+    The distinction matters because code relying on implementation details may break when run on PyPy, GraalPython, or future CPython versions. Portable code relies only on language-level guarantees.
+
+---
+
+**Exercise 2.**
+CPython uses reference counting for memory management, while PyPy uses a tracing garbage collector. Explain how this implementation difference could affect the following code:
+
+```python
+f = open("data.txt", "w")
+f.write("hello")
+# f goes out of scope here -- when is the file closed?
+```
+
+Why does this code "work" on CPython but may fail on PyPy? What is the correct way to write this code?
+
+??? success "Solution to Exercise 2"
+    On CPython: when `f` goes out of scope, its reference count drops to zero. CPython immediately destroys the file object, which triggers `f.close()` as part of the destructor (`__del__`). The file is reliably closed.
+
+    On PyPy: the tracing garbage collector does not destroy objects immediately when they become unreachable. The file object may remain open for an indeterminate time. This means the `"hello"` data may not be flushed to disk, or the file handle may remain locked, potentially causing resource exhaustion.
+
+    **Correct code:**
+
+    ```python
+    with open("data.txt", "w") as f:
+        f.write("hello")
+    # File is guaranteed closed here, regardless of implementation
+    ```
+
+    The `with` statement calls `f.close()` deterministically when the block exits, regardless of how the garbage collector works. This is the only portable way to manage resources.
+
+---
+
+**Exercise 3.**
+A programmer says: "I tested my code on CPython and it works, so it is correct Python." Explain why this reasoning is flawed. Give two examples of code that passes all tests on CPython but would behave differently on another implementation.
+
+??? success "Solution to Exercise 3"
+    The reasoning is flawed because CPython has specific behaviors that are not part of the language specification. Code that relies on these behaviors "works" on CPython by coincidence, not by correctness.
+
+    **Example 1 -- integer identity:**
+
+    ```python
+    x = 100
+    y = 100
+    assert x is y  # Passes on CPython (interned), may fail on PyPy
+    ```
+
+    **Example 2 -- deterministic destruction:**
+
+    ```python
+    class Logger:
+        def __del__(self):
+            print("destroyed")
+
+    def f():
+        obj = Logger()  # Created
+    f()  # On CPython, prints "destroyed" immediately
+         # On PyPy, may not print until later (or at all)
+    ```
+
+    To write correct Python, rely on language-level guarantees: use `==` for value comparison, `with` for resource management, and explicit cleanup rather than `__del__`.

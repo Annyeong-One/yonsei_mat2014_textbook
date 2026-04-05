@@ -572,3 +572,101 @@ if __name__ == "__main__":
     # 7. Class methods often used as alternative constructors
     # 8. Static methods are utility functions related to the class
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a `BankAccount` class with a class attribute `interest_rate = 0.02` and an instance attribute `balance`. Write a method `apply_interest()` that adds `balance * interest_rate` to the balance. Create two accounts and show that changing `BankAccount.interest_rate` affects the interest calculation for both accounts, while changing `instance.interest_rate` on one account only affects that account.
+
+??? success "Solution to Exercise 1"
+
+        class BankAccount:
+            interest_rate = 0.02
+
+            def __init__(self, balance):
+                self.balance = balance
+
+            def apply_interest(self):
+                self.balance += self.balance * self.interest_rate
+
+        a1 = BankAccount(1000)
+        a2 = BankAccount(2000)
+
+        # Changing class attribute affects both
+        BankAccount.interest_rate = 0.05
+        a1.apply_interest()
+        a2.apply_interest()
+        print(a1.balance)  # 1050.0
+        print(a2.balance)  # 2100.0
+
+        # Changing on instance only affects that one
+        a1.interest_rate = 0.10  # shadows class attribute
+        a1.apply_interest()
+        a2.apply_interest()
+        print(a1.balance)  # 1155.0 (10% of 1050)
+        print(a2.balance)  # 2205.0 (still 5% of 2100)
+
+---
+
+**Exercise 2.**
+Design a `Registry` class that tracks all created instances using a class attribute `_instances = []`. Each time a new instance is created, append `self` to `_instances`. Add a class method `get_all()` that returns the list. Create several instances and demonstrate that `get_all()` returns them all. Then discuss the potential problem with mutable class attributes (hint: what happens with subclasses?).
+
+??? success "Solution to Exercise 2"
+
+        class Registry:
+            _instances = []
+
+            def __init__(self, name):
+                self.name = name
+                Registry._instances.append(self)
+
+            @classmethod
+            def get_all(cls):
+                return cls._instances
+
+        r1 = Registry("first")
+        r2 = Registry("second")
+        r3 = Registry("third")
+
+        for r in Registry.get_all():
+            print(r.name)
+        # first, second, third
+
+        # Potential problem: subclasses share the same list
+        class SubRegistry(Registry):
+            pass
+
+        s = SubRegistry("sub")
+        print(len(Registry.get_all()))  # 4 - includes SubRegistry!
+        # Fix: use cls._instances in __init__ and define _instances per class
+
+---
+
+**Exercise 3.**
+Write a `Counter` class with a class attribute `count = 0` that tracks how many instances have been created. Increment `count` in `__init__` using `Counter.count += 1` (not `self.count += 1`). Create a subclass `SpecialCounter` that also increments `Counter.count`. Create instances of both and show the total count. Then explain what would go wrong if you used `self.count += 1` instead.
+
+??? success "Solution to Exercise 3"
+
+        class Counter:
+            count = 0
+
+            def __init__(self):
+                Counter.count += 1  # Modify class attribute directly
+
+        class SpecialCounter(Counter):
+            def __init__(self):
+                super().__init__()
+
+        c1 = Counter()
+        c2 = Counter()
+        s1 = SpecialCounter()
+
+        print(Counter.count)  # 3 - all instances counted
+
+        # What goes wrong with self.count += 1:
+        # self.count += 1 is equivalent to self.count = self.count + 1
+        # The read (self.count) finds the class attribute
+        # The write (self.count = ...) creates an INSTANCE attribute
+        # So the class attribute is never incremented after the first call

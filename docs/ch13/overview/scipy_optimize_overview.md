@@ -270,3 +270,103 @@ The remaining sections of this chapter cover:
 6. **Root Finding**: Finding zeros of functions
 
 Each section builds intuition with practical examples and guidance on method selection.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a function `find_best_method` that takes a 1D objective function and a search range, then runs `minimize_scalar` (bounded), `minimize` (Nelder-Mead), and `differential_evolution` on it. Return a dictionary mapping each method name to its result object. Print which method found the lowest function value.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import numpy as np
+        from scipy import optimize
+
+        def find_best_method(func, search_range):
+            results = {}
+
+            # minimize_scalar with bounded method
+            res_scalar = optimize.minimize_scalar(
+                func, bounds=search_range, method='bounded'
+            )
+            results['minimize_scalar'] = res_scalar
+
+            # minimize with Nelder-Mead
+            x0 = (search_range[0] + search_range[1]) / 2
+            res_nm = optimize.minimize(func, x0=x0, method='Nelder-Mead')
+            results['Nelder-Mead'] = res_nm
+
+            # differential_evolution
+            res_de = optimize.differential_evolution(func, bounds=[search_range])
+            results['differential_evolution'] = res_de
+
+            # Find best
+            best_name = min(results, key=lambda k: results[k].fun)
+            print(f"Best method: {best_name} with f = {results[best_name].fun:.6e}")
+
+            return results
+
+        # Test
+        def objective(x):
+            return np.sin(x) + 0.1 * x**2
+
+        results = find_best_method(objective, (-5, 5))
+        for name, res in results.items():
+            print(f"{name}: f = {res.fun:.6f}")
+        ```
+
+---
+
+**Exercise 2.**
+Using `scipy.optimize.curve_fit`, fit both a linear model and a quadratic model to the data `x = [0, 1, 2, 3, 4, 5]`, `y = [0.1, 2.3, 4.1, 6.5, 8.2, 10.8]`. Compute the residual sum of squares for each model and print which model fits better.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import numpy as np
+        from scipy.optimize import curve_fit
+
+        x = np.array([0, 1, 2, 3, 4, 5])
+        y = np.array([0.1, 2.3, 4.1, 6.5, 8.2, 10.8])
+
+        def linear(x, a, b):
+            return a * x + b
+
+        def quadratic(x, a, b, c):
+            return a * x**2 + b * x + c
+
+        params_lin, _ = curve_fit(linear, x, y)
+        params_quad, _ = curve_fit(quadratic, x, y)
+
+        rss_lin = np.sum((y - linear(x, *params_lin))**2)
+        rss_quad = np.sum((y - quadratic(x, *params_quad))**2)
+
+        print(f"Linear fit: a={params_lin[0]:.4f}, b={params_lin[1]:.4f}, RSS={rss_lin:.4f}")
+        print(f"Quadratic fit: a={params_quad[0]:.4f}, b={params_quad[1]:.4f}, c={params_quad[2]:.4f}, RSS={rss_quad:.4f}")
+
+        if rss_quad < rss_lin:
+            print("Quadratic model fits better (lower RSS).")
+        else:
+            print("Linear model fits better (lower RSS).")
+        ```
+
+---
+
+**Exercise 3.**
+Use `scipy.optimize.root_scalar` with Brent's method to find all three roots of the polynomial $f(x) = x^3 - 6x^2 + 11x - 6$ by supplying three different bracket intervals. Verify each root by evaluating $f$ at the found value.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import numpy as np
+        from scipy.optimize import root_scalar
+
+        def f(x):
+            return x**3 - 6*x**2 + 11*x - 6
+
+        # The roots are 1, 2, 3. Use brackets around each.
+        brackets = [(0.5, 1.5), (1.5, 2.5), (2.5, 3.5)]
+
+        for bracket in brackets:
+            result = root_scalar(f, bracket=bracket, method='brentq')
+            print(f"Bracket {bracket}: root = {result.root:.10f}, f(root) = {f(result.root):.2e}")
+        ```

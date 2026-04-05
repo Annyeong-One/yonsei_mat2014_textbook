@@ -196,3 +196,71 @@ When to use each method.
 # merge_asof is optimized for sorted data
 # Faster than alternatives for time series
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a `trades` DataFrame with timestamps and a `quotes` DataFrame with slightly earlier timestamps. Use `pd.merge_asof()` to match each trade with the most recent quote that occurred at or before the trade time.
+
+??? success "Solution to Exercise 1"
+    Match trades to the most recent preceding quote.
+
+        import pandas as pd
+
+        trades = pd.DataFrame({
+            'time': pd.to_datetime(['10:00:01', '10:00:03', '10:00:05']),
+            'price': [100, 102, 101]
+        })
+        quotes = pd.DataFrame({
+            'time': pd.to_datetime(['10:00:00', '10:00:02', '10:00:04']),
+            'bid': [99, 101, 100]
+        })
+        result = pd.merge_asof(trades, quotes, on='time')
+        print(result)
+
+---
+
+**Exercise 2.**
+Use `pd.merge_asof()` with the `tolerance` parameter to match only if the time difference is within a specified window (e.g., 2 seconds). Verify that trades without a quote within the tolerance get `NaN`.
+
+??? success "Solution to Exercise 2"
+    Use tolerance to limit the match window.
+
+        import pandas as pd
+
+        trades = pd.DataFrame({
+            'time': pd.to_datetime(['10:00:01', '10:00:10']),
+            'price': [100, 102]
+        })
+        quotes = pd.DataFrame({
+            'time': pd.to_datetime(['10:00:00', '10:00:02']),
+            'bid': [99, 101]
+        })
+        result = pd.merge_asof(trades, quotes, on='time', tolerance=pd.Timedelta('2s'))
+        print(result)
+        # Second trade has no quote within 2 seconds -> NaN
+
+---
+
+**Exercise 3.**
+Use `pd.merge_asof()` with a `by` parameter to perform the approximate match within groups (e.g., match each trade to the latest quote for the same stock ticker).
+
+??? success "Solution to Exercise 3"
+    Use the by parameter for grouped asof merge.
+
+        import pandas as pd
+
+        trades = pd.DataFrame({
+            'time': pd.to_datetime(['10:00:01', '10:00:01', '10:00:03']),
+            'ticker': ['AAPL', 'MSFT', 'AAPL'],
+            'price': [150, 250, 152]
+        })
+        quotes = pd.DataFrame({
+            'time': pd.to_datetime(['10:00:00', '10:00:00', '10:00:02']),
+            'ticker': ['AAPL', 'MSFT', 'AAPL'],
+            'bid': [149, 249, 151]
+        })
+        result = pd.merge_asof(trades, quotes, on='time', by='ticker')
+        print(result)

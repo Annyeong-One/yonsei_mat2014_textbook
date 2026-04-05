@@ -799,3 +799,46 @@ if __name__ == "__main__":
     print("9. Cauchy: heavy tails, no defined mean or variance")
     print("10. Choose distribution based on data characteristics and domain knowledge")
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Using `scipy.stats.norm`, compute the probability that a normally distributed variable with $\mu = 100$ and $\sigma = 15$ falls between 85 and 115 (i.e., within one standard deviation of the mean). Verify the result is approximately 0.6827.
+
+??? success "Solution to Exercise 1"
+
+        from scipy import stats
+
+        rv = stats.norm(loc=100, scale=15)
+        prob = rv.cdf(115) - rv.cdf(85)
+        print(f"P(85 <= X <= 115) = {prob:.4f}")
+
+---
+
+**Exercise 2.**
+Find the value $x$ such that $P(X \le x) = 0.90$ for a normal distribution with $\mu = 50$ and $\sigma = 10$. Then verify by computing `.cdf(x)` and confirming it returns 0.90.
+
+??? success "Solution to Exercise 2"
+
+        from scipy import stats
+
+        rv = stats.norm(loc=50, scale=10)
+        x = rv.ppf(0.90)
+        print(f"x = {x:.4f}")
+        print(f"Verification: CDF(x) = {rv.cdf(x):.4f}")
+
+---
+
+**Exercise 3.**
+The 68-95-99.7 rule states that approximately 68%, 95%, and 99.7% of data fall within 1, 2, and 3 standard deviations of the mean. Verify this numerically using `.cdf()` for the standard normal distribution.
+
+??? success "Solution to Exercise 3"
+
+        from scipy import stats
+
+        rv = stats.norm()
+        for k in [1, 2, 3]:
+            prob = rv.cdf(k) - rv.cdf(-k)
+            print(f"P(-{k} < Z < {k}) = {prob:.4f}")

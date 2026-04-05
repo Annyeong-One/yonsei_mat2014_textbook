@@ -268,3 +268,54 @@ if __name__ == "__main__":
     print("- Join types: inner, left, right, outer")
     print("- Use on= for same column names, left_on=/right_on= for different names")
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create two DataFrames sharing a `'key'` column with partial overlap. Perform a default merge (inner join) and count the resulting rows. Then perform an outer merge and compare.
+
+??? success "Solution to Exercise 1"
+    Compare inner and outer merge row counts.
+
+        import pandas as pd
+
+        df1 = pd.DataFrame({'key': ['a', 'b', 'c'], 'val1': [1, 2, 3]})
+        df2 = pd.DataFrame({'key': ['b', 'c', 'd'], 'val2': [4, 5, 6]})
+        inner = pd.merge(df1, df2, on='key')
+        outer = pd.merge(df1, df2, on='key', how='outer')
+        print(f"Inner: {len(inner)} rows")
+        print(f"Outer: {len(outer)} rows")
+
+---
+
+**Exercise 2.**
+Create an `orders` DataFrame with a `'product_id'` column and a `products` DataFrame with a `'product_id'` and `'product_name'` column. Use `pd.merge()` to look up the product name for each order.
+
+??? success "Solution to Exercise 2"
+    Look up product names for orders.
+
+        import pandas as pd
+
+        orders = pd.DataFrame({'order_id': [1, 2, 3], 'product_id': [101, 102, 101]})
+        products = pd.DataFrame({'product_id': [101, 102, 103], 'product_name': ['Widget', 'Gadget', 'Doohickey']})
+        result = pd.merge(orders, products, on='product_id')
+        print(result)
+
+---
+
+**Exercise 3.**
+Create two DataFrames and merge them using both the function syntax `pd.merge(df1, df2)` and the method syntax `df1.merge(df2)`. Verify both produce identical results.
+
+??? success "Solution to Exercise 3"
+    Verify function syntax and method syntax produce the same result.
+
+        import pandas as pd
+
+        df1 = pd.DataFrame({'key': ['a', 'b'], 'x': [1, 2]})
+        df2 = pd.DataFrame({'key': ['a', 'b'], 'y': [3, 4]})
+        result_func = pd.merge(df1, df2, on='key')
+        result_method = df1.merge(df2, on='key')
+        assert result_func.equals(result_method)
+        print("Both approaches produce identical results.")

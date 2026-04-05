@@ -341,3 +341,62 @@ result = df.select_dtypes(include='datetime')
 print(result.empty)  # True
 print(result.columns.tolist())  # []
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a mixed-type DataFrame with integer, float, string, and boolean columns. Use `select_dtypes(include='number')` to select only numeric columns and print their column names.
+
+??? success "Solution to Exercise 1"
+    Use `include='number'` to get all numeric columns.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'id': [1, 2, 3],
+            'price': [9.99, 19.99, 29.99],
+            'name': ['A', 'B', 'C'],
+            'active': [True, False, True]
+        })
+        numeric_df = df.select_dtypes(include='number')
+        print("Numeric columns:", numeric_df.columns.tolist())
+
+---
+
+**Exercise 2.**
+Use `select_dtypes(exclude='object')` to remove all string columns from a DataFrame. Then compute `.describe()` on the resulting numeric-only DataFrame.
+
+??? success "Solution to Exercise 2"
+    Exclude object dtype to keep only non-string columns.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'name': ['Alice', 'Bob', 'Carol'],
+            'age': [25, 30, 35],
+            'salary': [50000.0, 60000.0, 70000.0],
+            'dept': ['HR', 'IT', 'Sales']
+        })
+        non_string = df.select_dtypes(exclude='object')
+        print(non_string.describe())
+
+---
+
+**Exercise 3.**
+Given a DataFrame with datetime, categorical, and numeric columns, use `select_dtypes` to select only `'datetime64'` columns. Print the selected column names and their dtypes.
+
+??? success "Solution to Exercise 3"
+    Select datetime columns by specifying the dtype.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'date': pd.date_range('2024-01-01', periods=3),
+            'category': pd.Categorical(['A', 'B', 'A']),
+            'value': [10, 20, 30]
+        })
+        datetime_cols = df.select_dtypes(include='datetime64')
+        print("Datetime columns:", datetime_cols.columns.tolist())
+        print(datetime_cols.dtypes)

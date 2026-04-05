@@ -493,3 +493,70 @@ print(f"itemgetter: {itemgetter_time:.3f}s")
 - `attrgetter` supports nested attributes: `attrgetter('a.b.c')`
 - Arithmetic operators work with `reduce` for aggregations
 - All functions are implemented in C for performance
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Given a list of tuples `[("Alice", 88), ("Bob", 95), ("Charlie", 72)]`, use `operator.itemgetter` to sort them by score (index 1). Then use `itemgetter` to extract just the names from the sorted list. Print both results.
+
+??? success "Solution to Exercise 1"
+
+        from operator import itemgetter
+
+        students = [("Alice", 88), ("Bob", 95), ("Charlie", 72)]
+
+        by_score = sorted(students, key=itemgetter(1))
+        print(by_score)
+        # [('Charlie', 72), ('Alice', 88), ('Bob', 95)]
+
+        names = list(map(itemgetter(0), by_score))
+        print(names)  # ['Charlie', 'Alice', 'Bob']
+
+---
+
+**Exercise 2.**
+Use `functools.reduce` with `operator.mul` to compute the factorial of a number `n`. Write a `factorial(n)` function that handles `n == 0` (returns 1) and positive integers. Compare with using a lambda.
+
+??? success "Solution to Exercise 2"
+
+        from functools import reduce
+        from operator import mul
+
+        def factorial(n):
+            if n == 0:
+                return 1
+            return reduce(mul, range(1, n + 1))
+
+        print(factorial(0))   # 1
+        print(factorial(5))   # 120
+        print(factorial(10))  # 3628800
+
+        # Lambda version for comparison
+        factorial_lambda = lambda n: 1 if n == 0 else reduce(lambda a, b: a * b, range(1, n + 1))
+        print(factorial_lambda(5))  # 120
+
+---
+
+**Exercise 3.**
+Create a list of objects with a `.name` and `.score` attribute (use a simple class or `namedtuple`). Use `operator.attrgetter("score")` to sort them by score, then use `operator.methodcaller("upper")` to convert all names to uppercase. Print the sorted names.
+
+??? success "Solution to Exercise 3"
+
+        from operator import attrgetter, methodcaller
+        from collections import namedtuple
+
+        Student = namedtuple("Student", ["name", "score"])
+        students = [
+            Student("alice", 88),
+            Student("bob", 95),
+            Student("charlie", 72),
+        ]
+
+        by_score = sorted(students, key=attrgetter("score"))
+        print(by_score)
+
+        upper = methodcaller("upper")
+        names = [upper(s.name) for s in by_score]
+        print(names)  # ['CHARLIE', 'ALICE', 'BOB']

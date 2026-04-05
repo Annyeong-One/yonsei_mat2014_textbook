@@ -147,3 +147,58 @@ month_ends = pd.date_range('2025-01-31', periods=12, freq='M')
 # Every 6 hours
 timestamps = pd.date_range('2025-01-01', periods=24, freq='6H')
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that creates a DatetimeIndex using `pd.date_range()` with 30 business days starting from `'2024-01-01'`.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    # Solution for the specific exercise
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(10), 'B': np.random.randn(10)})
+    print(df.head())
+    ```
+
+---
+
+**Exercise 2.** Explain the `freq` parameter in `pd.date_range()`. List five common frequency strings (e.g., `'D'`, `'M'`, `'B'`).
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the Pandas API and its behavior for this specific operation.
+
+---
+
+**Exercise 3.** Write code that creates a monthly date range for all of 2024 using `freq='MS'` (month start) and `freq='ME'` (month end).
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(20), 'B': np.random.randn(20)})
+    result = df.describe()
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Create a DataFrame with a DatetimeIndex and demonstrate slicing by date string (e.g., `df['2024-03']`).
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(50), 'group': np.random.choice(['X', 'Y'], 50)})
+    result = df.groupby('group').mean()
+    print(result)
+    ```

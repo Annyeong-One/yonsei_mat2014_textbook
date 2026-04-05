@@ -444,3 +444,102 @@ print(f"{u!a}")    # Unicode('caf\xe9')
 - `__bool__` controls truthiness; falls back to `__len__`
 - Use `!r`, `!s`, `!a` in f-strings to control conversion
 - Quote strings in repr with `!r`: `f"Cls({self.name!r})"`
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a `Date` class with `year`, `month`, `day`. Implement `__repr__` to return `Date(2024, 3, 15)` and `__str__` to return `2024-03-15`. Also implement `__format__` to support `"{:long}"` (returns `"March 15, 2024"`) and `"{:short}"` (returns `"03/15/24"`). Default format uses `__str__`.
+
+??? success "Solution to Exercise 1"
+
+        class Date:
+            MONTHS = ["", "January", "February", "March", "April", "May", "June",
+                       "July", "August", "September", "October", "November", "December"]
+
+            def __init__(self, year, month, day):
+                self.year = year
+                self.month = month
+                self.day = day
+
+            def __repr__(self):
+                return f"Date({self.year}, {self.month}, {self.day})"
+
+            def __str__(self):
+                return f"{self.year}-{self.month:02d}-{self.day:02d}"
+
+            def __format__(self, spec):
+                if spec == "long":
+                    return f"{self.MONTHS[self.month]} {self.day}, {self.year}"
+                elif spec == "short":
+                    return f"{self.month:02d}/{self.day:02d}/{self.year % 100:02d}"
+                return str(self)
+
+        d = Date(2024, 3, 15)
+        print(repr(d))      # Date(2024, 3, 15)
+        print(str(d))       # 2024-03-15
+        print(f"{d:long}")  # March 15, 2024
+        print(f"{d:short}") # 03/15/24
+
+---
+
+**Exercise 2.**
+Write a `LogLevel` class with a `level` attribute (string like "INFO", "WARNING", "ERROR"). Implement `__repr__`, `__str__`, and `__bool__` (where "ERROR" is truthy for "has errors" checks). Show the difference between `print()`, `repr()`, and boolean context.
+
+??? success "Solution to Exercise 2"
+
+        class LogLevel:
+            def __init__(self, level):
+                self.level = level.upper()
+
+            def __repr__(self):
+                return f"LogLevel('{self.level}')"
+
+            def __str__(self):
+                return self.level
+
+            def __bool__(self):
+                return self.level == "ERROR"
+
+        info = LogLevel("INFO")
+        error = LogLevel("ERROR")
+
+        print(info)         # INFO
+        print(repr(error))  # LogLevel('ERROR')
+        if error:
+            print("Has errors!")  # prints
+        if not info:
+            print("No errors")   # prints
+
+---
+
+**Exercise 3.**
+Create a `RichText` class with `text` and `style` attributes. Implement `__str__` (returns plain text), `__repr__` (returns `RichText('text', style='bold')`), and `__format__` (when spec is `"html"`, returns `"<b>text</b>"` for bold style). Demonstrate all three outputs.
+
+??? success "Solution to Exercise 3"
+
+        class RichText:
+            def __init__(self, text, style="plain"):
+                self.text = text
+                self.style = style
+
+            def __str__(self):
+                return self.text
+
+            def __repr__(self):
+                return f"RichText({self.text!r}, style={self.style!r})"
+
+            def __format__(self, spec):
+                if spec == "html":
+                    if self.style == "bold":
+                        return f"<b>{self.text}</b>"
+                    elif self.style == "italic":
+                        return f"<i>{self.text}</i>"
+                    return self.text
+                return str(self)
+
+        rt = RichText("Hello", style="bold")
+        print(str(rt))       # Hello
+        print(repr(rt))      # RichText('Hello', style='bold')
+        print(f"{rt:html}")  # <b>Hello</b>

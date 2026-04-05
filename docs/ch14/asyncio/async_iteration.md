@@ -414,3 +414,82 @@ async with pool.acquire() as conn:
 - Common uses: HTTP sessions, database connections, locks, files
 - Async comprehensions work with `async for` and `await`
 - Always clean up async resources properly in `__aexit__`
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write an async generator `async_range_squared(n)` that yields the squares of numbers 0 through n-1, with a 0.05s delay between each. Collect the results using an async list comprehension and print them.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import asyncio
+
+        async def async_range_squared(n):
+            for i in range(n):
+                await asyncio.sleep(0.05)
+                yield i * i
+
+        async def main():
+            squares = [x async for x in async_range_squared(10)]
+            print(f"Squares: {squares}")
+
+        asyncio.run(main())
+        ```
+
+---
+
+**Exercise 2.**
+Create an async context manager class `ManagedResource` that prints "Acquired" on enter (after a 0.1s simulated setup) and "Released" on exit (after a 0.1s simulated teardown). The resource should provide a `do_work()` async method that prints "Working...". Demonstrate it with `async with`.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import asyncio
+
+        class ManagedResource:
+            async def __aenter__(self):
+                await asyncio.sleep(0.1)
+                print("Acquired")
+                return self
+
+            async def __aexit__(self, exc_type, exc_val, exc_tb):
+                await asyncio.sleep(0.1)
+                print("Released")
+                return False
+
+            async def do_work(self):
+                print("Working...")
+
+        async def main():
+            async with ManagedResource() as resource:
+                await resource.do_work()
+
+        asyncio.run(main())
+        ```
+
+---
+
+**Exercise 3.**
+Write an async generator `batched_counter(total, batch_size)` that yields lists of consecutive integers in batches. For example, `batched_counter(10, 3)` yields `[0,1,2]`, `[3,4,5]`, `[6,7,8]`, `[9]`. Add a 0.1s delay between batches. Collect all items into a flat list using `async for` and verify it equals `list(range(total))`.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import asyncio
+
+        async def batched_counter(total, batch_size):
+            for start in range(0, total, batch_size):
+                await asyncio.sleep(0.1)
+                yield list(range(start, min(start + batch_size, total)))
+
+        async def main():
+            flat = []
+            async for batch in batched_counter(10, 3):
+                print(f"Batch: {batch}")
+                flat.extend(batch)
+
+            assert flat == list(range(10))
+            print(f"All items: {flat}")
+
+        asyncio.run(main())
+        ```

@@ -50,3 +50,113 @@ Object Created
 - Reference counting: immediate, deterministic
 - Garbage collection: handles cycles
 - Both work automatically
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a script that creates an object, prints its reference count using `sys.getrefcount()`, then adds it to a list and a dictionary. Print the reference count after each step, then remove it from both containers and print the final count. Explain in comments why `getrefcount()` reports one more than expected.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import sys
+
+        obj = [1, 2, 3]
+        # getrefcount adds 1 temporary reference for the argument
+        print(f"Initial: {sys.getrefcount(obj)}")  # 2
+
+        lst = [obj]
+        print(f"After list: {sys.getrefcount(obj)}")  # 3
+
+        d = {"key": obj}
+        print(f"After dict: {sys.getrefcount(obj)}")  # 4
+
+        lst.remove(obj)
+        print(f"After removing from list: {sys.getrefcount(obj)}")  # 3
+
+        del d["key"]
+        print(f"After removing from dict: {sys.getrefcount(obj)}")  # 2
+        ```
+
+---
+
+**Exercise 2.**
+Create two `Node` objects that form a circular reference. Use `gc.collect()` to clean them up and print the number of collected objects. Then repeat the experiment with `gc.disable()` before creating the cycle, and show that `del` alone does not free them (verify by checking `gc.garbage` or object counts).
+
+??? success "Solution to Exercise 2"
+        ```python
+        import gc
+
+        class Node:
+            def __init__(self, name):
+                self.name = name
+                self.ref = None
+
+        # With GC enabled
+        gc.enable()
+        a = Node("A")
+        b = Node("B")
+        a.ref = b
+        b.ref = a
+        del a, b
+        collected = gc.collect()
+        print(f"GC enabled - collected: {collected}")
+
+        # With GC disabled
+        gc.disable()
+        c = Node("C")
+        d = Node("D")
+        c.ref = d
+        d.ref = c
+        del c, d
+        # Without gc.collect(), cycles are not freed
+        before = len(gc.get_objects())
+        gc.enable()
+        collected = gc.collect()
+        after = len(gc.get_objects())
+        print(f"GC disabled then collected: {collected}")
+        ```
+
+---
+
+**Exercise 3.**
+Write a function `show_memory_mechanisms()` that demonstrates both memory management mechanisms in sequence: (a) create and delete a simple list, showing immediate deallocation via reference counting (check `weakref.ref` returns `None`), and (b) create a circular reference, delete the variables, and show the objects persist until `gc.collect()` is called.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import weakref
+        import gc
+
+        def show_memory_mechanisms():
+            # (a) Reference counting: immediate deallocation
+            class Temp:
+                pass
+
+            obj = Temp()
+            ref = weakref.ref(obj)
+            print(f"Before del: ref() is None = {ref() is None}")
+            del obj
+            print(f"After del:  ref() is None = {ref() is None}")
+            print("-> Reference counting freed the object immediately\n")
+
+            # (b) Circular reference: needs GC
+            class Node:
+                def __init__(self):
+                    self.ref = None
+
+            a = Node()
+            b = Node()
+            a.ref = b
+            b.ref = a
+            ref_a = weakref.ref(a)
+
+            del a, b
+            print(f"After del (cycle): ref_a() is None = {ref_a() is None}")
+
+            collected = gc.collect()
+            print(f"After gc.collect(): ref_a() is None = {ref_a() is None}")
+            print(f"-> GC collected {collected} objects from the cycle")
+
+        show_memory_mechanisms()
+        ```

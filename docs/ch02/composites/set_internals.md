@@ -400,3 +400,75 @@ if __name__ == "__main__":
    - The overhead of set is minimal if you need speed
     """)
 ```
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Write a function `find_duplicates(lst)` that uses a set to find and return all duplicate elements in a list. For example, `find_duplicates([1, 2, 2, 3, 3, 3, 4])` should return `{2, 3}`.
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        def find_duplicates(lst):
+            seen = set()
+            duplicates = set()
+            for item in lst:
+                if item in seen:
+                    duplicates.add(item)
+                seen.add(item)
+            return duplicates
+
+        print(find_duplicates([1, 2, 2, 3, 3, 3, 4]))  # {2, 3}
+        ```
+
+    Using two sets gives O(n) performance. `seen` tracks all encountered elements and `duplicates` collects those seen more than once.
+
+---
+
+**Exercise 2.**
+Demonstrate that set elements must be hashable by attempting to add a list to a set. Then show how to add the same data by converting it to a tuple.
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        s = set()
+
+        try:
+            s.add([1, 2, 3])
+        except TypeError as e:
+            print(f"Error: {e}")  # unhashable type: 'list'
+
+        s.add((1, 2, 3))
+        print(s)  # {(1, 2, 3)}
+        ```
+
+    Lists are mutable and unhashable. Tuples are immutable and hashable, making them valid set elements.
+
+---
+
+**Exercise 3.**
+Given two sets `a = {1, 2, 3, 4, 5}` and `b = {4, 5, 6, 7, 8}`, compute and print the union, intersection, difference (a - b), and symmetric difference using both operator syntax and method syntax.
+
+??? success "Solution to Exercise 3"
+
+        ```python
+        a = {1, 2, 3, 4, 5}
+        b = {4, 5, 6, 7, 8}
+
+        # Operator syntax
+        print(a | b)   # {1, 2, 3, 4, 5, 6, 7, 8}
+        print(a & b)   # {4, 5}
+        print(a - b)   # {1, 2, 3}
+        print(a ^ b)   # {1, 2, 3, 6, 7, 8}
+
+        # Method syntax
+        print(a.union(b))                # {1, 2, 3, 4, 5, 6, 7, 8}
+        print(a.intersection(b))         # {4, 5}
+        print(a.difference(b))           # {1, 2, 3}
+        print(a.symmetric_difference(b)) # {1, 2, 3, 6, 7, 8}
+        ```
+
+    Both syntaxes produce identical results. The method syntax is more explicit and can accept any iterable, while operators require both operands to be sets.

@@ -233,3 +233,54 @@ df = df.assign(bonus=5000)  # Returns new DataFrame
 # Direct: quick modifications
 # assign: method chaining, functional style
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a DataFrame with a `'price'` column. Use `.assign()` to add a `'tax'` column (10% of price) and a `'total'` column (price + tax) in a single call.
+
+??? success "Solution to Exercise 1"
+    Add multiple computed columns with assign.
+
+        import pandas as pd
+
+        df = pd.DataFrame({'product': ['A', 'B', 'C'], 'price': [10.0, 25.0, 15.0]})
+        result = df.assign(
+            tax=lambda x: x['price'] * 0.10,
+            total=lambda x: x['price'] * 1.10
+        )
+        print(result)
+
+---
+
+**Exercise 2.**
+Use `.assign()` with a lambda that references a previously created column in the same call. For example, create `'bonus'` as 10% of salary, then `'total_pay'` as salary + bonus, all in one `.assign()` chain.
+
+??? success "Solution to Exercise 2"
+    Reference columns created within the same assign call.
+
+        import pandas as pd
+
+        df = pd.DataFrame({'name': ['Alice', 'Bob'], 'salary': [50000, 60000]})
+        result = df.assign(
+            bonus=lambda x: x['salary'] * 0.10,
+            total_pay=lambda x: x['salary'] + x['salary'] * 0.10
+        )
+        print(result)
+
+---
+
+**Exercise 3.**
+Create a DataFrame and use `.assign()` to overwrite an existing column (e.g., round a float column to 2 decimal places). Verify that the original DataFrame is unchanged and only the returned DataFrame has the modification.
+
+??? success "Solution to Exercise 3"
+    Overwrite a column via assign without modifying the original.
+
+        import pandas as pd
+
+        df = pd.DataFrame({'value': [3.14159, 2.71828, 1.41421]})
+        result = df.assign(value=lambda x: x['value'].round(2))
+        print("Original:", df['value'].tolist())
+        print("Assigned:", result['value'].tolist())

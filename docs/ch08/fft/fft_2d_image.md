@@ -537,3 +537,94 @@ plt.show()
 - Explore **convolution theorem** for deeper frequency domain theory
 - Study **image restoration** techniques (Wiener filtering, etc.)
 - Apply to **computer vision** tasks: edge detection, blur analysis, feature extraction
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a 128x128 image with a single white horizontal stripe (row 64, all columns set to 255). Compute its 2D FFT, shift it with `fftshift`, and display the log-magnitude spectrum. Explain why the energy concentrates along the vertical axis in the frequency domain.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+
+        image = np.zeros((128, 128))
+        image[64, :] = 255
+
+        X = np.fft.fft2(image)
+        X_shifted = np.fft.fftshift(X)
+        mag = np.log1p(np.abs(X_shifted))
+
+        # The horizontal stripe has variation only along the vertical
+        # direction, so its frequency content lies along the vertical
+        # axis (u-axis) in the 2D frequency domain.
+        print(f"Spectrum shape: {mag.shape}")
+        print("Energy is along vertical axis because the stripe is horizontal.")
+
+---
+
+**Exercise 2.**
+Implement a simple low-pass filter in the frequency domain: create a circular mask of radius 20 centered in the shifted FFT, multiply the shifted FFT by this mask, then invert the FFT. Apply this to a noisy checkerboard image (8x8 pattern with Gaussian noise `sigma=50`) and compare the denoised result with the original clean image.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        # Create clean checkerboard
+        image = np.zeros((128, 128))
+        for i in range(0, 128, 16):
+            for j in range(0, 128, 16):
+                image[i:i+8, j:j+8] = 255
+                image[i+8:i+16, j+8:j+16] = 255
+
+        # Add noise
+        np.random.seed(42)
+        noisy = image + np.random.randn(128, 128) * 50
+        noisy = np.clip(noisy, 0, 255)
+
+        # Low-pass filter
+        X = np.fft.fft2(noisy)
+        X_shifted = np.fft.fftshift(X)
+
+        # Circular mask of radius 20
+        cy, cx = 64, 64
+        Y, XC = np.ogrid[:128, :128]
+        mask = ((Y - cy)**2 + (XC - cx)**2) <= 20**2
+
+        X_filtered = X_shifted * mask
+        denoised = np.fft.ifft2(np.fft.ifftshift(X_filtered)).real
+
+        mse = np.mean((denoised - image)**2)
+        print(f"MSE after low-pass: {mse:.1f}")
+
+---
+
+**Exercise 3.**
+Given two images of the same size, implement FFT-based convolution using `np.fft.fft2` without relying on `scipy.signal.fftconvolve`. Apply a 15x15 averaging kernel to a 256x256 random image, remembering to zero-pad both the image and kernel to avoid circular convolution artifacts. Verify your result matches `scipy.ndimage.convolve` within a tolerance of `1e-10`.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import ndimage
+
+        image = np.random.rand(256, 256)
+        kernel = np.ones((15, 15)) / (15 * 15)
+
+        # Zero-pad
+        M, N = image.shape
+        Mk, Nk = kernel.shape
+        image_padded = np.pad(image, ((0, Mk - 1), (0, Nk - 1)))
+        kernel_padded = np.pad(kernel, ((0, M - 1), (0, N - 1)))
+
+        # FFT-based convolution
+        X = np.fft.fft2(image_padded)
+        H = np.fft.fft2(kernel_padded)
+        result_fft = np.fft.ifft2(X * H).real[:M, :N]
+
+        # Reference
+        result_ref = ndimage.convolve(image, kernel)
+
+        print(f"Max difference: {np.max(np.abs(result_fft - result_ref)):.2e}")
+        print(f"Match: {np.allclose(result_fft, result_ref, atol=1e-10)}")

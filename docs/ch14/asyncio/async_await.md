@@ -661,3 +661,94 @@ NEXT STEPS:
 - Run multiple tasks concurrently (04_multiple_coroutines.py)
 """
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write an async function `timed_greet(name, delay)` that waits `delay` seconds, then returns `"Hello, {name}"`. Call it three times sequentially and measure the total time. Then call it three times concurrently with `asyncio.gather()` and measure again. Print both elapsed times to confirm the concurrent version is faster.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import asyncio
+        import time
+
+        async def timed_greet(name, delay):
+            await asyncio.sleep(delay)
+            return f"Hello, {name}"
+
+        async def main():
+            names = [("Alice", 0.3), ("Bob", 0.5), ("Carol", 0.2)]
+
+            # Sequential
+            start = time.perf_counter()
+            for name, delay in names:
+                await timed_greet(name, delay)
+            seq_time = time.perf_counter() - start
+
+            # Concurrent
+            start = time.perf_counter()
+            results = await asyncio.gather(
+                *[timed_greet(n, d) for n, d in names]
+            )
+            con_time = time.perf_counter() - start
+
+            print(f"Sequential: {seq_time:.2f}s")
+            print(f"Concurrent: {con_time:.2f}s")
+            print(f"Results: {results}")
+
+        asyncio.run(main())
+        ```
+
+---
+
+**Exercise 2.**
+Create an async context manager class `Timer` that records the wall-clock time between `__aenter__` and `__aexit__` and prints the elapsed duration on exit. Use it with `async with Timer(): ...` around a block that awaits `asyncio.sleep(0.5)`.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import asyncio
+        import time
+
+        class Timer:
+            async def __aenter__(self):
+                self.start = time.perf_counter()
+                return self
+
+            async def __aexit__(self, exc_type, exc_val, exc_tb):
+                elapsed = time.perf_counter() - self.start
+                print(f"Elapsed: {elapsed:.3f}s")
+                return False
+
+        async def main():
+            async with Timer():
+                await asyncio.sleep(0.5)
+
+        asyncio.run(main())
+        ```
+
+---
+
+**Exercise 3.**
+Write an async generator `async_fibonacci(n)` that yields the first `n` Fibonacci numbers, with an `await asyncio.sleep(0.05)` between each yield to simulate asynchronous computation. Collect the results using an `async for` loop and print them.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import asyncio
+
+        async def async_fibonacci(n):
+            a, b = 0, 1
+            for _ in range(n):
+                yield a
+                a, b = b, a + b
+                await asyncio.sleep(0.05)
+
+        async def main():
+            fibs = []
+            async for num in async_fibonacci(10):
+                fibs.append(num)
+            print(f"First 10 Fibonacci numbers: {fibs}")
+
+        asyncio.run(main())
+        ```

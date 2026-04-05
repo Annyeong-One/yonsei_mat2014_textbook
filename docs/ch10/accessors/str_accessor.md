@@ -518,3 +518,48 @@ dtype: object
 | `strip()` | Remove whitespace | `s.str.strip()` |
 | `extract()` | Regex extraction | `s.str.extract(r'(\d+)')` |
 | `match()` | Regex matching | `s.str.match(r'^[A-Z]')` |
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Given a Series of full names like `['Alice Smith', 'Bob Jones', 'Carol Lee']`, use the `.str` accessor to extract only the first names (everything before the space) into a new Series.
+
+??? success "Solution to Exercise 1"
+    Use `.str.split()` and access the first element.
+
+        import pandas as pd
+
+        names = pd.Series(['Alice Smith', 'Bob Jones', 'Carol Lee'])
+        first_names = names.str.split(' ').str[0]
+        print(first_names)
+
+---
+
+**Exercise 2.**
+Given a Series of email addresses, use `.str.contains()` to create a boolean mask that identifies emails from the domain `'gmail.com'`. Then filter the Series to show only Gmail addresses.
+
+??? success "Solution to Exercise 2"
+    Use `.str.contains()` with `case=False` for safety.
+
+        import pandas as pd
+
+        emails = pd.Series(['alice@gmail.com', 'bob@yahoo.com', 'carol@gmail.com', 'dave@outlook.com'])
+        gmail_mask = emails.str.contains('gmail.com')
+        gmail_only = emails[gmail_mask]
+        print(gmail_only)
+
+---
+
+**Exercise 3.**
+Given a Series of messy product codes like `['  AB-123  ', 'cd-456', '  EF-789']`, chain `.str` methods to (1) strip whitespace, (2) convert to uppercase, and (3) replace the hyphen with an underscore. The result should be `['AB_123', 'CD_456', 'EF_789']`.
+
+??? success "Solution to Exercise 3"
+    Chain `strip()`, `upper()`, and `replace()`.
+
+        import pandas as pd
+
+        codes = pd.Series(['  AB-123  ', 'cd-456', '  EF-789'])
+        cleaned = codes.str.strip().str.upper().str.replace('-', '_')
+        print(cleaned)

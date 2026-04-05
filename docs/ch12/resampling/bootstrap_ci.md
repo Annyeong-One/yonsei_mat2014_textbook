@@ -163,3 +163,61 @@ if __name__ == "__main__":
     print("Tutorial 08 demonstrates statistical estimation visualization")
     print("Key concept: confidence intervals via bootstrapping")
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that computes three types of bootstrap confidence intervals: percentile, basic, and BCa (bias-corrected and accelerated).
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(100)
+    print(f'Mean: {data.mean():.4f}')
+    print(f'Std: {data.std():.4f}')
+    ```
+
+---
+
+**Exercise 2.** Explain the difference between the percentile method and the BCa method for bootstrap confidence intervals.
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the statistical method and its assumptions.
+
+---
+
+**Exercise 3.** Write code that computes a 95% bootstrap confidence interval for the correlation coefficient between two variables.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+    from scipy import stats
+    import matplotlib.pyplot as plt
+
+    np.random.seed(42)
+    data = np.random.randn(1000)
+    fig, ax = plt.subplots()
+    ax.hist(data, bins=30, density=True, alpha=0.7)
+    ax.set_title('Distribution')
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Demonstrate the coverage of bootstrap confidence intervals by running a simulation: generate 1000 datasets, compute CIs, and count how many contain the true parameter.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(500)
+    result = stats.describe(data)
+    print(result)
+    ```

@@ -384,3 +384,104 @@ squares_gen = (x**2 for x in range(1000000))
 3. Class variables vs instance variables
 4. Missing `nonlocal` or `global`
 5. Using `is` for value comparison
+
+---
+
+## Exercises
+
+**Exercise 1.**
+A common interview question: what does this code print?
+
+```python
+def make_adders():
+    return [lambda x: x + i for i in range(5)]
+
+adders = make_adders()
+print(adders[0](10))
+print(adders[4](10))
+print(adders[0](10) == adders[4](10))
+```
+
+Explain the bug and provide two different fixes. Which fix is more Pythonic?
+
+??? success "Solution to Exercise 1"
+    Output:
+
+    ```text
+    14
+    14
+    True
+    ```
+
+    All adders return the same result because the lambda captures `i` by reference. After the loop, `i` is `4`, so every lambda computes `x + 4`.
+
+    **Fix 1** (default argument): `lambda x, i=i: x + i` -- captures the current value of `i` at each iteration.
+
+    **Fix 2** (functools.partial): `from functools import partial; return [partial(lambda i, x: x + i, i) for i in range(5)]`.
+
+    The default argument fix is more Pythonic and commonly used. The `partial` approach is cleaner when the captured value is not the last parameter.
+
+---
+
+**Exercise 2.**
+Another classic: predict the output and explain the object model concepts involved:
+
+```python
+a = [[]] * 3
+a[0].append(1)
+print(a)
+
+b = [[] for _ in range(3)]
+b[0].append(1)
+print(b)
+```
+
+Why do `a` and `b` behave differently? What is the difference between `*` repetition and a list comprehension for mutable objects?
+
+??? success "Solution to Exercise 2"
+    Output:
+
+    ```text
+    [[1], [1], [1]]
+    [[1], [], []]
+    ```
+
+    `[[]] * 3` creates a list containing **three references to the same inner list**. Appending to `a[0]` mutates that shared list, so all three elements reflect the change.
+
+    `[[] for _ in range(3)]` creates a list containing **three independent empty lists**. The comprehension evaluates `[]` fresh on each iteration, producing separate objects.
+
+    The rule: `*` repetition with mutable objects creates **shallow copies of references**, not independent copies. This is one of the most common Python gotchas in interviews.
+
+---
+
+**Exercise 3.**
+Scope and mutability interview question. Predict the output:
+
+```python
+x = [1, 2, 3]
+
+def modify(lst):
+    lst.append(4)
+    lst = [10, 20, 30]
+    lst.append(40)
+
+modify(x)
+print(x)
+```
+
+Why does `x` end up as `[1, 2, 3, 4]` and not `[10, 20, 30, 40]`? What does this reveal about Python's argument passing mechanism?
+
+??? success "Solution to Exercise 3"
+    Output:
+
+    ```text
+    [1, 2, 3, 4]
+    ```
+
+    Python passes arguments by **assignment** (pass-by-object-reference). When `modify(x)` is called, the parameter `lst` is bound to the same list object as `x`.
+
+    - `lst.append(4)` mutates the shared object, so `x` sees the change.
+    - `lst = [10, 20, 30]` **rebinds** the local name `lst` to a completely new list. This does not affect `x` -- it just makes `lst` point somewhere else.
+    - `lst.append(40)` mutates the new local list, which has nothing to do with `x`.
+
+    The key insight: **mutation** (`.append`) affects the original object because both names reference it. **Rebinding** (`=`) only changes what the local name points to, without affecting other names.

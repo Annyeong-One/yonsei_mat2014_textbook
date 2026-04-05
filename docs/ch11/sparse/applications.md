@@ -507,3 +507,78 @@ Sparse matrix applications excel when:
 - **@ operator** for clean, readable sparse linear algebra
 
 The elegance of sparse matrices lies in separating construction from computation, letting you build once and apply efficiently many times.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Given prediction and ground truth arrays `pred = np.array([0, 1, 2, 0, 1, 2, 0, 1, 2])` and `gt = np.array([0, 0, 0, 1, 1, 1, 2, 2, 2])`, build a $3 \times 3$ confusion matrix using the COO sparse format (exploit duplicate coordinate summing). Convert to dense and print it. Compute the overall accuracy (sum of diagonal / total).
+
+??? success "Solution to Exercise 1"
+        import numpy as np
+        from scipy import sparse
+
+        pred = np.array([0, 1, 2, 0, 1, 2, 0, 1, 2])
+        gt = np.array([0, 0, 0, 1, 1, 1, 2, 2, 2])
+
+        cm = sparse.coo_matrix(
+            (np.ones(len(pred)), (pred, gt)),
+            shape=(3, 3)
+        ).toarray()
+
+        print("Confusion matrix:")
+        print(cm.astype(int))
+
+        accuracy = np.trace(cm) / cm.sum()
+        print(f"Accuracy: {accuracy:.4f}")
+
+---
+
+**Exercise 2.**
+Create a row-stochastic matrix from a sparse count matrix: start with the sparse matrix `C = sparse.csr_matrix([[10, 5, 0], [3, 20, 2], [0, 1, 15]])`. Normalize each row to sum to 1 using `sparse.diags` to build the inverse row-sum diagonal matrix, then multiply. Print the normalized matrix and verify each row sums to 1.
+
+??? success "Solution to Exercise 2"
+        import numpy as np
+        from scipy import sparse
+
+        C = sparse.csr_matrix([[10, 5, 0],
+                                [3, 20, 2],
+                                [0, 1, 15]])
+
+        row_sums = np.array(C.sum(axis=1)).flatten()
+        row_sums[row_sums == 0] = 1
+        D_inv = sparse.diags(1.0 / row_sums)
+        normalized = D_inv @ C
+
+        print("Normalized matrix:")
+        print(normalized.toarray())
+        print("Row sums:", np.array(normalized.sum(axis=1)).flatten())
+
+---
+
+**Exercise 3.**
+Build a sparse co-occurrence matrix from two categorical arrays: `words = np.array([0, 1, 2, 0, 1, 0, 2, 1])` and `docs = np.array([0, 0, 0, 1, 1, 2, 2, 2])`, where each pair (word, doc) indicates that the word appeared in that document. Use COO format to count occurrences, convert to CSR, and print the dense matrix. Then compute the TF normalization (divide each column by its sum).
+
+??? success "Solution to Exercise 3"
+        import numpy as np
+        from scipy import sparse
+
+        words = np.array([0, 1, 2, 0, 1, 0, 2, 1])
+        docs = np.array([0, 0, 0, 1, 1, 2, 2, 2])
+
+        co_occur = sparse.coo_matrix(
+            (np.ones(len(words)), (words, docs))
+        ).tocsr()
+
+        print("Co-occurrence matrix (words x docs):")
+        print(co_occur.toarray().astype(int))
+
+        # TF normalization: divide each column by its sum
+        col_sums = np.array(co_occur.sum(axis=0)).flatten()
+        col_sums[col_sums == 0] = 1
+        D_inv_col = sparse.diags(1.0 / col_sums)
+        tf_normalized = co_occur @ D_inv_col
+
+        print("\nTF-normalized matrix:")
+        print(tf_normalized.toarray().round(4))

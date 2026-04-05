@@ -194,3 +194,59 @@ s.mean(skipna=False)  # NaN (includes NaN)
 s.count()  # 3 (only non-NaN values)
 len(s)     # 4 (all values including NaN)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a DataFrame with columns `'math'`, `'science'`, and `'english'` containing scores for five students. Use `.mean()` to compute the average score for each subject (column-wise) and for each student (row-wise with `axis=1`).
+
+??? success "Solution to Exercise 1"
+    Use `.mean()` with different axis values.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'math': [85, 90, 78, 92, 88],
+            'science': [80, 85, 82, 95, 90],
+            'english': [75, 88, 91, 84, 79]
+        })
+        print("Average per subject:\n", df.mean())
+        print("\nAverage per student:\n", df.mean(axis=1))
+
+---
+
+**Exercise 2.**
+Given a DataFrame of daily stock prices for three tickers, compute the `describe()` statistics. Then extract only the `'mean'` and `'std'` rows from the result using `.loc`.
+
+??? success "Solution to Exercise 2"
+    Use `describe()` and extract specific rows with `.loc`.
+
+        import pandas as pd
+        import numpy as np
+
+        np.random.seed(42)
+        df = pd.DataFrame({
+            'AAPL': np.random.uniform(140, 160, 20),
+            'MSFT': np.random.uniform(340, 360, 20),
+            'GOOGL': np.random.uniform(130, 150, 20)
+        })
+        stats = df.describe()
+        print(stats.loc[['mean', 'std']])
+
+---
+
+**Exercise 3.**
+Create a Series with some `NaN` values. Demonstrate the difference between `.count()` and `len()` by printing both. Then compute the `.sum()` and show that NaN values are skipped by default but can be included by setting `min_count`.
+
+??? success "Solution to Exercise 3"
+    Show the difference between `count()` and `len()`.
+
+        import pandas as pd
+        import numpy as np
+
+        s = pd.Series([10, 20, np.nan, 40, np.nan])
+        print(f"count(): {s.count()}")  # 3
+        print(f"len(): {len(s)}")       # 5
+        print(f"sum(): {s.sum()}")      # 70 (NaN skipped)

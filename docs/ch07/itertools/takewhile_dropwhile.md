@@ -43,3 +43,62 @@ print(content)
 [4, 5, 3, 2, 1]
 ['content', 'more']
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Use `takewhile` to extract the leading digits from a string. For example, `leading_digits("123abc456")` should return `"123"`. Hint: use `str.isdigit` as the predicate.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    from itertools import takewhile
+
+    def leading_digits(s):
+        return "".join(takewhile(str.isdigit, s))
+
+    # Test
+    print(leading_digits("123abc456"))  # 123
+    print(leading_digits("abc123"))     # (empty string)
+    print(leading_digits("42"))         # 42
+    ```
+
+---
+
+**Exercise 2.**
+Use `dropwhile` to skip all the header lines (lines starting with `#`) from a list of text lines and return the remaining content lines. For example, given `["# header", "# comment", "data1", "data2"]`, return `["data1", "data2"]`.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    from itertools import dropwhile
+
+    lines = ["# header", "# comment", "data1", "data2"]
+    content = list(dropwhile(lambda line: line.startswith("#"), lines))
+    print(content)  # ['data1', 'data2']
+    ```
+
+---
+
+**Exercise 3.**
+Write a function `between_markers` that takes a list and two predicates, and returns the elements between the first element that fails predicate1 (using `dropwhile`) and up to (but not including) the first element in the remaining that fails predicate2 (using `takewhile`). For example, `between_markers([0, 0, 5, 3, 8, 0, 0], lambda x: x == 0, lambda x: x != 0)` should return `[5, 3, 8]`.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    from itertools import dropwhile, takewhile
+
+    def between_markers(items, pred_drop, pred_take):
+        after_drop = dropwhile(pred_drop, items)
+        return list(takewhile(pred_take, after_drop))
+
+    # Test
+    result = between_markers(
+        [0, 0, 5, 3, 8, 0, 0],
+        lambda x: x == 0,
+        lambda x: x != 0,
+    )
+    print(result)  # [5, 3, 8]
+    ```

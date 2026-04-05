@@ -445,3 +445,60 @@ print(f"Outliers (IQR): {outliers_iqr}")
 - MAD: Median absolute deviation (very robust)
 
 **Key insight:** Summary statistics reduce data to key numerical values, with robust measures (median, MAD, IQR) preferred when outliers are present, while classical measures (mean, std) are more efficient for clean, normally-distributed data.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Generate 200 samples from a gamma distribution with shape 3 and scale 2. Compute the mean, median, standard deviation, and IQR using NumPy and SciPy functions.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        data = stats.gamma.rvs(a=3, scale=2, size=200)
+        print(f"Mean:   {np.mean(data):.4f}")
+        print(f"Median: {np.median(data):.4f}")
+        print(f"Std:    {np.std(data, ddof=1):.4f}")
+        print(f"IQR:    {np.percentile(data, 75) - np.percentile(data, 25):.4f}")
+
+---
+
+**Exercise 2.**
+Use `scipy.stats.describe()` on an array of 500 standard normal samples. Print all returned fields (nobs, minmax, mean, variance, skewness, kurtosis) and interpret each.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        data = np.random.normal(size=500)
+        result = stats.describe(data)
+        print(f"nobs:     {result.nobs}")
+        print(f"minmax:   {result.minmax}")
+        print(f"mean:     {result.mean:.4f}")
+        print(f"variance: {result.variance:.4f}")
+        print(f"skewness: {result.skewness:.4f}")
+        print(f"kurtosis: {result.kurtosis:.4f}")
+
+---
+
+**Exercise 3.**
+Create two datasets: one from a normal distribution and one from an exponential distribution (both with 300 samples). Compare their `describe()` outputs and identify which statistics reveal the difference in distribution shape.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+
+        np.random.seed(42)
+        normal_data = np.random.normal(5, 2, size=300)
+        exp_data = np.random.exponential(5, size=300)
+
+        for name, data in [("Normal", normal_data), ("Exponential", exp_data)]:
+            d = stats.describe(data)
+            print(f"{name}: skew={d.skewness:.3f}, kurt={d.kurtosis:.3f}")

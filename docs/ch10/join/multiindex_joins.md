@@ -230,3 +230,76 @@ print(result)
 - Flat column values can be matched against MultiIndex levels using `left_on=[col1, col2]` with `right_index=True`
 - Watch for Cartesian products when joining on non-unique index levels
 - Level names must match exactly — check with `df.index.names` before joining
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create two DataFrames that share the same `(year, quarter)` MultiIndex. Use `.join()` to combine them. Verify the result has the same MultiIndex and no `NaN` values.
+
+??? success "Solution to Exercise 1"
+    Join two DataFrames on a shared MultiIndex.
+
+        import pandas as pd
+
+        idx = pd.MultiIndex.from_tuples(
+            [(2023, 'Q1'), (2023, 'Q2'), (2024, 'Q1')],
+            names=['year', 'quarter']
+        )
+        revenue = pd.DataFrame({'revenue': [100, 200, 150]}, index=idx)
+        costs = pd.DataFrame({'cost': [80, 160, 120]}, index=idx)
+        result = revenue.join(costs)
+        print(result)
+        assert result.isna().sum().sum() == 0
+        print("No NaN values.")
+
+---
+
+**Exercise 2.**
+Create a DataFrame with a `(region, quarter)` MultiIndex and a second DataFrame with a single `'region'` index. Use `pd.merge()` with `left_on='region'` and `right_index=True` to join them. Verify that each region's target is broadcast to all its quarters.
+
+??? success "Solution to Exercise 2"
+    Merge MultiIndex with single index on one level.
+
+        import pandas as pd
+
+        sales = pd.DataFrame(
+            {'revenue': [100, 200, 150, 250]},
+            index=pd.MultiIndex.from_tuples(
+                [('East', 'Q1'), ('East', 'Q2'), ('West', 'Q1'), ('West', 'Q2')],
+                names=['region', 'quarter']
+            )
+        )
+        targets = pd.DataFrame(
+            {'target': [180, 300]},
+            index=pd.Index(['East', 'West'], name='region')
+        )
+        result = pd.merge(sales, targets, left_on='region', right_index=True)
+        print(result)
+        # Each region's target is broadcast to all its quarters
+
+---
+
+**Exercise 3.**
+Create a flat DataFrame with `'dept'` and `'team'` columns and a targets DataFrame with a `(dept, team)` MultiIndex. Use `pd.merge()` with `left_on=['dept', 'team']` and `right_index=True` to look up targets for each row.
+
+??? success "Solution to Exercise 3"
+    Merge flat columns against a MultiIndex.
+
+        import pandas as pd
+
+        data = pd.DataFrame({
+            'dept': ['Eng', 'Eng', 'Sales'],
+            'team': ['Backend', 'Frontend', 'East'],
+            'headcount': [10, 8, 15]
+        })
+        targets = pd.DataFrame(
+            {'target': [12, 10, 18]},
+            index=pd.MultiIndex.from_tuples(
+                [('Eng', 'Backend'), ('Eng', 'Frontend'), ('Sales', 'East')],
+                names=['dept', 'team']
+            )
+        )
+        result = pd.merge(data, targets, left_on=['dept', 'team'], right_index=True)
+        print(result)

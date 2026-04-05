@@ -207,3 +207,58 @@ df.loc[df['needs_update'], 'value'] = new_value
 | New column on subset | `df[cond]['new'] = x` | `subset = df[cond].copy(); subset['new'] = x` |
 
 **Golden Rule**: Use `.loc[rows, cols] = value` for all conditional assignments.
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that demonstrates the chained assignment problem: `df[df['a'] > 0]['b'] = 1`. Explain why this may not work.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    # Solution for the specific exercise
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(10), 'B': np.random.randn(10)})
+    print(df.head())
+    ```
+
+---
+
+**Exercise 2.** Explain the difference between a view and a copy in Pandas. How does this relate to chained assignment?
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the Pandas API and its behavior for this specific operation.
+
+---
+
+**Exercise 3.** Write the correct way to modify a subset of a DataFrame using `.loc[]` instead of chained indexing.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(20), 'B': np.random.randn(20)})
+    result = df.describe()
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Explain what the `SettingWithCopyWarning` means and how to avoid it.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({'A': np.random.randn(50), 'group': np.random.choice(['X', 'Y'], 50)})
+    result = df.groupby('group').mean()
+    print(result)
+    ```

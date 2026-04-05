@@ -247,3 +247,91 @@ The function-based approach is shorter, requires no inheritance hierarchy, and i
 | Python advantage | First-class functions eliminate the need for strategy classes |
 
 **The one-line version**: pass a function where behaviour varies; keep everything else the same.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Implement a `TextProcessor` class that accepts a `strategy` function in its constructor. The strategy should transform a string. Create three strategies: `uppercase_strategy`, `snake_case_strategy` (replaces spaces with underscores and lowercases), and `title_strategy`. Demonstrate switching strategies at runtime.
+
+??? success "Solution to Exercise 1"
+
+        class TextProcessor:
+            def __init__(self, strategy):
+                self.strategy = strategy
+
+            def process(self, text):
+                return self.strategy(text)
+
+        def uppercase_strategy(text):
+            return text.upper()
+
+        def snake_case_strategy(text):
+            return text.lower().replace(" ", "_")
+
+        def title_strategy(text):
+            return text.title()
+
+        processor = TextProcessor(uppercase_strategy)
+        print(processor.process("hello world"))   # HELLO WORLD
+
+        processor.strategy = snake_case_strategy
+        print(processor.process("Hello World"))   # hello_world
+
+        processor.strategy = title_strategy
+        print(processor.process("hello world"))   # Hello World
+
+---
+
+**Exercise 2.**
+Build a `Sorter` class that accepts a `key_strategy` function. Create strategies for sorting a list of `(name, score)` tuples by name alphabetically, by score ascending, and by score descending. Use the same `Sorter` instance and swap strategies between sorts.
+
+??? success "Solution to Exercise 2"
+
+        class Sorter:
+            def __init__(self, key_strategy):
+                self.key_strategy = key_strategy
+
+            def sort(self, items):
+                return sorted(items, key=self.key_strategy)
+
+        students = [("Alice", 88), ("Bob", 95), ("Charlie", 72)]
+
+        by_name = lambda item: item[0]
+        by_score_asc = lambda item: item[1]
+        by_score_desc = lambda item: -item[1]
+
+        sorter = Sorter(by_name)
+        print(sorter.sort(students))
+
+        sorter.key_strategy = by_score_asc
+        print(sorter.sort(students))
+
+        sorter.key_strategy = by_score_desc
+        print(sorter.sort(students))
+
+---
+
+**Exercise 3.**
+Create a shipping cost calculator that uses the strategy pattern. Write a `calculate_shipping(weight, strategy)` function and three strategy functions: `standard_shipping` (flat rate plus per-kg cost), `express_shipping` (rate per kg with a minimum charge), and `free_shipping_over_50` (free if the computed cost exceeds a threshold, else standard rate). Demonstrate each.
+
+??? success "Solution to Exercise 3"
+
+        def standard_shipping(weight):
+            return 5.0 + weight * 0.5
+
+        def express_shipping(weight):
+            return max(10.0, weight * 2.0)
+
+        def free_shipping_over_50(weight):
+            cost = standard_shipping(weight)
+            return 0.0 if cost > 50.0 else cost
+
+        def calculate_shipping(weight, strategy):
+            return strategy(weight)
+
+        print(f"Standard: ${calculate_shipping(10, standard_shipping):.2f}")
+        print(f"Express:  ${calculate_shipping(10, express_shipping):.2f}")
+        print(f"Free>50:  ${calculate_shipping(10, free_shipping_over_50):.2f}")
+        print(f"Free>50:  ${calculate_shipping(100, free_shipping_over_50):.2f}")

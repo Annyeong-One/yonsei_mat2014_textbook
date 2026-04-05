@@ -326,3 +326,52 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create `a = np.array([3, 1, 4, 1, 5, 9, 2, 6])`. Sort it using `np.sort` (returns a sorted copy) and `a.sort()` (in-place). Also use `np.argsort` to get the indices that would sort the array.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        a = np.array([3, 1, 4, 1, 5, 9, 2, 6])
+        sorted_copy = np.sort(a)
+        print(f"Sorted copy: {sorted_copy}")
+        print(f"Original unchanged: {a}")
+
+        indices = np.argsort(a)
+        print(f"Sort indices: {indices}")
+        print(f"a[indices]: {a[indices]}")
+
+---
+
+**Exercise 2.**
+Create a 2D array and sort it along axis 0 (sort each column) and axis 1 (sort each row). Show that the results are different.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        a = np.array([[3, 1], [4, 2], [1, 5]])
+        print(f"Sort axis=0 (columns):\n{np.sort(a, axis=0)}")
+        print(f"Sort axis=1 (rows):\n{np.sort(a, axis=1)}")
+
+---
+
+**Exercise 3.**
+Use `np.argsort` to rank elements in an array. Given scores `s = np.array([88, 72, 95, 67, 91])`, compute the ranking (1st place, 2nd place, etc.) using argsort applied twice.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        scores = np.array([88, 72, 95, 67, 91])
+        order = np.argsort(-scores)  # descending
+        ranks = np.empty_like(order)
+        ranks[order] = np.arange(1, len(scores) + 1)
+        print(f"Scores: {scores}")
+        print(f"Ranks:  {ranks}")

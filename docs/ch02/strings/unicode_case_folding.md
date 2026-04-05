@@ -98,3 +98,68 @@ comparison-ready text
 ```python
 normalize("NFC", text).casefold()
 ```
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Show the difference between `.lower()` and `.casefold()` using the German character `"\u00df"` (sharp s). Explain why `casefold()` is more suitable for case-insensitive comparison.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    sharp_s = "\u00df"
+    print(f"lower():    '{sharp_s.lower()}'")      # ß (unchanged)
+    print(f"casefold(): '{sharp_s.casefold()}'")    # ss
+
+    print("SS".casefold() == sharp_s.casefold())  # True
+    print("SS".lower() == sharp_s.lower())        # False
+    ```
+
+    `lower()` does not change `ß` because it has no uppercase form. `casefold()` maps it to `ss`, enabling correct case-insensitive matching with `"SS"`.
+
+---
+
+**Exercise 2.**
+Write a `fold_equal(s1, s2)` function that combines NFC normalization and case folding. Test it with `"Cafe\u0301"` and `"CAFE"`.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    from unicodedata import normalize
+
+    def fold_equal(s1, s2):
+        return normalize("NFC", s1).casefold() == normalize("NFC", s2).casefold()
+
+    print(fold_equal("Cafe\u0301", "CAFE"))   # True
+    print(fold_equal("\u00df", "SS"))           # True
+    print(fold_equal("hello", "HELLO"))         # True
+    ```
+
+    NFC normalization handles representation differences, and `casefold()` handles case differences, making this the most robust comparison approach.
+
+---
+
+**Exercise 3.**
+Implement a case-insensitive search function `search_users(query, users)` where `users` is a list of name strings. The search should match regardless of case and Unicode representation differences.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    from unicodedata import normalize
+
+    def fold_equal(s1, s2):
+        return normalize("NFC", s1).casefold() == normalize("NFC", s2).casefold()
+
+    def search_users(query, users):
+        return [u for u in users if fold_equal(u, query)]
+
+    users = ["Jose\u0301", "Fran\u00e7oise", "M\u00fcller", "alice"]
+    print(search_users("jose", users))       # ['José']
+    print(search_users("ALICE", users))      # ['alice']
+    print(search_users("muller", users))     # ['Müller']
+    ```
+
+    By normalizing and folding both the query and each user name, the search handles all case and representation variations.

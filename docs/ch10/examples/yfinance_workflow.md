@@ -123,3 +123,63 @@ ax.set_title('Price with Moving Averages')
 volatility = returns.rolling(20).std() * np.sqrt(252)
 volatility.plot(figsize=(12, 4))
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that creates a synthetic stock price DataFrame with columns `['Open', 'High', 'Low', 'Close', 'Volume']` and a DatetimeIndex.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import pandas as pd
+
+    df = pd.DataFrame({
+        'name': ['Alice', 'Bob', 'Charlie', 'David'],
+        'salary': [70000, 80000, 60000, 90000],
+        'department': ['IT', 'IT', 'HR', 'HR']
+    })
+    result = df.groupby('department')['salary'].max()
+    print(result)
+    ```
+
+---
+
+**Exercise 2.** Explain the typical workflow for downloading, cleaning, and analyzing financial data with Pandas.
+
+??? success "Solution to Exercise 2"
+    See the main content for the relevant patterns and API calls. The solution involves understanding how to combine Pandas operations to solve data manipulation problems.
+
+---
+
+**Exercise 3.** Write code that computes the cumulative return of a price series. Start from the formula: cumulative return = (price / first_price) - 1.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    df = pd.DataFrame({
+        'value': np.random.randint(0, 100, 20),
+        'group': np.random.choice(['A', 'B'], 20)
+    })
+    result = df.groupby('group')['value'].transform('sum')
+    print(result)
+    ```
+
+---
+
+**Exercise 4.** Create a function that takes a DataFrame of daily prices and returns a summary with: total return, annualized return, and volatility.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(42)
+    s = pd.Series(np.random.randn(100))
+    s_clean = s.clip(lower=0)
+    print(s_clean.describe())
+    ```

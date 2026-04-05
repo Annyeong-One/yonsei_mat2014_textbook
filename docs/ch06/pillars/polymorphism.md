@@ -542,3 +542,176 @@ REAL-WORLD USES:
 - Notification systems (email, SMS, push notifications)
 """
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.** Write three classes `Dog`, `Cat`, and `Duck`, each with a `speak()` method that returns a species-appropriate string. Then write a function `animal_chorus(animals)` that iterates over a list and prints each animal's sound. Demonstrate duck typing by adding a `RobotDog` class that is not related by inheritance but has a `speak()` method.
+
+??? success "Solution to Exercise 1"
+    ```python
+    class Dog:
+        def speak(self):
+            return "Woof!"
+
+    class Cat:
+        def speak(self):
+            return "Meow!"
+
+    class Duck:
+        def speak(self):
+            return "Quack!"
+
+    class RobotDog:
+        def speak(self):
+            return "Beep-boop-bark!"
+
+    def animal_chorus(animals):
+        for animal in animals:
+            print(animal.speak())
+
+    animals = [Dog(), Cat(), Duck(), RobotDog()]
+    animal_chorus(animals)
+    # Woof!
+    # Meow!
+    # Quack!
+    # Beep-boop-bark!
+    ```
+
+    `RobotDog` has no inheritance relationship with the other classes, but the function works because Python only cares that the object has a `speak()` method (duck typing).
+
+---
+
+**Exercise 2.** Predict the output of the following code.
+
+```python
+class Base:
+    def identify(self):
+        return "Base"
+
+class ChildA(Base):
+    def identify(self):
+        return "ChildA"
+
+class ChildB(Base):
+    pass
+
+items = [Base(), ChildA(), ChildB()]
+for item in items:
+    print(item.identify())
+```
+
+??? success "Solution to Exercise 2"
+    The output is:
+
+    ```
+    Base
+    ChildA
+    Base
+    ```
+
+    `Base().identify()` calls the `Base` version. `ChildA().identify()` calls the overridden version in `ChildA`. `ChildB` does not override `identify()`, so it inherits the `Base` version and prints `"Base"`.
+
+---
+
+**Exercise 3.** Create a `Vector` class that supports addition (`+`), subtraction (`-`), equality (`==`), and string representation (`str()`). Each vector has two components `x` and `y`. Demonstrate operator overloading by computing `Vector(1, 2) + Vector(3, 4)`.
+
+??? success "Solution to Exercise 3"
+    ```python
+    class Vector:
+        def __init__(self, x, y):
+            self.x = x
+            self.y = y
+
+        def __add__(self, other):
+            return Vector(self.x + other.x, self.y + other.y)
+
+        def __sub__(self, other):
+            return Vector(self.x - other.x, self.y - other.y)
+
+        def __eq__(self, other):
+            return self.x == other.x and self.y == other.y
+
+        def __str__(self):
+            return f"Vector({self.x}, {self.y})"
+
+        def __repr__(self):
+            return f"Vector({self.x}, {self.y})"
+
+    v1 = Vector(1, 2)
+    v2 = Vector(3, 4)
+
+    print(v1 + v2)        # Vector(4, 6)
+    print(v2 - v1)        # Vector(2, 2)
+    print(v1 == Vector(1, 2))  # True
+    ```
+
+---
+
+**Exercise 4.** Write a polymorphic function `describe_all(items)` that calls `describe()` on each element. Create three unrelated classes (`Book`, `Movie`, `Song`) that each implement `describe()`. This exercise illustrates that Python polymorphism does not require a shared base class.
+
+??? success "Solution to Exercise 4"
+    ```python
+    class Book:
+        def __init__(self, title):
+            self.title = title
+        def describe(self):
+            return f"Book: {self.title}"
+
+    class Movie:
+        def __init__(self, title):
+            self.title = title
+        def describe(self):
+            return f"Movie: {self.title}"
+
+    class Song:
+        def __init__(self, title):
+            self.title = title
+        def describe(self):
+            return f"Song: {self.title}"
+
+    def describe_all(items):
+        for item in items:
+            print(item.describe())
+
+    media = [Book("1984"), Movie("Inception"), Song("Bohemian Rhapsody")]
+    describe_all(media)
+    # Book: 1984
+    # Movie: Inception
+    # Song: Bohemian Rhapsody
+    ```
+
+---
+
+**Exercise 5.** Explain the difference between polymorphism through inheritance and Python's duck typing. Write a short code example that shows the same function working with objects from completely unrelated class hierarchies, and explain why it works.
+
+??? success "Solution to Exercise 5"
+    **Inheritance-based polymorphism** requires classes to share a common parent. A function accepts a base type, and each subclass provides its own implementation of the same method.
+
+    **Duck typing** does not require any shared base class. Python only checks at runtime whether the object has the required method. If it does, the call succeeds regardless of the object's type.
+
+    ```python
+    class Printer:
+        def output(self):
+            return "Printing a document"
+
+    class Speaker:
+        def output(self):
+            return "Playing audio"
+
+    class Monitor:
+        def output(self):
+            return "Displaying image"
+
+    def activate(device):
+        # No type checking — just calls .output()
+        print(device.output())
+
+    # These classes share no base class, yet the function works
+    activate(Printer())   # Printing a document
+    activate(Speaker())   # Playing audio
+    activate(Monitor())   # Displaying image
+    ```
+
+    This works because Python follows the principle "if it has the right method, use it." No `isinstance` check or shared base class is needed.

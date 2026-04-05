@@ -258,3 +258,61 @@ if __name__ == "__main__":
     🔜 NEXT: 03_mathematical_ops.py
     """)
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a 1D array of 24 elements using `np.arange(24)`. Reshape it into a 3D array of shape `(2, 3, 4)`. Then reshape the 3D array back to a 1D array using `-1` as the dimension argument. Verify that the values are unchanged.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        a = np.arange(24)
+        b = a.reshape(2, 3, 4)
+        print(b.shape)  # (2, 3, 4)
+
+        c = b.reshape(-1)
+        print(c.shape)  # (24,)
+        print(np.array_equal(a, c))  # True
+
+---
+
+**Exercise 2.**
+Given `a = np.arange(12)`, reshape it into shape `(3, -1)` and print the result. Then reshape the original array into shape `(-1, 2)` and print the result. Explain what `-1` does in each case.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        a = np.arange(12)
+
+        b = a.reshape(3, -1)
+        print(b.shape)  # (3, 4) — NumPy infers 12/3 = 4
+        print(b)
+
+        c = a.reshape(-1, 2)
+        print(c.shape)  # (6, 2) — NumPy infers 12/2 = 6
+        print(c)
+        # -1 tells NumPy to compute that dimension automatically
+        # so that the total number of elements is preserved.
+
+---
+
+**Exercise 3.**
+Create a 2D array `a = np.arange(6).reshape(2, 3)`. Attempt to reshape it into shape `(4, 2)` and catch the `ValueError`. Print the error message and explain why the reshape fails.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        a = np.arange(6).reshape(2, 3)
+        try:
+            b = a.reshape(4, 2)
+        except ValueError as e:
+            print(f"Error: {e}")
+        # Error: cannot reshape array of size 6 into shape (4,2)
+        # 4 * 2 = 8 != 6, so the reshape is impossible.

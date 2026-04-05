@@ -84,3 +84,52 @@ Frozen distributions embody the **object-oriented design** of `scipy.stats`. Eac
 ## Summary
 
 Frozen distributions are the standard way to work with `scipy.stats`. By fixing parameters at creation time, they provide a clean, consistent interface for sampling, density evaluation, probability computation, and statistical analysis.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a frozen gamma distribution with shape $a = 3$ and scale $\theta = 2$. Compute its mean, variance, and skewness using the frozen object's methods. Verify the mean equals $a \cdot \theta$.
+
+??? success "Solution to Exercise 1"
+
+        from scipy import stats
+
+        gamma_rv = stats.gamma(a=3, scale=2)
+        print(f"Mean: {gamma_rv.mean():.4f} (expected {3*2})")
+        print(f"Variance: {gamma_rv.var():.4f}")
+        print(f"Skewness: {gamma_rv.stats(moments='s'):.4f}")
+
+---
+
+**Exercise 2.**
+Create frozen objects for a $t$-distribution with 5 degrees of freedom and a standard normal. Compare their PDF values at $x = 0, 1, 2, 3$ and show that the $t$-distribution has heavier tails.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+        from scipy import stats
+
+        t_rv = stats.t(df=5)
+        norm_rv = stats.norm()
+
+        for x in [0, 1, 2, 3]:
+            print(f"x={x}: t(5) PDF={t_rv.pdf(x):.6f}, Normal PDF={norm_rv.pdf(x):.6f}, "
+                  f"t > normal: {t_rv.pdf(x) > norm_rv.pdf(x)}")
+
+---
+
+**Exercise 3.**
+Create a frozen binomial distribution with $n = 20$ and $p = 0.3$. Use the frozen object to compute $P(X = 6)$, $P(X \le 6)$, and the 90th percentile. Verify that `.pmf(k)` summed over $k = 0, \ldots, 20$ equals 1.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+
+        binom_rv = stats.binom(n=20, p=0.3)
+        print(f"P(X=6)  = {binom_rv.pmf(6):.4f}")
+        print(f"P(X<=6) = {binom_rv.cdf(6):.4f}")
+        print(f"90th percentile = {binom_rv.ppf(0.9)}")
+        print(f"Sum PMF(k=0..20) = {sum(binom_rv.pmf(k) for k in range(21)):.6f}")

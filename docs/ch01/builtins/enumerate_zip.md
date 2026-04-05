@@ -115,3 +115,100 @@ print(ages)    # (25, 30, 35)
 `enumerate()` is the idiomatic way to iterate with an index — prefer it over `range(len(seq))`.
 `zip()` is the idiomatic way to iterate over two or more sequences in parallel — prefer it over indexing both manually.
 Both functions are lazy: they produce one tuple at a time without building the full result in memory.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+`zip()` stops at the shortest iterable. Predict the output:
+
+```python
+names = ["Alice", "Bob", "Charlie"]
+ages = [25, 30]
+
+for name, age in zip(names, ages):
+    print(name, age)
+```
+
+Why does Python silently drop `"Charlie"` instead of raising an error? How would you use `itertools.zip_longest` to include all elements? In Python 3.10+, how does `zip(strict=True)` change this behavior?
+
+??? success "Solution to Exercise 1"
+    Output:
+
+    ```text
+    Alice 25
+    Bob 30
+    ```
+
+    `"Charlie"` is silently dropped because `zip()` stops at the shortest iterable. This is by design: `zip()` was created for the common case where iterables are expected to have equal length, and stopping early is a safe default.
+
+    To include all elements with a fill value:
+
+    ```python
+    from itertools import zip_longest
+    for name, age in zip_longest(names, ages, fillvalue="N/A"):
+        print(name, age)
+    # Output: Alice 25, Bob 30, Charlie N/A
+    ```
+
+    In Python 3.10+, `zip(names, ages, strict=True)` raises `ValueError` if the iterables have different lengths. This is useful when unequal lengths indicate a bug in the data.
+
+---
+
+**Exercise 2.**
+`enumerate()` produces tuples. Predict the output and explain the unpacking:
+
+```python
+words = ["hello", "world"]
+result = list(enumerate(words, start=10))
+print(result)
+
+for i, word in enumerate(words):
+    print(f"{i}: {word}")
+```
+
+What is the type of each element in the `enumerate` output? Why does `enumerate(words, start=10)` not change the actual indices of the list?
+
+??? success "Solution to Exercise 2"
+    Output:
+
+    ```text
+    [(10, 'hello'), (11, 'world')]
+    0: hello
+    1: world
+    ```
+
+    Each element from `enumerate()` is a tuple of `(index, value)`. The `start=10` parameter changes the counter starting point but does NOT change the list's actual indices. `words[0]` is still `"hello"` -- `enumerate` just provides a counter alongside iteration.
+
+    The tuple unpacking `for i, word in enumerate(words)` works because each tuple `(0, "hello")` is unpacked into `i = 0` and `word = "hello"`. This is the same unpacking mechanism as `a, b = (1, 2)`.
+
+---
+
+**Exercise 3.**
+The "unzip" pattern uses `zip(*pairs)`. Predict the output and explain the mechanism:
+
+```python
+pairs = [(1, "a"), (2, "b"), (3, "c")]
+numbers, letters = zip(*pairs)
+print(numbers)
+print(letters)
+print(type(numbers))
+```
+
+What does the `*` operator do to `pairs` before passing to `zip()`? Why does the result contain tuples, not lists? What happens if `pairs` is empty?
+
+??? success "Solution to Exercise 3"
+    Output:
+
+    ```text
+    (1, 2, 3)
+    ('a', 'b', 'c')
+    <class 'tuple'>
+    ```
+
+    The `*` operator **unpacks** the list `pairs` into separate arguments: `zip(*pairs)` becomes `zip((1, "a"), (2, "b"), (3, "c"))`. This is equivalent to calling `zip` with three separate tuples.
+
+    `zip` then pairs the first elements `(1, 2, 3)`, the second elements `("a", "b", "c")`, etc. The result contains tuples (not lists) because `zip` always produces tuples.
+
+    If `pairs` is empty (`pairs = []`), then `zip(*pairs)` is `zip()` with no arguments. `numbers, letters = zip()` raises `ValueError: not enough values to unpack` because `zip()` produces nothing. To handle empty input, you would need a guard: `if pairs: numbers, letters = zip(*pairs)`.

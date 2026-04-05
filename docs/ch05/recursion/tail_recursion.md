@@ -82,3 +82,78 @@ Python deliberately doesn't support TCO. When you identify tail recursive code:
 1. Convert to iteration for better performance
 2. Or use accumulator pattern if recursion is clearer
 3. Accept the O(n) stack space usage if recursion adds clarity
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a tail-recursive version of `sum_to(n)` that computes the sum from 1 to n using an accumulator parameter. Then convert it to an iterative version. Verify both produce the same result for `n = 1000`.
+
+??? success "Solution to Exercise 1"
+
+        # Tail recursive version
+        def sum_to_tail(n, acc=0):
+            if n <= 0:
+                return acc
+            return sum_to_tail(n - 1, acc + n)
+
+        # Iterative version
+        def sum_to_iter(n):
+            acc = 0
+            while n > 0:
+                acc += n
+                n -= 1
+            return acc
+
+        print(sum_to_tail(1000))  # 500500
+        print(sum_to_iter(1000))  # 500500
+
+---
+
+**Exercise 2.**
+Write a tail-recursive `reverse_list(lst, acc=None)` function that reverses a list using an accumulator. Then write the equivalent iterative version. Test both with `[1, 2, 3, 4, 5]`.
+
+??? success "Solution to Exercise 2"
+
+        # Tail recursive version
+        def reverse_list(lst, acc=None):
+            if acc is None:
+                acc = []
+            if not lst:
+                return acc
+            return reverse_list(lst[1:], [lst[0]] + acc)
+
+        # Iterative version
+        def reverse_list_iter(lst):
+            acc = []
+            for item in lst:
+                acc.insert(0, item)
+            return acc
+
+        print(reverse_list([1, 2, 3, 4, 5]))       # [5, 4, 3, 2, 1]
+        print(reverse_list_iter([1, 2, 3, 4, 5]))   # [5, 4, 3, 2, 1]
+
+---
+
+**Exercise 3.**
+Convert the tail-recursive `gcd(a, b)` function (Euclidean algorithm) into an iterative version. The tail-recursive version is: if `b == 0`, return `a`; otherwise, return `gcd(b, a % b)`. Show both versions and verify with `gcd(48, 18)` (expected: 6).
+
+??? success "Solution to Exercise 3"
+
+        # Tail recursive version
+        def gcd_recursive(a, b):
+            if b == 0:
+                return a
+            return gcd_recursive(b, a % b)
+
+        # Iterative version
+        def gcd_iterative(a, b):
+            while b != 0:
+                a, b = b, a % b
+            return a
+
+        print(gcd_recursive(48, 18))   # 6
+        print(gcd_iterative(48, 18))   # 6
+        print(gcd_recursive(270, 192)) # 6
+        print(gcd_iterative(270, 192)) # 6

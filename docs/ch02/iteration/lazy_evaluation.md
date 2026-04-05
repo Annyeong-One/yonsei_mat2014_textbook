@@ -463,3 +463,74 @@ if __name__ == "__main__":
    - Use () by default, [] only when you need list
     """)
 ```
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Write a generator `infinite_squares()` that yields 1, 4, 9, 16, ... (squares of natural numbers) indefinitely. Use `itertools.islice` to get the first 10 squares.
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        from itertools import islice
+
+        def infinite_squares():
+            n = 1
+            while True:
+                yield n * n
+                n += 1
+
+        print(list(islice(infinite_squares(), 10)))
+        # [1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
+        ```
+
+    The generator produces squares indefinitely. `islice` takes only the first 10 without running forever.
+
+---
+
+**Exercise 2.**
+Demonstrate lazy evaluation by writing a generator that prints a message each time it yields a value. Show that values are produced one at a time, not all at once.
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        def verbose_range(n):
+            for i in range(n):
+                print(f"  Yielding {i}")
+                yield i
+
+        print("Creating generator:")
+        gen = verbose_range(5)
+        print("No output yet -- lazy!")
+
+        print("Taking first 3:")
+        for i, val in enumerate(gen):
+            if i >= 3:
+                break
+            print(f"  Got {val}")
+        ```
+
+    Messages appear only when values are consumed, proving that the generator does not execute ahead of time.
+
+---
+
+**Exercise 3.**
+Write a function `first_match(predicate, iterable)` that returns the first element for which `predicate` returns `True`, or `None` if no match is found. Use lazy evaluation to avoid processing the entire iterable.
+
+??? success "Solution to Exercise 3"
+
+        ```python
+        def first_match(predicate, iterable):
+            for item in iterable:
+                if predicate(item):
+                    return item
+            return None
+
+        result = first_match(lambda x: x > 100, range(1_000_000))
+        print(result)  # 101
+        ```
+
+    The function returns immediately upon finding a match. It does not process the remaining 999,898 elements.

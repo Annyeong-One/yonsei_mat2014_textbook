@@ -866,3 +866,90 @@ if __name__ == "__main__":
     print("- Starting point can affect convergence speed")
     print("=" * 70)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Define a 3D objective function $f(x, y, z) = (x-1)^2 + 2(y-2)^2 + 3(z-3)^2$. Write its analytical gradient. Minimize using BFGS with and without the analytical gradient. Compare the number of function evaluations in each case.
+
+??? success "Solution to Exercise 1"
+        ```python
+        import numpy as np
+        from scipy import optimize
+
+        def f(x):
+            return (x[0]-1)**2 + 2*(x[1]-2)**2 + 3*(x[2]-3)**2
+
+        def grad_f(x):
+            return np.array([2*(x[0]-1), 4*(x[1]-2), 6*(x[2]-3)])
+
+        x0 = np.array([0.0, 0.0, 0.0])
+
+        # Without gradient
+        res_no_grad = optimize.minimize(f, x0, method='BFGS')
+        print(f"Without gradient: nfev={res_no_grad.nfev}, x={res_no_grad.x}")
+
+        # With gradient
+        res_with_grad = optimize.minimize(f, x0, method='BFGS', jac=grad_f)
+        print(f"With gradient: nfev={res_with_grad.nfev}, x={res_with_grad.x}")
+        print(f"Function eval savings: {res_no_grad.nfev - res_with_grad.nfev}")
+        ```
+
+---
+
+**Exercise 2.**
+Implement a timing benchmark that minimizes the Rosenbrock function from the starting point $(-1, -1)$ using Nelder-Mead, Powell, BFGS, and L-BFGS-B. Use `time.perf_counter()` to measure wall-clock time for each. Print a table of method, final value, iterations, and elapsed time.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import numpy as np
+        from scipy import optimize
+        import time
+
+        def rosenbrock(x):
+            return (1 - x[0])**2 + 100 * (x[1] - x[0]**2)**2
+
+        x0 = np.array([-1.0, -1.0])
+        methods = ['Nelder-Mead', 'Powell', 'BFGS', 'L-BFGS-B']
+
+        print(f"{'Method':<15} {'Value':<15} {'Iters':<10} {'Time (ms)':<12}")
+        print("-" * 52)
+
+        for method in methods:
+            start = time.perf_counter()
+            result = optimize.minimize(rosenbrock, x0, method=method)
+            elapsed = (time.perf_counter() - start) * 1000
+
+            print(f"{method:<15} {result.fun:<15.2e} {result.nit:<10} {elapsed:<12.2f}")
+        ```
+
+---
+
+**Exercise 3.**
+Use L-BFGS-B to minimize $f(\mathbf{x}) = \sum_{i=1}^{n} (x_i - i)^2$ for $n = 500$ with the constraint that all $x_i \geq 0$. Provide the analytical gradient. Print the optimal value and the number of iterations. Verify that all solution components are non-negative.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import numpy as np
+        from scipy import optimize
+
+        n = 500
+
+        def f(x):
+            return np.sum((x - np.arange(1, n+1))**2)
+
+        def grad_f(x):
+            return 2 * (x - np.arange(1, n+1))
+
+        x0 = np.zeros(n)
+        bounds = [(0, None)] * n
+
+        result = optimize.minimize(f, x0, method='L-BFGS-B', jac=grad_f, bounds=bounds)
+
+        print(f"Optimal value: {result.fun:.2e}")
+        print(f"Iterations: {result.nit}")
+        print(f"All x >= 0: {np.all(result.x >= -1e-10)}")
+        print(f"x[:5] = {result.x[:5]}")
+        ```

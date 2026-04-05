@@ -113,3 +113,78 @@ Output:
 ```
 Read 3 lines
 ```
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Use `tempfile.NamedTemporaryFile` to create a temporary file, write some data to it, read it back, and print the temporary file's path. Show that the file is deleted after the `with` block.
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        import tempfile
+        import os
+
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=True) as f:
+            f.write("temporary data")
+            f.flush()
+            print(f"Temp file: {f.name}")
+            print(f"Exists: {os.path.exists(f.name)}")  # True
+
+        print(f"Exists after: {os.path.exists(f.name)}")  # False
+        ```
+
+    `NamedTemporaryFile` provides a visible file path and automatic cleanup when the context manager exits.
+
+---
+
+**Exercise 2.**
+Use `tempfile.mkdtemp()` to create a temporary directory, create a file inside it, and then clean up using `shutil.rmtree()`.
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        import tempfile
+        import shutil
+        import os
+
+        tmpdir = tempfile.mkdtemp()
+        filepath = os.path.join(tmpdir, "data.txt")
+
+        with open(filepath, "w") as f:
+            f.write("hello")
+
+        print(os.listdir(tmpdir))  # ['data.txt']
+
+        shutil.rmtree(tmpdir)
+        print(os.path.exists(tmpdir))  # False
+        ```
+
+    `mkdtemp()` creates the directory but does not clean it up automatically. Use `shutil.rmtree()` for cleanup.
+
+---
+
+**Exercise 3.**
+Explain the difference between `tempfile.TemporaryFile` and `tempfile.NamedTemporaryFile`. When would you use each?
+
+??? success "Solution to Exercise 3"
+
+    `TemporaryFile` creates an anonymous temporary file with no visible name in the filesystem (on Unix). It cannot be accessed by other processes. `NamedTemporaryFile` creates a file with a visible name that can be passed to other processes.
+
+        ```python
+        import tempfile
+
+        # No visible name (Unix)
+        with tempfile.TemporaryFile(mode="w") as f:
+            f.write("anonymous")
+            # f.name exists but may not be accessible on disk
+
+        # Visible name
+        with tempfile.NamedTemporaryFile(mode="w", delete=False) as f:
+            print(f.name)  # /tmp/tmpXXXXXX
+        ```
+
+    Use `TemporaryFile` when no other process needs to access the file. Use `NamedTemporaryFile` when you need to pass the path to external tools.

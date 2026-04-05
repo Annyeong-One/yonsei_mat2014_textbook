@@ -329,3 +329,84 @@ if __name__ == "__main__":
 
     print(f"\n" + "=" * 70)
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a `UserProfile` dataclass where `username` is a regular field, `tags` uses `field(default_factory=list)`, and `created_at` uses `field(default_factory=datetime.now)` (import `datetime`). Show that each instance gets its own list and timestamp. Demonstrate the mutable default problem by explaining what would happen without `default_factory`.
+
+??? success "Solution to Exercise 1"
+
+        from dataclasses import dataclass, field
+        from datetime import datetime
+
+        @dataclass
+        class UserProfile:
+            username: str
+            tags: list = field(default_factory=list)
+            created_at: datetime = field(default_factory=datetime.now)
+
+        u1 = UserProfile("alice")
+        u2 = UserProfile("bob")
+
+        u1.tags.append("admin")
+        print(u1.tags)  # ['admin']
+        print(u2.tags)  # [] — independent list
+
+        print(u1.created_at)
+        print(u2.created_at)  # Different timestamps
+
+        # Without default_factory, tags=[] would be shared:
+        # All instances would reference the SAME list object
+
+---
+
+**Exercise 2.**
+Define a `Product` dataclass with fields `name`, `price`, and `internal_id`. Use `field(repr=False)` on `internal_id` so it does not appear in the repr output. Add a `metadata` field using `field(metadata={"unit": "USD"})`. Print the repr and access the metadata.
+
+??? success "Solution to Exercise 2"
+
+        from dataclasses import dataclass, field, fields
+
+        @dataclass
+        class Product:
+            name: str
+            price: float
+            internal_id: int = field(repr=False)
+            metadata: dict = field(
+                default_factory=lambda: {"unit": "USD"},
+                metadata={"unit": "USD"}
+            )
+
+        p = Product("Widget", 9.99, 12345)
+        print(p)  # Product(name='Widget', price=9.99, metadata={'unit': 'USD'})
+        # internal_id not shown in repr
+
+        # Access field metadata
+        for f in fields(p):
+            if f.metadata:
+                print(f"{f.name}: metadata={f.metadata}")
+
+---
+
+**Exercise 3.**
+Create a `Matrix` dataclass with a `rows` field (int), `cols` field (int), and `data` field that uses `field(default_factory=list, compare=False)`. The `data` field should not be used in equality comparisons. Create two matrices with the same dimensions but different data and show they compare as equal. Then create two with different dimensions and show they compare as unequal.
+
+??? success "Solution to Exercise 3"
+
+        from dataclasses import dataclass, field
+
+        @dataclass
+        class Matrix:
+            rows: int
+            cols: int
+            data: list = field(default_factory=list, compare=False)
+
+        m1 = Matrix(3, 3, [1, 2, 3])
+        m2 = Matrix(3, 3, [4, 5, 6])
+        m3 = Matrix(2, 4, [1, 2, 3])
+
+        print(m1 == m2)  # True — data excluded from comparison
+        print(m1 == m3)  # False — different dimensions

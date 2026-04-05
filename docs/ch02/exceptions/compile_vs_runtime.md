@@ -326,3 +326,79 @@ Logical errors are the hardest to find because Python cannot detect them.
    if __name__ == "__main__":
        process()
    ```
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Classify each of the following errors as compile-time (syntax) or runtime. Verify by writing code that triggers each.
+
+- Missing colon after `if`
+- Dividing by zero
+- Using an undefined variable
+- Invalid indentation
+
+??? success "Solution to Exercise 1"
+
+        ```python
+        # Compile-time (SyntaxError):
+        # if True      # Missing colon -> SyntaxError
+        # def f():
+        #  x = 1       # Invalid indentation -> IndentationError
+
+        # Runtime errors:
+        try:
+            result = 1 / 0
+        except ZeroDivisionError as e:
+            print(f"Runtime: {e}")
+
+        try:
+            print(undefined_variable)
+        except NameError as e:
+            print(f"Runtime: {e}")
+        ```
+
+    Syntax errors are caught during parsing, before any code executes. Runtime errors occur during execution.
+
+---
+
+**Exercise 2.**
+Write a function that contains a syntax error and show that importing the module fails immediately. Then fix the error and show that the function works.
+
+??? success "Solution to Exercise 2"
+
+        ```python
+        # File with syntax error (cannot be imported):
+        # def broken(:     # SyntaxError: invalid syntax
+
+        # Fixed version:
+        def fixed():
+            return "It works!"
+
+        print(fixed())  # It works!
+        ```
+
+    Python compiles the entire module before executing any code. A syntax error anywhere in the file prevents the entire module from loading.
+
+---
+
+**Exercise 3.**
+Write code that passes syntax checking but raises a `TypeError` at runtime. Explain why Python cannot catch this error at compile time.
+
+??? success "Solution to Exercise 3"
+
+        ```python
+        def add(a, b):
+            return a + b
+
+        # This is valid syntax but fails at runtime
+        try:
+            result = add("hello", 42)
+        except TypeError as e:
+            print(f"Runtime error: {e}")
+            # unsupported operand type(s) for +: 'str' and 'int'
+        ```
+
+    Python is dynamically typed, so the types of `a` and `b` are not known until runtime. The syntax `a + b` is valid for many type combinations, so Python cannot determine at compile time that this particular call will fail.

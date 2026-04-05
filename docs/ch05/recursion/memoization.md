@@ -112,3 +112,89 @@ expensive_function.cache_clear()
 Memoization provides dramatic speedup for recursive algorithms with overlapping subproblems:
 - Without memoization: O(2^n)
 - With memoization: O(n)
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a memoized recursive function `coin_change(amount, coins)` that returns the minimum number of coins needed to make the given amount. Use a dictionary for manual memoization. Test with `coin_change(11, (1, 5, 6))` (expected: `3`, using 5+5+1 or 6+5).
+
+??? success "Solution to Exercise 1"
+
+        def coin_change(amount, coins, memo=None):
+            if memo is None:
+                memo = {}
+            if amount == 0:
+                return 0
+            if amount < 0:
+                return float("inf")
+            if amount in memo:
+                return memo[amount]
+
+            min_coins = float("inf")
+            for coin in coins:
+                result = coin_change(amount - coin, coins, memo)
+                min_coins = min(min_coins, result + 1)
+
+            memo[amount] = min_coins
+            return min_coins
+
+        print(coin_change(11, (1, 5, 6)))   # 3
+        print(coin_change(15, (1, 5, 10)))  # 2
+
+---
+
+**Exercise 2.**
+Implement the `climb_stairs(n)` problem (number of ways to reach step `n` by taking 1 or 2 steps at a time) using `@lru_cache`. Compute `climb_stairs(30)` and print the cache statistics.
+
+??? success "Solution to Exercise 2"
+
+        from functools import lru_cache
+
+        @lru_cache(maxsize=None)
+        def climb_stairs(n):
+            if n <= 1:
+                return 1
+            return climb_stairs(n - 1) + climb_stairs(n - 2)
+
+        print(climb_stairs(30))              # 1346269
+        print(climb_stairs.cache_info())
+
+---
+
+**Exercise 3.**
+Write a manual memoization decorator `@memoize` that stores results in a dictionary. Apply it to a recursive `fibonacci(n)` function. Compare performance by timing `fibonacci(35)` with and without the decorator.
+
+??? success "Solution to Exercise 3"
+
+        import time
+
+        def memoize(func):
+            cache = {}
+            def wrapper(*args):
+                if args not in cache:
+                    cache[args] = func(*args)
+                return cache[args]
+            return wrapper
+
+        # Without memoization
+        def fib_slow(n):
+            if n < 2:
+                return n
+            return fib_slow(n - 1) + fib_slow(n - 2)
+
+        # With memoization
+        @memoize
+        def fib_fast(n):
+            if n < 2:
+                return n
+            return fib_fast(n - 1) + fib_fast(n - 2)
+
+        start = time.time()
+        print(fib_slow(35))
+        print(f"Without memo: {time.time() - start:.3f}s")
+
+        start = time.time()
+        print(fib_fast(35))
+        print(f"With memo:    {time.time() - start:.6f}s")

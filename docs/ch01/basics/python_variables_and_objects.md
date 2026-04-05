@@ -388,6 +388,7 @@ Output
 
 ---
 
+
 ## 12. Summary
 
 Key ideas:
@@ -400,3 +401,108 @@ Key ideas:
 
 Understanding these concepts explains many common Python behaviors.
 
+
+## Exercises
+
+**Exercise 1.**
+Predict the output of the following code and explain *why* each comparison produces its result:
+
+```python
+a = [1, 2, 3]
+b = a
+c = [1, 2, 3]
+
+print(a == b)
+print(a is b)
+print(a == c)
+print(a is c)
+```
+
+What is the fundamental difference between `==` and `is`? Why does the distinction matter for mutable objects like lists?
+
+??? success "Solution to Exercise 1"
+    Output:
+
+    ```text
+    True
+    True
+    True
+    False
+    ```
+
+    - `a == b` is `True`: `==` checks if the **values** are equal. Both refer to `[1, 2, 3]`.
+    - `a is b` is `True`: `is` checks if both names refer to the **same object in memory**. `b = a` makes `b` point to the exact same list object, so they have the same identity.
+    - `a == c` is `True`: `c` was created as a separate list with the same contents. The values are equal.
+    - `a is c` is `False`: `c` is a **different object** (a separate list created by a separate `[1, 2, 3]` literal). Same values, different identity.
+
+    The distinction matters for mutable objects because if `a is b` is `True`, modifying the object through `b` also affects `a` -- they are the same object. If `a is c` is `False`, modifying `c` does not affect `a`.
+
+---
+
+**Exercise 2.**
+Consider this code:
+
+```python
+x = 256
+y = 256
+print(x is y)
+
+a = 257
+b = 257
+print(a is b)
+```
+
+In a standard CPython REPL, the first `is` comparison may return `True` while the second may return `True` or `False` depending on context. Explain *why* this happens. Is this behavior guaranteed by the Python language, or is it an implementation detail? Why should you never use `is` to compare integer values?
+
+??? success "Solution to Exercise 2"
+    CPython pre-creates and caches integer objects for small values (typically -5 through 256). This is called **integer interning**. When you write `x = 256`, Python reuses the cached object, so `x` and `y` point to the same object, making `x is y` return `True`.
+
+    For `257`, no pre-cached object exists. Whether `a is b` is `True` depends on whether the Python compiler happens to create one shared object or two separate ones. In an interactive REPL, each line may be compiled separately, creating distinct objects. In a script, the compiler may optimize both literals into one object.
+
+    This behavior is an **implementation detail of CPython**, not a language guarantee. Other Python implementations (PyPy, Jython) may intern different ranges. This is why `is` should never be used to compare integer values -- it may give inconsistent results. Always use `==` for value comparison.
+
+---
+
+**Exercise 3.**
+A student writes:
+
+```python
+x = 10
+x = "hello"
+```
+
+They ask: "How can `x` change from an integer to a string? Doesn't that break type safety?" Explain why this is perfectly valid in Python. What does "dynamically typed" mean in terms of where the type information lives? Contrast this with a statically typed language where `int x = 10; x = "hello";` would be an error.
+
+??? success "Solution to Exercise 3"
+    In Python, the type belongs to the **object**, not to the **variable**. A variable is just a name (a label) that refers to an object. When `x = 10` executes, an `int` object with value 10 is created, and the name `x` is bound to it. When `x = "hello"` executes, a `str` object is created, and the name `x` is rebound to this new object. The old `int` object is unaffected (and may be garbage-collected if nothing else refers to it).
+
+    "Dynamically typed" means type checking happens at runtime, and names have no fixed type. The name `x` can refer to any object of any type at any time. The type information lives inside each object (every Python object carries its type as part of its internal structure), not in the variable name.
+
+    In a statically typed language like C or Java, `int x` declares that the *name* `x` can only refer to integers. The type is a property of the variable, enforced at compile time. Assigning a string to an `int` variable is a compile-time error because the name's type constraint is violated.
+
+---
+
+**Exercise 4.**
+Predict the output and explain the underlying mechanism:
+
+```python
+a = [1, 2, 3]
+b = a
+b.append(4)
+print(a)
+print(a is b)
+```
+
+Why does modifying `b` also change `a`? Draw a mental model showing what `a` and `b` refer to. How would the behavior differ if the first line were `a = 10` and the second line were `b = a` followed by `b = b + 1`?
+
+??? success "Solution to Exercise 4"
+    Output:
+
+    ```text
+    [1, 2, 3, 4]
+    True
+    ```
+
+    `a = [1, 2, 3]` creates a list object and binds the name `a` to it. `b = a` binds the name `b` to the **same object**. Now `a` and `b` are two names for one list. `b.append(4)` mutates that single list object by adding `4`. Since `a` still refers to the same object, `print(a)` shows the modified list. `a is b` is `True` because they remain the same object.
+
+    With integers: `a = 10` binds `a` to an `int` object. `b = a` binds `b` to the same `int` object. But `b = b + 1` computes `10 + 1 = 11`, creating a **new** `int` object `11`, and rebinds `b` to this new object. The name `a` still refers to the original `10`. Integers are immutable, so there is no way to "modify" the `10` object in place -- any arithmetic operation creates a new object. This is why reassignment and mutation are fundamentally different.

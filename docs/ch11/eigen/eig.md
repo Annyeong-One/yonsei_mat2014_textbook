@@ -402,3 +402,69 @@ if __name__ == "__main__":
 - Use `eigvals` when eigenvectors not needed
 - Defective matrices have fewer eigenvectors than eigenvalues
 - Left eigenvectors satisfy $w^H A = \lambda w^H$
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Compute the eigenvalues and eigenvectors of $A = \begin{pmatrix} 0 & 1 \\ -2 & -3 \end{pmatrix}$. Verify the eigendecomposition by checking that $Av_i = \lambda_i v_i$ for each eigenpair. Print the eigenvalues and whether they are real or complex.
+
+??? success "Solution to Exercise 1"
+        import numpy as np
+        from scipy import linalg
+
+        A = np.array([[0, 1],
+                       [-2, -3]])
+        eigenvalues, eigenvectors = linalg.eig(A)
+
+        for i in range(len(eigenvalues)):
+            lam = eigenvalues[i]
+            v = eigenvectors[:, i]
+            match = np.allclose(A @ v, lam * v)
+            print(f"lambda_{i} = {lam}, real={np.isreal(lam)}, Av=lv: {match}")
+
+---
+
+**Exercise 2.**
+Create the transition matrix for a 3-state Markov chain: $P = \begin{pmatrix} 0.5 & 0.4 & 0.1 \\ 0.3 & 0.4 & 0.3 \\ 0.2 & 0.3 & 0.5 \end{pmatrix}$. Find the stationary distribution by computing the left eigenvector corresponding to eigenvalue 1 (use `linalg.eig(P.T)` and normalize so the entries sum to 1).
+
+??? success "Solution to Exercise 2"
+        import numpy as np
+        from scipy import linalg
+
+        P = np.array([[0.5, 0.4, 0.1],
+                       [0.3, 0.4, 0.3],
+                       [0.2, 0.3, 0.5]])
+
+        eigenvalues, eigenvectors = linalg.eig(P.T)
+        idx = np.argmin(np.abs(eigenvalues - 1))
+        stationary = eigenvectors[:, idx].real
+        stationary = stationary / stationary.sum()
+
+        print(f"Eigenvalues: {eigenvalues}")
+        print(f"Stationary distribution: {stationary}")
+        print(f"Sum = {stationary.sum():.6f}")
+
+---
+
+**Exercise 3.**
+Use eigendecomposition to compute $A^{20}$ for $A = \begin{pmatrix} 1 & 1 \\ 0 & 2 \end{pmatrix}$ via $A^{20} = V D^{20} V^{-1}$. Verify the result against `np.linalg.matrix_power(A, 20)`.
+
+??? success "Solution to Exercise 3"
+        import numpy as np
+        from scipy import linalg
+
+        A = np.array([[1, 1],
+                       [0, 2]], dtype=float)
+
+        eigenvalues, V = linalg.eig(A)
+        V_inv = np.linalg.inv(V)
+
+        D_20 = np.diag(eigenvalues ** 20)
+        A_20_eig = (V @ D_20 @ V_inv).real
+
+        A_20_direct = np.linalg.matrix_power(A, 20)
+        print(f"A^20 via eigendecomposition:\n{A_20_eig.round(2)}")
+        print(f"A^20 via matrix_power:\n{A_20_direct}")
+        print(f"Match: {np.allclose(A_20_eig, A_20_direct)}")

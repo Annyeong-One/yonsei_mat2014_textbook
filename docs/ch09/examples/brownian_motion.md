@@ -252,3 +252,145 @@ if __name__ == "__main__":
 - Plot multiple paths to show distribution of outcomes
 - GBM models stock prices with log-normal distribution
 - Confidence bands show expected variation over time
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that generates and plots 5 sample paths of standard Brownian motion over the interval $[0, 1]$ with 500 time steps. Add a horizontal dashed line at $y = 0$, label the axes, and include a grid.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    T, n_steps, n_paths = 1.0, 500, 5
+    dt = T / n_steps
+    t = np.linspace(0, T, n_steps + 1)
+
+    dB = np.random.randn(n_paths, n_steps) * np.sqrt(dt)
+    B = np.concatenate([np.zeros((n_paths, 1)), dB.cumsum(axis=1)], axis=1)
+
+    fig, ax = plt.subplots(figsize=(10, 4))
+    for i in range(n_paths):
+        ax.plot(t, B[i], alpha=0.7)
+    ax.axhline(0, color='black', linewidth=0.5, linestyle='--')
+    ax.set_xlabel('Time $t$')
+    ax.set_ylabel('$B_t$')
+    ax.set_title('Sample Paths of Brownian Motion')
+    ax.grid(True, alpha=0.3)
+    plt.show()
+    ```
+
+---
+
+**Exercise 2.** Explain why the theoretical standard deviation of Brownian motion $B_t$ at time $t$ is $\sqrt{t}$. Write code that plots the empirical standard deviation of 1000 Brownian paths alongside the theoretical curve $\sqrt{t}$.
+
+??? success "Solution to Exercise 2"
+    Brownian motion increments $B_t - B_s \sim N(0, t - s)$ for $s < t$. Starting from $B_0 = 0$, we have $B_t \sim N(0, t)$, so $\text{Var}(B_t) = t$ and $\text{Std}(B_t) = \sqrt{t}$.
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    T, n_steps, n_paths = 1.0, 500, 1000
+    dt = T / n_steps
+    t = np.linspace(0, T, n_steps + 1)
+
+    dB = np.random.randn(n_paths, n_steps) * np.sqrt(dt)
+    B = np.concatenate([np.zeros((n_paths, 1)), dB.cumsum(axis=1)], axis=1)
+
+    empirical_std = B.std(axis=0)
+    theoretical_std = np.sqrt(t)
+
+    fig, ax = plt.subplots(figsize=(10, 4))
+    ax.plot(t, empirical_std, 'b-', label='Empirical Std')
+    ax.plot(t, theoretical_std, 'r--', label=r'Theoretical $\sqrt{t}$')
+    ax.set_xlabel('Time $t$')
+    ax.set_ylabel('Standard Deviation')
+    ax.set_title('Empirical vs Theoretical Std of Brownian Motion')
+    ax.legend()
+    ax.grid(True, alpha=0.3)
+    plt.show()
+    ```
+
+---
+
+**Exercise 3.** Simulate Geometric Brownian Motion (GBM) with parameters $S_0 = 100$, $\mu = 0.05$, $\sigma = 0.3$, and $T = 1$. Plot 10 sample paths and add a horizontal line at the initial price $S_0$.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    S0, mu, sigma, T = 100, 0.05, 0.3, 1.0
+    n_steps, n_paths = 252, 10
+    dt = T / n_steps
+    t = np.linspace(0, T, n_steps + 1)
+
+    dW = np.random.randn(n_paths, n_steps) * np.sqrt(dt)
+    W = np.concatenate([np.zeros((n_paths, 1)), dW.cumsum(axis=1)], axis=1)
+    S = S0 * np.exp((mu - 0.5 * sigma**2) * t + sigma * W)
+
+    fig, ax = plt.subplots(figsize=(10, 5))
+    for i in range(n_paths):
+        ax.plot(t * 252, S[i], alpha=0.7)
+    ax.axhline(S0, color='black', linestyle='--', label=f'$S_0 = {S0}$')
+    ax.set_xlabel('Trading Days')
+    ax.set_ylabel('Price')
+    ax.set_title('Geometric Brownian Motion Paths')
+    ax.legend()
+    ax.grid(True, alpha=0.3)
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Create a figure with two subplots side by side. The left subplot shows 5 Brownian motion sample paths. The right subplot shows a histogram of the terminal values $B_T$ for 5000 paths, overlaid with the theoretical $N(0, T)$ density curve.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    T, n_steps = 1.0, 500
+    dt = T / n_steps
+    t = np.linspace(0, T, n_steps + 1)
+
+    # For paths subplot
+    dB5 = np.random.randn(5, n_steps) * np.sqrt(dt)
+    B5 = np.concatenate([np.zeros((5, 1)), dB5.cumsum(axis=1)], axis=1)
+
+    # For histogram subplot
+    dB_many = np.random.randn(5000, n_steps) * np.sqrt(dt)
+    B_many = np.concatenate([np.zeros((5000, 1)), dB_many.cumsum(axis=1)], axis=1)
+    terminal = B_many[:, -1]
+
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
+
+    for i in range(5):
+        ax1.plot(t, B5[i], alpha=0.7)
+    ax1.axhline(0, color='black', linestyle='--', linewidth=0.5)
+    ax1.set_xlabel('Time $t$')
+    ax1.set_ylabel('$B_t$')
+    ax1.set_title('Sample Paths')
+    ax1.grid(True, alpha=0.3)
+
+    ax2.hist(terminal, bins=50, density=True, alpha=0.7, label='Simulated')
+    x_range = np.linspace(-4, 4, 200)
+    ax2.plot(x_range, stats.norm(0, np.sqrt(T)).pdf(x_range), 'r-', lw=2,
+             label=f'$N(0, {T})$')
+    ax2.set_xlabel('$B_T$')
+    ax2.set_ylabel('Density')
+    ax2.set_title(f'Terminal Distribution at $T={T}$')
+    ax2.legend()
+
+    plt.tight_layout()
+    plt.show()
+    ```

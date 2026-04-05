@@ -164,3 +164,107 @@ Key points:
 - Don't rely on caching in program logic
 - Use `sys.intern()` for explicit string interning
 - Caching is an implementation detail, not guaranteed
+
+## Exercises
+
+**Exercise 1.**
+Predict the result of each `is` comparison and explain why:
+
+```python
+a = 256
+b = 256
+print(a is b)
+
+c = 257
+d = 257
+print(c is d)
+
+e = "hello"
+f = "hello"
+print(e is f)
+
+g = "hello world"
+h = "hello world"
+print(g is h)
+```
+
+Which results are guaranteed by the Python language, and which depend on the CPython implementation?
+
+??? success "Solution to Exercise 1"
+    In CPython:
+
+    ```text
+    True   (256 is in the interned range [-5, 256])
+    True or False  (257 is outside the range; depends on context)
+    True   ("hello" is a simple identifier-like string, typically interned)
+    True or False  ("hello world" contains a space, may or may not be interned)
+    ```
+
+    **None** of these `is` results are guaranteed by the Python language specification. The language only guarantees:
+
+    - `None is None` (singleton)
+    - `True is True`, `False is False` (singletons)
+
+    Integer interning in the range [-5, 256] is a CPython implementation detail. String interning for simple identifier-like strings is also CPython-specific. Other implementations (PyPy, Jython, GraalPython) may intern different ranges or use different strategies.
+
+    The only reliable use of `is` is for singletons (`None`, `True`, `False`) and explicitly interned objects. For all other comparisons, use `==`.
+
+---
+
+**Exercise 2.**
+A programmer writes tests like this:
+
+```python
+result = compute_something()
+assert result is True
+```
+
+They find that the test passes when `compute_something()` returns `True` but fails when it returns `1` (even though `1 == True`). Explain why `is True` and `== True` differ. When is `is` appropriate for boolean checks, and when should `==` be used instead?
+
+??? success "Solution to Exercise 2"
+    `is True` checks **identity**: is this the exact same object as the `True` singleton? `== True` checks **equality**: does this value equal `True`?
+
+    `1 == True` is `True` because `bool` is a subclass of `int`, and `True` has integer value `1`. But `1 is True` is `False` because `1` and `True` are different objects (different types, even though they compare equal).
+
+    Use `is True` or `is False` only when you specifically need to distinguish between `True` and other truthy values (like `1`). In most cases, use the idiomatic truthiness check:
+
+    ```python
+    if result:          # Checks truthiness -- usually what you want
+    if result == True:  # Checks value equality -- rarely needed
+    if result is True:  # Checks identity -- only for "must be exactly True"
+    ```
+
+    For `None` checks, always use `is None` (because `None` is a singleton and `==` can be overridden).
+
+---
+
+**Exercise 3.**
+Explain why interning is an *optimization* and not a *language feature*. What would break if a programmer wrote code that depended on interning behavior? Give a concrete example of code that works on CPython but might fail on PyPy or a future Python version.
+
+??? success "Solution to Exercise 3"
+    Interning is an optimization because it saves memory and speeds up certain operations (identity checks are faster than equality checks). The language specification does not require it -- it only says that integers with the same value must compare equal with `==`.
+
+    Code that depends on interning:
+
+    ```python
+    # WRONG: depends on integer interning
+    def check_status(code):
+        if code is 200:  # Works in CPython for 200 (in [-5, 256])
+            return "OK"
+        if code is 404:  # FAILS! 404 > 256, not interned
+            return "Not Found"
+    ```
+
+    This code would work for status code 200 on CPython (200 is in the interned range) but fail for 404. On PyPy (which may intern a different range or no integers at all), even 200 might fail.
+
+    The correct code uses `==`:
+
+    ```python
+    def check_status(code):
+        if code == 200:
+            return "OK"
+        if code == 404:
+            return "Not Found"
+    ```
+
+    The general rule: never rely on implementation-specific optimizations in program logic. Use `==` for values, `is` only for guaranteed singletons.

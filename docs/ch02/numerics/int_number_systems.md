@@ -378,3 +378,72 @@ if __name__ == "__main__":
 ## Conclusion
 
 Python's support for multiple number systems makes it easy to work with different bases. Understanding these representations is essential for low-level programming, bit manipulation, and working with hardware interfaces.
+
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Write a function `convert_all_bases(n)` that takes a decimal integer and returns a dictionary with keys `"bin"`, `"oct"`, and `"hex"`, each holding the string representation (with prefix) of `n` in that base.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    def convert_all_bases(n):
+        return {
+            "bin": bin(n),
+            "oct": oct(n),
+            "hex": hex(n),
+        }
+
+    result = convert_all_bases(255)
+    print(result)
+    # {'bin': '0b11111111', 'oct': '0o377', 'hex': '0xff'}
+    ```
+
+    `bin()`, `oct()`, and `hex()` return string representations with the appropriate prefix.
+
+---
+
+**Exercise 2.**
+Given the string `"0b11010110"`, convert it to its decimal, octal, and hexadecimal string representations without using `int()` with a base argument more than once. Print all three results.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    s = "0b11010110"
+    decimal_val = int(s, 2)          # Use int() once with base 2
+    print(f"Decimal: {decimal_val}")  # 214
+    print(f"Octal: {oct(decimal_val)}")  # 0o326
+    print(f"Hex: {hex(decimal_val)}")    # 0xd6
+    ```
+
+    `int(s, 2)` parses a binary string. From the integer, `oct()` and `hex()` produce the other representations.
+
+---
+
+**Exercise 3.**
+Write a function `base_to_decimal(s)` that accepts a string with a prefix (`"0b"`, `"0o"`, or `"0x"`) and returns the decimal integer. If the prefix is unrecognized, raise a `ValueError`.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    def base_to_decimal(s):
+        prefix = s[:2].lower()
+        if prefix == "0b":
+            return int(s, 2)
+        elif prefix == "0o":
+            return int(s, 8)
+        elif prefix == "0x":
+            return int(s, 16)
+        else:
+            raise ValueError(f"Unrecognized prefix in '{s}'")
+
+    print(base_to_decimal("0b1010"))   # 10
+    print(base_to_decimal("0o17"))     # 15
+    print(base_to_decimal("0xFF"))     # 255
+    ```
+
+    The function inspects the first two characters to determine the base, then delegates to `int()` with the appropriate base argument.

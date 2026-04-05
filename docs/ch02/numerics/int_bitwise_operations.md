@@ -554,3 +554,68 @@ if __name__ == "__main__":
 ## Conclusion
 
 Understanding bitwise operations is essential for low-level programming, optimizing performance, and working with hardware and embedded systems. These operations provide efficient ways to manipulate individual bits for tasks like setting flags, masking, and performing fast arithmetic.
+
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Write a function `is_power_of_two(n)` that uses bitwise operations to check whether a positive integer is a power of two. Hint: a power of two has exactly one bit set.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    def is_power_of_two(n):
+        return n > 0 and (n & (n - 1)) == 0
+
+    print(is_power_of_two(1))    # True  (2^0)
+    print(is_power_of_two(16))   # True  (2^4)
+    print(is_power_of_two(18))   # False
+    print(is_power_of_two(1024)) # True  (2^10)
+    ```
+
+    A power of two in binary is `100...0`. Subtracting 1 flips all bits below the set bit to `011...1`. The AND of these two values is zero only for powers of two.
+
+---
+
+**Exercise 2.**
+Without using multiplication, write a function `multiply_by_eight(n)` that multiplies an integer by 8 using only bitwise shift operators.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    def multiply_by_eight(n):
+        return n << 3
+
+    print(multiply_by_eight(5))   # 40
+    print(multiply_by_eight(10))  # 80
+    print(multiply_by_eight(-3))  # -24
+    ```
+
+    Left-shifting by `k` positions multiplies by `2^k`. Shifting by 3 multiplies by `2^3 = 8`.
+
+---
+
+**Exercise 3.**
+Write a function `swap_bits(n, i, j)` that swaps the bits at positions `i` and `j` in the integer `n`. Test with `n = 0b1010`, `i = 1`, `j = 3`.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    def swap_bits(n, i, j):
+        # Extract bits at positions i and j
+        bit_i = (n >> i) & 1
+        bit_j = (n >> j) & 1
+        # If bits differ, flip both using XOR
+        if bit_i != bit_j:
+            n ^= (1 << i) | (1 << j)
+        return n
+
+    result = swap_bits(0b1010, 1, 3)
+    print(f"{result:#06b}")  # 0b0010 -> 0b0010
+    print(result)            # 2
+    ```
+
+    If the two bits are different, XOR with a mask that has 1s at both positions flips them, effectively swapping. If they are the same, no change is needed.

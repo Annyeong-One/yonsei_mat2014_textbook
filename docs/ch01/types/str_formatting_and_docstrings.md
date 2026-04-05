@@ -186,6 +186,7 @@ A string becomes a docstring only when placed as the first statement in a module
 
 ---
 
+
 ## 9. Summary
 
 Key ideas:
@@ -196,3 +197,101 @@ Key ideas:
 * triple-quoted strings are often used for docstrings
 
 Formatting and documentation make string usage much more practical and expressive.
+
+
+## Exercises
+
+**Exercise 1.**
+F-strings can contain arbitrary expressions. Predict the output:
+
+```python
+x = 10
+print(f"{x}")
+print(f"{x!r}")
+print(f"{x:05d}")
+print(f"{x:>10}")
+print(f"{'hello':*^20}")
+```
+
+Explain the difference between `!r` and `:05d`. What is the general syntax inside an f-string brace `{expression!conversion:format_spec}`?
+
+??? success "Solution to Exercise 1"
+    Output:
+
+    ```text
+    10
+    10
+    00010
+         10
+    *******hello********
+    ```
+
+    - `{x}`: inserts the string representation of `x`.
+    - `{x!r}`: the `!r` conversion calls `repr(x)` instead of `str(x)`. For integers, `str(10)` and `repr(10)` are the same. The difference shows with strings: `f"{'hi'!r}"` produces `"'hi'"` (with quotes).
+    - `{x:05d}`: format spec `05d` means "decimal integer, 5 characters wide, zero-padded."
+    - `{x:>10}`: right-align within 10 characters.
+    - `{'hello':*^20}`: center `"hello"` in 20 characters, fill with `*`.
+
+    The general syntax is `{expression!conversion:format_spec}` where `!conversion` is optional (`!s` for `str()`, `!r` for `repr()`, `!a` for `ascii()`), and `format_spec` controls width, alignment, fill, precision, and type.
+
+---
+
+**Exercise 2.**
+A programmer writes a docstring for a function but cannot access it later:
+
+```python
+def compute(x):
+    # Compute the square of x
+    return x * x
+
+print(compute.__doc__)
+```
+
+What does this print? Why? Then explain: what makes a string a docstring vs. an ordinary comment? Are docstrings stored at runtime, and if so, where?
+
+??? success "Solution to Exercise 2"
+    This prints `None`.
+
+    A comment (`# Compute the square of x`) is not a docstring. Comments are stripped by the parser and never stored at runtime. A **docstring** must be a **string literal** (not a comment) placed as the **first statement** in the function body:
+
+    ```python
+    def compute(x):
+        """Compute the square of x."""
+        return x * x
+    ```
+
+    Now `compute.__doc__` returns `"Compute the square of x."`.
+
+    Docstrings are stored at runtime in the `__doc__` attribute of the function/class/module object. This is what allows `help(compute)` to display documentation interactively. Comments are purely for human readers of the source code and have no runtime existence.
+
+---
+
+**Exercise 3.**
+Python has three formatting approaches: f-strings, `.format()`, and `%`-formatting. Compare them:
+
+```python
+name = "Alice"
+age = 30
+print(f"{name} is {age}")
+print("{} is {}".format(name, age))
+print("%s is %d" % (name, age))
+```
+
+All three produce the same output. When should each be used? Why are f-strings generally preferred in modern Python? Give one scenario where `.format()` is necessary and f-strings cannot be used.
+
+??? success "Solution to Exercise 3"
+    All three produce: `Alice is 30`.
+
+    - **F-strings** (Python 3.6+): preferred for most cases. They are concise, readable, and evaluated at runtime with direct access to local variables. They are also the fastest because the format is compiled into bytecode.
+    - **`.format()`** (Python 2.6+): useful when the template is not a literal -- e.g., loaded from a configuration file or database: `template = "{name} is {age}"; template.format(name=name, age=age)`. F-strings cannot do this because the expression must be a literal at the call site.
+    - **`%`-formatting**: the oldest style, modeled after C's `printf`. Still seen in legacy code and in `logging` module format strings. Generally avoided in new code.
+
+    One scenario where `.format()` is necessary: when the template string is not known at write time. For example:
+
+    ```python
+    templates = {"en": "Hello, {name}!", "es": "Hola, {name}!"}
+    lang = "es"
+    print(templates[lang].format(name="Alice"))
+    ```
+
+    You cannot use an f-string here because the template is a variable, not a literal.

@@ -376,3 +376,62 @@ Name: proportion, dtype: float64
 # Number of sectors
 print(f"Number of sectors: {holdings['sector'].nunique()}")  # 3
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a Series of 50 random choices from `['red', 'blue', 'green']`. Use `.value_counts()` to count occurrences and `.value_counts(normalize=True)` to get the proportion of each color.
+
+??? success "Solution to Exercise 1"
+    Use value_counts with and without normalize.
+
+        import pandas as pd
+        import numpy as np
+
+        np.random.seed(42)
+        colors = pd.Series(np.random.choice(['red', 'blue', 'green'], 50))
+        print("Counts:")
+        print(colors.value_counts())
+        print("\nProportions:")
+        print(colors.value_counts(normalize=True))
+
+---
+
+**Exercise 2.**
+Given a DataFrame with a numeric `'score'` column, use `.value_counts(bins=5)` to group scores into 5 bins. Then use `.nunique()` to count the number of distinct scores.
+
+??? success "Solution to Exercise 2"
+    Use bins parameter and nunique.
+
+        import pandas as pd
+        import numpy as np
+
+        np.random.seed(42)
+        df = pd.DataFrame({'score': np.random.randint(0, 101, 100)})
+        print("Binned counts:")
+        print(df['score'].value_counts(bins=5))
+        print(f"\nUnique scores: {df['score'].nunique()}")
+
+---
+
+**Exercise 3.**
+Create a DataFrame with duplicate rows. Use `.duplicated()` to identify them, `.duplicated(keep=False)` to mark all duplicates, and then use `value_counts()` on a column to find which values appear more than once.
+
+??? success "Solution to Exercise 3"
+    Identify duplicates using duplicated and value_counts.
+
+        import pandas as pd
+
+        df = pd.DataFrame({
+            'name': ['Alice', 'Bob', 'Alice', 'Carol', 'Bob'],
+            'dept': ['HR', 'IT', 'HR', 'IT', 'IT']
+        })
+        print("Duplicated (keep first):")
+        print(df.duplicated())
+        print("\nAll duplicates:")
+        print(df.duplicated(keep=False))
+        print("\nValues appearing more than once:")
+        counts = df['name'].value_counts()
+        print(counts[counts > 1])

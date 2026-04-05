@@ -462,3 +462,49 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a 3x4 matrix and compute the sum along both axes as well as the global sum. Verify that `np.sum(a)` equals `np.sum(np.sum(a, axis=0))`.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        a = np.arange(12).reshape(3, 4)
+        print(f"Global sum: {np.sum(a)}")
+        print(f"Sum of column sums: {np.sum(np.sum(a, axis=0))}")
+        print(f"Match: {np.sum(a) == np.sum(np.sum(a, axis=0))}")
+
+---
+
+**Exercise 2.**
+Use `np.cumsum` on a 1D array `[1, 2, 3, 4, 5]` and verify the last element of the cumulative sum equals the total sum. Then apply `np.cumprod` to the same array and verify the last element equals `np.prod(a)`.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        a = np.array([1, 2, 3, 4, 5])
+        cs = np.cumsum(a)
+        print(f"cumsum: {cs}, last == sum: {cs[-1] == np.sum(a)}")
+        cp = np.cumprod(a)
+        print(f"cumprod: {cp}, last == prod: {cp[-1] == np.prod(a)}")
+
+---
+
+**Exercise 3.**
+Use `np.nansum` and `np.nanmean` to compute the sum and mean of an array that contains `np.nan` values: `a = np.array([1, 2, np.nan, 4, np.nan, 6])`. Compare with `np.sum(a)` and `np.mean(a)` which propagate NaN.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        a = np.array([1, 2, np.nan, 4, np.nan, 6])
+        print(f"np.sum:    {np.sum(a)}")      # nan
+        print(f"np.nansum: {np.nansum(a)}")    # 13.0
+        print(f"np.mean:    {np.mean(a)}")     # nan
+        print(f"np.nanmean: {np.nanmean(a)}")  # 3.25

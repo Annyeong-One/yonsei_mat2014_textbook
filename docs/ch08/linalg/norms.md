@@ -412,3 +412,60 @@ if __name__ == "__main__":
 - **Sparsity**: L1
 - **Matrix approximation error**: Frobenius
 - **Matrix condition**: Spectral (2-norm)
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Compute the L1, L2, and L-infinity norms of `v = np.array([3, -4, 5, -2])`. Verify the L2 norm manually using `np.sqrt(np.sum(v**2))`.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        v = np.array([3, -4, 5, -2], dtype=float)
+        l1 = np.linalg.norm(v, ord=1)
+        l2 = np.linalg.norm(v, ord=2)
+        linf = np.linalg.norm(v, ord=np.inf)
+        l2_manual = np.sqrt(np.sum(v**2))
+
+        print(f"L1 norm: {l1}")    # 14.0
+        print(f"L2 norm: {l2}")    # ~7.35
+        print(f"L-inf norm: {linf}")  # 5.0
+        print(f"L2 manual: {l2_manual}")
+        print(f"Match: {np.allclose(l2, l2_manual)}")
+
+---
+
+**Exercise 2.**
+Normalize a vector `v = np.array([1, 2, 3, 4])` to unit length (L2 norm = 1) by dividing by its norm. Verify that the resulting vector has norm 1.0.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        v = np.array([1, 2, 3, 4], dtype=float)
+        v_unit = v / np.linalg.norm(v)
+        print(f"Unit vector: {v_unit}")
+        print(f"Norm: {np.linalg.norm(v_unit):.10f}")  # 1.0
+
+---
+
+**Exercise 3.**
+Compute the Frobenius norm and the spectral norm (largest singular value) of `A = np.array([[1, 2], [3, 4]])`. Verify that the Frobenius norm equals `sqrt(sum of squared elements)` and the spectral norm equals the largest singular value from `np.linalg.svd`.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        A = np.array([[1, 2], [3, 4]], dtype=float)
+        frob = np.linalg.norm(A, 'fro')
+        spec = np.linalg.norm(A, 2)
+
+        frob_manual = np.sqrt(np.sum(A**2))
+        _, s, _ = np.linalg.svd(A)
+        spec_manual = s[0]
+
+        print(f"Frobenius: {frob:.4f}, manual: {frob_manual:.4f}")
+        print(f"Spectral: {spec:.4f}, max sv: {spec_manual:.4f}")

@@ -212,3 +212,83 @@ print(f"{error.code}: {error.get_message()}")  # 404: Resource not found
 - Related computations
 - Display formatting
 - Lookup functionality
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a `Season` enum with a method `is_warm()` that returns `True` for `SUMMER` and `SPRING`. Add a `__str__` override that returns a formatted string like `"Season: Spring"`. Iterate over all seasons and print which are warm.
+
+??? success "Solution to Exercise 1"
+
+        from enum import Enum
+
+        class Season(Enum):
+            SPRING = 1
+            SUMMER = 2
+            AUTUMN = 3
+            WINTER = 4
+
+            def is_warm(self):
+                return self in (Season.SPRING, Season.SUMMER)
+
+            def __str__(self):
+                return f"Season: {self.name.capitalize()}"
+
+        for s in Season:
+            warm = "warm" if s.is_warm() else "cold"
+            print(f"{s} ({warm})")
+
+---
+
+**Exercise 2.**
+Define a `Coin` enum with `PENNY = 1`, `NICKEL = 5`, `DIME = 10`, `QUARTER = 25`. Add a `dollar_value` property that returns the value in dollars (e.g., `0.25` for QUARTER). Add a class method `total(coins)` that returns the total dollar value of a list of coins.
+
+??? success "Solution to Exercise 2"
+
+        from enum import Enum
+
+        class Coin(Enum):
+            PENNY = 1
+            NICKEL = 5
+            DIME = 10
+            QUARTER = 25
+
+            @property
+            def dollar_value(self):
+                return self.value / 100
+
+            @classmethod
+            def total(cls, coins):
+                return sum(c.dollar_value for c in coins)
+
+        coins = [Coin.QUARTER, Coin.DIME, Coin.NICKEL, Coin.PENNY]
+        print(f"Total: ${Coin.total(coins):.2f}")  # Total: $0.41
+
+---
+
+**Exercise 3.**
+Create a `Direction` enum with a `opposite` property that returns the opposite direction (NORTH returns SOUTH, etc.). Also add a `rotate(steps)` method that rotates clockwise by the given number of 90-degree steps. Demonstrate both features.
+
+??? success "Solution to Exercise 3"
+
+        from enum import Enum
+
+        class Direction(Enum):
+            NORTH = 0
+            EAST = 1
+            SOUTH = 2
+            WEST = 3
+
+            @property
+            def opposite(self):
+                return Direction((self.value + 2) % 4)
+
+            def rotate(self, steps=1):
+                return Direction((self.value + steps) % 4)
+
+        print(Direction.NORTH.opposite)    # Direction.SOUTH
+        print(Direction.EAST.opposite)     # Direction.WEST
+        print(Direction.NORTH.rotate(1))   # Direction.EAST
+        print(Direction.NORTH.rotate(3))   # Direction.WEST

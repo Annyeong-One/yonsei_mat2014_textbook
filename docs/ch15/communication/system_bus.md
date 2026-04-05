@@ -261,3 +261,70 @@ Key points:
 - Bus contention can create bottlenecks
 - Memory bandwidth (~50 GB/s) often limits Python/NumPy performance
 - GPU transfer bandwidth (~15 GB/s) limits data movement
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Explain what a system bus is and name its three main components (data bus, address bus, control bus).
+
+??? success "Solution to Exercise 1"
+    ```python
+    # Conceptual solution - see page content for details
+    import sys
+    import platform
+
+    print(f"Python version: {sys.version}")
+    print(f"Platform: {platform.platform()}")
+    print(f"Architecture: {platform.machine()}")
+    ```
+
+---
+
+**Exercise 2.** Explain how bus bandwidth limits the rate at which data can move between the CPU and memory. How does this relate to the 'memory wall'?
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the hardware-software interaction and how it affects Python performance.
+
+---
+
+**Exercise 3.** Write Python code that demonstrates the concept of bandwidth limitation by comparing the time to process data from memory versus from CPU cache (using small vs large arrays).
+
+??? success "Solution to Exercise 3"
+    ```python
+    import time
+
+    # Simple benchmark
+    n = 10_000_000
+    start = time.perf_counter()
+    total = sum(range(n))
+    elapsed = time.perf_counter() - start
+    print(f"Sum of {n} integers: {total}")
+    print(f"Time: {elapsed:.4f} seconds")
+    ```
+
+---
+
+**Exercise 4.** Explain what DMA (Direct Memory Access) is and how it helps reduce CPU overhead during I/O operations.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    import time
+
+    n = 1_000_000
+    # Python loop
+    start = time.perf_counter()
+    result_py = sum(i * i for i in range(n))
+    time_py = time.perf_counter() - start
+
+    # NumPy vectorized
+    arr = np.arange(n)
+    start = time.perf_counter()
+    result_np = np.sum(arr * arr)
+    time_np = time.perf_counter() - start
+
+    print(f"Python: {time_py:.4f}s, NumPy: {time_np:.4f}s")
+    print(f"Speedup: {time_py / time_np:.1f}x")
+    ```

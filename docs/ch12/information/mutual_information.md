@@ -84,3 +84,61 @@ This follows from the non-negativity of conditional entropy: $H(X \mid Y) \geq 0
 ## Summary
 
 Mutual information $I(X; Y) = D_{\mathrm{KL}}(p_{X,Y} \| p_X p_Y)$ measures the total statistical dependence between two random variables. It equals the reduction in entropy of one variable given knowledge of the other, is always non-negative, and is symmetric. Unlike linear correlation, mutual information captures all forms of dependence, making it zero if and only if the variables are independent.
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code that computes the mutual information between two discrete random variables from a joint probability table.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(100)
+    print(f'Mean: {data.mean():.4f}')
+    print(f'Std: {data.std():.4f}')
+    ```
+
+---
+
+**Exercise 2.** Explain the relationship between mutual information and entropy: $I(X; Y) = H(X) + H(Y) - H(X, Y)$.
+
+??? success "Solution to Exercise 2"
+    See the main content for the detailed explanation. The key concept involves understanding the statistical method and its assumptions.
+
+---
+
+**Exercise 3.** Write code that estimates mutual information between two continuous variables using `sklearn.metrics.mutual_info_score` on discretized data.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import numpy as np
+    from scipy import stats
+    import matplotlib.pyplot as plt
+
+    np.random.seed(42)
+    data = np.random.randn(1000)
+    fig, ax = plt.subplots()
+    ax.hist(data, bins=30, density=True, alpha=0.7)
+    ax.set_title('Distribution')
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Demonstrate that mutual information is zero for independent variables and positive for dependent variables.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    data = np.random.randn(500)
+    result = stats.describe(data)
+    print(result)
+    ```

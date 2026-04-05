@@ -167,3 +167,63 @@ b = tf.constant([1., 2, 3])    # float32
 ```
 
 NumPy promotes types automatically; PyTorch and TensorFlow require explicit conversion.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Create a NumPy array from the Python list `[1, 2.5, 3, 4.0]` and print its dtype. Then create the same array with an explicit `dtype=np.int32` and print the resulting values to observe the truncation behavior.
+
+??? success "Solution to Exercise 1"
+
+        import numpy as np
+
+        # Default dtype inference
+        a = np.array([1, 2.5, 3, 4.0])
+        print(a.dtype)   # float64 (because 2.5 and 4.0 are floats)
+        print(a)          # [1.  2.5 3.  4. ]
+
+        # Explicit int32 dtype — floats are truncated
+        b = np.array([1, 2.5, 3, 4.0], dtype=np.int32)
+        print(b.dtype)   # int32
+        print(b)          # [1 2 3 4]  (2.5 truncated to 2)
+
+---
+
+**Exercise 2.**
+Given an array `a = np.array([100, 200, 300], dtype=np.int16)`, check whether the dtype is an integer kind using the `.kind` attribute. Then print the `itemsize` and verify that the total memory (`nbytes`) equals `len(a) * itemsize`.
+
+??? success "Solution to Exercise 2"
+
+        import numpy as np
+
+        a = np.array([100, 200, 300], dtype=np.int16)
+
+        # Check integer kind
+        print(a.dtype.kind)      # 'i' (signed integer)
+        print(a.dtype.itemsize)  # 2 (bytes per element)
+
+        # Verify total memory
+        print(a.nbytes)                        # 6
+        print(len(a) * a.dtype.itemsize)       # 6
+        print(a.nbytes == len(a) * a.dtype.itemsize)  # True
+
+---
+
+**Exercise 3.**
+Create two arrays: `x = np.array([1, 2, 3], dtype=np.float32)` and `y = np.array([4, 5, 6], dtype=np.float64)`. Compute `z = x + y` and print the dtype of `z`. Explain why NumPy chose that dtype by referencing the type promotion rules.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+
+        x = np.array([1, 2, 3], dtype=np.float32)
+        y = np.array([4, 5, 6], dtype=np.float64)
+        z = x + y
+        print(z.dtype)  # float64
+
+        # Explanation: NumPy promotes to the higher-precision type.
+        # float32 + float64 -> float64, following the rule that
+        # the result dtype is the smallest type that can safely
+        # represent both operands.

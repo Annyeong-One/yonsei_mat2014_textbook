@@ -413,3 +413,100 @@ print(my_func.__name__)  # 'my_func'
 - Use `update_wrapper()` for class-based decorators
 - `__wrapped__` provides access to the original function
 - Proper metadata enables debugging, documentation, and testing
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a `@timer` decorator without `@wraps` and one with `@wraps`. Apply each to a function with a docstring. Print `__name__` and `__doc__` for both decorated functions to demonstrate the difference.
+
+??? success "Solution to Exercise 1"
+
+        from functools import wraps
+
+        def timer_bad(func):
+            def wrapper(*args, **kwargs):
+                return func(*args, **kwargs)
+            return wrapper
+
+        def timer_good(func):
+            @wraps(func)
+            def wrapper(*args, **kwargs):
+                return func(*args, **kwargs)
+            return wrapper
+
+        @timer_bad
+        def add_bad(a, b):
+            """Add two numbers."""
+            return a + b
+
+        @timer_good
+        def add_good(a, b):
+            """Add two numbers."""
+            return a + b
+
+        print(f"Without wraps: name={add_bad.__name__}, doc={add_bad.__doc__}")
+        # Without wraps: name=wrapper, doc=None
+
+        print(f"With wraps:    name={add_good.__name__}, doc={add_good.__doc__}")
+        # With wraps:    name=add_good, doc=Add two numbers.
+
+---
+
+**Exercise 2.**
+Write a decorator `@logged` that uses `@wraps` and prints a message before calling the function. After decorating a function, access `__wrapped__` to call the original function directly (bypassing the decorator). Verify no log message is printed when calling via `__wrapped__`.
+
+??? success "Solution to Exercise 2"
+
+        from functools import wraps
+
+        def logged(func):
+            @wraps(func)
+            def wrapper(*args, **kwargs):
+                print(f"LOG: calling {func.__name__}")
+                return func(*args, **kwargs)
+            return wrapper
+
+        @logged
+        def multiply(a, b):
+            """Multiply two numbers."""
+            return a * b
+
+        print(multiply(3, 4))       # LOG: calling multiply \n 12
+
+        # Bypass the decorator via __wrapped__
+        original = multiply.__wrapped__
+        print(original(3, 4))       # 12 (no LOG message)
+
+---
+
+**Exercise 3.**
+Create a class-based decorator `CallTracker` that counts calls. Use `functools.update_wrapper` in `__init__` to preserve metadata. Decorate a function, call it three times, then verify that `__name__`, `__doc__`, and the `count` attribute all work correctly.
+
+??? success "Solution to Exercise 3"
+
+        import functools
+
+        class CallTracker:
+            def __init__(self, func):
+                functools.update_wrapper(self, func)
+                self.func = func
+                self.count = 0
+
+            def __call__(self, *args, **kwargs):
+                self.count += 1
+                return self.func(*args, **kwargs)
+
+        @CallTracker
+        def greet(name):
+            """Greet someone by name."""
+            return f"Hello, {name}!"
+
+        greet("Alice")
+        greet("Bob")
+        greet("Charlie")
+
+        print(greet.__name__)  # greet
+        print(greet.__doc__)   # Greet someone by name.
+        print(greet.count)     # 3

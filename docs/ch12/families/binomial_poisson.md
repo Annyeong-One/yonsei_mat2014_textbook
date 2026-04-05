@@ -714,3 +714,49 @@ if __name__ == "__main__":
     print("7. Hypergeometric: sampling without replacement from finite population")
     print("8. Many distributions are related through limiting cases and special relationships")
 ```
+
+---
+
+## Exercises
+
+**Exercise 1.**
+For a $\text{Binomial}(n=100, p=0.03)$, compute $P(X = 3)$ using both the binomial PMF and the Poisson approximation with $\lambda = np = 3$. Compare the two values.
+
+??? success "Solution to Exercise 1"
+
+        from scipy import stats
+
+        p_binom = stats.binom.pmf(3, n=100, p=0.03)
+        p_poisson = stats.poisson.pmf(3, mu=3)
+        print(f"Binomial:  P(X=3) = {p_binom:.6f}")
+        print(f"Poisson:   P(X=3) = {p_poisson:.6f}")
+        print(f"Difference: {abs(p_binom - p_poisson):.6f}")
+
+---
+
+**Exercise 2.**
+A call center receives an average of 8 calls per hour (Poisson). Compute the probability of receiving more than 12 calls in one hour and the probability of receiving exactly 0 calls using the survival function and PMF respectively.
+
+??? success "Solution to Exercise 2"
+
+        from scipy import stats
+
+        rv = stats.poisson(mu=8)
+        p_gt_12 = rv.sf(12)
+        p_eq_0 = rv.pmf(0)
+        print(f"P(X > 12) = {p_gt_12:.4f}")
+        print(f"P(X = 0)  = {p_eq_0:.6f}")
+
+---
+
+**Exercise 3.**
+Generate 10,000 binomial samples with $n = 20$ and $p = 0.4$. Compute the sample mean and variance and compare them with the theoretical values $np$ and $np(1-p)$.
+
+??? success "Solution to Exercise 3"
+
+        import numpy as np
+        from scipy import stats
+
+        samples = stats.binom.rvs(n=20, p=0.4, size=10000, random_state=42)
+        print(f"Sample mean: {np.mean(samples):.4f} (expected {20*0.4})")
+        print(f"Sample var:  {np.var(samples, ddof=1):.4f} (expected {20*0.4*0.6})")

@@ -368,3 +368,115 @@ def choose_executor(task_type):
 - **Measure** your task's CPU usage to determine type
 - **Mixed workloads**: Consider which component dominates, or use two-stage pipeline
 - **When in doubt**: Start with threads for simplicity, switch to processes if no speedup
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Write a function `classify_task` that accepts a callable and a set of arguments, runs it while measuring wall-clock time and CPU time (using `time.perf_counter` and `time.process_time`), and returns `"cpu_bound"` if the CPU-time-to-wall-time ratio is above 0.8, or `"io_bound"` otherwise. Test it with a pure computation (sum of squares up to 5,000,000) and a simulated I/O task (`time.sleep(1)`).
+
+??? success "Solution to Exercise 1"
+        ```python
+        import time
+
+        def classify_task(func, *args):
+            wall_start = time.perf_counter()
+            cpu_start = time.process_time()
+            func(*args)
+            cpu_elapsed = time.process_time() - cpu_start
+            wall_elapsed = time.perf_counter() - wall_start
+            ratio = cpu_elapsed / wall_elapsed if wall_elapsed > 0 else 1.0
+            label = "cpu_bound" if ratio > 0.8 else "io_bound"
+            print(f"Wall: {wall_elapsed:.3f}s, CPU: {cpu_elapsed:.3f}s, "
+                  f"Ratio: {ratio:.2f} -> {label}")
+            return label
+
+        def compute(n):
+            return sum(i * i for i in range(n))
+
+        def io_wait():
+            time.sleep(1)
+
+        print(classify_task(compute, 5_000_000))   # cpu_bound
+        print(classify_task(io_wait))               # io_bound
+        ```
+
+---
+
+**Exercise 2.**
+Create a two-stage pipeline: (1) an I/O stage that uses `ThreadPoolExecutor` with 4 workers to simulate downloading 4 files (`time.sleep(0.5)` each, returning a random list of 100,000 integers), and (2) a CPU stage that uses `ProcessPoolExecutor` to sort each list. Measure the total time and compare it against a fully sequential version.
+
+??? success "Solution to Exercise 2"
+        ```python
+        import time
+        import random
+        from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+
+        def download(file_id):
+            time.sleep(0.5)
+            return [random.randint(0, 1_000_000) for _ in range(100_000)]
+
+        def sort_list(data):
+            return sorted(data)
+
+        if __name__ == "__main__":
+            ids = list(range(4))
+
+            # Sequential
+            start = time.perf_counter()
+            for i in ids:
+                sort_list(download(i))
+            seq_time = time.perf_counter() - start
+
+            # Pipeline
+            start = time.perf_counter()
+            with ThreadPoolExecutor(max_workers=4) as tex:
+                raw = list(tex.map(download, ids))
+            with ProcessPoolExecutor() as pex:
+                sorted_data = list(pex.map(sort_list, raw))
+            pipe_time = time.perf_counter() - start
+
+            print(f"Sequential: {seq_time:.2f}s")
+            print(f"Pipeline:   {pipe_time:.2f}s")
+            print(f"Speedup:    {seq_time / pipe_time:.2f}x")
+        ```
+
+---
+
+**Exercise 3.**
+Write a benchmark that runs the same pure-Python CPU-bound function (computing the sum of cubes up to 2,000,000) four times using: (a) sequential execution, (b) `ThreadPoolExecutor` with 4 workers, and (c) `ProcessPoolExecutor` with 4 workers. Print the elapsed time for each and compute the speedup relative to sequential.
+
+??? success "Solution to Exercise 3"
+        ```python
+        import time
+        from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+
+        def sum_of_cubes(n):
+            return sum(i ** 3 for i in range(n))
+
+        if __name__ == "__main__":
+            N = 2_000_000
+            args = [N] * 4
+
+            # Sequential
+            start = time.perf_counter()
+            [sum_of_cubes(n) for n in args]
+            seq = time.perf_counter() - start
+
+            # Threads
+            start = time.perf_counter()
+            with ThreadPoolExecutor(max_workers=4) as ex:
+                list(ex.map(sum_of_cubes, args))
+            thr = time.perf_counter() - start
+
+            # Processes
+            start = time.perf_counter()
+            with ProcessPoolExecutor(max_workers=4) as ex:
+                list(ex.map(sum_of_cubes, args))
+            proc = time.perf_counter() - start
+
+            print(f"Sequential: {seq:.2f}s")
+            print(f"Threads:    {thr:.2f}s  (speedup {seq/thr:.2f}x)")
+            print(f"Processes:  {proc:.2f}s  (speedup {seq/proc:.2f}x)")
+        ```

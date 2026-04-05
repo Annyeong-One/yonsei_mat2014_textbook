@@ -112,3 +112,73 @@ print(bool(None))          # False
 | int | str | `str()` |
 | list | tuple | `tuple()` |
 | list | set | `set()` |
+
+
+---
+
+## Exercises
+
+
+**Exercise 1.**
+Write a function `safe_convert(value, target_type)` that attempts to convert `value` to `target_type` (e.g., `int`, `float`, `str`). If conversion fails, return `None` instead of raising an error.
+
+??? success "Solution to Exercise 1"
+
+    ```python
+    def safe_convert(value, target_type):
+        try:
+            return target_type(value)
+        except (ValueError, TypeError):
+            return None
+
+    print(safe_convert("42", int))      # 42
+    print(safe_convert("hello", int))   # None
+    print(safe_convert("3.14", float))  # 3.14
+    print(safe_convert(42, str))        # '42'
+    ```
+
+    The `try/except` block catches both `ValueError` (invalid literal) and `TypeError` (unsupported conversion) to provide safe conversion.
+
+---
+
+**Exercise 2.**
+Demonstrate the difference between `int(3.9)` (truncation) and `round(3.9)` (rounding). Then show how to use `math.floor()` and `math.ceil()` for explicit directional conversion.
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    import math
+
+    print(int(3.9))         # 3 (truncates toward zero)
+    print(round(3.9))       # 4 (rounds to nearest)
+    print(math.floor(3.9))  # 3 (rounds toward -inf)
+    print(math.ceil(3.9))   # 4 (rounds toward +inf)
+
+    # Negative number
+    print(int(-3.9))         # -3 (truncates toward zero)
+    print(math.floor(-3.9))  # -4 (rounds toward -inf)
+    ```
+
+    `int()` truncates toward zero, `math.floor()` rounds toward negative infinity, and `math.ceil()` rounds toward positive infinity. The difference is visible with negative numbers.
+
+---
+
+**Exercise 3.**
+Convert the list `[1, 2, 2, 3, 3, 3]` to a `set`, then to a sorted `list`, then to a `tuple`. Print the result at each step and explain what each conversion does.
+
+??? success "Solution to Exercise 3"
+
+    ```python
+    original = [1, 2, 2, 3, 3, 3]
+
+    as_set = set(original)
+    print(f"Set: {as_set}")          # {1, 2, 3} (duplicates removed)
+
+    as_sorted_list = sorted(as_set)
+    print(f"Sorted list: {as_sorted_list}")  # [1, 2, 3]
+
+    as_tuple = tuple(as_sorted_list)
+    print(f"Tuple: {as_tuple}")      # (1, 2, 3)
+    ```
+
+    `set()` removes duplicates, `sorted()` returns a new sorted list, and `tuple()` converts the list to an immutable tuple.

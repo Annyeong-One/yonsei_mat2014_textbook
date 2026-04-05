@@ -472,6 +472,7 @@ These principles allow programs to exploit modern CPU hardware efficiently.
 
 ---
 
+
 ## 12. Summary
 
 | Concept           | Explanation                          |
@@ -489,3 +490,58 @@ These principles allow programs to exploit modern CPU hardware efficiently.
 Modern CPUs are extremely fast, but their performance depends heavily on **data layout, memory access patterns, and software design**.
 
 Understanding these principles explains why **vectorized numerical libraries** can achieve performance close to low-level languages while still being used from Python.
+
+
+## Exercises
+
+**Exercise 1.**
+The instruction execution cycle consists of Fetch, Decode, Execute, and Writeback. Consider this Python statement:
+
+```python
+x = a + b
+```
+
+In C, `a + b` might compile to a single `ADD` instruction. In Python, the interpreter must: (1) look up `a` and `b` as objects, (2) check their types at runtime, (3) dispatch `__add__`, (4) allocate a result object, (5) update reference counts. Estimate: roughly how many more machine instructions does the Python version require compared to the C version? What are the main sources of this overhead?
+
+??? success "Solution to Exercise 1"
+    A single C `ADD` instruction is 1 machine instruction. The Python interpreter version involves roughly 50-100+ machine instructions for a single `a + b`:
+
+    - Object lookup: following pointers through the namespace dictionary (~10+ instructions)
+    - Type checking: reading the type pointer and comparing (~5+ instructions)
+    - Method dispatch: looking up `__add__` in the type's method table (~10+ instructions)
+    - Object allocation: requesting memory from the allocator (~20+ instructions)
+    - Reference counting: incrementing/decrementing refcounts on multiple objects (~10+ instructions)
+
+    The main overhead sources are: **dynamic typing** (type must be checked at runtime), **object model** (values are heap-allocated objects with metadata), and **interpreter loop** (each bytecode instruction requires fetching, decoding, and dispatching). This is why Python is roughly 10-100x slower than C for tight arithmetic loops.
+
+---
+
+**Exercise 2.**
+Instruction pipelining allows CPUs to overlap stages of multiple instructions. A pipeline hazard occurs when this overlap fails. For each scenario, identify the type of hazard:
+
+- (a) Instruction 2 needs the result of Instruction 1, which has not completed the Execute stage yet.
+- (b) A conditional branch instruction makes it unclear which instruction should be fetched next.
+- (c) Two instructions both need the same ALU in the same cycle.
+
+What hardware techniques do modern CPUs use to mitigate each type?
+
+??? success "Solution to Exercise 2"
+    - **(a) Data hazard.** Instruction 2 depends on the result of Instruction 1. Mitigated by **forwarding/bypassing** (routing the result directly from the Execute stage to the next instruction's input without waiting for Writeback) and **pipeline stalls** (inserting bubbles).
+    - **(b) Control hazard.** The branch makes the next instruction uncertain. Mitigated by **branch prediction** (guessing which way the branch goes) and **speculative execution** (executing the predicted path and rolling back if wrong).
+    - **(c) Structural hazard.** Two instructions compete for the same hardware resource. Mitigated by **resource duplication** (adding more ALUs) and **instruction scheduling** (reordering instructions to avoid conflicts).
+
+---
+
+**Exercise 3.**
+The memory hierarchy has vastly different latencies at each level. A register access takes ~1 cycle, L1 cache ~4 cycles, L2 ~12 cycles, L3 ~50 cycles, and RAM ~300 cycles. Consider a program that accesses an array of 1 million floats:
+
+- (a) If the array fits in L1 cache, approximately how many total cycles are spent on memory access for one pass through the array?
+- (b) If every access misses all caches and goes to RAM, approximately how many cycles are spent?
+- (c) This ratio explains why NumPy (contiguous arrays with good cache locality) outperforms Python lists (scattered objects with poor cache locality). What is the approximate speedup factor from cache locality alone?
+
+??? success "Solution to Exercise 3"
+    - **(a)** If the array fits in L1 (~4 cycles per access): 1,000,000 * 4 = **4,000,000 cycles**.
+    - **(b)** If every access goes to RAM (~300 cycles per access): 1,000,000 * 300 = **300,000,000 cycles**.
+    - **(c)** The ratio is 300,000,000 / 4,000,000 = **75x** speedup from cache locality alone. In practice, the difference is somewhat less because hardware prefetchers help with sequential access patterns, but the order of magnitude is correct.
+
+    This explains why NumPy arrays (contiguous, cache-friendly) massively outperform Python lists (pointer-chasing, cache-hostile) for numerical computation. The data layout difference alone can account for a 10-100x performance gap, even before considering interpreter overhead.

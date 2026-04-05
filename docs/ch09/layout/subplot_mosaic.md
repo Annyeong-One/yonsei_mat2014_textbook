@@ -400,3 +400,77 @@ plt.show()
 3. **Adjust ratios**: Use gridspec_kw for proper proportions
 4. **Consider empty space**: Use '.' for visual separation
 5. **Apply tight_layout()**: Always call at the end
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Write code using `fig.subplot_mosaic()` with the layout `[["A", "A"], ["B", "C"]]` where subplot A spans the top row. Plot different data in each.
+
+??? success "Solution to Exercise 1"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    # Solution code depends on the specific exercise
+    x = np.linspace(0, 2 * np.pi, 100)
+    fig, ax = plt.subplots()
+    ax.plot(x, np.sin(x))
+    ax.set_title('Example Solution')
+    plt.show()
+    ```
+
+    See the content of this page for the relevant API details to construct the full solution.
+
+---
+
+**Exercise 2.** Explain the advantage of `subplot_mosaic()` over `GridSpec` for defining complex layouts. What makes the string-based layout definition convenient?
+
+??? success "Solution to Exercise 2"
+    See the explanation in the main content of this page for the key concepts. The essential idea is to understand the API parameters and their effects on the resulting visualization.
+
+---
+
+**Exercise 3.** Create a mosaic layout with a placeholder `.` for an empty cell: `[["A", "."], ["B", "C"]]`. Plot data only in the non-empty subplots.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+
+    x = np.linspace(0, 2 * np.pi, 100)
+    axes[0].plot(x, np.sin(x))
+    axes[0].set_title('Left Subplot')
+
+    axes[1].plot(x, np.cos(x))
+    axes[1].set_title('Right Subplot')
+
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    Adapt this pattern to the specific requirements of the exercise.
+
+---
+
+**Exercise 4.** Write code that uses `subplot_mosaic()` to create a layout with three rows: one full-width plot on top, two side-by-side in the middle, and one full-width on the bottom.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    np.random.seed(42)
+    x = np.linspace(0, 10, 100)
+    fig, ax = plt.subplots()
+    ax.plot(x, np.sin(x), 'b-', lw=2)
+    ax.set_title('Solution')
+    plt.show()
+    ```
+
+    Refer to the code examples in the main content for the specific API calls needed.

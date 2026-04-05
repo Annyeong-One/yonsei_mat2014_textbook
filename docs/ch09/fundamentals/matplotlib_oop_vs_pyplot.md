@@ -620,3 +620,88 @@ if __name__ == "__main__":
     print("plt.grid()            -->  ax.grid()")
     print("=" * 70)
 ```
+
+
+---
+
+## Exercises
+
+**Exercise 1.** Rewrite the following pyplot-style code using the OOP style (explicit Figure and Axes objects):
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+
+x = np.linspace(0, 10, 100)
+plt.plot(x, np.sin(x), 'r-')
+plt.title('Sine Wave')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.grid(True)
+plt.show()
+```
+
+??? success "Solution to Exercise 1"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    x = np.linspace(0, 10, 100)
+
+    fig, ax = plt.subplots()
+    ax.plot(x, np.sin(x), 'r-')
+    ax.set_title('Sine Wave')
+    ax.set_xlabel('x')
+    ax.set_ylabel('y')
+    ax.grid(True)
+    plt.show()
+    ```
+
+---
+
+**Exercise 2.** Explain two advantages of the OOP style (`fig, ax = plt.subplots()`) over the pyplot style (`plt.plot()`) when creating complex, multi-subplot figures.
+
+??? success "Solution to Exercise 2"
+    1. **Explicit control over multiple subplots**: With the OOP style, each Axes object is a distinct variable (`ax1`, `ax2`, etc.), making it clear which subplot you are modifying. In pyplot style, the "current axes" concept can be ambiguous and error-prone with multiple subplots.
+
+    2. **Better for reusable functions**: You can write functions that accept an `ax` parameter and draw on it, making your plotting code modular and testable. With pyplot, functions implicitly modify global state, which is harder to compose and debug.
+
+---
+
+**Exercise 3.** Write code using the OOP style that creates a 1x2 subplot figure. Plot $\sin(x)$ on the left and $\cos(x)$ on the right, each with its own title, axis labels, and grid.
+
+??? success "Solution to Exercise 3"
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    x = np.linspace(0, 2 * np.pi, 200)
+
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
+
+    ax1.plot(x, np.sin(x), 'b-', lw=2)
+    ax1.set_title(r'$y = \sin(x)$')
+    ax1.set_xlabel('$x$')
+    ax1.set_ylabel('$y$')
+    ax1.grid(True, alpha=0.3)
+
+    ax2.plot(x, np.cos(x), 'r-', lw=2)
+    ax2.set_title(r'$y = \cos(x)$')
+    ax2.set_xlabel('$x$')
+    ax2.set_ylabel('$y$')
+    ax2.grid(True, alpha=0.3)
+
+    plt.tight_layout()
+    plt.show()
+    ```
+
+---
+
+**Exercise 4.** Predict what happens if you call `plt.plot()` twice without calling `plt.show()` in between. Then predict what happens if you use the OOP style and call `ax.plot()` twice on the same Axes object.
+
+??? success "Solution to Exercise 4"
+    Calling `plt.plot()` twice without `plt.show()` in between adds both lines to the **same** current axes. Both lines appear on the same plot when `plt.show()` is finally called.
+
+    Similarly, calling `ax.plot()` twice on the same Axes object also adds both lines to that axes. The behavior is identical: both lines appear together on the same subplot.
+
+    The key difference is only in clarity: with the OOP style, it is explicit which axes you are drawing on.
