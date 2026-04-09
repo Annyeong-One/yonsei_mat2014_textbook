@@ -1,7 +1,9 @@
 
 # Ternary Expressions
 
-A ternary expression provides a concise way to choose between two values.
+A ternary expression is a compact form of `if/else`, used when the decision fits within a single expression. Unlike `if/else`, which controls **execution** (which statements run), a ternary controls **evaluation** (which value is produced).
+
+Ternary expressions are not about saving lines of code---they are about keeping simple decisions inline with expressions.
 
 Syntax:
 
@@ -50,7 +52,50 @@ numbers = [1,2,3,4]
 labels = ["even" if n % 2 == 0 else "odd" for n in numbers]
 ```
 
-Ternary expressions are best used for **simple conditions**.
+### When to Use Ternary Expressions
+
+Use when:
+
+- the condition is simple
+- both outcomes are expressions (not complex logic)
+- readability improves over a full `if/else` block
+
+Avoid when:
+
+- nesting is required
+- the logic becomes harder to scan than a plain `if/else`
+
+Ternary expressions are best used for **simple, two-way choices**.
+
+---
+
+### Design Insight
+
+Python's ternary syntax places the result value first:
+
+```python
+value_if_true if condition else value_if_false
+```
+
+This reads like English: "use this value *if* the condition holds, *else* that value." Compared to C's `condition ? a : b`, Python's order makes the **chosen values more visible**, which matters when scanning complex expressions.
+
+---
+
+### Tradeoff: Conciseness vs Clarity
+
+Ternary expressions compress code---but compression is not always improvement. Use them when they remove boilerplate and keep logic local. Avoid them when they obscure control flow or require mental parsing.
+
+---
+
+### Limitations
+
+A ternary expression is an **expression**, not a statement. It must evaluate to a value and cannot contain standard assignments (`=`). However, Python 3.8+ assignment expressions (`:=`) can be used:
+
+```python
+result = (x := 5) if condition else (x := 10)
+```
+
+The key is not the syntax, but recognizing when an expression-level decision is clearer than a statement-level one.
 
 ---
 

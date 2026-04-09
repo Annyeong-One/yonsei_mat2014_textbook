@@ -1,6 +1,8 @@
 
 # Parameters
 
+Parameters define the boundary between a function and its environment, controlling how external data enters local execution. They specify how values are bound to names within a function's local scope.
+
 Functions become much more useful when they can accept **inputs**.
 Inputs allow the same function to work with different values each time it is called.
 

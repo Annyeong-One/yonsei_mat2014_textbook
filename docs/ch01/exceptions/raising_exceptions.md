@@ -1,9 +1,9 @@
 
 # Raising Exceptions
 
-Python programs can **raise exceptions explicitly** using the `raise` statement.
+Raising exceptions defines the **contract** of a function. It specifies what inputs are valid, what conditions are unacceptable, and how violations are communicated to the caller. Instead of returning error codes, functions raise exceptions to signal failure clearly.
 
-This allows functions to signal that something went wrong.
+Python programs can **raise exceptions explicitly** using the `raise` statement.
 
 ```mermaid
 flowchart LR
@@ -120,6 +120,8 @@ Raising exceptions is appropriate when:
 * an operation cannot be completed
 * continuing would produce incorrect results
 
+Do **not** raise exceptions for normal control flow---use `if/else` or `return` instead.
+
 ---
 
 
@@ -133,6 +135,18 @@ Key ideas:
 * custom exception classes can represent domain-specific problems
 
 Raising exceptions allows programs to enforce correctness and communicate errors clearly.
+
+---
+
+## Putting It Together
+
+Exceptions provide a complete system for handling failure:
+
+- exception types describe **what went wrong**
+- `try/except` defines **how to respond**
+- `raise` communicates **failure to callers**
+
+Together, control flow and exceptions describe all possible execution paths in a program: what happens when operations succeed, and what happens when they fail.
 
 
 ## Exercises

@@ -3,14 +3,14 @@
 
 A `tuple` is an **ordered, immutable sequence**.
 
-Tuples are useful when a collection of values should stay fixed after creation.
+Tuples are useful when a collection of values should stay fixed after creation. They trade flexibility for safety and predictability.
 
 ```mermaid
 flowchart TD
     A[tuple]
     A --> B[ordered]
     A --> C[immutable]
-    A --> D[hashable]
+    A --> D[hashable when all elements are hashable]
 ```
 
 ---
@@ -96,7 +96,7 @@ Output:
 TypeError: 'tuple' object does not support item assignment
 ```
 
-Because tuples are immutable, they are hashable and can be used as dictionary keys or set elements — unlike [lists](lists.md). See [Hashing and Hash Tables](../../ch02/composites/hashing_deep_dive.md) for a full explanation.
+Because tuples are immutable, they can be hashable---but only when all their elements are also hashable. A tuple of integers or strings is hashable; a tuple containing a list is not. Hashable tuples can be used as dictionary keys or set elements, unlike [lists](lists.md). Hashing is covered in more detail in a later chapter.
 
 ---
 

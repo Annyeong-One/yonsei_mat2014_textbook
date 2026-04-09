@@ -1,7 +1,11 @@
 
-# Input and Output Utilities
+# File I/O
 
-Python provides the `open()` built-in function for reading from and writing to files. The `with` statement ensures that files are properly closed after use, even if an exception occurs.
+Python's I/O splits into two distinct mechanisms: **console I/O** (`print`/`input`, covered in [print() and input()](print_input.md)) and **file I/O** (`open`). This page covers file I/O only.
+
+Like `print()` and `input()`, file I/O functions primarily produce **side effects** rather than returning computed values---they interact with the external environment.
+
+`open()` handles reading from and writing to **files on disk**. Unlike console I/O which is immediate and transient, file I/O persists data beyond program execution. The `with` statement ensures that files are properly closed after use, even if an exception occurs.
 
 ## Writing Files
 
@@ -38,8 +42,24 @@ with open("data.txt") as f:
 | `"rb"` | Read binary | No | No |
 | `"wb"` | Write binary | Yes | Yes |
 
+!!! warning "Be careful with `\"w\"` mode"
+    Opening a file with `"w"` **truncates it to zero length immediately**---all existing content is lost before you write anything. Use `"a"` (append) if you want to add to an existing file.
+
 !!! tip "Always Use `with`"
     The `with` statement guarantees that the file is closed when the block exits, even if an error occurs. Avoid calling `f.close()` manually.
+
+---
+
+## Practical Example
+
+```python
+# Save program results to a file
+results = ["Alice: 85", "Bob: 92", "Charlie: 78"]
+
+with open("results.txt", "w") as f:
+    for line in results:
+        f.write(line + "\n")
+```
 
 ---
 

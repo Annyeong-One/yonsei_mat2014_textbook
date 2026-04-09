@@ -1,34 +1,128 @@
 
 # Putting It All Together
 
-The following short program ties together variables, data types, expressions, and the `print` function from the preceding sections:
+At this point, you have seen all the fundamental pieces of Python: **objects**, **names**, **expressions**, **types**, and **structure**. Now we bring them together into a single program that demonstrates how Python works as a system.
+
+---
+
+## A Complete Example
 
 ```python
-# Calculate total price
-price = 19.99
-quantity = 3
+name = "Alice"
+age = 20
+scores = [80, 90, 85]
 
-total = price * quantity
+average = sum(scores) / len(scores)
+status = "adult" if age >= 18 else "minor"
 
-print("Total:", total)
-```
-
-When Python executes this script, it follows four sequential steps:
-
-```mermaid
-flowchart TD
-    A[assign variables] --> B[evaluate expression]
-    B --> C[store result]
-    C --> D[print output]
+print(f"{name} is {status} with average score {average}")
 ```
 
 Output:
 
 ```
-Total: 59.97
+Alice is adult with average score 85.0
 ```
 
-This example demonstrates how variables, data types, expressions, and statements work together in a program.
+---
+
+## Mapping to Core Concepts
+
+| Concept    | Example in this program         |
+| ---------- | ------------------------------- |
+| Object     | `"Alice"`, `20`, `[80, 90, 85]` |
+| Name       | `name`, `age`, `scores`         |
+| Expression | `sum(scores) / len(scores)`     |
+| Operator   | `/`, `>=`                       |
+| Type       | `int`, `list`, `str`            |
+| Structure  | conditional expression, f-string |
+| Statement  | assignment, `print()`           |
+
+---
+
+## Step-by-Step Breakdown
+
+**Step 1 --- Objects and Names.** `"Alice"`, `20`, and `[80, 90, 85]` are objects. The names `name`, `age`, and `scores` are bound to them.
+
+**Step 2 --- Expressions.** `sum(scores) / len(scores)` composes smaller expressions: `sum(scores)` produces `255`, `len(scores)` produces `3`, and `255 / 3` produces `85.0`. Each step creates new objects.
+
+**Step 3 --- Type-Dependent Behavior.** `>=` is an operator that calls a method on `age` (an `int`). The result is a Boolean that determines which string the conditional expression selects.
+
+**Step 4 --- Output.** The f-string constructs a new string from all the computed values, and `print` sends it to the console.
+
+---
+
+## The Big Idea
+
+This entire program follows one principle:
+
+> Python programs transform objects through expressions, under the control of structure.
+
+With this model, Python stops being a collection of rules. You can now explain:
+
+- why `"1" + "1"` produces `"11"` (string concatenation)
+- why `True + True` produces `2` (Boolean is a subclass of `int`)
+- why modifying a list can affect multiple variables (shared references)
+- why `a + b` depends on the type of `a` (method dispatch)
+
+These are not exceptions---they are consequences of the system.
+
+---
+
+## When Things Go Wrong
+
+The model also explains failures. Consider this broken version:
+
+```python
+scores = [80, 90, "85"]
+average = sum(scores) / len(scores)
+```
+
+This raises `TypeError: unsupported operand type(s) for +: 'int' and 'str'`. The `sum()` function calls `+` on each element, and `int.__add__` does not know how to add a string. The type mismatch is caught at runtime, not at definition time.
+
+Another common failure:
+
+```python
+scores = []
+average = sum(scores) / len(scores)
+```
+
+This raises `ZeroDivisionError: division by zero` because `len([])` is `0`. The model predicts this: `sum([])` returns `0`, `len([])` returns `0`, and `0 / 0` is undefined.
+
+Understanding the model lets you predict *where* and *why* errors occur---not just *what* went wrong.
+
+---
+
+## Mental Model Checklist
+
+When reading any Python program, ask:
+
+1. **What objects are involved?**
+2. **What names refer to them?**
+3. **What expressions are being evaluated?**
+4. **What types determine behavior?**
+5. **What structure controls execution?**
+
+If you can answer these five questions, you understand the program.
+
+---
+
+## The Python Mental Model
+
+Every program you write follows this flow:
+
+```mermaid
+flowchart LR
+    A[Names] --> B[Objects]
+    B --> C[Types]
+    C --> D[Expressions]
+    D --> E[Evaluation]
+    E --> F[New Objects]
+    F --> G[Statements]
+    G --> H[Output]
+```
+
+> Python programs transform objects through expressions, under the control of structure.
 
 ## Exercises
 

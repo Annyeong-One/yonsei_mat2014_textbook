@@ -1,55 +1,46 @@
-# Chapter 5: Functions
+# Chapter 4: Memory and Performance
 
-This chapter covers advanced function topics including first-class functions, lambda expressions, parameter handling, recursion, functional programming patterns, the functools module, and decorators.
+Understanding how Python manages memory and how to measure performance is essential for writing efficient programs. This chapter examines Python's memory architecture, reference counting, garbage collection, and profiling tools.
 
-## 5.1 First-Class Functions
+## 4.1 Memory Architecture
 
-- [First-Class Functions](first_class_functions/first_class_functions.md)
-- [Lambda Expressions](first_class_functions/lambda.md)
-- [Function Factories](first_class_functions/function_factories.md)
+- [Stack vs Heap Overview](memory/stack_heap_overview.md)
+- [Frame Objects](memory/frame_objects.md)
+- [Heap Object Storage](memory/heap_storage.md)
+- [Stack-Heap Interaction](memory/stack_heap_interaction.md)
+- [Recursion and Stack Growth](memory/recursion_stack.md)
+- [Object Identity Stability](memory/identity_stability.md)
+- [Buffer Reallocation](memory/buffer_reallocation.md)
+- [Stack Overflow](memory/stack_overflow.md)
+- [Python vs C Memory](memory/python_vs_c_memory.md)
 
-## 5.2 Recursion
+## 4.2 Reference Counting and GC
 
-- [Recursion Fundamentals](recursion/fundamentals.md)
-- [Recursive Patterns](recursion/patterns.md)
-- [Tree Recursion](recursion/tree_recursion.md)
-- [Recursion vs Iteration](recursion/recursion_vs_iteration.md)
-- [Tail Recursion](recursion/tail_recursion.md)
-- [Memoization and Recursion](recursion/memoization.md)
-- [sys.setrecursionlimit()](recursion/recursion_limit.md)
-- [Divide and Conquer](recursion/divide_and_conquer.md)
-- [Backtracking](recursion/backtracking.md)
+- [Memory Management Overview](gc/memory_management_overview.md)
+- [Reference Counting](gc/reference_counting.md)
+- [Garbage Collection](gc/garbage_collection.md)
+- [Memory Leaks](gc/memory_leaks.md)
 
-## 5.3 Functional Programming
+## 4.3 Weak References
 
-- [map(), filter(), reduce()](functional/map_filter_reduce.md)
-- [Pure Functions](functional/pure_functions.md)
-- [Higher-Order Functions](functional/higher_order.md)
-- [Partial Application](functional/partial_application.md)
-- [Function Composition](functional/composition.md)
-- [operator Module](functional/operator_module.md)
-- [Callback Patterns](functional/callback_patterns.md)
+- [Weak Reference Basics](gc/weak_references.md)
+- [Weak Reference Patterns](gc/weak_ref_patterns.md)
 
-## 5.4 functools Module
+## 4.4 Advanced Memory Topics
 
-- [functools Overview](functools/functools_overview.md)
-- [functools.cache](functools/functools_cache.md)
-- [functools.lru_cache](functools/functools_lru_cache.md)
-- [functools.partial](functools/functools_partial.md)
-- [functools.reduce](functools/functools_reduce.md)
-- [functools.wraps](functools/functools_wraps.md)
-- [functools.total_ordering](functools/functools_total_ordering.md)
-- [functools.singledispatch](functools/functools_singledispatch.md)
+- [Caching Strategies](advanced_memory/caching_strategies.md)
+- [Memory Management](advanced_memory/memory_management.md)
+- [Memory Optimization](advanced_memory/memory_optimization.md)
+- [\_\_slots\_\_](advanced_memory/slots.md)
+- [sys.getsizeof()](advanced_memory/getsizeof.md)
+- [tracemalloc](advanced_memory/tracemalloc.md)
 
-## 5.5 Decorators
+## 4.5 Performance and Profiling
 
-- [Decorator Fundamentals](decorators/decorator_fundamentals.md)
-- [Decorator Factories](decorators/decorator_factories.md)
-- [Stacked Decorators](decorators/stacked_decorators.md)
-- [Class Decorators](decorators/class_decorators.md)
-- [Practical Patterns](decorators/practical_patterns.md)
-- [Decorators Cheat Sheet](decorators/decorators_cheat_sheet.md)
-
-## 5.6 Design Patterns
-
-- Strategy Pattern
+- [Performance and Memory](practical/performance_memory.md)
+- [cProfile Module](practical/cprofile.md)
+- [line_profiler](practical/line_profiler.md)
+- [memory_profiler](practical/memory_profiler.md)
+- [Benchmarking Methodology](practical/benchmarking.md)
+- [Optimization Strategies](practical/optimization_strategies.md)
+- [Profiling Visualization (snakeviz)](practical/profiling_visualization.md)

@@ -4,7 +4,9 @@
 
 Python 3.10 introduced **structural pattern matching** using the `match` statement.
 
-Pattern matching allows programs to dispatch behavior based on the **structure of data**.
+Traditional conditionals ask: "Does this condition evaluate to true?" Pattern matching asks: **"Does this value match this structure?"** This is a shift from boolean logic to structural decomposition.
+
+Pattern matching allows programs to dispatch behavior based on the **structure of data**. While `if/elif` chains test conditions one by one, `match/case` can simultaneously check a value's type, structure, and contents in a single pattern. This makes `match` particularly powerful when working with structured data like tuples, lists, or objects.
 
 ---
 
@@ -56,7 +58,7 @@ match day:
 
 ## Guards
 
-Guards allow conditional checks.
+Guards add conditional checks to patterns, combining structural matching with boolean filtering.
 
 ```python
 match number:
@@ -68,7 +70,55 @@ match number:
         print("negative")
 ```
 
+!!! info "Design Insight"
+    Pattern matching separates **structure** (the pattern) from **conditions** (the guard). In `case (x, y) if x > 0:`, the pattern `(x, y)` enforces that the value is a 2-tuple and binds components, while the guard `if x > 0` filters on value. This separation improves readability in complex dispatch logic.
+
+---
+
+## Pattern Types
+
+| Type | Syntax | Effect |
+| --- | --- | --- |
+| Literal | `case 200:` | matches exact value |
+| OR | `case 301 \| 302:` | matches either value |
+| Capture | `case x:` | matches anything, binds to `x` |
+| Wildcard | `case _:` | matches anything, no binding |
+| Guard | `case x if x > 0:` | structural match + boolean filter |
+
+!!! warning "Capture vs Comparison"
+    A bare name like `case x:` is a **capture pattern** that matches *everything*---it does not compare against a variable named `x`. To match against a variable's value, use a dotted name (`case Status.OK:`) or a guard (`case x if x == expected:`). This is a common source of subtle bugs.
+
+---
+
+### When to Prefer match
+
+Use `match` when:
+
+- you are checking many structured cases
+- you want to destructure data (tuples, lists, objects)
+- `if/elif` chains become long or repetitive
+
+Avoid when:
+
+- simple boolean conditions suffice
+- you have only 2--3 cases with no structural patterns
+
 Pattern matching provides a more expressive alternative to long `if-elif` chains.
+
+!!! tip "Tradeoff: Power vs Familiarity"
+    Pattern matching is more expressive than `if/elif`, but less familiar to many readers and easier to misuse (especially capture patterns). Use it when it makes structure **clearer**, not just shorter.
+
+---
+
+### Relationship to Other Constructs
+
+Pattern matching extends conditional logic along a spectrum:
+
+- `if` --- boolean decisions
+- ternary --- inline value selection
+- `match` --- structured dispatch
+
+It is not a replacement for `if`, but a **specialized tool** that can replace long `if/elif` chains when the logic depends on structure rather than simple conditions.
 
 ---
 

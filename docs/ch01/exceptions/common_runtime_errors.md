@@ -1,9 +1,14 @@
 
 # Common Runtime Errors
 
-Programs may encounter various runtime errors during execution.
+Runtime errors are not random---they reflect different kinds of failure. Most fall into a few fundamental categories:
 
-Understanding the most common errors helps programmers debug code quickly.
+1. **Type mismatch** --- wrong kind of object (`TypeError`)
+2. **Invalid value** --- right type, wrong data (`ValueError`)
+3. **Lookup failure** --- missing element (`IndexError`, `KeyError`)
+4. **State error** --- invalid operation (`ZeroDivisionError`, `AttributeError`)
+
+These categories reflect different kinds of assumptions being violated: type assumptions, value constraints, data availability, and valid program state. They map directly to how Python defines exception classes, making the hierarchy predictable rather than arbitrary. Understanding them helps predict and diagnose errors, rather than memorizing individual exception types.
 
 ```mermaid
 flowchart TD
@@ -172,6 +177,8 @@ Key ideas:
 * different exception types describe different problems
 * recognizing common exceptions helps with debugging
 * careful checks can prevent some errors
+
+These errors can be handled using `try/except`, discussed in the next section.
 
 
 ## Exercises

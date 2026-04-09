@@ -109,44 +109,14 @@ Output:
 
 ## 5. Generator Expressions
 
-A similar syntax with parentheses creates a **generator expression** — a lazy sequence that computes values on demand rather than building the full collection in memory.
+Generator expressions are the lazy counterpart of comprehensions. See [Generator Expressions](generator_expressions.md) for full coverage.
 
-```python
-total = sum(x * x for x in range(5))
-print(total)
-```
-
-Output:
-
-```text
-30
-```
-
-When passed directly as a function argument, the outer parentheses of the generator expression are shared with the function call. Generators are preferred over list comprehensions when the full list is not needed.
-
-There is no tuple comprehension syntax. Parentheses create a generator expression,
-not a tuple. To build a tuple from a comprehension-like expression, wrap explicitly:
+There is no tuple comprehension syntax. To build a tuple from a comprehension-like expression, wrap a generator explicitly:
 
 ```python
 squares_tuple = tuple(x * x for x in range(5))
 print(squares_tuple)
-print(type(squares_tuple))
 ```
-
-Output:
-```text
-(0, 1, 4, 9, 16)
-<class 'tuple'>
-```
-
-This is a deliberate Python design choice. Tuples represent fixed-size records — a
-coordinate `(x, y)`, a person `("Alice", 25)`, a return value — where the number of
-elements and their positions carry meaning. A comprehension generates an arbitrary
-number of values from a transformation, which is conceptually the job of a list, not
-a tuple. Python therefore provides no tuple comprehension syntax, making the
-distinction explicit: if you are generating a collection of uniform values, you
-probably want a list; if you happen to need a tuple for a specific API or performance
-reason, wrap a generator explicitly with `tuple()`.
 
 
 ## 6. Nested Comprehensions
@@ -276,7 +246,7 @@ squares = [x for x in range(5)]
 
 Comprehensions create collections concisely by combining an expression, one or more `for` clauses, and an optional `if` filter. List, set, dictionary, and generator forms all follow the same pattern — the only differences are the enclosing brackets and the presence of `:` for dictionaries. A trailing `if` selects which elements to include; an `if`/`else` before `for` transforms every element. Generator expressions are lazy and memory-efficient — prefer them when the full collection is not needed. Keep comprehensions simple: once they require nested loops with conditions, a regular loop is clearer.
 
-Comprehensions build on [Lists](lists.md), [Sets](sets.md), and [Dictionaries](dictionaries.md) covered earlier in this section. For deeper coverage of how these collections work internally, see [Hashing and Hash Tables](../../ch02/composites/hashing_deep_dive.md).
+Comprehensions build on [Lists](lists.md), [Sets](sets.md), and [Dictionaries](dictionaries.md) covered earlier in this section. For deeper coverage of how these collections work internally, see the hashing and hash tables topic in a later chapter.
 
 
 ## Exercises

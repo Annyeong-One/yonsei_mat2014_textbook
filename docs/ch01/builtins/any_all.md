@@ -1,7 +1,7 @@
 
 # any() and all()
 
-Python provides `any()` and `all()` to test whether any or all elements in an iterable satisfy a condition, which is useful for validating collections of boolean values in a single expression.
+These functions **evaluate predicates over collections**---`any()` returns `True` if at least one element is truthy; `all()` returns `True` only if every element is truthy. They are the built-in way to express "does anything match?" and "does everything match?" without writing a loop.
 
 ```mermaid
 flowchart LR
@@ -44,6 +44,20 @@ True
 
 ---
 
+## Practical Example
+
+```python
+# Check if any system has failed
+statuses = ["OK", "OK", "ERROR", "OK"]
+has_error = any(s == "ERROR" for s in statuses)
+print(has_error)   # True
+
+# Check if all students passed
+scores = [75, 82, 91, 68]
+all_passed = all(score >= 60 for score in scores)
+print(all_passed)  # True
+```
+
 ## Exercises
 
 **Exercise 1.**
@@ -56,7 +70,7 @@ print(all([1, "hello", True, [1]]))
 print(all([1, "hello", True, []]))
 ```
 
-Why does an empty list `[]` cause `all()` to return `False`? What truthiness rule is being applied?
+Why does the empty list `[]` inside the collection cause `all()` to return `False`? What truthiness rule is being applied to the *elements*?
 
 ??? success "Solution to Exercise 1"
     Output:

@@ -1,11 +1,15 @@
 
 # Exception Hierarchy
 
-Exceptions are objects that represent **errors or unusual conditions** that occur during program execution.
+Exceptions are Python's mechanism for handling **failure in programs**. At a high level, exceptions answer three questions:
 
-When an error occurs, Python raises an exception that interrupts normal execution.
+- **What went wrong?** (exception type)
+- **Where did it happen?** (traceback)
+- **What should happen next?** (handling)
 
-Understanding how exceptions are organized helps programmers interpret error messages and handle problems correctly.
+While control flow describes what happens when operations succeed, exceptions describe what happens when they fail. Exceptions are not just errors---they are a structured form of **control flow for failure cases**.
+
+Understanding how exceptions are organized helps interpret error messages and handle problems correctly.
 
 ```mermaid
 flowchart TD
@@ -65,14 +69,12 @@ Most user programs interact only with exceptions derived from `Exception`.
 
 ## 3. Why Exceptions Exist
 
-Exceptions allow programs to:
+Exceptions separate normal logic from error handling. Instead of checking for errors at every step, programs can:
 
-* detect errors
-* stop incorrect computations
-* report problems clearly
-* recover gracefully
+- assume operations succeed
+- handle failures only when they occur
 
-Without exceptions, programs would need complex error-checking code everywhere.
+This leads to clearer and more maintainable code. Without exceptions, programs would need complex error-checking code everywhere.
 
 ---
 
@@ -113,7 +115,9 @@ Some common exception families include:
 | lookup errors  | `IndexError`, `KeyError` |
 | runtime issues | `RuntimeError`           |
 
-These categories help organize Python’s exception system.
+The hierarchy is not just classification---it determines how exceptions are caught. Catching a parent class (e.g., `LookupError`) also catches all its subclasses (`IndexError`, `KeyError`). More specific exceptions should be handled before general ones.
+
+These exception types are explored in more detail in the next section on common runtime errors.
 
 ---
 
@@ -139,12 +143,13 @@ This occurs when accessing a sequence outside its valid range.
 
 Key ideas:
 
-* exceptions represent runtime errors
 * exceptions are objects derived from `Exception`
 * Python prints tracebacks to explain failures
-* different exception types represent different problems
+* different exception types represent different kinds of failure
 
-Understanding the exception hierarchy helps programmers diagnose errors effectively.
+The hierarchy allows programs to decide how broadly or narrowly to handle failure, balancing specificity with generality.
+
+In real programs, most complexity arises not from the success path, but from handling failures correctly. Exceptions make this complexity manageable by structuring failure into predictable and composable mechanisms. They allow programs to defer error handling decisions to higher levels, enabling separation between low-level operations and high-level control.
 
 
 ## Exercises

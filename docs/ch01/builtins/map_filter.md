@@ -1,6 +1,6 @@
 # map() and filter()
 
-`map()` applies a function to every element of an iterable. `filter()` keeps only the elements for which a function returns `True`. Both return lazy iterators — wrap with `list()` to materialise the result.
+These are **functional-style transformations**: `map()` applies a function to every element; `filter()` selects elements matching a predicate. Both return lazy iterators---use `list()` if you need all results at once. In modern Python, list comprehensions are often preferred for readability, but `map()` and `filter()` remain useful when passing an existing named function directly.
 
 ## map()
 
@@ -148,9 +148,23 @@ print(valid)   # ['user@example.com', 'test@test.org']
 
 `map()` transforms every element; `filter()` selects elements. Both are lazy — they produce one result at a time without building the full list in memory. List comprehensions are usually clearer for simple cases; `map()` and `filter()` shine when a named function is already available to pass directly.
 
-We return to `map()` and `filter()` as functional programming tools — alongside `reduce()` and function composition — in [map(), filter(), reduce()](../../ch05/functional/map_filter_reduce.md).
+We return to `map()` and `filter()` as functional programming tools --- alongside `reduce()` and function composition --- in a later chapter on functional programming.
 
 ---
+
+## Practical Example
+
+```python
+# Cleaning user input
+raw_names = ["  alice  ", "BOB", "  Charlie"]
+cleaned = list(map(lambda s: s.strip().title(), raw_names))
+print(cleaned)   # ['Alice', 'Bob', 'Charlie']
+
+# Filter valid emails
+emails = ["user@example.com", "invalid", "test@test.org"]
+valid = list(filter(lambda e: "@" in e and "." in e, emails))
+print(valid)   # ['user@example.com', 'test@test.org']
+```
 
 ## Exercises
 

@@ -1,7 +1,9 @@
 
 # print() and input()
 
-Python provides two fundamental built-in functions for interacting with users:
+These functions connect the program to its environment---`print()` sends data out, `input()` brings data in. They are the primary mechanism for console interaction.
+
+Unlike most built-ins which transform data and return results, these functions primarily produce **side effects**: `print()` writes to the output stream (and returns `None`), while `input()` reads from the input stream (and returns a string).
 
 | Function | Purpose |
 |---|---|
@@ -97,7 +99,7 @@ print("Hello", name)
 
 ## Important Note
 
-`input()` always returns a **string**.
+`input()` always returns a **string**, because interactive input is always text from the terminal. Parsing it into other types is the program's responsibility.
 
 Example
 
@@ -116,6 +118,18 @@ Convert values if needed:
 
 ```python
 age = int(input("Enter age: "))
+```
+
+---
+
+## Practical Example
+
+```python
+# Simple CLI program
+name = input("Enter your name: ")
+age = int(input("Enter your age: "))
+
+print(f"{name} will be {age + 1} next year.")
 ```
 
 ---

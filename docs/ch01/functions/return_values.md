@@ -1,9 +1,7 @@
 
 # Return Values
 
-Functions can compute results and send them back to the caller.
-
-This is done using the `return` statement.
+Return values define how results leave a function, completing the function's interface. The `return` statement not only produces a value but also immediately terminates the function's execution---making it a form of control flow as well as output.
 
 ## The Problem
 

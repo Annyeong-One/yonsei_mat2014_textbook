@@ -377,24 +377,36 @@ print(nums)
 The programmer expects `[1, 3, 5]` but gets `[1, 3, 5, 6]` -- `6` survives. Explain *why* modifying a list while iterating over it causes elements to be skipped. What is happening internally with the iterator's index? What is the correct approach?
 
 ??? success "Solution to Exercise 3"
-    The `for` loop uses an internal index that advances by 1 each iteration. When `nums.remove(2)` removes the element at index 1, all subsequent elements shift left. The element `3` (originally at index 2) moves to index 1. But the iterator advances to index 2, which now holds `4`. So `3` is never examined.
+    Modifying a list while iterating over it is unreliable because the loop advances by index while removals shift later elements left.
 
     Step by step:
-    - Iteration 0: index 0, sees `1` (odd, kept). List: `[1, 2, 3, 4, 5, 6]`
-    - Iteration 1: index 1, sees `2` (even, removed). List: `[1, 3, 4, 5, 6]`
-    - Iteration 2: index 2, sees `4` (even, removed). List: `[1, 3, 5, 6]`
-    - Iteration 3: index 3, sees `6` -- but wait, `6` is now at index 3, and the list has length 4. But after removing `4`, the list is `[1, 3, 5, 6]`. Index 3 gives `6` (even, removed). Actually, after removing `4`, the iterator at index 3 finds the list only has 3 elements... Let me retrace:
 
-    After removing `2`: `[1, 3, 4, 5, 6]`, iterator goes to index 2 -> `4`. Remove `4`: `[1, 3, 5, 6]`, iterator goes to index 3 -> `6`. Remove `6`... but the actual output is `[1, 3, 5, 6]` (6 survives), which means the iterator stops before reaching `6`. After removing `4`, list is `[1, 3, 5, 6]` (len 4), index goes to 3 -> `6`, removes it... The actual behavior depends on exact implementation.
+    - Start: `[1, 2, 3, 4, 5, 6]`
+    - The loop sees `1` --- keep it
+    - The loop sees `2` --- remove it --- list becomes `[1, 3, 4, 5, 6]`
+    - The loop moves to the next index, which now points to `4` rather than `3`
+    - The loop sees `4` --- remove it --- list becomes `[1, 3, 5, 6]`
+    - Again the loop advances past `5` due to shifting
+    - The result is unpredictable and should not be relied upon
 
-    **Correct approach:** iterate over a copy:
+    The key idea: removing an element changes the list while the loop is still using positions based on the old structure. Some elements are skipped because they shift into positions the loop has already passed.
+
+    **Correct approaches:**
+
+    Iterate over a copy:
 
     ```python
     nums = [1, 2, 3, 4, 5, 6]
-    for n in nums[:]:  # iterate over a copy
+    for n in nums[:]:
         if n % 2 == 0:
             nums.remove(n)
     print(nums)  # [1, 3, 5]
     ```
 
-    Or use a list comprehension: `nums = [n for n in nums if n % 2 != 0]`.
+    Or build a new list:
+
+    ```python
+    nums = [1, 2, 3, 4, 5, 6]
+    nums = [n for n in nums if n % 2 != 0]
+    print(nums)  # [1, 3, 5]
+    ```

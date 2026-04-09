@@ -1,46 +1,56 @@
-# Chapter 4: Memory and Performance
+# Chapter 3: Object Model and Binding
 
-Understanding how Python manages memory and how to measure performance is essential for writing efficient programs. This chapter examines Python's memory architecture, reference counting, garbage collection, and profiling tools.
+This chapter explores Python's object model in depth, covering how names bind to objects, CPython implementation details, numeric and string internals, and practical patterns for writing Pythonic code.
 
-## 4.1 Memory Architecture
+## 3.1 Language Foundations
 
-- [Stack vs Heap Overview](memory/stack_heap_overview.md)
-- [Frame Objects](memory/frame_objects.md)
-- [Heap Object Storage](memory/heap_storage.md)
-- [Stack-Heap Interaction](memory/stack_heap_interaction.md)
-- [Recursion and Stack Growth](memory/recursion_stack.md)
-- [Object Identity Stability](memory/identity_stability.md)
-- [Buffer Reallocation](memory/buffer_reallocation.md)
-- [Stack Overflow](memory/stack_overflow.md)
-- [Python vs C Memory](memory/python_vs_c_memory.md)
+- [CPython vs Language Spec](foundations/cpython_vs_language.md)
+- [Key Terms Glossary](foundations/terminology.md)
+- [Everything is an Object](foundations/everything_is_object.md)
+- [Methods and Attributes](foundations/methods_and_attributes.md)
+- [Python Execution Model](foundations/python_execution.md)
 
-## 4.2 Reference Counting and GC
+## 3.2 Python's Object Model
 
-- [Memory Management Overview](gc/memory_management_overview.md)
-- [Reference Counting](gc/reference_counting.md)
-- [Garbage Collection](gc/garbage_collection.md)
-- [Memory Leaks](gc/memory_leaks.md)
+- [Names vs Objects](objects/names_vs_objects.md)
+- [Identity Type Value](objects/identity_type_value.md)
+- [PyObject Structure](objects/pyobject_structure.md)
+- [Immutable vs Mutable](objects/immutable_mutable.md)
 
-## 4.3 Weak References
+## 3.3 Names, Binding, and Assignment
 
-- [Weak Reference Basics](gc/weak_references.md)
-- [Weak Reference Patterns](gc/weak_ref_patterns.md)
+- [Formal Binding Model](binding/formal_model.md)
+- [Assignment Process](binding/assignment_process.md)
+- [Assignment vs Mutation](binding/assignment_vs_mutation.md)
+- [Identity and Equality](binding/identity_equality.md)
+- [Unpacking and Destructuring](binding/unpacking.md)
+- [Namespace Hierarchies](binding/namespace_hierarchies.md)
+- [Namespace Implementation](binding/namespace_implementation.md)
+- [Complex Binding Scenarios](binding/complex_scenarios.md)
 
-## 4.4 Advanced Memory Topics
+## 3.4 CPython Implementation Details
 
-- [Caching Strategies](advanced_memory/caching_strategies.md)
-- [Memory Management](advanced_memory/memory_management.md)
-- [Memory Optimization](advanced_memory/memory_optimization.md)
-- [\_\_slots\_\_](advanced_memory/slots.md)
-- [sys.getsizeof()](advanced_memory/getsizeof.md)
-- [tracemalloc](advanced_memory/tracemalloc.md)
+- [Impl vs Guarantees](implementation/guarantees_vs_details.md)
+- [Integer Interning](implementation/integer_interning.md)
+- [String Interning](implementation/string_interning.md)
+- [Object Interning](implementation/object_interning.md)
 
-## 4.5 Performance and Profiling
+## 3.5 Advanced Numeric Internals
 
-- [Performance and Memory](practical/performance_memory.md)
-- [cProfile Module](practical/cprofile.md)
-- [line_profiler](practical/line_profiler.md)
-- [memory_profiler](practical/memory_profiler.md)
-- [Benchmarking Methodology](practical/benchmarking.md)
-- [Optimization Strategies](practical/optimization_strategies.md)
-- [Profiling Visualization (snakeviz)](practical/profiling_visualization.md)
+- [int Logical Operations](numerics/int_logical_operations.md)
+- [int Two's Complement](numerics/int_twos_complement.md)
+- [float Machine Precision](numerics/float_machine_precision.md)
+- [float Numerical Stability](numerics/float_numerical_stability.md)
+
+## 3.6 Advanced String Internals
+
+- [str Unpacking](strings/str_unpacking.md)
+- [str Python vs C](strings/str_python_vs_c.md)
+
+## 3.7 Practical Implications
+
+- [Pythonic Patterns](practical/pythonic_patterns.md)
+- [Anti-Patterns and Pitfalls](practical/anti_patterns.md)
+- [Namespace Internals](practical/namespace_internals.md)
+- [Code Quality](practical/code_quality.md)
+- [Examples and Interview](practical/examples_interview.md)

@@ -1,9 +1,9 @@
 
 # Exception Handling
 
-Python allows programs to **catch and handle exceptions** using `try` and `except`.
+Exception handling is a form of control flow that separates normal logic from error recovery. This separation allows programs to remain clean while still handling errors correctly.
 
-This allows a program to recover from errors instead of crashing.
+Python allows programs to **catch and handle exceptions** using `try` and `except`.
 
 ```mermaid
 flowchart TD
@@ -118,11 +118,12 @@ finally:
 
 ---
 
-## 7. Good Practices
+## 7. Design Principles
 
-* catch only exceptions you expect
-* keep `try` blocks small
-* avoid using `except:` without specifying types
+- Catch only exceptions you expect --- avoid hiding bugs
+- Keep `try` blocks small --- isolate failure points
+- Prefer specific exceptions --- communicate intent clearly
+- Avoid bare `except:` --- it catches unintended signals like `KeyboardInterrupt`
 
 ---
 
@@ -136,7 +137,9 @@ Key ideas:
 * `finally` always executes
 * `else` runs when no error occurs
 
-Exception handling allows programs to recover gracefully from unexpected situations.
+Exception handling allows programs to recover gracefully from unexpected situations. This reflects Python's EAFP philosophy: write code for the common (successful) case, and handle exceptions for uncommon (failure) cases. EAFP keeps the success path clean while isolating failure handling separately.
+
+Exceptions are raised either by Python or explicitly using `raise`, covered next.
 
 
 ## Exercises

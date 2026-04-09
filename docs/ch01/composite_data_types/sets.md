@@ -1,7 +1,7 @@
 
 # Sets
 
-A `set` is an **unordered collection of unique elements**.
+A `set` is an **unordered collection of unique elements**. Sets trade order for fast membership testing and uniqueness guarantees.
 
 Sets are useful when the main concern is not order, but **membership and uniqueness**.
 
@@ -251,12 +251,24 @@ Output:
 TypeError: unhashable type: 'list'
 ```
 
-Python also provides `frozenset`, an immutable variant that is itself hashable and can be stored inside another set. See [Hashing and Hash Tables](../../ch02/composites/hashing_deep_dive.md) for a full explanation.
+Python also provides `frozenset`, an immutable variant that is itself hashable and can be stored inside another set. Hashing is covered in more detail in a later chapter.
 
 ---
 
 
-## 8. Summary
+## 8. When to Use a Set
+
+Use a set when:
+
+- **uniqueness** matters --- duplicates should be automatically eliminated
+- **membership testing** is frequent --- `in` on a set is O(1), versus O(n) on a list
+- **order is not semantically important** --- you care about *what* is present, not *where*
+
+Use a list instead when order matters or when you need to store duplicate values.
+
+---
+
+## 9. Summary
 
 Key ideas:
 

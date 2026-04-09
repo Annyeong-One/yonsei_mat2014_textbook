@@ -1,6 +1,6 @@
 # Type Hints
 
-Python allows functions to include **type hints** that describe the expected types of parameters and return values.
+Type hints define a function's expected interface, forming a contract between the function and its callers. They make the expected types of inputs and outputs explicit.
 
 ## The Problem
 
@@ -207,4 +207,4 @@ What is the difference between `Optional[int]` and `Union[int, None]`? Why is ex
 
     Expressing these types is useful because it communicates the **contract** of the function: what it accepts and what it returns, including edge cases like `None`. This helps other developers use the function correctly and helps static analysis tools verify that callers handle all possible return types (e.g., checking for `None` before using the result).
 
-Next: [Function Examples](function_examples.md).
+Next: [Docstrings](docstrings.md).

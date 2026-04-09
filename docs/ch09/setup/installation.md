@@ -1,162 +1,168 @@
-# Installation and Import
+# Installation
 
-Matplotlib is the foundational plotting library for Python scientific computing.
+## pip Install
 
----
+### 1. Basic Install
 
-## Installation
-
-Install via pip:
+Install NumPy using Python's package manager.
 
 ```bash
-pip install matplotlib
+pip install numpy
 ```
 
-Or via conda:
+### 2. Specific Version
+
+Install a specific version if needed.
 
 ```bash
-conda install matplotlib
+pip install numpy==1.26.0
 ```
 
----
+### 3. Upgrade Existing
 
-## Import Convention
+Upgrade to the latest version.
 
-The standard import convention uses `plt` as the alias:
-
-```python
-import matplotlib.pyplot as plt
+```bash
+pip install --upgrade numpy
 ```
 
-For numerical data, NumPy is typically imported alongside:
+## conda Install
+
+### 1. Basic Install
+
+Install NumPy using Anaconda/Miniconda.
+
+```bash
+conda install numpy
+```
+
+### 2. From conda-forge
+
+Install from the conda-forge channel.
+
+```bash
+conda install -c conda-forge numpy
+```
+
+### 3. Specific Version
+
+```bash
+conda install numpy=1.26.0
+```
+
+## Virtual Environment
+
+### 1. Create Environment
+
+Isolate NumPy installation in a virtual environment.
+
+```bash
+# Using venv
+python -m venv myenv
+
+# Activate (Linux/macOS)
+source myenv/bin/activate
+
+# Activate (Windows)
+myenv\Scripts\activate
+```
+
+### 2. Install in venv
+
+```bash
+# After activation
+pip install numpy
+```
+
+### 3. conda Environment
+
+```bash
+# Create with NumPy
+conda create -n myenv numpy
+
+# Activate
+conda activate myenv
+```
+
+## Platform Support
+
+### 1. Cross-Platform
+
+NumPy works on all major operating systems.
 
 ```python
-import matplotlib.pyplot as plt
 import numpy as np
+import platform
+
+def main():
+    print(f"OS: {platform.system()}")
+    print(f"NumPy version: {np.__version__}")
+
+if __name__ == "__main__":
+    main()
 ```
 
----
+### 2. Supported Systems
 
-## Version Check
+- **Windows**: Windows 10/11, x64
+- **macOS**: Intel and Apple Silicon (M1/M2/M3)
+- **Linux**: Most distributions, x64 and ARM
 
-```python
-import matplotlib
-print(matplotlib.__version__)
+### 3. Python Versions
+
+NumPy supports recent Python versions. Check compatibility:
+
+```bash
+# Check your Python version
+python --version
+
+# NumPy 1.26+ requires Python 3.9+
 ```
-
----
-
-## Backend Configuration
-
-Matplotlib uses backends for rendering. Common backends include:
-
-```python
-import matplotlib
-matplotlib.use('TkAgg')  # Before importing pyplot
-```
-
-In Jupyter notebooks:
-
-```python
-%matplotlib inline    # Static images
-%matplotlib notebook  # Interactive
-```
-
----
-
-## Verifying Installation
-
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-
-x = np.linspace(0, 2 * np.pi, 100)
-y = np.sin(x)
-
-plt.plot(x, y)
-plt.show()
-```
-
-If a plot window appears (or renders inline in Jupyter), the installation is successful.
-
----
-
-## Key Takeaways
-
-- Install with `pip install matplotlib` or `conda install matplotlib`
-- Import as `import matplotlib.pyplot as plt`
-- Configure backend before importing pyplot if needed
 
 
 ---
 
 ## Exercises
 
-**Exercise 1.** Write the standard import statement for Matplotlib's pyplot module and NumPy. Then write code that checks and prints the Matplotlib version.
+**Exercise 1.** Install NumPy using pip and verify the installation by printing the version number. What command do you run?
 
 ??? success "Solution to Exercise 1"
     ```python
-    import matplotlib.pyplot as plt
     import numpy as np
-
-    np.random.seed(42)
-    # Solution code depends on the specific exercise
-    x = np.linspace(0, 2 * np.pi, 100)
-    fig, ax = plt.subplots()
-    ax.plot(x, np.sin(x))
-    ax.set_title('Example Solution')
-    plt.show()
+    print(np.__version__)
     ```
 
-    See the content of this page for the relevant API details to construct the full solution.
+    Install with: `pip install numpy`
 
 ---
 
-**Exercise 2.** Explain the difference between `pip install matplotlib` and `conda install matplotlib`. When would you use each?
+**Exercise 2.** Write a script that checks if NumPy is installed and prints a helpful error message if it is not.
 
 ??? success "Solution to Exercise 2"
-    See the explanation in the main content of this page for the key concepts. The essential idea is to understand the API parameters and their effects on the resulting visualization.
-
----
-
-**Exercise 3.** Write code that creates a simple test plot to verify Matplotlib is installed correctly. Plot $y = \sin(x)$ for $x \in [0, 2\pi]$.
-
-??? success "Solution to Exercise 3"
     ```python
-    import matplotlib.pyplot as plt
-    import numpy as np
-
-    np.random.seed(42)
-    fig, axes = plt.subplots(1, 2, figsize=(12, 5))
-
-    x = np.linspace(0, 2 * np.pi, 100)
-    axes[0].plot(x, np.sin(x))
-    axes[0].set_title('Left Subplot')
-
-    axes[1].plot(x, np.cos(x))
-    axes[1].set_title('Right Subplot')
-
-    plt.tight_layout()
-    plt.show()
+    try:
+        import numpy as np
+        print(f"NumPy {np.__version__} is installed")
+    except ImportError:
+        print("NumPy is not installed. Run: pip install numpy")
     ```
 
-    Adapt this pattern to the specific requirements of the exercise.
+---
+
+**Exercise 3.** Explain the difference between `pip install numpy` and `conda install numpy`. When might you prefer one over the other?
+
+??? success "Solution to Exercise 3"
+    `pip install numpy` installs from PyPI and works in any Python environment. `conda install numpy` uses Anaconda's package manager, which can install optimized BLAS/LAPACK libraries automatically, potentially giving better performance for linear algebra operations. Use `conda` if you are in a conda environment; use `pip` otherwise.
 
 ---
 
-**Exercise 4.** List three Matplotlib backends and explain when you would use each. Write one line of code showing how to set the backend.
+**Exercise 4.** Import NumPy and create a simple array `[1, 2, 3]`. Print both the array and its type.
 
 ??? success "Solution to Exercise 4"
     ```python
-    import matplotlib.pyplot as plt
     import numpy as np
 
-    np.random.seed(42)
-    x = np.linspace(0, 10, 100)
-    fig, ax = plt.subplots()
-    ax.plot(x, np.sin(x), 'b-', lw=2)
-    ax.set_title('Solution')
-    plt.show()
+    arr = np.array([1, 2, 3])
+    print(arr)        # [1 2 3]
+    print(type(arr))  # <class 'numpy.ndarray'>
     ```
-
-    Refer to the code examples in the main content for the specific API calls needed.

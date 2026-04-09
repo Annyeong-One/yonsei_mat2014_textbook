@@ -1,213 +1,159 @@
-# Chapter 10: Pandas
+# Chapter 9: Matplotlib
 
-This chapter covers pandas, the essential data analysis library in Python, including Series and DataFrame objects, data loading, filtering, manipulation, merging, reshaping, groupby, time series, and performance optimization.
+This chapter covers Matplotlib, the core plotting library in Python, including figure and axes objects, plot types (line, scatter, bar, histogram, heatmap, 3D), customization, layout management, and OOP design.
 
-## 10.1 Overview
+## 9.1 Introduction
 
-- [Arrays vs DataFrames](overview/arrays_vs_dataframes.md)
+- [Visualization Libraries](intro/visualization_libraries.md)
+- [Python Data Science Ecosystem](intro/data_science_ecosystem.md)
+- [Three Ways of Drawing](intro/three_ways_drawing.md)
+- [Five Major Objects](intro/five_major_objects.md)
+- [Interactive Mode](intro/interactive_mode.md)
 
-## 10.2 Core pandas Objects
+## 9.2 Getting Started
 
-- [Series](core/series.md)
-- [DataFrame](core/dataframe.md)
-- [Series vs DataFrame](core/series_vs_dataframe.md)
-- [Index Objects](core/index_objects.md)
-- [Hierarchical Indexing](core/hierarchical_indexing.md)
-- [Indexing and Selection](core/indexing.md)
+- [Installation and Import](setup/installation.md)
+- [OOP vs Pyplot Style](fundamentals/matplotlib_oop_vs_pyplot.md)
+- [plt.subplot vs plt.subplots](setup/subplot_vs_subplots.md)
+- [Style Sheets](setup/style_sheets.md)
 
-## 10.3 Creating DataFrames
+## 9.3 Figure Object
 
-- [DataFrame Creation](creation/dataframe_creation.md)
-- [Series Creation](creation/series_creation.md)
-- [Loading CSV Files](creation/read_csv.md)
-- [Loading Excel and JSON](creation/read_excel_json.md)
-- [Loading SQL and Parquet](creation/read_sql_parquet.md)
-- [Saving DataFrames](creation/saving.md)
+- [Creating Figures](figure/creating_figures.md)
+- [Figure Styles](figure/figure_styles.md)
+- [Figure Methods](figure/figure_methods.md)
+- [Saving Figures](figure/saving_figures.md)
 
-## 10.4 DataFrame Inspection
+## 9.4 Axes Object
 
-- [Attributes](inspection/attributes.md)
-- [Basic Methods](inspection/basic_methods.md)
-- [Statistical Methods](inspection/statistical_methods.md)
-- [Value Counts and Unique](inspection/value_counts.md)
-- [Memory Usage](inspection/memory_usage.md)
+- [Axes Basics](axes/axes_basics.md)
+- [Creating Axes](axes/creating_axes.md)
+- [Axes Shape Behavior](axes/axes_shape.md)
+- [Unpacking Axes](axes/unpacking_axes.md)
+- [add_subplot vs subplots](axes/add_subplot_vs_subplots.md)
 
-## 10.5 Filtering Data
+## 9.5 Layout
 
-- [Boolean Indexing](filtering/boolean_indexing.md)
-- [query Method](filtering/query.md)
-- [isin Method](filtering/isin.md)
-- [between Method](filtering/between.md)
-- [String Methods](filtering/string_methods.md)
-- [eval Method](filtering/eval.md)
-- [select_dtypes Method](filtering/select_dtypes.md)
+- [Subplots and Grids](layout/subplots.md)
+- [GridSpec](layout/gridspec.md)
+- [subplot_mosaic](layout/subplot_mosaic.md)
+- [Tight Layout](layout/tight_layout.md)
 
-## 10.6 Data Manipulation
+## 9.6 Line Plot
 
-- [Renaming Axes](manipulation/renaming.md)
-- [Type Conversion with astype](manipulation/astype.md)
-- [map Method](manipulation/map.md)
-- [apply Method](manipulation/apply.md)
-- [apply with axis](manipulation/apply_axis.md)
-- [Sorting by Index and Values](manipulation/sorting.md)
-- [assign Method](manipulation/assign.md)
-- [drop Method](manipulation/drop.md)
-- [drop_duplicates Method](manipulation/drop_duplicates.md)
-- [clip Method](manipulation/clip.md)
+- [Basic Line Plot](line_plot/basic_line_plot.md)
+- [Data Input Types](line_plot/data_input_types.md)
+- [Line Styles and Colors](line_plot/line_styles_colors.md)
+- [Markers](line_plot/markers.md)
+- [Labels and Legends](line_plot/labels_legends.md)
+- [Error Bars](line_plot/errorbar.md)
 
-## 10.7 Handling Missing Data
+## 9.7 Axes Customization
 
-- [Detecting Missing Values](missing/detecting.md)
-- [fillna Method](missing/fillna.md)
-- [fillna Keywords](missing/fillna_keywords.md)
-- [interpolate Method](missing/interpolate.md)
-- [dropna Method](missing/dropna.md)
-- [dropna Keywords](missing/dropna_keywords.md)
-- [replace Method](missing/replace.md)
+- [Title and Labels](customization/title_labels.md)
+- [Limits and Ticks](customization/limits_ticks.md)
+- [Tick Labels](customization/tick_labels.md)
+- [Grid and Axis](customization/grid_axis.md)
+- [Logarithmic Scales](customization/log_scales.md)
 
-## 10.8 Aggregations
+## 9.8 Spine and Axis
 
-- [Basic Aggregations](aggregation/basic_aggregations.md)
-- [agg Method](aggregation/agg_method.md)
-- [agg with Multiple Functions](aggregation/agg_multiple.md)
+- [Spine Customization](spine_axis/spine_customization.md)
+- [Tick Control](spine_axis/tick_control.md)
 
-## 10.9 Accessor Methods
+## 9.9 Text and Annotations
 
-- [String Accessor (str)](accessors/str_accessor.md)
-- [String Methods Reference](accessors/str_methods.md)
-- [Datetime Accessor (dt)](accessors/dt_accessor.md)
-- [Datetime Methods Reference](accessors/dt_methods.md)
-- [Categorical Accessor (cat)](accessors/cat_accessor.md)
+- [Text Object](text/text_object.md)
+- [Adding Text](text/adding_text.md)
+- [Annotations](text/annotations.md)
+- [LaTeX Support](text/latex_support.md)
 
-## 10.10 Categorical Data
+## 9.10 Axes Enhancements
 
-- [Introduction to Categoricals](categorical/introduction.md)
-- [Creating Categoricals](categorical/creating.md)
-- [Memory Efficiency](categorical/memory_efficiency.md)
-- [Ordered Categoricals](categorical/ordered.md)
-- [Categorical Operations](categorical/operations.md)
-- [Binning (cut and qcut)](categorical/binning.md)
-- [One-Hot Encoding (get_dummies)](categorical/encoding.md)
+- [Twin Axes](advanced/twin_axes.md)
+- [Secondary Axes](advanced/secondary_axes.md)
+- [Fill and Fill Between](advanced/fill_between.md)
+- [Axhline and Axvline](advanced/axhline_axvline.md)
+- [Animation (FuncAnimation)](advanced/animation.md)
+- [Polar Plots](advanced/polar_plots.md)
+- [Quiver Plots](advanced/quiver_plots.md)
 
-## 10.11 Merging DataFrames
+## 9.11 Histogram
 
-- [merge vs join](merge/merge_vs_join.md)
-- [merge Method](merge/merge_method.md)
-- [Keyword - on](merge/keyword_on.md)
-- [Keyword - left_on right_on](merge/keyword_left_right_on.md)
-- [Keyword - how](merge/keyword_how.md)
-- [Keyword - suffixes](merge/keyword_suffixes.md)
-- [Keyword - indicator](merge/keyword_indicator.md)
-- [Self Merge](merge/self_merge.md)
-- [Cross Merge](merge/cross_merge.md)
-- [merge_asof Method](merge/merge_asof.md)
+- [Basic Histogram](histogram/basic_histogram.md)
+- [Histogram Keywords](histogram/histogram_keywords.md)
+- [Return Values](histogram/return_values.md)
+- [Distribution Fitting](histogram/distribution_fitting.md)
 
-## 10.12 Joining DataFrames
+## 9.12 Box Plot
 
-- [join Method](join/join_method.md)
-- [Keyword - how](join/keyword_how.md)
-- [Keyword - on and lsuffix/rsuffix](join/keyword_on_suffixes.md)
-- [Multi-Index Joins](join/multiindex_joins.md)
-- [join vs merge](join/join_vs_merge.md)
+- [Basic Box Plot](box_plot/basic_box_plot.md)
+- [Box Plot Anatomy](box_plot/box_plot_anatomy.md)
+- [Box Plot Keywords](box_plot/box_plot_keywords.md)
+- [Styling and Colors](box_plot/styling_colors.md)
+- [Violin Plot](box_plot/violin_plot.md)
+- [Combined Visualizations](box_plot/combined_visualizations.md)
 
-## 10.13 Concatenating DataFrames
+## 9.13 Scatter Plot
 
-- [concat Method](concat/concat_method.md)
-- [Keyword - axis](concat/keyword_axis.md)
-- [Keyword - ignore_index](concat/keyword_ignore_index.md)
-- [Keyword - keys and names](concat/keyword_keys_names.md)
-- [Keyword - join and verify_integrity](concat/keyword_join_verify.md)
-- [concat vs append vs merge](concat/concat_vs_append_merge.md)
+- [Basic Scatter Plot](scatter_plot/basic_scatter_plot.md)
+- [Scatter Plot Keywords](scatter_plot/scatter_plot_keywords.md)
+- [Color Mapping](scatter_plot/color_mapping.md)
 
-## 10.14 Reshaping Data
+## 9.14 Bar Chart
 
-- [melt Method](reshape/melt.md)
-- [pivot vs melt](reshape/pivot_vs_melt.md)
-- [stack Method](reshape/stack.md)
-- [unstack Method](reshape/unstack.md)
-- [stack vs unstack](reshape/stack_vs_unstack.md)
-- [explode Method](reshape/explode.md)
+- [Basic Bar Chart](bar_chart/basic_bar_chart.md)
+- [Bar Chart Keywords](bar_chart/bar_chart_keywords.md)
+- [Grouped and Stacked](bar_chart/grouped_stacked.md)
 
-## 10.15 GroupBy
+## 9.15 Pie Chart
 
-- [GroupBy Object](groupby/groupby_object.md)
-- [Iteration with GroupBy](groupby/iteration.md)
-- [get_group Method](groupby/get_group.md)
-- [GroupBy Aggregations](groupby/aggregations.md)
-- [transform Method](groupby/transform.md)
-- [rank Method](groupby/rank.md)
-- [filter Method](groupby/filter.md)
-- [Multi-Level Grouping](groupby/multi_level.md)
+- [Basic Pie Chart](pie_chart/basic_pie_chart.md)
+- [Pie Chart Keywords](pie_chart/pie_chart_keywords.md)
+- [Customization Examples](pie_chart/customization.md)
 
-## 10.16 Pivot Tables
+## 9.16 Heatmap and Colormaps
 
-- [pivot Method](pivot/pivot_method.md)
-- [pivot_table Method](pivot/pivot_table_method.md)
-- [pivot vs pivot_table](pivot/pivot_vs_pivot_table.md)
+- [Heatmaps with imshow](heatmap/imshow_heatmap.md)
+- [Heatmaps with pcolormesh](heatmap/pcolormesh_heatmap.md)
+- [Colormap Selection](heatmap/colormap_selection.md)
+- [Colorbars](heatmap/colorbars.md)
 
-## 10.17 Time Series
+## 9.17 2D Density Plots
 
-- [DatetimeIndex](timeseries/datetimeindex.md)
-- [Creating Date Ranges](timeseries/date_ranges.md)
-- [Parsing Dates](timeseries/parsing_dates.md)
-- [Time Indexing](timeseries/time_indexing.md)
-- [Resampling](timeseries/resampling.md)
-- [shift and diff](timeseries/shift_diff.md)
-- [pct_change Method](timeseries/pct_change.md)
+- [Axes Method - hist2d](density_2d/hist2d.md)
+- [Axes Method - hexbin](density_2d/hexbin.md)
+- [Kernel Density Estimation](density_2d/kde_imshow.md)
 
-## 10.18 Window Functions
+## 9.18 Image Plot
 
-- [Window Functions Overview](window/overview.md)
-- [rolling Method](window/rolling.md)
-- [expanding Method](window/expanding.md)
-- [ewm Method](window/ewm.md)
-- [Window with GroupBy](window/window_groupby.md)
+- [Image I/O](image/image_io.md)
+- [Image Processing](image/processing.md)
+- [Applications](image/applications.md)
 
-## 10.19 Panel Data
+## 9.19 Contour Plot
 
-- [Introduction to Panel Data](panel/introduction.md)
-- [Building Panel DataFrames](panel/building.md)
-- [Accessing Panel Data](panel/accessing.md)
-- [Panel Aggregations](panel/aggregations.md)
-- [Reshaping Panel Data](panel/reshaping.md)
+- [Axes Method - contour](contour_plot/contour.md)
+- [Axes Method - contourf](contour_plot/contourf.md)
+- [Axes Method - clabel](contour_plot/clabel.md)
+- [Contour and Surface](contour_plot/contour_surface.md)
 
-## 10.20 Performance Optimization
+## 9.20 3D Plot
 
-- [Memory Optimization](performance/memory_optimization.md)
-- [Vectorization](performance/vectorization.md)
-- [Chunked Processing](performance/chunked_processing.md)
-- [Introduction to Dask](performance/dask_intro.md)
+- [Creating 3D Axes](3d_plot/creating_3d_axes.md)
+- [Axes Method - plot (3D Lines)](3d_plot/plot_3d.md)
+- [Axes Method - plot_surface](3d_plot/plot_surface.md)
+- [Axes Method - view_init](3d_plot/view_init.md)
+- [Complex Function Visualization](3d_plot/complex_functions.md)
 
-## 10.21 Common Pitfalls
+## 9.21 Practical Examples
 
-- [View vs Copy](pitfalls/view_vs_copy.md)
-- [Chained Assignment](pitfalls/chained_assignment.md)
-- [Index Misalignment](pitfalls/index_misalignment.md)
-- [Unexpected NaNs](pitfalls/unexpected_nans.md)
-- [Performance Traps](pitfalls/performance_traps.md)
+- [Financial Charts](examples/financial_charts.md)
+- [Brownian Motion](examples/brownian_motion.md)
+- [Mathematical Functions](examples/math_functions.md)
+- [Statistical Distributions](examples/statistical_distributions.md)
 
-## 10.22 Practical Examples
+## 9.22 Matplotlib OOP Design
 
-- [Financial Data Workflow](examples/yfinance_workflow.md)
-- [SP500 Analysis](examples/sp500_analysis.md)
-- [LeetCode Patterns](examples/leetcode_patterns.md)
-- [LeetCode Series Problems](examples/leetcode_series.md)
-- [LeetCode DataFrame Problems](examples/leetcode_dataframe.md)
-
-## 10.23 Pandas OOP Design
-
-- [Pandas Series](oop/pandas_series.md)
-- [Pandas DataFrame](oop/pandas_dataframe.md)
-- [Pandas Index Objects](oop/pandas_index.md)
-- [Pandas MultiIndex](oop/pandas_multiindex.md)
-- [Pandas Method Chaining](oop/pandas_method_chaining.md)
-
-## 10.24 Pandas Plotting
-
-- [plot Method](plotting/plot_method.md)
-- [plot Keywords](plotting/plot_keywords.md)
-- [Plot Types (kind)](plotting/plot_kinds.md)
-- [hist Method](plotting/hist.md)
-- [boxplot Method](plotting/boxplot.md)
-- [scatter_matrix](plotting/scatter_matrix.md)
-- [Bar Plots](plotting/bar_plots.md)
+- [Matplotlib Hierarchy](oop/matplotlib_hierarchy.md)
+- [Matplotlib Artists](oop/matplotlib_artists.md)

@@ -1,7 +1,7 @@
 
 # min(), max(), sum()
 
-These built-ins perform basic numeric aggregation.
+These built-ins are **reductions**---they collapse a collection down to a single value.
 
 ```mermaid
 flowchart LR
@@ -63,6 +63,17 @@ Output
 
 ---
 
+## Practical Example
+
+```python
+# Sales analysis
+sales = [1200, 800, 1500, 950]
+
+print("Highest:", max(sales))
+print("Lowest:", min(sales))
+print("Total:", sum(sales))
+```
+
 ## Exercises
 
 **Exercise 1.**
@@ -116,7 +127,7 @@ Why does `sum([[1, 2], [3, 4]], [])` produce `[1, 2, 3, 4]`? Why does `sum()` no
 
     `sum([1, 2, 3], 10)` starts from `10` and adds each element: `10 + 1 + 2 + 3 = 16`.
 
-    `sum([[1, 2], [3, 4]], [])` starts from `[]` and concatenates: `[] + [1, 2] + [3, 4] = [1, 2, 3, 4]`. This works because `+` is defined for lists (concatenation).
+    `sum([[1, 2], [3, 4]], [])` starts from `[]` and concatenates: `[] + [1, 2] + [3, 4] = [1, 2, 3, 4]`. This works because `+` is defined for lists (concatenation). However, this pattern is **not recommended** for flattening lists---it is O(n^2) because each `+` creates a new list. Use a comprehension (`[x for sub in lists for x in sub]`) or `itertools.chain.from_iterable()` instead.
 
     `sum(["a", "b"], "")` raises `TypeError: sum() can't sum strings [use ''.join(seq) instead]`. Python explicitly forbids string summation because it is O(n^2) -- each `+` creates a new string. `"".join(seq)` is the correct O(n) approach. Python blocks the inefficient path and suggests the efficient one.
 

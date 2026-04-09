@@ -158,7 +158,7 @@ Output:
 TypeError: unhashable type: 'list'
 ```
 
-See [Hashing and Hash Tables](../../ch02/composites/hashing_deep_dive.md) for a full explanation of how hashing works.
+Hashing is covered in more detail in a later chapter.
 
 ---
 
@@ -250,7 +250,7 @@ size. This is why lookup stays O(1) whether the dictionary has 10 entries or 10 
 
 How Python converts a key like `"Alice"` into a position is the job of the **hash
 function** — covered in detail in
-[Hashing and Hash Tables](../../ch02/composites/hashing_deep_dive.md).
+Hashing and hash tables are covered in a later chapter.
 
 ---
 
@@ -345,17 +345,29 @@ KeyError: 0
 ---
 
 
-## 9. Summary
+## 9. When to Use a Dictionary
+
+Use a dictionary when:
+
+- you need to associate **keys with values** (name → score, id → record)
+- **fast lookup by key** is important --- O(1) average case
+- the data is naturally structured as **key-value pairs** rather than a flat sequence
+
+Use a list instead when data is accessed by position. Use a set when you only need membership testing without associated values.
+
+---
+
+## 10. Summary
 
 Key ideas:
 
 - dictionaries map keys to values
 - values are accessed by keys, not positions
 - dictionaries are mutable and maintain insertion order
-- keys must be hashable — lists cannot be keys
+- keys must be hashable --- lists cannot be keys
 - dictionaries are designed for O(1) lookup
 
-Dictionaries are one of Python's most powerful tools for representing structured information. Dictionary values can themselves be dictionaries — nested structures are covered in [Nested Data Structures](../../ch02/composites/nested_structures.md). Dictionaries can also be built concisely using comprehensions — see [Comprehensions](comprehensions.md). This page follows [Sets](sets.md) in the composite data types section.
+Dictionaries are one of Python's most powerful tools for representing structured information. Dictionary values can themselves be dictionaries — nested structures are covered in a later chapter. Dictionaries can also be built concisely using comprehensions — see [Comprehensions](comprehensions.md). This page follows [Sets](sets.md) in the composite data types section.
 
 
 ## Exercises

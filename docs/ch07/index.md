@@ -1,129 +1,127 @@
-# Chapter 7: Standard Library and Tools
+# Chapter 6: OOP
 
-This chapter covers essential Python standard library modules and development tools, including collections, itertools, typing, datetime, json, logging, regex, debugging, and testing.
+This chapter provides a comprehensive guide to object-oriented programming in Python, from foundational concepts through advanced topics like descriptors, metaclasses, dataclasses, and design patterns.
 
-## 7.1 collections Module
+## 6.1 OOP Foundations
 
-- [collections Overview](collections/collections_overview.md)
-- [namedtuple](collections/namedtuple.md)
-- [defaultdict](collections/defaultdict.md)
-- [Counter](collections/counter.md)
-- [deque](collections/deque.md)
-- [OrderedDict and ChainMap](collections/ordereddict_chainmap.md)
+- [Procedural vs OOP](foundations/procedural_vs_oop.md)
+- [Functions to Classes](foundations/functions_to_classes.md)
+- [Classes and Instances](foundations/classes_instances.md)
+- [Constructor and Destructor](foundations/constructor_destructor.md)
 
-## 7.2 itertools Module
+## 6.2 Attributes and Methods
 
-- [itertools Overview](itertools/itertools_module.md)
-- [Infinite Iterators (count, cycle, repeat)](itertools/infinite_iterators.md)
-- [chain and chain.from_iterable](itertools/chain.md)
-- [islice](itertools/islice.md)
-- [product](itertools/product.md)
-- [permutations and combinations](itertools/permutations_combinations.md)
-- [groupby](itertools/groupby.md)
-- [starmap](itertools/starmap.md)
-- [tee](itertools/tee.md)
-- [accumulate](itertools/accumulate.md)
-- [zip_longest](itertools/zip_longest.md)
-- [compress and filterfalse](itertools/compress_filterfalse.md)
-- [takewhile and dropwhile](itertools/takewhile_dropwhile.md)
-- [itertools Recipes](itertools/recipes.md)
+- [Instance Attributes](attributes/instance_attributes.md)
+- [Class Attributes](attributes/class_attributes.md)
+- [Attribute Lookup](attributes/attribute_lookup.md)
+- [Instance Methods](methods/instance_methods.md)
+- [Class Methods](methods/class_methods.md)
+- [Static Methods](methods/static_methods.md)
 
-## 7.3 typing Module
+## 6.3 Four Pillars of OOP
 
-- [typing Overview](typing/typing_overview.md)
-- [Basic Annotations (int, str, list)](typing/basic_annotations.md)
-- [Optional and Union](typing/optional_union.md)
-- [List\[int\] vs list\[int\]](typing/generic_syntax.md)
-- [Callable and TypeAlias](typing/callable_typealias.md)
-- [TypeVar and Generic](typing/typevar_generic.md)
-- [TypeGuard and TypeNarrowing](typing/typeguard.md)
-- [TYPE_CHECKING and Forward References](typing/type_checking.md)
-- [Practical Type Hint Patterns](typing/practical_patterns.md)
+- [Encapsulation](pillars/encapsulation.md)
+- [Abstraction](pillars/abstraction.md)
+- [Polymorphism](pillars/polymorphism.md)
+- [Inheritance Basics](pillars/inheritance.md)
 
-## 7.4 datetime Module
+## 6.4 Advanced Inheritance
 
-- [datetime Overview](datetime/datetime_overview.md)
-- [date, time, datetime Objects](datetime/date_time_datetime.md)
-- [timedelta Arithmetic](datetime/timedelta.md)
-- [Formatting (strftime) and Parsing (strptime)](datetime/strftime_strptime.md)
-- [Timezone Handling (timezone, zoneinfo)](datetime/timezones.md)
-- [calendar Module](datetime/calendar.md)
-- [Practical Patterns](datetime/practical_patterns.md)
+- [Initialization Patterns](inheritance/initialization_patterns.md)
+- [super() and Cooperation](inheritance/super.md)
+- [Method Resolution Order](inheritance/mro.md)
+- [C3 Linearization](inheritance/c3_linearization.md)
 
-## 7.5 json Module
+## 6.5 Composition and Aggregation
 
-- [json Overview](json/json_overview.md)
-- [json.dumps and json.loads](json/dumps_loads.md)
-- [json.dump and json.load (File I/O)](json/dump_load.md)
-- [Formatting and Pretty Printing](json/formatting.md)
-- [Custom Encoders (JSONEncoder)](json/custom_encoders.md)
-- [Custom Decoders (object_hook)](json/custom_decoders.md)
-- [JSON and Python Type Mapping](json/type_mapping.md)
+- [Is-a vs Has-a](composition/isa_vs_hasa.md)
+- [Composition Pattern](composition/composition_pattern.md)
+- [Aggregation Pattern](composition/aggregation_pattern.md)
+- [Composition vs Inheritance](composition/composition_vs_inheritance.md)
+- [Design Guidelines](composition/design_guidelines.md)
 
-## 7.6 logging Module
+## 6.6 Dunder Basics
 
-- [logging Overview](logging/logging_overview.md)
-- [Log Levels](logging/log_levels.md)
-- [Logger Objects](logging/logger_objects.md)
-- [Handlers (Stream, File, Rotating)](logging/handlers.md)
-- [Formatters](logging/formatters.md)
-- [Configuration (dictConfig, fileConfig)](logging/configuration.md)
-- [Logging Best Practices](logging/best_practices.md)
+- [Introduction](dunder/dunder_intro.md)
+- [Arithmetic Operators](dunder/dunder_arithmetic.md)
+- [Comparison Operators](dunder/dunder_comparison.md)
+- [Object Lifecycle](dunder/dunder_lifecycle.md)
+- [String Representation](dunder/dunder_string.md)
+- [Magic Methods Quick Reference](dunder/magic_methods_quick_reference.md)
+- [Magic Methods Exercises](dunder/magic_methods_exercises.md)
 
-## 7.7 Modules Deep Dive
+## 6.7 Dunder Advanced
 
-- [sys.path and Module Search](modules/module_search.md)
-- [Relative Imports](modules/relative_imports.md)
-- [Package Init Files](modules/init_files.md)
-- [Package Creation](modules/package_creation.md)
-- [Command Line Arguments](modules/argparse.md)
+- [Container Protocol](dunder_advanced/dunder_containers.md)
+- [Iteration Protocol](dunder_advanced/dunder_iterables.md)
+- [Callable Objects](dunder_advanced/dunder_callable.md)
+- [Context Managers](dunder_advanced/dunder_context.md)
 
-## 7.8 os and sys Modules
+## 6.8 Properties
 
-- [os Module Overview](os_sys/os_overview.md)
-- [File System Operations (os)](os_sys/os_filesystem.md)
-- [Environment Variables (os.environ)](os_sys/os_environ.md)
-- [Process Management (os)](os_sys/os_process.md)
-- [os.path vs pathlib](os_sys/os_path_vs_pathlib.md)
-- [sys Module Overview](os_sys/sys_overview.md)
-- [sys.argv and sys.exit](os_sys/sys_argv_exit.md)
-- [sys Runtime Information](os_sys/sys_runtime.md)
+- [Property Decorator](properties/property_decorator.md)
+- [Getter Setter Deleter](properties/getter_setter_deleter.md)
+- [Cached Properties](properties/cached_property.md)
+- [Read-Only Properties](properties/readonly_properties.md)
+- [Properties as Descriptors](properties/property_descriptor_connection.md)
 
-## 7.9 Package Managers
+## 6.9 Descriptor Protocol
 
-- [conda and Anaconda](package_managers/conda.md)
-- [conda-forge and Miniforge](package_managers/conda_forge.md)
-- [mamba](package_managers/mamba.md)
-- [Homebrew](package_managers/homebrew.md)
-- [Comparison](package_managers/pkg_manager_comparison.md)
+- [Descriptor Introduction](descriptors/descriptor_intro.md)
+- [\_\_get\_\_ \_\_set\_\_ \_\_delete\_\_](descriptors/descriptor_methods.md)
+- [Data vs Non-Data Descriptors](descriptors/descriptor_types.md)
+- [Descriptor Use Cases](descriptors/descriptor_applications.md)
+- [Attribute Access Lookup](descriptors/attribute_access_lookup.md)
 
-## 7.10 Regular Expressions
+## 6.10 Dunder Attribute Hooks
 
-- [re Module Overview](regex/re_overview.md)
-- [Pattern Syntax Basics](regex/pattern_syntax.md)
-- [Character Classes](regex/character_classes.md)
-- [Quantifiers and Anchors](regex/quantifiers_anchors.md)
-- [Groups and Capturing](regex/groups_capturing.md)
-- [search, match, findall](regex/search_match_findall.md)
-- [sub and split](regex/sub_split.md)
-- [Compiling Patterns](regex/compiled_patterns.md)
-- [Lookahead and Lookbehind](regex/lookahead_lookbehind.md)
-- [Practical Examples](regex/practical_examples.md)
+- [\_\_getattribute\_\_](dunder_attrs/dunder_getattribute.md)
+- [\_\_getattr\_\_](dunder_attrs/dunder_getattr.md)
+- [\_\_setattr\_\_](dunder_attrs/dunder_setattr.md)
+- [\_\_delattr\_\_](dunder_attrs/dunder_delattr.md)
 
-## 7.11 Debugging
+## 6.11 Dynamic Attribute Access
 
-- [breakpoint() and pdb Basics](debugging/breakpoint_pdb.md)
-- [Common pdb Commands](debugging/pdb_commands.md)
-- [Post-Mortem Debugging](debugging/post_mortem.md)
-- [IDE Debugging Overview](debugging/ide_debugging.md)
+- [getattr setattr delattr](dynamic/builtin_attr_functions.md)
+- [Dynamic vs Static Access](dynamic/dynamic_vs_static.md)
 
-## 7.12 Testing
+## 6.12 dataclasses
 
-- [Testing Overview](testing/testing_overview.md)
-- [unittest Basics](testing/unittest_basics.md)
-- [unittest.TestCase Methods](testing/testcase_methods.md)
-- [pytest Basics](testing/pytest_basics.md)
-- [pytest Fixtures](testing/pytest_fixtures.md)
-- [pytest Parametrize](testing/pytest_parametrize.md)
-- [Mocking (unittest.mock)](testing/mocking.md)
-- [Test Organization and Best Practices](testing/best_practices.md)
+- [dataclasses Module](dataclasses/dataclasses.md)
+- [field() Function](dataclasses/field.md)
+- [\_\_post\_init\_\_ Method](dataclasses/post_init.md)
+- [Frozen Dataclasses](dataclasses/frozen.md)
+- [Dataclass Inheritance](dataclasses/inheritance.md)
+- [slots and kw_only](dataclasses/slots_kw_only.md)
+- [Dataclass vs NamedTuple vs attrs](dataclasses/comparison.md)
+- [Practical Patterns](dataclasses/practical_patterns.md)
+
+## 6.13 Enumerations
+
+- [Enum Basics](enum/enum_basics.md)
+- [Enum Members and Values](enum/members_values.md)
+- [IntEnum and StrEnum](enum/int_str_enum.md)
+- [Flag and IntFlag](enum/flag.md)
+- [auto() Function](enum/auto.md)
+- [Enum Methods and Customization](enum/methods_customization.md)
+- [Enum Practical Patterns](enum/practical_patterns.md)
+
+## 6.14 Abstract Base Classes
+
+- [ABC and abstractmethod](abc/abstract_base_classes.md)
+- [typing.Protocol](abc/typing_protocol.md)
+- [collections.abc](abc/collections_abc.md)
+- [Virtual Subclasses (register)](abc/virtual_subclasses.md)
+
+## 6.15 Metaclasses
+
+- [Metaclasses Introduction](metaclasses/metaclasses_intro.md)
+- [\_\_init\_subclass\_\_](metaclasses/init_subclass.md)
+
+## 6.16 OOP Projects
+
+- [Task Management System](projects/task_management_project.md)
+- [User Authentication System](projects/user_auth_project.md)
+- [RPG Character System](projects/rpg_character_project.md)
+- [Banking System](projects/banking_system_project.md)
+- [Notification System](projects/notification_system_project.md)

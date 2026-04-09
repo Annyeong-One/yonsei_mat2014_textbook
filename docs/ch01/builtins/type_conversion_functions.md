@@ -3,9 +3,7 @@
 
 # Type Conversion Functions
 
-Python includes several built-in functions for converting values between types.
-
-These functions are essential when working with input data or performing numeric operations.
+Type conversion functions operate at the **boundary between data representations**---they transform a value from one type to another. These are essential when working with input data (which arrives as strings) or performing operations that require specific types.
 
 | Function | Description |
 |---|---|
@@ -16,6 +14,33 @@ These functions are essential when working with input data or performing numeric
 | list() | convert to list |
 | tuple() | convert to tuple |
 | set() | convert to set |
+
+Conversion can fail when the input cannot be interpreted in the target type:
+
+```python
+int("abc")  # ValueError: invalid literal for int() with base 10: 'abc'
+```
+
+This makes type conversion both a **transformation** and a **validation boundary**---it connects directly to exception handling.
+
+---
+
+## Conversion vs Interpretation
+
+Some conversions simply change type:
+
+```python
+float(3)   # 3 → 3.0
+```
+
+Others **interpret structure**:
+
+```python
+int("10")     # parses digits → 10
+list("abc")   # splits string → ['a', 'b', 'c']
+```
+
+These are not just type changes---they interpret the input.
 
 ---
 
@@ -56,7 +81,7 @@ print(text)
 
 ## bool()
 
-Falsy values include:
+In general, a value is falsy if it represents "zero" or "empty." Common falsy values include:
 
 ```
 0
@@ -72,6 +97,21 @@ Example
 ```python
 print(bool(0))
 print(bool(42))
+```
+
+---
+
+## Practical Example
+
+```python
+# Parsing user input safely
+user_input = "42"
+
+try:
+    value = int(user_input)
+    print(value + 10)   # 52
+except ValueError:
+    print("Invalid number")
 ```
 
 ---
@@ -99,16 +139,18 @@ What is the "zero value" or "empty value" for each type? Why does calling these 
     ```text
     0
     0.0
-
+    ''
     False
     []
     ()
     set()
     ```
 
-    Each type has a natural "zero" or "empty" value: `0` for `int`, `0.0` for `float`, `""` (empty string) for `str`, `False` for `bool`, `[]` for `list`, `()` for `tuple`, `set()` for `set`.
+    (Note: `str()` returns `''`, an empty string, which prints as a blank line.)
 
-    These are the defaults because each type's constructor, when called with no arguments, returns the **identity element** or **empty container** for that type. This is a consistent design: every type has a well-defined "nothing" value.
+    Each type has a natural "zero" or "empty" value: `0` for `int`, `0.0` for `float`, `""` for `str`, `False` for `bool`, `[]` for `list`, `()` for `tuple`, `set()` for `set`.
+
+    These are the defaults because each type's constructor, when called with no arguments, returns a natural "zero" or empty value for that type. This is a consistent design: every type has a well-defined default.
 
 ---
 
@@ -159,7 +201,7 @@ Which conversions are **reversible** (you can convert back and get the original 
     | Conversion | Reversible? | Notes |
     |-----------|------------|-------|
     | `int(3.9)` = `3` | **Lossy** | The fractional part `.9` is permanently lost |
-    | `float(3)` = `3.0` | Reversible | `int(3.0)` gives `3` |
+    | `float(3)` = `3.0` | Reversible (in this case) | `int(3.0)` gives `3` |
     | `str(42)` = `"42"` | Reversible | `int("42")` gives `42` |
     | `int("42")` = `42` | Reversible | `str(42)` gives `"42"` |
     | `list("abc")` = `["a", "b", "c"]` | Reversible | `"".join(["a", "b", "c"])` gives `"abc"` |

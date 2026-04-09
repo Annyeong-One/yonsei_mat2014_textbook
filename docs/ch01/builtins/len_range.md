@@ -1,5 +1,7 @@
 # len() and range()
 
+`range()` defines an iteration space; `len()` measures the size of a collection. Together they are among the most frequently used built-ins in Python.
+
 ## len()
 
 `len()` returns the number of elements in a container.
@@ -62,6 +64,18 @@ Avoid `range(len(seq))` when you need both index and value — use `enumerate()`
 
 ---
 
+## Practical Example
+
+```python
+# Pagination: split items into pages of size 3
+items = ["a", "b", "c", "d", "e", "f", "g"]
+page_size = 3
+
+for i in range(0, len(items), page_size):
+    page = items[i:i+page_size]
+    print(page)
+```
+
 ## Exercises
 
 **Exercise 1.**
@@ -89,7 +103,7 @@ Why can `range` support `len()`, indexing, and `in` without storing all million 
 
     `range` stores only three values internally: `start`, `stop`, and `step`. It computes any requested value on the fly using arithmetic: `r[i]` = `start + i * step`. `len(r)` = `(stop - start + step - 1) // step`. `x in r` checks if `x` is within bounds and lands on a step.
 
-    This is why `range(1_000_000)` uses the same amount of memory as `range(5)` -- it never materializes the sequence. This is an example of a **lazy sequence** that supports random access through computation rather than storage.
+    This is why `range(1_000_000)` uses the same amount of memory as `range(5)` -- it never materializes the sequence. This is an example of a **lazy object** (as introduced in the [overview](builtins_overview.md)) that supports random access through computation rather than storage.
 
 ---
 

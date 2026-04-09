@@ -1,7 +1,24 @@
 
 # Sequences Overview
 
-Python includes several **composite data types** that store multiple values inside a single object. These allow programs to represent structured information such as a list of scores, a tuple of coordinates, or a dictionary of settings.
+Python includes several **composite data types** that store multiple values inside a single object. When choosing a composite data type, ask:
+
+1. **Does order matter?** (sequences vs sets)
+2. **Can the data change?** (mutable vs immutable)
+3. **How do I access elements?** (by position, key, or membership)
+4. **Do I need uniqueness?** (sets and dict keys)
+
+Composite data types are different ways of organizing data: sequences organize by position, dictionaries organize by key, and sets organize by membership. Choosing the right structure determines how your program stores, accesses, and reasons about data.
+
+These questions map directly to Python's core collection types:
+
+| Type | Ordered | Mutable | Access model | Unique |
+| --- | --- | --- | --- | --- |
+| `tuple` | yes | no | positional | no |
+| `list` | yes | yes | positional | no |
+| `str` | yes | no | positional | no |
+| `set` | no | yes | membership | yes |
+| `dict` | insertion-ordered | yes | key-based | keys |
 
 Composite types fall into three categories:
 
@@ -218,13 +235,15 @@ Why does `20 in "abc"` behave differently from `20 in [10, 20, 30]`? What does t
 ??? success "Solution to Exercise 1"
     Output:
 
+    The list and tuple lines print normally, but the string line raises an error:
+
     ```text
-    list 10 30 4 True
-    tuple 10 30 4 True
-    str a c 3 False
+    list 10 30 3 True
+    tuple 10 30 3 True
+    TypeError: 'in <string>' requires string as left operand, not int
     ```
 
-    For `[10, 20, 30]` and `(10, 20, 30)`, `20 in seq` checks if the **value** `20` is an element. For `"abc"`, `20 in seq` checks if `20` is a **substring** -- but `20` is an integer, not a string, and strings can only contain string substrings. So `20 in "abc"` raises `TypeError` in strict mode, or for `in`, it returns `False` because an integer can never be found in a string. (Actually, `20 in "abc"` raises `TypeError: 'in <string>' requires string as left operand, not int`.)
+    For `[10, 20, 30]` and `(10, 20, 30)`, `20 in seq` checks if the **value** `20` is an element. For `"abc"`, `20 in seq` raises `TypeError` because the `in` operator on strings requires a string operand on the left side, not an integer. Strings only support substring containment checks (`"bc" in "abc"` is valid), not arbitrary element membership.
 
     The shared sequence interface (called the **Sequence ABC** or protocol) means code that works with indexing, slicing, and iteration works with **any** sequence type. A function that takes `seq[0]` and `len(seq)` works equally well with lists, tuples, and strings. This is Python's "duck typing" in action.
 

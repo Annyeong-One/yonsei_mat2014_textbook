@@ -1,22 +1,9 @@
 
 # Conditional Statements
 
-Conditional statements allow a program to **execute code only when certain conditions are satisfied**.
+Conditional statements allow a program to **execute code only when certain conditions are satisfied**. At a deeper level, they define how a program makes decisions: "Given the current state, which path should the program take?"
 
 The primary conditional structure in Python is the `if` statement.
-
----
-
-### Basic if Statement
-
-```python
-age = 25
-
-if age >= 18:
-    print("You are an adult")
-````
-
-If the condition evaluates to `True`, the indented block executes.
 
 ---
 
@@ -52,6 +39,25 @@ else:
 
 Python evaluates conditions **top to bottom**, executing the first match.
 
+!!! warning "if vs elif vs multiple if"
+    Using separate `if` statements is **not** the same as using `elif`. Separate `if` blocks are checked independently---every condition is evaluated regardless of prior matches. An `elif` chain is **mutually exclusive**: once one branch matches, all remaining branches are skipped.
+
+    ```python
+    # Independent checks — both can execute
+    if x > 0:
+        print("positive")
+    if x < 10:
+        print("less than 10")
+
+    # Mutually exclusive — only the first match executes
+    if x > 0:
+        print("positive")
+    elif x < 10:
+        print("less than 10")
+    ```
+
+    Use `elif` when the conditions are mutually exclusive. Use separate `if` statements when multiple conditions may apply simultaneously.
+
 ---
 
 ### Logical Operators
@@ -67,10 +73,10 @@ Python allows combining conditions using logical operators.
 Example:
 
 ```python
-age = 22
+user_age = 22
 has_license = True
 
-if age >= 18 and has_license:
+if user_age >= 18 and has_license:
     print("You can drive")
 ```
 
@@ -91,7 +97,7 @@ False
 {}
 ```
 
-Everything else is considered **truthy**.
+Everything else is considered **truthy**. This enables idiomatic Python: `if items:` is preferred over `if len(items) > 0:`, reflecting Python's philosophy of concise, readable expressions over explicit checks.
 
 Example:
 
@@ -111,17 +117,37 @@ else:
 Conditional blocks can appear inside other conditional blocks.
 
 ```python
-age = 20
+user_age = 20
 has_license = True
 
-if age >= 18:
+if user_age >= 18:
     if has_license:
         print("You can drive")
 ```
 
-However, excessive nesting can make programs harder to read.
+However, excessive nesting can make programs harder to read. Prefer early returns or guard clauses to keep the main logic at a shallow indentation level.
+
+```python
+# Deeply nested (hard to follow)
+if user_age >= 18:
+    if has_license:
+        if not suspended:
+            print("You can drive")
+
+# Flattened with guard clauses (clearer)
+if user_age < 18:
+    print("Too young")
+elif not has_license:
+    print("No license")
+elif suspended:
+    print("License suspended")
+else:
+    print("You can drive")
+```
 
 ````
+
+Ternary expressions offer a compact form of `if/else` for inline decisions. Pattern matching extends conditional logic further, allowing decisions based on the structure of data rather than simple conditions.
 
 ---
 

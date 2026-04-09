@@ -1,11 +1,13 @@
 
 # abs() and round()
 
-Python provides `abs()` and `round()` as built-in functions for two common numeric operations: computing absolute values and rounding to a specified number of decimal places.
+These are **value transformations**---they take a single number and produce a new number. Unlike collection operations (`len`, `sum`) or iteration tools (`enumerate`, `zip`), these operate on individual numeric values.
+
+Both normalize numbers toward a simpler or more useful form: `abs()` strips the sign, `round()` reduces precision.
 
 ## abs()
 
-Returns the absolute value of a number, which is its distance from zero on the number line.
+Returns the absolute value of a number---its distance from zero on the number line.
 
 ```python
 print(abs(-5))
@@ -19,7 +21,7 @@ Output:
 
 ## round()
 
-Rounds floating point numbers.
+Rounds numbers to a specified precision.
 
 ```python
 print(round(3.14159,2))
@@ -44,6 +46,20 @@ Output:
 ```
 
 ---
+
+## Practical Example
+
+```python
+# Round prices for display
+prices = [19.995, 5.555, 3.333]
+formatted = [round(p, 2) for p in prices]
+print(formatted)   # [20.0, 5.56, 3.33]
+
+# Distance from zero (error magnitude)
+errors = [-0.2, 0.5, -1.3]
+magnitudes = [abs(e) for e in errors]
+print(magnitudes)  # [0.2, 0.5, 1.3]
+```
 
 ## Exercises
 
@@ -119,7 +135,7 @@ print(round(1234, 0))
 print(type(round(1234, 0)))
 ```
 
-Why does `round(1234, 0)` return a `float` while `round(1234)` returns an `int`? What is the rule for the return type?
+What type does `round(1234, 0)` return? How does this compare to `round(1234)` (without `ndigits`)? What is the rule for the return type?
 
 ??? success "Solution to Exercise 3"
     Output:
@@ -129,10 +145,21 @@ Why does `round(1234, 0)` return a `float` while `round(1234)` returns an `int`?
     1200
     1200
     1400
-    1234.0
-    <class 'float'>
+    1234
+    <class 'int'>
     ```
 
     Negative `ndigits` rounds to the left of the decimal point: `-1` rounds to tens, `-2` rounds to hundreds. Banker's rounding still applies: `1250` is halfway between `1200` and `1300`, so it rounds to `1200` (even hundreds).
 
-    The return type rule: `round(x)` (no `ndigits`) returns an `int`. `round(x, ndigits)` (with `ndigits`, even if 0) returns the same type as `x`. So `round(1234, 0)` returns `1234.0` (float) while `round(1234)` returns `1234` (int). This distinction matters when the return type is used in further calculations.
+    **Return type behavior:**
+
+    - `round(x)` (no `ndigits`) always returns an `int`
+    - `round(x, ndigits)` returns a number whose type matches the input type
+
+    ```python
+    round(1234)        # int → 1234
+    round(1234, 0)     # int → 1234
+    round(1234.0, 0)   # float → 1234.0
+    ```
+
+    If `ndigits` is omitted, the result is always `int`. If `ndigits` is provided, the result matches the input type (`int` in → `int` out, `float` in → `float` out). This distinction matters when the return type is used in further calculations.

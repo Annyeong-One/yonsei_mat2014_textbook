@@ -1,6 +1,6 @@
 # enumerate() and zip()
 
-Both functions wrap an existing iterable and yield tuples. `enumerate()` pairs each element with its index; `zip()` pairs elements from two or more iterables.
+These functions are **iteration transformers**---they restructure how you loop over data. `enumerate()` adds indices to an iterable; `zip()` combines multiple iterables element-by-element. Both yield tuples.
 
 ## enumerate()
 
@@ -117,6 +117,17 @@ print(ages)    # (25, 30, 35)
 Both functions are lazy: they produce one tuple at a time without building the full result in memory.
 
 ---
+
+## Practical Example
+
+```python
+# Combine related data with numbered output
+names = ["Alice", "Bob", "Charlie"]
+scores = [85, 92, 78]
+
+for i, (name, score) in enumerate(zip(names, scores), start=1):
+    print(f"{i}. {name}: {score}")
+```
 
 ## Exercises
 

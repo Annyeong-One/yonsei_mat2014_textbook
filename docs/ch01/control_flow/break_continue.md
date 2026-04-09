@@ -1,11 +1,13 @@
 
 # break and continue
 
-Loop control statements modify the execution flow inside loops.
+Loop control statements modify the execution flow **inside** loops. Loops define an *iteration space*; `break` and `continue` define how execution navigates that space. While `if` decides *which* code runs and loops decide *how many times* code runs, `break` and `continue` provide fine-grained control *within* each iteration.
 
 ---
 
 ## break
+
+Use `break` when the goal has been achieved and further iteration is unnecessary.
 
 `break` exits the loop immediately.
 
@@ -30,6 +32,8 @@ Execution stops when `8` is found.
 ---
 
 ## continue
+
+Use `continue` when the current iteration should be skipped but the loop should keep going.
 
 `continue` skips the rest of the current iteration.
 
@@ -63,6 +67,9 @@ Even numbers are skipped.
 | break     | exits the loop entirely |
 | continue  | skips to next iteration |
 
+!!! tip "Tradeoff"
+    Overusing `continue` can make loop bodies harder to follow. When the skip condition is simple, restructuring the `if` condition is often clearer than using `continue`.
+
 ---
 
 ## Nested Loops
@@ -76,6 +83,8 @@ for i in range(3):
             break
         print(i,j)
 ```
+
+The key is not the syntax, but choosing the right construct for the structure of the problem.
 
 ---
 

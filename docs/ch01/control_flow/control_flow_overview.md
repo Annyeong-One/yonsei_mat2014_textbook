@@ -3,15 +3,22 @@
 
 Control flow determines **which parts of a program execute and in what order**.
 
+At its core, control flow answers three questions:
+
+- **What should happen?** (decision)
+- **When should it happen?** (repetition)
+- **When should it stop?** (control)
+
 So far, our programs executed sequentially---one line after another.
-Control flow introduces mechanisms that allow programs to:
+Control flow introduces mechanisms that allow programs to make decisions, repeat actions, and exit early when needed.
 
-- make decisions
-- repeat actions
-- terminate loops early
-- select behaviors based on patterns
+These three roles map directly to Python's constructs:
 
-These constructs are essential for building real programs. The following diagram shows how these control flow mechanisms branch from sequential execution:
+1. **Decision** --- `if` / `match`
+2. **Repetition** --- `for` / `while`
+3. **Control** --- `break` / `continue` / `else`
+
+The following diagram shows how these control flow mechanisms branch from sequential execution:
 
 ```mermaid
 flowchart TD
@@ -35,4 +42,16 @@ This chapter introduces Python's core control flow tools:
 | ternary expression | inline conditional expression     |
 | `match`            | structural pattern matching       |
 
-Understanding control flow allows programs to **adapt their behavior based on data and conditions**.
+### Perspective
+
+Control flow is where programs stop being sequences of instructions and become decision-making systems. Most bugs and complexity in real programs arise not from individual statements, but from how control flows between them. Understanding control flow is therefore more important than understanding any single construct.
+
+Control flow is not syntax---it is how programs *adapt*. Without control flow, programs are static sequences. With it, programs become responsive to data.
+
+Together, these tools allow a program to:
+
+- decide what path to take
+- repeat actions as needed
+- adjust behavior dynamically during execution
+
+This combination is what makes programs responsive rather than static.

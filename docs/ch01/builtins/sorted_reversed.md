@@ -1,7 +1,7 @@
 
 # sorted() and reversed()
 
-These built-ins manipulate sequence order.
+These built-ins are **ordering transformations**---they change the order in which elements are accessed without modifying the original object. They differ in an important way: `sorted()` creates a **new list** (materialized result), while `reversed()` returns a **lazy iterator**.
 
 ```mermaid
 flowchart TD
@@ -14,7 +14,7 @@ flowchart TD
 
 ## sorted()
 
-Returns a **new sorted list**.
+Returns a **new sorted list**, leaving the original iterable unchanged.
 
 ```python
 numbers = [3,1,4,2]
@@ -28,7 +28,7 @@ Output
 [1,2,3,4]
 ```
 
-Descending order
+Descending order:
 
 ```python
 print(sorted(numbers, reverse=True))
@@ -54,7 +54,7 @@ Output
 
 ## reversed()
 
-Returns elements in reverse order.
+Returns an iterator that yields elements in reverse order.
 
 ```python
 numbers = [1,2,3]
@@ -69,6 +69,30 @@ Output
 3
 2
 1
+```
+
+To get a reversed list directly:
+
+```python
+print(list(reversed(numbers)))  # [3, 2, 1]
+```
+
+---
+
+## Practical Example
+
+```python
+# Sort users by score (descending)
+users = [
+    {"name": "Alice", "score": 85},
+    {"name": "Bob", "score": 92},
+    {"name": "Charlie", "score": 78},
+]
+
+sorted_users = sorted(users, key=lambda u: u["score"], reverse=True)
+
+for user in sorted_users:
+    print(user["name"], user["score"])
 ```
 
 ---
@@ -127,13 +151,15 @@ Why do the three sorts produce different orders? What does the `key` function do
     ['Apple', 'banana', 'cherry']
     ```
 
-    Wait -- let me recalculate. `sorted(words)` sorts by default Unicode order: `"A"` (65) < `"b"` (98) < `"c"` (99), so `['Apple', 'banana', 'cherry']`.
+    `sorted(words)` sorts by default Unicode code point order. Uppercase letters have lower code points than lowercase (`"A"` = 65, `"b"` = 98), so `"Apple"` sorts before `"banana"` and `"cherry"`: `['Apple', 'banana', 'cherry']`.
 
-    `sorted(words, key=str.lower)` compares `"apple"`, `"banana"`, `"cherry"` (lowercase versions), giving alphabetical order: `['Apple', 'banana', 'cherry']`. Same result here because Apple already sorts first.
+    `sorted(words, key=str.lower)` compares lowercase versions: `"apple"`, `"banana"`, `"cherry"`. Alphabetically this gives `['Apple', 'banana', 'cherry']`. The result happens to be the same here because `"apple"` sorts first in both orderings.
 
-    `sorted(words, key=len)` compares lengths: `len("Apple")=5`, `len("banana")=6`, `len("cherry")=6`, so `['Apple', 'banana', 'cherry']` (stable sort preserves original order for equal lengths).
+    `sorted(words, key=len)` compares lengths: `len("Apple")=5`, `len("banana")=6`, `len("cherry")=6`. The shortest word comes first: `['Apple', 'banana', 'cherry']`. Stable sorting preserves original order for equal lengths (`"banana"` before `"cherry"`).
 
-    The `key` function does NOT modify the elements -- it only produces comparison keys. The original elements appear in the output.
+    The `key` function does NOT modify the elements---it only produces comparison keys. The original elements appear in the output.
+
+    Note: these examples happen to produce the same result because of the specific input. With different words, the three sorting criteria would produce different orderings.
 
 ---
 

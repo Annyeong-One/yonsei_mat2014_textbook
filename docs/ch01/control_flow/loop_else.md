@@ -1,11 +1,11 @@
 
 # Loop Else
 
-Python loops support an optional `else` clause.
+Python loops support an optional `else` clause. This feature builds directly on `break`---it is `break` that determines whether the `else` block runs.
 
-The `else` block runs **only if the loop completes normally**.
+The `else` block runs **only if the loop completes normally** (without hitting `break`).
 
-If a `break` statement occurs, the `else` block is skipped.
+If a `break` statement occurs, the `else` block is skipped. A useful way to read `for...else` is: "for each item, do this; if no `break` occurred, then do that."
 
 ## Example
 
@@ -30,6 +30,8 @@ Output:
 
 ## Practical Pattern: Searching
 
+The `for...else` construct is designed to express: "Search for something; if not found, handle the fallback."
+
 ```python
 def find_number(nums,target):
 
@@ -43,6 +45,99 @@ def find_number(nums,target):
 ```
 
 This pattern cleanly expresses **search logic**.
+
+---
+
+## Comparison: for...else vs Flag Variable
+
+The flag-based approach uses extra state to track whether the loop succeeded:
+
+```python
+found = False
+
+for num in nums:
+    if num == target:
+        found = True
+        break
+
+if not found:
+    print("not found")
+```
+
+The `for...else` approach keeps the logic local:
+
+```python
+for num in nums:
+    if num == target:
+        break
+else:
+    print("not found")
+```
+
+| Approach      | Characteristics                   |
+| ------------- | --------------------------------- |
+| Flag variable | explicit state, more verbose      |
+| `for...else`  | no extra state, logic stays local |
+
+`for...else` is preferable when the loop's purpose is **search** and the fallback depends on "not found."
+
+---
+
+## Interaction with continue
+
+`continue` does **not** affect the `else` clause. Only `break` determines whether `else` runs.
+
+```python
+for i in range(5):
+    if i == 2:
+        continue
+    print(i)
+else:
+    print("done")
+```
+
+Output:
+
+```
+0
+1
+3
+4
+done
+```
+
+---
+
+## Design Insight
+
+Python's `for...else` eliminates the need for external state tracking. Instead of managing a flag variable and checking it after the loop, you express the logic directly: "If the loop didn't terminate early, do this." This keeps logic localized and intent explicit.
+
+---
+
+## When Not to Use for...else
+
+Avoid `for...else` when:
+
+- You can use `return` directly inside a function
+- The loop is not conceptually a search
+- It reduces readability for your audience
+
+```python
+def is_prime(n):
+    if n < 2:
+        return False
+    for i in range(2, int(n**0.5) + 1):
+        if n % i == 0:
+            return False
+    return True  # clearer than for...else here
+```
+
+In functions, `return` often makes `else` unnecessary.
+
+---
+
+!!! warning "Common Misconception"
+    The name `else` does **not** mean "if the loop condition is false" (by analogy with `if/else`). It actually means "if no `break` occurred." A clearer mental reading is `nobreak` or `if_no_break`.
 
 ---
 

@@ -1,7 +1,7 @@
 
 # help() and dir()
 
-Python provides `help()` and `dir()` as introspection tools: `help()` displays an object's documentation, while `dir()` lists its available attributes and methods.
+These are **introspection tools**---they let you examine Python objects at runtime. `help()` displays an object's documentation; `dir()` lists its available attributes and methods. They are especially useful when working with unfamiliar objects or libraries, allowing you to explore without leaving the interpreter.
 
 ## help()
 
@@ -34,6 +34,18 @@ print(dir(x))
 ```
 
 These tools help developers **discover available functionality**.
+
+---
+
+## Practical Example
+
+```python
+# Exploring an unfamiliar library
+import math
+
+print(dir(math))          # discover available functions
+help(math.sqrt)           # learn how sqrt works
+```
 
 ---
 

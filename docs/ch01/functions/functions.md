@@ -1,6 +1,8 @@
 # Functions
 
-A **function** is a named block of code that performs a specific task.
+Functions are the primary mechanism for structuring programs. They abstract over execution by grouping behavior into reusable units that accept inputs, produce outputs, and isolate execution within their own local scope.
+
+Functions abstract over both control flow and exceptions: control flow defines how execution proceeds, exceptions define how execution fails, and functions encapsulate both into reusable units.
 
 You can think of a function as a **black box**:
 
@@ -147,9 +149,8 @@ We will explore how Python tracks these jumps in [Runtime Model (Call Stack)](ca
 
 ## Key Ideas
 
-Functions let us name a block of code and reuse it throughout a program.
 The `def` keyword creates a function, and parentheses after the name call it.
-Remember that defining a function only registers it — no code runs until the function is called.
+Remember that defining a function only registers it --- no code runs until the function is called.
 
 Next: [Parameters](parameters.md).
 

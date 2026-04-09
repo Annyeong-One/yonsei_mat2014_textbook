@@ -1,8 +1,8 @@
 # Runtime Model (Call Stack)
 
-When functions call other functions, Python must remember where execution should return after each function finishes.
+The call stack defines how function execution is organized at runtime. Each function call creates a new frame, allowing functions to isolate execution while still composing into larger programs.
 
-This is handled by a structure called the **call stack**.
+When functions call other functions, Python must remember where execution should return after each function finishes. This is handled by the **call stack**.
 
 ## Nested Function Calls
 
@@ -179,6 +179,20 @@ Because each call gets its own frame, local variables are fully isolated between
 Tracebacks are snapshots of the call stack at the moment an error occurs — learning to read them is one of the most practical debugging skills in Python.
 
 Understanding the call stack becomes especially important when learning **recursion**.
+
+---
+
+## Putting It Together
+
+Functions provide a complete abstraction over program execution:
+
+- parameters define inputs
+- return values define outputs
+- control flow defines the success path
+- exceptions define the failure path
+- the call stack defines how execution is organized
+
+Functions allow programs to scale by separating concerns: each function handles a small part of execution, while the call stack composes them into larger behavior. Understanding functions means understanding how programs are structured, executed, and controlled.
 
 ---
 

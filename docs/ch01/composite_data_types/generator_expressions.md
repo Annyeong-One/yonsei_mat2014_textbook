@@ -1,88 +1,107 @@
 # Generator Expressions
 
-## Syntax
+A generator expression produces values **lazily**---one at a time, on demand---rather than building an entire collection in memory. This makes generators ideal for processing large datasets or building pipelines where not all values are needed at once.
 
-### 1. Like Comprehension
+Generator expressions use the same syntax as list comprehensions, but with parentheses instead of brackets:
 
 ```python
-# List comprehension
+# List comprehension — builds entire list in memory
 squares_list = [x**2 for x in range(1000)]
 
-# Generator expression
+# Generator expression — produces values one at a time
 squares_gen = (x**2 for x in range(1000))
 ```
 
+---
+
 ## Lazy Evaluation
 
-### 1. Memory Efficient
+A list comprehension evaluates every element immediately and stores them all. A generator expression computes each value only when requested.
 
 ```python
-# Consumes memory
-large_list = [x**2 for x in range(1000000)]
+# Stores 1,000,000 values in memory
+large_list = [x**2 for x in range(1_000_000)]
 
-# Memory efficient
-large_gen = (x**2 for x in range(1000000))
-
-# Use one at a time
-for value in large_gen:
-    process(value)
+# Stores only the expression, not the values
+large_gen = (x**2 for x in range(1_000_000))
 ```
 
-## Use Cases
+This means a generator uses **constant memory** regardless of how many values it can produce.
 
-### 1. Pipeline
+---
+
+## Single-Use Iteration
+
+A generator can only be iterated **once**. After exhaustion, it produces no more values.
 
 ```python
-# Chained generators
+gen = (x for x in range(3))
+print(list(gen))
+print(list(gen))
+```
+
+Output:
+
+```text
+[0, 1, 2]
+[]
+```
+
+The first iteration consumes all values. The second finds nothing. This is fundamentally different from lists, which can be iterated any number of times.
+
+---
+
+## Pipelines
+
+Generators compose naturally into processing pipelines where each stage transforms or filters data lazily:
+
+```python
 numbers = range(1000)
 squares = (x**2 for x in numbers)
 evens = (x for x in squares if x % 2 == 0)
 result = sum(evens)
 ```
 
+No intermediate list is created. Each value flows through the pipeline one at a time.
+
+---
+
+## When to Use Generator Expressions
+
+Use a generator when:
+
+- the dataset is large or unbounded
+- you only need to iterate once
+- intermediate results do not need to be stored
+
+Use a list comprehension when:
+
+- you need to access elements multiple times
+- you need `len()`, indexing, or slicing
+- the dataset is small enough to fit in memory
+
+---
+
 ## Reimplementing map and filter
 
-Generators can recreate the behavior of `map()` and `filter()`.
+Generator expressions can replace `map()` and `filter()`:
 
-### 1. Custom map
+| Operation | Built-in | Generator Expression |
+|-----------|----------|----------------------|
+| map | `map(f, xs)` | `(f(x) for x in xs)` |
+| filter | `filter(p, xs)` | `(x for x in xs if p(x))` |
 
-```python
-def my_map(func, iterable):
-    for item in iterable:
-        yield func(item)
+All three approaches are **lazy**---values are computed on demand.
 
-squares = my_map(lambda x: x * x, [1, 2, 3, 4])
-print(list(squares))  # [1, 4, 9, 16]
-```
-
-### 2. Custom filter
-
-```python
-def my_filter(predicate, iterable):
-    for item in iterable:
-        if predicate(item):
-            yield item
-
-evens = my_filter(lambda x: x % 2 == 0, range(10))
-print(list(evens))  # [0, 2, 4, 6, 8]
-```
-
-### 3. Comparison
-
-| Operation | Built-in | Custom Generator | Generator Expression |
-|-----------|----------|------------------|----------------------|
-| map | `map(f, xs)` | `my_map(f, xs)` | `(f(x) for x in xs)` |
-| filter | `filter(p, xs)` | `my_filter(p, xs)` | `(x for x in xs if p(x))` |
-
-All three approaches are **lazy** — values computed on demand.
-
+---
 
 ## Summary
 
-- Lazy evaluation
-- Memory efficient
-- Single iteration
-- Good for pipelines
+- Generator expressions produce values lazily, one at a time
+- They use constant memory regardless of dataset size
+- They can only be iterated once (single-use iterators)
+- They compose into pipelines for efficient data processing
+- Use generators for large data; use list comprehensions when reuse or random access is needed
 
 
 ## Exercises

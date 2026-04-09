@@ -1,6 +1,6 @@
 # Docstrings
 
-A **docstring** is a string literal placed as the first statement in a function body. It documents what the function does.
+While type hints describe the structure of data, docstrings describe its **meaning and intent**. A docstring is a string literal placed as the first statement in a function body, documenting what the function does and why.
 
 ```python
 def celsius_to_fahrenheit(c: float) -> float:
@@ -183,4 +183,4 @@ Why does Python allow modifying `__doc__`? Is the docstring part of the function
 
     This can be useful in practice: decorators sometimes modify `__doc__` to combine the wrapper's documentation with the original function's documentation. `functools.wraps` preserves the original `__doc__` when wrapping a function.
 
-Next: [Function Examples](function_examples.md).
+Next: [Runtime Model (Call Stack)](call_stack.md).
