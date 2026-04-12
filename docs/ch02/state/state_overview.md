@@ -1,4 +1,3 @@
-
 # State and Program Execution
 
 ## What is State?
@@ -75,6 +74,50 @@ The returned value `10` flows back to the caller and is bound to `y`, updating t
 
 ---
 
+## Advanced Note: Scope Affects Evaluation
+
+In Python, assignment has an important interaction with **variable scope** that can be surprising at first.
+
+Consider:
+
+```python
+n = 10
+
+def f():
+    n = n + 1
+    return n
+```
+
+This results in an error:
+
+```
+UnboundLocalError: local variable 'n' referenced before assignment
+```
+
+Why?
+
+Before the function runs, Python determines that `n` is a **local variable** because it appears on the left-hand side of an assignment (`n = ...`) inside the function.
+
+This decision is made **before execution**, not dynamically at runtime.
+
+As a result, when evaluating the right-hand side:
+
+```python
+n + 1
+```
+
+Python looks for the **local** `n`, not the global one. But since the local `n` has not been assigned a value yet, evaluation fails.
+
+A useful mental model is:
+
+> **scope → evaluate RHS → bind to LHS**
+
+- First, Python determines where each name lives (local/global/nonlocal)
+- Then it evaluates the right-hand side using that scope
+- Finally, it binds the result to the left-hand name
+
+---
+
 ## The Big Picture
 
 Understanding state gives you a mental framework for reasoning about any program:
@@ -83,4 +126,100 @@ Understanding state gives you a mental framework for reasoning about any program
 2. **Evaluate expressions using the current state.** Names resolve to whatever objects they are currently bound to.
 3. **Function calls create temporary local states.** These are isolated from the caller but connected through arguments and return values.
 
-This model---state as a sequence of snapshots, transformed by assignments and function calls---is the foundation for everything else in this chapter. The sections that follow explore how assignment works in detail, what happens when objects are shared between names, and how data flows through function boundaries.
+This model---state as a sequence of snapshots, transformed by assignments and function calls---is the foundation for everything else in this chapter.
+
+---
+
+## Exercises
+
+**Exercise 1.**
+Trace the state after each line. What are the values of `a`, `b`, and `c` at the end?
+
+```python
+a = 5
+b = a
+a = a + 3
+c = a + b
+```
+
+Does changing `a` on line 3 affect `b`? Why or why not?
+
+??? success "Solution to Exercise 1"
+    | After line | State |
+    |---|---|
+    | `a = 5` | `a` -> `5` |
+    | `b = a` | `a` -> `5`, `b` -> `5` |
+    | `a = a + 3` | `a` -> `8`, `b` -> `5` |
+    | `c = a + b` | `a` -> `8`, `b` -> `5`, `c` -> `13` |
+
+    Changing `a` on line 3 does NOT affect `b`. When `b = a` executed, `b` was bound to the object `5`. Rebinding `a` to `8` only changes what `a` refers to --- `b` still refers to the original `5`. There is no ongoing link between `b` and `a`.
+
+---
+
+**Exercise 2.**
+Predict whether this function modifies the caller's state:
+
+```python
+def increment(n):
+    n = n + 1
+    return n
+
+x = 10
+y = increment(x)
+print(x)
+print(y)
+```
+
+??? success "Solution to Exercise 2"
+    Output:
+
+    ```text
+    10
+    11
+    ```
+
+    `x` is unchanged. Inside `increment`, the parameter `n` is a local name initially bound to the same object as `x` (the integer `10`). The line `n = n + 1` rebinds the local `n` to a new object `11`. Since integers are immutable, there is no way to modify the original object. The caller's `x` still refers to `10`. The new value `11` flows back to the caller only through the return value, which is bound to `y`.
+
+---
+
+**Exercise 3.**
+Explain why this code raises `UnboundLocalError`:
+
+```python
+count = 0
+
+def increment():
+    count = count + 1
+    return count
+
+increment()
+```
+
+How would you fix it? Give two different solutions.
+
+??? success "Solution to Exercise 3"
+    Python sees `count = ...` inside the function and marks `count` as a **local variable** at compile time. When the function executes, it tries to evaluate `count + 1` using the local `count`, which has not been assigned yet. This raises `UnboundLocalError`.
+
+    **Fix 1 --- use `global`** (generally discouraged):
+
+    ```python
+    count = 0
+
+    def increment():
+        global count
+        count = count + 1
+        return count
+    ```
+
+    **Fix 2 --- pass and return** (preferred):
+
+    ```python
+    count = 0
+
+    def increment(n):
+        return n + 1
+
+    count = increment(count)
+    ```
+
+    Fix 2 is preferred because it avoids modifying global state. The function takes a value in and returns a new value out, making data flow explicit.

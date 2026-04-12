@@ -74,8 +74,17 @@ The following diagram illustrates this relationship:
 
 ```mermaid
 flowchart LR
-    a["name: a"] --> obj["list object: [1, 2, 3]"]
-    b["name: b"] --> obj
+    subgraph Namespace["Namespace"]
+        a["a"]
+        b["b"]
+    end
+
+    subgraph Heap["Heap (Objects)"]
+        obj["[1, 2, 3]"]
+    end
+
+    a -- reference --> obj
+    b -- reference --> obj
 ```
 
 Because `a` and `b` refer to the same list, modifying the list through one name is visible through the other:

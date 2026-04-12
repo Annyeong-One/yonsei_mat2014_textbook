@@ -473,6 +473,7 @@ nav:
             - Instance Methods: ch07/methods/instance_methods.md
             - Class Methods: ch07/methods/class_methods.md
             - Static Methods: ch07/methods/static_methods.md
+            - Method Chaining: ch07/methods/method_chaining.md
 
         - 7.3 Four Pillars of Object-Oriented Programming:
             - Encapsulation: ch07/pillars/encapsulation.md

@@ -15,6 +15,33 @@ id(x)
 
 Conceptually corresponds to a memory address.
 
+### What does id() actually represent?
+
+In CPython, `id(obj)` returns the object's identity, which corresponds to its **virtual memory address**.
+
+From Python's perspective:
+- The object is allocated once.
+- Its identity (`id`) remains constant for its lifetime.
+- The object itself is not relocated.
+
+However, this should not be confused with physical memory.
+
+From the operating system's perspective:
+- Memory is managed using **virtual memory**.
+- The OS may remap a virtual address to different physical memory locations over time (e.g., paging, swapping).
+- This remapping is completely transparent to Python.
+
+Additionally, some objects (like lists) manage internal storage separately:
+- When a list grows beyond its capacity, Python allocates a new internal buffer and copies elements.
+- The list object itself remains at the same virtual address.
+- Only its internal storage changes.
+
+Key ideas:
+- `id()` reflects the object's identity (virtual address).
+- The object itself does not move.
+- Internal storage may be reallocated independently.
+- Physical memory mapping may change, but this is handled by the OS and irrelevant to Python semantics.
+
 ---
 
 ## `type()`
@@ -63,7 +90,6 @@ print(dir())  # Includes 'x'
 
 Useful for exploration and debugging.
 
-
 ---
 
 ## `help()`
@@ -76,7 +102,6 @@ help(len)
 ```
 
 Shows the docstring and signature. In interactive sessions, provides paginated output.
-
 
 ---
 
@@ -104,7 +129,6 @@ del obj.attribute
 
 Memory is freed by the garbage collector when no references remain.
 
-
 ---
 
 ## Best practices
@@ -116,7 +140,7 @@ Memory is freed by the garbage collector when no references remain.
 
 ## Key takeaways
 
-- `id()` returns object identity (memory address)
+- `id()` returns object identity (virtual address)
 - `type()` returns object type
 - `isinstance()` is the correct type-checking tool
 - `dir()` lists available attributes and methods
@@ -127,78 +151,80 @@ Memory is freed by the garbage collector when no references remain.
 
 ## Exercises
 
-
 **Exercise 1.**
-Write a function `list_methods(obj)` that takes any object and returns a sorted list of its public method names (names that do not start with `_` and are callable). Test it with a list and a string.
+Predict the output and explain each result:
+
+```python
+a = [1, 2, 3]
+b = a
+c = [1, 2, 3]
+
+print(id(a) == id(b))
+print(id(a) == id(c))
+print(isinstance(a, list))
+print(type(a) == type(c))
+```
 
 ??? success "Solution to Exercise 1"
+    Output:
 
-        ```python
-        def list_methods(obj):
-            return sorted(
-                name for name in dir(obj)
-                if not name.startswith("_") and callable(getattr(obj, name))
-            )
+    ```text
+    True
+    False
+    True
+    True
+    ```
 
-        print(list_methods([]))    # ['append', 'clear', 'copy', ...]
-        print(list_methods(""))    # ['capitalize', 'casefold', 'center', ...]
-        ```
-
-    `dir(obj)` returns all attribute names. Filtering out names starting with `_` removes dunder methods and private attributes. Checking `callable(getattr(obj, name))` ensures only methods are included.
+    `b = a` makes `b` refer to the same object as `a`, so `id(a) == id(b)` is `True`. `c` is a separate list with the same contents, so it has a different identity: `id(a) == id(c)` is `False`. Both `isinstance` and `type` confirm they are lists, but identity and equality are different concepts.
 
 ---
 
 **Exercise 2.**
-Given the class below, use `type()`, `isinstance()`, and `hasattr()` to answer the following questions in code: What is the type of `d`? Is `d` an instance of `Animal`? Does `d` have an attribute called `speak`?
+`isinstance()` respects inheritance, while `type()` does not. Predict the output:
 
 ```python
-class Animal:
-    pass
-
-class Dog(Animal):
-    def speak(self):
-        return "Woof"
-
-d = Dog()
+print(type(True) == bool)
+print(type(True) == int)
+print(isinstance(True, bool))
+print(isinstance(True, int))
 ```
 
+Why does `type(True) == int` return `False` while `isinstance(True, int)` returns `True`?
+
 ??? success "Solution to Exercise 2"
+    Output:
 
-        ```python
-        class Animal:
-            pass
+    ```text
+    True
+    False
+    True
+    True
+    ```
 
-        class Dog(Animal):
-            def speak(self):
-                return "Woof"
-
-        d = Dog()
-
-        print(type(d))                  # <class '__main__.Dog'>
-        print(isinstance(d, Animal))    # True
-        print(hasattr(d, "speak"))      # True
-        ```
-
-    `type(d)` returns `Dog`, but `isinstance(d, Animal)` returns `True` because `Dog` inherits from `Animal`. `hasattr` checks whether the attribute exists on the object or its class hierarchy.
+    `type(True)` returns `<class 'bool'>`, not `<class 'int'>`. So `type(True) == int` is `False`---it checks the exact type. But `isinstance(True, int)` is `True` because `bool` is a **subclass** of `int`. `isinstance` walks the inheritance chain; `type` does not. This is why `isinstance` is preferred for type checking.
 
 ---
 
 **Exercise 3.**
-Write a function `inspect_object(obj)` that prints the object's type, its `id`, the number of attributes returned by `dir()`, and whether it is callable. Test it with an integer, a string, and a lambda function.
+A programmer uses `del` and expects the object to be immediately destroyed. Predict the output:
+
+```python
+a = [1, 2, 3]
+b = a
+del a
+
+print(b)
+print(type(b))
+```
+
+Is the list object destroyed when `del a` executes? How can you verify?
 
 ??? success "Solution to Exercise 3"
+    Output:
 
-        ```python
-        def inspect_object(obj):
-            print(f"Type: {type(obj)}")
-            print(f"ID: {id(obj)}")
-            print(f"Attributes: {len(dir(obj))}")
-            print(f"Callable: {callable(obj)}")
-            print()
+    ```text
+    [1, 2, 3]
+    <class 'list'>
+    ```
 
-        inspect_object(42)
-        inspect_object("hello")
-        inspect_object(lambda x: x)
-        ```
-
-    Integers and strings are not callable, so `callable` returns `False` for them. Lambda functions are callable, so it returns `True`.
+    The list is NOT destroyed. `del a` removes the name `a` from the namespace, but `b` still references the same list object. An object is only garbage-collected when its reference count drops to zero (no names or other references point to it). You can verify the object survives by printing `b`---it still works. After `del a`, only `print(a)` would raise `NameError`.

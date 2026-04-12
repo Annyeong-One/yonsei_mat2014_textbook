@@ -1,5 +1,3 @@
-
-
 # Running Python
 
 Execution is how expressions come to life. Everything you write is eventually evaluated step-by-step by the Python interpreter. Before writing programs, we must understand how this process works.
@@ -64,13 +62,79 @@ When Python runs a script, it performs the following steps:
 
 ```mermaid
 flowchart TD
-    A[Python source code] --> B[Interpreter]
-    B --> C[Bytecode compilation]
+    A[Python source code] --> B[Compilation]
+    B --> C[Bytecode]
     C --> D[Python Virtual Machine]
-    D --> E[Program output]
+    D --> E[Machine Code Execution (CPU)]
+    E --> F[Program output]
 ```
 
-The interpreter translates Python code into **bytecode**, which is executed by the **Python Virtual Machine (PVM)**.
+### Python Execution Pipeline
+
+```
+code → compile → bytecode → VM → machine code → CPU → result
+```
+
+### Compile Time vs Run Time
+
+**Compile time (before execution):**
+- Python parses the code
+- Generates bytecode
+- **Determines variable scope (very important)**
+- Detects syntax errors
+
+**Run time (during execution):**
+- Bytecode is executed by the Python Virtual Machine (PVM)
+- Values are computed
+- Runtime errors may occur
+
+> Key idea:  
+> **Compile time decides *where to look* (scope)**  
+> **Run time determines *what value is found***
+
+---
+
+### Bytecode vs Machine Code
+
+These may look similar, but they are fundamentally different:
+
+| Type | Executed by | Description |
+|------|------------|-------------|
+| Bytecode | Python VM | Intermediate instructions |
+| Machine code | CPU | Hardware-level instructions |
+
+**Pipeline difference:**
+
+- C/C++:
+  ```
+  code → machine code → CPU
+  ```
+
+- Python:
+  ```
+  code → bytecode → VM → CPU
+  ```
+
+> Bytecode is portable (same across systems),  
+> machine code is hardware-specific.
+
+---
+
+### Role of the Python Virtual Machine (PVM)
+
+The PVM acts as a **translator**:
+
+- Reads bytecode
+- Converts it into machine-level operations
+- Sends instructions to the CPU
+
+You can think of it as:
+
+```
+bytecode → (interpreted by VM) → machine actions → CPU
+```
+
+---
 
 Python reports errors at two different stages:
 
@@ -99,7 +163,7 @@ import dis
 dis.dis(lambda x, y: x + y)
 ```
 
-This shows the low-level instructions the PVM executes. You do not need to understand bytecode to write Python, but knowing it exists explains why Python can report errors at two different stages: **syntax errors** at compile time (before any code runs) and **runtime errors** during execution.
+This shows the low-level instructions the PVM executes.
 
 ---
 
@@ -114,17 +178,172 @@ In practice, the development cycle looks like this:
 
 The interactive interpreter is ideal for exploring small ideas. Scripts are better for complete programs. Most real work alternates between the two.
 
-Try this in the interpreter to see the cycle in action:
+!!! tip "One thing to remember"
+    Python compiles your code to bytecode, then executes it via a virtual machine before reaching the CPU.
 
-```python
->>> "hello" + 5
-TypeError: can only concatenate str (not "int") to str
+
+---
+
+## 5. Why Python Uses a Virtual Machine
+
+Python does not execute bytecode directly on the CPU. Instead, it uses a **Virtual Machine (PVM)** as an intermediate layer.
+
+### Key Idea
+
+```
+bytecode → VM → CPU
 ```
 
-You wrote code, ran it, observed a failure, and now you know: Python does not auto-convert types. Modify to `"hello" + str(5)` and try again.
+### Why add this extra layer?
 
-!!! tip "One thing to remember"
-    Python compiles your code to bytecode, then executes it. Syntax errors stop compilation; runtime errors happen during execution. Learn to read tracebacks from the bottom up.
+#### 1. Portability
+- Same Python code runs on different systems (Windows, Mac, Linux)
+- Only the VM needs to adapt to the underlying CPU
+
+> Write once, run anywhere
+
+---
+
+#### 2. Simpler Language Design
+Python does not need to deal with:
+- CPU instruction sets
+- Registers
+- Low-level memory handling
+
+The VM abstracts these details away.
+
+---
+
+#### 3. Dynamic Features
+Python supports:
+```python
+x = 10
+x = "hello"
+```
+
+and even:
+
+```python
+def f():
+    return 42
+
+f = 100
+```
+
+This flexibility is much easier to support with a VM than with direct machine code.
+
+---
+
+#### 4. Better Error Handling
+Because execution is controlled by the VM:
+- Python can provide detailed tracebacks
+- Errors can be detected cleanly at runtime
+
+---
+
+#### 5. Memory Management
+The VM manages:
+- Object creation
+- Reference counting
+- Garbage collection
+
+No manual memory management is required.
+
+---
+
+### Trade-off
+
+Using a VM adds overhead:
+
+```
+bytecode → VM → CPU
+```
+
+So Python is slower than low-level languages like C, but much easier to use.
+
+---
+
+## 6. Python, Java, and C Execution Model Comparison
+
+These languages differ mainly in **how code reaches the CPU**.
+
+| Language | Pipeline | Main Strength |
+|----------|----------|---------------|
+| C | code → machine code → CPU | maximum performance and hardware control |
+| Python | code → bytecode → VM → CPU | simplicity and flexibility |
+| Java | code → bytecode → JVM → CPU | portability with stronger static structure |
+
+### Comparison Box
+
+!!! info "Python vs Java vs C"
+    **C**
+
+    - Compiles directly to **machine code**
+    - CPU executes it directly
+    - Very fast and close to hardware
+    - Platform-specific after compilation
+
+    ```text
+    code → machine code → CPU
+    ```
+
+    **Python**
+
+    - Compiles to **bytecode**
+    - Bytecode is executed by the **Python Virtual Machine (PVM)**
+    - Very flexible and easy to use, but slower
+
+    ```text
+    code → bytecode → PVM → CPU
+    ```
+
+    **Java**
+
+    - Compiles to **bytecode**
+    - Bytecode is executed by the **Java Virtual Machine (JVM)**
+    - More portable than C, usually more structured and faster than Python in many cases
+
+    ```text
+    code → bytecode → JVM → CPU
+    ```
+
+### Why compare Python with Java and C?
+
+Python and Java both use a virtual machine layer, so they share an important idea:
+
+> The program does **not** talk directly to the CPU first.  
+> It first runs through a virtual machine.
+
+C is different:
+
+> C is compiled to **machine code**, so the CPU can execute it directly.
+
+This creates a useful three-way contrast:
+
+- **Python** prioritizes readability, dynamic behavior, and ease of use
+- **Java** prioritizes portability, structured design, and strong static checking
+- **C** prioritizes direct hardware performance and low-level control
+
+### Important nuance
+
+Although both Python and Java use bytecode and a VM, they are not identical:
+
+- Python is generally more dynamic at runtime
+- Java is typically compiled with more static type information
+- Modern JVMs often use advanced optimizations such as **JIT (Just-In-Time) compilation**
+- CPython usually interprets bytecode more directly, which is one reason Python is often slower than Java
+
+C is different from both:
+
+- C code is compiled ahead of time into platform-specific machine code
+- There is no Python-style or Java-style VM in the normal execution model
+- The program runs much closer to the hardware
+
+### One-line takeaway
+
+> **C** aims to run close to the machine.
+> **Python** aims to make programming easy and flexible.
+> **Java** sits in between: portable like Python, but more performance-oriented and statically structured.
 
 ---
 
@@ -154,94 +373,6 @@ Open the Python interpreter and evaluate the following expressions one at a time
 ---
 
 **Exercise 2.**
-Create a file called `greet.py` with the following content:
-
-```python
-name = "World"
-print("Hello, " + name + "!")
-```
-
-Run the file from the command line. What command do you use? What is the output?
-
-??? success "Solution to Exercise 2"
-    Run from the terminal:
-
-    ```bash
-    python greet.py
-    ```
-
-    Output:
-
-    ```
-    Hello, World!
-    ```
-
-    On some systems you may need to use `python3 greet.py` instead. The interpreter reads the entire file, executes it top to bottom, and prints the result of the `print` call.
-
----
-
-**Exercise 3.**
-Explain the three stages that occur when Python runs a `.py` script. Describe the role of each stage.
-
-??? success "Solution to Exercise 3"
-    When Python runs a script, three stages occur:
-
-    1. **Source code reading** -- The interpreter reads the `.py` file as text.
-    2. **Bytecode compilation** -- The source code is compiled into bytecode, an intermediate, platform-independent representation.
-    3. **Execution by the Python Virtual Machine (PVM)** -- The PVM executes the bytecode instructions and produces the program's output.
-
-    This process happens automatically every time a script is run. The bytecode step is why Python is sometimes called a "compiled interpreted" language.
-
----
-
-**Exercise 4.**
-A student types `print("Hello")` in the interactive interpreter and sees `Hello` as output. They then type `"Hello"` (without `print`) and also see `'Hello'`. Explain why both produce visible output and describe the difference between the two results.
-
-??? success "Solution to Exercise 4"
-    In the interactive interpreter, any expression that evaluates to a non-`None` value is automatically displayed using its `repr` form. So typing `"Hello"` displays `'Hello'` (with quotes), because the interpreter shows the representation of the string object.
-
-    When `print("Hello")` is used, the `print` function writes the string's **content** to standard output (without quotes), producing `Hello`. The `print` call itself returns `None`, which the interpreter does not display.
-
-    Key difference: the bare expression shows the `repr` (with quotes), while `print` shows the `str` form (without quotes).
-
----
-
-**Exercise 5.**
-Write a Python script called `calculator.py` that defines two variables `a = 7` and `b = 3`, then prints their sum, difference, product, and quotient on separate lines. Run the script and verify the output.
-
-??? success "Solution to Exercise 5"
-    File `calculator.py`:
-
-    ```python
-    a = 7
-    b = 3
-
-    print(a + b)
-    print(a - b)
-    print(a * b)
-    print(a / b)
-    ```
-
-    Run:
-
-    ```bash
-    python calculator.py
-    ```
-
-    Output:
-
-    ```
-    10
-    4
-    21
-    2.3333333333333335
-    ```
-
-    Note that `/` performs true division and returns a `float`, even when both operands are integers.
-
----
-
-**Exercise 6.**
 A student runs this script and gets an error before any output appears:
 
 ```python
@@ -250,9 +381,21 @@ x = 10 +
 print("end")
 ```
 
-Is this a compile-time error or a runtime error? Why does `"start"` never print? How does this relate to Python's execution model?
+Is this a compile-time error or a runtime error? Why does `"start"` never print?
 
-??? success "Solution to Exercise 6"
+??? success "Solution to Exercise 2"
     This is a **compile-time error** (`SyntaxError: invalid syntax`). Python compiles the entire script to bytecode before executing any of it. The syntax error on line 2 prevents compilation from completing, so the PVM never runs --- not even the first `print`.
 
     This demonstrates the two-stage execution model: compilation happens first (catches syntax errors), then execution (catches runtime errors like `TypeError`, `ValueError`). If compilation fails, nothing runs.
+
+---
+
+**Exercise 3.**
+Explain the key difference between Python's execution model and C's. Why does Python use a virtual machine instead of compiling directly to machine code? Name one advantage and one disadvantage of this approach.
+
+??? success "Solution to Exercise 3"
+    **C** compiles source code directly to machine code that the CPU executes. **Python** compiles source code to bytecode, which is then interpreted by the Python Virtual Machine (PVM), which in turn issues instructions to the CPU.
+
+    **Advantage**: Portability and flexibility. The same Python bytecode runs on any platform that has a PVM. Python can also support dynamic features (like changing a variable's type at runtime) more easily because the VM controls execution.
+
+    **Disadvantage**: Performance overhead. The extra VM layer means Python code runs slower than equivalent C code, since every bytecode instruction must be interpreted rather than executed directly by the CPU.

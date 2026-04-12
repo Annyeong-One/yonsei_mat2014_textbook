@@ -177,6 +177,28 @@ print(b)  # [1, 2] -- b still refers to the original list
     `+=` mutates in place (and rebinds), while `a = a + b` creates a new object
     and rebinds. For immutable types, both create a new object.
 
+### The tuple-with-list surprise
+
+One of Python's most surprising behaviors involves `+=` on a mutable element inside an immutable container:
+
+```python
+t = ([1, 2],)
+
+try:
+    t[0] += [3]
+except TypeError as e:
+    print("Error:", e)
+
+print(t)  # ([1, 2, 3],)
+```
+
+This both **raises an error** and **mutates the list**. Why? Because `+=` is a two-step operation:
+
+1. `t[0].__iadd__([3])` --- mutates the list in place (succeeds)
+2. `t[0] = result` --- tries to assign back into the tuple (fails)
+
+Step 1 already changed the list before step 2 fails. This demonstrates that `+=` is not an atomic operation.
+
 ---
 
 ## The Right-Hand Side Is Always Evaluated First

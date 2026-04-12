@@ -58,7 +58,7 @@ print(names)  # ['Alice', 'Bob', 'Charlie']
 
 ## The map() Function
 
-Python also provides the built-in `map()` function. It takes a function and an iterable and returns a lazy iterator of transformed values.
+Python also provides the built-in `map()` function. It takes a function and an iterable and returns a "lazy" iterator of transformed values.
 
 ```python
 celsius = [0, 20, 37, 100]

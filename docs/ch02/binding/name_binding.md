@@ -1,5 +1,3 @@
-
-
 # Name Binding Model
 
 ## The Mental Model
@@ -36,101 +34,24 @@ namespace:
 
 Each of these statements binds a name in the **current** namespace.
 
-### How def Creates a Name
-
-A `def` statement does two things: it creates a **function object**, and it
-binds the function's name in the enclosing namespace:
-
-```python
-def square(n):
-    return n * n
-
-print(type(square))  # <class 'function'>
-print(square)        # <function square at 0x...>
-```
-
-The name `square` is an ordinary entry in the namespace. You can rebind it:
-
-```python
-def square(n):
-    return n * n
-
-old = square
-square = 42
-print(square)    # 42
-print(old(5))    # 25 -- the function object still exists
-```
-
-### How import Creates a Name
-
-An `import` statement creates a **module object** and binds a name to it:
-
-```python
-import math
-print(type(math))  # <class 'module'>
-print(math.pi)     # 3.141592653589793
-```
-
-With `from ... import`, specific attributes are copied into the current
-namespace:
-
-```python
-from math import sqrt, pi
-print(sqrt(16))  # 4.0
-print(pi)        # 3.141592653589793
-```
-
-Using an alias binds under a different name:
-
-```python
-import numpy as np  # binds the module object under the name "np"
-```
-
 ---
 
 ## Namespaces as Dictionaries
 
-Every namespace in Python is implemented as (or backed by) a dictionary. You
-can inspect them directly:
-
-### The global namespace
+Every namespace in Python is implemented as (or backed by) a dictionary. You can inspect them directly:
 
 ```python
 x = 10
-name = "Alice"
 
-print(globals())
+def greet():
+    name = "Alice"
+    print(locals())   # {'name': 'Alice'}
+
+greet()
+print("x" in globals())  # True
 ```
 
-`globals()` returns the dictionary for the current module's namespace. You will
-see `"x"` and `"name"` as keys among the built-in entries.
-
-### The local namespace
-
-Inside a function, `locals()` returns the local namespace:
-
-```python
-def example():
-    a = 1
-    b = 2
-    print(locals())
-
-example()  # {'a': 1, 'b': 2}
-```
-
-At module level, `locals()` and `globals()` return the same dictionary.
-
-### Namespace manipulation
-
-Because `globals()` returns a real dictionary, you can modify it directly
-(though this is rarely advisable):
-
-```python
-globals()["dynamic_var"] = 99
-print(dynamic_var)  # 99
-```
-
-This confirms the mental model: name binding is literally dictionary insertion.
+`globals()` returns the module-level namespace as a dictionary. `locals()` returns the current function's namespace. This is not a metaphor---namespaces literally are dictionaries.
 
 ---
 
@@ -141,96 +62,15 @@ When Python encounters a name, it searches four namespaces in order:
 | Letter | Scope | Description |
 | --- | --- | --- |
 | **L** | Local | Names defined inside the current function |
-| **E** | Enclosing | Names in any enclosing function (for nested functions) |
+| **E** | Enclosing | Names in any enclosing function |
 | **G** | Global | Names defined at the module level |
-| **B** | Built-in | Names pre-defined by Python (`len`, `print`, `int`, etc.) |
-
-Python searches from L to B and stops at the first match.
-
-### LEGB in action
-
-```python
-x = "global"
-
-def outer():
-    x = "enclosing"
-
-    def inner():
-        x = "local"
-        print(x)  # "local" -- found in L
-
-    inner()
-    print(x)  # "enclosing" -- found in L of outer
-
-outer()
-print(x)  # "global" -- found in G
-```
-
-### Falling through to built-in scope
-
-```python
-def demo():
-    result = len([1, 2, 3])  # "len" not in L, E, or G -- found in B
-    print(result)
-
-demo()  # 3
-```
-
-### Shadowing
-
-A local name can shadow a global or built-in name:
-
-```python
-len = 42  # shadows the built-in len
-
-# print(len([1, 2, 3]))  # TypeError: 'int' object is not callable
-
-del len  # remove the shadow, restoring access to the built-in
-print(len([1, 2, 3]))  # 3
-```
-
-!!! warning "Avoid shadowing built-in names"
-    Binding a name like `list`, `dict`, `str`, `len`, or `print` in your own
-    code hides the built-in. This is a common source of confusing errors.
-
----
-
-## Removing Names with del
-
-The `del` statement removes a name from its namespace:
-
-```python
-x = 100
-print(x)    # 100
-
-del x
-# print(x)  # NameError: name 'x' is not defined
-```
-
-`del` does **not** destroy the object. It removes the name-to-object binding.
-The object is only destroyed when no references remain (garbage collection):
-
-```python
-a = [1, 2, 3]
-b = a
-del a
-print(b)  # [1, 2, 3] -- the list object still exists because b refers to it
-```
-
-You can also delete attributes and dictionary entries with `del`:
-
-```python
-d = {"key": "value"}
-del d["key"]
-print(d)  # {}
-```
+| **B** | Built-in | Predefined names |
 
 ---
 
 ## Scope Determined at Compile Time
 
-Python determines the scope of each name **at compile time** (when the
-function is defined), not at runtime. This has an important consequence:
+Python determines the scope of each name **at compile time**, not at runtime.
 
 ```python
 x = 10
@@ -238,53 +78,124 @@ x = 10
 def broken():
     print(x)   # UnboundLocalError!
     x = 20
-
-# broken()
 ```
 
-Python sees the assignment `x = 20` inside `broken` and classifies `x` as a
-**local** variable for the entire function body. When `print(x)` executes, the
-local `x` has not yet been assigned, causing an `UnboundLocalError`.
+Python sees `x = 20` and classifies `x` as **local** for the entire function.
 
-This is not a bug -- it is a direct consequence of compile-time scope analysis.
-If you intend to read and write a global variable inside a function, use the
-`global` declaration:
+---
+
+## Advanced Note: Assignment Changes Scope (and Evaluation)
+
+Assignment does more than bind a name — it also determines **where that name lives**.
+
+Consider:
 
 ```python
-x = 10
+n = 10
 
-def fixed():
-    global x
-    print(x)  # 10
-    x = 20
-
-fixed()
-print(x)  # 20
+def f():
+    n = n + 1
+    return n
 ```
+
+This raises:
+
+```
+UnboundLocalError: local variable 'n' referenced before assignment
+```
+
+### What actually happens
+
+Before execution, Python analyzes the function:
+
+- It sees `n = ...`
+- Therefore, `n` is **local to the function**
+
+This decision is made **before any line runs**.
+
+Now when evaluating:
+
+```python
+n + 1
+```
+
+Python does:
+
+1. Look up `n` in the **local scope**
+2. Not find a value (not assigned yet)
+3. Raise an error
+
+### Key insight
+
+> Assignment affects *all* uses of the name in the function
+
+Even earlier lines.
+
+---
+
+## Refined Mental Model
+
+Combine name binding and scope:
+
+> **scope → evaluate RHS → bind to LHS**
+
+- Scope is determined first (compile time)
+- RHS is evaluated using that scope
+- LHS binding updates the namespace
+
+---
+
+## Comparison
+
+### No assignment → global lookup
+
+```python
+def f():
+    return n + 1
+```
+
+- `n` not assigned → not local
+- → Python searches global scope
+- → works
+
+---
+
+### With assignment → local shadowing
+
+```python
+def f():
+    n = n + 1
+```
+
+- `n` assigned → local
+- → shadows global `n`
+- → RHS uses uninitialized local → error
 
 ---
 
 ## Summary
 
-| Concept | Key idea |
-| --- | --- |
-| Namespace | A dictionary mapping names to objects |
-| Name binding | Adding an entry to a namespace (`x = ...`, `def`, `import`, etc.) |
-| LEGB rule | Search order: Local, Enclosing, Global, Built-in |
-| `del` | Removes a name from a namespace (not the object) |
-| Scope analysis | Python determines scope at compile time, not runtime |
+| Situation | Result |
+|----------|--------|
+| Name assigned in function | Local variable |
+| RHS uses that name | Uses local scope |
+| Local not initialized | UnboundLocalError |
+| No assignment | Falls back to LEGB |
 
-Names are not magic -- they are dictionary keys. Every operation on names
-reduces to dictionary lookups and insertions, governed by the LEGB search
-order.
+---
+
+## Key Takeaway
+
+> Names are dictionary keys — but **which dictionary** is decided *before execution*.
+
+Assignment doesn't just insert into a dictionary --- it determines **which dictionary will be used everywhere in the function**.
 
 ---
 
 ## Exercises
 
 **Exercise 1.**
-Predict the output of the following code. For each `print` call, state which
-scope (Local, Enclosing, Global, or Built-in) provides the value and why.
+Predict the output and explain which namespace each name lives in:
 
 ```python
 x = "global"
@@ -298,124 +209,86 @@ def outer():
     inner()
 
 outer()
-print(x)
 ```
+
+Which scope does `inner` find `x` in? What would change if `inner` also had `x = "local"` before the `print`?
 
 ??? success "Solution to Exercise 1"
     Output:
 
     ```text
     enclosing
-    global
     ```
 
-    - The first `print(x)` is inside `inner()`. Python searches the local
-      scope of `inner` and finds no `x`. It then searches the **enclosing**
-      scope (`outer`), where `x = "enclosing"` exists. It prints `"enclosing"`.
-    - The second `print(x)` is at module level. Python searches the **global**
-      scope, where `x = "global"` exists. It prints `"global"`.
+    `inner` does not assign `x`, so it is not local. Python searches LEGB: Local (no `x`) -> Enclosing (`x = "enclosing"` found). It prints `"enclosing"`.
 
-    The key point is that `inner` does not have its own `x`, so LEGB resolution
-    falls through from L to E. The module-level `print` resolves `x` directly
-    at the G level.
+    If `inner` had `x = "local"` before the `print`, Python would classify `x` as local to `inner` at compile time. The `print(x)` would use the local value `"local"`.
 
 ---
 
 **Exercise 2.**
-Explain why the following function raises an error, even though `total` is
-defined before the `print` call at module level. Fix the function in two
-different ways: once using the `global` keyword, and once by redesigning the
-function to avoid `global`.
+Explain why this code raises an error, and provide two different fixes:
 
 ```python
 total = 0
 
-def add_to_total(n):
-    print(total)
+def add(n):
     total = total + n
+    return total
 
-add_to_total(5)
+add(5)
 ```
 
 ??? success "Solution to Exercise 2"
-    The function raises `UnboundLocalError: cannot access local variable
-    'total' before assignment`. Python's compiler sees the assignment
-    `total = total + n` and classifies `total` as a **local** variable for
-    the entire function body. When `print(total)` executes, the local `total`
-    has not yet been assigned.
+    `UnboundLocalError: local variable 'total' referenced before assignment`.
 
-    **Fix 1 -- using `global`:**
+    Python sees `total = ...` inside `add` and marks `total` as local at compile time. When evaluating `total + n`, it looks for the local `total`, which has not been assigned yet.
+
+    **Fix 1 --- use `global`** (generally discouraged):
 
     ```python
-    total = 0
-
-    def add_to_total(n):
+    def add(n):
         global total
-        print(total)
         total = total + n
-
-    add_to_total(5)  # prints 0, then total becomes 5
+        return total
     ```
 
-    The `global` declaration tells Python that `total` inside this function
-    refers to the module-level name.
-
-    **Fix 2 -- redesign without `global`:**
+    **Fix 2 --- pass and return** (preferred):
 
     ```python
-    def add_to_total(current_total, n):
-        print(current_total)
-        return current_total + n
-
     total = 0
-    total = add_to_total(total, 5)  # prints 0, total becomes 5
+
+    def add(total, n):
+        return total + n
+
+    total = add(total, 5)
     ```
 
-    This approach passes `total` as an argument and returns the new value,
-    avoiding shared mutable state entirely. This is generally preferred because
-    it makes data flow explicit and the function easier to test.
+    Fix 2 makes data flow explicit through parameters and return values, avoiding hidden state dependencies.
 
 ---
 
 **Exercise 3.**
-Write a short program that demonstrates that `del` removes a name but not the
-underlying object. Your program should:
+`del` removes a name from its namespace. Predict the output:
 
-1. Create a list and bind two names to it.
-2. Delete one name.
-3. Show that the other name still accesses the list.
-4. Show that the deleted name raises `NameError`.
+```python
+x = 10
+y = x
+del x
 
-Include the expected output as comments.
+print(y)
+print(x)
+```
+
+What happens to the object `10` after `del x`? Is it destroyed?
 
 ??? success "Solution to Exercise 3"
-    ```python
-    data = [10, 20, 30]
-    backup = data          # both names refer to the same list object
-
-    print(id(data) == id(backup))  # True -- same object
-
-    del data               # remove the name "data" from the namespace
-
-    print(backup)          # [10, 20, 30] -- object still exists
-    print(type(backup))    # <class 'list'>
-
-    try:
-        print(data)
-    except NameError as e:
-        print(e)           # name 'data' is not defined
-    ```
-
-    Expected output:
+    Output:
 
     ```text
-    True
-    [10, 20, 30]
-    <class 'list'>
-    name 'data' is not defined
+    10
     ```
 
-    `del data` removes the entry `"data"` from the namespace dictionary. The
-    list object itself is unaffected because `backup` still holds a reference
-    to it. The object would only be garbage-collected when its reference count
-    drops to zero (i.e., when no name or container refers to it).
+    Then `print(x)` raises `NameError: name 'x' is not defined`.
+
+    `del x` removes the name `x` from the namespace dictionary. It does NOT destroy the object `10`. The object still exists because `y` still references it. An object is only garbage-collected when no names (or other references) point to it. `del` removes the dictionary entry, not the object.
