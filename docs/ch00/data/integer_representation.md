@@ -787,3 +787,18 @@ Consider the expression `-5 & 0xFF` in Python, which produces `251`. Explain ste
 * **Python integers** use arbitrary precision and never overflow, but require more memory.
 
 Understanding integer representation is essential for reasoning about **overflow, bitwise operations, memory efficiency, and numerical correctness** in software systems.
+
+## Exercises
+
+**Exercise 1.** In two's complement representation using 8 bits, what is the range of representable integers.
+
+??? success "Solution to Exercise 1"
+    With 8 bits in two's complement, the range is -128 to 127. The most significant bit is the sign bit: 0 for non-negative, 1 for negative. The minimum value is 10000000 = -128, and the maximum is 01111111 = 127.
+
+---
+
+**Exercise 2.** Explain what integer overflow is and give an example with 8-bit unsigned integers.
+
+??? success "Solution to Exercise 2"
+    Integer overflow occurs when an arithmetic operation produces a result outside the representable range. With 8-bit unsigned integers (range 0-255), adding 200 + 100 = 300, but 300 cannot be stored in 8 bits. The result wraps around: 300 mod 256 = 44. This can cause subtle bugs in programs.
+

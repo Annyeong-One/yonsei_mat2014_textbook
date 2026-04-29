@@ -2,13 +2,18 @@
 
 Understanding the fundamental differences between procedural and object-oriented programming paradigms.
 
+!!! tip "Core Insight"
+    Procedural programming separates data and behavior — functions receive data, transform it, and return results. OOP *binds* data and behavior together, so state changes are controlled by the object itself.
+
 ---
 
 ## Programming Paradigms
 
+Python code can be organized around functions that transform data (procedural) or around objects that own their data and expose operations on it (OOP). The comparison below makes the trade-offs concrete.
+
 ### 1. Procedural Focus
 
-Organized around **procedures or functions** that operate on data.
+Organized around **procedures or functions** that operate on data passed as arguments.
 
 ```python
 def calculate_area(width, height):
@@ -24,7 +29,7 @@ area = calculate_area(width, height)
 
 ### 2. OOP Focus
 
-Organized around **objects** that encapsulate data and behavior.
+Organized around **objects** that encapsulate data and behavior in a single unit.
 
 ```python
 class Rectangle:
@@ -44,7 +49,7 @@ area = rect.area()
 
 ### 3. Key Shift
 
-From function-centric to object-centric design.
+The core change is from function-centric to object-centric design. In procedural code, functions and data live separately — you pass data into functions. In OOP, each object owns its data and exposes methods to operate on it.
 
 ---
 
@@ -66,7 +71,11 @@ $$
 
 ## State Management
 
+The most visible difference between the two paradigms is where state lives. In procedural code, state is stored in variables that must be passed to every function that needs them. In OOP, each object carries its own state internally.
+
 ### 1. Procedural State
+
+State lives outside functions and must be threaded through every call.
 
 ```python
 # State is external to functions
@@ -84,6 +93,8 @@ print_car(speed, color)
 ```
 
 ### 2. OOP State
+
+State lives inside the object and methods access it through `self`.
 
 ```python
 # State is internal to objects
@@ -105,16 +116,18 @@ ford.print_all()
 
 ### 3. State Cohesion
 
-OOP keeps related data and operations together.
+OOP keeps related data and operations together. When state grows — adding `fuel`, `mileage`, `engine_type` — the procedural version requires updating every function signature, while the OOP version simply adds attributes and methods to the class.
 
 ---
 
 ## Code Organization
 
+As a codebase grows, the way related functions and data are grouped determines how easy it is to navigate, test, and extend. Procedural code relies on naming conventions and file organization, while OOP uses classes as natural organizational boundaries.
+
 ### 1. Procedural Organization
 
 ```python
-# Functions scattered
+# Functions scattered — only naming ties them together
 def create_student(name, major):
     return {"name": name, "major": major}
 
@@ -147,11 +160,13 @@ class Student:
 
 ### 3. Logical Grouping
 
-Classes provide natural organization boundaries.
+Classes provide natural organization boundaries. With the class, discovering what operations exist on a student is as simple as inspecting `Student` — no need to search the entire module for functions that accept a `student` dictionary.
 
 ---
 
 ## When to Use Each
+
+Neither paradigm is universally better. The right choice depends on the problem's complexity and how the code will evolve.
 
 ### 1. Use Procedural
 
@@ -162,18 +177,20 @@ Classes provide natural organization boundaries.
 
 ### 2. Use OOP
 
-- Complex systems
-- Multiple related entities
-- Need for inheritance
-- Long-term maintenance
+- Complex systems with multiple interacting entities
+- Domains where objects have identity and lifecycle
+- Projects requiring inheritance and polymorphism
+- Long-term codebases that need extensible design
 
 ### 3. Hybrid Approach
 
-Modern Python often mixes both paradigms.
+Modern Python often mixes both paradigms. A data pipeline might use classes for configuration and connection pooling while keeping transformation logic as pure functions.
 
 ---
 
 ## Code Reuse
+
+Both paradigms support reuse, but through different mechanisms. Procedural code reuses by calling shared functions. OOP adds inheritance and composition, which allow extending behavior without modifying existing code.
 
 ### 1. Procedural Reuse
 
@@ -202,17 +219,17 @@ class CustomProcessor(BaseProcessor):
 
 ### 3. Extensibility
 
-OOP provides more mechanisms for extension.
+OOP provides more mechanisms for extension. `CustomProcessor` reuses `BaseProcessor.process` via `super()` and adds new behavior on top — without touching the base class.
 
 ---
 
 ## Key Takeaways
 
-- Procedural: functions operating on data.
-- OOP: objects encapsulating data and behavior.
-- OOP provides better encapsulation and reuse.
-- Choose based on problem complexity.
-- Modern code often uses both paradigms.
+- Procedural programming organizes code around functions that operate on external data.
+- OOP organizes code around objects that encapsulate data and behavior.
+- OOP provides better encapsulation, cohesion, and reuse mechanisms.
+- Choose the paradigm based on problem complexity and expected growth.
+- Modern Python often blends both paradigms in the same project.
 
 ---
 
@@ -305,7 +322,37 @@ Model a library checkout system. Procedurally: use dictionaries and functions. O
 
 ??? success "Solution to Exercise 3"
 
-        # OOP version
+        # Procedural
+        def create_library(name):
+            return {"name": name, "books": []}
+
+        def add_book(library, title, author):
+            library["books"].append({"title": title, "author": author, "checked_out": False})
+
+        def checkout(library, title):
+            for b in library["books"]:
+                if b["title"] == title and not b["checked_out"]:
+                    b["checked_out"] = True
+                    return True
+            return False
+
+        def return_book(library, title):
+            for b in library["books"]:
+                if b["title"] == title and b["checked_out"]:
+                    b["checked_out"] = False
+                    return True
+            return False
+
+        def available(library):
+            return [b["title"] for b in library["books"] if not b["checked_out"]]
+
+        lib = create_library("City Library")
+        add_book(lib, "Python 101", "Author A")
+        add_book(lib, "Data Science", "Author B")
+        checkout(lib, "Python 101")
+        print(available(lib))  # ['Data Science']
+
+        # OOP
         class Book:
             def __init__(self, title, author):
                 self.title = title
@@ -342,3 +389,63 @@ Model a library checkout system. Procedurally: use dictionaries and functions. O
         lib.add_book("Data Science", "Author B")
         lib.checkout("Python 101")
         print(lib.available())  # ['Data Science']
+
+---
+
+**Exercise 4.**
+Explain in your own words why the procedural `speed_up(speed)` function in the State Management section must return the new value, while the OOP `Car.speed_up()` method does not. What does this reveal about how each paradigm handles state?
+
+??? success "Solution to Exercise 4"
+
+        # The procedural function receives speed as a parameter — a local copy.
+        # To propagate the change, it must return the new value so the caller
+        # can rebind the variable:
+        #
+        #   speed = speed_up(speed)
+        #
+        # The OOP method accesses self.speed — the object's own attribute.
+        # Mutating self.speed changes the object in place, so no return is needed:
+        #
+        #   ford.speed_up()
+        #
+        # This reveals the core difference: procedural code treats data as
+        # values flowing through functions, while OOP treats data as state
+        # owned by objects. OOP's internal state eliminates the need to
+        # thread variables through every function call.
+
+---
+
+**Exercise 5.**
+A colleague argues that OOP is always better than procedural code. Write a short script where the procedural approach is clearly simpler and more readable than an OOP equivalent. Explain your reasoning.
+
+??? success "Solution to Exercise 5"
+
+        import math
+
+        # Procedural — clean and direct
+        def distance(x1, y1, x2, y2):
+            return math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
+
+        def midpoint(x1, y1, x2, y2):
+            return ((x1 + x2) / 2, (y1 + y2) / 2)
+
+        print(distance(0, 0, 3, 4))   # 5.0
+        print(midpoint(0, 0, 3, 4))   # (1.5, 2.0)
+
+        # OOP — unnecessary ceremony for a stateless computation
+        class GeometryCalculator:
+            def distance(self, x1, y1, x2, y2):
+                return math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
+
+            def midpoint(self, x1, y1, x2, y2):
+                return ((x1 + x2) / 2, (y1 + y2) / 2)
+
+        calc = GeometryCalculator()
+        print(calc.distance(0, 0, 3, 4))   # 5.0
+        print(calc.midpoint(0, 0, 3, 4))   # (1.5, 2.0)
+
+        # The class adds no value here: there is no state to encapsulate,
+        # no behavior to inherit, and no identity to track. The procedural
+        # version is shorter, clearer, and avoids creating an object that
+        # serves only as a namespace. OOP shines when objects have state
+        # and lifecycle — for pure computations, functions are the right tool.

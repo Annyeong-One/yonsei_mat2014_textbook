@@ -548,3 +548,18 @@ Process isolation through virtual memory means that one process cannot directly 
 * **Memory-mapped files** allow programs to work with datasets larger than RAM.
 
 Virtual memory is a fundamental abstraction that enables **process isolation, memory protection, and scalable memory management** in modern operating systems.
+
+## Exercises
+
+**Exercise 1.** Explain the purpose of virtual memory and why each process gets its own address space.
+
+??? success "Solution to Exercise 1"
+    Virtual memory provides each process with the illusion of a large, contiguous address space. This isolates processes from each other (one process cannot corrupt another's memory), allows the total memory used by all processes to exceed physical RAM (using disk as overflow), and simplifies memory management for programmers.
+
+---
+
+**Exercise 2.** What is a page fault and when does it occur.
+
+??? success "Solution to Exercise 2"
+    A page fault occurs when a program accesses a virtual memory page that is not currently in physical RAM. The operating system must then load the page from disk (swap space), which takes milliseconds compared to nanoseconds for RAM access. Frequent page faults (thrashing) severely degrade performance.
+

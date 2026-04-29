@@ -78,3 +78,61 @@ print(args.op)    # '+'
 
 Use `args.num1`, `args.num2`, and `args.op` to access values safely.
 
+## Exercises
+
+**Exercise 1.** Write a script that uses `argparse` to accept a filename and an optional `--verbose` flag. When `--verbose` is set, print additional information about the file (size, modification time).
+
+??? success "Solution to Exercise 1"
+
+        import argparse
+        import os
+        import time
+
+        parser = argparse.ArgumentParser(description="Display file info")
+        parser.add_argument("filename", help="Path to the file")
+        parser.add_argument("--verbose", "-v", action="store_true",
+                            help="Show detailed file information")
+        args = parser.parse_args()
+
+        if not os.path.exists(args.filename):
+            print(f"Error: {args.filename} not found")
+        else:
+            print(f"File: {args.filename}")
+            if args.verbose:
+                stat = os.stat(args.filename)
+                print(f"  Size: {stat.st_size} bytes")
+                print(f"  Modified: {time.ctime(stat.st_mtime)}")
+
+---
+
+**Exercise 2.** Extend the script from Exercise 1 to support subcommands: `info` (display file information) and `count` (count lines, words, and characters in a text file).
+
+??? success "Solution to Exercise 2"
+
+        import argparse
+        import os
+        import time
+
+        parser = argparse.ArgumentParser(description="File utility")
+        subparsers = parser.add_subparsers(dest="command", required=True)
+
+        info_parser = subparsers.add_parser("info", help="Show file info")
+        info_parser.add_argument("filename")
+
+        count_parser = subparsers.add_parser("count", help="Count lines/words/chars")
+        count_parser.add_argument("filename")
+
+        args = parser.parse_args()
+
+        if args.command == "info":
+            stat = os.stat(args.filename)
+            print(f"Size: {stat.st_size} bytes")
+            print(f"Modified: {time.ctime(stat.st_mtime)}")
+        elif args.command == "count":
+            with open(args.filename) as f:
+                content = f.read()
+            lines = content.count("\n")
+            words = len(content.split())
+            chars = len(content)
+            print(f"Lines: {lines}, Words: {words}, Characters: {chars}")
+

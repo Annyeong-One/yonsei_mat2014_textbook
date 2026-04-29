@@ -204,3 +204,17 @@ These ideas are developed across the following pages:
 
 With these fundamentals in place, later sections build on them: control flow, functions, data types, and modules all rely on the model introduced here.
 
+## Exercises
+
+**Exercise 1.** Summarize the key concepts introduced in this overview in your own words. Identify which concept you find most important and explain why.
+
+??? success "Solution to Exercise 1"
+    Answers will vary. A strong response should demonstrate understanding of the main ideas and articulate a clear reason for prioritizing one concept, connecting it to practical programming tasks.
+
+---
+
+**Exercise 2.** For each concept introduced in this overview, write a short code snippet (2-5 lines) that demonstrates it in action.
+
+??? success "Solution to Exercise 2"
+    Answers will vary based on the specific overview content. Each snippet should be self-contained and clearly illustrate the concept it targets.
+

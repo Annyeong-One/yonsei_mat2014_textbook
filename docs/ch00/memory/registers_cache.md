@@ -621,3 +621,18 @@ A programmer notices that summing a 1D NumPy array of 10 million `float64` value
 * NumPy exploits SIMD and contiguous memory to achieve much higher performance than Python loops.
 
 Understanding registers and cache behavior is essential for writing **efficient numerical and high-performance code**.
+
+## Exercises
+
+**Exercise 1.** Why are CPU registers faster than L1 cache.
+
+??? success "Solution to Exercise 1"
+    Registers are built directly into the CPU core and accessed in a single clock cycle (sub-nanosecond). L1 cache is on-chip but separate from the execution units, requiring a few clock cycles for access. The physical proximity and simpler addressing of registers make them the fastest storage.
+
+---
+
+**Exercise 2.** Explain what a cache miss is and how it affects program performance.
+
+??? success "Solution to Exercise 2"
+    A cache miss occurs when the CPU requests data that is not in the cache, forcing a load from a slower memory level. An L1 miss may add 4-10 cycles (L2 access), an L2 miss 10-50 cycles (L3 access), and an L3 miss 100+ cycles (main memory access). Cache misses are a primary bottleneck in compute-intensive programs.
+

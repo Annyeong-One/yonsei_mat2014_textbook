@@ -160,7 +160,7 @@ This example demonstrates several key features:
 - **Boundary handling**: `mode='wrap'` creates a toroidal board (edges wrap around)
 - **State persistence**: Simple state management during filtering
 
-!!! key-takeaway "Why Game of Life?"
+!!! tip "Why Game of Life?"
     This demonstrates that `generic_filter()` can:
     - Express complex conditional logic
     - Handle non-linear operations

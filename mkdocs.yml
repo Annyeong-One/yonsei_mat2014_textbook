@@ -21,6 +21,9 @@ markdown_extensions:
 extra_javascript:
     - javascripts/mathjax.js
     - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+    # Load Mermaid AFTER everything
+    - https://unpkg.com/mermaid@11/dist/mermaid.min.js
+    - javascripts/mermaid-init.js
 
 extra_css:
     - stylesheets/extra.css
@@ -1210,6 +1213,7 @@ nav:
             - Partial Differential Equation Discretization: ch12/applications/pde.md
             - Graph Algorithms: ch12/applications/graphs.md
             - Sparse Matrix Applications: ch12/sparse/applications.md
+            - Variation of Information: ch12/sparse/variation_of_information.md
 
     - 13 SciPy Stats:
         - Chapter Overview: ch13/index.md

@@ -178,7 +178,7 @@ Good luck!
 
 ---
 
-## Quick Practice Exercises
+## Exercises
 
 **Exercise 1.**
 Create a `Counter` class that supports `+` (add counts), `-` (subtract counts, minimum 0), `==` (compare counts), and `str()` (display as `"Counter(N)"`). Implement `__add__`, `__sub__`, `__eq__`, `__str__`, and `__repr__`. Show all operations.

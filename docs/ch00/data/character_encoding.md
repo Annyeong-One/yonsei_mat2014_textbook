@@ -667,3 +667,18 @@ Python 3 made a deliberate design decision: strings (`str`) are sequences of Uni
 * Encoding converts text to bytes; decoding converts bytes to text.
 
 Understanding character encoding is essential for reliable text processing, especially when working with **files, networks, and multilingual data**.
+
+## Exercises
+
+**Exercise 1.** Explain the difference between ASCII and UTF-8. Why is UTF-8 backward-compatible with ASCII.
+
+??? success "Solution to Exercise 1"
+    ASCII uses 7 bits to encode 128 characters (English letters, digits, punctuation, control characters). UTF-8 is a variable-length encoding (1-4 bytes) that can represent all Unicode characters (over 143,000). UTF-8 is backward-compatible because it encodes the 128 ASCII characters using the same single-byte values (0x00-0x7F), so any valid ASCII file is also valid UTF-8.
+
+---
+
+**Exercise 2.** What is the difference between a code point and an encoding.
+
+??? success "Solution to Exercise 2"
+    A code point is an abstract number assigned to a character in the Unicode standard (e.g., U+0041 for "A"). An encoding is a concrete scheme for representing code points as byte sequences. The same code point can be encoded differently: U+00E9 (e with accent) is 2 bytes in UTF-8 (0xC3 0xA9), 2 bytes in UTF-16 (0x00E9), and 4 bytes in UTF-32 (0x000000E9).
+

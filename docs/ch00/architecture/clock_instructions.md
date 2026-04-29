@@ -505,3 +505,18 @@ A program runs 1 billion instructions. 30% are memory accesses, and 70% of memor
 Modern CPU performance results from the interaction of **clock frequency, instruction throughput, and memory behavior**.
 
 In practice, programs often run slowly not because CPUs are slow, but because **memory latency and inefficient instruction scheduling limit performance**.
+
+## Exercises
+
+**Exercise 1.** If a CPU has a clock speed of 3 GHz, how many clock cycles occur per second? How many nanoseconds does one cycle take.
+
+??? success "Solution to Exercise 1"
+    A 3 GHz clock produces 3 billion cycles per second. One cycle takes 1/3,000,000,000 seconds = approximately 0.33 nanoseconds.
+
+---
+
+**Exercise 2.** Explain why a higher clock speed does not always mean faster program execution.
+
+??? success "Solution to Exercise 2"
+    Performance depends on instructions per cycle (IPC) as well as clock speed. A CPU with lower clock speed but higher IPC (due to better architecture, wider execution units, or better branch prediction) can outperform a higher-clocked CPU. Memory latency, cache behavior, and instruction-level parallelism all affect real-world performance.
+

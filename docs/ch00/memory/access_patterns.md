@@ -567,3 +567,18 @@ Hardware prefetchers can detect sequential and simple strided access patterns an
 * Techniques such as **blocking**, **vectorization**, and **Structure of Arrays** improve cache efficiency.
 
 Designing algorithms with efficient memory access patterns is essential for building **high-performance numerical and data-processing programs**.
+
+## Exercises
+
+**Exercise 1.** Explain why iterating over a 2D array row-by-row is faster than column-by-column in C (row-major order).
+
+??? success "Solution to Exercise 1"
+    In row-major order, consecutive elements of a row are stored contiguously in memory. Row-by-row iteration accesses these elements sequentially, benefiting from spatial locality and cache prefetching. Column-by-column iteration jumps by one row's worth of elements each step, causing cache misses on every access.
+
+---
+
+**Exercise 2.** What is the difference between temporal and spatial locality.
+
+??? success "Solution to Exercise 2"
+    Temporal locality means recently accessed data is likely to be accessed again soon. Spatial locality means data near recently accessed addresses is likely to be accessed soon. Caches exploit both: recently accessed cache lines are kept (temporal), and each cache line loads a block of contiguous bytes (spatial).
+

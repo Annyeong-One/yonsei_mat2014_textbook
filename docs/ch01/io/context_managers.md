@@ -68,12 +68,26 @@ with open("input.txt") as f1, open("output.txt", "w") as f2:
 
 ## 5. Conceptual Model
 
-A context manager defines two phases:
+A context manager is any object that implements two special methods:
 
-* entering the context
-* exiting the context
+* `__enter__()` -- called when execution enters the `with` block. Its return value is bound to the variable after `as`.
+* `__exit__()` -- called when execution leaves the `with` block, whether normally or via an exception.
 
-The `with` statement guarantees that cleanup occurs.
+The `with` statement translates into a `try/finally` pattern:
+
+```python
+# with open("data.txt") as f:
+#     process(f)
+
+# is equivalent to:
+f = open("data.txt").__enter__()
+try:
+    process(f)
+finally:
+    f.__exit__()
+```
+
+This guarantees that cleanup occurs regardless of how the block exits.
 
 ---
 

@@ -614,3 +614,18 @@ A cache line is typically 64 bytes. Explain why this size is a design trade-off.
 * NumPy arrays store contiguous data, enabling much faster numerical computation.
 
 Understanding memory hierarchy and data layout is crucial for designing **high-performance programs and efficient numerical algorithms**.
+
+## Exercises
+
+**Exercise 1.** Draw or describe the memory hierarchy from registers to disk, listing approximate access times for each level.
+
+??? success "Solution to Exercise 1"
+    Registers: ~0.3 ns; L1 cache: ~1 ns; L2 cache: ~3-10 ns; L3 cache: ~10-30 ns; RAM: ~50-100 ns; SSD: ~50-150 microseconds; HDD: ~5-10 ms. Each level is roughly 10x slower and 10-100x larger than the one above it.
+
+---
+
+**Exercise 2.** Why is understanding the memory hierarchy important for writing efficient programs.
+
+??? success "Solution to Exercise 2"
+    Programs that exhibit good locality (accessing data in patterns that keep frequently used data in cache) can run orders of magnitude faster than those with poor locality. Understanding the hierarchy helps programmers choose appropriate data structures, access patterns, and algorithms.
+

@@ -213,7 +213,7 @@ The Sobel kernel weights the central row/column more heavily (coefficient 2 inst
 
 This combination makes Sobel more robust to noise than simple difference filters.
 
-!!! key-takeaway "Key Takeaway"
+!!! tip "Key Takeaway"
     Sobel edge detection is a practical tool that:
     - Combines smoothing and differencing for noise robustness
     - Provides both magnitude (edge strength) and direction

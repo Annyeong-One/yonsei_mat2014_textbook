@@ -97,14 +97,44 @@ def my_function(y):
     return x + y  # x is FREE, y is BOUND
 ```
 
-### 3. In Closures
+### 3. Where They Live
+
+Free variables are stored in **cell objects** attached to the function via `__closure__` — not in `__dict__` or `__globals__`. This is how closures retain state after the enclosing function returns.
 
 ```python
 def outer(x):
     def inner(y):
         return x + y  # x is FREE in inner
     return inner
+
+f = outer(10)
+print(f.__code__.co_freevars)          # ('x',)
+print(f.__closure__[0].cell_contents)  # 10
 ```
+
+??? note "Function Object Structure"
+
+    `__code__` stores names; runtime structures hold values.
+
+    ```text
+    function object (static)
+    ├── __code__
+    │   ├── co_varnames   → local variable names
+    │   ├── co_freevars   → enclosing variable names
+    │   └── co_names      → global variable names
+    ├── __globals__       → global namespace (name → value)
+    └── __closure__       → enclosing values (cell objects)
+
+    execution frame (dynamic, per call)
+    └── locals            → local variable values
+    ```
+
+    This maps directly to LEGB lookup:
+
+    - **L** ocals → names in `co_varnames`, values in frame
+    - **E** nclosing → names in `co_freevars`, values in `__closure__`
+    - **G** lobals → names in `co_names`, values in `__globals__`
+    - **B** uiltins → fallback from `__globals__["__builtins__"]`
 
 ---
 
@@ -143,6 +173,9 @@ print(times3(10))  # 30
 
 - Closure: captures free variables
 - Class: stores attributes explicitly
+
+!!! tip "Key Insight"
+    A class is a named, reusable closure with multiple behaviors. Closures store state in hidden cell objects (`__closure__`), while classes store state explicitly in instance attributes (`__dict__`). This is the fundamental difference: implicit vs explicit state.
 
 ---
 
@@ -198,45 +231,40 @@ Closures typically return one function.
 
 State is captured implicitly through free variables.
 
-### 3. No Introspection
+### 3. Hidden Introspection
 
-Harder to inspect what's captured.
+Closure state can be inspected via `__closure__`, but it is obscure compared to class attributes.
 
 ```python
-# What's in times3?
 times3 = make_multiplier(3)
-# Not obvious from outside
+print(times3.__closure__[0].cell_contents)  # 3 — accessible but buried
+print(vars(Multiplier(3)))                  # {'factor': 3} — explicit
 ```
 
 ---
 
-## Class After Deletion
+??? note "Advanced: Class After Deletion"
 
-### 1. Instance Survives
+    Instances survive even if the class itself is deleted — but class-level
+    features become inaccessible.
 
-```python
-class Multiplier:
-    class_var = "I exist"
-    
-    def __init__(self, factor):
-        self.factor = factor
+    ```python
+    class Multiplier:
+        class_var = "I exist"
 
-times3 = Multiplier(3)
-del Multiplier  # Delete class
-```
+        def __init__(self, factor):
+            self.factor = factor
 
-### 2. Methods Still Work
+    times3 = Multiplier(3)
+    del Multiplier  # Delete class
 
-```python
-print(times3.factor)  # ✅ Works: 3
-```
+    print(times3.factor)     # ✅ Works: 3
+    print(times3.class_var)  # ❌ AttributeError
+    # new_obj = Multiplier(5)  # ❌ NameError
+    ```
 
-### 3. Class Attributes Lost
-
-```python
-print(times3.class_var)  # ❌ AttributeError
-# new_obj = Multiplier(5)  # ❌ NameError
-```
+    This is an implementation detail of Python's reference model, not a
+    pattern you should rely on in practice.
 
 ---
 

@@ -2,8 +2,10 @@
 # Path Handling (pathlib)
 
 Python provides the **pathlib** module for working with file system paths.
-
-It offers a modern and object-oriented interface for path manipulation.
+It offers a modern, object-oriented interface that eliminates the most
+common mistakes programmers make when handling paths: hard-coded separators,
+fragile string concatenation, and scripts that break when run from a
+different working directory.
 
 ```mermaid
 flowchart TD
@@ -22,9 +24,50 @@ from pathlib import Path
 p = Path("data.txt")
 ```
 
+A relative path like `Path("data.txt")` is resolved against the **current
+working directory** at the time of use. This is fine in interactive sessions,
+but scripts are often launched from a different directory than the one
+containing the script file.
+
 ---
 
-## 2. Checking File Existence
+## 2. Script-Relative Paths
+
+A common bug: a script opens `data.txt` assuming it sits next to the script,
+but the user runs it from another directory and gets `FileNotFoundError`.
+
+```python
+# Wrong -- depends on where the user runs the script
+p = Path("data.txt")
+
+# Right -- always relative to the script's own directory
+script_dir = Path(__file__).parent
+p = script_dir / "data.txt"
+```
+
+`__file__` is a built-in variable that holds the path to the currently
+executing script. `Path(__file__).parent` gives the directory that contains
+the script, regardless of where the user launched it from.
+
+---
+
+## 3. Absolute Paths with `.resolve()`
+
+`.resolve()` converts any path -- relative or containing `..` segments --
+into an absolute, canonical path.
+
+```python
+p = Path("data") / ".." / "data" / "file.txt"
+print(p)            # data/../data/file.txt
+print(p.resolve())  # /home/alice/project/data/file.txt
+```
+
+This is useful for logging, error messages, and comparing two paths that
+might refer to the same file through different relative routes.
+
+---
+
+## 4. Checking File Existence
 
 ```python
 p.exists()
@@ -34,17 +77,58 @@ p.is_dir()
 
 ---
 
-## 3. Joining Paths
+## 5. Joining Paths
 
 ```python
 p = Path("data") / "file.txt"
 ```
 
-This avoids manual string concatenation.
+The `/` operator replaces fragile string concatenation like
+`"data" + "/" + "file.txt"`, which breaks on Windows where the separator
+is `\`.
 
 ---
 
-## 4. Reading and Writing
+## 6. Creating Directories
+
+```python
+output = Path("results") / "2024" / "january"
+output.mkdir(parents=True, exist_ok=True)
+```
+
+`parents=True` creates intermediate directories (like `mkdir -p` in the
+shell). `exist_ok=True` silences the error if the directory already exists.
+
+---
+
+## 7. Finding Files with `.glob()` and `.rglob()`
+
+`.glob()` searches a single directory for files matching a pattern.
+`.rglob()` searches recursively through all subdirectories.
+
+```python
+data = Path("data")
+
+# All .csv files in data/
+for csv_file in data.glob("*.csv"):
+    print(csv_file)
+
+# All .csv files in data/ and every subdirectory
+for csv_file in data.rglob("*.csv"):
+    print(csv_file)
+```
+
+Common patterns:
+
+| Pattern | Matches |
+|---|---|
+| `"*.txt"` | all `.txt` files in the directory |
+| `"**/*.txt"` | all `.txt` files recursively (same as `.rglob("*.txt")`) |
+| `"data_*"` | files whose names start with `data_` |
+
+---
+
+## 8. Reading and Writing
 
 ```python
 p = Path("hello.txt")
@@ -55,7 +139,7 @@ print(p.read_text())
 
 ---
 
-## 5. Iterating Through Directories
+## 9. Iterating Through Directories
 
 ```python
 p = Path("data")
@@ -66,23 +150,59 @@ for item in p.iterdir():
 
 ---
 
-## 6. Advantages of pathlib
+## 10. Advantages of pathlib
 
-* clearer code
-* platform independence
-* easier path manipulation
+Each advantage below addresses a real failure case.
+
+**Problem 1 -- Wrong working directory.**
+A script opens `"config.json"` assuming the user runs it from the project
+root. When someone runs it from their home directory, the file is not found.
+
+```python
+# Fragile: depends on working directory
+config = open("config.json")
+
+# Robust: always relative to the script
+config_path = Path(__file__).parent / "config.json"
+config = open(config_path)
+```
+
+**Problem 2 -- Hard-coded separators.**
+A Windows developer writes `"data\\results\\output.csv"`. The path is
+meaningless on macOS or Linux.
+
+```python
+# Breaks on other platforms
+path = "data\\results\\output.csv"
+
+# Works everywhere
+path = Path("data") / "results" / "output.csv"
+```
+
+**Problem 3 -- Fragile string concatenation.**
+Building paths with `+` is error-prone: a missing `/` silently produces
+the wrong path.
+
+```python
+# Bug: "datafile.txt" instead of "data/file.txt"
+path = "data" + "file.txt"
+
+# Correct by construction
+path = Path("data") / "file.txt"
+```
 
 ---
 
-
-## 7. Summary
+## 11. Summary
 
 Key ideas:
 
-* `pathlib.Path` represents filesystem paths
-* paths can be joined using `/`
-* methods support reading, writing, and inspection
-* pathlib simplifies file system interactions
+* `Path(__file__).parent` anchors paths to the script's location
+* `.resolve()` produces an absolute, canonical path
+* `.mkdir(parents=True, exist_ok=True)` safely creates directory trees
+* `.glob()` and `.rglob()` find files by pattern
+* the `/` operator replaces string concatenation and hard-coded separators
+* methods like `.read_text()`, `.write_text()`, `.exists()`, and `.is_file()` keep path operations on a single object
 
 
 ## Exercises

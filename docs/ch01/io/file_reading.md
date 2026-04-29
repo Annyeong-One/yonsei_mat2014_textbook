@@ -1,5 +1,6 @@
 
 
+
 # Opening and Reading Files
 
 Programs often need to read data stored in files.
@@ -15,57 +16,109 @@ Typical tasks include:
 
 ```mermaid
 flowchart TD
-    A[File on disk]
-    A --> B[open()]
-    B --> C[file object]
-    C --> D[read operations]
-````
+    A["File on disk"]
+    A --> B["open"]
+    B --> C["file object"]
+
+    C --> D1["operation type"]
+    C --> D2["data mode"]
+
+    D1 --> E1["read (default)"]
+    D1 --> E2["write"]
+    D1 --> E3["append"]
+    D1 --> E4["create"]
+
+    D2 --> F1["text (default)"]
+    D2 --> F2["binary"]
+
+    E1 --> G["close"]
+    E2 --> G
+    E3 --> G
+    E4 --> G
+    F1 --> G
+    F2 --> G
+```
 
 ---
 
-## 1. Opening a File
+## 1. Opening and Reading a File with `with`
 
-Files are opened using the `open()` function.
+The standard way to open a file in Python is the `with` statement (a **context manager**). It opens the file, gives you a file object, and **automatically closes** the file when the block ends -- even if an exception occurs.
 
 ```python
-f = open("data.txt")
+with open("data.txt") as f:
+    text = f.read()
+
+print(text)
 ```
 
-This returns a **file object** representing the open file.
+`open()` returns a **file object**. The default mode is **read mode** (`"r"`), so `open("data.txt")` and `open("data.txt", "r")` are equivalent.
 
-The default mode is **read mode**.
+When reading text files that may contain non-ASCII characters, specify the encoding explicitly:
+
+```python
+with open("data.txt", encoding="utf-8") as f:
+    text = f.read()
+```
+
+Without `encoding="utf-8"`, Python uses the platform default, which varies across systems and can cause garbled text or errors.
+
+### Relative vs. Absolute Paths
+
+`"data.txt"` is a **relative path**. Python looks for the file in the **current working directory** (the directory from which the script is run), not necessarily the directory containing the script.
+
+If the file is not found, Python raises:
+
+```text
+FileNotFoundError: [Errno 2] No such file or directory: 'data.txt'
+```
+
+To check the current working directory:
+
+```python
+import os
+print(os.getcwd())
+```
+
+To open a file relative to the script's location (regardless of where you run the script from):
+
+```python
+from pathlib import Path
+
+script_dir = Path(__file__).parent
+
+with open(script_dir / "data.txt") as f:
+    text = f.read()
+```
 
 ---
 
 ## 2. Reading the Entire File
 
+`read()` loads the entire file contents into a single string.
+
 ```python
-f = open("data.txt")
+with open("data.txt") as f:
+    text = f.read()
 
-text = f.read()
 print(text)
-
-f.close()
 ```
 
-`read()` loads the entire file contents into a string.
+This is convenient for small files. For very large files, prefer reading line by line (see next section).
 
 ---
 
 ## 3. Reading Line by Line
 
-Files can also be processed line by line.
+Files can also be processed one line at a time by iterating over the file object.
 
 ```python
-f = open("data.txt")
-
-for line in f:
-    print(line)
-
-f.close()
+with open("data.txt") as f:
+    for line in f:
+        print(line)
 ```
 
-This approach is useful for large files.
+This approach is memory-efficient for large files because only one line is loaded into memory at a time.
 
 ---
 
@@ -80,70 +133,76 @@ This approach is useful for large files.
 Example:
 
 ```python
-f = open("data.txt")
-
-print(f.readline())
-print(f.readline())
-
-f.close()
+with open("data.txt") as f:
+    print(f.readline())
+    print(f.readline())
 ```
 
 ---
 
-## 5. File Closing
-
-Files should normally be closed after use.
+## 5. Worked Example
 
 ```python
-f.close()
-```
-
-Closing ensures resources are released and data is written properly.
-
-Later sections introduce **automatic closing using context managers**.
-
----
-
-## 6. Worked Example
-
-```python
-f = open("numbers.txt")
-
-for line in f:
-    print(int(line))
-
-f.close()
+with open("numbers.txt") as f:
+    for line in f:
+        print(int(line))
 ```
 
 This example reads numbers from a file and prints them.
 
 ---
 
-## 7. Common Pitfalls
+## 6. File Modes
+
+The default mode for `open()` is `"r"` (read text). For the full table of file modes (`"w"`, `"a"`, `"b"`, etc.), see [File Writing](file_writing.md).
+
+---
+
+## 7. Manual open() and close() (Background)
+
+Before the `with` statement was introduced, files were opened and closed manually:
+
+```python
+f = open("data.txt")
+text = f.read()
+f.close()
+```
+
+`f.close()` releases the file handle and flushes any buffered data to disk. The problem with this pattern is that if an error occurs between `open()` and `close()`, the file is never closed. The `with` statement solves this by guaranteeing cleanup, and should always be preferred.
+
+---
+
+## 8. Common Pitfalls
 
 ### Forgetting to close files
 
-Unclosed files may cause resource problems.
+Unclosed files may cause resource problems. Using `with` eliminates this issue entirely.
 
 ### Reading extremely large files with `read()`
 
-This loads the entire file into memory.
+This loads the entire file into memory. Iterate line by line instead.
 
 ### Assuming files always exist
 
-Attempting to open a missing file raises an exception.
+Attempting to open a missing file raises `FileNotFoundError`. See [Handling File Errors](file_errors.md) for how to handle this with `try`/`except`.
+
+### Running scripts from unexpected directories
+
+When using relative paths like `"data.txt"`, the file must exist in the current working directory, not the script's directory. Use `pathlib` to build paths relative to `__file__` for reliable file access.
 
 ---
 
 
-## 8. Summary
+## 9. Summary
 
 Key ideas:
 
-* files are opened with `open()`
-* reading operations use file objects
-* files can be read entirely or line by line
-* files should normally be closed after use
+* the `with` statement is the standard way to open files -- it guarantees the file is closed automatically
+* `open()` defaults to read mode (`"r"`) and uses relative paths, resolving from the current working directory
+* specify `encoding="utf-8"` when reading text files with non-ASCII content
+* `read()` loads the entire file; iterating line by line is preferred for large files
+* `read()`, `readline()`, and `readlines()` offer different levels of granularity
+* manual `open()`/`close()` is a legacy pattern; prefer `with` in all new code
 
 File reading is the first step in processing external data sources.
 

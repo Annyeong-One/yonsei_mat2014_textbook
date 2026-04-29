@@ -534,3 +534,18 @@ Modern systems use multiple memory channels (dual-channel, quad-channel) to incr
 * Techniques such as **memory mapping** allow programs to work with datasets larger than RAM.
 
 Understanding RAM behavior is crucial for building **efficient data-intensive programs and numerical applications**.
+
+## Exercises
+
+**Exercise 1.** Explain the difference between SRAM and DRAM.
+
+??? success "Solution to Exercise 1"
+    SRAM uses flip-flop circuits (6 transistors per bit) and does not need refreshing, making it faster but more expensive. DRAM stores each bit as a charge on a capacitor (1 transistor + 1 capacitor per bit) and must be refreshed periodically, making it cheaper but slower. SRAM is used for CPU caches; DRAM is used for main memory.
+
+---
+
+**Exercise 2.** Why does RAM lose its contents when power is removed.
+
+??? success "Solution to Exercise 2"
+    Both SRAM and DRAM are volatile. DRAM capacitors discharge when unpowered, and SRAM flip-flops lose their state. Non-volatile storage (SSDs, HDDs) uses different physical mechanisms (charge trapping in flash cells, magnetic domains on platters) that persist without power.
+

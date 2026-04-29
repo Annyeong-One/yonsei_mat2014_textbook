@@ -697,3 +697,18 @@ IEEE 754 defines that `NaN != NaN` (NaN is not equal to itself). This seems biza
 * IEEE 754 includes special values such as **NaN** and **Infinity**.
 
 Understanding floating-point representation is essential for writing **correct numerical software and scientific code**.
+
+## Exercises
+
+**Exercise 1.** In IEEE 754 single-precision format, how many bits are used for the sign, exponent, and mantissa.
+
+??? success "Solution to Exercise 1"
+    Single precision uses 32 bits total: 1 bit for sign, 8 bits for exponent (biased by 127), and 23 bits for mantissa (with an implicit leading 1 for normalized numbers). This gives approximately 7 decimal digits of precision.
+
+---
+
+**Exercise 2.** Explain why 0.1 + 0.2 does not equal 0.3 in floating-point arithmetic.
+
+??? success "Solution to Exercise 2"
+    0.1 and 0.2 cannot be represented exactly in binary floating-point (they are repeating fractions in base 2). Each is rounded to the nearest representable value. When these rounded values are added, the result is approximately 0.30000000000000004, not exactly 0.3. This is a fundamental limitation of binary floating-point, not a bug.
+

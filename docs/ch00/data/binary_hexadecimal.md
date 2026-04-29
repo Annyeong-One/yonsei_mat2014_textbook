@@ -720,3 +720,18 @@ RGB color values are often written as 6-digit hex strings like `#3498DB`. Explai
 * Programmers frequently convert between bases when debugging, inspecting memory, or working with binary protocols.
 
 Understanding binary and hexadecimal allows programmers to reason about **bit patterns, memory layout, and low-level data formats** with precision.
+
+## Exercises
+
+**Exercise 1.** Convert the decimal number 42 to binary and hexadecimal.
+
+??? success "Solution to Exercise 1"
+    Binary: 42 = 32 + 8 + 2 = 101010 in binary. Hexadecimal: 42 = 2 * 16 + 10 = 0x2A.
+
+---
+
+**Exercise 2.** Why is hexadecimal commonly used in computing instead of decimal.
+
+??? success "Solution to Exercise 2"
+    Each hexadecimal digit corresponds to exactly 4 binary digits (bits), making conversion between hex and binary trivial. A byte (8 bits) is always exactly 2 hex digits. This makes hexadecimal a compact, human-readable representation of binary data that preserves bit-level structure.
+

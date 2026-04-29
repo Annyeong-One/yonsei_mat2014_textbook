@@ -547,3 +547,18 @@ A programmer needs to process a 50 GB dataset on a machine with 8 GB of RAM. The
 * Techniques such as **chunked reading** and **memory mapping** allow programs to process datasets larger than available memory.
 
 Understanding storage performance is crucial for designing efficient **data pipelines and large-scale numerical workflows**.
+
+## Exercises
+
+**Exercise 1.** List the storage devices in order from fastest to slowest access time.
+
+??? success "Solution to Exercise 1"
+    From fastest to slowest: CPU registers, L1 cache, L2 cache, L3 cache, RAM, SSD, HDD, tape. Each level trades speed for capacity.
+
+---
+
+**Exercise 2.** Explain why programs that access memory sequentially tend to run faster than those that access memory randomly.
+
+??? success "Solution to Exercise 2"
+    Sequential access benefits from spatial locality: when one byte is loaded, nearby bytes are brought into cache automatically (cache lines are typically 64 bytes). Random access causes frequent cache misses, forcing slower loads from main memory.
+

@@ -1,14 +1,34 @@
-# Constructor & Destructor
+# Constructor and Destructor
 
-Constructor (`__init__`) and destructor (`__del__`) manage object lifecycle in Python.
+`__init__` (initializer) and `__del__` (destructor) manage object lifecycle in Python. Despite common usage, `__init__` is not the true constructor — `__new__` is. Understanding when each runs — and when `__del__` does not — is essential for writing reliable classes.
 
 ---
 
-## Constructor: `__init__`
+## Object Lifecycle
+
+Every Python object follows a predictable lifecycle: creation, initialization, use, and eventual destruction. `__new__` always runs at creation; `__init__` runs only if `__new__` returns a proper instance of the class. The destructor (`__del__`) does not guarantee teardown.
+
+```mermaid
+flowchart TD
+    A[Class called] --> B["__new__ creates object"]
+    B --> C["__init__ initializes object"]
+    C --> D[Object in use]
+    D --> E[No more references]
+    E --> F[Garbage collector runs]
+    F -->|maybe| G["__del__ runs"]
+    F -->|maybe not| H[Object silently freed]
+```
+
+!!! tip "Core Insight"
+    `__new__` creates the object and `__init__` initializes it — both are deterministic. `__del__` is non-deterministic — it may or may not run, and you cannot control when. Design accordingly.
+
+---
+
+## Initializer: `__init__`
 
 ### 1. Purpose
 
-Initializes new objects immediately after creation.
+Initializes new objects immediately after `__new__` creates them. Despite being commonly called the "constructor," `__init__` does not construct the object — it receives an already-created instance and sets up its attributes.
 
 ```python
 class Student:
@@ -29,13 +49,13 @@ a = Student("Lee", "Math")
 # Student.__init__(a, "Lee", "Math")
 ```
 
-### 3. Not Optional
+### 3. Why It Matters
 
-Every class should define `__init__` for clarity.
+Every class should define `__init__` for clarity. Without it, attributes must be assigned dynamically — leading to fragile, error-prone code.
 
 ---
 
-## Bad Practice: No Constructor
+## Without `__init__`
 
 ### 1. Dynamic Assignment
 
@@ -66,63 +86,7 @@ print(b.major)  # AttributeError
 
 ---
 
-## Good Practice: With Constructor
-
-### 1. Structured Initialization
-
-```python
-class Student:
-    def __init__(self, name, major):
-        self.name = name
-        self.major = major
-
-a = Student("Lee", "Math")
-```
-
-### 2. Benefits
-
-- Parameters are explicit
-- Required fields enforced
-- Self-documenting code
-- Enables validation
-
-### 3. With Validation
-
-```python
-class Student:
-    def __init__(self, name, major):
-        if not name:
-            raise ValueError("Name required")
-        self.name = name
-        self.major = major
-```
-
----
-
-## Introspection with `vars()`
-
-### 1. View Attributes
-
-```python
-alice = Student("Alice", "Statistics")
-print(vars(alice))
-# {'name': 'Alice', 'major': 'Statistics'}
-```
-
-### 2. Same as `__dict__`
-
-```python
-print(alice.__dict__)
-# Same output as vars(alice)
-```
-
-### 3. Debugging Aid
-
-Useful for inspecting object state.
-
----
-
-## Constructor Patterns
+## `__init__` Patterns
 
 ### 1. Simple Assignment
 
@@ -142,23 +106,109 @@ class Car:
         self.color = color
 ```
 
-### 3. With Computation
+### 3. With Validation
 
 ```python
-class Rectangle:
-    def __init__(self, width, height):
-        self.width = width
-        self.height = height
-        self.area = width * height  # computed
+class Student:
+    def __init__(self, name, major):
+        if not name:
+            raise ValueError("Name required")
+        self.name = name
+        self.major = major
 ```
+
+---
+
+## The True Constructor: `__new__`
+
+When you call `Student("Alice", "Math")`, Python performs two steps internally. First `__new__` creates the object, then `__init__` initializes it.
+
+### 1. Two-Step Process
+
+```python
+class Demo:
+    def __new__(cls, *args, **kwargs):
+        print("Creating instance (__new__)")
+        return super().__new__(cls)
+
+    def __init__(self):
+        print("Initializing instance (__init__)")
+
+d = Demo()
+# Creating instance (__new__)
+# Initializing instance (__init__)
+```
+
+### 2. Why `__new__` Uses `cls`, Not `self`
+
+`__new__` receives the **class** as its first argument because no instance exists yet — it is the method responsible for creating one. Using `cls` makes this explicit. Writing `self` would be misleading: the first argument is the class object, not an instance.
+
+| Method | First argument | What it receives |
+|---|---|---|
+| `__new__` | `cls` | The class being instantiated |
+| `__init__` | `self` | The instance being initialized |
+
+### 3. When to Override `__new__`
+
+`__new__` behaves like a class method (it receives `cls`), but does **not** require the `@classmethod` decorator — Python treats it as a special hook in the object creation protocol. Most classes never need to override `__new__`. Use it only when you need to control object creation itself:
+
+**Immutable type subclasses** — values must be set before the object exists:
+
+```python
+class UpperStr(str):
+    def __new__(cls, value):
+        return super().__new__(cls, value.upper())
+
+s = UpperStr("hello")
+print(s)  # HELLO — cannot do this in __init__
+```
+
+**Singleton pattern** — only one instance ever exists:
+
+```python
+class Singleton:
+    _instance = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+```
+
+Think of it as: `__new__` decides *what object exists*; `__init__` decides *how it is configured*. In 99% of classes, `__init__` alone is enough.
+
+---
+
+## Introspection with `vars()`
+
+### 1. View Attributes
+
+```python
+alice = Student("Alice", "Statistics")
+print(vars(alice))
+# {'name': 'Alice', 'major': 'Statistics'}
+```
+
+### 2. `vars()` vs `__dict__`
+
+For simple objects, `vars(obj)` and `obj.__dict__` return the same result — but they serve different abstraction levels. `vars()` is the public interface; `__dict__` is the implementation detail. This follows Python's design pattern of separating interface from mechanism (`len()` vs `__len__()`, `str()` vs `__str__()`).
+
+```python
+print(alice.__dict__)       # Same output as vars(alice) for simple objects
+print(vars() )              # Works in local scope too — no __dict__ equivalent
+```
+
+### 3. When to Use Which
+
+Use `vars()` for general debugging and introspection. Use `__dict__` only when you need direct access to the internal attribute storage — such as metaprogramming or dynamically injecting attributes. Some objects (those using `__slots__`) have no `__dict__` at all.
 
 ---
 
 ## Destructor: `__del__`
 
-### 1. Purpose
+Most Python developers never use `__del__` directly. It exists for resource cleanup, but Python does not guarantee that `__del__` will ever run — not just that timing is unpredictable, but that it may never execute at all. If program correctness depends on cleanup, never rely on `__del__`.
 
-Called when object is about to be destroyed.
+### 1. Basic Syntax
 
 ```python
 class IceCream:
@@ -171,17 +221,9 @@ class IceCream:
         print(f"{self.name} destroyed")
 ```
 
-### 2. Non-Deterministic
+### 2. Reference Counting
 
-Timing is unpredictable—depends on garbage collection.
-
-```python
-obj = IceCream("Cone", 1500)
-del obj
-# Destructor may or may not run immediately
-```
-
-### 3. Reference Counting
+`__del__` runs only when the last reference is removed.
 
 ```python
 obj1 = IceCream("Cone", 1500)
@@ -190,21 +232,13 @@ del obj1     # __del__ NOT called yet
 del obj2     # Now __del__ is called
 ```
 
----
+### 3. Why It Fails
 
-## Destructor Limitations
+`__del__` can fail to run in several common scenarios:
 
-### 1. Unreliable Timing
-
-```python
-def create_objects():
-    obj = IceCream("Cone", 1500)
-    # When is __del__ called? Unknown!
-
-create_objects()
-```
-
-### 2. Circular References
+- **Circular references**: objects referencing each other may never be collected
+- **Program exit**: Python may skip `__del__` entirely at interpreter shutdown
+- **Multiple references**: the object lives as long as any reference exists
 
 ```python
 class Node:
@@ -215,19 +249,18 @@ class Node:
 a = Node(1)
 b = Node(2)
 a.next = b
-b.next = a  # Circular reference
-# Destructors may never run!
+b.next = a  # Circular reference — destructors may never run
 ```
 
-### 3. No Guarantees
-
-Python doesn't guarantee `__del__` will be called.
+Creation is explicit and guaranteed; destruction is implicit and best-effort.
 
 ---
 
-## Better Alternatives
+## Proper Cleanup: Context Managers
 
-### 1. Context Managers
+Since `__del__` is unreliable, Python provides context managers for deterministic resource cleanup.
+
+### 1. The `with` Statement
 
 ```python
 class FileHandler:
@@ -240,10 +273,10 @@ class FileHandler:
 
 with FileHandler() as f:
     f.write("data")
-# Guaranteed cleanup
+# Guaranteed cleanup — even if an exception occurs
 ```
 
-### 2. Explicit Methods
+### 2. Explicit Close Methods
 
 ```python
 class Resource:
@@ -255,8 +288,7 @@ class Resource:
 
 r = Resource()
 try:
-    # Use resource
-    pass
+    pass  # Use resource
 finally:
     r.close()
 ```
@@ -277,418 +309,13 @@ def managed_resource():
 
 ---
 
-## Constructor Best Practices
-
-### 1. Keep Simple
-
-```python
-# Good
-def __init__(self, name):
-    self.name = name
-
-# Bad - too much logic
-def __init__(self, name):
-    self.name = name
-    self.connect_to_database()
-    self.load_all_data()
-```
-
-### 2. Validate Input
-
-```python
-def __init__(self, age):
-    if age < 0:
-        raise ValueError("Age must be positive")
-    self.age = age
-```
-
-### 3. Document Parameters
-
-```python
-def __init__(self, name, age):
-    """
-    Initialize a Person.
-    
-    Args:
-        name (str): Person's name
-        age (int): Person's age
-    """
-    self.name = name
-    self.age = age
-```
-
----
-
 ## Key Takeaways
 
-- `__init__` initializes objects—always define it.
-- Use constructors to enforce required fields.
-- `vars()` and `__dict__` inspect object state.
-- `__del__` is unreliable—avoid for cleanup.
-- Use context managers for resource management.
-
----
-
-## Runnable Example: `classes_advanced_examples.py`
-
-```python
-"""
-Advanced Classes and Objects Examples
-Demonstrating special methods, class methods, static methods, and design patterns
-"""
-
-# ============================================================================
-# Example 1: Special Methods (Magic Methods)
-
-if __name__ == "__main__":
-    print("=" * 50)
-    print("Example 1: Special Methods - Vector Class")
-    print("=" * 50)
-
-    class Vector2D:
-        def __init__(self, x, y):
-            self.x = x
-            self.y = y
-
-        def __str__(self):
-            return f"Vector({self.x}, {self.y})"
-
-        def __repr__(self):
-            return f"Vector2D(x={self.x}, y={self.y})"
-
-        def __add__(self, other):
-            return Vector2D(self.x + other.x, self.y + other.y)
-
-        def __sub__(self, other):
-            return Vector2D(self.x - other.x, self.y - other.y)
-
-        def __mul__(self, scalar):
-            return Vector2D(self.x * scalar, self.y * scalar)
-
-        def __eq__(self, other):
-            return self.x == other.x and self.y == other.y
-
-        def __abs__(self):
-            return (self.x ** 2 + self.y ** 2) ** 0.5
-
-        def __len__(self):
-            return 2
-
-        def __getitem__(self, index):
-            if index == 0:
-                return self.x
-            elif index == 1:
-                return self.y
-            raise IndexError("Vector index out of range")
-
-    v1 = Vector2D(3, 4)
-    v2 = Vector2D(1, 2)
-
-    print(f"v1: {v1}")
-    print(f"v2: {v2}")
-    print(f"v1 + v2: {v1 + v2}")
-    print(f"v1 - v2: {v1 - v2}")
-    print(f"v1 * 3: {v1 * 3}")
-    print(f"v1 == v2: {v1 == v2}")
-    print(f"|v1|: {abs(v1)}")
-    print(f"v1[0]: {v1[0]}, v1[1]: {v1[1]}")
-    print()
-
-    # ============================================================================
-    # Example 2: Class Methods and Static Methods
-    print("=" * 50)
-    print("Example 2: Class Methods and Static Methods")
-    print("=" * 50)
-
-    class Employee:
-        company = "TechCorp"
-        num_employees = 0
-        raise_amount = 1.04
-
-        def __init__(self, name, salary):
-            self.name = name
-            self.salary = salary
-            Employee.num_employees += 1
-
-        def apply_raise(self):
-            self.salary = int(self.salary * self.raise_amount)
-
-        @classmethod
-        def set_raise_amount(cls, amount):
-            cls.raise_amount = amount
-
-        @classmethod
-        def from_string(cls, emp_string):
-            """Alternative constructor"""
-            name, salary = emp_string.split('-')
-            return cls(name, int(salary))
-
-        @staticmethod
-        def is_workday(day):
-            """Utility method that doesn't need instance or class"""
-            return day.weekday() < 5
-
-        def __str__(self):
-            return f"{self.name}: ${self.salary}"
-
-    # Regular instantiation
-    emp1 = Employee("John", 50000)
-    emp2 = Employee("Jane", 60000)
-
-    print(f"Company: {Employee.company}")
-    print(f"Employees: {Employee.num_employees}")
-    print(emp1)
-    print(emp2)
-
-    # Using class method to change class variable
-    Employee.set_raise_amount(1.05)
-    emp1.apply_raise()
-    print(f"After raise: {emp1}")
-
-    # Using alternative constructor
-    emp3 = Employee.from_string("Bob-55000")
-    print(f"Created from string: {emp3}")
-
-    # Using static method
-    from datetime import date
-    today = date.today()
-    print(f"Is today a workday? {Employee.is_workday(today)}")
-    print()
-
-    # ============================================================================
-    # Example 3: Properties and Validation
-    print("=" * 50)
-    print("Example 3: Properties with Validation")
-    print("=" * 50)
-
-    class Person:
-        def __init__(self, name, age):
-            self._name = name
-            self.age = age  # Uses setter
-
-        @property
-        def name(self):
-            return self._name
-
-        @name.setter
-        def name(self, value):
-            if not value or not isinstance(value, str):
-                raise ValueError("Name must be a non-empty string")
-            self._name = value
-
-        @property
-        def age(self):
-            return self._age
-
-        @age.setter
-        def age(self, value):
-            if not isinstance(value, int) or value < 0 or value > 150:
-                raise ValueError("Age must be between 0 and 150")
-            self._age = value
-
-        @property
-        def is_adult(self):
-            return self._age >= 18
-
-        def __str__(self):
-            return f"{self._name}, {self._age} years old"
-
-    person = Person("Alice", 25)
-    print(person)
-    print(f"Is adult? {person.is_adult}")
-
-    person.age = 30
-    print(f"After birthday: {person}")
-
-    try:
-        person.age = -5  # Will raise error
-    except ValueError as e:
-        print(f"Error: {e}")
-    print()
-
-    # ============================================================================
-    # Example 4: Composition Pattern
-    print("=" * 50)
-    print("Example 4: Composition - Building Complex Objects")
-    print("=" * 50)
-
-    class Engine:
-        def __init__(self, horsepower, type):
-            self.horsepower = horsepower
-            self.type = type
-            self.running = False
-
-        def start(self):
-            self.running = True
-            return f"{self.horsepower}HP {self.type} engine started"
-
-        def stop(self):
-            self.running = False
-            return "Engine stopped"
-
-    class GPS:
-        def __init__(self):
-            self.current_location = "Unknown"
-
-        def set_location(self, location):
-            self.current_location = location
-
-        def navigate_to(self, destination):
-            return f"Navigating from {self.current_location} to {destination}"
-
-    class Car:
-        def __init__(self, model, horsepower, engine_type):
-            self.model = model
-            self.engine = Engine(horsepower, engine_type)
-            self.gps = GPS()
-            self.speed = 0
-
-        def start(self):
-            return f"{self.model}: {self.engine.start()}"
-
-        def accelerate(self, amount):
-            if self.engine.running:
-                self.speed += amount
-                return f"Speed: {self.speed} mph"
-            return "Start engine first!"
-
-        def navigate(self, destination):
-            return self.gps.navigate_to(destination)
-
-    car = Car("Tesla Model S", 670, "Electric")
-    print(car.start())
-    print(car.accelerate(30))
-    print(car.accelerate(20))
-    car.gps.set_location("San Francisco")
-    print(car.navigate("Los Angeles"))
-    print()
-
-    # ============================================================================
-    # Example 5: Context Manager (with statement)
-    print("=" * 50)
-    print("Example 5: Context Manager")
-    print("=" * 50)
-
-    class FileManager:
-        def __init__(self, filename, mode):
-            self.filename = filename
-            self.mode = mode
-            self.file = None
-
-        def __enter__(self):
-            self.file = open(self.filename, self.mode)
-            return self.file
-
-        def __exit__(self, exc_type, exc_val, exc_tb):
-            if self.file:
-                self.file.close()
-            return False
-
-    # Using the context manager
-    with FileManager('test.txt', 'w') as f:
-        f.write("Hello from context manager!\n")
-        f.write("File will be closed automatically.\n")
-
-    print("File written and closed automatically")
-
-    # Read back
-    with FileManager('test.txt', 'r') as f:
-        content = f.read()
-        print(f"File content:\n{content}")
-    print()
-
-    # ============================================================================
-    # Example 6: Callable Objects
-    print("=" * 50)
-    print("Example 6: Callable Objects")
-    print("=" * 50)
-
-    class Multiplier:
-        def __init__(self, factor):
-            self.factor = factor
-
-        def __call__(self, x):
-            return x * self.factor
-
-    double = Multiplier(2)
-    triple = Multiplier(3)
-
-    print(f"Double 5: {double(5)}")
-    print(f"Triple 5: {triple(5)}")
-    print(f"Double 10: {double(10)}")
-    print()
-
-    # ============================================================================
-    # Example 7: Descriptors (Advanced)
-    print("=" * 50)
-    print("Example 7: Descriptors for Validation")
-    print("=" * 50)
-
-    class PositiveNumber:
-        def __init__(self, name):
-            self.name = name
-
-        def __get__(self, obj, objtype=None):
-            return obj.__dict__.get(self.name, 0)
-
-        def __set__(self, obj, value):
-            if not isinstance(value, (int, float)) or value <= 0:
-                raise ValueError(f"{self.name} must be a positive number")
-            obj.__dict__[self.name] = value
-
-    class Product:
-        price = PositiveNumber("price")
-        quantity = PositiveNumber("quantity")
-
-        def __init__(self, name, price, quantity):
-            self.name = name
-            self.price = price
-            self.quantity = quantity
-
-        @property
-        def total_value(self):
-            return self.price * self.quantity
-
-    product = Product("Laptop", 999.99, 5)
-    print(f"{product.name}: ${product.price} x {product.quantity}")
-    print(f"Total value: ${product.total_value}")
-
-    try:
-        product.price = -10  # Will raise error
-    except ValueError as e:
-        print(f"Error: {e}")
-    print()
-
-    # ============================================================================
-    # Example 8: Iterator Pattern
-    print("=" * 50)
-    print("Example 8: Custom Iterator")
-    print("=" * 50)
-
-    class Countdown:
-        def __init__(self, start):
-            self.current = start
-
-        def __iter__(self):
-            return self
-
-        def __next__(self):
-            if self.current <= 0:
-                raise StopIteration
-            self.current -= 1
-            return self.current + 1
-
-    print("Countdown from 5:")
-    for num in Countdown(5):
-        print(num, end=" ")
-    print("\n")
-
-    # Clean up test file
-    import os
-    if os.path.exists('test.txt'):
-        os.remove('test.txt')
-        print("Cleaned up test file")
-```
+- `__new__` creates the object; `__init__` initializes it — know the difference.
+- Always define `__init__` to enforce required fields and validate input.
+- `vars()` and `__dict__` inspect object state for debugging.
+- `__del__` is non-deterministic — never rely on it for critical cleanup.
+- Use context managers (`with` statement) for guaranteed resource management.
 
 ---
 
@@ -782,3 +409,30 @@ Design a `Timer` class where `__init__` records the start time. Add an `elapsed(
         # Context manager usage
         with Timer() as t:
             time.sleep(0.1)
+
+---
+
+**Exercise 4.**
+Explain why `__init__` is called an "initializer" rather than a "constructor" in Python. What actually constructs the object, and when does `__init__` receive it? How does this distinction matter in practice?
+
+??? success "Solution to Exercise 4"
+
+        # In Python, the true constructor is __new__, not __init__.
+        #
+        # __new__ creates and returns the new object instance.
+        # __init__ receives the already-created instance (self) and
+        # sets up its attributes.
+        #
+        # The call MyClass(args) does two things:
+        #   1. obj = MyClass.__new__(MyClass)   — creates the object
+        #   2. obj.__init__(args)               — initializes its state
+        #
+        # This distinction matters because:
+        # - __new__ controls object creation (useful for singletons,
+        #   immutable types like int/str subclasses)
+        # - __init__ only configures an already-existing object
+        # - If __new__ returns an instance of a different class,
+        #   __init__ is not called at all
+        #
+        # For most classes, you only need __init__. Override __new__
+        # only when you need to control the creation step itself.
